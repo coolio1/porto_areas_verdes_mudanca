@@ -8,8 +8,11 @@ import os
 import base64
 import io
 import time
+from dotenv import load_dotenv
 
-ee.Initialize(project='REDACTED')
+load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+GEE_PROJECT = os.environ["GEE_PROJECT"]
+ee.Initialize(project=GEE_PROJECT)
 
 # Mesma area do projecto original
 porto = ee.Geometry.Polygon([
@@ -18,7 +21,7 @@ porto = ee.Geometry.Polygon([
 BOUNDS = [[41.13, -8.70], [41.19, -8.54]]
 
 # Municipios para fronteiras
-municipios = ee.FeatureCollection('projects/REDACTED/assets/CAOP2025_municipios')
+municipios = ee.FeatureCollection(f'projects/{GEE_PROJECT}/assets/CAOP2025_municipios')
 municipiosPorto = municipios.filterBounds(porto)
 
 # ============================================================
@@ -59,10 +62,19 @@ def ndvi_l5(img):
     return ndvi.clamp(-1, 1)
 
 def ndvi_l8(img):
-    """NDVI para Landsat 8/9 OLI (SR_B5=NIR, SR_B4=Red)."""
+    """NDVI para Landsat 8/9 OLI, harmonizado para nivel TM (Roy et al. 2016).
+
+    Coeficientes OLI->ETM+ (slope, intercept) por banda:
+      Red (B4):  0.9585, -0.0002
+      NIR (B5):  0.9785, -0.0010
+    Aplicados apos conversao a reflectancia de superficie.
+    """
     img = cloud_mask_l8(img)
-    nir = img.select('SR_B5').multiply(0.0000275).add(-0.2)
-    red = img.select('SR_B4').multiply(0.0000275).add(-0.2)
+    nir_raw = img.select('SR_B5').multiply(0.0000275).add(-0.2)
+    red_raw = img.select('SR_B4').multiply(0.0000275).add(-0.2)
+    # Harmonizar OLI -> TM (Roy et al. 2016, Table 2)
+    red = red_raw.multiply(0.9585).add(-0.0002)
+    nir = nir_raw.multiply(0.9785).add(-0.0010)
     ndvi = nir.subtract(red).divide(nir.add(red)).rename('ndvi')
     return ndvi.clamp(-1, 1)
 
@@ -101,15 +113,113 @@ def get_ndvi_composite(sensor, years):
     return median, count
 
 # ============================================================
-# Calcular compositos
+# Alvos pseudo-invariantes (PIF) para normalizacao inter-sensor
+# Buffer de 60m (~2 pixeis Landsat) a volta de cada ponto
+# ============================================================
+PIF_BUFFER = 60  # metros
+
+PIF_POINTS = {
+    'floresta': [
+        ee.Geometry.Point([-8.657919, 41.157911]).buffer(PIF_BUFFER),  # Serralves
+        ee.Geometry.Point([-8.677261, 41.168894]).buffer(PIF_BUFFER),  # Parque Cidade
+    ],
+    'solo_relva': [
+        ee.Geometry.Point([-8.658664, 41.163311]).buffer(PIF_BUFFER),
+        ee.Geometry.Point([-8.588781, 41.144906]).buffer(PIF_BUFFER),
+    ],
+    'agua': [
+        ee.Geometry.Point([-8.586953, 41.140633]).buffer(PIF_BUFFER),  # Douro/Foz
+        ee.Geometry.Point([-8.683278, 41.149100]).buffer(PIF_BUFFER),  # Mar
+    ],
+}
+
+# Juntar todos os pontos PIF numa FeatureCollection para extraccao
+pif_features = []
+for pif_type, geoms in PIF_POINTS.items():
+    for i, geom in enumerate(geoms):
+        pif_features.append(ee.Feature(geom, {'type': pif_type, 'idx': i}))
+pif_fc = ee.FeatureCollection(pif_features)
+
+# ============================================================
+# Calcular compositos (antes da normalizacao)
 # ============================================================
 print('A calcular compositos NDVI por epoca...')
-composites = {}
+composites_raw = {}
 for name, sensor, years in EPOCHS:
     ndvi, count = get_ndvi_composite(sensor, years)
     n = count.getInfo()
     print(f'  {name} ({sensor}): {n} cenas')
-    composites[name] = ndvi
+    composites_raw[name] = ndvi
+
+# ============================================================
+# Normalizacao PIF: ajustar todas as epocas ao nivel da referencia
+# Referencia = primeira epoca (1985-90, Landsat 5)
+# ============================================================
+print('\nA extrair NDVI nos pontos PIF...')
+REF_EPOCH = EPOCHS[0][0]  # 1985-90
+
+def extract_pif_values(composite, epoch_name):
+    """Extrai NDVI medio em cada ponto PIF."""
+    values = {}
+    for pif_type, geoms in PIF_POINTS.items():
+        type_vals = []
+        for geom in geoms:
+            val = composite.reduceRegion(
+                reducer=ee.Reducer.mean(),
+                geometry=geom,
+                scale=30,
+            ).getInfo().get('ndvi', None)
+            if val is not None:
+                type_vals.append(val)
+        values[pif_type] = sum(type_vals) / len(type_vals) if type_vals else None
+    return values
+
+# Extrair valores PIF para todas as epocas
+pif_values = {}
+for name, sensor, years in EPOCHS:
+    pif_values[name] = extract_pif_values(composites_raw[name], name)
+    print(f'  {name}: agua={pif_values[name]["agua"]:.4f}  '
+          f'solo={pif_values[name]["solo_relva"]:.4f}  '
+          f'floresta={pif_values[name]["floresta"]:.4f}')
+
+# Calcular normalizacao linear por minimos quadrados
+# Para cada epoca: NDVI_norm = slope * NDVI_raw + intercept
+# onde slope e intercept minimizam o erro vs os valores de referencia
+print('\nA calcular coeficientes de normalizacao...')
+ref_vals = pif_values[REF_EPOCH]
+ref_points = [ref_vals['agua'], ref_vals['solo_relva'], ref_vals['floresta']]
+
+composites = {}
+for name, sensor, years in EPOCHS:
+    if name == REF_EPOCH:
+        composites[name] = composites_raw[name]
+        print(f'  {name}: referencia (sem ajuste)')
+        continue
+
+    epoch_vals = pif_values[name]
+    raw_points = [epoch_vals['agua'], epoch_vals['solo_relva'], epoch_vals['floresta']]
+
+    # Regressao linear: ref = slope * raw + intercept
+    n = len(raw_points)
+    sum_x = sum(raw_points)
+    sum_y = sum(ref_points)
+    sum_xy = sum(x * y for x, y in zip(raw_points, ref_points))
+    sum_xx = sum(x * x for x in raw_points)
+    slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x)
+    intercept = (sum_y - slope * sum_x) / n
+
+    print(f'  {name}: slope={slope:.4f}  intercept={intercept:+.4f}')
+
+    # Aplicar normalizacao
+    composites[name] = composites_raw[name].multiply(slope).add(intercept).clamp(-1, 1)
+
+# Verificar valores normalizados
+print('\nA verificar normalizacao...')
+for name, sensor, years in EPOCHS:
+    vals = extract_pif_values(composites[name], name)
+    print(f'  {name}: agua={vals["agua"]:.4f}  '
+          f'solo={vals["solo_relva"]:.4f}  '
+          f'floresta={vals["floresta"]:.4f}')
 
 # ============================================================
 # Download das camadas
@@ -120,102 +230,91 @@ DIM = 2048
 # Paleta NDVI: castanho -> amarelo -> verde escuro
 NDVI_PALETTE = ['8B4513', 'D2B48C', 'F5DEB3', 'FFFF00', 'ADFF2F', '32CD32', '228B22', '006400']
 
-def download_ndvi(image, filename, label):
-    """Download NDVI como PNG colorido."""
+def _robust_download(vis_image, filepath, label, transparent_black=False):
+    """Download robusto com retry e backoff exponencial."""
     from PIL import Image as PILImage
 
-    filepath = f'layers_historico/{filename}'
     if os.path.exists(filepath):
-        print(f'  {filename} ja existe, a saltar...')
+        print(f'  {os.path.basename(filepath)} ja existe, a saltar...')
         return filepath
 
-    vis = image.visualize(min=0, max=0.8, palette=NDVI_PALETTE)
-    for attempt in range(3):
-        url = vis.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png'})
-        print(f'  A descarregar {label}...')
-        r = requests.get(url)
+    for attempt in range(5):
         try:
+            wait = 3 * (2 ** attempt) if attempt > 0 else 0
+            if wait:
+                print(f'  Retry {attempt+1}/5 apos {wait}s...')
+                time.sleep(wait)
+            url = vis_image.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png'})
+            print(f'  A descarregar {label}...')
+            r = requests.get(url, timeout=120)
             img = PILImage.open(io.BytesIO(r.content)).convert('RGBA')
-            break
+            if transparent_black:
+                pixels = list(img.getdata())
+                new_data = [(0,0,0,0) if (p[0]<10 and p[1]<10 and p[2]<10) else p for p in pixels]
+                img.putdata(new_data)
+            img.save(filepath)
+            print(f'  {os.path.basename(filepath)} guardado ({os.path.getsize(filepath)//1024} KB)')
+            return filepath
         except Exception as e:
             print(f'  Tentativa {attempt+1} falhou: {e}')
-            if attempt < 2:
-                time.sleep(3)
-            else:
-                print(f'  ERRO: nao foi possivel descarregar {filename}')
+            if attempt == 4:
+                print(f'  ERRO: nao foi possivel descarregar {label}')
                 return None
 
-    img.save(filepath)
-    print(f'  {filename} guardado ({os.path.getsize(filepath)//1024} KB)')
-    return filepath
+def download_ndvi(image, filename, label):
+    vis = image.visualize(min=0, max=0.8, palette=NDVI_PALETTE)
+    return _robust_download(vis, f'layers_historico/{filename}', label)
 
 def download_diff(image, filename, label):
-    """Download camada de diferenca NDVI como PNG colorido."""
-    from PIL import Image as PILImage
-
-    filepath = f'layers_historico/{filename}'
-    if os.path.exists(filepath):
-        print(f'  {filename} ja existe, a saltar...')
-        return filepath
-
     diff_palette = ['d73027', 'f46d43', 'fdae61', 'ffffbf', 'a6d96a', '1a9850', '006837']
     vis = image.visualize(min=-0.3, max=0.3, palette=diff_palette)
-    for attempt in range(3):
-        url = vis.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png'})
-        print(f'  A descarregar {label}...')
-        r = requests.get(url)
-        try:
-            img = PILImage.open(io.BytesIO(r.content)).convert('RGBA')
-            break
-        except Exception as e:
-            print(f'  Tentativa {attempt+1} falhou: {e}')
-            if attempt < 2:
-                time.sleep(3)
-            else:
-                return None
-
-    img.save(filepath)
-    print(f'  {filename} guardado ({os.path.getsize(filepath)//1024} KB)')
-    return filepath
+    return _robust_download(vis, f'layers_historico/{filename}', label)
 
 def download_mask(image, color_hex, filename):
-    """Download mascara binaria como PNG."""
-    from PIL import Image as PILImage
-
-    filepath = f'layers_historico/{filename}'
-    if os.path.exists(filepath):
-        print(f'  {filename} ja existe, a saltar...')
-        return filepath
-
     vis = image.visualize(palette=[color_hex], min=0, max=1)
-    for attempt in range(3):
-        url = vis.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png'})
-        print(f'  A descarregar {filename}...')
-        r = requests.get(url)
-        try:
-            img = PILImage.open(io.BytesIO(r.content)).convert('RGBA')
-            break
-        except Exception as e:
-            print(f'  Tentativa {attempt+1} falhou: {e}')
-            if attempt < 2:
-                time.sleep(3)
-            else:
-                return None
+    return _robust_download(vis, f'layers_historico/{filename}', filename, transparent_black=True)
 
-    pixels = list(img.getdata())
-    new_data = [(0,0,0,0) if (p[0]<10 and p[1]<10 and p[2]<10) else p for p in pixels]
-    img.putdata(new_data)
-    img.save(filepath)
-    print(f'  {filename} guardado ({os.path.getsize(filepath)//1024} KB)')
-    return filepath
+# ============================================================
+# Mascaras de vegetacao (NDVI >= 0.4) por epoca
+# ============================================================
+NDVI_VEG_THRESHOLD = 0.4
 
-# Download NDVI por epoca
+veg_masks = {}
+for name, sensor, years in EPOCHS:
+    veg_masks[name] = composites[name].gte(NDVI_VEG_THRESHOLD)
+
+# Perda/ganho de vegetacao (primeira vs ultima epoca)
+first_epoch = EPOCHS[0][0]   # 1985-90
+last_epoch = EPOCHS[-1][0]   # 2023-24
+veg_loss = veg_masks[first_epoch].And(veg_masks[last_epoch].Not()).selfMask()
+veg_gain = veg_masks[first_epoch].Not().And(veg_masks[last_epoch]).selfMask()
+
+# ============================================================
+# Downloads (com pausa entre pedidos para evitar desconexoes)
+# ============================================================
+DOWNLOAD_PAUSE = 5  # segundos entre downloads
+
+# NDVI por epoca
 print('\nA descarregar camadas NDVI...')
 for name, sensor, years in EPOCHS:
     download_ndvi(composites[name], f'ndvi_{name}.png', f'NDVI {name}')
+    time.sleep(DOWNLOAD_PAUSE)
 
-# Diferencas chave
-print('\nA calcular diferencas...')
+# Mascaras de vegetacao por epoca
+print('\nA descarregar mascaras de vegetacao...')
+for name, sensor, years in EPOCHS:
+    download_mask(veg_masks[name].selfMask(), '00FF00', f'veg_{name}.png')
+    time.sleep(DOWNLOAD_PAUSE)
+
+# Perda e ganho
+print('\nA descarregar perda/ganho de vegetacao...')
+download_mask(veg_loss, 'FF4444', 'veg_perda.png')
+time.sleep(DOWNLOAD_PAUSE)
+download_mask(veg_gain, '44FF44', 'veg_ganho.png')
+time.sleep(DOWNLOAD_PAUSE)
+
+# Diferencas NDVI
+print('\nA calcular diferencas NDVI...')
 diff_layers = [
     ('diff_85_24', composites['2023-24'].subtract(composites['1985-90']),
      'Mudanca 1985-90 vs 2023-24'),
@@ -227,6 +326,7 @@ diff_layers = [
 
 for did, diff_img, label in diff_layers:
     download_diff(diff_img, f'{did}.png', label)
+    time.sleep(DOWNLOAD_PAUSE)
 
 # Municipios
 print('\nA descarregar limites...')
@@ -234,9 +334,19 @@ muni_styled = ee.Image().paint(municipiosPorto, 0, 2).selfMask()
 download_mask(muni_styled, 'FFFFFF', 'municipios.png')
 
 # ============================================================
-# Estatisticas NDVI por epoca
+# Estatisticas: NDVI medio + area de vegetacao por epoca
 # ============================================================
-print('\n--- Estatisticas NDVI medio por epoca ---')
+PIXEL_AREA_HA = 30 * 30 / 10000  # 30m pixel = 0.09 ha
+
+print('\n--- Estatisticas por epoca ---')
+print(f'  {"Epoca":<12} {"NDVI medio":>12} {"Area veg (ha)":>14} {"Area veg (%)":>13}')
+print(f'  {"-"*12} {"-"*12} {"-"*14} {"-"*13}')
+
+# Area total da regiao (pixeis validos)
+total_pixels = composites[first_epoch].gt(-1).reduceRegion(
+    reducer=ee.Reducer.sum(), geometry=porto, scale=30, maxPixels=1e9
+).getInfo().get('ndvi', 0)
+
 for name, sensor, years in EPOCHS:
     stats = composites[name].reduceRegion(
         reducer=ee.Reducer.mean(),
@@ -244,11 +354,28 @@ for name, sensor, years in EPOCHS:
         scale=30,
         maxPixels=1e9
     ).getInfo()
-    ndvi_mean = stats.get('ndvi', 'N/A')
-    if isinstance(ndvi_mean, (int, float)):
-        print(f'  {name}: NDVI medio = {ndvi_mean:.4f}')
-    else:
-        print(f'  {name}: NDVI medio = {ndvi_mean}')
+    veg_count = veg_masks[name].reduceRegion(
+        reducer=ee.Reducer.sum(),
+        geometry=porto,
+        scale=30,
+        maxPixels=1e9
+    ).getInfo()
+    ndvi_mean = stats.get('ndvi', 0)
+    veg_pixels = veg_count.get('ndvi', 0)
+    veg_ha = veg_pixels * PIXEL_AREA_HA
+    veg_pct = (veg_pixels / total_pixels * 100) if total_pixels > 0 else 0
+    print(f'  {name:<12} {ndvi_mean:>12.4f} {veg_ha:>13.0f} {veg_pct:>12.1f}%')
+
+# Perda/ganho totais
+loss_count = veg_loss.unmask(0).reduceRegion(
+    reducer=ee.Reducer.sum(), geometry=porto, scale=30, maxPixels=1e9
+).getInfo().get('ndvi', 0)
+gain_count = veg_gain.unmask(0).reduceRegion(
+    reducer=ee.Reducer.sum(), geometry=porto, scale=30, maxPixels=1e9
+).getInfo().get('ndvi', 0)
+print(f'\n  Vegetacao perdida ({first_epoch} -> {last_epoch}): {loss_count * PIXEL_AREA_HA:.0f} ha')
+print(f'  Vegetacao ganha  ({first_epoch} -> {last_epoch}): {gain_count * PIXEL_AREA_HA:.0f} ha')
+print(f'  Balanco liquido: {(gain_count - loss_count) * PIXEL_AREA_HA:+.0f} ha')
 
 # ============================================================
 # Construir mapa HTML
@@ -265,13 +392,24 @@ for name, sensor, years in EPOCHS:
     yr_range = f'{years[0]}-{years[-1]}'
     NDVI_LAYERS.append((f'ndvi_{name}', f'NDVI {yr_range} ({sensor})', True))
 
-DIFF_LAYERS_INFO = [
-    ('diff_85_24', 'Mudanca 1985-90 \u2192 2023-24', False),
-    ('diff_95_24', 'Mudanca 1995-00 \u2192 2023-24', False),
-    ('diff_05_24', 'Mudanca 2001-05 \u2192 2023-24', False),
+VEG_LAYERS = []
+for name, sensor, years in EPOCHS:
+    yr_range = f'{years[0]}-{years[-1]}'
+    VEG_LAYERS.append((f'veg_{name}', f'Vegetacao {yr_range}', False))
+
+CHANGE_LAYERS_INFO = [
+    ('veg_perda', 'Perda de vegetacao (85-90 \u2192 23-24)', False),
+    ('veg_ganho', 'Ganho de vegetacao (85-90 \u2192 23-24)', False),
 ]
 
-ALL_MAP_LAYERS = NDVI_LAYERS + DIFF_LAYERS_INFO + [('municipios', 'Limites municipais', True)]
+DIFF_LAYERS_INFO = [
+    ('diff_85_24', 'Diferenca NDVI 85-90 \u2192 23-24', False),
+    ('diff_95_24', 'Diferenca NDVI 95-00 \u2192 23-24', False),
+    ('diff_05_24', 'Diferenca NDVI 01-05 \u2192 23-24', False),
+]
+
+ALL_MAP_LAYERS = (NDVI_LAYERS + VEG_LAYERS + CHANGE_LAYERS_INFO
+    + DIFF_LAYERS_INFO + [('municipios', 'Limites municipais', True)])
 
 layers_js_items = []
 for lid, label, show in ALL_MAP_LAYERS:
@@ -282,6 +420,8 @@ for lid, label, show in ALL_MAP_LAYERS:
 layers_js = ',\n'.join(layers_js_items)
 
 n_ndvi = len(NDVI_LAYERS)
+n_veg = len(VEG_LAYERS)
+n_change = len(CHANGE_LAYERS_INFO)
 n_diff = len(DIFF_LAYERS_INFO)
 
 basemaps = [
@@ -298,7 +438,7 @@ html = '''<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>NDVI historico do Porto (1985-2024)</title>
+<title>Vegetacao do Porto 1985-2024</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -308,7 +448,7 @@ html = '''<!DOCTYPE html>
     position:fixed; bottom:20px; left:20px; z-index:1000;
     background:rgba(30,30,30,0.95); padding:14px 18px; border-radius:10px;
     font:13px 'Segoe UI',Arial,sans-serif; color:#eee;
-    box-shadow:0 2px 10px rgba(0,0,0,0.5); min-width:300px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.5); min-width:320px;
     max-height:90vh; overflow-y:auto; line-height:1.8;
   }
   .row { display:flex; align-items:center; gap:6px; margin:2px 0; }
@@ -326,15 +466,16 @@ html = '''<!DOCTYPE html>
   .radio-group { margin:6px 0; }
   .radio-group label { display:block; cursor:pointer; padding:2px 0; font-size:12px; }
   .radio-group input { margin-right:6px; }
+  .swatch { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; }
 </style>
 </head>
 <body>
 <div id="map"></div>
 <div id="panel">
-  <b style="font-size:14px;">NDVI historico do Porto</b><br>
-  <span style="color:#aaa;font-size:10px;">1985-2024 &bull; Landsat 30m</span>
+  <b style="font-size:14px;">Vegetacao do Porto</b><br>
+  <span style="color:#aaa;font-size:10px;">1985-2024 &bull; Landsat 30m &bull; NDVI &ge; 0.4</span>
 
-  <div class="section">NDVI por epoca (selecionar uma)</div>
+  <div class="section">NDVI continuo (selecionar uma epoca)</div>
   <div id="ndvi-radios" class="radio-group"></div>
 
   <div class="legend">
@@ -343,7 +484,17 @@ html = '''<!DOCTYPE html>
     <div class="legend-labels"><span>0 (solo)</span><span>0.4</span><span>0.8 (denso)</span></div>
   </div>
 
-  <div class="section">Mudancas de NDVI</div>
+  <div class="section">Mascara de vegetacao por epoca</div>
+  <div id="veg-rows"></div>
+
+  <div class="section">Perda e ganho (1985-90 vs 2023-24)</div>
+  <div id="change-rows"></div>
+  <div style="font-size:10px;color:#888;margin:4px 0;">
+    <span class="swatch" style="background:#FF4444;"></span>Perda
+    <span class="swatch" style="background:#44FF44;margin-left:10px;"></span>Ganho
+  </div>
+
+  <div class="section">Diferenca NDVI continua</div>
   <div id="diff-rows"></div>
 
   <div class="legend" id="diff-legend" style="display:none;">
@@ -360,7 +511,7 @@ html = '''<!DOCTYPE html>
   <select id="basemap-select">''' + basemap_options + '''</select>
 
   <hr style="border-color:#555;margin:10px 0 4px 0;">
-  <span style="color:#666;font-size:10px;">Fonte: Landsat (USGS/NASA) &bull; 30m resolucao</span>
+  <span style="color:#666;font-size:10px;">Fonte: Landsat (USGS/NASA) &bull; Roy et al. 2016 (harmonizacao)</span>
 </div>
 
 <script>
@@ -376,7 +527,27 @@ var bounds = ''' + str(BOUNDS) + ''';
 var layers = [''' + layers_js + '''];
 var overlays = [];
 var nNdvi = ''' + str(n_ndvi) + ''';
+var nVeg = ''' + str(n_veg) + ''';
+var nChange = ''' + str(n_change) + ''';
 var nDiff = ''' + str(n_diff) + ''';
+
+function makeCheckbox(container, idx, defaultOn) {
+  var row = document.createElement('div');
+  row.className = 'row';
+  var cb = document.createElement('input');
+  cb.type = 'checkbox'; cb.checked = defaultOn; cb.dataset.idx = idx;
+  if (defaultOn) overlays[idx].addTo(map);
+  cb.addEventListener('change', function() {
+    var i = +this.dataset.idx;
+    if (this.checked) overlays[i].addTo(map);
+    else map.removeLayer(overlays[i]);
+  });
+  var lb = document.createElement('label');
+  lb.textContent = layers[idx].label;
+  row.appendChild(cb);
+  row.appendChild(lb);
+  container.appendChild(row);
+}
 
 async function init() {
   for (var i = 0; i < layers.length; i++) {
@@ -384,6 +555,7 @@ async function init() {
     overlays.push(ov);
   }
 
+  // NDVI radio buttons (exclusive)
   var divRadios = document.getElementById('ndvi-radios');
   for (var i = 0; i < nNdvi; i++) {
     var lbl = document.createElement('label');
@@ -402,9 +574,24 @@ async function init() {
     divRadios.appendChild(lbl);
   }
 
+  // Vegetation masks
+  var divVeg = document.getElementById('veg-rows');
+  for (var i = nNdvi; i < nNdvi + nVeg; i++) {
+    makeCheckbox(divVeg, i, false);
+  }
+
+  // Change layers (loss/gain)
+  var divChange = document.getElementById('change-rows');
+  var changeStart = nNdvi + nVeg;
+  for (var i = changeStart; i < changeStart + nChange; i++) {
+    makeCheckbox(divChange, i, false);
+  }
+
+  // Diff layers
   var divDiff = document.getElementById('diff-rows');
   var diffLegend = document.getElementById('diff-legend');
-  for (var i = nNdvi; i < nNdvi + nDiff; i++) {
+  var diffStart = changeStart + nChange;
+  for (var i = diffStart; i < diffStart + nDiff; i++) {
     var row = document.createElement('div');
     row.className = 'row';
     var cb = document.createElement('input');
@@ -414,7 +601,7 @@ async function init() {
       if (this.checked) overlays[idx].addTo(map);
       else map.removeLayer(overlays[idx]);
       var anyDiff = false;
-      for (var j = nNdvi; j < nNdvi + nDiff; j++) {
+      for (var j = diffStart; j < diffStart + nDiff; j++) {
         if (map.hasLayer(overlays[j])) anyDiff = true;
       }
       diffLegend.style.display = anyDiff ? 'block' : 'none';
@@ -426,23 +613,11 @@ async function init() {
     divDiff.appendChild(row);
   }
 
+  // Other layers (municipios)
   var divOther = document.getElementById('other-rows');
-  for (var i = nNdvi + nDiff; i < layers.length; i++) {
-    var row = document.createElement('div');
-    row.className = 'row';
-    var cb = document.createElement('input');
-    cb.type = 'checkbox'; cb.checked = layers[i].show; cb.dataset.idx = i;
-    if (layers[i].show) overlays[i].addTo(map);
-    cb.addEventListener('change', function() {
-      var idx = +this.dataset.idx;
-      if (this.checked) overlays[idx].addTo(map);
-      else map.removeLayer(overlays[idx]);
-    });
-    var lb = document.createElement('label');
-    lb.textContent = layers[i].label;
-    row.appendChild(cb);
-    row.appendChild(lb);
-    divOther.appendChild(row);
+  var otherStart = diffStart + nDiff;
+  for (var i = otherStart; i < layers.length; i++) {
+    makeCheckbox(divOther, i, layers[i].show);
   }
 }
 
