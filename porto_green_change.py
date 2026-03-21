@@ -1,6 +1,8 @@
 import ee
+import os
 
-ee.Initialize(project='REDACTED')
+GEE_PROJECT = os.environ["GEE_PROJECT"]
+ee.Initialize(project=GEE_PROJECT)
 
 # ============================================================
 # PORTO GREEN SPACE CHANGE DETECTION 2016 → 2025
@@ -15,7 +17,7 @@ porto = ee.Geometry.Polygon([
 CONFIDENCE = 0.70
 
 # 3. Municipality boundaries
-municipios = ee.FeatureCollection('projects/REDACTED/assets/CAOP2025_municipios')
+municipios = ee.FeatureCollection(f'projects/{GEE_PROJECT}/assets/CAOP2025_municipios')
 municipiosPorto = municipios.filterBounds(porto)
 
 # ============================================================

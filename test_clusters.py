@@ -5,7 +5,8 @@ import os
 import io
 import base64
 
-ee.Initialize(project='REDACTED')
+GEE_PROJECT = os.environ["GEE_PROJECT"]
+ee.Initialize(project=GEE_PROJECT)
 
 LAT, LON = 41.188117, -8.617633
 BUFFER = 1500

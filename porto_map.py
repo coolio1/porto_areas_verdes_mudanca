@@ -1,13 +1,15 @@
 import ee
 import folium
+import os
 
-ee.Initialize(project='REDACTED')
+GEE_PROJECT = os.environ["GEE_PROJECT"]
+ee.Initialize(project=GEE_PROJECT)
 
 porto = ee.Geometry.Polygon([
     [[-8.69, 41.13], [-8.57, 41.13], [-8.57, 41.18], [-8.69, 41.18]]
 ])
 
-municipios = ee.FeatureCollection('projects/REDACTED/assets/CAOP2025_municipios')
+municipios = ee.FeatureCollection(f'projects/{GEE_PROJECT}/assets/CAOP2025_municipios')
 municipiosPorto = municipios.filterBounds(porto)
 
 BANDS = ['B4', 'B8', 'B11', 'SCL']

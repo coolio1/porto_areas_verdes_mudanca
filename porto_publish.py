@@ -3,14 +3,15 @@ import requests
 import os
 import base64
 
-ee.Initialize(project='REDACTED')
+GEE_PROJECT = os.environ["GEE_PROJECT"]
+ee.Initialize(project=GEE_PROJECT)
 
 porto = ee.Geometry.Polygon([
     [[-8.70, 41.13], [-8.54, 41.13], [-8.54, 41.19], [-8.70, 41.19]]
 ])
 BOUNDS = [[41.13, -8.70], [41.19, -8.54]]
 
-municipios = ee.FeatureCollection('projects/REDACTED/assets/CAOP2025_municipios')
+municipios = ee.FeatureCollection(f'projects/{GEE_PROJECT}/assets/CAOP2025_municipios')
 municipiosPorto = municipios.filterBounds(porto)
 
 BANDS = ['B3', 'B4', 'B8', 'B11', 'SCL']

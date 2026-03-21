@@ -1,13 +1,15 @@
 """Estatisticas de uso do solo e transicoes para o Porto."""
 import ee
+import os
 
-ee.Initialize(project='REDACTED')
+GEE_PROJECT = os.environ["GEE_PROJECT"]
+ee.Initialize(project=GEE_PROJECT)
 
 porto = ee.Geometry.Polygon([
     [[-8.70, 41.13], [-8.54, 41.13], [-8.54, 41.19], [-8.70, 41.19]]
 ])
 
-municipios = ee.FeatureCollection('projects/REDACTED/assets/CAOP2025_municipios')
+municipios = ee.FeatureCollection(f'projects/{GEE_PROJECT}/assets/CAOP2025_municipios')
 municipiosPorto = municipios.filterBounds(porto)
 
 BANDS = ['B3', 'B4', 'B8', 'B11', 'SCL']
