@@ -1,0 +1,25 @@
+title: "Porto Verde — Monitorizar o Ambiente com Dados de Satelite"
+description: "Artigos sobre GIS, ambiente e detecao remota em Portugal, usando Google Earth Engine."
+url: "https://coolio1.github.io"
+baseurl: "/porto_areas_verdes_mudanca"
+lang: pt
+
+author:
+  name: "Quentin"
+
+permalink: /posts/:slug/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+exclude:
+  - "*.py"
+  - "*.pyc"
+  - CAOP_Continente_2025-gpkg
+  - layers/test
+  - .claude
+  - "*.gpkg"

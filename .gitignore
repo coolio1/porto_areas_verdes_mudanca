@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+_site/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+CAOP_Continente_2025-gpkg/
+.claude/
