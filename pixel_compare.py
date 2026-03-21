@@ -1,7 +1,9 @@
 """Comparar espectro de dois pixeis: relva vs arvores."""
 import ee
 import os
+from dotenv import load_dotenv
 
+load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)
 
