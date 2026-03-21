@@ -39,20 +39,37 @@ def getS2col(start, end):
         return ndvi.addBands(ndbi).addBands(ndmi).addBands(nir_green).addBands(b3).updateMask(clear)
     return s2.map(process)
 
-def getComposite(start, end):
-    """Mediana + NDVI minimo (p10) para separar arvores de relva."""
-    col = getS2col(start, end)
-    median = col.median().clip(area)
-    # NDVI minimo: arvores manteem NDVI alto, relva cai para <0.3
-    ndvi_min = col.select('ndvi').reduce(ee.Reducer.percentile([10])).rename('ndvi_min').clip(area)
-    return median.addBands(ndvi_min)
+def getComposite(years):
+    """Composito multi-sazonal para separar arvores de relva.
+
+    Estrategia: arvores caducifolias perdem folha no inverno,
+    relva seca no final da primavera (Mai-Jun) e outono (Out).
+    A janela Mai-Jun e a chave: arvores com folha completa, relva seca.
+    """
+    all_col = ee.ImageCollection([])
+    spring_col = ee.ImageCollection([])
+
+    for year in years:
+        # Colecao completa (Mai-Out) para mediana geral
+        full = getS2col(f'{year}-05-01', f'{year}-10-31')
+        all_col = all_col.merge(full)
+        # Janela primavera tardia (Mai-Jun) - arvores verdes, relva seca
+        spring = getS2col(f'{year}-05-15', f'{year}-06-30')
+        spring_col = spring_col.merge(spring)
+
+    median = all_col.median().clip(area)
+    # NDVI MINIMO de Mai-Jun: arvores >0.7, relva cai a <0.5
+    spring_ndvi = spring_col.select('ndvi').reduce(ee.Reducer.percentile([15])).rename('spring_ndvi').clip(area)
+    # NDVI minimo (p10) como backup - relva oscila, arvores estaveis
+    ndvi_min = all_col.select('ndvi').reduce(ee.Reducer.percentile([10])).rename('ndvi_min').clip(area)
+
+    return median.addBands(spring_ndvi).addBands(ndvi_min)
 
 print('A calcular compositos...')
 print(f'  Area: {BUFFER}m em redor de {LAT}N, {abs(LON)}W')
 
-# Usar periodo longo para capturar variabilidade sazonal da relva
-s2_early = getComposite('2015-06-01', '2017-12-31')
-s2_late  = getComposite('2024-01-01', '2026-03-20')
+s2_early = getComposite([2016, 2017])
+s2_late  = getComposite([2024, 2025])
 
 # Contar cenas disponiveis
 n_early = (ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
@@ -76,33 +93,55 @@ b3_e = s2_early.select('b3')
 b3_l = s2_late.select('b3')
 ndvi_min_e = s2_early.select('ndvi_min')
 ndvi_min_l = s2_late.select('ndvi_min')
+spring_ndvi_e = s2_early.select('spring_ndvi')
+spring_ndvi_l = s2_late.select('spring_ndvi')
 
 # ESA WorldCover 10m (2021) como desempate
 esa = ee.Image('ESA/WorldCover/v200/2021').select('Map').clip(area)
 esaBuilt = esa.eq(50)
 
 # --- Classificacao ---
-# arvore = NDVI mediana >= 0.5 AND NDVI_min (p10) >= 0.4
-#   -> relva cai para <0.3 no p10, arvores manteem >0.5
-# edificado = (NDVI < 0.2 AND NDBI >= -0.1) OR (ESA tiebreak 0.2-0.35)
-# solo = resto
+# Abordagem multi-sazonal:
+#   arvore = NDVI verao >= 0.5
+#            AND NDVI primavera (Mai-Jun) >= 0.6  [relva seca, arvores com folha]
+#            AND NDVI min (p10) >= 0.3             [arvores caducifolias podem cair, mas nao tanto]
+#   edificado = (NDVI < 0.2 AND NDBI >= -0.1) OR (ESA tiebreak)
+#   solo/relva = resto
 
-def classify(ndvi, ndbi, ndmi, nirgreen, b3, ndvi_min):
-    isTree = ndvi.gte(0.5).And(ndvi_min.gte(0.4))
+def classify(ndvi, ndbi, ndmi, nirgreen, b3, ndvi_min, spring_ndvi):
+    # Arvores puras: todos os filtros
+    isTree = (ndvi.gte(0.5)
+        .And(spring_ndvi.gte(0.7))
+        .And(ndvi_min.gte(0.3))
+        .And(nirgreen.gte(4))
+        .And(b3.lt(600))
+    )
+    # Verde urbano / arvores mistas: NDVI alto + primavera razoavel
+    # mas nao passa todos os filtros espectrais (ruas arborizadas, jardins)
+    # B3 < 700 exclui relva brilhante regada que mantem NDVI alto
+    isMixed = (ndvi.gte(0.5)
+        .And(spring_ndvi.gte(0.5))
+        .And(ndvi_min.gte(0.2))
+        .And(b3.lt(600))                  # exclui relva brilhante (mesmo limiar arvores)
+        .And(isTree.Not())                # nao e arvore pura
+    )
+    # Edificado
     clear_built = ndvi.lt(0.2).And(ndbi.gte(-0.1))
     esa_tiebreak = ndvi.gte(0.2).And(ndvi.lt(0.35)).And(esaBuilt)
     isBuilt = clear_built.Or(esa_tiebreak)
-    isSolo = isTree.Not().And(isBuilt.Not())
-    return isTree, isBuilt, isSolo
+    # Solo/relva = resto
+    isSolo = isTree.Not().And(isMixed.Not()).And(isBuilt.Not())
+    return isTree, isMixed, isBuilt, isSolo
 
-isTree_e, isBuilt_e, isSolo_e = classify(ndvi_e, ndbi_e, ndmi_e, nirgreen_e, b3_e, ndvi_min_e)
-isTree_l_base, isBuilt_l_base, _ = classify(ndvi_l, ndbi_l, ndmi_l, nirgreen_l, b3_l, ndvi_min_l)
+isTree_e, isMixed_e, isBuilt_e, isSolo_e = classify(ndvi_e, ndbi_e, ndmi_e, nirgreen_e, b3_e, ndvi_min_e, spring_ndvi_e)
+isTree_l_base, isMixed_l_base, isBuilt_l_base, _ = classify(ndvi_l, ndbi_l, ndmi_l, nirgreen_l, b3_l, ndvi_min_l, spring_ndvi_l)
 
 # Criterio restrito: pixel edificado em periodo antigo so sai se NDVI recente >= 0.45
 stays_built = isBuilt_e.And(ndvi_l.lt(0.45))
 isBuilt_l = isBuilt_l_base.Or(stays_built)
 isTree_l = isTree_l_base.And(isBuilt_l.Not())
-isSolo_l = isTree_l.Not().And(isBuilt_l.Not())
+isMixed_l = isMixed_l_base.And(isBuilt_l.Not()).And(isTree_l.Not())
+isSolo_l = isTree_l.Not().And(isMixed_l.Not()).And(isBuilt_l.Not())
 
 # Transicoes
 ndviDrop = ndvi_e.subtract(ndvi_l)
@@ -126,12 +165,14 @@ def count_ha(mask, label):
 
 print('\nPeriodo antigo (2015-17):')
 count_ha(isTree_e.selfMask(), 'Arvores')
-count_ha(isSolo_e.selfMask(), 'Solo')
+count_ha(isMixed_e.selfMask(), 'Verde urbano')
+count_ha(isSolo_e.selfMask(), 'Solo/Relva')
 count_ha(isBuilt_e.selfMask(), 'Edificado')
 
 print('\nPeriodo recente (2024-26):')
 count_ha(isTree_l.selfMask(), 'Arvores')
-count_ha(isSolo_l.selfMask(), 'Solo')
+count_ha(isMixed_l.selfMask(), 'Verde urbano')
+count_ha(isSolo_l.selfMask(), 'Solo/Relva')
 count_ha(isBuilt_l.selfMask(), 'Edificado')
 
 print('\nTransicoes:')
@@ -152,7 +193,8 @@ def print_stats(composite, label):
         if v is not None:
             print(f'    {k}: {v:.4f}')
 
-print_stats(ndvi_l, 'NDVI mediana (todos pixels)')
+print_stats(ndvi_l, 'NDVI mediana verao (todos pixels)')
+print_stats(spring_ndvi_l, 'NDVI primavera Mai-Jun (todos pixels)')
 print_stats(ndvi_min_l, 'NDVI min p10 (todos pixels)')
 print_stats(ndmi_l, 'NDMI recente (todos pixels)')
 print_stats(nirgreen_l, 'NIR/Green recente (todos pixels)')
@@ -164,6 +206,7 @@ print('\n--- Indices SO onde NDVI >= 0.5 (zona de confusao) ---')
 print_stats(ndmi_l.updateMask(green_mask), 'NDMI (onde NDVI>=0.5)')
 print_stats(nirgreen_l.updateMask(green_mask), 'NIR/Green (onde NDVI>=0.5)')
 print_stats(b3_l.updateMask(green_mask), 'B3 (onde NDVI>=0.5)')
+print_stats(spring_ndvi_l.updateMask(green_mask), 'NDVI primavera (onde NDVI>=0.5)')
 print_stats(ndvi_min_l.updateMask(green_mask), 'NDVI min p10 (onde NDVI>=0.5)')
 print_stats(ndvi_l.updateMask(green_mask), 'NDVI (onde NDVI>=0.5)')
 
@@ -238,7 +281,8 @@ def download_rgb(composite, filename):
 
 print('\nA descarregar camadas de teste...')
 download_rgb(s2_late, 'rgb_recente.png')
-download_layer(isTree_l.selfMask(), '228B22', 'arvores_recente.png')
+download_layer(isTree_l.selfMask(), '1B5E20', 'arvores_recente.png')
+download_layer(isMixed_l.selfMask(), '66BB6A', 'misto_recente.png')
 download_layer(isSolo_l.selfMask(), 'C2B280', 'solo_recente.png')
 download_layer(isBuilt_l.selfMask(), '888888', 'edificado_recente.png')
 
@@ -248,8 +292,9 @@ def to_b64(filepath):
         return base64.b64encode(f.read()).decode()
 
 test_layers = [
-    ('arvores_recente', 'Arvores', '#228B22', True),
-    ('solo_recente', 'Solo', '#C2B280', False),
+    ('arvores_recente', 'Arvores', '#1B5E20', True),
+    ('misto_recente', 'Verde urbano', '#66BB6A', True),
+    ('solo_recente', 'Solo/Relva', '#C2B280', False),
     ('edificado_recente', 'Edificado', '#888888', False),
 ]
 

@@ -16,7 +16,8 @@ municipiosPorto = municipios.filterBounds(porto)
 
 BANDS = ['B3', 'B4', 'B8', 'B11', 'SCL']
 
-def getS2(start, end):
+def getS2col(start, end):
+    """Retorna colecao processada (sem reduzir)."""
     s2 = (ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
         .filterBounds(porto).filterDate(start, end)
         .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30))
@@ -26,15 +27,33 @@ def getS2(start, end):
         clear = scl.eq(4).Or(scl.eq(5)).Or(scl.eq(6)).Or(scl.eq(2)).Or(scl.eq(11))
         ndvi = img.normalizedDifference(['B8', 'B4']).rename('ndvi')
         ndbi = img.normalizedDifference(['B11', 'B8']).rename('ndbi')
-        ndmi = img.normalizedDifference(['B8', 'B11']).rename('ndmi')
         nir_green = img.select('B8').divide(img.select('B3').max(1)).rename('nir_green')
         green = img.select('B3').rename('green')
-        return ndvi.addBands(ndbi).addBands(ndmi).addBands(nir_green).addBands(green).updateMask(clear)
-    return s2.map(process).median().clip(porto)
+        return ndvi.addBands(ndbi).addBands(nir_green).addBands(green).updateMask(clear)
+    return s2.map(process)
 
-print('A calcular compositos Sentinel-2...')
-s2_early = getS2('2016-05-01', '2017-10-31')
-s2_late  = getS2('2024-05-01', '2025-10-31')
+def getComposite(years):
+    """Composito multi-sazonal: mediana verao + NDVI primavera + NDVI min."""
+    all_col = ee.ImageCollection([])
+    spring_col = ee.ImageCollection([])
+
+    for year in years:
+        full = getS2col(f'{year}-05-01', f'{year}-10-31')
+        all_col = all_col.merge(full)
+        spring = getS2col(f'{year}-05-15', f'{year}-06-30')
+        spring_col = spring_col.merge(spring)
+
+    median = all_col.median().clip(porto)
+    spring_ndvi = spring_col.select('ndvi').reduce(
+        ee.Reducer.percentile([15])).rename('spring_ndvi').clip(porto)
+    ndvi_min = all_col.select('ndvi').reduce(
+        ee.Reducer.percentile([10])).rename('ndvi_min').clip(porto)
+
+    return median.addBands(spring_ndvi).addBands(ndvi_min)
+
+print('A calcular compositos Sentinel-2 (multi-sazonal)...')
+s2_early = getComposite([2016, 2017])
+s2_late  = getComposite([2024, 2025])
 
 ndvi_e = s2_early.select('ndvi')
 ndvi_l = s2_late.select('ndvi')
@@ -42,28 +61,51 @@ ndbi_e = s2_early.select('ndbi')
 ndbi_l = s2_late.select('ndbi')
 nirgreen_e = s2_early.select('nir_green')
 nirgreen_l = s2_late.select('nir_green')
-ndmi_e = s2_early.select('ndmi')
-ndmi_l = s2_late.select('ndmi')
 green_e = s2_early.select('green')
 green_l = s2_late.select('green')
+spring_ndvi_e = s2_early.select('spring_ndvi')
+spring_ndvi_l = s2_late.select('spring_ndvi')
+ndvi_min_e = s2_early.select('ndvi_min')
+ndvi_min_l = s2_late.select('ndvi_min')
 ndviDrop = ndvi_e.subtract(ndvi_l)
 
 # ESA WorldCover 10m (2021) como desempate na zona ambigua
 esa = ee.Image('ESA/WorldCover/v200/2021').select('Map').clip(porto)
 esaBuilt = esa.eq(50)
 
-# Classificacao 2016-17 (arvores = NDVI >= 0.5 E NIR/Green >= 5 E B3 < 580 E NDMI >= 0.20)
-isTree_e = ndvi_e.gte(0.5).And(nirgreen_e.gte(5)).And(green_e.lt(580)).And(ndmi_e.gte(0.20))
-clear_built_e = ndvi_e.lt(0.2).And(ndbi_e.gte(-0.1))
-esa_tiebreak_e = ndvi_e.gte(0.2).And(ndvi_e.lt(0.35)).And(esaBuilt)
-isBuilt_e = clear_built_e.Or(esa_tiebreak_e)
-isSolo_e = isTree_e.Not().And(isBuilt_e.Not())
+# Classificacao: temporal + espectral
+# arvore = NDVI verao >= 0.5
+#          AND NDVI primavera (Mai-Jun, p15) >= 0.7  [relva seca, arvores com folha]
+#          AND NDVI min (p10) >= 0.3                  [tolerante para caducifolias]
+#          AND NIR/Green >= 4                          [filtra relva regada]
+#          AND B3 < 600                                [filtra vegetacao brilhante]
+def classify(ndvi, ndbi, nirgreen, green, spring_ndvi, ndvi_min):
+    # Arvores puras (rigoroso)
+    isTreeStrict = (ndvi.gte(0.5)
+        .And(spring_ndvi.gte(0.7))
+        .And(ndvi_min.gte(0.3))
+        .And(nirgreen.gte(4))
+        .And(green.lt(600))
+    )
+    # Verde urbano / arvores mistas (ruas arborizadas, jardins)
+    isMixed = (ndvi.gte(0.5)
+        .And(spring_ndvi.gte(0.5))
+        .And(ndvi_min.gte(0.2))
+        .And(green.lt(600))
+        .And(isTreeStrict.Not())
+    )
+    # Arvores = puras + mistas (juntas para o mapa)
+    isTree = isTreeStrict.Or(isMixed)
+    # Edificado
+    clear_built = ndvi.lt(0.2).And(ndbi.gte(-0.1))
+    esa_tiebreak = ndvi.gte(0.2).And(ndvi.lt(0.35)).And(esaBuilt)
+    isBuilt = clear_built.Or(esa_tiebreak)
+    # Solo/Relva = resto
+    isSolo = isTree.Not().And(isBuilt.Not())
+    return isTree, isTreeStrict, isMixed, isBuilt, isSolo
 
-# Classificacao 2024-25
-isTree_l_base = ndvi_l.gte(0.5).And(nirgreen_l.gte(5)).And(green_l.lt(580)).And(ndmi_l.gte(0.20))
-clear_built_l = ndvi_l.lt(0.2).And(ndbi_l.gte(-0.1))
-esa_tiebreak_l = ndvi_l.gte(0.2).And(ndvi_l.lt(0.35)).And(esaBuilt)
-isBuilt_l_base = clear_built_l.Or(esa_tiebreak_l)
+isTree_e, _, _, isBuilt_e, isSolo_e = classify(ndvi_e, ndbi_e, nirgreen_e, green_e, spring_ndvi_e, ndvi_min_e)
+isTree_l_base, _, _, isBuilt_l_base, _ = classify(ndvi_l, ndbi_l, nirgreen_l, green_l, spring_ndvi_l, ndvi_min_l)
 
 # Criterio restrito: pixel edificado em 2016 so sai se NDVI 2025 >= 0.45
 stays_built = isBuilt_e.And(ndvi_l.lt(0.45))
