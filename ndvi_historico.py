@@ -265,11 +265,6 @@ def download_ndvi(image, filename, label):
     vis = image.visualize(min=0, max=0.8, palette=NDVI_PALETTE)
     return _robust_download(vis, f'layers_historico/{filename}', label)
 
-def download_diff(image, filename, label):
-    diff_palette = ['d73027', 'f46d43', 'fdae61', 'ffffbf', 'a6d96a', '1a9850', '006837']
-    vis = image.visualize(min=-0.3, max=0.3, palette=diff_palette)
-    return _robust_download(vis, f'layers_historico/{filename}', label)
-
 def download_mask(image, color_hex, filename):
     vis = image.visualize(palette=[color_hex], min=0, max=1)
     return _robust_download(vis, f'layers_historico/{filename}', filename, transparent_black=True)
@@ -312,21 +307,6 @@ download_mask(veg_loss, 'FF4444', 'veg_perda.png')
 time.sleep(DOWNLOAD_PAUSE)
 download_mask(veg_gain, '44FF44', 'veg_ganho.png')
 time.sleep(DOWNLOAD_PAUSE)
-
-# Diferencas NDVI
-print('\nA calcular diferencas NDVI...')
-diff_layers = [
-    ('diff_85_24', composites['2023-24'].subtract(composites['1985-90']),
-     'Mudanca 1985-90 vs 2023-24'),
-    ('diff_95_24', composites['2023-24'].subtract(composites['1995-00']),
-     'Mudanca 1995-00 vs 2023-24'),
-    ('diff_05_24', composites['2023-24'].subtract(composites['2001-05']),
-     'Mudanca 2001-05 vs 2023-24'),
-]
-
-for did, diff_img, label in diff_layers:
-    download_diff(diff_img, f'{did}.png', label)
-    time.sleep(DOWNLOAD_PAUSE)
 
 # Municipios
 print('\nA descarregar limites...')
@@ -402,14 +382,8 @@ CHANGE_LAYERS_INFO = [
     ('veg_ganho', 'Ganho de vegetacao (85-90 \u2192 23-24)', False),
 ]
 
-DIFF_LAYERS_INFO = [
-    ('diff_85_24', 'Diferenca NDVI 85-90 \u2192 23-24', False),
-    ('diff_95_24', 'Diferenca NDVI 95-00 \u2192 23-24', False),
-    ('diff_05_24', 'Diferenca NDVI 01-05 \u2192 23-24', False),
-]
-
 ALL_MAP_LAYERS = (NDVI_LAYERS + VEG_LAYERS + CHANGE_LAYERS_INFO
-    + DIFF_LAYERS_INFO + [('municipios', 'Limites municipais', True)])
+    + [('municipios', 'Limites municipais', True)])
 
 layers_js_items = []
 for lid, label, show in ALL_MAP_LAYERS:
@@ -422,7 +396,6 @@ layers_js = ',\n'.join(layers_js_items)
 n_ndvi = len(NDVI_LAYERS)
 n_veg = len(VEG_LAYERS)
 n_change = len(CHANGE_LAYERS_INFO)
-n_diff = len(DIFF_LAYERS_INFO)
 
 basemaps = [
     ('CartoDB Dark', 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'),
@@ -475,8 +448,8 @@ html = '''<!DOCTYPE html>
   <b style="font-size:14px;">Vegetacao do Porto</b><br>
   <span style="color:#aaa;font-size:10px;">1985-2024 &bull; Landsat 30m &bull; NDVI &ge; 0.4</span>
 
-  <div class="section">NDVI continuo (selecionar uma epoca)</div>
-  <div id="ndvi-radios" class="radio-group"></div>
+  <div class="section">NDVI continuo</div>
+  <div id="ndvi-rows"></div>
 
   <div class="legend">
     <div style="font-size:10px;color:#aaa;margin-bottom:2px;">NDVI (vegetacao)</div>
@@ -492,15 +465,6 @@ html = '''<!DOCTYPE html>
   <div style="font-size:10px;color:#888;margin:4px 0;">
     <span class="swatch" style="background:#FF4444;"></span>Perda
     <span class="swatch" style="background:#44FF44;margin-left:10px;"></span>Ganho
-  </div>
-
-  <div class="section">Diferenca NDVI continua</div>
-  <div id="diff-rows"></div>
-
-  <div class="legend" id="diff-legend" style="display:none;">
-    <div style="font-size:10px;color:#aaa;margin-bottom:2px;">Diferenca NDVI</div>
-    <div class="legend-bar" style="background:linear-gradient(to right, #d73027, #f46d43, #fdae61, #ffffbf, #a6d96a, #1a9850, #006837);"></div>
-    <div class="legend-labels"><span>-0.3 (perda)</span><span>0</span><span>+0.3 (ganho)</span></div>
   </div>
 
   <div class="section">Outros</div>
@@ -529,7 +493,6 @@ var overlays = [];
 var nNdvi = ''' + str(n_ndvi) + ''';
 var nVeg = ''' + str(n_veg) + ''';
 var nChange = ''' + str(n_change) + ''';
-var nDiff = ''' + str(n_diff) + ''';
 
 function makeCheckbox(container, idx, defaultOn) {
   var row = document.createElement('div');
@@ -555,23 +518,34 @@ async function init() {
     overlays.push(ov);
   }
 
-  // NDVI radio buttons (exclusive)
-  var divRadios = document.getElementById('ndvi-radios');
+  // NDVI checkboxes (exclusive: clicking one turns off others, clicking again turns off)
+  var divNdvi = document.getElementById('ndvi-rows');
   for (var i = 0; i < nNdvi; i++) {
-    var lbl = document.createElement('label');
-    var rb = document.createElement('input');
-    rb.type = 'radio'; rb.name = 'ndvi_epoch'; rb.value = i;
-    if (i === nNdvi - 1) { rb.checked = true; overlays[i].addTo(map); }
-    rb.addEventListener('change', function() {
-      var sel = +this.value;
-      for (var j = 0; j < nNdvi; j++) {
-        if (j === sel) overlays[j].addTo(map);
-        else map.removeLayer(overlays[j]);
+    var row = document.createElement('div');
+    row.className = 'row';
+    var cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.checked = (i === nNdvi - 1); cb.dataset.idx = i;
+    if (i === nNdvi - 1) overlays[i].addTo(map);
+    cb.addEventListener('change', function() {
+      var idx = +this.dataset.idx;
+      if (this.checked) {
+        // Turn off other NDVI layers
+        for (var j = 0; j < nNdvi; j++) {
+          if (j !== idx) {
+            map.removeLayer(overlays[j]);
+            divNdvi.querySelectorAll('input[type=checkbox]')[j].checked = false;
+          }
+        }
+        overlays[idx].addTo(map);
+      } else {
+        map.removeLayer(overlays[idx]);
       }
     });
-    lbl.appendChild(rb);
-    lbl.appendChild(document.createTextNode(' ' + layers[i].label));
-    divRadios.appendChild(lbl);
+    var lb = document.createElement('label');
+    lb.textContent = layers[i].label;
+    row.appendChild(cb);
+    row.appendChild(lb);
+    divNdvi.appendChild(row);
   }
 
   // Vegetation masks
@@ -587,35 +561,9 @@ async function init() {
     makeCheckbox(divChange, i, false);
   }
 
-  // Diff layers
-  var divDiff = document.getElementById('diff-rows');
-  var diffLegend = document.getElementById('diff-legend');
-  var diffStart = changeStart + nChange;
-  for (var i = diffStart; i < diffStart + nDiff; i++) {
-    var row = document.createElement('div');
-    row.className = 'row';
-    var cb = document.createElement('input');
-    cb.type = 'checkbox'; cb.checked = false; cb.dataset.idx = i;
-    cb.addEventListener('change', function() {
-      var idx = +this.dataset.idx;
-      if (this.checked) overlays[idx].addTo(map);
-      else map.removeLayer(overlays[idx]);
-      var anyDiff = false;
-      for (var j = diffStart; j < diffStart + nDiff; j++) {
-        if (map.hasLayer(overlays[j])) anyDiff = true;
-      }
-      diffLegend.style.display = anyDiff ? 'block' : 'none';
-    });
-    var lb = document.createElement('label');
-    lb.textContent = layers[i].label;
-    row.appendChild(cb);
-    row.appendChild(lb);
-    divDiff.appendChild(row);
-  }
-
   // Other layers (municipios)
   var divOther = document.getElementById('other-rows');
-  var otherStart = diffStart + nDiff;
+  var otherStart = changeStart + nChange;
   for (var i = otherStart; i < layers.length; i++) {
     makeCheckbox(divOther, i, layers[i].show);
   }
