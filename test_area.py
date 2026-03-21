@@ -109,21 +109,23 @@ esaBuilt = esa.eq(50)
 #   solo/relva = resto
 
 def classify(ndvi, ndbi, ndmi, nirgreen, b3, ndvi_min, spring_ndvi):
-    # Arvores puras: todos os filtros
+    # Arvores puras: filtros temporais + espectrais
+    # B3<600 OU (B3<800 se NDVI_min>=0.5) - arvores claras com NDVI estavel todo o ano
+    b3_ok = b3.lt(600).Or(b3.lt(800).And(ndvi_min.gte(0.5)))
     isTree = (ndvi.gte(0.5)
         .And(spring_ndvi.gte(0.7))
         .And(ndvi_min.gte(0.3))
         .And(nirgreen.gte(4))
-        .And(b3.lt(600))
+        .And(b3_ok)
     )
-    # Verde urbano / arvores mistas: NDVI alto + primavera razoavel
-    # mas nao passa todos os filtros espectrais (ruas arborizadas, jardins)
-    # B3 < 700 exclui relva brilhante regada que mantem NDVI alto
+    # Verde urbano / arvores mistas (ruas arborizadas, jardins)
+    # Mesma logica B3 relaxada para NDVI_min alto
+    b3_ok_mixed = b3.lt(600).Or(b3.lt(800).And(ndvi_min.gte(0.5)))
     isMixed = (ndvi.gte(0.5)
         .And(spring_ndvi.gte(0.5))
         .And(ndvi_min.gte(0.2))
-        .And(b3.lt(600))                  # exclui relva brilhante (mesmo limiar arvores)
-        .And(isTree.Not())                # nao e arvore pura
+        .And(b3_ok_mixed)
+        .And(isTree.Not())
     )
     # Edificado
     clear_built = ndvi.lt(0.2).And(ndbi.gte(-0.1))
