@@ -1,5 +1,4 @@
 import ee
-import folium
 import requests
 import os
 import base64
@@ -182,241 +181,194 @@ muni_styled = ee.Image().paint(municipiosPorto, 0, 2).selfMask()
 download_layer(muni_styled, 'FFFFFF', 'municipios.png')
 
 # ============================================================
-# Build HTML
+# Build HTML (pure Leaflet, single panel)
 # ============================================================
 print('\nA construir mapa...')
 
-m = folium.Map(location=[41.155, -8.63], zoom_start=13,
-               tiles='CartoDB dark_matter', attr='CartoDB')
+# Add municipios to layers
+muni_styled = ee.Image().paint(municipiosPorto, 0, 2).selfMask()
+download_layer(muni_styled, 'FFFFFF', 'municipios.png')
 
-folium.TileLayer(
-    tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    attr='Esri', name=u'Sat\u00e9lite', overlay=False, control=True,
-).add_to(m)
-folium.TileLayer('OpenStreetMap', name='OpenStreetMap', overlay=False, control=True).add_to(m)
+ALL_LAYERS_PLUS = ALL_LAYERS + [('municipios', None, 'Limites municipais', 'FFFFFF', True)]
 
-# Add all overlay layers with base64 images
-for lid, mask, label, color, show in ALL_LAYERS:
+# Build layer JS data
+import json
+layers_js_items = []
+for lid, mask, label, color, show in ALL_LAYERS_PLUS:
     b64 = to_base64(f'layers/{lid}.png')
-    folium.raster_layers.ImageOverlay(
-        image=b64, bounds=BOUNDS, name=label,
-        opacity=1.0, interactive=False, show=show,
-    ).add_to(m)
+    layers_js_items.append(
+        f'{{id:"{lid}",label:"{label}",color:"#{color}",show:{str(show).lower()},src:"{b64}"}}'
+    )
+layers_js = ',\n'.join(layers_js_items)
 
-muni_b64 = to_base64('layers/municipios.png')
-folium.raster_layers.ImageOverlay(
-    image=muni_b64, bounds=BOUNDS, name='Limites municipais',
-    opacity=1.0, interactive=False, show=True,
-).add_to(m)
+n_landuse = len(LANDUSE_LAYERS)
+n_trans = len(TRANS_LAYERS)
 
-folium.LayerControl(collapsed=False).add_to(m)
+basemaps = [
+    ('CartoDB Dark', 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'),
+    ('Satelite', 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
+    ('OpenStreetMap', 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
+]
+basemap_options = ''.join(
+    f'<option value="{url}"{"selected" if i==0 else ""}>{name}</option>'
+    for i, (name, url) in enumerate(basemaps)
+)
 
-# Legend with color pickers
-picker_html_landuse = ''
-picker_html_trans = ''
-for i, (lid, mask, label, color, show) in enumerate(ALL_LAYERS):
-    row = (f'<input type="color" id="c{i}" value="#{color}" data-layer="{lid}" '
-           f'style="width:24px;height:24px;border:none;cursor:pointer;vertical-align:middle;margin-right:6px;">'
-           f' {label}<br>')
-    if i < len(LANDUSE_LAYERS):
-        picker_html_landuse += row
-    else:
-        picker_html_trans += row
+html = f'''<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Espaco verde do Porto - Mudanca 2016-2025</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  body {{ margin:0; }}
+  #map {{ position:absolute; top:0; bottom:0; width:100%; }}
+  #panel {{
+    position:fixed; bottom:20px; left:20px; z-index:1000;
+    background:rgba(30,30,30,0.95); padding:14px 18px; border-radius:10px;
+    font:13px 'Segoe UI',Arial,sans-serif; color:#eee;
+    box-shadow:0 2px 10px rgba(0,0,0,0.5); min-width:280px;
+    max-height:90vh; overflow-y:auto; line-height:1.8;
+  }}
+  .row {{ display:flex; align-items:center; gap:6px; margin:2px 0; }}
+  .row input[type=color] {{ width:22px; height:22px; border:none; cursor:pointer; padding:0; }}
+  .row input[type=checkbox] {{ width:15px; height:15px; cursor:pointer; margin:0; }}
+  .row label {{ cursor:pointer; }}
+  .section {{ font-size:11px; color:#aaa; font-weight:bold; margin:8px 0 4px 0; }}
+  select {{ background:#333; color:#eee; border:1px solid #555; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="panel">
+  <b style="font-size:14px;">Espaco verde do Porto</b><br>
+  <span style="color:#aaa;font-size:10px;">2016-17 &rarr; 2024-25 &bull; Sentinel-2 10m</span>
 
-# Generate a short unique prefix from each layer's base64 to identify it in JS
-# Use first 40 chars of the base64 data (after the header) as fingerprint
-layer_fingerprints = {}
-for i, (lid, mask, label, color, show) in enumerate(ALL_LAYERS):
-    b64 = to_base64(f'layers/{lid}.png')
-    # Extract a unique substring from the base64 data
-    fp = b64[30:70]  # skip 'data:image/png;base64,' prefix area
-    layer_fingerprints[i] = fp
+  <div class="section">Uso do solo (2024-25)</div>
+  <div id="landuse-rows"></div>
 
-fps_js = str(layer_fingerprints).replace("'", '"')
+  <div class="section">Transicoes (2016 &rarr; 2025)</div>
+  <div id="trans-rows"></div>
 
-n = len(ALL_LAYERS)
+  <div class="section">Outros</div>
+  <div id="other-rows"></div>
 
-legend_and_js = f"""
-<div id="color-panel" style="position:fixed; bottom:30px; left:30px; z-index:1000;
-     background:rgba(30,30,30,0.95); padding:16px 20px; border-radius:10px;
-     font-family:'Segoe UI',Arial,sans-serif; font-size:13px; color:#eee;
-     box-shadow:0 2px 10px rgba(0,0,0,0.5); line-height:2.2; min-width:280px;
-     max-height:90vh; overflow-y:auto;">
-<b style="font-size:14px;">Espa\u00e7o verde do Porto</b><br>
-<span style="color:#aaa;font-size:10px;">2016-17 \u2192 2024-25 \u2022 Sentinel-2</span><br>
-<span style="color:#aaa;font-size:10px;">Clique nos quadrados para mudar as cores:</span><br><br>
+  <hr style="border-color:#555;margin:10px 0 6px 0;">
+  <div class="section">Fundo</div>
+  <select id="basemap-select">{basemap_options}</select>
 
-<b style="font-size:11px;color:#ccc;">Uso do solo (2024-25)</b><br>
-{picker_html_landuse}
-<br>
-<b style="font-size:11px;color:#ccc;">Transi\u00e7\u00f5es (2016-17 \u2192 2024-25)</b><br>
-{picker_html_trans}
-
-<hr style="border-color:#555;margin:8px 0;">
-<span style="color:#aaa;font-size:10px;">Fonte: Sentinel-2 (ESA)</span>
+  <hr style="border-color:#555;margin:10px 0 4px 0;">
+  <span style="color:#666;font-size:10px;">Fonte: Sentinel-2 (ESA) &bull; Copernicus</span>
 </div>
 
 <script>
-(function() {{
-    var N = {n};
-    var fingerprints = {fps_js};
-    var masks = {{}};       // idx -> {{w, h, alpha}}
-    var origSrcs = {{}};    // idx -> original base64 src
-    var colored = {{}};     // idx -> current recolored dataURL
+var map = L.map('map').setView([41.155, -8.63], 13);
+var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:''}}).addTo(map);
 
-    function hexToRgb(hex) {{
-        hex = hex.replace('#','');
-        return [parseInt(hex.substr(0,2),16), parseInt(hex.substr(2,2),16), parseInt(hex.substr(4,2),16)];
-    }}
+document.getElementById('basemap-select').addEventListener('change', function() {{
+  map.removeLayer(baseTile);
+  baseTile = L.tileLayer(this.value, {{maxZoom:19, attribution:''}}).addTo(map);
+}});
 
-    // Find which layer index an img belongs to, by checking its src
-    function identifyImg(img) {{
-        var src = img.src || '';
-        // Check against fingerprints (original base64)
-        for (var idx in fingerprints) {{
-            if (src.indexOf(fingerprints[idx]) !== -1) return parseInt(idx);
-        }}
-        // Check against stored colored versions
-        for (var idx in colored) {{
-            if (src === colored[idx]) return parseInt(idx);
-        }}
-        return -1;
-    }}
+var bounds = {BOUNDS};
+var layers = [{layers_js}];
+var state = [];
 
-    function getAllOverlayImgs() {{
-        return Array.from(document.querySelectorAll('.leaflet-overlay-pane .leaflet-image-layer'));
-    }}
+function hexToRgb(h) {{
+  h = h.replace('#','');
+  return [parseInt(h.substr(0,2),16), parseInt(h.substr(2,2),16), parseInt(h.substr(4,2),16)];
+}}
 
-    function extractMask(src, idx) {{
-        return new Promise(function(resolve) {{
-            var img = new Image();
-            img.onload = function() {{
-                var c = document.createElement('canvas');
-                c.width = img.width; c.height = img.height;
-                var ctx = c.getContext('2d');
-                ctx.drawImage(img, 0, 0);
-                var d = ctx.getImageData(0, 0, c.width, c.height);
-                var mask = new Uint8Array(d.data.length / 4);
-                for (var i = 0; i < mask.length; i++) {{
-                    mask[i] = d.data[i*4+3];
-                }}
-                masks[idx] = {{w: c.width, h: c.height, alpha: mask}};
-                resolve();
-            }};
-            img.src = src;
-        }});
-    }}
+function extractMask(src) {{
+  return new Promise(function(r) {{
+    var i = new Image();
+    i.onload = function() {{
+      var c = document.createElement('canvas');
+      c.width = i.width; c.height = i.height;
+      var x = c.getContext('2d');
+      x.drawImage(i, 0, 0);
+      var d = x.getImageData(0, 0, c.width, c.height);
+      var a = new Uint8Array(d.data.length / 4);
+      for (var j = 0; j < a.length; j++) a[j] = d.data[j * 4 + 3];
+      r({{w: c.width, h: c.height, alpha: a}});
+    }};
+    i.src = src;
+  }});
+}}
 
-    function recolor(imgEl, idx, hex) {{
-        var m = masks[idx];
-        if (!m) return;
-        var rgb = hexToRgb(hex);
-        var c = document.createElement('canvas');
-        c.width = m.w; c.height = m.h;
-        var ctx = c.getContext('2d');
-        var d = ctx.createImageData(m.w, m.h);
-        for (var i = 0; i < m.alpha.length; i++) {{
-            d.data[i*4]   = rgb[0];
-            d.data[i*4+1] = rgb[1];
-            d.data[i*4+2] = rgb[2];
-            d.data[i*4+3] = m.alpha[i];
-        }}
-        ctx.putImageData(d, 0, 0);
-        var dataUrl = c.toDataURL();
-        colored[idx] = dataUrl;
-        imgEl.src = dataUrl;
-    }}
+function renderColored(m, hex) {{
+  var rgb = hexToRgb(hex);
+  var c = document.createElement('canvas');
+  c.width = m.w; c.height = m.h;
+  var x = c.getContext('2d');
+  var d = x.createImageData(m.w, m.h);
+  for (var i = 0; i < m.alpha.length; i++) {{
+    d.data[i*4] = rgb[0]; d.data[i*4+1] = rgb[1];
+    d.data[i*4+2] = rgb[2]; d.data[i*4+3] = m.alpha[i];
+  }}
+  x.putImageData(d, 0, 0);
+  return c.toDataURL();
+}}
 
-    // Scan all visible overlays and apply current picker colors
-    function applyAll() {{
-        var imgs = getAllOverlayImgs();
-        imgs.forEach(function(img) {{
-            var idx = identifyImg(img);
-            if (idx < 0 || idx >= N) return;
-            var picker = document.getElementById('c' + idx);
-            if (picker && masks[idx]) {{
-                recolor(img, idx, picker.value);
-            }}
-        }});
-    }}
+async function init() {{
+  var nLanduse = {n_landuse};
+  var nTrans = {n_trans};
+  var divLanduse = document.getElementById('landuse-rows');
+  var divTrans = document.getElementById('trans-rows');
+  var divOther = document.getElementById('other-rows');
 
-    async function init() {{
-        // Wait for at least some overlays
-        var imgs = getAllOverlayImgs();
-        if (imgs.length === 0) {{
-            setTimeout(init, 500);
-            return;
-        }}
+  for (var i = 0; i < layers.length; i++) {{
+    var L_ = layers[i];
+    var m = await extractMask(L_.src);
+    var cs = renderColored(m, L_.color);
+    var ov = L.imageOverlay(cs, bounds);
+    if (L_.show) ov.addTo(map);
+    state.push({{overlay: ov, mask: m, color: L_.color}});
 
-        // Extract masks from all visible overlays
-        for (var i = 0; i < imgs.length; i++) {{
-            var idx = identifyImg(imgs[i]);
-            if (idx >= 0 && idx < N && !masks[idx]) {{
-                origSrcs[idx] = imgs[i].src;
-                await extractMask(imgs[i].src, idx);
-            }}
-        }}
+    var row = document.createElement('div');
+    row.className = 'row';
 
-        // Bind color pickers
-        for (var i = 0; i < N; i++) {{
-            (function(idx) {{
-                var picker = document.getElementById('c' + idx);
-                if (!picker) return;
-                picker.addEventListener('input', function() {{
-                    var imgs = getAllOverlayImgs();
-                    imgs.forEach(function(img) {{
-                        var id = identifyImg(img);
-                        if (id === idx) recolor(img, idx, picker.value);
-                    }});
-                }});
-            }})(i);
-        }}
+    var cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.checked = L_.show; cb.dataset.idx = i;
+    cb.addEventListener('change', function() {{
+      var idx = +this.dataset.idx;
+      if (this.checked) state[idx].overlay.addTo(map);
+      else map.removeLayer(state[idx].overlay);
+    }});
 
-        // Don't recolor initially -- keep the original exported colors
-    }}
+    var cp = document.createElement('input');
+    cp.type = 'color'; cp.value = L_.color; cp.dataset.idx = i;
+    cp.addEventListener('input', function() {{
+      var idx = +this.dataset.idx;
+      var s = state[idx];
+      s.color = this.value;
+      s.overlay.setUrl(renderColored(s.mask, this.value));
+    }});
 
-    // When layers are toggled, Leaflet re-adds img elements with original src.
-    // We need to detect new imgs and recolor them if the user changed the color.
-    setInterval(function() {{
-        var imgs = getAllOverlayImgs();
-        imgs.forEach(function(img) {{
-            var idx = identifyImg(img);
-            if (idx < 0 || idx >= N) return;
+    var lb = document.createElement('label');
+    lb.textContent = L_.label;
+    lb.style.fontSize = '12px';
 
-            // If this img has the original src (not yet recolored) and user changed color
-            var picker = document.getElementById('c' + idx);
-            if (!picker) return;
+    row.appendChild(cb);
+    row.appendChild(cp);
+    row.appendChild(lb);
 
-            // Extract mask if we don't have it yet
-            if (!masks[idx] && img.src.indexOf('data:image/png;base64,') === 0) {{
-                origSrcs[idx] = img.src;
-                extractMask(img.src, idx).then(function() {{
-                    if (picker.value !== picker.defaultValue) {{
-                        recolor(img, idx, picker.value);
-                    }}
-                }});
-                return;
-            }}
+    if (i < nLanduse) divLanduse.appendChild(row);
+    else if (i < nLanduse + nTrans) divTrans.appendChild(row);
+    else divOther.appendChild(row);
+  }}
+}}
 
-            // If user changed color and this img shows original, recolor it
-            if (masks[idx] && picker.value !== picker.defaultValue) {{
-                if (img.src !== colored[idx]) {{
-                    recolor(img, idx, picker.value);
-                }}
-            }}
-        }});
-    }}, 500);
-
-    setTimeout(init, 1500);
-}})();
+init();
 </script>
-"""
-
-m.get_root().html.add_child(folium.Element(legend_and_js))
+</body>
+</html>'''
 
 output = 'index.html'
-m.save(output)
+with open(output, 'w', encoding='utf-8') as f:
+    f.write(html)
 print(f'\nMapa guardado em {output} ({os.path.getsize(output)//1024} KB)')
 
 import webbrowser
-webbrowser.open('http://localhost:8765/' + output)
+webbrowser.open(output)
