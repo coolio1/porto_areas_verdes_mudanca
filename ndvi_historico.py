@@ -272,7 +272,7 @@ def download_mask(image, color_hex, filename):
 # ============================================================
 # Mascaras de vegetacao (NDVI >= 0.4) por epoca
 # ============================================================
-NDVI_VEG_THRESHOLD = 0.4
+NDVI_VEG_THRESHOLD = 0.35
 
 veg_masks = {}
 for name, sensor, years in EPOCHS:
@@ -446,7 +446,7 @@ html = '''<!DOCTYPE html>
 <div id="map"></div>
 <div id="panel">
   <b style="font-size:14px;">Vegetacao do Porto</b><br>
-  <span style="color:#aaa;font-size:10px;">1985-2024 &bull; Landsat 30m &bull; NDVI &ge; 0.4</span>
+  <span style="color:#aaa;font-size:10px;">1985-2024 &bull; Landsat 30m &bull; NDVI &ge; 0.35</span>
 
   <div class="section">NDVI continuo</div>
   <div id="ndvi-rows"></div>
