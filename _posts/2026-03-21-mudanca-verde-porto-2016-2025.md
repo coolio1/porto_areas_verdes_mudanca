@@ -2,13 +2,56 @@
 layout: post
 title: "Porto perdeu ou ganhou verde? Análise de satélite 1985–2025"
 date: 2026-03-21
-tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação]
+tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação, animação]
 ---
 
-Quanto espaço verde perdeu o Porto nas últimas décadas? Usando imagens de satélite e o Google Earth Engine, analisei a evolução da vegetação do município em duas escalas temporais:
+Quanto espaço verde perdeu o Porto nas últimas décadas? Usando imagens de satélite e o Google Earth Engine, analisei a evolução da vegetação do município em duas escalas temporais — e criei uma animação vectorial que mostra, a cada dois anos, como a cidade cresceu à custa dos espaços verdes.
 
-- **Análise detalhada 2016–2025** — Sentinel-2 a 10 m, com classificação árvores/solo/edificado
+- **Animação do crescimento urbano 1987–2024** — evolução bienal vectorial em 4K
 - **Análise histórica 1985–2024** — Landsat a 30 m, com NDVI normalizado entre sensores
+- **Análise detalhada 2016–2025** — Sentinel-2 a 10 m, com classificação árvores/solo/edificado
+
+---
+
+## Animação: 37 anos de crescimento urbano
+
+<video controls width="100%" poster="{{ site.baseurl }}/animacao/frame_2024.png">
+  <source src="{{ site.baseurl }}/animacao/animacao_cairo.mp4" type="video/mp4">
+</video>
+
+A animação mostra a evolução bienal do Porto entre 1987 e 2024, com dados interpolados a partir das cinco épocas de classificação Landsat. Cada cor representa uma era de construção diferente — do castanho escuro (pré-1990) ao magenta (2023–24) — enquanto o verde recua progressivamente.
+
+Três fases são visíveis:
+
+1. **1987–2003: expansão acelerada.** O Porto perdeu 1 780 ha de vegetação em apenas 16 anos — uma taxa de 111 ha/ano. A mancha urbana expandiu-se rapidamente nas freguesias periféricas (Ramalde, Paranhos, Campanhã), preenchendo vazios e quintas.
+
+2. **2003–2016: estabilização e ligeira recuperação.** A vegetação recuperou 160 ha, possivelmente reflectindo o amadurecimento de plantações e a crise económica de 2008–2013 que travou a construção. O balanço líquido neste período foi positivo.
+
+3. **2017–2024: nova pressão urbana.** Com o boom turístico e imobiliário pós-2015, o Porto voltou a perder vegetação — 165 ha em 8 anos. A construção concentrou-se na densificação do tecido existente, visível nas manchas laranja e magenta dispersas por toda a cidade.
+
+### Evolução bienal da vegetação
+
+| Ano | Vegetação (ha) | % do município | Variação vs 1987 |
+|-----|---------------|----------------|------------------|
+| 1987 | 5 352 | **45,0%** | — |
+| 1991 | 4 907 | 41,3% | −445 ha |
+| 1997 | 4 240 | 35,6% | −1 112 ha |
+| 2003 | 3 572 | **30,0%** | −1 780 ha |
+| 2009 | 3 646 | 30,7% | −1 706 ha |
+| 2016 | 3 732 | 31,4% | −1 620 ha |
+| 2024 | 3 567 | **30,0%** | **−1 785 ha** |
+
+O ritmo de perda não foi constante. Entre 1987 e 1997, o Porto perdeu vegetação ao ritmo mais intenso de toda a série — **111 ha por ano**. Na década seguinte (1997–2003), o ritmo manteve-se elevado (111 ha/ano). Mas entre 2003 e 2016, houve uma inversão notável: a vegetação cresceu ligeiramente (+12 ha/ano), sugerindo que a expansão urbana abrandou e que áreas anteriormente classificadas como solo foram recolonizadas por vegetação espontânea ou plantada.
+
+### Distribuição espacial
+
+A análise espacial revela padrões geográficos claros:
+
+- **Zona Ocidental (Foz, Nevogilde, Aldoar):** manteve a maior cobertura verde ao longo de todo o período, graças ao Parque da Cidade e às áreas residenciais de baixa densidade. Mesmo em 2024, esta zona permanece maioritariamente verde.
+
+- **Centro histórico (Sé, Miragaia, Cedofeita):** já densamente edificado em 1987, com muito pouca vegetação. As alterações foram mínimas — não havia verde para perder.
+
+- **Periferia Norte e Este (Paranhos, Ramalde, Campanhã):** sofreram a maior transformação. Grandes áreas verdes visíveis em 1987 foram progressivamente convertidas em tecido urbano, particularmente ao longo dos eixos viários principais.
 
 ---
 
@@ -148,11 +191,12 @@ Todo o pipeline está disponível no repositório:
 - [`porto_publish.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/porto_publish.py) — pipeline Sentinel-2 (classificação + mapa)
 - [`test_area.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/test_area.py) — calibração na área de teste
 - [`porto_stats.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/porto_stats.py) — cálculo de estatísticas
+- [`animacao/animacao_cairo.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/animacao/animacao_cairo.py) — animação vectorial Cairo com interpolação bienal
 
 ---
 
 ## Próximos passos
 
-- Explorar a série temporal anual (2016–2025) para identificar **quando** ocorreram as maiores alterações
-- Cruzar com dados de licenciamento urbanístico da CMP
-- Analisar a distribuição espacial da perda por freguesia
+- Cruzar com dados de licenciamento urbanístico da CMP para correlacionar picos de construção com perda de vegetação
+- Analisar a distribuição espacial da perda por freguesia, identificando quais sofreram maior pressão
+- Comparar com a ortofotografia de 1947 para contextualizar a escala da transformação urbana do Porto ao longo de quase 80 anos
