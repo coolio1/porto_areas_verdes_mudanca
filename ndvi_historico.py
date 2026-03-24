@@ -24,6 +24,10 @@ BOUNDS = [[41.13, -8.70], [41.19, -8.54]]
 municipios = ee.FeatureCollection(f'projects/{GEE_PROJECT}/assets/CAOP2025_municipios')
 municipiosPorto = municipios.filterBounds(porto)
 
+# Concelho do Porto (para mascarar edificado — exclui agua do mar/rio)
+portoMuni = municipios.filter(ee.Filter.eq('municipio', 'Porto'))
+portoMuniGeom = portoMuni.geometry()
+
 # ============================================================
 # Epocas: janelas de 5-6 anos para maximizar cenas disponiveis
 # ============================================================
@@ -272,11 +276,24 @@ def download_mask(image, color_hex, filename):
 # ============================================================
 # Mascaras de vegetacao (NDVI >= 0.4) por epoca
 # ============================================================
-NDVI_VEG_THRESHOLD = 0.3
+NDVI_VEG_THRESHOLD = 0.25
 
 veg_masks = {}
 for name, sensor, years in EPOCHS:
     veg_masks[name] = composites[name].gte(NDVI_VEG_THRESHOLD)
+
+# Mascara de agua permanente (JRC Global Surface Water)
+# occurrence > 50% = agua permanente (rio Douro, mar, etc.)
+# unmask(0) garante que pixeis sem dados JRC ficam como 0 (nao-agua)
+jrc_water = ee.Image('JRC/GSW1_4/GlobalSurfaceWater').select('occurrence')
+water_mask = jrc_water.unmask(0).gt(50).clip(porto)  # 1 = agua, 0 = nao-agua
+
+# Mascaras de edificado (tudo o que nao e vegetacao nem agua)
+portoMuniMask = ee.Image.constant(1).clip(portoMuniGeom)
+edif_masks = {}
+for name, sensor, years in EPOCHS:
+    not_veg = veg_masks[name].Not()
+    edif_masks[name] = not_veg.updateMask(water_mask.Not()).updateMask(portoMuniMask)
 
 # Perda/ganho de vegetacao (primeira vs ultima epoca)
 first_epoch = EPOCHS[0][0]   # 1985-90
@@ -299,6 +316,12 @@ for name, sensor, years in EPOCHS:
 print('\nA descarregar mascaras de vegetacao...')
 for name, sensor, years in EPOCHS:
     download_mask(veg_masks[name].selfMask(), '00FF00', f'veg_{name}.png')
+    time.sleep(DOWNLOAD_PAUSE)
+
+# Mascaras de edificado por epoca
+print('\nA descarregar mascaras de edificado...')
+for name, sensor, years in EPOCHS:
+    download_mask(edif_masks[name].selfMask(), 'C4A882', f'edif_{name}.png')
     time.sleep(DOWNLOAD_PAUSE)
 
 # Perda e ganho
@@ -377,12 +400,17 @@ for name, sensor, years in EPOCHS:
     yr_range = f'{years[0]}-{years[-1]}'
     VEG_LAYERS.append((f'veg_{name}', f'Vegetacao {yr_range}', False))
 
+EDIF_LAYERS = []
+for name, sensor, years in EPOCHS:
+    yr_range = f'{years[0]}-{years[-1]}'
+    EDIF_LAYERS.append((f'edif_{name}', f'Edificado {yr_range}', False))
+
 CHANGE_LAYERS_INFO = [
     ('veg_perda', 'Perda de vegetacao (85-90 \u2192 23-24)', False),
     ('veg_ganho', 'Ganho de vegetacao (85-90 \u2192 23-24)', False),
 ]
 
-ALL_MAP_LAYERS = (NDVI_LAYERS + VEG_LAYERS + CHANGE_LAYERS_INFO
+ALL_MAP_LAYERS = (NDVI_LAYERS + VEG_LAYERS + EDIF_LAYERS + CHANGE_LAYERS_INFO
     + [('municipios', 'Limites municipais', True)])
 
 layers_js_items = []
@@ -395,6 +423,7 @@ layers_js = ',\n'.join(layers_js_items)
 
 n_ndvi = len(NDVI_LAYERS)
 n_veg = len(VEG_LAYERS)
+n_edif = len(EDIF_LAYERS)
 n_change = len(CHANGE_LAYERS_INFO)
 
 basemaps = [
@@ -446,7 +475,7 @@ html = '''<!DOCTYPE html>
 <div id="map"></div>
 <div id="panel">
   <b style="font-size:14px;">Vegetacao do Porto</b><br>
-  <span style="color:#aaa;font-size:10px;">1985-2024 &bull; Landsat 30m &bull; NDVI &ge; 0.3</span>
+  <span style="color:#aaa;font-size:10px;">1985-2024 &bull; Landsat 30m &bull; NDVI &ge; 0.25</span>
 
   <div class="section">NDVI continuo</div>
   <div id="ndvi-rows"></div>
@@ -459,6 +488,9 @@ html = '''<!DOCTYPE html>
 
   <div class="section">Mascara de vegetacao por epoca</div>
   <div id="veg-rows"></div>
+
+  <div class="section">Mascara de edificado por epoca</div>
+  <div id="edif-rows"></div>
 
   <div class="section">Perda e ganho (1985-90 vs 2023-24)</div>
   <div id="change-rows"></div>
@@ -492,6 +524,7 @@ var layers = [''' + layers_js + '''];
 var overlays = [];
 var nNdvi = ''' + str(n_ndvi) + ''';
 var nVeg = ''' + str(n_veg) + ''';
+var nEdif = ''' + str(n_edif) + ''';
 var nChange = ''' + str(n_change) + ''';
 
 function makeCheckbox(container, idx, defaultOn) {
@@ -554,9 +587,16 @@ async function init() {
     makeCheckbox(divVeg, i, false);
   }
 
+  // Edificado masks
+  var divEdif = document.getElementById('edif-rows');
+  var edifStart = nNdvi + nVeg;
+  for (var i = edifStart; i < edifStart + nEdif; i++) {
+    makeCheckbox(divEdif, i, false);
+  }
+
   // Change layers (loss/gain)
   var divChange = document.getElementById('change-rows');
-  var changeStart = nNdvi + nVeg;
+  var changeStart = edifStart + nEdif;
   for (var i = changeStart; i < changeStart + nChange; i++) {
     makeCheckbox(divChange, i, false);
   }
