@@ -252,10 +252,6 @@ def gerar_html(casos, agregados):
             <h3>Ciclistas vítimas em Portugal (ANSR)</h3>
             <canvas id="chartCiclistas"></canvas>
         </div>
-        <div class="chart-card">
-            <h3>Sinistralidade geral — Distrito do Porto</h3>
-            <canvas id="chartGeral"></canvas>
-        </div>
     </div>
 
     <div class="table-card">
@@ -379,18 +375,6 @@ def gerar_html(casos, agregados):
         options: defaultOptions
     }});
 
-    // Sinistralidade geral Porto - barras agrupadas com valores reais
-    new Chart(document.getElementById('chartGeral'), {{
-        type: 'bar',
-        data: {{
-            labels: {json.dumps([str(g['ano']) for g in geral])},
-            datasets: [
-                {{ label: 'Vítimas mortais', data: {json.dumps([g['vitimas_mortais'] for g in geral])}, backgroundColor: chartColors.red }},
-                {{ label: 'Feridos graves', data: {json.dumps([g['feridos_graves'] for g in geral])}, backgroundColor: chartColors.orange }}
-            ]
-        }},
-        options: defaultOptions
-    }});
 </script>
 
 </body>

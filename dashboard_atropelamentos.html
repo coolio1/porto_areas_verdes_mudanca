@@ -172,10 +172,6 @@
             <h3>Ciclistas vítimas em Portugal (ANSR)</h3>
             <canvas id="chartCiclistas"></canvas>
         </div>
-        <div class="chart-card">
-            <h3>Sinistralidade geral — Distrito do Porto</h3>
-            <canvas id="chartGeral"></canvas>
-        </div>
     </div>
 
     <div class="table-card">
@@ -734,18 +730,6 @@
         options: defaultOptions
     });
 
-    // Sinistralidade geral Porto - barras agrupadas com valores reais
-    new Chart(document.getElementById('chartGeral'), {
-        type: 'bar',
-        data: {
-            labels: ["2019", "2023", "2024"],
-            datasets: [
-                { label: 'Vítimas mortais', data: [79, 61, 76], backgroundColor: chartColors.red },
-                { label: 'Feridos graves', data: [205, 216, 218], backgroundColor: chartColors.orange }
-            ]
-        },
-        options: defaultOptions
-    });
 </script>
 
 </body>
