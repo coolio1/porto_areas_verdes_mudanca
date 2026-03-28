@@ -9,6 +9,8 @@ import math
 import base64
 import io
 import time
+from PIL import Image
+Image.MAX_IMAGE_PIXELS = None
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
@@ -483,10 +485,19 @@ n_veg = len(VEG_LAYERS)
 n_edif = len(EDIF_LAYERS)
 n_change = len(CHANGE_LAYERS_INFO)
 
-# Layers 1947 (base64)
+# Layers 1947 (base64, reduzidas para caber no canvas do browser)
+def to_base64_resized(filepath, scale=0.25):
+    """Reduz imagem para evitar limites de canvas do browser."""
+    img = Image.open(filepath)
+    new_size = (img.width // int(1/scale), img.height // int(1/scale))
+    img = img.resize(new_size, Image.NEAREST)
+    buf = io.BytesIO()
+    img.save(buf, format='PNG', optimize=True)
+    return 'data:image/png;base64,' + base64.b64encode(buf.getvalue()).decode()
+
 layers1947_js_items = []
 for lid, label, color, show in LAYERS_1947:
-    b64 = to_base64(f'1947/layers/{lid}.png')
+    b64 = to_base64_resized(f'1947/layers/{lid}.png')
     layers1947_js_items.append(
         '{' + f'id:"{lid}",label:"{label}",color:"{color}",show:{str(show).lower()},src:"{b64}"' + '}'
     )
