@@ -256,10 +256,6 @@ def gerar_html(casos, agregados):
             <h3>Sinistralidade geral — Distrito do Porto</h3>
             <canvas id="chartGeral"></canvas>
         </div>
-        <div class="chart-card">
-            <h3>Casos noticiados por concelho (amostra)</h3>
-            <canvas id="chartConcelhos"></canvas>
-        </div>
     </div>
 
     <div class="table-card">
@@ -383,37 +379,17 @@ def gerar_html(casos, agregados):
         options: defaultOptions
     }});
 
-    // Sinistralidade geral Porto
+    // Sinistralidade geral Porto - barras agrupadas com valores reais
     new Chart(document.getElementById('chartGeral'), {{
-        type: 'line',
+        type: 'bar',
         data: {{
             labels: {json.dumps([str(g['ano']) for g in geral])},
             datasets: [
-                {{ label: 'Acidentes c/ vítimas', data: {json.dumps([g['acidentes_com_vitimas'] for g in geral])}, borderColor: chartColors.blue, backgroundColor: 'transparent', tension: 0.3 }},
-                {{ label: 'Vítimas mortais (x50)', data: {json.dumps([g['vitimas_mortais']*50 for g in geral])}, borderColor: chartColors.red, backgroundColor: 'transparent', tension: 0.3 }},
-                {{ label: 'Feridos graves (x20)', data: {json.dumps([g['feridos_graves']*20 for g in geral])}, borderColor: chartColors.orange, backgroundColor: 'transparent', tension: 0.3 }}
+                {{ label: 'Vítimas mortais', data: {json.dumps([g['vitimas_mortais'] for g in geral])}, backgroundColor: chartColors.red }},
+                {{ label: 'Feridos graves', data: {json.dumps([g['feridos_graves'] for g in geral])}, backgroundColor: chartColors.orange }}
             ]
         }},
         options: defaultOptions
-    }});
-
-    // Concelhos
-    var concelhoLabels = {json.dumps(list(concelho_counts.keys()))};
-    var concelhoMortal = {json.dumps([concelho_counts[k]['mortal'] for k in concelho_counts])};
-    var concelhoGrave = {json.dumps([concelho_counts[k]['ferido_grave'] for k in concelho_counts])};
-    var concelhoLeve = {json.dumps([concelho_counts[k]['ferido_leve'] for k in concelho_counts])};
-
-    new Chart(document.getElementById('chartConcelhos'), {{
-        type: 'bar',
-        data: {{
-            labels: concelhoLabels,
-            datasets: [
-                {{ label: 'Mortal', data: concelhoMortal, backgroundColor: chartColors.red }},
-                {{ label: 'Ferido grave', data: concelhoGrave, backgroundColor: chartColors.orange }},
-                {{ label: 'Ferido leve', data: concelhoLeve, backgroundColor: chartColors.blue }}
-            ]
-        }},
-        options: {{ ...defaultOptions, scales: {{ ...defaultOptions.scales, x: {{ ...defaultOptions.scales.x, stacked: true }}, y: {{ ...defaultOptions.scales.y, stacked: true }} }} }}
     }});
 </script>
 

@@ -176,10 +176,6 @@
             <h3>Sinistralidade geral — Distrito do Porto</h3>
             <canvas id="chartGeral"></canvas>
         </div>
-        <div class="chart-card">
-            <h3>Casos noticiados por concelho (amostra)</h3>
-            <canvas id="chartConcelhos"></canvas>
-        </div>
     </div>
 
     <div class="table-card">
@@ -738,37 +734,17 @@
         options: defaultOptions
     });
 
-    // Sinistralidade geral Porto
+    // Sinistralidade geral Porto - barras agrupadas com valores reais
     new Chart(document.getElementById('chartGeral'), {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: ["2019", "2023", "2024"],
             datasets: [
-                { label: 'Acidentes c/ vítimas', data: [6245, 6107, 6384], borderColor: chartColors.blue, backgroundColor: 'transparent', tension: 0.3 },
-                { label: 'Vítimas mortais (x50)', data: [3950, 3050, 3800], borderColor: chartColors.red, backgroundColor: 'transparent', tension: 0.3 },
-                { label: 'Feridos graves (x20)', data: [4100, 4320, 4360], borderColor: chartColors.orange, backgroundColor: 'transparent', tension: 0.3 }
+                { label: 'Vítimas mortais', data: [79, 61, 76], backgroundColor: chartColors.red },
+                { label: 'Feridos graves', data: [205, 216, 218], backgroundColor: chartColors.orange }
             ]
         },
         options: defaultOptions
-    });
-
-    // Concelhos
-    var concelhoLabels = ["P\u00f3voa de Varzim", "Porto", "Gondomar", "Vila Nova de Gaia", "Maia", "Matosinhos", "Valongo"];
-    var concelhoMortal = [1, 8, 0, 3, 1, 3, 0];
-    var concelhoGrave = [0, 1, 2, 0, 0, 3, 0];
-    var concelhoLeve = [0, 0, 1, 0, 0, 0, 1];
-
-    new Chart(document.getElementById('chartConcelhos'), {
-        type: 'bar',
-        data: {
-            labels: concelhoLabels,
-            datasets: [
-                { label: 'Mortal', data: concelhoMortal, backgroundColor: chartColors.red },
-                { label: 'Ferido grave', data: concelhoGrave, backgroundColor: chartColors.orange },
-                { label: 'Ferido leve', data: concelhoLeve, backgroundColor: chartColors.blue }
-            ]
-        },
-        options: { ...defaultOptions, scales: { ...defaultOptions.scales, x: { ...defaultOptions.scales.x, stacked: true }, y: { ...defaultOptions.scales.y, stacked: true } } }
     });
 </script>
 
