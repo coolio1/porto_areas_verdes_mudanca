@@ -24,4 +24,5 @@ exclude:
   - .claude
   - .superpowers
   - docs
+  - archive
   - "*.gpkg"

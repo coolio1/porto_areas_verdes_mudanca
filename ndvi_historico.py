@@ -494,6 +494,7 @@ layers1947_js = ',\n'.join(layers1947_js_items)
 
 basemaps = [
     ('CartoDB Dark', 'dark'),
+    ('CartoDB Positron', 'positron'),
     ('Ortofoto 1947', 'orto1947'),
     ('Satelite', 'satellite'),
     ('OpenStreetMap', 'osm'),
@@ -583,6 +584,7 @@ document.getElementById('basemap-select').addEventListener('change', function() 
   } else {
     var urls = {
       dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+      positron: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
       satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       osm: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     };

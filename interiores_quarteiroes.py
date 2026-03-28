@@ -102,24 +102,38 @@ isBuilt_l = isBuilt_l_base.Or(stays_built)
 isTree_l = isTree_l_base.And(isBuilt_l.Not())
 isSolo_l = isTree_l.Not().And(isBuilt_l.Not())
 
-# Neighbourhood filter: fraction of built pixels within 50m radius
+# Neighbourhood filter: pixels verdes com edificado na vizinhanca (borda de interiores)
 print('A calcular filtro de vizinhanca...')
+isGreen_l = isTree_l.Or(isSolo_l)
+isGreen_e = isTree_e.Or(isSolo_e)
+
 built_fraction = isBuilt_l.unmask(0).reduceNeighborhood(
     reducer=ee.Reducer.mean(),
     kernel=ee.Kernel.circle(radius=50, units='meters')
 )
-is_interior = built_fraction.gte(0.5)
+is_edge_interior = built_fraction.gte(0.5)
 
-# Subsistente: green/soil in 2024 AND surrounded by buildings
-isGreen_l = isTree_l.Or(isSolo_l)
-subsistente_raw = isGreen_l.And(is_interior).selfMask()
+# Flood-fill: crescer das bordas para dentro, preenchendo interiores grandes
+# Sementes = pixels verdes na borda (junto a edificios)
+print('A preencher interiores (flood-fill)...')
+interior_fill = isGreen_l.And(is_edge_interior)
+for _ in range(10):  # ~100m de crescimento (10 iter x 10m/pixel)
+    grown = interior_fill.focal_max(radius=10, units='meters')
+    interior_fill = grown.And(isGreen_l).Or(interior_fill)
 
-# Perdido: was green/soil in 2016, now built in 2024, AND surrounded by buildings
-isGreen_e = isTree_e.Or(isSolo_e)
-perdido_raw = isGreen_e.And(isBuilt_l).And(is_interior).selfMask()
+# Subsistente: green/soil em 2024 dentro de interiores de quarteirão
+subsistente_raw = isGreen_l.And(interior_fill).selfMask()
 
-# Filtro de area minima: remover manchas com menos de 6 pixels conexos
-MIN_PIXELS = 15
+# Perdido: era green/soil em 2016, agora edificado, na zona de interiores
+# Usar o mesmo flood-fill mas para a epoca 2016
+interior_fill_e = isGreen_e.And(is_edge_interior)
+for _ in range(10):
+    grown = interior_fill_e.focal_max(radius=10, units='meters')
+    interior_fill_e = grown.And(isGreen_e).Or(interior_fill_e)
+perdido_raw = isGreen_e.And(isBuilt_l).And(interior_fill_e).selfMask()
+
+# Filtro de area minima: remover manchas com menos de 30 pixels conexos (~3000 m2)
+MIN_PIXELS = 30
 subsistente_count = subsistente_raw.connectedPixelCount(MIN_PIXELS + 1)
 subsistente = subsistente_raw.updateMask(subsistente_count.gte(MIN_PIXELS))
 
