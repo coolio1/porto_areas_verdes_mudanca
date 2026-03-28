@@ -208,15 +208,15 @@ for _ in range(10):
 perdido_raw = isGreen_e.And(isBuilt_l).And(interior_fill_e).selfMask()
 
 # ----- Filtro morfologico: remover ruas arborizadas (features lineares) -----
-# Opening (erosao + dilatacao) remove features < ~30m de largura
+# Opening (erosao + dilatacao) sobre raster binario (unmask(0) para ter 0s reais)
 print('A remover features lineares (ruas arborizadas)...')
-subsistente_opened = subsistente_raw.focal_min(
+subsistente_opened = subsistente_raw.unmask(0).focal_min(
     radius=1.5, kernelType='square', units='pixels'
 ).focal_max(
     radius=1.5, kernelType='square', units='pixels'
 ).selfMask()
 
-perdido_opened = perdido_raw.focal_min(
+perdido_opened = perdido_raw.unmask(0).focal_min(
     radius=1.5, kernelType='square', units='pixels'
 ).focal_max(
     radius=1.5, kernelType='square', units='pixels'
