@@ -171,75 +171,15 @@ else:
 
 is_centro = ee.Image.constant(1).clip(centro_ee).unmask(0).clip(porto)
 
-# ----- Filtro de vizinhanca + flood-fill -----
-print('A calcular filtro de vizinhanca...')
+# ----- Camadas base -----
 isGreen_l = isTree_l.Or(isSolo_l)
 isGreen_e = isTree_e.Or(isSolo_e)
 
-built_fraction = isBuilt_l.unmask(0).reduceNeighborhood(
-    reducer=ee.Reducer.mean(),
-    kernel=ee.Kernel.circle(radius=50, units='meters')
-)
-is_edge_interior = built_fraction.gte(0.5)
+# Descarregar camadas brutas (sem filtros — filtragem feita localmente em vector)
+subsistente = isGreen_l.selfMask()
+perdido = isGreen_e.And(isBuilt_l).selfMask()
 
-# ----- Passo 1: pixels verdes na borda (sem flood-fill) -----
-sub_edge = isGreen_l.And(is_edge_interior).selfMask()
-per_edge = isGreen_e.And(isBuilt_l).And(is_edge_interior).selfMask()
-
-# ----- Passo 2: opening para remover features lineares -----
-print('A remover features lineares (ruas arborizadas)...')
-sub_opened = sub_edge.unmask(0).focal_min(
-    radius=1.5, kernelType='square', units='pixels'
-).focal_max(
-    radius=1.5, kernelType='square', units='pixels'
-).gte(0.5).selfMask()
-
-per_opened = per_edge.unmask(0).focal_min(
-    radius=1.5, kernelType='square', units='pixels'
-).focal_max(
-    radius=1.5, kernelType='square', units='pixels'
-).gte(0.5).selfMask()
-
-# ----- Passo 3: filtro de área mínima (ANTES do flood-fill) -----
-MIN_PIXELS_CENTRO = 30     # ~3000 m2
-MIN_PIXELS_PERIFERIA = 400  # ~40000 m2 (4 ha)
-
-print('A filtrar por area minima...')
-sub_count = sub_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
-sub_filtered = sub_opened.updateMask(
-    sub_count.gte(MIN_PIXELS_CENTRO).And(is_centro)
-).unmask(0).add(
-    sub_opened.updateMask(
-        sub_count.gte(MIN_PIXELS_PERIFERIA).And(is_centro.Not())
-    ).unmask(0)
-).selfMask()
-
-per_count = per_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
-per_filtered = per_opened.updateMask(
-    per_count.gte(MIN_PIXELS_CENTRO).And(is_centro)
-).unmask(0).add(
-    per_opened.updateMask(
-        per_count.gte(MIN_PIXELS_PERIFERIA).And(is_centro.Not())
-    ).unmask(0)
-).selfMask()
-
-# ----- Passo 4: flood-fill SÓ nos componentes que passaram o filtro -----
-print('A preencher interiores (flood-fill)...')
-subsistente_fill = sub_filtered
-for _ in range(10):
-    grown = subsistente_fill.focal_max(radius=10, units='meters')
-    subsistente_fill = grown.And(isGreen_l).Or(subsistente_fill)
-subsistente = subsistente_fill.selfMask()
-
-perdido_fill = per_filtered
-for _ in range(10):
-    grown = perdido_fill.focal_max(radius=10, units='meters')
-    perdido_fill = grown.And(isGreen_e.And(isBuilt_l)).Or(perdido_fill)
-perdido = perdido_fill.selfMask()
-
-# Contorno do centro alargado (rasterizado localmente, nao no GEE)
-
-print('Classificacao e filtros concluidos.')
+print('Classificacao concluida.')
 
 from PIL import Image
 import numpy as np
@@ -379,7 +319,91 @@ def apply_osm_mask(filepath, parks_geom):
 
 apply_osm_mask('layers/interior_subsistente.png', parks_union)
 apply_osm_mask('layers/interior_perdido.png', parks_union)
-print('Mascara OSM aplicada.')
+print('Mascara PDM aplicada.')
+
+# ----- Phase 2b: Filtragem vectorial (area + linearidade) -----
+print('\nA filtrar por area e forma (vectorial)...')
+from scipy import ndimage
+
+# Resolucao: graus por pixel
+ref_img = Image.open('layers/interior_subsistente.png')
+W, H = ref_img.size
+lon_min, lon_max = -8.70, -8.54
+lat_min, lat_max = 41.13, 41.19
+dx_deg = (lon_max - lon_min) / W   # graus/pixel em longitude
+dy_deg = (lat_max - lat_min) / H   # graus/pixel em latitude
+# Conversao aproximada a metros (lat ~41.16)
+import math
+lat_mid = (lat_min + lat_max) / 2
+m_per_deg_lat = 111320
+m_per_deg_lon = 111320 * math.cos(math.radians(lat_mid))
+pixel_area_m2 = (dx_deg * m_per_deg_lon) * (dy_deg * m_per_deg_lat)
+print(f'  Resolucao: {dx_deg*m_per_deg_lon:.1f} x {dy_deg*m_per_deg_lat:.1f} m/pixel, area pixel: {pixel_area_m2:.0f} m2')
+
+# Mascara VCI rasterizada para distinguir centro/periferia
+from shapely import contains_xy as _contains_xy
+xs_grid = np.linspace(lon_min, lon_max, W)
+ys_grid = np.linspace(lat_max, lat_min, H)
+xx_grid, yy_grid = np.meshgrid(xs_grid, ys_grid)
+if centro_union is not None:
+    vci_mask = _contains_xy(centro_union, xx_grid.ravel(), yy_grid.ravel()).reshape(H, W)
+else:
+    vci_mask = np.ones((H, W), dtype=bool)
+
+MIN_AREA_CENTRO = 3000       # m2
+MIN_AREA_PERIFERIA = 20000   # m2
+MAX_ELONGATION = 5           # racio comprimento/largura para detectar features lineares
+
+def filter_by_vector(filepath):
+    """Vectorizar pixels, filtrar por area e forma, guardar PNG limpo."""
+    img = Image.open(filepath).convert('RGBA')
+    arr = np.array(img)
+    # Mascara binaria: pixel visivel (alpha > 0)
+    visible = arr[:, :, 3] > 0
+
+    # Etiquetar componentes conexos
+    labeled, n_features = ndimage.label(visible)
+    print(f'  {os.path.basename(filepath)}: {n_features} componentes encontrados')
+
+    kept = 0
+    removed_area = 0
+    removed_linear = 0
+    for label_id in range(1, n_features + 1):
+        component = (labeled == label_id)
+        n_pixels = component.sum()
+        area_m2 = n_pixels * pixel_area_m2
+
+        # Determinar se esta dentro ou fora da VCI (maioria dos pixels)
+        inside_vci = vci_mask[component].sum() > n_pixels / 2
+        min_area = MIN_AREA_CENTRO if inside_vci else MIN_AREA_PERIFERIA
+
+        # Filtro de area
+        if area_m2 < min_area:
+            arr[component, 3] = 0
+            removed_area += 1
+            continue
+
+        # Filtro de linearidade: bounding box minimo
+        rows, cols = np.where(component)
+        height_px = rows.max() - rows.min() + 1
+        width_px = cols.max() - cols.min() + 1
+        long_side = max(height_px, width_px)
+        short_side = max(min(height_px, width_px), 1)
+        elongation = long_side / short_side
+
+        if elongation > MAX_ELONGATION:
+            arr[component, 3] = 0
+            removed_linear += 1
+            continue
+
+        kept += 1
+
+    Image.fromarray(arr).save(filepath)
+    print(f'    Mantidos: {kept}, removidos por area: {removed_area}, removidos por forma linear: {removed_linear}')
+
+filter_by_vector('layers/interior_subsistente.png')
+filter_by_vector('layers/interior_perdido.png')
+print('Filtragem vectorial concluida.')
 
 # ----- Phase 3: HTML map -----
 print('\nA construir mapa...')
