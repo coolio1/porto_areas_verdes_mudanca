@@ -410,10 +410,8 @@ for el in osm_data['elements']:
         park_polys.extend(outers)
 
 if park_polys:
-    parks_raw = unary_union(park_polys)
-    # Buffer de ~50m (em graus: ~0.00045 lat, ~0.00060 lon a 41N)
-    parks_union = parks_raw.buffer(0.0005)
-    print(f'  {len(park_polys)} poligonos de parques/equipamentos encontrados (+ buffer 50m)')
+    parks_union = unary_union(park_polys)
+    print(f'  {len(park_polys)} poligonos de parques/equipamentos encontrados')
 else:
     parks_union = MultiPolygon()
     print('  Nenhum parque encontrado (mascara OSM nao aplicada)')
@@ -520,11 +518,11 @@ html = f'''<!DOCTYPE html>
 
 <script>
 var map = L.map('map').setView([41.155, -8.63], 13);
-var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:''}}).addTo(map);
+var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
 document.getElementById('basemap-select').addEventListener('change', function() {{
   map.removeLayer(baseTile);
-  baseTile = L.tileLayer(this.value, {{maxZoom:19, attribution:''}}).addTo(map);
+  baseTile = L.tileLayer(this.value, {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 }});
 
 var bounds = {BOUNDS};
