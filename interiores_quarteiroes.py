@@ -121,6 +121,7 @@ perdido = isGreen_e.And(isBuilt_l).And(is_interior).selfMask()
 print('Classificacao e filtro de vizinhanca concluidos.')
 
 from PIL import Image
+import numpy as np
 import time
 
 os.makedirs('layers', exist_ok=True)
@@ -144,9 +145,10 @@ def download_layer(image, color_hex, filename):
                 time.sleep(3)
             else:
                 return None
-    pixels = list(img.getdata())
-    new_data = [(0,0,0,0) if (p[0]<10 and p[1]<10 and p[2]<10) else p for p in pixels]
-    img.putdata(new_data)
+    arr = np.array(img)
+    dark = (arr[:,:,0] < 10) & (arr[:,:,1] < 10) & (arr[:,:,2] < 10)
+    arr[dark, 3] = 0
+    img = Image.fromarray(arr)
     img.save(filepath)
     print(f'  {filename} guardado ({os.path.getsize(filepath)//1024} KB)')
     return filepath
@@ -161,12 +163,14 @@ download_layer(muni_styled, 'FFFFFF', 'municipios.png')
 
 from shapely.geometry import shape, box, MultiPolygon
 from shapely.ops import unary_union
-import numpy as np
 
 # ----- Phase 2: OSM park mask -----
 print('\nA descarregar espacos verdes publicos do OSM...')
 
-OVERPASS_URL = 'https://overpass-api.de/api/interpreter'
+OVERPASS_URLS = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+]
 OVERPASS_QUERY = """
 [out:json][timeout:60];
 (
@@ -182,8 +186,24 @@ out body;
 out skel qt;
 """
 
-resp = requests.get(OVERPASS_URL, params={'data': OVERPASS_QUERY})
-osm_data = resp.json()
+osm_data = None
+for overpass_url in OVERPASS_URLS:
+    for attempt in range(3):
+        print(f'  A tentar {overpass_url} (tentativa {attempt+1})...')
+        resp = requests.get(overpass_url, params={'data': OVERPASS_QUERY}, timeout=90)
+        if resp.status_code == 200:
+            try:
+                osm_data = resp.json()
+                break
+            except Exception:
+                pass
+        time.sleep(5)
+    if osm_data:
+        break
+
+if not osm_data:
+    print('  AVISO: Overpass API indisponivel, mascara OSM nao aplicada')
+    osm_data = {'elements': []}
 
 # Build node lookup
 nodes = {}
@@ -231,11 +251,11 @@ def apply_osm_mask(filepath, parks_geom):
     lon_min, lon_max = -8.70, -8.54
     lat_min, lat_max = 41.13, 41.19
 
-    from shapely.vectorized import contains
+    from shapely import contains_xy
     xs = np.linspace(lon_min, lon_max, w)
     ys = np.linspace(lat_max, lat_min, h)
     xx, yy = np.meshgrid(xs, ys)
-    mask = contains(parks_geom, xx, yy)
+    mask = contains_xy(parks_geom, xx.ravel(), yy.ravel()).reshape(h, w)
 
     arr[mask, 3] = 0
     Image.fromarray(arr).save(filepath)
