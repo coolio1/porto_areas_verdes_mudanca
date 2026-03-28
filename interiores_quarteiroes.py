@@ -182,54 +182,60 @@ built_fraction = isBuilt_l.unmask(0).reduceNeighborhood(
 )
 is_edge_interior = built_fraction.gte(0.5)
 
-# Flood-fill: crescer das bordas para dentro, preenchendo interiores grandes
-print('A preencher interiores (flood-fill)...')
-interior_fill = isGreen_l.And(is_edge_interior)
-for _ in range(10):
-    grown = interior_fill.focal_max(radius=10, units='meters')
-    interior_fill = grown.And(isGreen_l).Or(interior_fill)
+# ----- Passo 1: pixels verdes na borda (sem flood-fill) -----
+sub_edge = isGreen_l.And(is_edge_interior).selfMask()
+per_edge = isGreen_e.And(isBuilt_l).And(is_edge_interior).selfMask()
 
-subsistente_raw = isGreen_l.And(interior_fill).selfMask()
-
-interior_fill_e = isGreen_e.And(is_edge_interior)
-for _ in range(10):
-    grown = interior_fill_e.focal_max(radius=10, units='meters')
-    interior_fill_e = grown.And(isGreen_e).Or(interior_fill_e)
-perdido_raw = isGreen_e.And(isBuilt_l).And(interior_fill_e).selfMask()
-
-# ----- Filtro morfologico: remover ruas arborizadas (features lineares) -----
-# Opening (erosao + dilatacao) sobre raster binario (unmask(0) para ter 0s reais)
+# ----- Passo 2: opening para remover features lineares -----
 print('A remover features lineares (ruas arborizadas)...')
-subsistente_opened = subsistente_raw.unmask(0).focal_min(
+sub_opened = sub_edge.unmask(0).focal_min(
     radius=1.5, kernelType='square', units='pixels'
 ).focal_max(
     radius=1.5, kernelType='square', units='pixels'
-).selfMask()
+).gte(0.5).selfMask()
 
-perdido_opened = perdido_raw.unmask(0).focal_min(
+per_opened = per_edge.unmask(0).focal_min(
     radius=1.5, kernelType='square', units='pixels'
 ).focal_max(
     radius=1.5, kernelType='square', units='pixels'
-).selfMask()
+).gte(0.5).selfMask()
 
-# ----- Filtro de area minima: diferenciado centro vs periferia -----
+# ----- Passo 3: filtro de área mínima (ANTES do flood-fill) -----
 MIN_PIXELS_CENTRO = 30     # ~3000 m2
 MIN_PIXELS_PERIFERIA = 400  # ~40000 m2 (4 ha)
 
 print('A filtrar por area minima...')
-sub_count = subsistente_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
-sub_centro = subsistente_opened.updateMask(
-    sub_count.gte(MIN_PIXELS_CENTRO).And(is_centro))
-sub_periferia = subsistente_opened.updateMask(
-    sub_count.gte(MIN_PIXELS_PERIFERIA).And(is_centro.Not()))
-subsistente = sub_centro.unmask(0).add(sub_periferia.unmask(0)).selfMask()
+sub_count = sub_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
+sub_filtered = sub_opened.updateMask(
+    sub_count.gte(MIN_PIXELS_CENTRO).And(is_centro)
+).unmask(0).add(
+    sub_opened.updateMask(
+        sub_count.gte(MIN_PIXELS_PERIFERIA).And(is_centro.Not())
+    ).unmask(0)
+).selfMask()
 
-per_count = perdido_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
-per_centro = perdido_opened.updateMask(
-    per_count.gte(MIN_PIXELS_CENTRO).And(is_centro))
-per_periferia = perdido_opened.updateMask(
-    per_count.gte(MIN_PIXELS_PERIFERIA).And(is_centro.Not()))
-perdido = per_centro.unmask(0).add(per_periferia.unmask(0)).selfMask()
+per_count = per_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
+per_filtered = per_opened.updateMask(
+    per_count.gte(MIN_PIXELS_CENTRO).And(is_centro)
+).unmask(0).add(
+    per_opened.updateMask(
+        per_count.gte(MIN_PIXELS_PERIFERIA).And(is_centro.Not())
+    ).unmask(0)
+).selfMask()
+
+# ----- Passo 4: flood-fill SÓ nos componentes que passaram o filtro -----
+print('A preencher interiores (flood-fill)...')
+subsistente_fill = sub_filtered
+for _ in range(10):
+    grown = subsistente_fill.focal_max(radius=10, units='meters')
+    subsistente_fill = grown.And(isGreen_l).Or(subsistente_fill)
+subsistente = subsistente_fill.selfMask()
+
+perdido_fill = per_filtered
+for _ in range(10):
+    grown = perdido_fill.focal_max(radius=10, units='meters')
+    perdido_fill = grown.And(isGreen_e.And(isBuilt_l)).Or(perdido_fill)
+perdido = perdido_fill.selfMask()
 
 # Contorno do centro alargado (rasterizado localmente, nao no GEE)
 
