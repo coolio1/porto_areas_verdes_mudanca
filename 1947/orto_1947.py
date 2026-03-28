@@ -97,12 +97,58 @@ TRAINING_SAMPLES = [
     # Edificios brancos (telhados muito claros)
     (2, -_dms(8, 37, 8.34), _dms(41, 9, 47.44)),
     (2, -_dms(8, 37, 8.76), _dms(41, 9, 48.39)),
+    # Vegetacao — zona este (Campanha/Bonfim)
+    (1, -_dms(8, 34, 41.00), _dms(41, 10, 34.85)),
+    (1, -_dms(8, 34, 24.93), _dms(41, 10, 34.94)),
+    (1, -_dms(8, 34, 7.43),  _dms(41, 10, 34.68)),
+    (1, -_dms(8, 34, 32.64), _dms(41, 10, 38.80)),
+    (1, -_dms(8, 34, 46.06), _dms(41, 9, 16.01)),
+    (1, -_dms(8, 33, 41.12), _dms(41, 9, 25.54)),
+    # Edificado — zona sul
+    (2, -_dms(8, 36, 35.57), _dms(41, 8, 39.31)),
+    (2, -_dms(8, 36, 48.90), _dms(41, 8, 37.28)),
+    (2, -_dms(8, 36, 8.70),  _dms(41, 8, 43.18)),
+    (2, -_dms(8, 36, 18.77), _dms(41, 8, 49.95)),
+    (2, -_dms(8, 36, 26.45), _dms(41, 9, 1.70)),
 ]
 
 
 # ============================================================
-# 1. Mascara do municipio via GEE
+# 1. Mascaras (municipio + rio)
 # ============================================================
+def get_rio_mask():
+    """Carrega mascara do rio e reprojecta para o grid do mosaico 1947."""
+    rio_path = os.path.join('..', 'layers_historico', 'rio.png')
+    if not os.path.exists(rio_path):
+        print('  AVISO: mascara do rio nao encontrada, a ignorar')
+        return np.zeros((MOSAIC_H, MOSAIC_W), dtype=bool)
+    rio_img = Image.open(rio_path).convert('RGBA')
+    rio_src = np.array(rio_img)[:, :, 3] > 30
+    src_h, src_w = rio_src.shape
+
+    # Grid GEE (origem da mascara do rio)
+    GEE_LON_MIN, GEE_LON_MAX = -8.70, -8.54
+    GEE_LAT_MIN, GEE_LAT_MAX = 41.13, 41.19
+
+    # Grid 1947 (mosaico)
+    mosaic_xmax = BBOX_3857['xmin'] + N_TILES_X * TILE_SIZE_M
+    mosaic_ymin = BBOX_3857['ymax'] - N_TILES_Y * TILE_SIZE_M
+    m_lat_s, m_lon_w = m3857_to_wgs84(BBOX_3857['xmin'], mosaic_ymin)
+    m_lat_n, m_lon_e = m3857_to_wgs84(mosaic_xmax, BBOX_3857['ymax'])
+
+    # Reprojectar vectorizado (mosaico -> GEE coords)
+    my = np.arange(MOSAIC_H)
+    mx = np.arange(MOSAIC_W)
+    lats = m_lat_n - (my + 0.5) / MOSAIC_H * (m_lat_n - m_lat_s)
+    lons = m_lon_w + (mx + 0.5) / MOSAIC_W * (m_lon_e - m_lon_w)
+    sy = np.clip(((GEE_LAT_MAX - lats) / (GEE_LAT_MAX - GEE_LAT_MIN) * src_h).astype(int), 0, src_h - 1)
+    sx = np.clip(((lons - GEE_LON_MIN) / (GEE_LON_MAX - GEE_LON_MIN) * src_w).astype(int), 0, src_w - 1)
+    rio_out = rio_src[np.ix_(sy, sx)]
+
+    print(f'  Rio: {rio_out.sum():,} pixels mascarados')
+    return rio_out
+
+
 def get_porto_mask():
     cache_path = 'layers/porto_municipio_mask_tiles.png'
     if os.path.exists(cache_path):
@@ -292,7 +338,7 @@ def train_rf(X_train, y_train):
 # ============================================================
 # 5. Classificar todos os tiles e montar mosaico
 # ============================================================
-def classify_mosaic(rf, muni_mask):
+def classify_mosaic(rf, muni_mask, rio_mask):
     from scipy.ndimage import median_filter
 
     classified = np.zeros((MOSAIC_H, MOSAIC_W), dtype=np.uint8)
@@ -358,9 +404,26 @@ def classify_mosaic(rf, muni_mask):
             processed += 1
             print(f'{time.time()-t0:.0f}s')
 
-    # Mascara final do municipio
+    # Mascara final: municipio + rio
     classified[~muni_mask] = 0
+    classified[rio_mask] = 0
     print(f'\n  {processed} tiles processados')
+
+    # Remover manchas isoladas (componentes conexos pequenos)
+    from scipy.ndimage import label as ndlabel
+    MIN_PIXELS = 100  # ~25m² a 0.49m/pixel
+    for cls in sorted(CLASSES.keys()):
+        mask = classified == cls
+        labels, n = ndlabel(mask)
+        sizes = np.bincount(labels.ravel())
+        # sizes[0] = background, ignorar
+        small = np.where(sizes < MIN_PIXELS)[0]
+        small = small[small > 0]  # excluir background
+        if len(small) > 0:
+            remove = np.isin(labels, small)
+            classified[remove] = 0
+            print(f'  {CLASSES[cls]}: removidos {len(small)} fragmentos < {MIN_PIXELS}px')
+
     return classified
 
 
@@ -635,15 +698,16 @@ if __name__ == '__main__':
     print(f'=== Pixel RF Porto 1947 (tiles {TILE_SIZE_M}m, {TILE_PX}px) ===')
     print(f'    Grid: {N_TILES_X} x {N_TILES_Y} tiles, mosaico {MOSAIC_W}x{MOSAIC_H}\n')
 
-    print('1. Mascara do municipio...')
+    print('1. Mascaras (municipio + rio)...')
     muni_mask = get_porto_mask()
+    rio_mask = get_rio_mask()
 
     print('\n2. Treino (coordenadas manuais)...')
     X_train, y_train = collect_training()
     rf = train_rf(X_train, y_train)
 
     print('\n3. Classificar mosaico...')
-    classified = classify_mosaic(rf, muni_mask)
+    classified = classify_mosaic(rf, muni_mask, rio_mask)
 
     print('\n4. Estatisticas...')
     stats = compute_stats(classified, muni_mask)
