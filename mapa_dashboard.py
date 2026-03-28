@@ -44,7 +44,7 @@ def gerar_html(casos, agregados):
 
         popup = f"""
             <b>{c['data']}</b><br>
-            <b>{c['morada']}</b>, {c['concelho']}<br>
+            <b>{c['morada'] or 'Localização GPS'}</b>, {c['concelho']}<br>
             Vítima: {c['tipo_vitima'].replace('peao', 'Peão').replace('ciclista', 'Ciclista')}<br>
             Gravidade: <span style='color:{color};font-weight:bold'>{c['gravidade'].replace('_',' ').title()}</span><br>
             Veículo: {(c['tipo_veiculo'] or '').replace('_', ' ').title()}<br>
@@ -274,7 +274,7 @@ def gerar_html(casos, agregados):
             <tbody>
                 {''.join(f"""<tr>
                     <td>{c['data']}</td>
-                    <td>{c['morada'][:45]}</td>
+                    <td>{(c['morada'] or '')[:45]}</td>
                     <td>{c['concelho']}</td>
                     <td>{c['tipo_vitima'].replace('peao', 'Peão').replace('ciclista', 'Ciclista')}</td>
                     <td><span class="badge {'badge-red' if c['gravidade']=='mortal' else 'badge-orange' if c['gravidade']=='ferido_grave' else 'badge-blue'}">{c['gravidade'].replace('_',' ')}</span></td>
