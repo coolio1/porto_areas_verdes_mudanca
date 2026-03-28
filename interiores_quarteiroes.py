@@ -348,6 +348,13 @@ OVERPASS_QUERY = """
   relation["leisure"="stadium"](41.13,-8.70,41.19,-8.54);
   way["leisure"="pitch"](41.13,-8.70,41.19,-8.54);
   relation["leisure"="pitch"](41.13,-8.70,41.19,-8.54);
+  way["leisure"="playground"](41.13,-8.70,41.19,-8.54);
+  relation["leisure"="playground"](41.13,-8.70,41.19,-8.54);
+  way["place"="square"](41.13,-8.70,41.19,-8.54);
+  relation["place"="square"](41.13,-8.70,41.19,-8.54);
+  way["highway"="pedestrian"]["area"="yes"](41.13,-8.70,41.19,-8.54);
+  way["amenity"="grave_yard"](41.13,-8.70,41.19,-8.54);
+  relation["amenity"="grave_yard"](41.13,-8.70,41.19,-8.54);
 );
 out body;
 >;
@@ -403,8 +410,10 @@ for el in osm_data['elements']:
         park_polys.extend(outers)
 
 if park_polys:
-    parks_union = unary_union(park_polys)
-    print(f'  {len(park_polys)} poligonos de parques/equipamentos encontrados')
+    parks_raw = unary_union(park_polys)
+    # Buffer de ~50m (em graus: ~0.00045 lat, ~0.00060 lon a 41N)
+    parks_union = parks_raw.buffer(0.0005)
+    print(f'  {len(park_polys)} poligonos de parques/equipamentos encontrados (+ buffer 50m)')
 else:
     parks_union = MultiPolygon()
     print('  Nenhum parque encontrado (mascara OSM nao aplicada)')
