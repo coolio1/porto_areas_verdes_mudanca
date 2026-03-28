@@ -26,7 +26,9 @@ def criar_bd():
 
 def importar_noticias(conn):
     """Importa casos individuais recolhidos de notícias."""
-    csv_path = Path(__file__).parent / "casos_noticias_porto.csv"
+    csv_path = Path(__file__).parent / "casos_noticias_todos.csv"
+    if not csv_path.exists():
+        csv_path = Path(__file__).parent / "casos_noticias_porto.csv"
     if not csv_path.exists():
         print("AVISO: casos_noticias_porto.csv não encontrado")
         return 0
