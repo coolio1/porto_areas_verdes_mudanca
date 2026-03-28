@@ -108,15 +108,23 @@ built_fraction = isBuilt_l.unmask(0).reduceNeighborhood(
     reducer=ee.Reducer.mean(),
     kernel=ee.Kernel.circle(radius=50, units='meters')
 )
-is_interior = built_fraction.gte(0.6)
+is_interior = built_fraction.gte(0.5)
 
 # Subsistente: green/soil in 2024 AND surrounded by buildings
 isGreen_l = isTree_l.Or(isSolo_l)
-subsistente = isGreen_l.And(is_interior).selfMask()
+subsistente_raw = isGreen_l.And(is_interior).selfMask()
 
 # Perdido: was green/soil in 2016, now built in 2024, AND surrounded by buildings
 isGreen_e = isTree_e.Or(isSolo_e)
-perdido = isGreen_e.And(isBuilt_l).And(is_interior).selfMask()
+perdido_raw = isGreen_e.And(isBuilt_l).And(is_interior).selfMask()
+
+# Filtro de area minima: remover manchas com menos de 6 pixels conexos
+MIN_PIXELS = 15
+subsistente_count = subsistente_raw.connectedPixelCount(MIN_PIXELS + 1)
+subsistente = subsistente_raw.updateMask(subsistente_count.gte(MIN_PIXELS))
+
+perdido_count = perdido_raw.connectedPixelCount(MIN_PIXELS + 1)
+perdido = perdido_raw.updateMask(perdido_count.gte(MIN_PIXELS))
 
 print('Classificacao e filtro de vizinhanca concluidos.')
 
