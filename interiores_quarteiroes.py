@@ -102,7 +102,86 @@ isBuilt_l = isBuilt_l_base.Or(stays_built)
 isTree_l = isTree_l_base.And(isBuilt_l.Not())
 isSolo_l = isTree_l.Not().And(isBuilt_l.Not())
 
-# Neighbourhood filter: pixels verdes com edificado na vizinhanca (borda de interiores)
+# ----- Zona centro alargado (3 freguesias via OSM) -----
+print('A obter limites das freguesias do centro...')
+
+CENTRO_QUERY = """
+[out:json][timeout:60];
+(
+  relation(3382149);
+  relation(3383100);
+  relation(3382145);
+);
+out body;
+>;
+out skel qt;
+"""
+
+centro_data = None
+for overpass_url in ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']:
+    for attempt in range(3):
+        print(f'  A tentar {overpass_url} (tentativa {attempt+1})...')
+        try:
+            resp = requests.get(overpass_url, params={'data': CENTRO_QUERY}, timeout=90)
+            if resp.status_code == 200:
+                centro_data = resp.json()
+                break
+        except Exception:
+            pass
+        import time as _time
+        _time.sleep(5)
+    if centro_data:
+        break
+
+# Construir poligonos das freguesias
+centro_nodes = {}
+for el in centro_data['elements']:
+    if el['type'] == 'node':
+        centro_nodes[el['id']] = (el['lon'], el['lat'])
+
+# Construir ways lookup
+centro_ways = {}
+for el in centro_data['elements']:
+    if el['type'] == 'way' and 'nodes' in el:
+        coords = [centro_nodes[n] for n in el['nodes'] if n in centro_nodes]
+        centro_ways[el['id']] = coords
+
+from shapely.geometry import Polygon as ShapelyPolygon
+from shapely.ops import linemerge, polygonize
+
+centro_polys = []
+for el in centro_data['elements']:
+    if el['type'] == 'relation':
+        outer_coords = []
+        for member in el.get('members', []):
+            if member['type'] == 'way' and member['role'] == 'outer':
+                if member['ref'] in centro_ways:
+                    outer_coords.append(centro_ways[member['ref']])
+        if outer_coords:
+            # Merge way segments into closed rings
+            from shapely.geometry import LineString
+            lines = [LineString(c) for c in outer_coords if len(c) >= 2]
+            merged = linemerge(lines)
+            polys = list(polygonize(merged))
+            centro_polys.extend(polys)
+
+from shapely.ops import unary_union as union_geom
+if centro_polys:
+    centro_union = union_geom(centro_polys)
+    print(f'  {len(centro_polys)} poligonos de freguesias do centro encontrados')
+    # Converter para ee.Geometry
+    if centro_union.geom_type == 'MultiPolygon':
+        ee_coords = [list(p.exterior.coords) for p in centro_union.geoms]
+    else:
+        ee_coords = [list(centro_union.exterior.coords)]
+    centro_ee = ee.Geometry.MultiPolygon([ee_coords])
+else:
+    print('  AVISO: freguesias do centro nao encontradas, usando porto inteiro')
+    centro_ee = porto
+
+is_centro = ee.Image.constant(1).clip(centro_ee).unmask(0).clip(porto)
+
+# ----- Filtro de vizinhanca + flood-fill -----
 print('A calcular filtro de vizinhanca...')
 isGreen_l = isTree_l.Or(isSolo_l)
 isGreen_e = isTree_e.Or(isSolo_e)
@@ -114,33 +193,57 @@ built_fraction = isBuilt_l.unmask(0).reduceNeighborhood(
 is_edge_interior = built_fraction.gte(0.5)
 
 # Flood-fill: crescer das bordas para dentro, preenchendo interiores grandes
-# Sementes = pixels verdes na borda (junto a edificios)
 print('A preencher interiores (flood-fill)...')
 interior_fill = isGreen_l.And(is_edge_interior)
-for _ in range(10):  # ~100m de crescimento (10 iter x 10m/pixel)
+for _ in range(10):
     grown = interior_fill.focal_max(radius=10, units='meters')
     interior_fill = grown.And(isGreen_l).Or(interior_fill)
 
-# Subsistente: green/soil em 2024 dentro de interiores de quarteirão
 subsistente_raw = isGreen_l.And(interior_fill).selfMask()
 
-# Perdido: era green/soil em 2016, agora edificado, na zona de interiores
-# Usar o mesmo flood-fill mas para a epoca 2016
 interior_fill_e = isGreen_e.And(is_edge_interior)
 for _ in range(10):
     grown = interior_fill_e.focal_max(radius=10, units='meters')
     interior_fill_e = grown.And(isGreen_e).Or(interior_fill_e)
 perdido_raw = isGreen_e.And(isBuilt_l).And(interior_fill_e).selfMask()
 
-# Filtro de area minima: remover manchas com menos de 30 pixels conexos (~3000 m2)
-MIN_PIXELS = 30
-subsistente_count = subsistente_raw.connectedPixelCount(MIN_PIXELS + 1)
-subsistente = subsistente_raw.updateMask(subsistente_count.gte(MIN_PIXELS))
+# ----- Filtro morfologico: remover ruas arborizadas (features lineares) -----
+# Opening (erosao + dilatacao) remove features < ~30m de largura
+print('A remover features lineares (ruas arborizadas)...')
+subsistente_opened = subsistente_raw.focal_min(
+    radius=1.5, kernelType='square', units='pixels'
+).focal_max(
+    radius=1.5, kernelType='square', units='pixels'
+).selfMask()
 
-perdido_count = perdido_raw.connectedPixelCount(MIN_PIXELS + 1)
-perdido = perdido_raw.updateMask(perdido_count.gte(MIN_PIXELS))
+perdido_opened = perdido_raw.focal_min(
+    radius=1.5, kernelType='square', units='pixels'
+).focal_max(
+    radius=1.5, kernelType='square', units='pixels'
+).selfMask()
 
-print('Classificacao e filtro de vizinhanca concluidos.')
+# ----- Filtro de area minima: diferenciado centro vs periferia -----
+MIN_PIXELS_CENTRO = 30     # ~3000 m2
+MIN_PIXELS_PERIFERIA = 100  # ~10000 m2 (1 ha)
+
+print('A filtrar por area minima...')
+sub_count = subsistente_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
+sub_centro = subsistente_opened.updateMask(
+    sub_count.gte(MIN_PIXELS_CENTRO).And(is_centro))
+sub_periferia = subsistente_opened.updateMask(
+    sub_count.gte(MIN_PIXELS_PERIFERIA).And(is_centro.Not()))
+subsistente = sub_centro.unmask(0).add(sub_periferia.unmask(0)).selfMask()
+
+per_count = perdido_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
+per_centro = perdido_opened.updateMask(
+    per_count.gte(MIN_PIXELS_CENTRO).And(is_centro))
+per_periferia = perdido_opened.updateMask(
+    per_count.gte(MIN_PIXELS_PERIFERIA).And(is_centro.Not()))
+perdido = per_centro.unmask(0).add(per_periferia.unmask(0)).selfMask()
+
+# Contorno do centro alargado (rasterizado localmente, nao no GEE)
+
+print('Classificacao e filtros concluidos.')
 
 from PIL import Image
 import numpy as np
@@ -178,6 +281,35 @@ def download_layer(image, color_hex, filename):
 print('\nA descarregar camadas...')
 download_layer(subsistente, '2E7D32', 'interior_subsistente.png')
 download_layer(perdido, 'D7263D', 'interior_perdido.png')
+# Centro alargado: rasterizar contorno localmente (geometria vem do OSM, nao do GEE)
+centro_path = 'layers/centro_alargado.png'
+if not os.path.exists(centro_path):
+    print('  A rasterizar contorno do centro alargado...')
+    # Usar as dimensoes reais dos PNGs existentes
+    ref_img = Image.open('layers/interior_subsistente.png')
+    W, H = ref_img.size
+    centro_boundary = centro_union.boundary
+    centro_img = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    from PIL import ImageDraw
+    draw = ImageDraw.Draw(centro_img)
+    lon_min, lon_max = -8.70, -8.54
+    lat_min, lat_max = 41.13, 41.19
+    def geo_to_pixel(lon, lat):
+        x = (lon - lon_min) / (lon_max - lon_min) * W
+        y = (lat_max - lat) / (lat_max - lat_min) * H
+        return (x, y)
+    if centro_boundary.geom_type == 'MultiLineString':
+        lines = centro_boundary.geoms
+    else:
+        lines = [centro_boundary]
+    for line in lines:
+        coords = [geo_to_pixel(x, y) for x, y in line.coords]
+        if len(coords) >= 2:
+            draw.line(coords, fill=(255, 215, 0, 255), width=3)
+    centro_img.save(centro_path)
+    print(f'  centro_alargado.png guardado ({os.path.getsize(centro_path)//1024} KB)')
+else:
+    print('  centro_alargado.png ja existe, a saltar...')
 
 # Municipios (reuse if exists)
 muni_styled = ee.Image().paint(municipiosPorto, 0, 2).selfMask()
@@ -187,7 +319,7 @@ from shapely.geometry import shape, box, MultiPolygon
 from shapely.ops import unary_union
 
 # ----- Phase 2: OSM park mask -----
-print('\nA descarregar espacos verdes publicos do OSM...')
+print('\nA descarregar espacos verdes publicos e equipamentos do OSM...')
 
 OVERPASS_URLS = [
     'https://overpass-api.de/api/interpreter',
@@ -202,6 +334,20 @@ OVERPASS_QUERY = """
   relation["leisure"="garden"](41.13,-8.70,41.19,-8.54);
   way["landuse"="recreation_ground"](41.13,-8.70,41.19,-8.54);
   relation["landuse"="recreation_ground"](41.13,-8.70,41.19,-8.54);
+  way["landuse"="cemetery"](41.13,-8.70,41.19,-8.54);
+  relation["landuse"="cemetery"](41.13,-8.70,41.19,-8.54);
+  way["amenity"="school"](41.13,-8.70,41.19,-8.54);
+  relation["amenity"="school"](41.13,-8.70,41.19,-8.54);
+  way["amenity"="university"](41.13,-8.70,41.19,-8.54);
+  relation["amenity"="university"](41.13,-8.70,41.19,-8.54);
+  way["amenity"="hospital"](41.13,-8.70,41.19,-8.54);
+  relation["amenity"="hospital"](41.13,-8.70,41.19,-8.54);
+  way["leisure"="sports_centre"](41.13,-8.70,41.19,-8.54);
+  relation["leisure"="sports_centre"](41.13,-8.70,41.19,-8.54);
+  way["leisure"="stadium"](41.13,-8.70,41.19,-8.54);
+  relation["leisure"="stadium"](41.13,-8.70,41.19,-8.54);
+  way["leisure"="pitch"](41.13,-8.70,41.19,-8.54);
+  relation["leisure"="pitch"](41.13,-8.70,41.19,-8.54);
 );
 out body;
 >;
@@ -258,7 +404,7 @@ for el in osm_data['elements']:
 
 if park_polys:
     parks_union = unary_union(park_polys)
-    print(f'  {len(park_polys)} poligonos de parques/jardins encontrados')
+    print(f'  {len(park_polys)} poligonos de parques/equipamentos encontrados')
 else:
     parks_union = MultiPolygon()
     print('  Nenhum parque encontrado (mascara OSM nao aplicada)')
@@ -298,6 +444,7 @@ def to_base64(filepath):
 MAP_LAYERS = [
     ('interior_subsistente', 'Subsistente', '#2E7D32', True),
     ('interior_perdido', 'Perdido', '#D7263D', True),
+    ('centro_alargado', 'Centro alargado', '#FFD700', True),
     ('municipios', 'Limites municipais', '#FFFFFF', True),
 ]
 
