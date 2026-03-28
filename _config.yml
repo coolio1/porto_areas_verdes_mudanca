@@ -22,4 +22,6 @@ exclude:
   - CAOP_Continente_2025-gpkg
   - layers/test
   - .claude
+  - .superpowers
+  - docs
   - "*.gpkg"
