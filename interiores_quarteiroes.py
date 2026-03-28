@@ -102,81 +102,71 @@ isBuilt_l = isBuilt_l_base.Or(stays_built)
 isTree_l = isTree_l_base.And(isBuilt_l.Not())
 isSolo_l = isTree_l.Not().And(isBuilt_l.Not())
 
-# ----- Zona centro alargado (3 freguesias via OSM) -----
-print('A obter limites das freguesias do centro...')
+# ----- Zona centro = interior da VCI (Via de Cintura Interna) -----
+print('A obter traçado da VCI...')
+from shapely.geometry import LineString, Polygon as ShapelyPolygon
+from shapely.ops import linemerge, polygonize, unary_union as union_geom
 
-CENTRO_QUERY = """
+VCI_QUERY = """
 [out:json][timeout:60];
-(
-  relation(3382149);
-  relation(3383100);
-  relation(3382145);
-);
+way["name"="Via de Cintura Interna"](41.13,-8.70,41.19,-8.54);
 out body;
 >;
 out skel qt;
 """
 
-centro_data = None
+vci_data = None
 for overpass_url in ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']:
     for attempt in range(3):
         print(f'  A tentar {overpass_url} (tentativa {attempt+1})...')
         try:
-            resp = requests.get(overpass_url, params={'data': CENTRO_QUERY}, timeout=90)
+            resp = requests.get(overpass_url, params={'data': VCI_QUERY}, timeout=90)
             if resp.status_code == 200:
-                centro_data = resp.json()
+                vci_data = resp.json()
                 break
         except Exception:
             pass
         import time as _time
         _time.sleep(5)
-    if centro_data:
+    if vci_data:
         break
 
-# Construir poligonos das freguesias
-centro_nodes = {}
-for el in centro_data['elements']:
+# Construir nós e segmentos da VCI
+vci_nodes = {}
+for el in vci_data['elements']:
     if el['type'] == 'node':
-        centro_nodes[el['id']] = (el['lon'], el['lat'])
+        vci_nodes[el['id']] = (el['lon'], el['lat'])
 
-# Construir ways lookup
-centro_ways = {}
-for el in centro_data['elements']:
+vci_lines = []
+for el in vci_data['elements']:
     if el['type'] == 'way' and 'nodes' in el:
-        coords = [centro_nodes[n] for n in el['nodes'] if n in centro_nodes]
-        centro_ways[el['id']] = coords
+        coords = [vci_nodes[n] for n in el['nodes'] if n in vci_nodes]
+        if len(coords) >= 2:
+            vci_lines.append(LineString(coords))
 
-from shapely.geometry import Polygon as ShapelyPolygon
-from shapely.ops import linemerge, polygonize
+# Juntar segmentos, buffer para unir as 2 faixas, subtrair ao bbox
+from shapely.geometry import Point, box as shapely_box
+vci_buffer = union_geom(vci_lines).buffer(0.0003)  # ~30m junta as faixas
+porto_box = shapely_box(-8.70, 41.13, -8.54, 41.19)
+remaining = porto_box.difference(vci_buffer)
 
-centro_polys = []
-for el in centro_data['elements']:
-    if el['type'] == 'relation':
-        outer_coords = []
-        for member in el.get('members', []):
-            if member['type'] == 'way' and member['role'] == 'outer':
-                if member['ref'] in centro_ways:
-                    outer_coords.append(centro_ways[member['ref']])
-        if outer_coords:
-            # Merge way segments into closed rings
-            from shapely.geometry import LineString
-            lines = [LineString(c) for c in outer_coords if len(c) >= 2]
-            merged = linemerge(lines)
-            polys = list(polygonize(merged))
-            centro_polys.extend(polys)
+# Encontrar o polígono que contém o centro do Porto
+porto_center = Point(-8.61, 41.155)
+centro_union = None
+if remaining.geom_type == 'MultiPolygon':
+    for p in remaining.geoms:
+        if p.contains(porto_center):
+            centro_union = p
+            break
+elif remaining.geom_type == 'Polygon' and remaining.contains(porto_center):
+    centro_union = remaining
 
-from shapely.ops import unary_union as union_geom
-if centro_polys:
-    centro_union = union_geom(centro_polys)
-    print(f'  {len(centro_polys)} poligonos de freguesias do centro encontrados')
-    # Converter para ee.Geometry
-    if centro_union.geom_type == 'MultiPolygon':
-        ee_coords = [list(p.exterior.coords) for p in centro_union.geoms]
-    else:
-        ee_coords = [list(centro_union.exterior.coords)]
-    centro_ee = ee.Geometry.MultiPolygon([ee_coords])
+if centro_union:
+    print(f'  Interior da VCI encontrado (área: {centro_union.area:.6f} graus²)')
+    ee_coords = [list(centro_union.exterior.coords)]
+    centro_ee = ee.Geometry.Polygon(ee_coords)
 else:
-    print('  AVISO: freguesias do centro nao encontradas, usando porto inteiro')
+    print('  AVISO: interior da VCI não encontrado, a usar porto inteiro')
     centro_ee = porto
 
 is_centro = ee.Image.constant(1).clip(centro_ee).unmask(0).clip(porto)
@@ -281,11 +271,10 @@ def download_layer(image, color_hex, filename):
 print('\nA descarregar camadas...')
 download_layer(subsistente, '2E7D32', 'interior_subsistente.png')
 download_layer(perdido, 'D7263D', 'interior_perdido.png')
-# Centro alargado: rasterizar contorno localmente (geometria vem do OSM, nao do GEE)
+# Interior VCI: rasterizar contorno localmente (geometria vem do OSM, não do GEE)
 centro_path = 'layers/centro_alargado.png'
-if not os.path.exists(centro_path):
-    print('  A rasterizar contorno do centro alargado...')
-    # Usar as dimensoes reais dos PNGs existentes
+if not os.path.exists(centro_path) and centro_union is not None:
+    print('  A rasterizar contorno da VCI...')
     ref_img = Image.open('layers/interior_subsistente.png')
     W, H = ref_img.size
     centro_boundary = centro_union.boundary
@@ -319,102 +308,47 @@ from shapely.geometry import shape, box, MultiPolygon
 from shapely.ops import unary_union
 
 # ----- Phase 2: OSM park mask -----
-print('\nA descarregar espacos verdes publicos e equipamentos do OSM...')
+# ----- Phase 2: Mascara de exclusao via PDM 2021 (fonte oficial CMP) -----
+print('\nA carregar mascara de exclusao do PDM 2021...')
+import geopandas as gpd
 
-OVERPASS_URLS = [
-    'https://overpass-api.de/api/interpreter',
-    'https://overpass.kumi.systems/api/interpreter',
+PDM_URL = 'https://opendata.porto.digital/dataset/e6bff4b8-ebe8-4048-a3ca-6a1640da8293/resource/44b228a4-1df1-4e67-b44b-c19cfa7bdf97/download/po_cqs.gpkg'
+PDM_LOCAL = os.path.join(os.path.dirname(__file__), 'CLC', 'po_cqs.gpkg')
+
+# Descarregar PDM se nao existir localmente
+if not os.path.exists(PDM_LOCAL):
+    print('  A descarregar GeoPackage do PDM...')
+    os.makedirs(os.path.dirname(PDM_LOCAL), exist_ok=True)
+    r = requests.get(PDM_URL, timeout=120)
+    with open(PDM_LOCAL, 'wb') as f:
+        f.write(r.content)
+    print(f'  PDM guardado ({os.path.getsize(PDM_LOCAL)//1024} KB)')
+
+# Carregar qualificacao funcional e reprojectar para WGS84
+gdf = gpd.read_file(PDM_LOCAL, layer='PO_QSFUNCIONAL_PL').to_crs(epsg=4326)
+
+# Categorias a excluir (espacos publicos: verdes, equipamentos, infraestruturas)
+EXCLUIR_CATEGORIAS = [
+    'Espaços verdes e frente atlântica e ribeirinha',
+    'Espaços de uso especial - Equipamentos',
+    'Espaços de uso especial - Infraestruturas',
 ]
-OVERPASS_QUERY = """
-[out:json][timeout:60];
-(
-  way["leisure"="park"](41.13,-8.70,41.19,-8.54);
-  relation["leisure"="park"](41.13,-8.70,41.19,-8.54);
-  way["leisure"="garden"](41.13,-8.70,41.19,-8.54);
-  relation["leisure"="garden"](41.13,-8.70,41.19,-8.54);
-  way["landuse"="recreation_ground"](41.13,-8.70,41.19,-8.54);
-  relation["landuse"="recreation_ground"](41.13,-8.70,41.19,-8.54);
-  way["landuse"="cemetery"](41.13,-8.70,41.19,-8.54);
-  relation["landuse"="cemetery"](41.13,-8.70,41.19,-8.54);
-  way["amenity"="school"](41.13,-8.70,41.19,-8.54);
-  relation["amenity"="school"](41.13,-8.70,41.19,-8.54);
-  way["amenity"="university"](41.13,-8.70,41.19,-8.54);
-  relation["amenity"="university"](41.13,-8.70,41.19,-8.54);
-  way["amenity"="hospital"](41.13,-8.70,41.19,-8.54);
-  relation["amenity"="hospital"](41.13,-8.70,41.19,-8.54);
-  way["leisure"="sports_centre"](41.13,-8.70,41.19,-8.54);
-  relation["leisure"="sports_centre"](41.13,-8.70,41.19,-8.54);
-  way["leisure"="stadium"](41.13,-8.70,41.19,-8.54);
-  relation["leisure"="stadium"](41.13,-8.70,41.19,-8.54);
-  way["leisure"="pitch"](41.13,-8.70,41.19,-8.54);
-  relation["leisure"="pitch"](41.13,-8.70,41.19,-8.54);
-  way["leisure"="playground"](41.13,-8.70,41.19,-8.54);
-  relation["leisure"="playground"](41.13,-8.70,41.19,-8.54);
-  way["place"="square"](41.13,-8.70,41.19,-8.54);
-  relation["place"="square"](41.13,-8.70,41.19,-8.54);
-  way["highway"="pedestrian"]["area"="yes"](41.13,-8.70,41.19,-8.54);
-  way["amenity"="grave_yard"](41.13,-8.70,41.19,-8.54);
-  relation["amenity"="grave_yard"](41.13,-8.70,41.19,-8.54);
-);
-out body;
->;
-out skel qt;
-"""
+# Tentar com encoding correcto e fallback para encoding danificado
+mask = gdf['c_espaco'].isin(EXCLUIR_CATEGORIAS)
+if mask.sum() == 0:
+    # Encoding pode estar danificado no gpkg, tentar match parcial
+    for idx, val in enumerate(gdf['c_espaco'].unique()):
+        if 'verde' in val.lower() or 'equip' in val.lower() or 'infra' in val.lower():
+            mask = mask | (gdf['c_espaco'] == val)
 
-osm_data = None
-for overpass_url in OVERPASS_URLS:
-    for attempt in range(3):
-        print(f'  A tentar {overpass_url} (tentativa {attempt+1})...')
-        resp = requests.get(overpass_url, params={'data': OVERPASS_QUERY}, timeout=90)
-        if resp.status_code == 200:
-            try:
-                osm_data = resp.json()
-                break
-            except Exception:
-                pass
-        time.sleep(5)
-    if osm_data:
-        break
+excluir = gdf[mask]
+print(f'  {len(excluir)} poligonos PDM a excluir:')
+for cat in excluir['c_espaco'].unique():
+    n = (excluir['c_espaco'] == cat).sum()
+    print(f'    {cat}: {n}')
 
-if not osm_data:
-    print('  AVISO: Overpass API indisponivel, mascara OSM nao aplicada')
-    osm_data = {'elements': []}
-
-# Build node lookup
-nodes = {}
-for el in osm_data['elements']:
-    if el['type'] == 'node':
-        nodes[el['id']] = (el['lon'], el['lat'])
-
-# Build polygons from ways
-park_polys = []
-for el in osm_data['elements']:
-    if el['type'] == 'way' and 'nodes' in el:
-        coords = [nodes[n] for n in el['nodes'] if n in nodes]
-        if len(coords) >= 4 and coords[0] == coords[-1]:
-            from shapely.geometry import Polygon as ShapelyPolygon
-            park_polys.append(ShapelyPolygon(coords))
-
-# Build polygons from relations (multipolygons)
-for el in osm_data['elements']:
-    if el['type'] == 'relation' and el.get('tags', {}).get('type') == 'multipolygon':
-        outers = []
-        for member in el.get('members', []):
-            if member['type'] == 'way' and member['role'] == 'outer':
-                for w in osm_data['elements']:
-                    if w['type'] == 'way' and w['id'] == member['ref']:
-                        coords = [nodes[n] for n in w['nodes'] if n in nodes]
-                        if len(coords) >= 4 and coords[0] == coords[-1]:
-                            from shapely.geometry import Polygon as ShapelyPolygon
-                            outers.append(ShapelyPolygon(coords))
-        park_polys.extend(outers)
-
-if park_polys:
-    parks_union = unary_union(park_polys)
-    print(f'  {len(park_polys)} poligonos de parques/equipamentos encontrados')
-else:
-    parks_union = MultiPolygon()
-    print('  Nenhum parque encontrado (mascara OSM nao aplicada)')
+parks_union = excluir.geometry.union_all() if len(excluir) > 0 else MultiPolygon()
+print(f'  Mascara PDM pronta')
 
 def apply_osm_mask(filepath, parks_geom):
     if parks_geom.is_empty:
@@ -451,7 +385,7 @@ def to_base64(filepath):
 MAP_LAYERS = [
     ('interior_subsistente', 'Subsistente', '#2E7D32', True),
     ('interior_perdido', 'Perdido', '#D7263D', True),
-    ('centro_alargado', 'Centro alargado', '#FFD700', True),
+    ('centro_alargado', 'Interior VCI', '#FFD700', True),
     ('municipios', 'Limites municipais', '#FFFFFF', True),
 ]
 
