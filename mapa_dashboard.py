@@ -100,23 +100,25 @@ def gerar_html(casos, agregados):
         .header p {{ color: #94a3b8; margin-top: 4px; font-size: 0.95rem; }}
 
         .stats-row {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            padding: 24px 32px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
         }}
         .stat-card {{
             background: #1e293b;
-            border-radius: 12px;
-            padding: 20px;
-            border-left: 4px solid #3b82f6;
+            border-radius: 10px;
+            padding: 12px 16px;
+            border-left: 3px solid #3b82f6;
+            min-width: 130px;
         }}
         .stat-card.danger {{ border-left-color: #ef4444; }}
         .stat-card.warning {{ border-left-color: #f59e0b; }}
         .stat-card.info {{ border-left-color: #06b6d4; }}
-        .stat-card .number {{ font-size: 2.2rem; font-weight: 700; color: #f8fafc; }}
-        .stat-card .label {{ font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }}
-        .stat-card .sublabel {{ font-size: 0.75rem; color: #64748b; }}
+        .stat-card .number {{ font-size: 1.6rem; font-weight: 700; color: #f8fafc; }}
+        .stat-card .label {{ font-size: 0.8rem; color: #94a3b8; margin-top: 2px; }}
+        .stat-card .sublabel {{ font-size: 0.7rem; color: #64748b; }}
 
         .content {{ padding: 0 32px 32px; }}
 
@@ -233,14 +235,14 @@ def gerar_html(casos, agregados):
 
 <div class="content">
 
-    <div class="note-box">
-        <strong>Nota:</strong> O mapa mostra {len(casos)} casos individuais recolhidos de notícias (2019-2026).
-        Estes representam &lt;2% do total real - a maioria dos ~1090 atropelamentos anuais nao e noticiada.
-        Dados georreferenciados completos requerem protocolo com a ANSR.
-    </div>
-
     <div class="map-container">
         <div id="map"></div>
+    </div>
+
+    <div class="note-box">
+        <strong>Nota:</strong> O mapa mostra {len(casos)} casos individuais recolhidos de notícias (2017-2026).
+        Estes representam &lt;2% do total real — a maioria dos ~1090 atropelamentos anuais não é noticiada.
+        Dados georreferenciados completos requerem protocolo com a ANSR.
     </div>
 
     <div class="charts-grid">
