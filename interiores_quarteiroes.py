@@ -158,3 +158,90 @@ download_layer(perdido, 'D7263D', 'interior_perdido.png')
 # Municipios (reuse if exists)
 muni_styled = ee.Image().paint(municipiosPorto, 0, 2).selfMask()
 download_layer(muni_styled, 'FFFFFF', 'municipios.png')
+
+from shapely.geometry import shape, box, MultiPolygon
+from shapely.ops import unary_union
+import numpy as np
+
+# ----- Phase 2: OSM park mask -----
+print('\nA descarregar espacos verdes publicos do OSM...')
+
+OVERPASS_URL = 'https://overpass-api.de/api/interpreter'
+OVERPASS_QUERY = """
+[out:json][timeout:60];
+(
+  way["leisure"="park"](41.13,-8.70,41.19,-8.54);
+  relation["leisure"="park"](41.13,-8.70,41.19,-8.54);
+  way["leisure"="garden"](41.13,-8.70,41.19,-8.54);
+  relation["leisure"="garden"](41.13,-8.70,41.19,-8.54);
+  way["landuse"="recreation_ground"](41.13,-8.70,41.19,-8.54);
+  relation["landuse"="recreation_ground"](41.13,-8.70,41.19,-8.54);
+);
+out body;
+>;
+out skel qt;
+"""
+
+resp = requests.get(OVERPASS_URL, params={'data': OVERPASS_QUERY})
+osm_data = resp.json()
+
+# Build node lookup
+nodes = {}
+for el in osm_data['elements']:
+    if el['type'] == 'node':
+        nodes[el['id']] = (el['lon'], el['lat'])
+
+# Build polygons from ways
+park_polys = []
+for el in osm_data['elements']:
+    if el['type'] == 'way' and 'nodes' in el:
+        coords = [nodes[n] for n in el['nodes'] if n in nodes]
+        if len(coords) >= 4 and coords[0] == coords[-1]:
+            from shapely.geometry import Polygon as ShapelyPolygon
+            park_polys.append(ShapelyPolygon(coords))
+
+# Build polygons from relations (multipolygons)
+for el in osm_data['elements']:
+    if el['type'] == 'relation' and el.get('tags', {}).get('type') == 'multipolygon':
+        outers = []
+        for member in el.get('members', []):
+            if member['type'] == 'way' and member['role'] == 'outer':
+                for w in osm_data['elements']:
+                    if w['type'] == 'way' and w['id'] == member['ref']:
+                        coords = [nodes[n] for n in w['nodes'] if n in nodes]
+                        if len(coords) >= 4 and coords[0] == coords[-1]:
+                            from shapely.geometry import Polygon as ShapelyPolygon
+                            outers.append(ShapelyPolygon(coords))
+        park_polys.extend(outers)
+
+if park_polys:
+    parks_union = unary_union(park_polys)
+    print(f'  {len(park_polys)} poligonos de parques/jardins encontrados')
+else:
+    parks_union = MultiPolygon()
+    print('  Nenhum parque encontrado (mascara OSM nao aplicada)')
+
+def apply_osm_mask(filepath, parks_geom):
+    if parks_geom.is_empty:
+        return
+    img = Image.open(filepath).convert('RGBA')
+    w, h = img.size
+    arr = np.array(img)
+
+    lon_min, lon_max = -8.70, -8.54
+    lat_min, lat_max = 41.13, 41.19
+
+    from shapely.vectorized import contains
+    xs = np.linspace(lon_min, lon_max, w)
+    ys = np.linspace(lat_max, lat_min, h)
+    xx, yy = np.meshgrid(xs, ys)
+    mask = contains(parks_geom, xx, yy)
+
+    arr[mask, 3] = 0
+    Image.fromarray(arr).save(filepath)
+    n_masked = mask.sum()
+    print(f'  {os.path.basename(filepath)}: {n_masked} pixels mascarados (parques)')
+
+apply_osm_mask('layers/interior_subsistente.png', parks_union)
+apply_osm_mask('layers/interior_perdido.png', parks_union)
+print('Mascara OSM aplicada.')
