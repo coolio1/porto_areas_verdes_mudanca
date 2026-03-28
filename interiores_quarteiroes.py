@@ -214,7 +214,7 @@ perdido_opened = perdido_raw.unmask(0).focal_min(
 
 # ----- Filtro de area minima: diferenciado centro vs periferia -----
 MIN_PIXELS_CENTRO = 30     # ~3000 m2
-MIN_PIXELS_PERIFERIA = 100  # ~10000 m2 (1 ha)
+MIN_PIXELS_PERIFERIA = 200  # ~20000 m2 (2 ha)
 
 print('A filtrar por area minima...')
 sub_count = subsistente_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
@@ -400,7 +400,7 @@ layers_js = ',\n'.join(layers_js_items)
 basemaps = [
     ('CartoDB Positron', 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'),
     ('CartoDB Dark', 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'),
-    ('OpenStreetMap', 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
+    ('OpenStreetMap', 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'),
     ('Satelite', 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
 ]
 basemap_options = ''.join(
