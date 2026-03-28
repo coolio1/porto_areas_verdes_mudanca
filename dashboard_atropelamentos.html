@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atropelamentos no Grande Porto - Dashboard</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
+
+        .header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            padding: 24px 32px;
+            border-bottom: 3px solid #ef4444;
+        }
+        .header h1 { font-size: 1.8rem; color: #f8fafc; }
+        .header p { color: #94a3b8; margin-top: 4px; font-size: 0.95rem; }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            padding: 24px 32px;
+        }
+        .stat-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #3b82f6;
+        }
+        .stat-card.danger { border-left-color: #ef4444; }
+        .stat-card.warning { border-left-color: #f59e0b; }
+        .stat-card.info { border-left-color: #06b6d4; }
+        .stat-card .number { font-size: 2.2rem; font-weight: 700; color: #f8fafc; }
+        .stat-card .label { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
+        .stat-card .sublabel { font-size: 0.75rem; color: #64748b; }
+
+        .content { padding: 0 32px 32px; }
+
+        .map-container {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            border: 1px solid #334155;
+        }
+        #map { height: 500px; width: 100%; }
+
+        .legend {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 12px 16px;
+            border-radius: 8px;
+            line-height: 1.8;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+        }
+        .legend i {
+            width: 14px; height: 14px;
+            display: inline-block;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        .chart-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .chart-card h3 {
+            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .table-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+        .table-card h3 {
+            font-size: 1rem; color: #94a3b8; margin-bottom: 16px; font-weight: 500;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { text-align: left; padding: 10px 12px; color: #64748b; border-bottom: 1px solid #334155; font-weight: 500; }
+        td { padding: 10px 12px; border-bottom: 1px solid #1e293b; }
+        tr:hover td { background: #334155; }
+        .badge {
+            display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;
+        }
+        .badge-red { background: #450a0a; color: #fca5a5; }
+        .badge-orange { background: #451a03; color: #fdba74; }
+        .badge-blue { background: #0c1e3a; color: #93c5fd; }
+
+        .footer {
+            text-align: center; padding: 24px; color: #475569; font-size: 0.8rem;
+            border-top: 1px solid #1e293b;
+        }
+        .footer a { color: #3b82f6; text-decoration: none; }
+
+        .note-box {
+            background: #1e293b; border-left: 4px solid #f59e0b; border-radius: 8px;
+            padding: 16px 20px; margin-bottom: 24px; font-size: 0.9rem; color: #94a3b8;
+        }
+        .note-box strong { color: #f59e0b; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Atropelamentos de Peões e Ciclistas — Grande Porto</h1>
+    <p>Base de dados de sinistralidade rodoviária | Fontes: ANSR, INE, notícias</p>
+</div>
+
+<div class="stats-row">
+    <div class="stat-card danger">
+        <div class="number">~1090</div>
+        <div class="label">Peões vítimas/ano</div>
+        <div class="sublabel">Distrito do Porto, 2024 (ANSR)</div>
+    </div>
+    <div class="stat-card danger">
+        <div class="number">20</div>
+        <div class="label">Vítimas mortais (peões)</div>
+        <div class="sublabel">Distrito do Porto, 2024</div>
+    </div>
+    <div class="stat-card warning">
+        <div class="number">37</div>
+        <div class="label">Feridos graves (peões)</div>
+        <div class="sublabel">Distrito do Porto, 2024</div>
+    </div>
+    <div class="stat-card info">
+        <div class="number">1033</div>
+        <div class="label">Feridos leves (peões)</div>
+        <div class="sublabel">Distrito do Porto, 2024</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">6384</div>
+        <div class="label">Acidentes com vítimas (total)</div>
+        <div class="sublabel">Distrito do Porto, 2024</div>
+    </div>
+</div>
+
+<div class="content">
+
+    <div class="note-box">
+        <strong>Nota:</strong> O mapa mostra 24 casos individuais recolhidos de notícias (2019-2026).
+        Estes representam &lt;2% do total real - a maioria dos ~1090 atropelamentos anuais nao e noticiada.
+        Dados georreferenciados completos requerem protocolo com a ANSR.
+    </div>
+
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Peões vítimas no Distrito do Porto (ANSR)</h3>
+            <canvas id="chartPeoes"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Ciclistas vítimas em Portugal (ANSR)</h3>
+            <canvas id="chartCiclistas"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Sinistralidade geral — Distrito do Porto</h3>
+            <canvas id="chartGeral"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Casos noticiados por concelho (amostra)</h3>
+            <canvas id="chartConcelhos"></canvas>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <h3>Casos individuais registados (24 ocorrências)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Local</th>
+                    <th>Concelho</th>
+                    <th>Vítima</th>
+                    <th>Gravidade</th>
+                    <th>Veículo</th>
+                    <th>Idade</th>
+                    <th>Fonte</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2026-03-13</td>
+                    <td>Via pública em Laúndos</td>
+                    <td>Póvoa de Varzim</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>pesado mercadorias</td>
+                    <td>-</td>
+                    <td><a href="https://cnnportugal.iol.pt/laundos/pesados/homem-morre-atropelado-por-camiao-na-povoa-de-varzim/20260313/69b3dc66d34e28842c81b2bf" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2026-02-12</td>
+                    <td>Estrada da Circunvalação (Monte dos Burgos)</td>
+                    <td>Porto</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>-</td>
+                    <td><a href="https://www.jn.pt/pais/artigo/mulher-morreu-atropelada-na-estrada-da-circunvalacao-no-porto/18051554" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2026-02-08</td>
+                    <td>Rua Afonso de Albuquerque (Rio Tinto)</td>
+                    <td>Gondomar</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-orange">ferido grave</span></td>
+                    <td>autocarro</td>
+                    <td>-</td>
+                    <td><a href="https://tvi.iol.pt/noticias/atropelados/autocarro/duas-pessoas-em-estado-grave-apos-serem-atropeladas-por-autocarro-em-rio-tinto/20260208/69889b97d34e0ec52ec3484e" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2025-12-06</td>
+                    <td>Avenida Beira-Mar (Canidelo)</td>
+                    <td>Vila Nova de Gaia</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>65</td>
+                    <td><a href="https://observador.pt/2025/12/07/um-morto-e-um-ferido-num-atropelamento-com-fuga-em-vila-nova-de-gaia/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2025-11-26</td>
+                    <td>Linha do Minho (apeadeiro de Águas Santas)</td>
+                    <td>Maia</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>comboio</td>
+                    <td>63</td>
+                    <td><a href="https://observador.pt/2025/11/26/homem-morre-em-atropelamento-na-linha-do-minho-que-ficou-com-circulacao-condicionada/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2025-11-24</td>
+                    <td>Linha do Norte (Valadares)</td>
+                    <td>Vila Nova de Gaia</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>comboio</td>
+                    <td>-</td>
+                    <td><a href="https://observador.pt/2025/11/24/um-morto-em-atropelamento-ferroviario-em-valadares-em-vila-nova-de-gaia/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2025-11-18</td>
+                    <td>Estação de metro da Senhora da Hora</td>
+                    <td>Matosinhos</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-orange">ferido grave</span></td>
+                    <td>metro</td>
+                    <td>30</td>
+                    <td><a href="https://rr.pt/noticia/pais/2025/11/18/mulher-colhida-pelo-metro-com-ferimentos-graves-em-matosinhos/448353/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2025-11-07</td>
+                    <td>Praça Machado dos Santos / EN15</td>
+                    <td>Valongo</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-blue">ferido leve</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>-</td>
+                    <td><a href="https://www.jornalnovoregional.pt/2025/11/atropelamento-interrompe-transito-no-centro-de-valongo/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2025-10-20</td>
+                    <td>Rua Júlio Dinis</td>
+                    <td>Porto</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>autocarro</td>
+                    <td>66</td>
+                    <td><a href="https://www.publico.pt/2025/10/20/local/noticia/mulher-morre-atropelada-autocarro-rua-julio-dinis-porto-2151523" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2025-03-22</td>
+                    <td>Rua Nossa Senhora do Amparo / EN15</td>
+                    <td>Gondomar</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-blue">ferido leve</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>-</td>
+                    <td><a href="https://rr.pt/noticia/pais/2025/03/22/en15-cortada-em-rio-tinto-gondomar-apos-atropelamento/418553/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2024-11-01</td>
+                    <td>Rua do Campo Alegre</td>
+                    <td>Porto</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>72</td>
+                    <td><a href="https://www.cmjornal.pt/portugal/detalhe/alerta-cm--mulher-de-45-anos-atropelada-no-porto" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2024-09-01</td>
+                    <td>Apeadeiro da Madalena (Linha do Norte)</td>
+                    <td>Vila Nova de Gaia</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>comboio</td>
+                    <td>-</td>
+                    <td><a href="https://www.ogaiense.pt/noticias/noticiario/uma-pessoa-morreu-apos-atropelamento-de-comboio-na-madalena" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2024-07-09</td>
+                    <td>Linha do metro em Francos</td>
+                    <td>Porto</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>metro</td>
+                    <td>36</td>
+                    <td><a href="https://observador.pt/2024/07/09/homem-colhido-pelo-metro-no-porto-ia-de-auriculares-nos-ouvidos-era-um-turista-sueco-de-36-anos/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2024-06-06</td>
+                    <td>Rua Oliveira Gaio (São Mamede de Infesta)</td>
+                    <td>Matosinhos</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>37</td>
+                    <td><a href="https://portocanal.sapo.pt/noticia/351872" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2024-05-13</td>
+                    <td>Alameda Infanta Dona Mafalda (Parque do Sardã</td>
+                    <td>Matosinhos</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>pesado mercadorias</td>
+                    <td>70</td>
+                    <td><a href="https://cnnportugal.iol.pt/atropelamento/matosinhos/mulher-com-cerca-de-70-anos-morre-atropelada-em-matosinhos/20240513/66422943d34e04989220c9b0" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2024-04-01</td>
+                    <td>Estação de metro Carreira (Rio Tinto)</td>
+                    <td>Gondomar</td>
+                    <td>Ciclista</td>
+                    <td><span class="badge badge-orange">ferido grave</span></td>
+                    <td>metro</td>
+                    <td>40</td>
+                    <td><a href="https://www.jn.pt/7184562619/ciclista-atropelado-pelo-metro-em-rio-tinto-fica-em-estado-grave/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2023-03-11</td>
+                    <td>Avenida da Boavista (cruzamento com Rua 15 de</td>
+                    <td>Porto</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>pesado mercadorias</td>
+                    <td>72</td>
+                    <td><a href="https://www.jn.pt/local/noticias/porto/porto/mulher-morre-atropelada-por-camiao-na-avenida-da-boavista-16007284.html/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2023-03-02</td>
+                    <td>Estrada da Circunvalação (junto ao McDonald's</td>
+                    <td>Porto</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>20</td>
+                    <td><a href="https://cidadedoporto.sapo.pt/noticias/jovem-de-20-anos-e-a-vitima-do-acidente-mortal-na-circunvalacao" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2023-01-01</td>
+                    <td>Rua Oliveira Monteiro (cruzamento com Rua da </td>
+                    <td>Porto</td>
+                    <td>Ciclista</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>-</td>
+                    <td><a href="https://observador.pt/2023/01/01/um-morto-e-um-ferido-em-estado-critico-apos-atropelamento-no-porto/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2022-10-03</td>
+                    <td>Rua 1º de Maio</td>
+                    <td>Matosinhos</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-orange">ferido grave</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>51</td>
+                    <td><a href="https://tvsenhoradahora.com/ferido-grave-apos-atropelamento-em-matosinhos/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2022-08-18</td>
+                    <td>Avenida da Boavista (passadeira)</td>
+                    <td>Porto</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-orange">ferido grave</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>66</td>
+                    <td><a href="https://rr.pt/noticia/pais/2022/08/18/homem-em-fuga-causa-ferido-grave-em-atropelamento-no-porto/296354/" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2022-07-18</td>
+                    <td>Estação de metro de Pias (Linha Verde)</td>
+                    <td>Matosinhos</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>metro</td>
+                    <td>23</td>
+                    <td><a href="https://oprimeirodejaneiro.sapo.pt/noticias/jovem-de-23-anos-morre-atropelada-pelo-metro-em-matosinhos" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2019-11-09</td>
+                    <td>Cruzamento Rua Morgado de Mateus com Rua Visc</td>
+                    <td>Porto</td>
+                    <td>Peão</td>
+                    <td><span class="badge badge-red">mortal</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>-</td>
+                    <td><a href="https://cidade.fm/noticia/dois-mortos-em-acidente-no-centro-do-porto" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr><tr>
+                    <td>2022</td>
+                    <td>Estrada da Circunvalação (Matosinhos)</td>
+                    <td>Matosinhos</td>
+                    <td>Ciclista</td>
+                    <td><span class="badge badge-orange">ferido grave</span></td>
+                    <td>ligeiro passageiros</td>
+                    <td>-</td>
+                    <td><a href="https://portocanal.sapo.pt/noticia/348334" target="_blank" style="color:#3b82f6">link</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-card">
+        <h3>Dados agregados ANSR — Peões vítimas (Distrito do Porto)</h3>
+        <table>
+            <thead><tr><th>Ano</th><th>Vítimas Mortais</th><th>Feridos Graves</th><th>Feridos Leves</th><th>Total</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><b>2019</b></td>
+                    <td style="color:#fca5a5">26</td>
+                    <td style="color:#fdba74">43</td>
+                    <td>1093</td>
+                    <td><b>1162</b></td>
+                </tr><tr>
+                    <td><b>2023</b></td>
+                    <td style="color:#fca5a5">16</td>
+                    <td style="color:#fdba74">47</td>
+                    <td>1028</td>
+                    <td><b>1091</b></td>
+                </tr><tr>
+                    <td><b>2024</b></td>
+                    <td style="color:#fca5a5">20</td>
+                    <td style="color:#fdba74">37</td>
+                    <td>1033</td>
+                    <td><b>1090</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>Dados compilados a partir de fontes públicas (ANSR, INE, notícias) | Actualizado: Março 2026</p>
+    <p>Para dados completos georreferenciados: estabelecer protocolo com a <a href="https://www.ansr.pt">ANSR</a></p>
+    <p>Projecto para redução de mortes e acidentes com peões e ciclistas no Grande Porto</p>
+</div>
+
+<script>
+    // === MAPA ===
+    var map = L.map('map').setView([41.16, -8.63], 12);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Markers
+    
+            L.circleMarker([41.3821981, -8.7569645], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2026-03-13</b><br>             <b>Via pública em Laúndos</b>, Póvoa de Varzim<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Pesado Mercadorias<br>                          | Sexo: M<br>             <small>Homem parou camião na via pública para reparar avaria; veículo moveu-se e atropelou-o. Morte declarada no local.</small><br>             <a href=\'https://cnnportugal.iol.pt/laundos/pesados/homem-morre-atropelado-por-camiao-na-povoa-de-varzim/20260313/69b3dc66d34e28842c81b2bf\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1796916, -8.6267535], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2026-02-12</b><br>             <b>Estrada da Circunvalação (Monte dos Burgos)</b>, Porto<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Ligeiro Passageiros<br>                          | Sexo: F<br>             <small>Mulher atropelada na Circunvalação por volta das 06:30. Manobras de reanimação no local sem sucesso. Condutor em fuga.</small><br>             <a href=\'https://www.jn.pt/pais/artigo/mulher-morreu-atropelada-na-estrada-da-circunvalacao-no-porto/18051554\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1682485, -8.5616845], {
+                radius: 7,
+                fillColor: 'orange',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2026-02-08</b><br>             <b>Rua Afonso de Albuquerque (Rio Tinto)</b>, Gondomar<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:orange;font-weight:bold\'>Ferido Grave</span><br>             Veículo: Autocarro<br>                          <br>             <small>Autocarro despistou-se e atropelou duas pessoas. Ambas em estado grave. Transportadas ao Hospital de S. João.</small><br>             <a href=\'https://tvi.iol.pt/noticias/atropelados/autocarro/duas-pessoas-em-estado-grave-apos-serem-atropeladas-por-autocarro-em-rio-tinto/20260208/69889b97d34e0ec52ec3484e\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1332383, -8.6697979], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2025-12-06</b><br>             <b>Avenida Beira-Mar (Canidelo)</b>, Vila Nova de Gaia<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Ligeiro Passageiros<br>             Idade: 65             | Sexo: M<br>             <small>Casal saía de bar no Paredão quando dois carros em excesso de velocidade causaram acidente. Homem de 65 anos morreu no local; mulher de 64 com ferimentos na perna. Condutor (22 anos) fugiu e entregou-</small><br>             <a href=\'https://observador.pt/2025/12/07/um-morto-e-um-ferido-num-atropelamento-com-fuga-em-vila-nova-de-gaia/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.2373456, -8.6299982], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2025-11-26</b><br>             <b>Linha do Minho (apeadeiro de Águas Santas)</b>, Maia<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Comboio<br>             Idade: 63             | Sexo: M<br>             <small>Homem de 63 anos atropelado por comboio na Linha do Minho às 07:51. Assistido no local mas não resistiu aos ferimentos.</small><br>             <a href=\'https://observador.pt/2025/11/26/homem-morre-em-atropelamento-na-linha-do-minho-que-ficou-com-circulacao-condicionada/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.095291, -8.6326514], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2025-11-24</b><br>             <b>Linha do Norte (Valadares)</b>, Vila Nova de Gaia<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Comboio<br>                          | Sexo: F<br>             <small>Mulher morreu ao ser colhida por comboio na Linha do Norte em Valadares por volta das 22:20. Área proibida a peões.</small><br>             <a href=\'https://observador.pt/2025/11/24/um-morto-em-atropelamento-ferroviario-em-valadares-em-vila-nova-de-gaia/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1880792, -8.6544931], {
+                radius: 7,
+                fillColor: 'orange',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2025-11-18</b><br>             <b>Estação de metro da Senhora da Hora</b>, Matosinhos<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:orange;font-weight:bold\'>Ferido Grave</span><br>             Veículo: Metro<br>             Idade: 30             | Sexo: F<br>             <small>Mulher de 30 anos atropelada pelo metro na estação da Senhora da Hora às 17:35. Ficou com perna presa debaixo do metro. Ferimentos no braço, perna e cabeça. Transportada ao Hospital Pedro Hispano.</small><br>             <a href=\'https://rr.pt/noticia/pais/2025/11/18/mulher-colhida-pelo-metro-com-ferimentos-graves-em-matosinhos/448353/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.189044, -8.4965177], {
+                radius: 5,
+                fillColor: 'blue',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2025-11-07</b><br>             <b>Praça Machado dos Santos / EN15</b>, Valongo<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:blue;font-weight:bold\'>Ferido Leve</span><br>             Veículo: Ligeiro Passageiros<br>                          <br>             <small>Peão atropelado junto a passadeira no centro de Valongo às 18:08. Trânsito na EN15 interrompido. 4 veículos e 9 bombeiros mobilizados.</small><br>             <a href=\'https://www.jornalnovoregional.pt/2025/11/atropelamento-interrompe-transito-no-centro-de-valongo/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.0237015, -8.5739193], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2025-10-20</b><br>             <b>Rua Júlio Dinis</b>, Porto<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Autocarro<br>             Idade: 66             | Sexo: F<br>             <small>Mulher de 66 anos morre atropelada por autocarro da STCP na Rua Júlio Dinis ao final da tarde (18:15). Vítima carregava sacos e desequilibrou-se. 19 operacionais e 7 veículos mobilizados. STCP abriu i</small><br>             <a href=\'https://www.publico.pt/2025/10/20/local/noticia/mulher-morre-atropelada-autocarro-rua-julio-dinis-porto-2151523\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1809624, -8.5357682], {
+                radius: 5,
+                fillColor: 'blue',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2025-03-22</b><br>             <b>Rua Nossa Senhora do Amparo / EN15</b>, Gondomar<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:blue;font-weight:bold\'>Ferido Leve</span><br>             Veículo: Ligeiro Passageiros<br>                          <br>             <small>Peão atropelado por automóvel ligeiro às 09:23. EN15 cortada nos dois sentidos. Vítima transportada ao Hospital de Santo António.</small><br>             <a href=\'https://rr.pt/noticia/pais/2025/03/22/en15-cortada-em-rio-tinto-gondomar-apos-atropelamento/418553/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1524219, -8.6347225], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2024-11-01</b><br>             <b>Rua do Campo Alegre</b>, Porto<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Ligeiro Passageiros<br>             Idade: 72             | Sexo: F<br>             <small>Maria Dulce Leal, 72 anos, atropelada numa passadeira no Campo Alegre. Projetada vários metros por carro conduzido por mulher de 81 anos.</small><br>             <a href=\'https://www.cmjornal.pt/portugal/detalhe/alerta-cm--mulher-de-45-anos-atropelada-no-porto\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1114874, -8.637766], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2024-09-01</b><br>             <b>Apeadeiro da Madalena (Linha do Norte)</b>, Vila Nova de Gaia<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Comboio<br>                          | Sexo: M<br>             <small>Homem morre atropelado por comboio junto ao apeadeiro da Madalena ao início da noite. Alerta às 20:04.</small><br>             <a href=\'https://www.ogaiense.pt/noticias/noticiario/uma-pessoa-morreu-apos-atropelamento-de-comboio-na-madalena\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1502195, -8.6103497], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2024-07-09</b><br>             <b>Linha do metro em Francos</b>, Porto<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Metro<br>             Idade: 36             | Sexo: M<br>             <small>Turista sueco de 36 anos morre atropelado pelo metro em Francos. Atravessou a linha com auscultadores. Morte declarada no local. Circulação cortada entre Senhora da Hora e Casa da Música.</small><br>             <a href=\'https://observador.pt/2024/07/09/homem-colhido-pelo-metro-no-porto-ia-de-auriculares-nos-ouvidos-era-um-turista-sueco-de-36-anos/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1912232, -8.6106388], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2024-06-06</b><br>             <b>Rua Oliveira Gaio (São Mamede de Infesta)</b>, Matosinhos<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Ligeiro Passageiros<br>             Idade: 37             | Sexo: F<br>             <small>Mulher venezuelana de 37 anos atropelada intencionalmente pelo ex-namorado que passou por cima do corpo 3 vezes. Vizinhos perseguiram o condutor. Detido pela Polícia Judiciária. Condenado a 25 anos de</small><br>             <a href=\'https://portocanal.sapo.pt/noticia/351872\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.2158488, -8.6755061], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2024-05-13</b><br>             <b>Alameda Infanta Dona Mafalda (Parque do Sardão)</b>, Matosinhos<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Pesado Mercadorias<br>             Idade: 70             | Sexo: F<br>             <small>Mulher de cerca de 70 anos morre atropelada por veículo pesado que manobrava para sair de empresa. Alerta às 08:53. Já havia falecido à chegada dos socorros.</small><br>             <a href=\'https://cnnportugal.iol.pt/atropelamento/matosinhos/mulher-com-cerca-de-70-anos-morre-atropelada-em-matosinhos/20240513/66422943d34e04989220c9b0\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1798361, -8.5435122], {
+                radius: 7,
+                fillColor: 'orange',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2024-04-01</b><br>             <b>Estação de metro Carreira (Rio Tinto)</b>, Gondomar<br>             Vítima: Ciclista<br>             Gravidade: <span style=\'color:orange;font-weight:bold\'>Ferido Grave</span><br>             Veículo: Metro<br>             Idade: 40             <br>             <small>Ciclista entre 40 e 50 anos atropelado por metro perto da estação de Carreira em Rio Tinto. Ficou em estado grave.</small><br>             <a href=\'https://www.jn.pt/7184562619/ciclista-atropelado-pelo-metro-em-rio-tinto-fica-em-estado-grave/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1589025, -8.6307748], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2023-03-11</b><br>             <b>Avenida da Boavista (cruzamento com Rua 15 de Novembro)</b>, Porto<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Pesado Mercadorias<br>             Idade: 72             | Sexo: F<br>             <small>Mulher de 72 anos morre atropelada por camião junto à Casa da Música às 11:19. Atravessou fora da passadeira (~100m). Estava ao telemóvel segundo testemunhas. Semáforo verde para veículos.</small><br>             <a href=\'https://www.jn.pt/local/noticias/porto/porto/mulher-morre-atropelada-por-camiao-na-avenida-da-boavista-16007284.html/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1837074, -8.6114785], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2023-03-02</b><br>             <b>Estrada da Circunvalação (junto ao McDonald\'s)</b>, Porto<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Ligeiro Passageiros<br>             Idade: 20             | Sexo: M<br>             <small>Jovem de 20 anos morre em despiste na Circunvalação perto da meia-noite. 2 feridos graves e 2 ligeiros. 29 operacionais e 11 veículos mobilizados. Feridos transportados ao Hospital de S. João.</small><br>             <a href=\'https://cidadedoporto.sapo.pt/noticias/jovem-de-20-anos-e-a-vitima-do-acidente-mortal-na-circunvalacao\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1587618, -8.6237975], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2023-01-01</b><br>             <b>Rua Oliveira Monteiro (cruzamento com Rua da Boavista)</b>, Porto<br>             Vítima: Ciclista<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Ligeiro Passageiros<br>                          | Sexo: M<br>             <small>Duas pessoas em trotinetes atropeladas por automóvel às 06:15 da manhã de Ano Novo. Vítima mortal de 25 anos. Condutor com taxa de álcool de 1.7g/l (taxa crime). Passageira do carro com ferimentos lig</small><br>             <a href=\'https://observador.pt/2023/01/01/um-morto-e-um-ferido-em-estado-critico-apos-atropelamento-no-porto/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1826062, -8.6825423], {
+                radius: 7,
+                fillColor: 'orange',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2022-10-03</b><br>             <b>Rua 1º de Maio</b>, Matosinhos<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:orange;font-weight:bold\'>Ferido Grave</span><br>             Veículo: Ligeiro Passageiros<br>             Idade: 51             | Sexo: M<br>             <small>Homem de 51 anos atropelado por automóvel ao final da tarde (18:36). Ferimentos graves. Transportado ao Hospital Pedro Hispano.</small><br>             <a href=\'https://tvsenhoradahora.com/ferido-grave-apos-atropelamento-em-matosinhos/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1643251, -8.6670099], {
+                radius: 7,
+                fillColor: 'orange',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2022-08-18</b><br>             <b>Avenida da Boavista (passadeira)</b>, Porto<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:orange;font-weight:bold\'>Ferido Grave</span><br>             Veículo: Ligeiro Passageiros<br>             Idade: 66             <br>             <small>Peão de 66 anos atropelado na passadeira da Av. Boavista por condutor que fugia da PSP. Vítima sofreu politraumatismos graves. Transportada ao Hospital Santo António.</small><br>             <a href=\'https://rr.pt/noticia/pais/2022/08/18/homem-em-fuga-causa-ferido-grave-em-atropelamento-no-porto/296354/\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1806814, -8.6821998], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2022-07-18</b><br>             <b>Estação de metro de Pias (Linha Verde)</b>, Matosinhos<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Metro<br>             Idade: 23             | Sexo: F<br>             <small>Mulher de 23 anos morre atropelada pelo metro do Porto junto à estação de Pias na manhã de segunda-feira (~09:00). Linha Verde interrompida entre Fórum da Maia e Senhora da Hora.</small><br>             <a href=\'https://oprimeirodejaneiro.sapo.pt/noticias/jovem-de-23-anos-morre-atropelada-pelo-metro-em-matosinhos\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1470911, -8.6002572], {
+                radius: 10,
+                fillColor: 'red',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2019-11-09</b><br>             <b>Cruzamento Rua Morgado de Mateus com Rua Visconde de Bóbeda</b>, Porto<br>             Vítima: Peão<br>             Gravidade: <span style=\'color:red;font-weight:bold\'>Mortal</span><br>             Veículo: Ligeiro Passageiros<br>                          <br>             <small>Carro despista-se contra casa no centro do Porto às 08:24. Condutor e peão morrem. Ambas as vítimas na casa dos 60 anos.</small><br>             <a href=\'https://cidade.fm/noticia/dois-mortos-em-acidente-no-centro-do-porto\' target=\'_blank\'>Fonte</a>         ');
+        
+            L.circleMarker([41.1770407, -8.6609685], {
+                radius: 7,
+                fillColor: 'orange',
+                color: '#333',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('             <b>2022</b><br>             <b>Estrada da Circunvalação (Matosinhos)</b>, Matosinhos<br>             Vítima: Ciclista<br>             Gravidade: <span style=\'color:orange;font-weight:bold\'>Ferido Grave</span><br>             Veículo: Ligeiro Passageiros<br>                          <br>             <small>Ciclista atropelado na Circunvalação em Matosinhos por Vítor Macedo (\'rei dos catalisadores\') que fugia da PSP. Ciclista com ferimentos graves. Condutor condenado a 3 anos e 4 meses.</small><br>             <a href=\'https://portocanal.sapo.pt/noticia/348334\' target=\'_blank\'>Fonte</a>         ');
+        
+
+    // Legend
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function(map) {
+        var div = L.DomUtil.create('div', 'legend');
+        div.style.background = 'rgba(255,255,255,0.92)';
+        div.style.color = '#1e293b';
+        div.innerHTML = '<b>Gravidade</b><br>' +
+            '<i style="background:#ef4444"></i> Mortal<br>' +
+            '<i style="background:#f59e0b"></i> Ferido grave<br>' +
+            '<i style="background:#3b82f6"></i> Ferido leve';
+        return div;
+    };
+    legend.addTo(map);
+
+    // === GRAFICOS ===
+    var chartColors = {
+        red: '#ef4444', orange: '#f59e0b', blue: '#3b82f6', cyan: '#06b6d4',
+        grid: '#334155', text: '#94a3b8'
+    };
+    var defaultOptions = {
+        responsive: true,
+        plugins: { legend: { labels: { color: chartColors.text } } },
+        scales: {
+            x: { ticks: { color: chartColors.text }, grid: { color: chartColors.grid } },
+            y: { ticks: { color: chartColors.text }, grid: { color: chartColors.grid } }
+        }
+    };
+
+    // Peões Porto
+    new Chart(document.getElementById('chartPeoes'), {
+        type: 'bar',
+        data: {
+            labels: ["2019", "2023", "2024"],
+            datasets: [
+                { label: 'Vítimas Mortais', data: [26, 16, 20], backgroundColor: chartColors.red },
+                { label: 'Feridos Graves', data: [43, 47, 37], backgroundColor: chartColors.orange },
+                { label: 'Feridos Leves (÷10)', data: [109, 103, 103], backgroundColor: chartColors.blue }
+            ]
+        },
+        options: { ...defaultOptions, plugins: { ...defaultOptions.plugins, title: { display: false } } }
+    });
+
+    // Ciclistas Nacional
+    new Chart(document.getElementById('chartCiclistas'), {
+        type: 'bar',
+        data: {
+            labels: ["2019", "2023", "2024"],
+            datasets: [
+                { label: 'Vítimas Mortais', data: [27, 32, 30], backgroundColor: chartColors.red },
+                { label: 'Feridos Graves', data: [97, 180, 167], backgroundColor: chartColors.orange },
+                { label: 'Feridos Leves (÷10)', data: [164, 295, 332], backgroundColor: chartColors.cyan }
+            ]
+        },
+        options: defaultOptions
+    });
+
+    // Sinistralidade geral Porto
+    new Chart(document.getElementById('chartGeral'), {
+        type: 'line',
+        data: {
+            labels: ["2019", "2023", "2024"],
+            datasets: [
+                { label: 'Acidentes c/ vítimas', data: [6245, 6107, 6384], borderColor: chartColors.blue, backgroundColor: 'transparent', tension: 0.3 },
+                { label: 'Vítimas mortais (x50)', data: [3950, 3050, 3800], borderColor: chartColors.red, backgroundColor: 'transparent', tension: 0.3 },
+                { label: 'Feridos graves (x20)', data: [4100, 4320, 4360], borderColor: chartColors.orange, backgroundColor: 'transparent', tension: 0.3 }
+            ]
+        },
+        options: defaultOptions
+    });
+
+    // Concelhos
+    var concelhoLabels = ["P\u00f3voa de Varzim", "Porto", "Gondomar", "Vila Nova de Gaia", "Maia", "Matosinhos", "Valongo"];
+    var concelhoMortal = [1, 8, 0, 3, 1, 3, 0];
+    var concelhoGrave = [0, 1, 2, 0, 0, 3, 0];
+    var concelhoLeve = [0, 0, 1, 0, 0, 0, 1];
+
+    new Chart(document.getElementById('chartConcelhos'), {
+        type: 'bar',
+        data: {
+            labels: concelhoLabels,
+            datasets: [
+                { label: 'Mortal', data: concelhoMortal, backgroundColor: chartColors.red },
+                { label: 'Ferido grave', data: concelhoGrave, backgroundColor: chartColors.orange },
+                { label: 'Ferido leve', data: concelhoLeve, backgroundColor: chartColors.blue }
+            ]
+        },
+        options: { ...defaultOptions, scales: { ...defaultOptions.scales, x: { ...defaultOptions.scales.x, stacked: true }, y: { ...defaultOptions.scales.y, stacked: true } } }
+    });
+</script>
+
+</body>
+</html>

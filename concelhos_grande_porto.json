@@ -1,0 +1,25 @@
+{
+  "area_metropolitana_porto": {
+    "descricao": "Concelhos da Área Metropolitana do Porto (AMP)",
+    "concelhos": [
+      {"nome": "Porto", "codigo_ine": "1312"},
+      {"nome": "Vila Nova de Gaia", "codigo_ine": "1317"},
+      {"nome": "Matosinhos", "codigo_ine": "1308"},
+      {"nome": "Maia", "codigo_ine": "1307"},
+      {"nome": "Gondomar", "codigo_ine": "1304"},
+      {"nome": "Valongo", "codigo_ine": "1316"},
+      {"nome": "Vila do Conde", "codigo_ine": "1318"},
+      {"nome": "Póvoa de Varzim", "codigo_ine": "1313"},
+      {"nome": "Paredes", "codigo_ine": "1311"},
+      {"nome": "Penafiel", "codigo_ine": "1312"},
+      {"nome": "Paços de Ferreira", "codigo_ine": "1310"},
+      {"nome": "Santo Tirso", "codigo_ine": "1314"},
+      {"nome": "Trofa", "codigo_ine": "1319"},
+      {"nome": "Espinho", "codigo_ine": "1103"},
+      {"nome": "São João da Madeira", "codigo_ine": "0114"},
+      {"nome": "Santa Maria da Feira", "codigo_ine": "0113"},
+      {"nome": "Arouca", "codigo_ine": "0101"},
+      {"nome": "Oliveira de Azeméis", "codigo_ine": "0110"}
+    ]
+  }
+}

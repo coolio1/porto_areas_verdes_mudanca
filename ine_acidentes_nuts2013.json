@@ -1,0 +1,354 @@
+[ {
+  "IndicadorCod" : "0007989",
+  "IndicadorDsg" : "Acidentes de viação com vítimas (N.º) por Localização geográfica (NUTS - 2013) e Natureza do acidente; Anual - Autoridade Nacional de Segurança Rodoviária",
+  "MetaInfUrl" : "https://www.ine.pt/bddXplorer/htdocs/minfo.jsp?var_cd=0007989&lingua=PT",
+  "DataExtracao" : "2026-03-28T15:19:55.952Z",
+  "DataUltimoAtualizacao" : "2025-03-11",
+  "UltimoPref" : "2023",
+  "Dados" : {
+    "2023" : [ {
+      "geocod" : "PT",
+      "geodsg" : "Portugal",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "ind_string" : "4 873",
+      "valor" : "4873"
+    }, {
+      "geocod" : "11",
+      "geodsg" : "Norte",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "15",
+      "geodsg" : "Algarve",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "16",
+      "geodsg" : "Centro",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "17",
+      "geodsg" : "Área Metropolitana de Lisboa",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "18",
+      "geodsg" : "Alentejo",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "20",
+      "geodsg" : "Região Autónoma dos Açores",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "30",
+      "geodsg" : "Região Autónoma da Madeira",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "1",
+      "geodsg" : "Continente",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "2",
+      "geodsg" : "Região Autónoma dos Açores",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "3",
+      "geodsg" : "Região Autónoma da Madeira",
+      "dim_3" : "1",
+      "dim_3_t" : "Atropelamento",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "PT",
+      "geodsg" : "Portugal",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "ind_string" : "19 238",
+      "valor" : "19238"
+    }, {
+      "geocod" : "11",
+      "geodsg" : "Norte",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "15",
+      "geodsg" : "Algarve",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "16",
+      "geodsg" : "Centro",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "17",
+      "geodsg" : "Área Metropolitana de Lisboa",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "18",
+      "geodsg" : "Alentejo",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "20",
+      "geodsg" : "Região Autónoma dos Açores",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "30",
+      "geodsg" : "Região Autónoma da Madeira",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "1",
+      "geodsg" : "Continente",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "2",
+      "geodsg" : "Região Autónoma dos Açores",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "3",
+      "geodsg" : "Região Autónoma da Madeira",
+      "dim_3" : "2",
+      "dim_3_t" : "Colisão",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "PT",
+      "geodsg" : "Portugal",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "ind_string" : "12 484",
+      "valor" : "12484"
+    }, {
+      "geocod" : "11",
+      "geodsg" : "Norte",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "15",
+      "geodsg" : "Algarve",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "16",
+      "geodsg" : "Centro",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "17",
+      "geodsg" : "Área Metropolitana de Lisboa",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "18",
+      "geodsg" : "Alentejo",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "20",
+      "geodsg" : "Região Autónoma dos Açores",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "30",
+      "geodsg" : "Região Autónoma da Madeira",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "1",
+      "geodsg" : "Continente",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "2",
+      "geodsg" : "Região Autónoma dos Açores",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "3",
+      "geodsg" : "Região Autónoma da Madeira",
+      "dim_3" : "3",
+      "dim_3_t" : "Despiste",
+      "sinal_conv" : "x",
+      "sinal_conv_desc" : "Dado não disponível",
+      "ind_string" : "x"
+    }, {
+      "geocod" : "PT",
+      "geodsg" : "Portugal",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "36 595",
+      "valor" : "36595"
+    }, {
+      "geocod" : "11",
+      "geodsg" : "Norte",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "12 716",
+      "valor" : "12716"
+    }, {
+      "geocod" : "15",
+      "geodsg" : "Algarve",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "2 149",
+      "valor" : "2149"
+    }, {
+      "geocod" : "16",
+      "geodsg" : "Centro",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "8 625",
+      "valor" : "8625"
+    }, {
+      "geocod" : "17",
+      "geodsg" : "Área Metropolitana de Lisboa",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "9 029",
+      "valor" : "9029"
+    }, {
+      "geocod" : "18",
+      "geodsg" : "Alentejo",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "2 455",
+      "valor" : "2455"
+    }, {
+      "geocod" : "20",
+      "geodsg" : "Região Autónoma dos Açores",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "620",
+      "valor" : "620"
+    }, {
+      "geocod" : "30",
+      "geodsg" : "Região Autónoma da Madeira",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "1 001",
+      "valor" : "1001"
+    }, {
+      "geocod" : "1",
+      "geodsg" : "Continente",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "34 974",
+      "valor" : "34974"
+    }, {
+      "geocod" : "2",
+      "geodsg" : "Região Autónoma dos Açores",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "620",
+      "valor" : "620"
+    }, {
+      "geocod" : "3",
+      "geodsg" : "Região Autónoma da Madeira",
+      "dim_3" : "T",
+      "dim_3_t" : "Total",
+      "ind_string" : "1 001",
+      "valor" : "1001"
+    } ]
+  },
+  "Sucesso" : {
+    "Verdadeiro" : [ {
+      "Msg" : "OK"
+    } ]
+  }
+} ]
