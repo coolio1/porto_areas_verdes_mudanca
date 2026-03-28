@@ -214,7 +214,7 @@ perdido_opened = perdido_raw.unmask(0).focal_min(
 
 # ----- Filtro de area minima: diferenciado centro vs periferia -----
 MIN_PIXELS_CENTRO = 30     # ~3000 m2
-MIN_PIXELS_PERIFERIA = 200  # ~20000 m2 (2 ha)
+MIN_PIXELS_PERIFERIA = 400  # ~40000 m2 (4 ha)
 
 print('A filtrar por area minima...')
 sub_count = subsistente_opened.connectedPixelCount(MIN_PIXELS_PERIFERIA + 1)
