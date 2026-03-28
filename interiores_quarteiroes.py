@@ -351,8 +351,8 @@ else:
     vci_mask = np.ones((H, W), dtype=bool)
 
 MIN_AREA_CENTRO = 3000       # m2
-MIN_AREA_PERIFERIA = 20000   # m2
-MAX_ELONGATION = 5           # racio comprimento/largura para detectar features lineares
+MIN_AREA_PERIFERIA = 40000   # m2
+MIN_COMPACTNESS = 0.12       # 4*pi*area/perimetro^2 — abaixo disto e linear
 
 def filter_by_vector(filepath):
     """Vectorizar pixels, filtrar por area e forma, guardar PNG limpo."""
@@ -383,15 +383,17 @@ def filter_by_vector(filepath):
             removed_area += 1
             continue
 
-        # Filtro de linearidade: bounding box minimo
-        rows, cols = np.where(component)
-        height_px = rows.max() - rows.min() + 1
-        width_px = cols.max() - cols.min() + 1
-        long_side = max(height_px, width_px)
-        short_side = max(min(height_px, width_px), 1)
-        elongation = long_side / short_side
+        # Filtro de linearidade: compacidade (4*pi*area/perimetro^2)
+        # Perimetro = pixels com pelo menos um vizinho 4-conexo fora do componente
+        eroded = ndimage.binary_erosion(component)
+        perimeter_pixels = component & ~eroded
+        perimeter_len = perimeter_pixels.sum()
+        if perimeter_len > 0:
+            compactness = (4 * math.pi * n_pixels) / (perimeter_len ** 2)
+        else:
+            compactness = 1.0
 
-        if elongation > MAX_ELONGATION:
+        if compactness < MIN_COMPACTNESS:
             arr[component, 3] = 0
             removed_linear += 1
             continue
