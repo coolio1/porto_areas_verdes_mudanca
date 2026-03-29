@@ -1,5 +1,10 @@
 # GEE Porto Green Space Project
 
+## Idioma
+- Toda a escrita é em **Português de Portugal** (PT-PT), com acentuação correcta e ortografia europeia.
+- Nunca omitir acentos: é, á, ã, õ, ç, ê, ô, í, ú, etc.
+- Usar vocabulário PT-PT (peão, autocarro, passadeira, etc.), não brasileiro.
+
 ## Credentials
 
 - GEE project ID lives in `.env` (gitignored), loaded via `python-dotenv`
@@ -26,6 +31,11 @@ GEE/
 │   └── anim/               # Modulo Python (config, renderer, sdf_engine)
 ├── layers/                 # Layers do mapa actual (Sentinel-2)
 ├── layers_historico/       # Layers do mapa historico (Landsat)
+├── atropelamentos/         # Dashboard sinistralidade rodoviária
+│   ├── mapa_dashboard.py   # Script principal → dashboard_atropelamentos.html
+│   ├── compilar_dados.py   # Compilação de CSVs/fontes → DB
+│   ├── *.csv, *.json       # Dados (ANSR, INE, notícias)
+│   └── *.xlsx, *.pdf       # Anexos originais ANSR
 ├── CLC/                    # Scripts Corine Land Cover (experimental)
 ├── docs/                   # Planos e specs (excluido do Jekyll)
 └── archive/                # Scripts e HTMLs obsoletos
@@ -39,3 +49,6 @@ GEE/
 - **Scripts obsoletos** vão para `archive/`, nunca apagar do git
 - **`_config.yml` exclude** deve incluir: `*.py`, docs, archive, .claude, .superpowers
 - **1947/** é uma pasta dedicada — todo o código e layers de 1947 ficam lá
+- **atropelamentos/** é uma pasta dedicada — todo o código, dados e HTMLs de atropelamentos ficam lá, nunca na raiz
+- **Cada sub-projecto tem a sua pasta** — nunca espalhar ficheiros de dados (csv, json, xlsx, pdf, db) pela raiz do repositório
+- **Links no `index.html`** devem apontar para o caminho correcto dentro da pasta (ex: `atropelamentos/dashboard_atropelamentos.html`)
