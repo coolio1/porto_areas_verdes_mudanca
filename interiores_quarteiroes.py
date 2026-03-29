@@ -547,6 +547,16 @@ html = f'''<!DOCTYPE html>
 <style>
   body {{ margin:0; }}
   #map {{ position:absolute; top:0; bottom:0; width:100%; }}
+  #nav {{
+    position:fixed; top:10px; right:10px; z-index:1000;
+    display:flex; gap:6px; font:11px 'Segoe UI',Arial,sans-serif;
+  }}
+  #nav a {{
+    background:rgba(255,255,255,0.9); color:#444; text-decoration:none;
+    padding:4px 10px; border-radius:5px; box-shadow:0 1px 4px rgba(0,0,0,0.15);
+  }}
+  #nav a:hover {{ background:#fff; color:#222; }}
+  #nav a.active {{ background:var(--green,#2E7D32); color:#fff; }}
   #panel {{
     position:fixed; bottom:20px; left:20px; z-index:1000;
     background:rgba(255,255,255,0.95); padding:14px 18px; border-radius:10px;
@@ -563,6 +573,11 @@ html = f'''<!DOCTYPE html>
 </style>
 </head>
 <body>
+<div id="nav">
+  <a href="mapa.html">Mapa 2016-2025</a>
+  <a href="ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
+  <a href="interiores_quarteiroes.html" class="active">Interiores</a>
+</div>
 <div id="map"></div>
 <div id="panel">
   <b style="font-size:14px;">Interiores de Quarteir&atilde;o</b><br>

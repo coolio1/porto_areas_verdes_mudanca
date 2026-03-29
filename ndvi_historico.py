@@ -539,9 +539,24 @@ html = '''<!DOCTYPE html>
   .section { font-size:11px; color:#aaa; font-weight:bold; margin:8px 0 4px 0; }
   select { background:#333; color:#eee; border:1px solid #555; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }
   .swatch { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; }
+  #nav {
+    position:fixed; top:10px; right:10px; z-index:1000;
+    display:flex; gap:6px; font:11px 'Segoe UI',Arial,sans-serif;
+  }
+  #nav a {
+    background:rgba(255,255,255,0.9); color:#444; text-decoration:none;
+    padding:4px 10px; border-radius:5px; box-shadow:0 1px 4px rgba(0,0,0,0.15);
+  }
+  #nav a:hover { background:#fff; color:#222; }
+  #nav a.active { background:#2E7D32; color:#fff; }
 </style>
 </head>
 <body>
+<div id="nav">
+  <a href="mapa.html">Mapa 2016-2025</a>
+  <a href="ndvi_historico.html" class="active">Hist&oacute;rico 1947-2024</a>
+  <a href="interiores_quarteiroes.html">Interiores</a>
+</div>
 <div id="map"></div>
 <div id="panel">
   <b style="font-size:14px;">Vegetacao do Porto</b><br>
