@@ -11,6 +11,16 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
 
+        #nav {
+            position:fixed; top:10px; right:10px; z-index:9999;
+            display:flex; gap:6px; font:11px 'Segoe UI',Arial,sans-serif;
+        }
+        #nav a {
+            background:rgba(255,255,255,0.9); color:#444; text-decoration:none;
+            padding:4px 10px; border-radius:5px; box-shadow:0 1px 4px rgba(0,0,0,0.15);
+        }
+        #nav a:hover { background:#fff; color:#222; }
+        #nav a.active { background:#ef4444; color:#fff; }
         .header {
             background: linear-gradient(135deg, #1e293b, #334155);
             padding: 24px 32px;
@@ -119,6 +129,12 @@
     </style>
 </head>
 <body>
+<div id="nav">
+  <a href="../mapa.html">Mapa 2016-2025</a>
+  <a href="../ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
+  <a href="../interiores_quarteiroes.html">Interiores</a>
+  <a href="dashboard_atropelamentos.html" class="active">Atropelamentos</a>
+</div>
 
 <div class="header">
     <h1>Atropelamentos de Peões e Ciclistas — Grande Porto</h1>
