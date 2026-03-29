@@ -183,7 +183,7 @@ print('\nA descarregar camadas...')
 for lid, mask, label, color, show in ALL_LAYERS:
     download_layer(mask, color, f'{lid}.png')
 
-muni_styled = ee.Image().paint(municipiosPorto, 0, 2).selfMask()
+muni_styled = ee.Image().byte().paint(featureCollection=municipiosPorto, color=1, width=2)
 download_layer(muni_styled, 'FFFFFF', 'municipios.png')
 
 # ============================================================
@@ -192,7 +192,7 @@ download_layer(muni_styled, 'FFFFFF', 'municipios.png')
 print('\nA construir mapa...')
 
 # Add municipios to layers
-muni_styled = ee.Image().paint(municipiosPorto, 0, 2).selfMask()
+muni_styled = ee.Image().byte().paint(featureCollection=municipiosPorto, color=1, width=2)
 download_layer(muni_styled, 'FFFFFF', 'municipios.png')
 
 ALL_LAYERS_PLUS = ALL_LAYERS + [('municipios', None, 'Limites municipais', 'FFFFFF', True)]

@@ -283,8 +283,8 @@ else:
     print('  centro_alargado.png ja existe, a saltar...')
 
 # Municipios (reuse if exists)
-muni_styled = ee.Image().paint(municipiosPorto, 0, 2).selfMask()
-download_layer(muni_styled, 'FFFFFF', 'municipios.png')
+muni_styled = ee.Image().byte().paint(featureCollection=municipiosPorto, color=1, width=3)
+download_layer(muni_styled, '444444', 'municipios.png')
 
 from shapely.geometry import shape, box, MultiPolygon
 from shapely.ops import unary_union
@@ -512,7 +512,7 @@ MAP_LAYERS = [
     ('interior_subsistente', 'Subsistente', '#2E7D32', True),
     ('interior_perdido', 'Perdido', '#D7263D', True),
     ('centro_alargado', 'Interior VCI', '#FFD700', True),
-    ('municipios', 'Limites municipais', '#FFFFFF', True),
+    ('municipios', 'Limites municipais', '#444444', True),
 ]
 
 layers_js_items = []

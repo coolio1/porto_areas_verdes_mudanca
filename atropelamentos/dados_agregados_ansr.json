@@ -1,0 +1,159 @@
+{
+  "fonte": "ANSR - Relatório Anual de Sinistralidade Rodoviária a 30 dias",
+  "ficheiros": [
+    "Anexo_Relatorio_Anual_2024_30dias.xlsx",
+    "Anexo_Relatorio_Anual_2023_30dias.xlsx",
+    "Anexo_Relatorio_Anual_2024_24h.xlsx",
+    "Anexo_Relatorio_Mensal_Set2025.xlsx"
+  ],
+  "distrito_porto": {
+    "peoes_vitimas": {
+      "descricao": "Quadro 4.10 - Peões vítimas por distrito",
+      "dados": [
+        {
+          "ano": 2019,
+          "vitimas_mortais": 26,
+          "feridos_graves": 43,
+          "feridos_leves": 1093
+        },
+        {
+          "ano": 2023,
+          "vitimas_mortais": 16,
+          "feridos_graves": 47,
+          "feridos_leves": 1028
+        },
+        {
+          "ano": 2024,
+          "vitimas_mortais": 20,
+          "feridos_graves": 37,
+          "feridos_leves": 1033
+        }
+      ]
+    },
+    "sinistralidade_geral": {
+      "descricao": "Quadro 1.10 - Sinistralidade por distrito",
+      "dados": [
+        {
+          "ano": 2019,
+          "acidentes_com_vitimas": 6245,
+          "vitimas_mortais": 79,
+          "feridos_graves": 205,
+          "feridos_leves": 7738
+        },
+        {
+          "ano": 2023,
+          "acidentes_com_vitimas": 6107,
+          "vitimas_mortais": 61,
+          "feridos_graves": 216,
+          "feridos_leves": 7261
+        },
+        {
+          "ano": 2024,
+          "acidentes_com_vitimas": 6384,
+          "vitimas_mortais": 76,
+          "feridos_graves": 218,
+          "feridos_leves": 7609
+        }
+      ]
+    }
+  },
+  "nacional": {
+    "atropelamentos": {
+      "descricao": "Quadro 1.6 - Sinistralidade por natureza (atropelamento)",
+      "dados": [
+        {
+          "ano": 2019,
+          "acidentes": 5565,
+          "vitimas_mortais": 134,
+          "feridos_graves": 427,
+          "feridos_leves": 5513
+        },
+        {
+          "ano": 2023,
+          "acidentes": 4873,
+          "vitimas_mortais": 106,
+          "feridos_graves": 346,
+          "feridos_leves": 4787
+        },
+        {
+          "ano": 2024,
+          "acidentes": 5073,
+          "vitimas_mortais": 107,
+          "feridos_graves": 404,
+          "feridos_leves": 5030
+        }
+      ]
+    },
+    "ciclistas_vitimas": {
+      "descricao": "Quadro 6.13 - Condutores vítimas por categoria (velocípede)",
+      "dados": [
+        {
+          "ano": 2019,
+          "vitimas_mortais": 27,
+          "feridos_graves": 97,
+          "feridos_leves": 1644
+        },
+        {
+          "ano": 2023,
+          "vitimas_mortais": 32,
+          "feridos_graves": 180,
+          "feridos_leves": 2946
+        },
+        {
+          "ano": 2024,
+          "vitimas_mortais": 30,
+          "feridos_graves": 167,
+          "feridos_leves": 3323
+        }
+      ]
+    },
+    "peoes_evolucao": {
+      "descricao": "Quadro 4.2 - Evolução peões vítimas (nacional)",
+      "dados": [
+        {
+          "ano": 2019,
+          "vitimas_mortais": 140,
+          "feridos_graves": 450,
+          "feridos_leves": 5391
+        },
+        {
+          "ano": 2020,
+          "vitimas_mortais": 101,
+          "feridos_graves": 291,
+          "feridos_leves": 3484
+        },
+        {
+          "ano": 2021,
+          "vitimas_mortais": 100,
+          "feridos_graves": 306,
+          "feridos_leves": 3717
+        },
+        {
+          "ano": 2022,
+          "vitimas_mortais": 109,
+          "feridos_graves": 350,
+          "feridos_leves": 4302
+        },
+        {
+          "ano": 2023,
+          "vitimas_mortais": 109,
+          "feridos_graves": 350,
+          "feridos_leves": 4648
+        },
+        {
+          "ano": 2024,
+          "vitimas_mortais": 111,
+          "feridos_graves": 426,
+          "feridos_leves": 4847
+        }
+      ]
+    }
+  },
+  "notas": [
+    "VM = Vítimas Mortais (a 30 dias), FG = Feridos Graves, FL = Feridos Leves",
+    "AcV = Acidentes com Vítimas",
+    "Ciclistas classificados como 'condutores de velocípede' pela ANSR",
+    "Dados por distrito não distinguem ciclistas - apenas disponível a nível nacional",
+    "Para dados georreferenciados e por concelho: necessário protocolo com ANSR"
+  ]
+}

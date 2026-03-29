@@ -392,7 +392,7 @@ time.sleep(DOWNLOAD_PAUSE)
 
 # Municipios
 print('\nA descarregar limites...')
-muni_styled = ee.Image().paint(municipiosPorto, 0, 2).selfMask()
+muni_styled = ee.Image().byte().paint(featureCollection=municipiosPorto, color=1, width=2)
 download_mask(muni_styled, 'FFFFFF', 'municipios.png')
 
 # ============================================================
