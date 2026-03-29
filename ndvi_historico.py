@@ -556,6 +556,7 @@ html = '''<!DOCTYPE html>
   <a href="mapa.html">Mapa 2016-2025</a>
   <a href="ndvi_historico.html" class="active">Hist&oacute;rico 1947-2024</a>
   <a href="interiores_quarteiroes.html">Interiores</a>
+  <a href="atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
 </div>
 <div id="map"></div>
 <div id="panel">

@@ -3,50 +3,175 @@ layout: default
 title: null
 ---
 
-<h2 style="margin-bottom:1.5rem;">Artigos</h2>
+<style>
+  .hero {
+    text-align: center;
+    padding: 1.5rem 0 2rem;
+  }
+  .hero h2 {
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .hero h2 strong { font-weight: 700; color: var(--green); }
+  .hero p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-{% for post in site.posts %}
-<article style="margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid #ddd;">
-  <h3><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
-  <time style="color:var(--muted); font-size:0.85rem;">{{ post.date | date: "%d %b %Y" }}</time>
-  <p style="margin-top:0.5rem;">{{ post.excerpt | strip_html | truncatewords: 40 }}</p>
-</article>
-{% endfor %}
+  .map-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.4rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+  .map-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .map-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  }
+  .map-card .card-color {
+    height: 6px;
+  }
+  .map-card .card-body {
+    padding: 1.2rem 1.4rem;
+  }
+  .map-card .card-body h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .map-card .card-body p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .map-card .card-body .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-bottom: 0.5rem;
+  }
 
-<h2 style="margin:2.5rem 0 1.5rem;">Animação</h2>
+  .video-section {
+    margin: 2rem 0;
+  }
+  .video-section h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .video-wrap {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .video-wrap video { display: block; width: 100%; }
+  .video-caption {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.6rem;
+    text-align: center;
+  }
 
-<div style="margin-bottom:2rem;">
-  <video controls width="100%" style="border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.12);" poster="{{ site.baseurl }}/animacao/frame_2024.png">
-    <source src="{{ site.baseurl }}/animacao/animacao_cairo.mp4" type="video/mp4">
-  </video>
-  <p style="font-size:0.85rem; color:var(--muted); margin-top:0.5rem;">Crescimento urbano do Porto 1987-2024 — evolução bienal vectorial, dados Landsat.</p>
+  .articles-section { margin: 2.5rem 0; }
+  .articles-section h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .article-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e8e8e0;
+  }
+  .article-item:last-child { border-bottom: none; }
+  .article-item h3 { font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .article-item h3 a { color: var(--text); text-decoration: none; }
+  .article-item h3 a:hover { color: var(--green); }
+  .article-item time { font-size: 0.8rem; color: var(--muted); }
+  .article-item p { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+</style>
+
+<div class="hero">
+  <h2>Espaço verde do <strong>Porto</strong>, visto do espaço</h2>
+  <p>Mapas interactivos de vegetação, uso do solo e mudanças urbanas, construídos com dados de satélite abertos.</p>
 </div>
 
-<h2 style="margin:2.5rem 0 1.5rem;">Mapas Interactivos</h2>
+<div class="map-grid">
+  <a href="{{ site.baseurl }}/mapa.html" class="map-card">
+    <div class="card-color" style="background:linear-gradient(90deg, #228B22, #D7263D);"></div>
+    <div class="card-body">
+      <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Sentinel-2 10m</span>
+      <h3>Mudanças 2016 &mdash; 2025</h3>
+      <p>Classificação de árvores, solo e edificado. Transições detectadas entre os dois períodos.</p>
+    </div>
+  </a>
 
-<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:1.2rem;">
-  <a href="{{ site.baseurl }}/mapa.html" style="text-decoration:none; color:inherit;">
-    <div style="background:white; border-radius:8px; padding:1.2rem; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.15s;">
-      <strong style="color:var(--green);">Mapa 2016-2025</strong>
-      <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem;">Classificação Sentinel-2 a 10m: árvores, solo, edificado e transições.</p>
+  <a href="{{ site.baseurl }}/ndvi_historico.html" class="map-card">
+    <div class="card-color" style="background:linear-gradient(90deg, #4a7c59, #1a3a24);"></div>
+    <div class="card-body">
+      <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Landsat 30-60m</span>
+      <h3>Histórico 1947 &mdash; 2024</h3>
+      <p>Ortofoto aérea de 1947 e seis décadas de vegetação Landsat com normalização inter-sensor.</p>
     </div>
   </a>
-  <a href="{{ site.baseurl }}/ndvi_historico.html" style="text-decoration:none; color:inherit;">
-    <div style="background:white; border-radius:8px; padding:1.2rem; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.15s;">
-      <strong style="color:var(--green);">Histórico 1947-2024</strong>
-      <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem;">Ortofoto 1947 + 40 anos de vegetação Landsat, normalização inter-sensor.</p>
+
+  <a href="{{ site.baseurl }}/interiores_quarteiroes.html" class="map-card">
+    <div class="card-color" style="background:linear-gradient(90deg, #2E7D32, #D7263D);"></div>
+    <div class="card-body">
+      <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Sentinel-2 + PDM</span>
+      <h3>Interiores de Quarteirão</h3>
+      <p>Espaços verdes privados encravados no tecido urbano: os que subsistem e os que foram perdidos.</p>
     </div>
   </a>
-  <a href="{{ site.baseurl }}/interiores_quarteiroes.html" style="text-decoration:none; color:inherit;">
-    <div style="background:white; border-radius:8px; padding:1.2rem; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.15s;">
-      <strong style="color:var(--green);">Interiores de Quarteirão</strong>
-      <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem;">Espaços verdes privados encravados no tecido urbano: subsistentes e perdidos (2016-2025).</p>
+
+  <a href="{{ site.baseurl }}/atropelamentos/dashboard_atropelamentos.html" class="map-card">
+    <div class="card-color" style="background:linear-gradient(90deg, #ef4444, #f97316);"></div>
+    <div class="card-body">
+      <span class="tag" style="background:#fef2f2; color:#ef4444;">ANSR + Notícias</span>
+      <h3>Atropelamentos &mdash; Grande Porto</h3>
+      <p>Dashboard de sinistralidade rodoviária com peões e ciclistas.</p>
     </div>
   </a>
-  <a href="{{ site.baseurl }}/atropelamentos/dashboard_atropelamentos.html" style="text-decoration:none; color:inherit;">
-    <div style="background:white; border-radius:8px; padding:1.2rem; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.15s;">
-      <strong style="color:#ef4444;">Atropelamentos — Grande Porto</strong>
-      <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem;">Mapa e dashboard de sinistralidade rodoviária com peões e ciclistas. Dados ANSR + notícias.</p>
-    </div>
-  </a>
+</div>
+
+<div class="video-section">
+  <h2>Crescimento urbano 1987 &mdash; 2024</h2>
+  <div class="video-wrap">
+    <video controls poster="{{ site.baseurl }}/animacao/frame_2024.png">
+      <source src="{{ site.baseurl }}/animacao/animacao_cairo.mp4" type="video/mp4">
+    </video>
+  </div>
+  <p class="video-caption">Evolução bienal vectorial do edificado, dados Landsat.</p>
+</div>
+
+<div class="articles-section">
+  <h2>Artigos</h2>
+  {% for post in site.posts %}
+  <div class="article-item">
+    <h3><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
+    <time>{{ post.date | date: "%d %b %Y" }}</time>
+    <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+  </div>
+  {% endfor %}
 </div>
