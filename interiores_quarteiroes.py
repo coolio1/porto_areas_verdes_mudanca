@@ -643,8 +643,10 @@ function renderColored(m, hex) {{
 }}
 
 async function init() {{
-  // Camada de fundo (GHS-POP) — adicionada primeiro para ficar por baixo
-  bgOverlay = L.imageOverlay(bgLayer.src, bounds, {{opacity: bgLayer.opacity}});
+  // Pane dedicado para camada de fundo (z-index abaixo do overlay padrao)
+  map.createPane('bgPane');
+  map.getPane('bgPane').style.zIndex = 250;
+  bgOverlay = L.imageOverlay(bgLayer.src, bounds, {{opacity: bgLayer.opacity, pane: 'bgPane'}});
   if (bgLayer.show) bgOverlay.addTo(map);
   var bgDiv = document.getElementById('bg-rows');
   var bgRow = document.createElement('div');
