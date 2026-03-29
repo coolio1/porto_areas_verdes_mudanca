@@ -166,13 +166,9 @@
     </div>
 
     <div class="charts-grid">
-        <div class="chart-card">
-            <h3>Peões e ciclistas vítimas — Distrito do Porto (ANSR)</h3>
-            <canvas id="chartPorto"></canvas>
-        </div>
-        <div class="chart-card">
-            <h3>Mortes de peões e ciclistas por 100 000 hab. — comparação internacional</h3>
-            <canvas id="chartInternacional" style="min-height:500px"></canvas>
+        <div class="chart-card" style="grid-column: 1 / -1;">
+            <h3>Mortes de peões por 100 000 habitantes — comparação internacional (2022)</h3>
+            <canvas id="chartInternacional" style="min-height:340px"></canvas>
         </div>
     </div>
 
@@ -2288,65 +2284,20 @@
         }
     };
 
-    // Peões + Ciclistas Porto (combinar dados ANSR)
-    // Peões distrito Porto + ciclistas nacionais (estimativa proporcional ~15% para Porto)
-    var portoLabels = ["2019", "2023", "2024"];
-    var portoVM_peoes = [26, 16, 20];
-    var portoFG_peoes = [43, 47, 37];
-    var portoFL_peoes = [109, 103, 103];
-    // Ciclistas nacionais (estimativa ~15% para distrito Porto)
-    var ciclistasVM = [4, 5, 4];
-    var ciclistasFG = [15, 27, 25];
-
-    new Chart(document.getElementById('chartPorto'), {
-        type: 'bar',
-        data: {
-            labels: portoLabels,
-            datasets: [
-                { label: 'Peões — Vítimas mortais', data: portoVM_peoes, backgroundColor: '#ef4444' },
-                { label: 'Peões — Feridos graves', data: portoFG_peoes, backgroundColor: '#f59e0b' },
-                { label: 'Peões — Feridos leves (÷10)', data: portoFL_peoes, backgroundColor: '#3b82f6' },
-                { label: 'Ciclistas — Vítimas mortais (est.)', data: ciclistasVM, backgroundColor: '#dc2626', borderWidth: 2, borderColor: '#fff', borderDash: [5,5] },
-                { label: 'Ciclistas — Feridos graves (est.)', data: ciclistasFG, backgroundColor: '#d97706', borderWidth: 2, borderColor: '#fff', borderDash: [5,5] }
-            ]
-        },
-        options: {
-            ...defaultOptions,
-            plugins: {
-                ...defaultOptions.plugins,
-                subtitle: { display: true, text: 'Ciclistas: estimativa ~15% do total nacional (ANSR não publica por distrito)', color: '#64748b', font: { size: 11 } }
-            }
-        }
-    });
-
-    // Comparação internacional — mortes peões+ciclistas por 100 000 habitantes
+    // Comparação internacional — mortes de peões por 100 000 habitantes
+    // Fonte: CDC MMWR 2022 (28 países de rendimento elevado) — apenas dados oficiais
+    // Portugal: ANSR 2024, 1.03 peões/100k (nacional)
     var intlData = [
-        { city: 'Bogotá (Colômbia)', rate: 4.3, color: '#64748b' },
-        { city: 'Los Angeles', rate: 3.2, color: '#64748b' },
-        { city: 'São Paulo', rate: 3.0, color: '#64748b' },
-        { city: 'EUA (nacional)', rate: 2.6, color: '#64748b' },
-        { city: 'Coreia do Sul', rate: 2.0, color: '#64748b' },
-        { city: 'Nova Iorque', rate: 1.5, color: '#64748b' },
-        { city: 'Budapeste (Hungria)', rate: 1.5, color: '#64748b' },
-        { city: 'Porto', rate: 1.4, color: '#ef4444' },
-        { city: 'Varsóvia (Polónia)', rate: 1.4, color: '#64748b' },
-        { city: 'Lisboa', rate: 1.15, color: '#f59e0b' },
-        { city: 'Tóquio', rate: 1.05, color: '#64748b' },
-        { city: 'Praga', rate: 0.95, color: '#64748b' },
-        { city: 'Roma', rate: 0.95, color: '#64748b' },
-        { city: 'Dublin', rate: 0.95, color: '#64748b' },
-        { city: 'Paris', rate: 0.85, color: '#64748b' },
-        { city: 'Barcelona', rate: 0.85, color: '#64748b' },
-        { city: 'Bruxelas', rate: 0.85, color: '#64748b' },
-        { city: 'Londres', rate: 0.70, color: '#64748b' },
-        { city: 'Melbourne', rate: 0.70, color: '#64748b' },
-        { city: 'Viena', rate: 0.65, color: '#64748b' },
-        { city: 'Copenhaga', rate: 0.65, color: '#64748b' },
-        { city: 'Berlim', rate: 0.60, color: '#64748b' },
-        { city: 'Helsínquia', rate: 0.55, color: '#64748b' },
-        { city: 'Zurique', rate: 0.55, color: '#64748b' },
-        { city: 'Estocolmo', rate: 0.35, color: '#64748b' },
-        { city: 'Oslo', rate: 0.25, color: '#22c55e' }
+        { city: 'EUA', rate: 2.33, color: '#64748b' },
+        { city: 'Coreia do Sul', rate: 1.81, color: '#64748b' },
+        { city: 'Hungria', rate: 1.33, color: '#64748b' },
+        { city: 'Polónia', rate: 1.22, color: '#64748b' },
+        { city: 'Portugal', rate: 1.03, color: '#ef4444' },
+        { city: 'Japão', rate: 0.93, color: '#64748b' },
+        { city: 'França', rate: 0.74, color: '#64748b' },
+        { city: 'Reino Unido', rate: 0.59, color: '#64748b' },
+        { city: 'Alemanha', rate: 0.44, color: '#64748b' },
+        { city: 'Noruega', rate: 0.17, color: '#22c55e' }
     ];
 
     new Chart(document.getElementById('chartInternacional'), {
@@ -2354,11 +2305,11 @@
         data: {
             labels: intlData.map(d => d.city),
             datasets: [{
-                label: 'Mortes por 100 000 hab./ano',
+                label: 'Mortes de peões / 100 000 hab.',
                 data: intlData.map(d => d.rate),
                 backgroundColor: intlData.map(d => d.color),
-                borderColor: intlData.map(d => d.city === 'Porto' ? '#fff' : d.city === 'Lisboa' ? '#fff' : 'transparent'),
-                borderWidth: intlData.map(d => (d.city === 'Porto' || d.city === 'Lisboa') ? 2 : 0)
+                borderColor: intlData.map(d => d.city === 'Portugal' ? '#fff' : 'transparent'),
+                borderWidth: intlData.map(d => d.city === 'Portugal' ? 2 : 0)
             }]
         },
         options: {
@@ -2367,11 +2318,11 @@
             maintainAspectRatio: false,
             plugins: {
                 legend: { display: false },
-                subtitle: { display: true, text: 'Fontes: CDC/MMWR 2022, OECD/IRTAD 2024, ANSR 2024', color: '#64748b', font: { size: 11 } }
+                subtitle: { display: true, text: 'Fonte: CDC/MMWR, dados de 2022 — 28 países de rendimento elevado', color: '#64748b', font: { size: 11 }, padding: { bottom: 10 } }
             },
             scales: {
-                x: { ticks: { color: chartColors.text }, grid: { color: chartColors.grid }, title: { display: true, text: 'Mortes peões+ciclistas / 100 000 hab.', color: chartColors.text } },
-                y: { ticks: { color: function(context) { var label = intlData[context.index]?.city; return label === 'Porto' ? '#ef4444' : label === 'Lisboa' ? '#f59e0b' : chartColors.text; }, font: function(context) { var label = intlData[context.index]?.city; return { weight: (label === 'Porto' || label === 'Lisboa') ? 'bold' : 'normal', size: 12 }; } }, grid: { color: chartColors.grid } }
+                x: { ticks: { color: chartColors.text }, grid: { color: chartColors.grid }, title: { display: true, text: 'Mortes de peões por 100 000 hab./ano', color: chartColors.text } },
+                y: { ticks: { color: function(context) { return intlData[context.index]?.city === 'Portugal' ? '#ef4444' : chartColors.text; }, font: function(context) { return { weight: intlData[context.index]?.city === 'Portugal' ? 'bold' : 'normal', size: 13 }; } }, grid: { color: chartColors.grid } }
             }
         }
     });
