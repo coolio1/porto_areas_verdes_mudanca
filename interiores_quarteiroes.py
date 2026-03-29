@@ -179,6 +179,14 @@ isGreen_e = isTree_e.Or(isSolo_e)
 subsistente = isGreen_l.selfMask()
 perdido = isGreen_e.And(isBuilt_l).selfMask()
 
+# GHS-POP 2020 (densidade populacional 100m)
+print('A preparar camada de densidade populacional (GHS-POP)...')
+ghspop = ee.Image('JRC/GHSL/P2023A/GHS_POP/2020').select('population_count').clip(porto)
+# Visualizar com paleta quente (transparente onde pop=0)
+ghspop_vis = ghspop.updateMask(ghspop.gt(0)).visualize(
+    min=0, max=50, palette=['#ffffcc', '#feb24c', '#f03b20', '#bd0026']
+)
+
 print('Classificacao concluida.')
 
 from PIL import Image
@@ -214,9 +222,37 @@ def download_layer(image, color_hex, filename):
     print(f'  {filename} guardado ({os.path.getsize(filepath)//1024} KB)')
     return filepath
 
+def download_rgb_layer(image, filename):
+    """Download pre-visualized RGB layer (e.g., GHS-POP with palette)."""
+    filepath = f'layers/{filename}'
+    if os.path.exists(filepath):
+        print(f'  {filename} ja existe, a saltar...')
+        return filepath
+    for attempt in range(3):
+        url = image.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png'})
+        print(f'  A descarregar {filename}...')
+        r = requests.get(url)
+        try:
+            img = Image.open(io.BytesIO(r.content)).convert('RGBA')
+            break
+        except Exception as e:
+            print(f'  Tentativa {attempt+1} falhou: {e}')
+            if attempt < 2:
+                time.sleep(3)
+            else:
+                return None
+    # Tornar pixels pretos/quase-pretos transparentes
+    arr = np.array(img)
+    dark = (arr[:,:,0] < 10) & (arr[:,:,1] < 10) & (arr[:,:,2] < 10)
+    arr[dark, 3] = 0
+    Image.fromarray(arr).save(filepath)
+    print(f'  {filename} guardado ({os.path.getsize(filepath)//1024} KB)')
+    return filepath
+
 print('\nA descarregar camadas...')
 download_layer(subsistente, '2E7D32', 'interior_subsistente.png')
 download_layer(perdido, 'D7263D', 'interior_perdido.png')
+download_rgb_layer(ghspop_vis, 'ghspop.png')
 # Interior VCI: rasterizar contorno localmente (geometria vem do OSM, não do GEE)
 centro_path = 'layers/centro_alargado.png'
 if not os.path.exists(centro_path) and centro_union is not None:
@@ -321,6 +357,77 @@ apply_osm_mask('layers/interior_subsistente.png', parks_union)
 apply_osm_mask('layers/interior_perdido.png', parks_union)
 print('Mascara PDM aplicada.')
 
+# ----- Phase 2b: Mascara de estradas (OSM) -----
+print('\nA descarregar estradas do OSM...')
+
+ROADS_QUERY = """
+[out:json][timeout:90];
+(
+  way["highway"~"^(motorway|trunk|primary|secondary|tertiary|residential|unclassified|service|living_street|pedestrian)$"](41.13,-8.70,41.19,-8.54);
+);
+out body;
+>;
+out skel qt;
+"""
+
+roads_data = None
+for overpass_url in ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']:
+    for attempt in range(3):
+        print(f'  A tentar {overpass_url} (tentativa {attempt+1})...')
+        try:
+            resp = requests.get(overpass_url, params={'data': ROADS_QUERY}, timeout=120)
+            if resp.status_code == 200:
+                try:
+                    roads_data = resp.json()
+                    break
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        time.sleep(5)
+    if roads_data:
+        break
+
+if roads_data:
+    road_nodes = {}
+    for el in roads_data['elements']:
+        if el['type'] == 'node':
+            road_nodes[el['id']] = (el['lon'], el['lat'])
+
+    road_lines = []
+    for el in roads_data['elements']:
+        if el['type'] == 'way' and 'nodes' in el:
+            coords = [road_nodes[n] for n in el['nodes'] if n in road_nodes]
+            if len(coords) >= 2:
+                road_lines.append(LineString(coords))
+
+    print(f'  {len(road_lines)} segmentos de estrada encontrados')
+
+    # Buffer de ~10m (em graus: ~0.00012 a lat 41)
+    roads_buffered = union_geom(road_lines).buffer(0.00012)
+
+    def apply_roads_mask(filepath, roads_geom):
+        img = Image.open(filepath).convert('RGBA')
+        w, h = img.size
+        arr = np.array(img)
+        lon_min, lon_max = -8.70, -8.54
+        lat_min, lat_max = 41.13, 41.19
+        from shapely import contains_xy as _cxy
+        xs = np.linspace(lon_min, lon_max, w)
+        ys = np.linspace(lat_max, lat_min, h)
+        xx, yy = np.meshgrid(xs, ys)
+        rmask = _cxy(roads_geom, xx.ravel(), yy.ravel()).reshape(h, w)
+        arr[rmask, 3] = 0
+        Image.fromarray(arr).save(filepath)
+        n_masked = rmask.sum()
+        print(f'  {os.path.basename(filepath)}: {n_masked} pixels mascarados (estradas)')
+
+    apply_roads_mask('layers/interior_subsistente.png', roads_buffered)
+    apply_roads_mask('layers/interior_perdido.png', roads_buffered)
+    print('Mascara de estradas aplicada.')
+else:
+    print('  AVISO: Overpass indisponivel, mascara de estradas nao aplicada')
+
 # ----- Phase 2b: Filtragem vectorial (area + linearidade) -----
 print('\nA filtrar por area e forma (vectorial)...')
 from scipy import ndimage
@@ -352,7 +459,6 @@ else:
 
 MIN_AREA_CENTRO = 3000       # m2
 MIN_AREA_PERIFERIA = 40000   # m2
-MIN_COMPACTNESS = 0.12       # 4*pi*area/perimetro^2 — abaixo disto e linear
 
 def filter_by_vector(filepath):
     """Vectorizar pixels, filtrar por area e forma, guardar PNG limpo."""
@@ -367,7 +473,6 @@ def filter_by_vector(filepath):
 
     kept = 0
     removed_area = 0
-    removed_linear = 0
     for label_id in range(1, n_features + 1):
         component = (labeled == label_id)
         n_pixels = component.sum()
@@ -383,25 +488,10 @@ def filter_by_vector(filepath):
             removed_area += 1
             continue
 
-        # Filtro de linearidade: compacidade (4*pi*area/perimetro^2)
-        # Perimetro = pixels com pelo menos um vizinho 4-conexo fora do componente
-        eroded = ndimage.binary_erosion(component)
-        perimeter_pixels = component & ~eroded
-        perimeter_len = perimeter_pixels.sum()
-        if perimeter_len > 0:
-            compactness = (4 * math.pi * n_pixels) / (perimeter_len ** 2)
-        else:
-            compactness = 1.0
-
-        if compactness < MIN_COMPACTNESS:
-            arr[component, 3] = 0
-            removed_linear += 1
-            continue
-
         kept += 1
 
     Image.fromarray(arr).save(filepath)
-    print(f'    Mantidos: {kept}, removidos por area: {removed_area}, removidos por forma linear: {removed_linear}')
+    print(f'    Mantidos: {kept}, removidos por area: {removed_area}')
 
 filter_by_vector('layers/interior_subsistente.png')
 filter_by_vector('layers/interior_perdido.png')
@@ -414,6 +504,10 @@ def to_base64(filepath):
     with open(filepath, 'rb') as f:
         return 'data:image/png;base64,' + base64.b64encode(f.read()).decode()
 
+# Camada de fundo (RGB, opacidade 70%)
+BACKGROUND_LAYER = ('ghspop', 'Densidade populacional', to_base64('layers/ghspop.png'), 0.7, False)
+
+# Camadas principais (monocromaticas, recoloraveis)
 MAP_LAYERS = [
     ('interior_subsistente', 'Subsistente', '#2E7D32', True),
     ('interior_perdido', 'Perdido', '#D7263D', True),
@@ -428,6 +522,9 @@ for lid, label, color, show in MAP_LAYERS:
         f'{{id:"{lid}",label:"{label}",color:"{color}",show:{str(show).lower()},src:"{b64}"}}'
     )
 layers_js = ',\n'.join(layers_js_items)
+
+bg_id, bg_label, bg_src, bg_opacity, bg_show = BACKGROUND_LAYER
+bg_js = f'{{id:"{bg_id}",label:"{bg_label}",opacity:{bg_opacity},show:{str(bg_show).lower()},src:"{bg_src}"}}'
 
 basemaps = [
     ('CartoDB Positron', 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'),
@@ -475,6 +572,10 @@ html = f'''<!DOCTYPE html>
   <div id="layer-rows"></div>
 
   <hr style="border-color:#ddd;margin:10px 0 6px 0;">
+  <div class="section">Contexto</div>
+  <div id="bg-rows"></div>
+
+  <hr style="border-color:#ddd;margin:10px 0 6px 0;">
   <div class="section">Fundo</div>
   <select id="basemap-select">{basemap_options}</select>
 
@@ -492,8 +593,10 @@ document.getElementById('basemap-select').addEventListener('change', function() 
 }});
 
 var bounds = {BOUNDS};
+var bgLayer = {bg_js};
 var layers = [{layers_js}];
 var state = [];
+var bgOverlay = null;
 
 function hexToRgb(h) {{
   h = h.replace('#','');
@@ -532,6 +635,26 @@ function renderColored(m, hex) {{
 }}
 
 async function init() {{
+  // Camada de fundo (GHS-POP) — adicionada primeiro para ficar por baixo
+  bgOverlay = L.imageOverlay(bgLayer.src, bounds, {{opacity: bgLayer.opacity}});
+  if (bgLayer.show) bgOverlay.addTo(map);
+  var bgDiv = document.getElementById('bg-rows');
+  var bgRow = document.createElement('div');
+  bgRow.className = 'row';
+  var bgCb = document.createElement('input');
+  bgCb.type = 'checkbox'; bgCb.checked = bgLayer.show;
+  bgCb.addEventListener('change', function() {{
+    if (this.checked) bgOverlay.addTo(map);
+    else map.removeLayer(bgOverlay);
+  }});
+  var bgLb = document.createElement('label');
+  bgLb.textContent = bgLayer.label;
+  bgLb.style.fontSize = '12px';
+  bgRow.appendChild(bgCb);
+  bgRow.appendChild(bgLb);
+  bgDiv.appendChild(bgRow);
+
+  // Camadas principais
   var div = document.getElementById('layer-rows');
   for (var i = 0; i < layers.length; i++) {{
     var L_ = layers[i];
