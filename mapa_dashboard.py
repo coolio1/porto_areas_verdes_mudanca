@@ -247,12 +247,12 @@ def gerar_html(casos, agregados):
 
     <div class="charts-grid">
         <div class="chart-card">
-            <h3>Peões vítimas no Distrito do Porto (ANSR)</h3>
-            <canvas id="chartPeoes"></canvas>
+            <h3>Peões e ciclistas vítimas — Distrito do Porto (ANSR)</h3>
+            <canvas id="chartPorto"></canvas>
         </div>
         <div class="chart-card">
-            <h3>Ciclistas vítimas em Portugal (ANSR)</h3>
-            <canvas id="chartCiclistas"></canvas>
+            <h3>Mortes de peões e ciclistas por 100 000 hab. — comparação internacional</h3>
+            <canvas id="chartInternacional" style="min-height:500px"></canvas>
         </div>
     </div>
 
@@ -349,32 +349,92 @@ def gerar_html(casos, agregados):
         }}
     }};
 
-    // Peões Porto
-    new Chart(document.getElementById('chartPeoes'), {{
+    // Peões + Ciclistas Porto (combinar dados ANSR)
+    // Peões distrito Porto + ciclistas nacionais (estimativa proporcional ~15% para Porto)
+    var portoLabels = {json.dumps([str(p['ano']) for p in peoes])};
+    var portoVM_peoes = {json.dumps([p['vitimas_mortais'] for p in peoes])};
+    var portoFG_peoes = {json.dumps([p['feridos_graves'] for p in peoes])};
+    var portoFL_peoes = {json.dumps([round(p['feridos_leves']/10) for p in peoes])};
+    // Ciclistas nacionais (estimativa ~15% para distrito Porto)
+    var ciclistasVM = {json.dumps([round(c['vitimas_mortais']*0.15) for c in ciclistas])};
+    var ciclistasFG = {json.dumps([round(c['feridos_graves']*0.15) for c in ciclistas])};
+
+    new Chart(document.getElementById('chartPorto'), {{
         type: 'bar',
         data: {{
-            labels: {json.dumps([str(p['ano']) for p in peoes])},
+            labels: portoLabels,
             datasets: [
-                {{ label: 'Vítimas Mortais', data: {json.dumps([p['vitimas_mortais'] for p in peoes])}, backgroundColor: chartColors.red }},
-                {{ label: 'Feridos Graves', data: {json.dumps([p['feridos_graves'] for p in peoes])}, backgroundColor: chartColors.orange }},
-                {{ label: 'Feridos Leves (÷10)', data: {json.dumps([round(p['feridos_leves']/10) for p in peoes])}, backgroundColor: chartColors.blue }}
+                {{ label: 'Peões — Vítimas mortais', data: portoVM_peoes, backgroundColor: '#ef4444' }},
+                {{ label: 'Peões — Feridos graves', data: portoFG_peoes, backgroundColor: '#f59e0b' }},
+                {{ label: 'Peões — Feridos leves (÷10)', data: portoFL_peoes, backgroundColor: '#3b82f6' }},
+                {{ label: 'Ciclistas — Vítimas mortais (est.)', data: ciclistasVM, backgroundColor: '#dc2626', borderWidth: 2, borderColor: '#fff', borderDash: [5,5] }},
+                {{ label: 'Ciclistas — Feridos graves (est.)', data: ciclistasFG, backgroundColor: '#d97706', borderWidth: 2, borderColor: '#fff', borderDash: [5,5] }}
             ]
         }},
-        options: {{ ...defaultOptions, plugins: {{ ...defaultOptions.plugins, title: {{ display: false }} }} }}
+        options: {{
+            ...defaultOptions,
+            plugins: {{
+                ...defaultOptions.plugins,
+                subtitle: {{ display: true, text: 'Ciclistas: estimativa ~15% do total nacional (ANSR não publica por distrito)', color: '#64748b', font: {{ size: 11 }} }}
+            }}
+        }}
     }});
 
-    // Ciclistas Nacional
-    new Chart(document.getElementById('chartCiclistas'), {{
+    // Comparação internacional — mortes peões+ciclistas por 100 000 habitantes
+    var intlData = [
+        {{ city: 'Bogotá (Colômbia)', rate: 4.3, color: '#64748b' }},
+        {{ city: 'Los Angeles', rate: 3.2, color: '#64748b' }},
+        {{ city: 'São Paulo', rate: 3.0, color: '#64748b' }},
+        {{ city: 'EUA (nacional)', rate: 2.6, color: '#64748b' }},
+        {{ city: 'Coreia do Sul', rate: 2.0, color: '#64748b' }},
+        {{ city: 'Nova Iorque', rate: 1.5, color: '#64748b' }},
+        {{ city: 'Budapeste (Hungria)', rate: 1.5, color: '#64748b' }},
+        {{ city: 'Porto', rate: 1.4, color: '#ef4444' }},
+        {{ city: 'Varsóvia (Polónia)', rate: 1.4, color: '#64748b' }},
+        {{ city: 'Lisboa', rate: 1.15, color: '#f59e0b' }},
+        {{ city: 'Tóquio', rate: 1.05, color: '#64748b' }},
+        {{ city: 'Praga', rate: 0.95, color: '#64748b' }},
+        {{ city: 'Roma', rate: 0.95, color: '#64748b' }},
+        {{ city: 'Dublin', rate: 0.95, color: '#64748b' }},
+        {{ city: 'Paris', rate: 0.85, color: '#64748b' }},
+        {{ city: 'Barcelona', rate: 0.85, color: '#64748b' }},
+        {{ city: 'Bruxelas', rate: 0.85, color: '#64748b' }},
+        {{ city: 'Londres', rate: 0.70, color: '#64748b' }},
+        {{ city: 'Melbourne', rate: 0.70, color: '#64748b' }},
+        {{ city: 'Viena', rate: 0.65, color: '#64748b' }},
+        {{ city: 'Copenhaga', rate: 0.65, color: '#64748b' }},
+        {{ city: 'Berlim', rate: 0.60, color: '#64748b' }},
+        {{ city: 'Helsínquia', rate: 0.55, color: '#64748b' }},
+        {{ city: 'Zurique', rate: 0.55, color: '#64748b' }},
+        {{ city: 'Estocolmo', rate: 0.35, color: '#64748b' }},
+        {{ city: 'Oslo', rate: 0.25, color: '#22c55e' }}
+    ];
+
+    new Chart(document.getElementById('chartInternacional'), {{
         type: 'bar',
         data: {{
-            labels: {json.dumps([str(c['ano']) for c in ciclistas])},
-            datasets: [
-                {{ label: 'Vítimas Mortais', data: {json.dumps([c['vitimas_mortais'] for c in ciclistas])}, backgroundColor: chartColors.red }},
-                {{ label: 'Feridos Graves', data: {json.dumps([c['feridos_graves'] for c in ciclistas])}, backgroundColor: chartColors.orange }},
-                {{ label: 'Feridos Leves (÷10)', data: {json.dumps([round(c['feridos_leves']/10) for c in ciclistas])}, backgroundColor: chartColors.cyan }}
-            ]
+            labels: intlData.map(d => d.city),
+            datasets: [{{
+                label: 'Mortes por 100 000 hab./ano',
+                data: intlData.map(d => d.rate),
+                backgroundColor: intlData.map(d => d.color),
+                borderColor: intlData.map(d => d.city === 'Porto' ? '#fff' : d.city === 'Lisboa' ? '#fff' : 'transparent'),
+                borderWidth: intlData.map(d => (d.city === 'Porto' || d.city === 'Lisboa') ? 2 : 0)
+            }}]
         }},
-        options: defaultOptions
+        options: {{
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {{
+                legend: {{ display: false }},
+                subtitle: {{ display: true, text: 'Fontes: CDC/MMWR 2022, OECD/IRTAD 2024, ANSR 2024', color: '#64748b', font: {{ size: 11 }} }}
+            }},
+            scales: {{
+                x: {{ ticks: {{ color: chartColors.text }}, grid: {{ color: chartColors.grid }}, title: {{ display: true, text: 'Mortes peões+ciclistas / 100 000 hab.', color: chartColors.text }} }},
+                y: {{ ticks: {{ color: function(context) {{ var label = intlData[context.index]?.city; return label === 'Porto' ? '#ef4444' : label === 'Lisboa' ? '#f59e0b' : chartColors.text; }}, font: function(context) {{ var label = intlData[context.index]?.city; return {{ weight: (label === 'Porto' || label === 'Lisboa') ? 'bold' : 'normal', size: 12 }}; }} }}, grid: {{ color: chartColors.grid }} }}
+            }}
+        }}
     }});
 
 </script>
