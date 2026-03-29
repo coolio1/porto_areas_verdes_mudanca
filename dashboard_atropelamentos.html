@@ -168,7 +168,7 @@
     <div class="charts-grid">
         <div class="chart-card" style="grid-column: 1 / -1;">
             <h3>Mortes de peões por 100 000 habitantes — comparação internacional (2022)</h3>
-            <canvas id="chartInternacional" style="min-height:340px"></canvas>
+            <canvas id="chartInternacional" style="min-height:300px"></canvas>
         </div>
     </div>
 
@@ -2284,20 +2284,21 @@
         }
     };
 
-    // Comparação internacional — mortes de peões por 100 000 habitantes
-    // Fonte: CDC MMWR 2022 (28 países de rendimento elevado) — apenas dados oficiais
-    // Portugal: ANSR 2024, 1.03 peões/100k (nacional)
+    // Comparação internacional — mortes de peões por 100 000 hab. (cidades)
+    // Fontes: TfL 2022, NYC DOT 2022, ANSR 2024, ITF/OECD Safer City Streets, CSE India, PMC11329493
     var intlData = [
-        { city: 'EUA', rate: 2.33, color: '#64748b' },
-        { city: 'Coreia do Sul', rate: 1.81, color: '#64748b' },
-        { city: 'Hungria', rate: 1.33, color: '#64748b' },
-        { city: 'Polónia', rate: 1.22, color: '#64748b' },
-        { city: 'Portugal', rate: 1.03, color: '#ef4444' },
-        { city: 'Japão', rate: 0.93, color: '#64748b' },
-        { city: 'França', rate: 0.74, color: '#64748b' },
-        { city: 'Reino Unido', rate: 0.59, color: '#64748b' },
-        { city: 'Alemanha', rate: 0.44, color: '#64748b' },
-        { city: 'Noruega', rate: 0.17, color: '#22c55e' }
+        { city: 'Deli',          rate: 5.5,  color: '#64748b' },
+        { city: 'Bogotá',        rate: 3.8,  color: '#64748b' },
+        { city: 'São Paulo',     rate: 2.7,  color: '#64748b' },
+        { city: 'Porto',         rate: 1.18, color: '#ef4444' },
+        { city: 'Nova Iorque',   rate: 1.13, color: '#64748b' },
+        { city: 'Lisboa',        rate: 0.95, color: '#f59e0b' },
+        { city: 'Paris',         rate: 0.70, color: '#64748b' },
+        { city: 'Londres',       rate: 0.67, color: '#64748b' },
+        { city: 'Berlim',        rate: 0.50, color: '#64748b' },
+        { city: 'Tóquio',        rate: 0.50, color: '#64748b' },
+        { city: 'Estocolmo',     rate: 0.24, color: '#64748b' },
+        { city: 'Oslo',          rate: 0.15, color: '#22c55e' }
     ];
 
     new Chart(document.getElementById('chartInternacional'), {
@@ -2308,8 +2309,9 @@
                 label: 'Mortes de peões / 100 000 hab.',
                 data: intlData.map(d => d.rate),
                 backgroundColor: intlData.map(d => d.color),
-                borderColor: intlData.map(d => d.city === 'Portugal' ? '#fff' : 'transparent'),
-                borderWidth: intlData.map(d => d.city === 'Portugal' ? 2 : 0)
+                borderColor: intlData.map(d => (d.city === 'Porto' || d.city === 'Lisboa') ? '#fff' : 'transparent'),
+                borderWidth: intlData.map(d => (d.city === 'Porto' || d.city === 'Lisboa') ? 2 : 0),
+                barThickness: 18
             }]
         },
         options: {
@@ -2318,11 +2320,12 @@
             maintainAspectRatio: false,
             plugins: {
                 legend: { display: false },
-                subtitle: { display: true, text: 'Fonte: CDC/MMWR, dados de 2022 — 28 países de rendimento elevado', color: '#64748b', font: { size: 11 }, padding: { bottom: 10 } }
+                subtitle: { display: true, text: 'Fontes: ANSR 2024, TfL 2022, NYC DOT 2022, ITF/OECD, CSE India, PMC11329493', color: '#64748b', font: { size: 10 }, padding: { bottom: 8 } },
+                tooltip: { callbacks: { label: function(ctx) { return ctx.parsed.x.toFixed(2) + ' mortes / 100 000 hab.'; } } }
             },
             scales: {
-                x: { ticks: { color: chartColors.text }, grid: { color: chartColors.grid }, title: { display: true, text: 'Mortes de peões por 100 000 hab./ano', color: chartColors.text } },
-                y: { ticks: { color: function(context) { return intlData[context.index]?.city === 'Portugal' ? '#ef4444' : chartColors.text; }, font: function(context) { return { weight: intlData[context.index]?.city === 'Portugal' ? 'bold' : 'normal', size: 13 }; } }, grid: { color: chartColors.grid } }
+                x: { ticks: { color: chartColors.text }, grid: { color: chartColors.grid }, title: { display: true, text: 'Mortes de peões por 100 000 hab./ano', color: chartColors.text, font: { size: 11 } } },
+                y: { ticks: { color: function(context) { var c = intlData[context.index]?.city; return c === 'Porto' ? '#ef4444' : c === 'Lisboa' ? '#f59e0b' : chartColors.text; }, font: function(context) { var c = intlData[context.index]?.city; return { weight: (c === 'Porto' || c === 'Lisboa') ? 'bold' : 'normal', size: 12 }; } }, grid: { color: chartColors.grid } }
             }
         }
     });
