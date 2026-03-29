@@ -36,9 +36,7 @@ GEE/
 │   ├── compilar_dados.py   # Compilação de CSVs/fontes → DB
 │   ├── *.csv, *.json       # Dados (ANSR, INE, notícias)
 │   └── *.xlsx, *.pdf       # Anexos originais ANSR
-├── CLC/                    # Scripts Corine Land Cover (experimental)
-├── docs/                   # Planos e specs (excluido do Jekyll)
-└── archive/                # Scripts e HTMLs obsoletos
+└── docs/                   # Planos e specs (excluido do Jekyll)
 ```
 
 ### Navegação entre páginas
@@ -53,8 +51,8 @@ GEE/
 - **Each script generates o seu HTML** — nunca editar HTMLs à mão
 - **Layers ficam na pasta do seu pipeline**: `layers/` (actual), `layers_historico/` (historico), `1947/layers/` (1947)
 - **Ficheiros de teste/debug** nunca ficam nas pastas de layers — apagar depois de usar
-- **Scripts obsoletos** vão para `archive/`, nunca apagar do git
-- **`_config.yml` exclude** deve incluir: `*.py`, docs, archive, .claude, .superpowers
+- **Scripts obsoletos** apagam-se directamente (git e disco sincronizados)
+- **`_config.yml` exclude** deve incluir: `*.py`, docs, .claude, .superpowers
 - **1947/** é uma pasta dedicada — todo o código e layers de 1947 ficam lá
 - **atropelamentos/** é uma pasta dedicada — todo o código, dados e HTMLs de atropelamentos ficam lá, nunca na raiz
 - **Cada sub-projecto tem a sua pasta** — nunca espalhar ficheiros de dados (csv, json, xlsx, pdf, db) pela raiz do repositório
