@@ -184,7 +184,7 @@ print('A preparar camada de densidade populacional (GHS-POP)...')
 ghspop = ee.Image('JRC/GHSL/P2023A/GHS_POP/2020').select('population_count').clip(porto)
 # Visualizar com paleta quente (transparente onde pop=0)
 ghspop_vis = ghspop.updateMask(ghspop.gt(0)).visualize(
-    min=0, max=50, palette=['#ffffcc', '#feb24c', '#f03b20', '#bd0026']
+    min=0, max=150, palette=['#f5e6d0', '#d4b896', '#b08a5e', '#8b6934', '#6b4a1e', '#4a2f0a']
 )
 
 print('Classificacao concluida.')
@@ -574,6 +574,14 @@ html = f'''<!DOCTYPE html>
   <hr style="border-color:#ddd;margin:10px 0 6px 0;">
   <div class="section">Contexto</div>
   <div id="bg-rows"></div>
+  <div id="pop-legend" style="display:none;margin:4px 0 0 22px;">
+    <div style="font-size:10px;color:#888;margin-bottom:2px;">hab/pixel (100m)</div>
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span style="font-size:9px;color:#888;">0</span>
+      <div style="width:120px;height:10px;border-radius:3px;background:linear-gradient(to right,#f5e6d0,#d4b896,#b08a5e,#8b6934,#6b4a1e,#4a2f0a);"></div>
+      <span style="font-size:9px;color:#888;">150+</span>
+    </div>
+  </div>
 
   <hr style="border-color:#ddd;margin:10px 0 6px 0;">
   <div class="section">Fundo</div>
@@ -644,8 +652,8 @@ async function init() {{
   var bgCb = document.createElement('input');
   bgCb.type = 'checkbox'; bgCb.checked = bgLayer.show;
   bgCb.addEventListener('change', function() {{
-    if (this.checked) bgOverlay.addTo(map);
-    else map.removeLayer(bgOverlay);
+    if (this.checked) {{ bgOverlay.addTo(map); document.getElementById('pop-legend').style.display='block'; }}
+    else {{ map.removeLayer(bgOverlay); document.getElementById('pop-legend').style.display='none'; }}
   }});
   var bgLb = document.createElement('label');
   bgLb.textContent = bgLayer.label;
