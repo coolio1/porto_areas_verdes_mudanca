@@ -579,7 +579,7 @@ var bounds = {BOUNDS};
 // Camada de acessibilidade (pré-colorida, 70% opacidade, off por defeito)
 var accLayer = {{
   id: "acessibilidade",
-  label: "Acessibilidade 2SFCA",
+  label: "Acessibilidade a 500m",
   src: "{acc_b64}",
   opacity: 0.7,
   show: false
