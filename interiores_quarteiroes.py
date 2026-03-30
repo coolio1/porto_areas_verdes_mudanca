@@ -510,7 +510,7 @@ BACKGROUND_LAYER = ('ghspop', 'Densidade populacional', to_base64('layers/ghspop
 # Camadas principais (monocromaticas, recoloraveis)
 MAP_LAYERS = [
     ('interior_subsistente', 'Subsistente', '#2E7D32', True),
-    ('interior_perdido', 'Perdido', '#D7263D', True),
+    ('interior_perdido', 'Perdido (2016-2025)', '#D7263D', True),
     ('centro_alargado', 'Interior VCI', '#FFD700', True),
     ('municipios', 'Limites municipais', '#444444', True),
 ]
@@ -574,6 +574,7 @@ html = f'''<!DOCTYPE html>
 </head>
 <body>
 <div id="nav">
+  <a href="index.html">In&iacute;cio</a>
   <a href="mapa.html">Mapa 2016-2025</a>
   <a href="ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
   <a href="interiores_quarteiroes.html" class="active">Verde Privado</a>
@@ -718,6 +719,9 @@ async function init() {{
 
 init();
 </script>
+<div style="position:fixed;bottom:6px;right:10px;z-index:1000;font:10px 'Segoe UI',Arial,sans-serif;color:#888;background:rgba(255,255,255,0.85);padding:2px 8px;border-radius:4px;">
+  <a href="https://www.linkedin.com/in/nquental/" target="_blank" style="color:#555;text-decoration:none;">Nuno Quental</a> &middot; <a href="mailto:quental.nuno@gmail.com" style="color:#888;text-decoration:none;">quental.nuno@gmail.com</a>
+</div>
 </body>
 </html>'''
 
