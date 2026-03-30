@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Acessibilidade a Espaços Verdes Públicos no Porto: Uma Análise Espacial pelo Método 2SFCA"
-date: 2026-03-31
+date: 2026-03-30
 tags: [porto, acessibilidade, verde público, 2sfca, gee, ghs-pop, pdm, sentinel-2]
 ---
 
