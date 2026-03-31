@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Acessibilidade a Espaços Verdes Públicos no Porto: Uma Análise Espacial pelo Método 2SFCA"
+description: "Mapa de acessibilidade da população do Porto a espaços verdes públicos (m²/hab, raio 500m), usando o método Two-Step Floating Catchment Area com dados GHS-POP e PDM."
 date: 2026-03-30
 tags: [porto, acessibilidade, verde público, 2sfca, gee, ghs-pop, pdm, sentinel-2]
 ---

@@ -16,6 +16,12 @@ defaults:
     values:
       layout: "post"
 
+google_site_verification: "Lkfn0DpuOYZdEePSv1vr4_iStVt6XfX5_mb4Sw3jXfY"
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
 exclude:
   - "*.py"
   - "*.pyc"

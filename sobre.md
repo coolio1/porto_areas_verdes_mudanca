@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Sobre
+description: "Sobre o projecto Porto Verde — análise geoespacial do ambiente urbano no Porto com dados de satélite abertos."
 permalink: /sobre/
 ---
 
