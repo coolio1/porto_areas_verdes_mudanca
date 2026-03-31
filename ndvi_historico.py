@@ -519,7 +519,14 @@ html = '''<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>Vegetacao do Porto 1947-2024</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vegetação do Porto 1947-2024</title>
+<meta name="description" content="Mapa histórico da vegetação do Porto de 1947 a 2024, com ortofoto aérea e seis décadas de dados Landsat com normalização inter-sensor.">
+<link rel="canonical" href="https://coolio1.github.io/porto_areas_verdes_mudanca/ndvi_historico.html">
+<meta property="og:title" content="Vegetação do Porto 1947-2024">
+<meta property="og:description" content="Mapa histórico da vegetação do Porto de 1947 a 2024, com ortofoto aérea e dados Landsat.">
+<meta property="og:url" content="https://coolio1.github.io/porto_areas_verdes_mudanca/ndvi_historico.html">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>

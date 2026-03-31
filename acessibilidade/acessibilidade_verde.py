@@ -458,7 +458,14 @@ html = f'''<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>Acessibilidade a Verde P&uacute;blico - Porto</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acessibilidade a Verde P&uacute;blico — Porto</title>
+<meta name="description" content="Mapa de acessibilidade da população do Porto a espaços verdes públicos (m²/hab, raio 500m), usando o método 2SFCA com dados GHS-POP e PDM.">
+<link rel="canonical" href="https://coolio1.github.io/porto_areas_verdes_mudanca/acessibilidade/acessibilidade_verde.html">
+<meta property="og:title" content="Acessibilidade a Verde Público — Porto">
+<meta property="og:description" content="Acessibilidade da população a espaços verdes públicos no Porto (m²/hab, raio 500m), método 2SFCA.">
+<meta property="og:url" content="https://coolio1.github.io/porto_areas_verdes_mudanca/acessibilidade/acessibilidade_verde.html">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>

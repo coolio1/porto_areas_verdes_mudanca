@@ -518,7 +518,14 @@ def build_html(layer_paths, stats):
 <html>
 <head>
 <meta charset="utf-8">
-<title>Uso do solo Porto 1947</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uso do solo — Porto 1947</title>
+<meta name="description" content="Classificação do uso do solo no Porto em 1947, baseada na ortofoto aérea CIIMAR/FCUP com Random Forest (vegetação e edificado).">
+<link rel="canonical" href="https://coolio1.github.io/porto_areas_verdes_mudanca/1947/orto_1947.html">
+<meta property="og:title" content="Uso do solo — Porto 1947">
+<meta property="og:description" content="Classificação do uso do solo no Porto em 1947, baseada na ortofoto aérea CIIMAR/FCUP.">
+<meta property="og:url" content="https://coolio1.github.io/porto_areas_verdes_mudanca/1947/orto_1947.html">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
