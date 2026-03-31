@@ -33,3 +33,5 @@ exclude:
   - archive
   - "*.gpkg"
   - CLC
+  - CLAUDE.md
+  - "atropelamentos/Porto_2019_24h.pdf"
