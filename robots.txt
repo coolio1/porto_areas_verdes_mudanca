@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://coolio1.github.io/porto_areas_verdes_mudanca/sitemap.xml
