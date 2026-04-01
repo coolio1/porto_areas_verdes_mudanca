@@ -19,8 +19,14 @@ Utilizo dados de satélite (Sentinel-2, Dynamic World), o **Google Earth Engine*
 - **Python** — automação e análise (ee, folium, Pillow)
 - **ESA WorldCover** — classificação de referência para validação
 
-### Contacto
+### Sobre o autor
 
-- [GitHub](https://github.com/coolio1)
+**[Nuno Quental](https://coolio1.github.io/)** é engenheiro do ambiente e investigador em sustentabilidade urbana. Doutorado em engenharia do território pelo Instituto Superior Técnico, trabalha na Comissão Europeia desde 2016. Tem uma longa ligação à cidade do Porto, onde coordenou o plano estratégico de ambiente da Área Metropolitana, fundou a ONG ambiental Campo Aberto e criou a campanha *50 Áreas Verdes a Proteger na Região do Porto*.
 
-O código-fonte de todas as análises está disponível no [repositório](https://github.com/coolio1/porto_areas_verdes_mudanca).
+Este projecto combina essa experiência com ferramentas de detecção remota para documentar — com dados — o que há décadas observa no terreno.
+
+[Publicações](https://coolio1.github.io/escritos.html) · [LinkedIn](https://www.linkedin.com/in/nquental) · [Google Scholar](https://scholar.google.com/citations?user=NoCUypYAAAAJ)
+
+### Código
+
+O código-fonte de todas as análises está disponível no [repositório GitHub](https://github.com/coolio1/porto_areas_verdes_mudanca).
