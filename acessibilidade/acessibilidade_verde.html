@@ -38,6 +38,35 @@
   .swatch { width:14px; height:14px; border-radius:3px; display:inline-block; }
   .section { font-size:11px; color:#888; font-weight:bold; margin:8px 0 4px 0; }
   select { background:#f5f5f5; color:#222; border:1px solid #ccc; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }
+  #panel-toggle {
+    display:none; position:absolute; top:-32px; right:8px;
+    background:rgba(255,255,255,0.95); color:#222; border:none; border-radius:6px 6px 0 0;
+    padding:4px 12px; font-size:11px; cursor:pointer; z-index:1001;
+  }
+  @media (max-width: 768px) {
+    #panel {
+      left:6px; right:6px; bottom:6px; min-width:unset;
+      max-height:35vh; padding:8px 10px; font-size:11px;
+      line-height:1.3;
+    }
+    #panel b { font-size:12px !important; }
+    #panel .section { font-size:9px; margin:4px 0 2px; }
+    #panel .row { gap:4px; margin:1px 0; }
+    #panel .row input[type=checkbox] { width:12px; height:12px; }
+    #panel .row label { font-size:10px; }
+    #panel .swatch { width:10px; height:10px; }
+    #panel select { font-size:10px; padding:2px 4px; }
+    #panel hr { margin:4px 0 !important; }
+    #panel [id$="-legend"] { margin:3px 0 0 18px !important; }
+    #panel [id$="-legend"] span[style*="width:14px"] { width:10px !important; height:8px !important; }
+    #panel.collapsed { max-height:36px; overflow:hidden; }
+    #panel-toggle { display:block; }
+    #nav {
+      top:4px; right:4px; left:4px;
+      flex-wrap:wrap; gap:3px; justify-content:center;
+    }
+    #nav a { font-size:9px; padding:2px 6px; }
+  }
 </style>
 </head>
 <body>
@@ -51,6 +80,7 @@
 </div>
 <div id="map"></div>
 <div id="panel">
+  <button id="panel-toggle" onclick="var p=document.getElementById('panel');p.classList.toggle('collapsed');this.textContent=p.classList.contains('collapsed')?'▲ Legenda':'▼ Fechar';">▼ Fechar</button>
   <b style="font-size:14px;">Acessibilidade a Verde P&uacute;blico</b><br>
   <span style="color:#888;font-size:10px;">2SFCA &mdash; m&sup2; de verde p&uacute;blico por habitante (raio 500m)</span>
 
@@ -305,5 +335,6 @@ init();
 <div style="position:fixed;bottom:6px;right:10px;z-index:1000;font:10px 'Segoe UI',Arial,sans-serif;color:#888;background:rgba(255,255,255,0.85);padding:2px 8px;border-radius:4px;">
   <a href="https://www.linkedin.com/in/nquental/" target="_blank" style="color:#555;text-decoration:none;">Nuno Quental</a>
 </div>
+<script>if(window.innerWidth<=768){var p=document.getElementById('panel'),b=document.getElementById('panel-toggle');p.classList.add('collapsed');b.textContent='▲ Legenda';}</script>
 </body>
 </html>
