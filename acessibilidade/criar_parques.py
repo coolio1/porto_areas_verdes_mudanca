@@ -238,6 +238,61 @@ PARQUES = [
         "osm_type": "way",
         "osm_id": 551666213,
     },
+    # --- Espaços gratuitos adicionais ---
+    {
+        "nome": "Parque da Fundação Eng. António de Almeida",
+        "tipo": "parque",
+        "osm_type": "way",
+        "osm_id": 1019590397,
+        # Acesso livre em horário administrativo (dias úteis 09:30-18:30)
+    },
+    {
+        "nome": "Jardins da Casa Allen",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 549960061,
+        # Casa e Quinta de Vilar D'Allen — património de interesse público
+    },
+    {
+        "nome": "Parque da Quinta de Lamas",
+        "tipo": "parque",
+        "osm_type": "way",
+        "osm_id": 455315123,
+        # Espaço universitário de acesso livre
+    },
+    {
+        "nome": "Jardins da FLUP",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 891088478,
+        # Faculdade de Letras — acesso livre sem barreiras
+    },
+    {
+        "nome": "Parque de Requesende",
+        "tipo": "parque",
+        # 6 ways fragmentados no OSM — buscar por bbox
+        "osm_bbox_park": (41.158, -8.642, 41.167, -8.630),
+    },
+    {
+        "nome": "Jardim do Calém",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 555827193,
+    },
+    {
+        "nome": "Jardim da Praça da Corujeira",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 35413298,
+    },
+    {
+        "nome": "Parque Teodoro de Sousa",
+        "tipo": "parque",
+        # Não encontrado no OSM
+        "centroid_lat": 41.1565,
+        "centroid_lon": -8.588,
+        "buffer_m": 50,
+    },
 ]
 
 

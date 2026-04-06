@@ -375,10 +375,13 @@ print(
 pop_500m = ndimage.convolve(pop_corrected, kernel, mode="constant", cval=0.0)
 
 # Acessibilidade = verde / pop (m²/hab)
-# Limiar: ignorar zonas com menos de 1000 hab num raio de 500m (~1274 hab/km²)
-# Evita colorir zonas não-urbanas (parques, indústria, rio) como "défice severo"
-POP_MIN_THRESHOLD = 2000
-accessibility = np.where(pop_500m > POP_MIN_THRESHOLD, green_500m / pop_500m, np.nan)
+# Filtro: excluir pixels com densidade local < 40 hab/pixel_100m (~4000 hab/km²)
+# Evita colorir zonas não-residenciais (parques, indústria, rio)
+POP_PIXEL_MIN = 10  # hab por pixel nativo GHS-POP (100m)
+pop_local_mask = pop_upscaled >= POP_PIXEL_MIN
+accessibility = np.where(
+    pop_local_mask & (pop_500m > 0.5), green_500m / pop_500m, np.nan
+)
 
 valid = ~np.isnan(accessibility)
 print(
