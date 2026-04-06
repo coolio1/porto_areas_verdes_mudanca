@@ -412,7 +412,15 @@ def fetch_osm_bbox_parks(bbox):
             polys.append(g)
     if polys:
         print(f"  {len(polys)} fragmentos encontrados")
-        return unary_union(polys)
+        merged = unary_union(polys)
+        # Buffer+debuffer para fundir fragmentos com pequenos gaps (~5m)
+        buf_deg = 5 / 111320  # ~5m em graus
+        merged = merged.buffer(buf_deg).buffer(-buf_deg)
+        if merged.geom_type == "MultiPolygon":
+            # Manter apenas o polígono maior (o parque principal)
+            parts = list(merged.geoms)
+            merged = max(parts, key=lambda p: p.area)
+        return merged
     return None
 
 

@@ -377,7 +377,7 @@ pop_500m = ndimage.convolve(pop_corrected, kernel, mode="constant", cval=0.0)
 # Acessibilidade = verde / pop (m²/hab)
 # Limiar: ignorar zonas com menos de 1000 hab num raio de 500m (~1274 hab/km²)
 # Evita colorir zonas não-urbanas (parques, indústria, rio) como "défice severo"
-POP_MIN_THRESHOLD = 1000
+POP_MIN_THRESHOLD = 2000
 accessibility = np.where(pop_500m > POP_MIN_THRESHOLD, green_500m / pop_500m, np.nan)
 
 valid = ~np.isnan(accessibility)
