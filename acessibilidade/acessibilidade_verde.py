@@ -1,13 +1,14 @@
 """
-Acessibilidade a áreas verdes públicas no Porto — 2SFCA (300m)
+Acessibilidade a áreas verdes públicas no Porto — 2SFCA (500m)
 
 Método Two-Step Floating Catchment Area:
-1. Para cada pixel: soma verde público num raio de 300m (m²)
-2. Para cada pixel: soma população num raio de 300m (hab)
-3. Acessibilidade = verde_300m / pop_300m (m²/hab)
+1. Para cada pixel: soma verde público num raio de 500m (m²)
+2. Para cada pixel: soma população num raio de 500m (hab)
+3. Acessibilidade = verde_500m / pop_500m (m²/hab)
 
 Camadas:
-- Verde público (Sentinel-2 2024-25 + PDM) — monochroma verde
+- Verde público (Sentinel-2 2024-25 + 30 parques oficiais) — verde
+- Verde pago/não usufruível (PDM fora dos parques) — castanho
 - Densidade populacional (GHS-POP 2020) — reutiliza ../layers/ghspop.png
 - Acessibilidade 2SFCA — paleta divergente, 70% opacidade, no topo
 """
@@ -352,7 +353,7 @@ print(f"  Área pixel: {pixel_area_m2:.0f} m²")
 # Área verde por pixel (m²)
 green_m2 = green_frac * pixel_area_m2
 
-# Kernel circular de 300m (elíptico para compensar pixels não-quadrados)
+# Kernel circular (elíptico para compensar pixels não-quadrados)
 radius_px_x = int(round(RADIUS_M / px_w_m))
 radius_px_y = int(round(RADIUS_M / px_h_m))
 print(f"  Kernel: raio {radius_px_x}px (x) × {radius_px_y}px (y) para {RADIUS_M}m")
@@ -362,7 +363,7 @@ kernel = ((kx * px_w_m) ** 2 + (ky * px_h_m) ** 2 <= RADIUS_M**2).astype(np.floa
 print(f"  Kernel shape: {kernel.shape}, pixels activos: {kernel.sum():.0f}")
 
 # Focal sums
-green_300m = ndimage.convolve(green_m2, kernel, mode="constant", cval=0.0)
+green_500m = ndimage.convolve(green_m2, kernel, mode="constant", cval=0.0)
 # GHS-POP nativo ~100m: ao renderizar a ~6.5m, cada célula é replicada em ~N sub-pixels.
 # Corrigir dividindo pelo rácio de áreas para obter pop real por pixel de display.
 POP_NATIVE_RES = 100  # metros (resolução nativa GHS-POP)
@@ -371,14 +372,13 @@ pop_corrected = pop_upscaled / pop_oversampling
 print(
     f"  Correccao oversampling pop: /{pop_oversampling:.0f} (nativo {POP_NATIVE_RES}m para {px_w_m:.1f}m)"
 )
-pop_300m = ndimage.convolve(pop_corrected, kernel, mode="constant", cval=0.0)
+pop_500m = ndimage.convolve(pop_corrected, kernel, mode="constant", cval=0.0)
 
 # Acessibilidade = verde / pop (m²/hab)
-# Onde pop > 0.5 hab (evitar divisão por zero em áreas despovoadas)
-# Limiar: ignorar zonas com menos de ~50 hab num raio de 500m (~63 hab/km²)
+# Limiar: ignorar zonas com menos de 1000 hab num raio de 500m (~1274 hab/km²)
 # Evita colorir zonas não-urbanas (parques, indústria, rio) como "défice severo"
-POP_MIN_THRESHOLD = 50
-accessibility = np.where(pop_300m > POP_MIN_THRESHOLD, green_300m / pop_300m, np.nan)
+POP_MIN_THRESHOLD = 1000
+accessibility = np.where(pop_500m > POP_MIN_THRESHOLD, green_500m / pop_500m, np.nan)
 
 valid = ~np.isnan(accessibility)
 print(
@@ -837,7 +837,7 @@ async function init() {{
   var pSw = document.createElement('span'); pSw.className = 'swatch'; pSw.style.backgroundColor = '#2E7D32';
   var pLb = document.createElement('label'); pLb.textContent = 'Parques e Jardins'; pLb.style.fontSize = '12px';
   pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
-  div.insertBefore(pRow, div.firstChild);
+  div.insertBefore(pRow, accRow.nextSibling);
 }}
 
 init();
