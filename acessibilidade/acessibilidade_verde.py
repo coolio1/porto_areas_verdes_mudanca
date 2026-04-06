@@ -542,25 +542,40 @@ html = f'''<!DOCTYPE html>
   }}
   #panel-toggle {{
     display:none; width:100%; border:none; padding:6px 0;
-    background:transparent; color:#eee; font-size:11px; cursor:pointer;
+    background:transparent; color:#555; font-size:11px; cursor:pointer;
     text-align:right;
   }}
+  .panel-body {{ display:block; }}
   .row {{ display:flex; align-items:center; gap:6px; margin:2px 0; }}
   .row input[type=checkbox] {{ width:15px; height:15px; cursor:pointer; margin:0; }}
-  .row label {{ cursor:pointer; }}
+  .row label {{ cursor:pointer; font-size:12px; }}
   .swatch {{ width:14px; height:14px; border-radius:3px; display:inline-block; }}
   .section {{ font-size:11px; color:#888; font-weight:bold; margin:8px 0 4px 0; }}
   select {{ background:#f5f5f5; color:#222; border:1px solid #ccc; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }}
   .park-label {{ background:rgba(255,255,255,0.85)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#1B5E20; padding:1px 5px; border-radius:3px; }}
-  @media (max-width:768px) {{
-    #panel {{ bottom:0; left:0; right:0; border-radius:10px 10px 0 0; padding:8px 12px; font-size:11px; min-width:auto; line-height:1.5; }}
-    #panel .row {{ margin:1px 0; }}
+  @media (max-width: 768px) {{
+    #panel {{
+      left:6px; right:6px; bottom:6px; min-width:unset;
+      padding:8px 10px; font-size:11px; line-height:1.3;
+      max-height:35vh; overflow-y:auto;
+    }}
+    #panel b {{ font-size:12px !important; }}
+    #panel .section {{ font-size:9px; margin:4px 0 2px; }}
+    #panel .row {{ gap:4px; margin:1px 0; }}
+    #panel .row input[type=checkbox] {{ width:12px; height:12px; }}
+    #panel .row label {{ font-size:10px; }}
     #panel select {{ font-size:10px; padding:2px 4px; }}
     #panel hr {{ margin:4px 0 !important; }}
+    #panel .swatch {{ width:10px; height:10px; }}
     #panel.collapsed .panel-body {{ display:none; }}
     #panel-toggle {{ display:block; }}
-    #nav {{ top:4px; right:4px; left:4px; flex-wrap:wrap; gap:3px; justify-content:center; }}
-    #nav a {{ padding:3px 6px; font-size:9px; }}
+    #nav {{
+      top:4px; right:4px; left:4px;
+      flex-wrap:wrap; gap:3px; justify-content:center;
+    }}
+    #nav a {{ font-size:9px; padding:2px 6px; }}
+    .leaflet-top {{ top:50px; }}
+    #credit {{ display:none; }}
   }}
 </style>
 </head>
