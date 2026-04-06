@@ -649,7 +649,7 @@ var greenPrivLayer = {{
   label: "Verde privado",
   color: "#1565C0",
   src: "{verde_priv_b64}",
-  show: true
+  show: false
 }};
 
 // Camada de verde pago ou não usufruível — castanho
@@ -658,7 +658,7 @@ var outroVerdeLayer = {{
   label: "Verde pago ou n\\u00e3o usufru\\u00edvel",
   color: "#8D6E63",
   src: "{verde_pago_b64}",
-  show: true
+  show: false
 }};
 
 // Limites municipais

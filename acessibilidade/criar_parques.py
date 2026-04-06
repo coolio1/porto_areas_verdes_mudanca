@@ -132,9 +132,9 @@ PARQUES = [
         "nome": "Jardim da Praça da República",
         "tipo": "jardim",
         # Não encontrado no OSM — usar centróide
-        "centroid_lat": 41.1488,
-        "centroid_lon": -8.6117,
-        "buffer_m": 40,
+        "centroid_lat": 41.1492,
+        "centroid_lon": -8.6105,
+        "buffer_m": 55,
     },
     {
         "nome": "Viveiro Municipal",
@@ -274,21 +274,21 @@ PARQUES = [
         "osm_bbox_park": (41.158, -8.642, 41.167, -8.630),
     },
     {
-        "nome": "Jardim do Calém",
+        "nome": "Jardim do Calém e das Sobreiras",
         "tipo": "jardim",
-        "osm_type": "way",
-        "osm_id": 555827193,
+        "osm_ids": [("way", 555827193), ("way", 615952628)],
+        # Calém + Sobreiras (marginal fluvial)
     },
     {
-        "nome": "Jardim da Praça da Corujeira",
+        "nome": "Jardim da Corujeira",
         "tipo": "jardim",
         "osm_type": "way",
         "osm_id": 35413298,
     },
     {
-        "nome": "Parque Teodoro de Sousa",
-        "tipo": "parque",
-        # Não encontrado no OSM
+        "nome": "Jardim de Teodoro de Sousa",
+        "tipo": "jardim",
+        # Monte Aventino/Antas — não encontrado no OSM
         "centroid_lat": 41.1565,
         "centroid_lon": -8.588,
         "buffer_m": 50,
