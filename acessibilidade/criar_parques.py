@@ -489,6 +489,11 @@ def calc_area_ha(geom):
 def main():
     print("=== Construção da base de parques públicos do Porto ===\n")
 
+    # Limites do Porto (para clipar parques que ultrapassam o concelho)
+    print("  A carregar limites do Porto...")
+    porto_gdf = gpd.read_file(PDM_PATH, layer="PO_QSFUNCIONAL_PL").to_crs(epsg=4326)
+    porto_boundary = porto_gdf.union_all()
+
     # 1. Buscar geometrias OSM
     osm_parques = [p for p in PARQUES if "osm_id" in p or "osm_ids" in p]
     geom_map = fetch_osm_geometries(osm_parques)
@@ -552,6 +557,16 @@ def main():
         if geom is None:
             print(f"  ERRO: {nome} — sem geometria, a saltar")
             continue
+
+        # Clipar aos limites do Porto
+        geom_clipped = geom.intersection(porto_boundary)
+        if geom_clipped.is_empty:
+            print(f"  AVISO: {nome} — fora do Porto, a saltar")
+            continue
+        if geom_clipped.area < geom.area * 0.99:
+            pct = geom_clipped.area / geom.area * 100
+            print(f"  AVISO: {nome} — clipado ao Porto ({pct:.0f}% retido)")
+        geom = geom_clipped
 
         # Garantir que é Polygon ou MultiPolygon
         if geom.geom_type not in ("Polygon", "MultiPolygon"):
