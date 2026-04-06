@@ -432,34 +432,32 @@ acc_path = os.path.join(LAYERS_DIR, "acessibilidade_2sfca.png")
 acc_img_display.save(acc_path)
 print(f"  acessibilidade_2sfca.png guardado ({os.path.getsize(acc_path) // 1024} KB)")
 
-# ===== Phase 4b: Défice ponderado (population-weighted gap) =====
-print("\nA calcular défice ponderado...")
-# deficit = pop_300m × max(9 - acessibilidade, 0)
-# Pondera a falta de verde pela quantidade de pessoas afectadas
+# ===== Phase 4b: Défice per capita (m²/hab em falta) =====
+print("\nA calcular défice per capita...")
+# deficit_pc = max(9 - acessibilidade, 0) — varia de 0 a 9 m²/hab
+# Não penaliza zonas densas em si, apenas falta de verde per capita
 OMS_LIMIAR = 9.0
-deficit = np.where(valid, pop_300m * np.maximum(OMS_LIMIAR - accessibility, 0), np.nan)
+deficit = np.where(valid, np.maximum(OMS_LIMIAR - accessibility, 0), np.nan)
 
 valid_def = ~np.isnan(deficit)
 def_nonzero = deficit[valid_def & (deficit > 0)]
 if len(def_nonzero) > 0:
     print(
-        f"  Défice: min={def_nonzero.min():.0f}, median={np.median(def_nonzero):.0f}, "
-        f"p95={np.percentile(def_nonzero, 95):.0f}, max={def_nonzero.max():.0f}"
+        f"  Défice pc: min={def_nonzero.min():.1f}, median={np.median(def_nonzero):.1f}, "
+        f"p95={np.percentile(def_nonzero, 95):.1f}, max={def_nonzero.max():.1f} m²/hab"
     )
 
-    # Colorir com paleta sequencial (branco → vermelho escuro)
-    # Normalizar pelo percentil 95 para evitar distorção por outliers
-    def_p95 = np.percentile(def_nonzero, 95)
-    def_norm = np.clip(deficit / def_p95, 0, 1)
+    # Colorir com paleta sequencial — normalizar a 0-9 (escala fixa)
+    def_norm = np.clip(deficit / OMS_LIMIAR, 0, 1)
 
-    # Paleta: transparente (0) → amarelo claro → laranja → vermelho → vermelho escuro
+    # Paleta: amarelo claro (pouco défice) → vermelho escuro (sem verde)
     DEF_COLORS = np.array(
         [
-            [255, 247, 188],  # amarelo claro
+            [255, 247, 188],  # amarelo claro (0-2 m²/hab em falta)
             [254, 196, 79],  # amarelo
             [253, 141, 60],  # laranja
             [227, 74, 51],  # vermelho
-            [179, 0, 0],  # vermelho escuro
+            [179, 0, 0],  # vermelho escuro (9 m²/hab em falta)
         ],
         dtype=np.float64,
     )
@@ -643,13 +641,13 @@ html = f'''<!DOCTYPE html>
   </div>
 
   <div id="def-legend" style="display:block;margin:6px 0 0 22px;">
-    <div style="font-size:10px;color:#888;margin-bottom:2px;">D&eacute;fice ponderado (pop &times; gap)</div>
+    <div style="font-size:10px;color:#888;margin-bottom:2px;">D&eacute;fice per capita (m&sup2;/hab em falta)</div>
     <div style="display:flex;align-items:center;gap:4px;">
-      <span style="font-size:9px;color:#888;">baixo</span>
+      <span style="font-size:9px;color:#888;">0</span>
       <div style="width:120px;height:10px;border-radius:3px;background:linear-gradient(to right,#FFF7BC,#FEC44F,#FD8D3C,#E34A33,#B30000);"></div>
-      <span style="font-size:9px;color:#888;">alto</span>
+      <span style="font-size:9px;color:#888;">9</span>
     </div>
-    <div style="color:#aaa;font-size:9px;margin-top:2px;">Onde a falta de verde afecta mais pessoas</div>
+    <div style="color:#aaa;font-size:9px;margin-top:2px;">m&sup2; de verde em falta por habitante (limiar OMS: 9)</div>
   </div>
 
   <hr style="border-color:#ddd;margin:10px 0 6px 0;">
@@ -695,10 +693,10 @@ var accLayer = {{
   show: false
 }};
 
-// Camada de défice ponderado (topo, on por defeito)
+// Camada de défice per capita (topo, on por defeito)
 var defLayer = {{
   id: "deficit",
-  label: "D\\u00e9fice ponderado",
+  label: "D\\u00e9fice per capita",
   src: "{def_b64}",
   opacity: 0.7,
   show: true
