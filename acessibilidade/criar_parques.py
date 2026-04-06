@@ -168,19 +168,93 @@ PARQUES = [
         # Zona linear — usar polígonos PDM "Área de frente atlântica e ribeirinha"
         "pdm_category": "frente",
     },
+    # --- Parques adicionais (ausentes do site CMP) ---
+    {
+        "nome": "Parque Central da Asprela",
+        "tipo": "parque",
+        "osm_ids": [("way", 1418972813), ("way", 1419127492), ("way", 1419127496)],
+        "area_ha": 6,
+        # Bacia de retenção da Ribeira da Asprela, 2022 — 3 ways no OSM
+    },
+    {
+        "nome": "Parque Urbano da Lapa",
+        "tipo": "parque",
+        "osm_type": "way",
+        "osm_id": 1452005414,
+        "area_ha": 1.7,
+        # Parque Urbano Dr. Mário Soares, Dez 2024
+    },
+    {
+        "nome": "Jardim Botânico do Porto",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 450874936,
+        "area_ha": 4,
+    },
+    {
+        "nome": "Jardim Paulo Vallada",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 35731231,
+        # Jardim das Antas
+    },
+    {
+        "nome": "Jardim da Praça do Império",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 165495635,
+    },
+    {
+        "nome": "Alameda das Fontainhas",
+        "tipo": "jardim",
+        # Miradouro público, não indexado no OSM como leisure
+        "centroid_lat": 41.1413,
+        "centroid_lon": -8.6040,
+        "buffer_m": 60,
+    },
+    {
+        "nome": "Jardim do Homem do Leme",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 478335004,
+        # Jardim marítimo na Foz
+    },
+    {
+        "nome": "Jardim da Avenida de Montevideu",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 370626234,
+    },
+    {
+        "nome": "Jardins da Praia de Gondarém",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 551666215,
+        # Jardim marítimo (incluído na "Frente Atlântica" no site CMP)
+    },
+    {
+        "nome": "Jardins da Praia do Molhe",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 551666213,
+    },
 ]
 
 
 def fetch_osm_geometries(parques):
     """Buscar geometrias de todos os parques com OSM ID numa única query Overpass."""
-    ways = [p for p in parques if p.get("osm_type") == "way"]
-    rels = [p for p in parques if p.get("osm_type") == "relation"]
+    # Recolher todos os IDs (single e multi)
+    all_ids = set()
+    for p in parques:
+        if "osm_ids" in p:
+            for osm_type, osm_id in p["osm_ids"]:
+                all_ids.add((osm_type, osm_id))
+        elif "osm_id" in p:
+            all_ids.add((p["osm_type"], p["osm_id"]))
 
     parts = []
-    for p in ways:
-        parts.append(f"way({p['osm_id']});")
-    for p in rels:
-        parts.append(f"relation({p['osm_id']});")
+    for osm_type, osm_id in all_ids:
+        parts.append(f"{osm_type}({osm_id});")
 
     if not parts:
         return {}
@@ -324,7 +398,7 @@ def main():
     print("=== Construção da base de parques públicos do Porto ===\n")
 
     # 1. Buscar geometrias OSM
-    osm_parques = [p for p in PARQUES if "osm_id" in p]
+    osm_parques = [p for p in PARQUES if "osm_id" in p or "osm_ids" in p]
     geom_map = fetch_osm_geometries(osm_parques)
 
     # 2. Construir features
@@ -334,7 +408,20 @@ def main():
         geom = None
         fonte = None
 
-        if "osm_id" in p:
+        if "osm_ids" in p:
+            # Múltiplos ways/relations — unir geometrias
+            parts = []
+            for osm_type, osm_id in p["osm_ids"]:
+                key = f"{osm_type}/{osm_id}"
+                g = geom_map.get(key)
+                if g:
+                    parts.append(g)
+            if parts:
+                geom = unary_union(parts)
+                fonte = "osm"
+            else:
+                print(f"  AVISO: {nome} — nenhuma geometria OSM encontrada")
+        elif "osm_id" in p:
             key = f"{p['osm_type']}/{p['osm_id']}"
             geom = geom_map.get(key)
             if geom:

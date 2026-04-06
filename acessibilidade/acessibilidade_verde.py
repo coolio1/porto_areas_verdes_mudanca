@@ -269,7 +269,7 @@ pdm_verde_union = (
 )
 print(f"  {len(pdm_verde)} polígonos PDM de verde")
 
-# ===== 20 parques oficiais CMP (fonte autoritativa de verde público) =====
+# ===== parques oficiais CMP (fonte autoritativa de verde público) =====
 parques_path = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
 if not os.path.exists(parques_path):
     raise FileNotFoundError(f"Correr criar_parques.py primeiro: {parques_path}")
@@ -285,10 +285,10 @@ ys = np.linspace(LAT_MAX, LAT_MIN, grid_h)
 xx, yy = np.meshgrid(xs, ys)
 coords_flat = (xx.ravel(), yy.ravel())
 
-# --- Verde público: Sentinel-2 verde ∩ 20 parques oficiais ---
+# --- Verde público: Sentinel-2 verde ∩ parques oficiais ---
 verde_pub_path = os.path.join(LAYERS_DIR, "verde_publico.png")
 if not os.path.exists(verde_pub_path):
-    print("  A mascarar verde para 20 parques oficiais...")
+    print("  A mascarar verde para parques oficiais...")
     arr = np.array(img_ref)
     inside_parques = contains_xy(parques_union, *coords_flat).reshape(grid_h, grid_w)
     arr[~inside_parques, 3] = 0
@@ -298,13 +298,13 @@ if not os.path.exists(verde_pub_path):
 else:
     print("  verde_publico.png já existe, a saltar...")
 
-# A máscara para o 2SFCA usa os 20 parques
+# A máscara para o 2SFCA usa os parques
 publico_union = parques_union
 
-# --- Verde pago ou não usufruível: polígonos PDM \ 20 parques (sólido) ---
+# --- Verde pago ou não usufruível: polígonos PDM \ parques (sólido) ---
 verde_pago_path = os.path.join(LAYERS_DIR, "verde_pago.png")
 if not os.path.exists(verde_pago_path):
-    print("  A calcular verde pago (PDM fora dos 20 parques, sólido)...")
+    print("  A calcular verde pago (PDM fora dos parques, sólido)...")
     pdm_minus_parques = pdm_verde_union.difference(parques_union)
     inside_pago = contains_xy(pdm_minus_parques, *coords_flat).reshape(grid_h, grid_w)
     pago_arr = np.zeros((grid_h, grid_w, 4), dtype=np.uint8)
@@ -556,10 +556,8 @@ html = f'''<!DOCTYPE html>
   <b style="font-size:14px;">Acessibilidade a Verde P&uacute;blico</b><br>
   <span style="color:#888;font-size:10px;">2SFCA &mdash; m&sup2; de verde p&uacute;blico por habitante (raio 500m)</span>
 
-  <div class="section">Camadas</div>
-  <div id="layer-rows"></div>
-
-  <div id="acc-legend" style="display:block;margin:6px 0 0 22px;">
+  <div id="acc-legend" style="display:block;margin:4px 0 8px 0;">
+    <div class="section">Acessibilidade (m&sup2;/hab, raio 500m)</div>
     <div style="font-size:10px;color:#888;margin-bottom:2px;">m&sup2;/hab (raio 500m)</div>
     <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
       <div style="display:flex;align-items:center;gap:4px;">
@@ -585,6 +583,9 @@ html = f'''<!DOCTYPE html>
     </div>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS recomenda &ge;9 m&sup2;/hab</div>
   </div>
+
+  <div class="section">Camadas</div>
+  <div id="layer-rows"></div>
 
   <hr style="border-color:#ddd;margin:10px 0 6px 0;">
   <div class="section">Contexto</div>
@@ -762,8 +763,7 @@ async function init() {{
   var accRow = document.createElement('div'); accRow.className = 'row';
   var accCb = document.createElement('input'); accCb.type = 'checkbox'; accCb.checked = accLayer.show;
   accCb.addEventListener('change', function() {{
-    if (this.checked) {{ accOverlay.addTo(map); document.getElementById('acc-legend').style.display='block'; }}
-    else {{ map.removeLayer(accOverlay); document.getElementById('acc-legend').style.display='none'; }}
+    if (this.checked) accOverlay.addTo(map); else map.removeLayer(accOverlay);
   }});
   var accSw = document.createElement('span'); accSw.className = 'swatch';
   accSw.style.background = 'linear-gradient(to right, #D7263D, #E8A838, #FFD700, #8BC34A, #2E7D32)';
@@ -773,13 +773,13 @@ async function init() {{
   div.insertBefore(accRow, div.firstChild);
 
   // --- Camada combinada "Parques e Jardins" (raster verde + contornos GeoJSON) ---
-  // Raster: verde público (Sentinel-2 dentro dos 20 parques)
+  // Raster: verde público (Sentinel-2 dentro dos parques)
   var greenMask = await extractMask(greenLayer.src);
   var greenSrc = renderColored(greenMask, greenLayer.color);
   var greenOverlay = L.imageOverlay(greenSrc, bounds);
   greenOverlay.addTo(map);
 
-  // Contornos GeoJSON dos 20 parques
+  // Contornos GeoJSON dos parques
   var parquesGeoLayer = null;
   if (parquesData) {{
     map.createPane('parquesPane');
