@@ -172,9 +172,9 @@ PARQUES = [
     {
         "nome": "Parque Central da Asprela",
         "tipo": "parque",
-        "osm_ids": [("way", 1418972813), ("way", 1419127492), ("way", 1419127496)],
+        # 34 ways leisure=park fragmentados no OSM — buscar por bbox
+        "osm_bbox_park": (41.175, -8.615, 41.182, -8.60),
         "area_ha": 6,
-        # Bacia de retenção da Ribeira da Asprela, 2022 — 3 ways no OSM
     },
     {
         "nome": "Parque Urbano da Lapa",
@@ -387,6 +387,35 @@ def get_pdm_frente_atlantica():
     return unary_union(frente.geometry)
 
 
+def fetch_osm_bbox_parks(bbox):
+    """Buscar todos os ways leisure=park numa bbox e unir."""
+    s, w, n, e = bbox
+    query = f'[out:json][timeout:30];way["leisure"="park"]({s},{w},{n},{e});out geom;'
+    print(f"  A consultar Overpass (parks em bbox {bbox})...")
+    time.sleep(5)  # Evitar rate limit após query anterior
+    for attempt in range(3):
+        try:
+            resp = requests.post(OVERPASS_URL, data={"data": query}, timeout=60)
+            resp.raise_for_status()
+            break
+        except Exception as e:
+            print(f"  Tentativa {attempt + 1} falhou: {e}")
+            if attempt < 2:
+                time.sleep(10)
+            else:
+                raise
+    data = resp.json()
+    polys = []
+    for el in data.get("elements", []):
+        g = _overpass_element_to_geometry(el)
+        if g:
+            polys.append(g)
+    if polys:
+        print(f"  {len(polys)} fragmentos encontrados")
+        return unary_union(polys)
+    return None
+
+
 def calc_area_ha(geom):
     """Calcular área em hectares (projecção UTM 29N para Porto)."""
     gdf = gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")
@@ -408,7 +437,13 @@ def main():
         geom = None
         fonte = None
 
-        if "osm_ids" in p:
+        if "osm_bbox_park" in p:
+            geom = fetch_osm_bbox_parks(p["osm_bbox_park"])
+            if geom:
+                fonte = "osm"
+            else:
+                print(f"  AVISO: {nome} — nenhum park encontrado na bbox")
+        elif "osm_ids" in p:
             # Múltiplos ways/relations — unir geometrias
             parts = []
             for osm_type, osm_id in p["osm_ids"]:
