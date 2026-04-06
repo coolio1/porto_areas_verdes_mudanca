@@ -540,6 +540,11 @@ html = f'''<!DOCTYPE html>
     box-shadow:0 2px 10px rgba(0,0,0,0.2); min-width:260px;
     max-height:90vh; overflow-y:auto; line-height:1.8;
   }}
+  #panel-toggle {{
+    display:none; width:100%; border:none; padding:6px 0;
+    background:transparent; color:#eee; font-size:11px; cursor:pointer;
+    text-align:right;
+  }}
   .row {{ display:flex; align-items:center; gap:6px; margin:2px 0; }}
   .row input[type=checkbox] {{ width:15px; height:15px; cursor:pointer; margin:0; }}
   .row label {{ cursor:pointer; }}
@@ -547,6 +552,16 @@ html = f'''<!DOCTYPE html>
   .section {{ font-size:11px; color:#888; font-weight:bold; margin:8px 0 4px 0; }}
   select {{ background:#f5f5f5; color:#222; border:1px solid #ccc; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }}
   .park-label {{ background:rgba(255,255,255,0.85)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#1B5E20; padding:1px 5px; border-radius:3px; }}
+  @media (max-width:768px) {{
+    #panel {{ bottom:0; left:0; right:0; border-radius:10px 10px 0 0; padding:8px 12px; font-size:11px; min-width:auto; line-height:1.5; }}
+    #panel .row {{ margin:1px 0; }}
+    #panel select {{ font-size:10px; padding:2px 4px; }}
+    #panel hr {{ margin:4px 0 !important; }}
+    #panel.collapsed .panel-body {{ display:none; }}
+    #panel-toggle {{ display:block; }}
+    #nav {{ top:4px; right:4px; left:4px; flex-wrap:wrap; gap:3px; justify-content:center; }}
+    #nav a {{ padding:3px 6px; font-size:9px; }}
+  }}
 </style>
 </head>
 <body>
@@ -560,6 +575,8 @@ html = f'''<!DOCTYPE html>
 </div>
 <div id="map"></div>
 <div id="panel">
+  <button id="panel-toggle" onclick="var p=document.getElementById('panel');p.classList.toggle('collapsed');this.textContent=p.classList.contains('collapsed')?'&#9650; Abrir legenda':'&#9660; Fechar';">&#9660; Fechar</button>
+  <div class="panel-body">
   <b style="font-size:14px;">Acessibilidade a Verde P&uacute;blico</b><br>
   <span style="color:#888;font-size:10px;">2SFCA &mdash; m&sup2; de verde p&uacute;blico por habitante (raio 500m)</span>
 
@@ -616,8 +633,9 @@ html = f'''<!DOCTYPE html>
 
   <hr style="border-color:#ddd;margin:10px 0 4px 0;">
   <span style="color:#aaa;font-size:10px;">Sentinel-2 10m (ESA) &bull; GHS-POP 100m (JRC)<br>
-  Verde p&uacute;blico via PDM Porto 2021<br>
+  38 parques e jardins (CMP + OSM)<br>
   M&eacute;todo: Two-Step Floating Catchment Area</span>
+  </div>
 </div>
 
 <script>
@@ -853,6 +871,7 @@ init();
 <div style="position:fixed;bottom:6px;right:10px;z-index:1000;font:10px 'Segoe UI',Arial,sans-serif;color:#888;background:rgba(255,255,255,0.85);padding:2px 8px;border-radius:4px;">
   <a href="https://www.linkedin.com/in/nquental/" target="_blank" style="color:#555;text-decoration:none;">Nuno Quental</a>
 </div>
+<script>if(window.innerWidth<=768){{var p=document.getElementById('panel'),b=document.getElementById('panel-toggle');p.classList.add('collapsed');b.textContent='\\u25B2 Abrir legenda';}}</script>
 </body>
 </html>'''
 
