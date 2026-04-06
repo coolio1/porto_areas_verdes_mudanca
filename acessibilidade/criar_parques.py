@@ -132,8 +132,8 @@ PARQUES = [
         "nome": "Jardim da Praça da República",
         "tipo": "jardim",
         # Não encontrado no OSM — usar centróide
-        "centroid_lat": 41.1492,
-        "centroid_lon": -8.6105,
+        "centroid_lat": 41.1544,
+        "centroid_lon": -8.6127,
         "buffer_m": 55,
     },
     {

@@ -328,12 +328,13 @@ print(f"  GHS-POP max: {POP_MAX:.1f} hab/pixel")
 # Download arrays de cálculo
 pop_arr = download_greyscale(ghspop, CALC_DIM, 0, POP_MAX, "GHS-POP calc")
 
-# Verde público como array binário (a partir do PNG mascarado)
+# Verde público: área total dos polígonos dos parques (não Sentinel-2)
 print("  A preparar verde público para cálculo...")
 vp_img = Image.open(verde_pub_path).convert("RGBA")
 display_w, display_h = vp_img.size
-# Usar resolução de display (preserva parques pequenos)
-green_frac = np.array(vp_img)[:, :, 3].astype(np.float64) / 255.0
+# Máscara binária: todos os pixels dentro dos parques contam como verde
+inside_parques_calc = contains_xy(parques_union, *coords_flat).reshape(grid_h, grid_w)
+green_frac = inside_parques_calc.astype(np.float64)
 
 # Upscalar população para a mesma resolução
 pop_upscaled = np.array(
