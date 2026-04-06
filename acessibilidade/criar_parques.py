@@ -489,10 +489,15 @@ def calc_area_ha(geom):
 def main():
     print("=== Construção da base de parques públicos do Porto ===\n")
 
-    # Limites do Porto (para clipar parques que ultrapassam o concelho)
-    print("  A carregar limites do Porto...")
-    porto_gdf = gpd.read_file(PDM_PATH, layer="PO_QSFUNCIONAL_PL").to_crs(epsg=4326)
-    porto_boundary = porto_gdf.union_all()
+    # Limites do Porto via CAOP (exclui oceano, ao contrário do PDM)
+    print("  A carregar limites do Porto (CAOP)...")
+    CAOP_PATH = os.path.join(
+        os.path.dirname(SCRIPT_DIR),
+        "CAOP_Continente_2025-gpkg",
+        "CAOP2025_municipios.shp",
+    )
+    caop = gpd.read_file(CAOP_PATH).to_crs(epsg=4326)
+    porto_boundary = caop[caop["dtmn"] == "1312"].geometry.union_all()
 
     # 1. Buscar geometrias OSM
     osm_parques = [p for p in PARQUES if "osm_id" in p or "osm_ids" in p]
@@ -558,10 +563,22 @@ def main():
             print(f"  ERRO: {nome} — sem geometria, a saltar")
             continue
 
-        # Clipar aos limites do Porto
+        # Clipar aos limites do Porto (CAOP — exclui oceano)
         geom_clipped = geom.intersection(porto_boundary)
         if geom_clipped.is_empty:
             print(f"  AVISO: {nome} — fora do Porto, a saltar")
+            continue
+        # Extrair apenas polígonos (clip pode gerar linhas/pontos residuais)
+        if geom_clipped.geom_type == "GeometryCollection":
+
+            polys = [
+                g
+                for g in geom_clipped.geoms
+                if g.geom_type in ("Polygon", "MultiPolygon")
+            ]
+            geom_clipped = unary_union(polys) if polys else geom_clipped
+        if geom_clipped.is_empty:
+            print(f"  AVISO: {nome} — sem área após clip, a saltar")
             continue
         if geom_clipped.area < geom.area * 0.99:
             pct = geom_clipped.area / geom.area * 100
