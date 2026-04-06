@@ -432,60 +432,7 @@ acc_path = os.path.join(LAYERS_DIR, "acessibilidade_2sfca.png")
 acc_img_display.save(acc_path)
 print(f"  acessibilidade_2sfca.png guardado ({os.path.getsize(acc_path) // 1024} KB)")
 
-# ===== Phase 4b: Défice per capita (m²/hab em falta) =====
-print("\nA calcular défice per capita...")
-# deficit_pc = max(9 - acessibilidade, 0) — varia de 0 a 9 m²/hab
-# Não penaliza zonas densas em si, apenas falta de verde per capita
-OMS_LIMIAR = 9.0
-deficit = np.where(valid, np.maximum(OMS_LIMIAR - accessibility, 0), np.nan)
-
-valid_def = ~np.isnan(deficit)
-def_nonzero = deficit[valid_def & (deficit > 0)]
-if len(def_nonzero) > 0:
-    print(
-        f"  Défice pc: min={def_nonzero.min():.1f}, median={np.median(def_nonzero):.1f}, "
-        f"p95={np.percentile(def_nonzero, 95):.1f}, max={def_nonzero.max():.1f} m²/hab"
-    )
-
-    # Colorir com paleta sequencial — normalizar a 0-9 (escala fixa)
-    def_norm = np.clip(deficit / OMS_LIMIAR, 0, 1)
-
-    # Paleta: amarelo claro (pouco défice) → vermelho escuro (sem verde)
-    DEF_COLORS = np.array(
-        [
-            [255, 247, 188],  # amarelo claro (0-2 m²/hab em falta)
-            [254, 196, 79],  # amarelo
-            [253, 141, 60],  # laranja
-            [227, 74, 51],  # vermelho
-            [179, 0, 0],  # vermelho escuro (9 m²/hab em falta)
-        ],
-        dtype=np.float64,
-    )
-
-    def_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
-    has_deficit = valid_def & (deficit > 0)
-
-    # Interpolar cores
-    n_colors = len(DEF_COLORS)
-    t = def_norm[has_deficit] * (n_colors - 1)
-    idx_lo = np.clip(np.floor(t).astype(int), 0, n_colors - 2)
-    idx_hi = idx_lo + 1
-    frac = t - idx_lo
-    colors = (
-        DEF_COLORS[idx_lo] * (1 - frac[:, None]) + DEF_COLORS[idx_hi] * frac[:, None]
-    )
-    def_rgba[has_deficit, 0:3] = colors.astype(np.uint8)
-    def_rgba[has_deficit, 3] = 255
-    # Clipar ao Porto
-    def_rgba[~porto_mask, 3] = 0
-
-    def_img_display = Image.fromarray(def_rgba)
-    def_path = os.path.join(LAYERS_DIR, "deficit_ponderado.png")
-    def_img_display.save(def_path)
-    print(f"  deficit_ponderado.png guardado ({os.path.getsize(def_path) // 1024} KB)")
-else:
-    print("  Sem défice detectado")
-    def_path = None
+def_path = None  # Défice removido — usar apenas acessibilidade
 
 # ===== Phase 5: Municipios (reutilizar ou descarregar) =====
 muni_path = os.path.join(PARENT_LAYERS, "municipios.png")
@@ -516,7 +463,6 @@ verde_pago_b64 = to_base64(verde_pago_path)
 ghspop_b64 = to_base64(os.path.join(PARENT_LAYERS, "ghspop.png"))
 acc_b64 = to_base64(acc_path)
 muni_b64 = to_base64(muni_path)
-def_b64 = to_base64(def_path) if def_path else ""
 
 # Carregar GeoJSON dos parques nomeados (se existir)
 parques_geojson_path = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
@@ -613,7 +559,7 @@ html = f'''<!DOCTYPE html>
   <div class="section">Camadas</div>
   <div id="layer-rows"></div>
 
-  <div id="acc-legend" style="display:none;margin:6px 0 0 22px;">
+  <div id="acc-legend" style="display:block;margin:6px 0 0 22px;">
     <div style="font-size:10px;color:#888;margin-bottom:2px;">m&sup2;/hab (raio 500m)</div>
     <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
       <div style="display:flex;align-items:center;gap:4px;">
@@ -638,16 +584,6 @@ html = f'''<!DOCTYPE html>
       </div>
     </div>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS recomenda &ge;9 m&sup2;/hab</div>
-  </div>
-
-  <div id="def-legend" style="display:block;margin:6px 0 0 22px;">
-    <div style="font-size:10px;color:#888;margin-bottom:2px;">D&eacute;fice per capita (m&sup2;/hab em falta)</div>
-    <div style="display:flex;align-items:center;gap:4px;">
-      <span style="font-size:9px;color:#888;">0</span>
-      <div style="width:120px;height:10px;border-radius:3px;background:linear-gradient(to right,#FFF7BC,#FEC44F,#FD8D3C,#E34A33,#B30000);"></div>
-      <span style="font-size:9px;color:#888;">9</span>
-    </div>
-    <div style="color:#aaa;font-size:9px;margin-top:2px;">m&sup2; de verde em falta por habitante (limiar OMS: 9)</div>
   </div>
 
   <hr style="border-color:#ddd;margin:10px 0 6px 0;">
@@ -684,20 +620,11 @@ document.getElementById('basemap-select').addEventListener('change', function() 
 
 var bounds = {BOUNDS};
 
-// Camada de acessibilidade (pré-colorida, 70% opacidade, off por defeito)
+// Camada de acessibilidade (pré-colorida, 70% opacidade, on por defeito)
 var accLayer = {{
   id: "acessibilidade",
   label: "Acessibilidade a 500m",
   src: "{acc_b64}",
-  opacity: 0.7,
-  show: false
-}};
-
-// Camada de défice per capita (topo, on por defeito)
-var defLayer = {{
-  id: "deficit",
-  label: "D\\u00e9fice per capita",
-  src: "{def_b64}",
   opacity: 0.7,
   show: true
 }};
@@ -842,26 +769,8 @@ async function init() {{
   accSw.style.background = 'linear-gradient(to right, #D7263D, #E8A838, #FFD700, #8BC34A, #2E7D32)';
   var accLb = document.createElement('label'); accLb.textContent = accLayer.label; accLb.style.fontSize = '12px';
   accRow.appendChild(accCb); accRow.appendChild(accSw); accRow.appendChild(accLb);
-
-  // --- Défice ponderado (topo absoluto) ---
-  if (defLayer.src) {{
-    var defOverlay = L.imageOverlay(defLayer.src, bounds, {{opacity: defLayer.opacity, pane: 'accPane'}});
-    if (defLayer.show) defOverlay.addTo(map);
-
-    var defRow = document.createElement('div'); defRow.className = 'row';
-    var defCb = document.createElement('input'); defCb.type = 'checkbox'; defCb.checked = defLayer.show;
-    defCb.addEventListener('change', function() {{
-      if (this.checked) {{ defOverlay.addTo(map); document.getElementById('def-legend').style.display='block'; }}
-      else {{ map.removeLayer(defOverlay); document.getElementById('def-legend').style.display='none'; }}
-    }});
-    var defSw = document.createElement('span'); defSw.className = 'swatch';
-    defSw.style.background = 'linear-gradient(to right, #FFF7BC, #FEC44F, #FD8D3C, #E34A33, #B30000)';
-    var defLb = document.createElement('label'); defLb.textContent = defLayer.label; defLb.style.fontSize = '12px';
-    defRow.appendChild(defCb); defRow.appendChild(defSw); defRow.appendChild(defLb);
-    // Défice no topo, acessibilidade logo abaixo
-    div.insertBefore(defRow, div.firstChild);
-  }}
-  div.insertBefore(accRow, defLayer.src ? defRow.nextSibling : div.firstChild);
+  // Acessibilidade no topo
+  div.insertBefore(accRow, div.firstChild);
 
   // --- Camada combinada "Parques e Jardins" (raster verde + contornos GeoJSON) ---
   // Raster: verde público (Sentinel-2 dentro dos 20 parques)
