@@ -25,14 +25,14 @@ from scipy import ndimage
 from dotenv import load_dotenv
 
 # ===== Configuração =====
-load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)
 
 # Geometria do Porto (bbox)
-porto = ee.Geometry.Polygon([
-    [[-8.70, 41.13], [-8.54, 41.13], [-8.54, 41.19], [-8.70, 41.19]]
-])
+porto = ee.Geometry.Polygon(
+    [[[-8.70, 41.13], [-8.54, 41.13], [-8.54, 41.19], [-8.70, 41.19]]]
+)
 BOUNDS = [[41.13, -8.70], [41.19, -8.54]]
 DIM = 2048  # resolução display
 
@@ -49,62 +49,83 @@ RADIUS_M = 500  # raio 2SFCA em metros
 
 # Directórios
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-LAYERS_DIR = os.path.join(SCRIPT_DIR, 'layers')
-PARENT_LAYERS = os.path.join(os.path.dirname(SCRIPT_DIR), 'layers')
+LAYERS_DIR = os.path.join(SCRIPT_DIR, "layers")
+PARENT_LAYERS = os.path.join(os.path.dirname(SCRIPT_DIR), "layers")
 os.makedirs(LAYERS_DIR, exist_ok=True)
 
-municipios = ee.FeatureCollection(f'projects/{GEE_PROJECT}/assets/CAOP2025_municipios')
+municipios = ee.FeatureCollection(f"projects/{GEE_PROJECT}/assets/CAOP2025_municipios")
 municipiosPorto = municipios.filterBounds(porto)
 
 # ===== Sentinel-2 — classificação verde (2024-25) =====
-BANDS = ['B3', 'B4', 'B8', 'B11', 'SCL']
+BANDS = ["B3", "B4", "B8", "B11", "SCL"]
+
 
 def getS2col(start, end):
-    s2 = (ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
-        .filterBounds(porto).filterDate(start, end)
-        .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30))
-        .select(BANDS))
+    s2 = (
+        ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+        .filterBounds(porto)
+        .filterDate(start, end)
+        .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 30))
+        .select(BANDS)
+    )
+
     def process(img):
-        scl = img.select('SCL')
+        scl = img.select("SCL")
         clear = scl.eq(4).Or(scl.eq(5)).Or(scl.eq(6)).Or(scl.eq(2)).Or(scl.eq(11))
-        ndvi = img.normalizedDifference(['B8', 'B4']).rename('ndvi')
-        ndbi = img.normalizedDifference(['B11', 'B8']).rename('ndbi')
-        nir_green = img.select('B8').divide(img.select('B3').max(1)).rename('nir_green')
-        green = img.select('B3').rename('green')
+        ndvi = img.normalizedDifference(["B8", "B4"]).rename("ndvi")
+        ndbi = img.normalizedDifference(["B11", "B8"]).rename("ndbi")
+        nir_green = img.select("B8").divide(img.select("B3").max(1)).rename("nir_green")
+        green = img.select("B3").rename("green")
         return ndvi.addBands(ndbi).addBands(nir_green).addBands(green).updateMask(clear)
+
     return s2.map(process)
+
 
 def getComposite(years):
     all_col = ee.ImageCollection([])
     spring_col = ee.ImageCollection([])
     for year in years:
-        full = getS2col(f'{year}-05-01', f'{year}-10-31')
+        full = getS2col(f"{year}-05-01", f"{year}-10-31")
         all_col = all_col.merge(full)
-        spring = getS2col(f'{year}-05-15', f'{year}-06-30')
+        spring = getS2col(f"{year}-05-15", f"{year}-06-30")
         spring_col = spring_col.merge(spring)
     median = all_col.median().clip(porto)
-    spring_ndvi = spring_col.select('ndvi').reduce(
-        ee.Reducer.percentile([15])).rename('spring_ndvi').clip(porto)
-    ndvi_min = all_col.select('ndvi').reduce(
-        ee.Reducer.percentile([10])).rename('ndvi_min').clip(porto)
+    spring_ndvi = (
+        spring_col.select("ndvi")
+        .reduce(ee.Reducer.percentile([15]))
+        .rename("spring_ndvi")
+        .clip(porto)
+    )
+    ndvi_min = (
+        all_col.select("ndvi")
+        .reduce(ee.Reducer.percentile([10]))
+        .rename("ndvi_min")
+        .clip(porto)
+    )
     return median.addBands(spring_ndvi).addBands(ndvi_min)
 
-esa = ee.Image('ESA/WorldCover/v200/2021').select('Map').clip(porto)
+
+esa = ee.Image("ESA/WorldCover/v200/2021").select("Map").clip(porto)
 esaBuilt = esa.eq(50)
+
 
 def classify(ndvi, ndbi, nirgreen, green, spring_ndvi, ndvi_min):
     b3_ok = green.lt(600).Or(green.lt(800).And(ndvi_min.gte(0.5)))
-    isTreeStrict = (ndvi.gte(0.5)
+    isTreeStrict = (
+        ndvi.gte(0.5)
         .And(spring_ndvi.gte(0.7))
         .And(ndvi_min.gte(0.3))
         .And(nirgreen.gte(4))
-        .And(b3_ok))
+        .And(b3_ok)
+    )
     b3_ok_mixed = green.lt(600).Or(green.lt(800).And(ndvi_min.gte(0.5)))
-    isMixed = (ndvi.gte(0.5)
+    isMixed = (
+        ndvi.gte(0.5)
         .And(spring_ndvi.gte(0.5))
         .And(ndvi_min.gte(0.2))
         .And(b3_ok_mixed)
-        .And(isTreeStrict.Not()))
+        .And(isTreeStrict.Not())
+    )
     isTree = isTreeStrict.Or(isMixed)
     clear_built = ndvi.lt(0.2).And(ndbi.gte(-0.1))
     esa_tiebreak = ndvi.gte(0.2).And(ndvi.lt(0.35)).And(esaBuilt)
@@ -112,40 +133,44 @@ def classify(ndvi, ndbi, nirgreen, green, spring_ndvi, ndvi_min):
     isSolo = isTree.Not().And(isBuilt.Not())
     return isTree, isBuilt, isSolo
 
-print('A calcular composito Sentinel-2 (2024-25)...')
-s2_late = getComposite([2024, 2025])
-ndvi_l = s2_late.select('ndvi')
-ndbi_l = s2_late.select('ndbi')
-nirgreen_l = s2_late.select('nir_green')
-green_l = s2_late.select('green')
-spring_ndvi_l = s2_late.select('spring_ndvi')
-ndvi_min_l = s2_late.select('ndvi_min')
 
-isTree_l, isBuilt_l, isSolo_l = classify(ndvi_l, ndbi_l, nirgreen_l, green_l, spring_ndvi_l, ndvi_min_l)
+print("A calcular composito Sentinel-2 (2024-25)...")
+s2_late = getComposite([2024, 2025])
+ndvi_l = s2_late.select("ndvi")
+ndbi_l = s2_late.select("ndbi")
+nirgreen_l = s2_late.select("nir_green")
+green_l = s2_late.select("green")
+spring_ndvi_l = s2_late.select("spring_ndvi")
+ndvi_min_l = s2_late.select("ndvi_min")
+
+isTree_l, isBuilt_l, isSolo_l = classify(
+    ndvi_l, ndbi_l, nirgreen_l, green_l, spring_ndvi_l, ndvi_min_l
+)
 isGreen_l = isTree_l.Or(isSolo_l)  # árvores + solo/relva
 
 # GHS-POP 2020 (densidade pop 100m)
-ghspop = ee.Image('JRC/GHSL/P2023A/GHS_POP/2020').select('population_count').clip(porto)
+ghspop = ee.Image("JRC/GHSL/P2023A/GHS_POP/2020").select("population_count").clip(porto)
 
-print('Classificação concluída.')
+print("Classificação concluída.")
+
 
 # ===== Download helpers =====
 def download_mono_layer(image, color_hex, filename, layers_dir=LAYERS_DIR):
     """Download camada monocromática com transparência."""
     filepath = os.path.join(layers_dir, filename)
     if os.path.exists(filepath):
-        print(f'  {filename} já existe, a saltar...')
+        print(f"  {filename} já existe, a saltar...")
         return filepath
     vis = image.visualize(palette=[color_hex], min=0, max=1)
     for attempt in range(3):
-        url = vis.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png'})
-        print(f'  A descarregar {filename}...')
+        url = vis.getThumbURL({"region": porto, "dimensions": DIM, "format": "png"})
+        print(f"  A descarregar {filename}...")
         r = requests.get(url)
         try:
-            img = Image.open(io.BytesIO(r.content)).convert('RGBA')
+            img = Image.open(io.BytesIO(r.content)).convert("RGBA")
             break
         except Exception as e:
-            print(f'  Tentativa {attempt+1} falhou: {e}')
+            print(f"  Tentativa {attempt + 1} falhou: {e}")
             if attempt < 2:
                 time.sleep(3)
             else:
@@ -154,57 +179,70 @@ def download_mono_layer(image, color_hex, filename, layers_dir=LAYERS_DIR):
     dark = (arr[:, :, 0] < 10) & (arr[:, :, 1] < 10) & (arr[:, :, 2] < 10)
     arr[dark, 3] = 0
     Image.fromarray(arr).save(filepath)
-    print(f'  {filename} guardado ({os.path.getsize(filepath)//1024} KB)')
+    print(f"  {filename} guardado ({os.path.getsize(filepath) // 1024} KB)")
     return filepath
+
 
 def download_greyscale(image, dim, min_val, max_val, label):
     """Download imagem GEE como array numpy float via greyscale PNG."""
-    vis = image.unmask(0).visualize(min=min_val, max=max_val,
-                                     palette=['000000', 'FFFFFF'])
+    vis = image.unmask(0).visualize(
+        min=min_val, max=max_val, palette=["000000", "FFFFFF"]
+    )
     for attempt in range(3):
-        url = vis.getThumbURL({'region': porto, 'dimensions': dim, 'format': 'png'})
-        print(f'  A descarregar {label} ({dim}px)...')
+        url = vis.getThumbURL({"region": porto, "dimensions": dim, "format": "png"})
+        print(f"  A descarregar {label} ({dim}px)...")
         r = requests.get(url)
         try:
-            img = Image.open(io.BytesIO(r.content)).convert('L')
+            img = Image.open(io.BytesIO(r.content)).convert("L")
             arr = np.array(img).astype(np.float64) / 255.0 * max_val
-            print(f'  {label}: {arr.shape}, min={arr.min():.1f}, max={arr.max():.1f}')
+            print(f"  {label}: {arr.shape}, min={arr.min():.1f}, max={arr.max():.1f}")
             return arr
         except Exception as e:
-            print(f'  Tentativa {attempt+1} falhou: {e}')
+            print(f"  Tentativa {attempt + 1} falhou: {e}")
             if attempt < 2:
                 time.sleep(3)
     return None
 
+
 # ===== Phase 1: Download verde total (display) =====
-print('\nA descarregar verde total (display)...')
-verde_total_path = os.path.join(LAYERS_DIR, 'verde_total.png')
-download_mono_layer(isGreen_l.selfMask(), '2E7D32', 'verde_total.png')
+print("\nA descarregar verde total (display)...")
+verde_total_path = os.path.join(LAYERS_DIR, "verde_total.png")
+download_mono_layer(isGreen_l.selfMask(), "2E7D32", "verde_total.png")
 
 # ===== Phase 2: Máscara PDM — manter só verde PÚBLICO =====
-print('\nA aplicar máscara PDM (manter verde público)...')
+print("\nA aplicar máscara PDM (manter verde público)...")
 import geopandas as gpd
 from shapely.geometry import MultiPolygon
 from shapely import contains_xy
 
-PDM_URL = 'https://opendata.porto.digital/dataset/e6bff4b8-ebe8-4048-a3ca-6a1640da8293/resource/44b228a4-1df1-4e67-b44b-c19cfa7bdf97/download/po_cqs.gpkg'
-PDM_LOCAL = os.path.join(os.path.dirname(SCRIPT_DIR), 'CLC', 'po_cqs.gpkg')
+PDM_URL = "https://opendata.porto.digital/dataset/e6bff4b8-ebe8-4048-a3ca-6a1640da8293/resource/44b228a4-1df1-4e67-b44b-c19cfa7bdf97/download/po_cqs.gpkg"
+PDM_LOCAL = os.path.join(os.path.dirname(SCRIPT_DIR), "CLC", "po_cqs.gpkg")
 
 if not os.path.exists(PDM_LOCAL):
-    print('  A descarregar GeoPackage do PDM (~133 MB)...')
+    print("  A descarregar GeoPackage do PDM (~133 MB)...")
     os.makedirs(os.path.dirname(PDM_LOCAL), exist_ok=True)
     import urllib.request
+
     for attempt in range(5):
         try:
-            urllib.request.urlretrieve(PDM_URL, PDM_LOCAL,
-                reporthook=lambda b, bs, ts: print(
-                    f'\r    {b*bs/1e6:.0f}/{ts/1e6:.0f} MB', end='', flush=True)
-                if b % 200 == 0 else None)
+            urllib.request.urlretrieve(
+                PDM_URL,
+                PDM_LOCAL,
+                reporthook=lambda b, bs, ts: (
+                    print(
+                        f"\r    {b * bs / 1e6:.0f}/{ts / 1e6:.0f} MB",
+                        end="",
+                        flush=True,
+                    )
+                    if b % 200 == 0
+                    else None
+                ),
+            )
             print()
-            print(f'  PDM guardado ({os.path.getsize(PDM_LOCAL)//1024} KB)')
+            print(f"  PDM guardado ({os.path.getsize(PDM_LOCAL) // 1024} KB)")
             break
         except Exception as e:
-            print(f'\n  Tentativa {attempt+1} falhou: {e}')
+            print(f"\n  Tentativa {attempt + 1} falhou: {e}")
             if os.path.exists(PDM_LOCAL):
                 os.remove(PDM_LOCAL)
             if attempt < 4:
@@ -212,81 +250,104 @@ if not os.path.exists(PDM_LOCAL):
             else:
                 raise
 
-gdf = gpd.read_file(PDM_LOCAL, layer='PO_QSFUNCIONAL_PL').to_crs(epsg=4326)
-
-# Subcategorias de verde público (sc_espaco)
-VERDE_PUBLICO = [
-    'Área verde de fruição coletiva',           # parques e jardins públicos
-    'Área verde lúdico-produtiva',               # hortas urbanas
-    'Área verde associada a equipamento',        # jardins de equipamentos
-    'Área de frente atlântica e ribeirinha',      # frente marítima/rio
+# ===== PDM: polígonos de verde (para camada "pago/não usufruível") =====
+gdf = gpd.read_file(PDM_LOCAL, layer="PO_QSFUNCIONAL_PL").to_crs(epsg=4326)
+VERDE_PDM = [
+    "Área verde de fruição coletiva",
+    "Área verde lúdico-produtiva",
+    "Área verde associada a equipamento",
+    "Área de frente atlântica e ribeirinha",
 ]
-mask_pub = gdf['sc_espaco'].isin(VERDE_PUBLICO)
-# Fallback: encoding pode diferir
-if mask_pub.sum() == 0:
-    for val in gdf['sc_espaco'].dropna().unique():
-        if 'verde' in val.lower() or 'frente' in val.lower():
-            mask_pub = mask_pub | (gdf['sc_espaco'] == val)
+mask_pdm = gdf["sc_espaco"].isin(VERDE_PDM)
+if mask_pdm.sum() == 0:
+    for val in gdf["sc_espaco"].dropna().unique():
+        if "verde" in val.lower() or "frente" in val.lower():
+            mask_pdm = mask_pdm | (gdf["sc_espaco"] == val)
+pdm_verde = gdf[mask_pdm]
+pdm_verde_union = (
+    pdm_verde.geometry.union_all() if len(pdm_verde) > 0 else MultiPolygon()
+)
+print(f"  {len(pdm_verde)} polígonos PDM de verde")
 
-publico = gdf[mask_pub]
-print(f'  {len(publico)} polígonos PDM de verde público:')
-for cat in sorted(publico['sc_espaco'].unique()):
-    n = (publico['sc_espaco'] == cat).sum()
-    print(f'    {cat}: {n}')
+# ===== 20 parques oficiais CMP (fonte autoritativa de verde público) =====
+parques_path = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
+if not os.path.exists(parques_path):
+    raise FileNotFoundError(f"Correr criar_parques.py primeiro: {parques_path}")
+parques_gdf = gpd.read_file(parques_path).to_crs(epsg=4326)
+parques_union = parques_gdf.geometry.union_all()
+print(f"  {len(parques_gdf)} parques oficiais CMP carregados")
 
-publico_union = publico.geometry.union_all() if len(publico) > 0 else MultiPolygon()
+# Grid de coordenadas (reutilizado por ambas as camadas)
+img_ref = Image.open(verde_total_path).convert("RGBA")
+grid_w, grid_h = img_ref.size
+xs = np.linspace(LON_MIN, LON_MAX, grid_w)
+ys = np.linspace(LAT_MAX, LAT_MIN, grid_h)
+xx, yy = np.meshgrid(xs, ys)
+coords_flat = (xx.ravel(), yy.ravel())
 
-# Aplicar máscara: manter APENAS pixels dentro de áreas públicas
-verde_pub_path = os.path.join(LAYERS_DIR, 'verde_publico.png')
+# --- Verde público: Sentinel-2 verde ∩ 20 parques oficiais ---
+verde_pub_path = os.path.join(LAYERS_DIR, "verde_publico.png")
 if not os.path.exists(verde_pub_path):
-    print('  A mascarar verde para público...')
-    img = Image.open(verde_total_path).convert('RGBA')
-    w, h = img.size
-    arr = np.array(img)
-
-    xs = np.linspace(LON_MIN, LON_MAX, w)
-    ys = np.linspace(LAT_MAX, LAT_MIN, h)
-    xx, yy = np.meshgrid(xs, ys)
-    inside_pub = contains_xy(publico_union, xx.ravel(), yy.ravel()).reshape(h, w)
-
-    # Apagar pixels FORA de áreas públicas
-    arr[~inside_pub, 3] = 0
+    print("  A mascarar verde para 20 parques oficiais...")
+    arr = np.array(img_ref)
+    inside_parques = contains_xy(parques_union, *coords_flat).reshape(grid_h, grid_w)
+    arr[~inside_parques, 3] = 0
     Image.fromarray(arr).save(verde_pub_path)
     n_pub = (arr[:, :, 3] > 0).sum()
-    print(f'  verde_publico.png guardado ({n_pub} pixels verdes públicos)')
+    print(f"  verde_publico.png guardado ({n_pub} pixels verdes em parques)")
 else:
-    print(f'  verde_publico.png já existe, a saltar...')
+    print("  verde_publico.png já existe, a saltar...")
+
+# A máscara para o 2SFCA usa os 20 parques
+publico_union = parques_union
+
+# --- Verde pago ou não usufruível: polígonos PDM \ 20 parques (sólido) ---
+verde_pago_path = os.path.join(LAYERS_DIR, "verde_pago.png")
+if not os.path.exists(verde_pago_path):
+    print("  A calcular verde pago (PDM fora dos 20 parques, sólido)...")
+    pdm_minus_parques = pdm_verde_union.difference(parques_union)
+    inside_pago = contains_xy(pdm_minus_parques, *coords_flat).reshape(grid_h, grid_w)
+    pago_arr = np.zeros((grid_h, grid_w, 4), dtype=np.uint8)
+    pago_arr[inside_pago, 3] = 255
+    Image.fromarray(pago_arr).save(verde_pago_path)
+    n_pago = inside_pago.sum()
+    print(f"  verde_pago.png guardado ({n_pago} pixels)")
+else:
+    print("  verde_pago.png já existe, a saltar...")
 
 # ===== Phase 3: 2SFCA (cálculo a ~30m) =====
-print('\nA calcular 2SFCA (300m)...')
+print("\nA calcular 2SFCA (300m)...")
 
 # Obter valor máximo de população para normalização
-print('  A consultar GHS-POP max...')
+print("  A consultar GHS-POP max...")
 pop_max_info = ghspop.reduceRegion(ee.Reducer.max(), porto, 100).getInfo()
-POP_MAX = pop_max_info['population_count']
-print(f'  GHS-POP max: {POP_MAX:.1f} hab/pixel')
+POP_MAX = pop_max_info["population_count"]
+print(f"  GHS-POP max: {POP_MAX:.1f} hab/pixel")
 
 # Download arrays de cálculo
-pop_arr = download_greyscale(ghspop, CALC_DIM, 0, POP_MAX, 'GHS-POP calc')
+pop_arr = download_greyscale(ghspop, CALC_DIM, 0, POP_MAX, "GHS-POP calc")
 
 # Verde público como array binário (a partir do PNG mascarado)
-print('  A preparar verde público para cálculo...')
-vp_img = Image.open(verde_pub_path).convert('RGBA')
+print("  A preparar verde público para cálculo...")
+vp_img = Image.open(verde_pub_path).convert("RGBA")
 display_w, display_h = vp_img.size
 # Usar resolução de display (preserva parques pequenos)
 green_frac = np.array(vp_img)[:, :, 3].astype(np.float64) / 255.0
 
 # Upscalar população para a mesma resolução
-pop_upscaled = np.array(Image.fromarray(pop_arr.astype(np.float32), mode='F').resize(
-    (display_w, display_h), Image.BILINEAR))
+pop_upscaled = np.array(
+    Image.fromarray(pop_arr.astype(np.float32), mode="F").resize(
+        (display_w, display_h), Image.BILINEAR
+    )
+)
 
 # Dimensões em metros
 calc_h, calc_w = display_h, display_w
 px_w_m = (LON_MAX - LON_MIN) * M_PER_DEG_LON / calc_w
 px_h_m = (LAT_MAX - LAT_MIN) * M_PER_DEG_LAT / calc_h
 pixel_area_m2 = px_w_m * px_h_m
-print(f'  Resolução cálculo: {px_w_m:.1f} x {px_h_m:.1f} m/pixel ({calc_w}x{calc_h})')
-print(f'  Área pixel: {pixel_area_m2:.0f} m²')
+print(f"  Resolução cálculo: {px_w_m:.1f} x {px_h_m:.1f} m/pixel ({calc_w}x{calc_h})")
+print(f"  Área pixel: {pixel_area_m2:.0f} m²")
 
 # Área verde por pixel (m²)
 green_m2 = green_frac * pixel_area_m2
@@ -294,47 +355,51 @@ green_m2 = green_frac * pixel_area_m2
 # Kernel circular de 300m (elíptico para compensar pixels não-quadrados)
 radius_px_x = int(round(RADIUS_M / px_w_m))
 radius_px_y = int(round(RADIUS_M / px_h_m))
-print(f'  Kernel: raio {radius_px_x}px (x) × {radius_px_y}px (y) para {RADIUS_M}m')
+print(f"  Kernel: raio {radius_px_x}px (x) × {radius_px_y}px (y) para {RADIUS_M}m")
 
-ky, kx = np.ogrid[-radius_px_y:radius_px_y+1, -radius_px_x:radius_px_x+1]
-kernel = ((kx * px_w_m)**2 + (ky * px_h_m)**2 <= RADIUS_M**2).astype(np.float64)
-print(f'  Kernel shape: {kernel.shape}, pixels activos: {kernel.sum():.0f}')
+ky, kx = np.ogrid[-radius_px_y : radius_px_y + 1, -radius_px_x : radius_px_x + 1]
+kernel = ((kx * px_w_m) ** 2 + (ky * px_h_m) ** 2 <= RADIUS_M**2).astype(np.float64)
+print(f"  Kernel shape: {kernel.shape}, pixels activos: {kernel.sum():.0f}")
 
 # Focal sums
-green_300m = ndimage.convolve(green_m2, kernel, mode='constant', cval=0.0)
+green_300m = ndimage.convolve(green_m2, kernel, mode="constant", cval=0.0)
 # GHS-POP nativo ~100m: ao renderizar a ~6.5m, cada célula é replicada em ~N sub-pixels.
 # Corrigir dividindo pelo rácio de áreas para obter pop real por pixel de display.
 POP_NATIVE_RES = 100  # metros (resolução nativa GHS-POP)
-pop_oversampling = (POP_NATIVE_RES ** 2) / pixel_area_m2
+pop_oversampling = (POP_NATIVE_RES**2) / pixel_area_m2
 pop_corrected = pop_upscaled / pop_oversampling
-print(f'  Correccao oversampling pop: /{pop_oversampling:.0f} (nativo {POP_NATIVE_RES}m para {px_w_m:.1f}m)')
-pop_300m = ndimage.convolve(pop_corrected, kernel, mode='constant', cval=0.0)
+print(
+    f"  Correccao oversampling pop: /{pop_oversampling:.0f} (nativo {POP_NATIVE_RES}m para {px_w_m:.1f}m)"
+)
+pop_300m = ndimage.convolve(pop_corrected, kernel, mode="constant", cval=0.0)
 
 # Acessibilidade = verde / pop (m²/hab)
 # Onde pop > 0.5 hab (evitar divisão por zero em áreas despovoadas)
 accessibility = np.where(pop_300m > 0.5, green_300m / pop_300m, np.nan)
 
 valid = ~np.isnan(accessibility)
-print(f'  Acessibilidade: min={np.nanmin(accessibility):.1f}, '
-      f'median={np.nanmedian(accessibility):.1f}, '
-      f'max={np.nanmax(accessibility):.1f} m²/hab')
-print(f'  Pixels com pop: {valid.sum()} / {accessibility.size}')
+print(
+    f"  Acessibilidade: min={np.nanmin(accessibility):.1f}, "
+    f"median={np.nanmedian(accessibility):.1f}, "
+    f"max={np.nanmax(accessibility):.1f} m²/hab"
+)
+print(f"  Pixels com pop: {valid.sum()} / {accessibility.size}")
 
 # Limiar OMS
 pct_below_9 = (accessibility[valid] < 9).sum() / valid.sum() * 100
-print(f'  Abaixo do limiar OMS (9 m²/hab): {pct_below_9:.1f}%')
+print(f"  Abaixo do limiar OMS (9 m²/hab): {pct_below_9:.1f}%")
 
 # ===== Phase 4: Colorir acessibilidade =====
-print('\nA colorir mapa de acessibilidade...')
+print("\nA colorir mapa de acessibilidade...")
 
 # Paleta divergente: vermelho → laranja → amarelo → verde claro → verde escuro
 # Classes: 0-3 (severo), 3-6 (insuficiente), 6-9 (limiar), 9-15 (adequado), 15+ (bom)
 CLASSES = [
-    (0,   3,  np.array([215, 38, 61])),    # vermelho (#D7263D)
-    (3,   6,  np.array([232, 168, 56])),    # laranja (#E8A838)
-    (6,   9,  np.array([255, 215, 0])),     # amarelo (#FFD700)
-    (9,  15,  np.array([139, 195, 74])),    # verde claro (#8BC34A)
-    (15, 999, np.array([46, 125, 50])),     # verde escuro (#2E7D32)
+    (0, 3, np.array([215, 38, 61])),  # vermelho (#D7263D)
+    (3, 6, np.array([232, 168, 56])),  # laranja (#E8A838)
+    (6, 9, np.array([255, 215, 0])),  # amarelo (#FFD700)
+    (9, 15, np.array([139, 195, 74])),  # verde claro (#8BC34A)
+    (15, 999, np.array([46, 125, 50])),  # verde escuro (#2E7D32)
 ]
 
 # Criar imagem RGBA na resolução de cálculo
@@ -345,30 +410,30 @@ for lo, hi, color in CLASSES:
     acc_rgba[mask, 3] = 255
 
 # Máscara do município do Porto (clipar resultados ao concelho)
-print('  A aplicar mascara do municipio...')
+print("  A aplicar mascara do municipio...")
 import geopandas as _gpd
-muni_gdf = _gpd.read_file(
-    f'C:/Users/quent/Downloads/Claude/GEE/CLC/po_cqs.gpkg',
-    layer='PO_QSFUNCIONAL_PL').to_crs(epsg=4326)
+
+muni_gdf = _gpd.read_file(PDM_LOCAL, layer="PO_QSFUNCIONAL_PL").to_crs(epsg=4326)
 porto_boundary = muni_gdf.union_all()
 xs = np.linspace(LON_MIN, LON_MAX, calc_w)
 ys = np.linspace(LAT_MAX, LAT_MIN, calc_h)
 xx, yy = np.meshgrid(xs, ys)
 from shapely import contains_xy as _cxy_muni
+
 porto_mask = _cxy_muni(porto_boundary, xx.ravel(), yy.ravel()).reshape(calc_h, calc_w)
 # Apagar pixels fora do Porto
 acc_rgba[~porto_mask, 3] = 0
-print(f'  Pixels fora do Porto removidos: {(~porto_mask).sum()}')
+print(f"  Pixels fora do Porto removidos: {(~porto_mask).sum()}")
 
 # Já está na resolução de display
 acc_img_display = Image.fromarray(acc_rgba)
 
-acc_path = os.path.join(LAYERS_DIR, 'acessibilidade_2sfca.png')
+acc_path = os.path.join(LAYERS_DIR, "acessibilidade_2sfca.png")
 acc_img_display.save(acc_path)
-print(f'  acessibilidade_2sfca.png guardado ({os.path.getsize(acc_path)//1024} KB)')
+print(f"  acessibilidade_2sfca.png guardado ({os.path.getsize(acc_path) // 1024} KB)")
 
 # ===== Phase 4b: Défice ponderado (population-weighted gap) =====
-print('\nA calcular défice ponderado...')
+print("\nA calcular défice ponderado...")
 # deficit = pop_300m × max(9 - acessibilidade, 0)
 # Pondera a falta de verde pela quantidade de pessoas afectadas
 OMS_LIMIAR = 9.0
@@ -377,8 +442,10 @@ deficit = np.where(valid, pop_300m * np.maximum(OMS_LIMIAR - accessibility, 0), 
 valid_def = ~np.isnan(deficit)
 def_nonzero = deficit[valid_def & (deficit > 0)]
 if len(def_nonzero) > 0:
-    print(f'  Défice: min={def_nonzero.min():.0f}, median={np.median(def_nonzero):.0f}, '
-          f'p95={np.percentile(def_nonzero, 95):.0f}, max={def_nonzero.max():.0f}')
+    print(
+        f"  Défice: min={def_nonzero.min():.0f}, median={np.median(def_nonzero):.0f}, "
+        f"p95={np.percentile(def_nonzero, 95):.0f}, max={def_nonzero.max():.0f}"
+    )
 
     # Colorir com paleta sequencial (branco → vermelho escuro)
     # Normalizar pelo percentil 95 para evitar distorção por outliers
@@ -386,13 +453,16 @@ if len(def_nonzero) > 0:
     def_norm = np.clip(deficit / def_p95, 0, 1)
 
     # Paleta: transparente (0) → amarelo claro → laranja → vermelho → vermelho escuro
-    DEF_COLORS = np.array([
-        [255, 247, 188],  # amarelo claro
-        [254, 196, 79],   # amarelo
-        [253, 141, 60],   # laranja
-        [227, 74, 51],    # vermelho
-        [179, 0, 0],      # vermelho escuro
-    ], dtype=np.float64)
+    DEF_COLORS = np.array(
+        [
+            [255, 247, 188],  # amarelo claro
+            [254, 196, 79],  # amarelo
+            [253, 141, 60],  # laranja
+            [227, 74, 51],  # vermelho
+            [179, 0, 0],  # vermelho escuro
+        ],
+        dtype=np.float64,
+    )
 
     def_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
     has_deficit = valid_def & (deficit > 0)
@@ -403,54 +473,85 @@ if len(def_nonzero) > 0:
     idx_lo = np.clip(np.floor(t).astype(int), 0, n_colors - 2)
     idx_hi = idx_lo + 1
     frac = t - idx_lo
-    colors = (DEF_COLORS[idx_lo] * (1 - frac[:, None]) +
-              DEF_COLORS[idx_hi] * frac[:, None])
+    colors = (
+        DEF_COLORS[idx_lo] * (1 - frac[:, None]) + DEF_COLORS[idx_hi] * frac[:, None]
+    )
     def_rgba[has_deficit, 0:3] = colors.astype(np.uint8)
     def_rgba[has_deficit, 3] = 255
     # Clipar ao Porto
     def_rgba[~porto_mask, 3] = 0
 
     def_img_display = Image.fromarray(def_rgba)
-    def_path = os.path.join(LAYERS_DIR, 'deficit_ponderado.png')
+    def_path = os.path.join(LAYERS_DIR, "deficit_ponderado.png")
     def_img_display.save(def_path)
-    print(f'  deficit_ponderado.png guardado ({os.path.getsize(def_path)//1024} KB)')
+    print(f"  deficit_ponderado.png guardado ({os.path.getsize(def_path) // 1024} KB)")
 else:
-    print('  Sem défice detectado')
+    print("  Sem défice detectado")
     def_path = None
 
 # ===== Phase 5: Municipios (reutilizar ou descarregar) =====
-muni_path = os.path.join(PARENT_LAYERS, 'municipios.png')
+muni_path = os.path.join(PARENT_LAYERS, "municipios.png")
 if not os.path.exists(muni_path):
-    print('\nA descarregar limites municipais...')
-    muni_styled = ee.Image().byte().paint(featureCollection=municipiosPorto, color=1, width=3)
-    download_mono_layer(muni_styled, '444444', 'municipios.png',
-                        layers_dir=PARENT_LAYERS)
+    print("\nA descarregar limites municipais...")
+    muni_styled = (
+        ee.Image().byte().paint(featureCollection=municipiosPorto, color=1, width=3)
+    )
+    download_mono_layer(
+        muni_styled, "444444", "municipios.png", layers_dir=PARENT_LAYERS
+    )
 else:
-    print(f'\nMunicípios: a reutilizar {muni_path}')
+    print(f"\nMunicípios: a reutilizar {muni_path}")
 
 # ===== Phase 6: HTML =====
-print('\nA construir mapa...')
+print("\nA construir mapa...")
+
 
 def to_base64(filepath):
-    with open(filepath, 'rb') as f:
-        return 'data:image/png;base64,' + base64.b64encode(f.read()).decode()
+    with open(filepath, "rb") as f:
+        return "data:image/png;base64," + base64.b64encode(f.read()).decode()
+
 
 # Camadas
 verde_pub_b64 = to_base64(verde_pub_path)
-verde_priv_b64 = to_base64(os.path.join(PARENT_LAYERS, 'interior_subsistente.png'))
-ghspop_b64 = to_base64(os.path.join(PARENT_LAYERS, 'ghspop.png'))
+verde_priv_b64 = to_base64(os.path.join(PARENT_LAYERS, "interior_subsistente.png"))
+verde_pago_b64 = to_base64(verde_pago_path)
+ghspop_b64 = to_base64(os.path.join(PARENT_LAYERS, "ghspop.png"))
 acc_b64 = to_base64(acc_path)
 muni_b64 = to_base64(muni_path)
-def_b64 = to_base64(def_path) if def_path else ''
+def_b64 = to_base64(def_path) if def_path else ""
+
+# Carregar GeoJSON dos parques nomeados (se existir)
+parques_geojson_path = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
+parques_geojson_str = ""
+if os.path.exists(parques_geojson_path):
+    with open(parques_geojson_path, "r", encoding="utf-8") as f:
+        parques_geojson_str = f.read()
+    import json as _json
+
+    _pdata = _json.loads(parques_geojson_str)
+    print(f"  Parques nomeados: {len(_pdata['features'])} carregados")
+else:
+    print(
+        "  AVISO: parques_porto.geojson não encontrado — correr criar_parques.py primeiro"
+    )
 
 basemaps = [
-    ('CartoDB Positron', 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'),
-    ('CartoDB Dark', 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'),
-    ('OpenStreetMap', 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'),
-    ('Satélite', 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
+    (
+        "CartoDB Positron",
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    ),
+    ("CartoDB Dark", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"),
+    (
+        "OpenStreetMap",
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+    ),
+    (
+        "Satélite",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    ),
 ]
-basemap_options = ''.join(
-    f'<option value="{url}"{"selected" if i==0 else ""}>{name}</option>'
+basemap_options = "".join(
+    f'<option value="{url}"{"selected" if i == 0 else ""}>{name}</option>'
     for i, (name, url) in enumerate(basemaps)
 )
 
@@ -494,6 +595,7 @@ html = f'''<!DOCTYPE html>
   .swatch {{ width:14px; height:14px; border-radius:3px; display:inline-block; }}
   .section {{ font-size:11px; color:#888; font-weight:bold; margin:8px 0 4px 0; }}
   select {{ background:#f5f5f5; color:#222; border:1px solid #ccc; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }}
+  .park-label {{ background:rgba(255,255,255,0.85)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#1B5E20; padding:1px 5px; border-radius:3px; }}
 </style>
 </head>
 <body>
@@ -573,6 +675,7 @@ html = f'''<!DOCTYPE html>
 </div>
 
 <script>
+var parquesData = {parques_geojson_str if parques_geojson_str else "null"};
 var map = L.map('map').setView([41.155, -8.63], 13);
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
@@ -601,13 +704,11 @@ var defLayer = {{
   show: true
 }};
 
-// Camada de verde público (monocromática)
+// Verde público raster (usado dentro da camada combinada "Parques e Jardins")
 var greenLayer = {{
   id: "verde_publico",
-  label: "Verde p\\u00fablico",
   color: "#2E7D32",
   src: "{verde_pub_b64}",
-  show: true
 }};
 
 // Camada de verde privado (monocromática azul)
@@ -616,6 +717,15 @@ var greenPrivLayer = {{
   label: "Verde privado",
   color: "#1565C0",
   src: "{verde_priv_b64}",
+  show: true
+}};
+
+// Camada de verde pago ou não usufruível — castanho
+var outroVerdeLayer = {{
+  id: "verde_pago",
+  label: "Verde pago ou n\\u00e3o usufru\\u00edvel",
+  color: "#8D6E63",
+  src: "{verde_pago_b64}",
   show: true
 }};
 
@@ -696,7 +806,7 @@ async function init() {{
   bgRow.appendChild(bgCb); bgRow.appendChild(bgLb); bgDiv.appendChild(bgRow);
 
   // --- Camadas principais ---
-  var monoLayers = [greenLayer, greenPrivLayer, muniLayer];
+  var monoLayers = [greenPrivLayer, outroVerdeLayer, muniLayer];
   var div = document.getElementById('layer-rows');
   var overlays = [];
 
@@ -734,10 +844,8 @@ async function init() {{
   accSw.style.background = 'linear-gradient(to right, #D7263D, #E8A838, #FFD700, #8BC34A, #2E7D32)';
   var accLb = document.createElement('label'); accLb.textContent = accLayer.label; accLb.style.fontSize = '12px';
   accRow.appendChild(accCb); accRow.appendChild(accSw); accRow.appendChild(accLb);
-  // Inserir no topo da lista de camadas
-  div.insertBefore(accRow, div.firstChild);
 
-  // --- Défice ponderado (topo, pré-colorido, off por defeito) ---
+  // --- Défice ponderado (topo absoluto) ---
   if (defLayer.src) {{
     var defOverlay = L.imageOverlay(defLayer.src, bounds, {{opacity: defLayer.opacity, pane: 'accPane'}});
     if (defLayer.show) defOverlay.addTo(map);
@@ -752,8 +860,74 @@ async function init() {{
     defSw.style.background = 'linear-gradient(to right, #FFF7BC, #FEC44F, #FD8D3C, #E34A33, #B30000)';
     var defLb = document.createElement('label'); defLb.textContent = defLayer.label; defLb.style.fontSize = '12px';
     defRow.appendChild(defCb); defRow.appendChild(defSw); defRow.appendChild(defLb);
-    div.insertBefore(defRow, accRow.nextSibling);
+    // Défice no topo, acessibilidade logo abaixo
+    div.insertBefore(defRow, div.firstChild);
   }}
+  div.insertBefore(accRow, defLayer.src ? defRow.nextSibling : div.firstChild);
+
+  // --- Camada combinada "Parques e Jardins" (raster verde + contornos GeoJSON) ---
+  // Raster: verde público (Sentinel-2 dentro dos 20 parques)
+  var greenMask = await extractMask(greenLayer.src);
+  var greenSrc = renderColored(greenMask, greenLayer.color);
+  var greenOverlay = L.imageOverlay(greenSrc, bounds);
+  greenOverlay.addTo(map);
+
+  // Contornos GeoJSON dos 20 parques
+  var parquesGeoLayer = null;
+  if (parquesData) {{
+    map.createPane('parquesPane');
+    map.getPane('parquesPane').style.zIndex = 500;
+
+    parquesGeoLayer = L.geoJson(parquesData, {{
+      pane: 'parquesPane',
+      style: function(f) {{
+        return {{
+          color: '#1B5E20', weight: 2.5, opacity: 0.9,
+          fillColor: '#2E7D32', fillOpacity: 0.08,
+          dashArray: f.properties.fonte === 'manual' ? '4 4' : null
+        }};
+      }},
+      onEachFeature: function(f, layer) {{
+        var p = f.properties;
+        var area = p.area_ha ? p.area_ha + ' ha (oficial)' : p.area_calc_ha + ' ha (calc.)';
+        var html = '<b style="font-size:13px;">' + p.nome + '</b><br>';
+        html += '<span style="color:#666;">' + (p.tipo || '') + ' &mdash; ' + area + '</span>';
+        if (p.horario_verao) html += '<br><span style="font-size:11px;">Ver\\u00e3o: ' + p.horario_verao + '</span>';
+        if (p.horario_inverno) html += '<br><span style="font-size:11px;">Inverno: ' + p.horario_inverno + '</span>';
+        layer.bindPopup(html);
+        layer.bindTooltip(p.nome, {{
+          permanent: true, direction: 'center',
+          className: 'park-label',
+          offset: [0, 0]
+        }});
+      }}
+    }});
+    parquesGeoLayer.addTo(map);
+
+    map.on('zoomend', function() {{
+      var labels = document.querySelectorAll('.park-label');
+      var z = map.getZoom();
+      labels.forEach(function(l) {{ l.style.display = z >= 14 ? '' : 'none'; }});
+    }});
+    map.fire('zoomend');
+  }}
+
+  // Checkbox único para raster + contornos
+  var pRow = document.createElement('div'); pRow.className = 'row';
+  var pCb = document.createElement('input'); pCb.type = 'checkbox'; pCb.checked = true;
+  pCb.addEventListener('change', function() {{
+    if (this.checked) {{
+      greenOverlay.addTo(map);
+      if (parquesGeoLayer) parquesGeoLayer.addTo(map);
+    }} else {{
+      map.removeLayer(greenOverlay);
+      if (parquesGeoLayer) map.removeLayer(parquesGeoLayer);
+    }}
+  }});
+  var pSw = document.createElement('span'); pSw.className = 'swatch'; pSw.style.backgroundColor = '#2E7D32';
+  var pLb = document.createElement('label'); pLb.textContent = 'Parques e Jardins'; pLb.style.fontSize = '12px';
+  pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
+  div.insertBefore(pRow, div.firstChild);
 }}
 
 init();
@@ -764,8 +938,8 @@ init();
 </body>
 </html>'''
 
-output = os.path.join(SCRIPT_DIR, 'acessibilidade_verde.html')
-with open(output, 'w', encoding='utf-8') as f:
+output = os.path.join(SCRIPT_DIR, "acessibilidade_verde.html")
+with open(output, "w", encoding="utf-8") as f:
     f.write(html)
-print(f'\nMapa guardado: {output}')
-print(f'Abrir no browser: file:///{output.replace(os.sep, "/")}')
+print(f"\nMapa guardado: {output}")
+print(f"Abrir no browser: file:///{output.replace(os.sep, '/')}")
