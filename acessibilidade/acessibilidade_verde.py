@@ -587,6 +587,10 @@ html = f'''<!DOCTYPE html>
         <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
         <span style="color:#666;">&gt;15 (bom)</span>
       </div>
+      <div style="display:flex;align-items:center;gap:4px;margin-top:2px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:transparent;border:1px solid #ccc;display:inline-block;"></span>
+        <span style="color:#999;">Sem c&aacute;lculo (baixa densidade)</span>
+      </div>
     </div>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS recomenda &ge;9 m&sup2;/hab</div>
   </div>

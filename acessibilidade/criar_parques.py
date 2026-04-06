@@ -134,7 +134,7 @@ PARQUES = [
         # Não encontrado no OSM — usar centróide
         "centroid_lat": 41.154493,
         "centroid_lon": -8.612638,
-        "buffer_m": 55,
+        "buffer_m": 80,
     },
     {
         "nome": "Viveiro Municipal",
