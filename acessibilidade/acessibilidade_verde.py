@@ -443,7 +443,7 @@ if not os.path.exists(lowpop_path):
     print("  A gerar máscara de baixa densidade...")
     low_pop_mask = porto_mask & (pop_upscaled <= 10)
     low_pop_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
-    low_pop_rgba[low_pop_mask] = [200, 200, 200, 180]  # cinza claro, semi-transparente
+    low_pop_rgba[low_pop_mask] = [200, 200, 200, 255]  # cinza claro, opaco
     Image.fromarray(low_pop_rgba).save(lowpop_path)
     print(f"  baixa_densidade.png guardado ({low_pop_mask.sum()} pixels)")
 else:
@@ -847,17 +847,19 @@ async function init() {{
   div.insertBefore(accRow, div.firstChild);
 
   // --- Camada combinada "Parques e Jardins" (raster verde + contornos GeoJSON) ---
+  // Pane no topo de tudo, opaco
+  map.createPane('parquesPane');
+  map.getPane('parquesPane').style.zIndex = 550;
+
   // Raster: verde público (Sentinel-2 dentro dos parques)
   var greenMask = await extractMask(greenLayer.src);
   var greenSrc = renderColored(greenMask, greenLayer.color);
-  var greenOverlay = L.imageOverlay(greenSrc, bounds);
+  var greenOverlay = L.imageOverlay(greenSrc, bounds, {{pane: 'parquesPane'}});
   greenOverlay.addTo(map);
 
   // Contornos GeoJSON dos parques
   var parquesGeoLayer = null;
   if (parquesData) {{
-    map.createPane('parquesPane');
-    map.getPane('parquesPane').style.zIndex = 500;
 
     parquesGeoLayer = L.geoJson(parquesData, {{
       pane: 'parquesPane',
