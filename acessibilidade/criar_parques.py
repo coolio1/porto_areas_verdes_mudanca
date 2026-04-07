@@ -293,6 +293,71 @@ PARQUES = [
         "centroid_lon": -8.588,
         "buffer_m": 50,
     },
+    # --- Micro-jardins e praças ajardinadas ---
+    {
+        "nome": "Jardim de Belém",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 1308725143,
+        # Foz do Douro — Rua de Belém / Rua de Diogo Botelho
+    },
+    {
+        "nome": "Jardim Palmira Milheiro",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 1456129791,
+        # Paranhos — Largo Palmira Malheiro (place=square no OSM)
+    },
+    {
+        "nome": "Jardim da Praça de Liège",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 115999890,
+        # Foz do Douro — praça arborizada
+    },
+    {
+        "nome": "Jardim de Fradelos",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 290578113,
+        # Bonfim — Rua de Camões / Rua de Fradelos
+    },
+    {
+        "nome": "Jardim do Campo 24 de Agosto",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 27293329,
+        # Bonfim — praça ajardinada com vestígios arqueológicos
+    },
+    {
+        "nome": "Jardim de Antero de Quental",
+        "tipo": "jardim",
+        # Lapa — não encontrado no OSM
+        "centroid_lat": 41.1490,
+        "centroid_lon": -8.6175,
+        "buffer_m": 30,
+    },
+    {
+        "nome": "Jardim da Praça de Francisco Sá Carneiro",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 13715723,
+        # Antas (Velasquez) — espaço verde central de grandes dimensões
+    },
+    {
+        "nome": "Jardim de Sarah Afonso",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 447731781,
+        # Foz — Rua de Gondarém / Rua de Cantareira
+    },
+    {
+        "nome": "Jardim do Largo da Paz",
+        "tipo": "jardim",
+        "osm_type": "way",
+        "osm_id": 571754719,
+        # Cedofeita — Largo da Paz (place=square no OSM)
+    },
 ]
 
 
@@ -570,7 +635,6 @@ def main():
             continue
         # Extrair apenas polígonos (clip pode gerar linhas/pontos residuais)
         if geom_clipped.geom_type == "GeometryCollection":
-
             polys = [
                 g
                 for g in geom_clipped.geoms

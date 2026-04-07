@@ -592,8 +592,7 @@ html = f'''<!DOCTYPE html>
 <div id="panel">
   <button id="panel-toggle" onclick="var p=document.getElementById('panel');p.classList.toggle('collapsed');this.textContent=p.classList.contains('collapsed')?'&#9650; Abrir legenda':'&#9660; Fechar';">&#9660; Fechar</button>
   <div class="panel-body">
-  <b style="font-size:14px;">Acessibilidade a Verde P&uacute;blico</b><br>
-  <span style="color:#888;font-size:10px;">2SFCA &mdash; m&sup2; de verde p&uacute;blico por habitante (raio 500m)</span>
+  <b style="font-size:14px;">Acessibilidade a Verde P&uacute;blico</b>
 
   <div id="acc-legend" style="display:block;margin:4px 0 8px 0;">
     <div class="section">Acessibilidade (m&sup2;/hab, raio 500m)</div>
