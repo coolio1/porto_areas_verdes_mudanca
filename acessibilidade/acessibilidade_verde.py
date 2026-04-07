@@ -455,6 +455,23 @@ porto_mask = contains_xy(porto_boundary, *coords_flat).reshape(calc_h, calc_w)
 acc_rgba[~porto_mask, 3] = 0
 print(f"  Pixels fora do Porto removidos: {(~porto_mask).sum()}")
 
+# ===== Estatísticas populacionais por classe =====
+print("\nEstatísticas populacionais por classe de acessibilidade:")
+porto_valid = valid & porto_mask
+low_density = porto_mask & (pop_upscaled <= 10)
+total_pop_porto = pop_corrected[porto_mask].sum()
+print(f"  População total (GHS-POP): {total_pop_porto:.0f} hab")
+for lo, hi, label in [
+    (0, 3, "Défice crítico (0–3)"),
+    (3, 9, "Insuficiente (3–9)"),
+    (9, 999, "Adequado (>9)"),
+]:
+    mask_cls = porto_valid & (accessibility >= lo) & (accessibility < hi)
+    pop_cls = pop_corrected[mask_cls].sum()
+    print(f"  {label}: {pop_cls:.0f} hab ({pop_cls / total_pop_porto * 100:.1f}%)")
+pop_low = pop_corrected[low_density & ~porto_valid].sum()
+print(f"  Baixa densidade: {pop_low:.0f} hab ({pop_low / total_pop_porto * 100:.1f}%)")
+
 # Já está na resolução de display
 acc_img_display = Image.fromarray(acc_rgba)
 

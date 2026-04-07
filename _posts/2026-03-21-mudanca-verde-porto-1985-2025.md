@@ -10,6 +10,8 @@ tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação, animação, deteção
 
 ---
 
+&nbsp;
+
 ## 1. Introdução
 
 O espaço verde urbano desempenha um papel ecológico e social insubstituível, fornecendo serviços de ecossistema vitais — desde a mitigação do efeito de ilha de calor até à promoção da saúde pública, regulação hidrológica e manutenção da biodiversidade (Madureira *et al.*, 2018). Contudo, nas últimas décadas, a cidade do Porto tem sido palco de uma intensa transformação territorial, com a progressiva conversão de solos permeáveis em superfícies impermeabilizadas.
@@ -23,6 +25,8 @@ Utilizando imagens de satélite e algoritmos processados em *Google Earth Engine
 - **Análise detalhada 2016–2025** — Sentinel-2 a 10 m, com classificação árvores/solo/edificado
 
 ---
+
+&nbsp;
 
 ## 2. Enquadramento e Revisão da Literatura
 
@@ -38,6 +42,8 @@ Quanto aos serviços de ecossistema prestados pela infraestrutura verde remanesc
 
 ---
 
+&nbsp;
+
 ## 3. Animação: 37 anos de crescimento urbano
 
 <video controls width="100%" poster="{{ site.baseurl }}/animacao/frame_2024.png">
@@ -48,9 +54,13 @@ A animação mostra a evolução bienal do Porto entre 1987 e 2024, com dados in
 
 ---
 
+&nbsp;
+
 ## 4. Metodologia
 
 Para garantir rigor na avaliação de uma série temporal de 40 anos e contornar os desafios inerentes à variabilidade de sensores, a metodologia foi estruturada em duas abordagens complementares.
+
+&nbsp;
 
 ### 4.1. Análise Histórica (1985–2024) com Landsat (30 m)
 
@@ -63,6 +73,8 @@ A comparação direta entre os sensores *Thematic Mapper* (TM, Landsat 5) e *Ope
    - **Manchas florestais maduras** (Serralves e Parque da Cidade) — NDVI elevado
 
 Para cada época, extraiu-se o NDVI nestes pontos de referência e calculou-se uma regressão linear que alinha os valores com a época de referência (1985–90), corrigindo simultaneamente diferenças de sensor, atmosfera e calibração. A vegetação foi classificada com um limiar de **NDVI ≥ 0,25** aplicado à mediana de verão (Junho–Setembro), agregando entre 54 e 70 cenas por época.
+
+&nbsp;
 
 ### 4.2. Análise Detalhada (2016–2025) com Sentinel-2 (10 m)
 
@@ -94,7 +106,11 @@ O *pipeline* incluiu a análise de **81 cenas Sentinel-2**, validação de separ
 
 ---
 
+&nbsp;
+
 ## 5. Resultados e Discussão
+
+&nbsp;
 
 ### 5.1. Evolução Histórica e Ritmos de Perda (1985–2024)
 
@@ -134,6 +150,8 @@ A cidade regressa a uma trajetória de **perda acelerada (−165 ha em 8 anos)**
 | 2016 | 3 732 | 31,4% | −1 620 ha |
 | 2024 | 3 567 | **30,0%** | **−1 785 ha** |
 
+&nbsp;
+
 ### 5.2. Padrões Espaciais de Transformação
 
 A distribuição geográfica da perda de vegetação confirma a evolução assimétrica documentada na literatura:
@@ -143,6 +161,8 @@ A distribuição geográfica da perda de vegetação confirma a evolução assim
 - **Centro Histórico (Sé, Miragaia, Cedofeita):** sofreu alterações marginais por já se encontrar profundamente impermeabilizado no arranque da série temporal (década de 1980). Não havia verde para perder.
 
 - **Periferias Norte e Este (Paranhos, Ramalde, Campanhã):** sofreram a maior transformação. As grandes quintas e áreas agrícolas visíveis em 1987 foram inteiramente reconfiguradas ao longo dos eixos viários, dando lugar a um *continuum* edificado. Esta distribuição valida a tese de que a **acessibilidade viária foi o vetor primordial do crescimento urbano**, um padrão consistente com a dinâmica observada por Guilherme *et al.* (2022) para a zona norte da cidade.
+
+&nbsp;
 
 ### 5.3. Análise Granular e Tipológica (2016–2025)
 
@@ -171,6 +191,8 @@ Nota positiva: o algoritmo detetou **127 hectares de solo/relva que transitaram 
 
 ---
 
+&nbsp;
+
 ## 6. Conclusões
 
 A integração de dados de satélite de média e alta resolução espacial permite afirmar, com elevada precisão quantitativa, que o Porto perdeu **um terço da sua matriz verde histórica** ao longo dos últimos 40 anos (−1 785 hectares). O trabalho demonstra que esta perda foi de natureza fortemente tipológica: vitimou sobretudo os solos outrora agrícolas e prados abertos (cobertura herbácea), enquanto a estrutura arbórea manteve uma **resiliência notável** perante a pressão urbanística — um padrão consistente ao longo de múltiplas escalas temporais e espaciais, e convergente com as conclusões independentes de Guilherme *et al.* (2022) baseadas em fotointerpretação.
@@ -180,6 +202,8 @@ Ao melhorar a metodologia de calibração espectral multitemporal (PIF) e a filt
 Os resultados acarretam implicações diretas para o planeamento urbano. Dado que 32,6% do município se encontra em zonas de elevado risco térmico (Monteiro *et al.*, 2025), e que a perda de vegetação se concentra nos solos permeáveis herbáceos — fundamentais para a regulação hidrológica e a mitigação do escoamento superficial —, torna-se imperativo que as futuras políticas urbanísticas foquem não apenas na proteção do estrato arbóreo, mas também na **fixação e permeabilidade dos últimos redutos de solo e cobertura herbácea**. A resiliência da cobertura arbórea, embora encorajadora, não deve obscurecer o colapso silencioso dos solos permeáveis — o substrato ecológico que sustenta a capacidade de infiltração, a recarga de aquíferos e a regulação microclimática à escala do bairro.
 
 ---
+
+&nbsp;
 
 ## 7. Referências
 
@@ -195,12 +219,16 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 
 ---
 
+&nbsp;
+
 ## Mapas interativos
 
 - **[Mapa histórico (1985–2024)]({{ site.baseurl }}/ndvi_historico.html)** — alternância entre épocas, máscaras de vegetação, zonas de perda e ganho
 - **[Mapa detalhado (2016–2025)]({{ site.baseurl }}/mapa.html)** — classificação árvores/solo/edificado a 10 m
 
 ---
+
+&nbsp;
 
 ## Código
 

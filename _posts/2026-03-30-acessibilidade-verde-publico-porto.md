@@ -20,7 +20,11 @@ O resultado é um mapa pixel a pixel da acessibilidade efectiva a verde público
 
 ---
 
+&nbsp;
+
 ## 2. Enquadramento e Revisão da Literatura
+
+&nbsp;
 
 ### 2.1. Verde público no Porto
 
@@ -28,9 +32,13 @@ Madureira *et al.* (2018) mapearam 95 espaços verdes urbanos de acesso público
 
 Contudo, a distribuição destes espaços é marcadamente assimétrica. A faixa ocidental (Foz–Nevogilde–Aldoar), que alberga o Parque da Cidade (80 ha), Serralves (18 ha) e os Jardins do Palácio de Cristal (8 ha), concentra uma proporção desmesurada do verde público total. Em contraste, as freguesias de alta densidade do centro e leste — Cedofeita, Bonfim, Campanhã — apresentam uma malha verde residual e fragmentada, onde a maior "mancha" pode não ultrapassar um pequeno largo arborizado.
 
+&nbsp;
+
 ### 2.2. O problema da equidade espacial
 
 Wolch *et al.* (2014), na sua influente revisão sobre justiça ambiental urbana, sintetizaram a evidência de que as populações de menor rendimento e as minorias étnicas tendem a residir em bairros com menor acesso a espaços verdes — fenómeno que designaram *green gentrification paradox*. Monteiro *et al.* (2025) demonstraram que, no Porto, 32,6% do território se encontra em zonas de elevado risco térmico, com a ilha de calor urbana mais intensa precisamente nas áreas de maior densidade habitacional e menor cobertura vegetal.
+
+&nbsp;
 
 ### 2.3. Limitações das métricas tradicionais
 
@@ -39,6 +47,8 @@ As abordagens clássicas de avaliação de verde urbano apresentam limitações 
 - **Área per capita** (m²/hab por freguesia): dilui a informação numa média administrativa, ignorando a distribuição interna. Uma freguesia pode ter um parque enorme num extremo e zero verde no resto.
 - **Buffer de proximidade** (população a ≤300 m de um espaço verde): trata todos os espaços como iguais, sem distinguir um canteiro de 500 m² de um parque de 50 hectares.
 - **Índices de cobertura vegetal** (NDVI médio): não separam verde público de privado, nem consideram a acessibilidade pedonal.
+
+&nbsp;
 
 ### 2.4. O método 2SFCA
 
@@ -53,7 +63,11 @@ Dai (2011) aplicou o 2SFCA a espaços verdes em Atlanta, demonstrando disparidad
 
 ---
 
+&nbsp;
+
 ## 3. Dados e Metodologia
+
+&nbsp;
 
 ### 3.1. Fontes de dados
 
@@ -64,6 +78,8 @@ Dai (2011) aplicou o 2SFCA a espaços verdes em Atlanta, demonstrando disparidad
 | Verde não usufruível | PDM Porto 2021 (CMP) | vectorial (132 polígonos) | 2021 |
 | População | GHS-POP (JRC/EC) | 100 m | 2020 |
 | Limites municipais | CAOP 2025 (DGT) | vectorial | 2025 |
+
+&nbsp;
 
 ### 3.2. Identificação do verde público
 
@@ -84,13 +100,17 @@ A classificação da cobertura verde seguiu a metodologia multi-sazonal descrita
 
 #### Verde pago ou não usufruível
 
-Os polígonos do PDM 2021 classificados como verde público (132 polígonos em 4 subcategorias: fruição colectiva, lúdico-produtiva, associada a equipamento e frente atlântica/ribeirinha) mas que **não correspondem a nenhum dos 38 parques inventariados** são apresentados numa camada separada ("Verde pago ou não usufruível") como áreas sólidas. Estes espaços incluem jardins de escolas, hortas urbanas com acesso restrito, jardins de equipamentos hospitalares e outras zonas verdes formalmente públicas mas sem usufruto livre pela população.
+Os polígonos do PDM 2021 classificados como verde público (132 polígonos em 4 subcategorias: fruição colectiva, lúdico-produtiva, associada a equipamento e frente atlântica/ribeirinha) mas que **não correspondem a nenhum dos 47 parques inventariados** são apresentados numa camada separada ("Verde pago ou não usufruível") como áreas sólidas. Estes espaços incluem jardins de escolas, hortas urbanas com acesso restrito, jardins de equipamentos hospitalares e outras zonas verdes formalmente públicas mas sem usufruto livre pela população.
+
+&nbsp;
 
 ### 3.3. Dados de população
 
 A grelha GHS-POP 2020 (Schiavina *et al.*, 2023) fornece estimativas de contagem populacional a uma resolução de ~100 m, produzidas pelo *Joint Research Centre* da Comissão Europeia a partir de recenseamentos desagregados e classificação de povoamento (*built-up*). Para o Porto, os valores por célula variam entre 0 (espaços não habitados) e ~708 habitantes (blocos residenciais de alta densidade).
 
 Uma nota técnica importante: ao renderizar a grelha GHS-POP na resolução de cálculo (~6,5 m/pixel), o método de reamostragem por vizinho mais próximo (*nearest neighbour*) do Google Earth Engine replica o valor de cada célula nativa em ~175 sub-pixels. Para evitar inflacionar a soma focal de população, aplicou-se um factor de correcção proporcional ao rácio entre a área do pixel de cálculo e a área da célula nativa (57 m² / 10 000 m² ≈ 1/175).
+
+&nbsp;
 
 ### 3.4. Cálculo do 2SFCA
 
@@ -106,7 +126,11 @@ Este procedimento equivale ao 2SFCA clássico na sua versão de campo contínuo,
 
 ---
 
+&nbsp;
+
 ## 4. Resultados
+
+&nbsp;
 
 ### 4.1. Verde público: inventário e distribuição
 
@@ -129,7 +153,7 @@ A tabela seguinte lista os 47 espaços inventariados e a respectiva área calcul
 | Jardim Botânico do Porto | 43 000 |
 | Jardim do Passeio Alegre | 38 700 |
 | Rotunda da Boavista | 30 800 |
-| Parque de Requesende | 30 800 |
+| Parque de Requesende | 31 600 |
 | Parque das Águas | 27 600 |
 | Jardim da Avenida de Montevideu | 27 300 |
 | Jardim do Calém e das Sobreiras | 25 100 |
@@ -143,9 +167,9 @@ A tabela seguinte lista os 47 espaços inventariados e a respectiva área calcul
 | Jardim Paulo Vallada | 13 600 |
 | Parque das Virtudes | 12 400 |
 | Jardim de Sarah Afonso | 10 400 |
-| Alameda das Fontainhas | 10 000 |
+| Alameda das Fontainhas | 11 300 |
 | Jardim de Teodoro de Sousa | 7 800 |
-| Parque Urbano da Lapa | 7 000 |
+| Parque Urbano da Lapa | 17 000 |
 | Jardim do Marquês | 6 800 |
 | Jardim de São Lázaro | 5 700 |
 | Jardim Palmira Milheiro | 5 200 |
@@ -163,27 +187,45 @@ A tabela seguinte lista os 47 espaços inventariados e a respectiva área calcul
 | Jardins da Praia de Gondarém | 900 |
 | Praça da Galiza | 800 |
 | Jardins da FLUP | 500 |
-| **Total** | **2 015 900** |
+| **Total** | **2 027 100** |
 
 Os restantes ~246 ha de verde do PDM que não integram o inventário de parques são apresentados na camada "Verde pago ou não usufruível". Esta distinção — entre verde formalmente público e verde efectivamente usufruível — é central para a análise de acessibilidade.
 
+&nbsp;
+
 ### 4.2. Acessibilidade 2SFCA: a desigualdade revelada
 
-A distribuição espacial da acessibilidade a verde público no raio de 500 m é fortemente assimétrica. Considerando apenas os pixels com densidade populacional suficiente (≥10 hab/célula GHS-POP, ~56% da área do concelho), **83,4% do território habitado do Porto apresenta uma acessibilidade efectiva inferior ao limiar da OMS de 9 m²/hab**.
+A distribuição espacial da acessibilidade a verde público no raio de 500 m é fortemente assimétrica. A análise por classes de acessibilidade, ponderada pela população residente (GHS-POP, ~242 mil hab), revela um panorama preocupante:
+
+| Classe de acessibilidade | População | % |
+|---|---:|---:|
+| Défice crítico (0–3 m²/hab) | 154 033 | 63,5% |
+| Insuficiente (3–9 m²/hab) | 49 330 | 20,3% |
+| Adequado (>9 m²/hab) | 39 062 | 16,1% |
+
+**83,9% da população do Porto** — cerca de 203 mil pessoas — vive com uma acessibilidade efectiva inferior ao limiar da OMS de 9 m²/hab num raio pedonal de 500 metros. Quase dois terços da população (63,5%) encontra-se em situação de défice crítico, com menos de 3 m² de verde público acessível por habitante.
 
 Este resultado contrasta drasticamente com a métrica agregada (~8,7 m²/hab) e revela a profunda desigualdade espacial no acesso a verde público.
 
+&nbsp;
+
+### 4.3. Áreas com maior défice
+
 A distribuição geográfica das classes de acessibilidade revela um padrão espacial claro:
+
+- **Centro histórico e Baixa (Sé, Miragaia, Vitória, Santo Ildefonso)**: défice crítico (<3 m²/hab). O tecido urbano densíssimo e a escassez de espaços verdes de dimensão significativa produzem valores de acessibilidade próximos de zero — agravados pela elevada densidade populacional. Os pequenos jardins existentes (Cordoaria, Praça da República, S. Lázaro) são insuficientes para a população envolvente. Esta é a zona com o défice mais severo de todo o concelho.
+
+- **Cedofeita interior e Bonfim**: défice crítico a insuficiente (0–6 m²/hab). A malha urbana densa e consolidada oferece poucos interstícios para espaços verdes, e os que existem (Jardim do Marquês, Campo 24 de Agosto) têm dimensão reduzida face à população servida.
+
+- **Interior de Paranhos e Ramalde**: valores heterogéneos, com o Parque Central da Asprela (6 ha) e o Parque de Requesende a beneficiar as zonas universitárias, mas bolsas de défice crítico nos bairros residenciais intermédios — nomeadamente entre a Via de Cintura Interna e a Circunvalação.
+
+- **Campanhã**: o Parque Oriental (16 ha) e a Quinta de Bonjóia melhoram pontualmente a acessibilidade, mas a estrutura verde pública permanece fragmentada. A zona industrial e os bairros a norte da estação apresentam valores próximos de zero.
+
+- **Eixo Boavista–Palácio de Cristal**: acessibilidade adequada (>9 m²/hab), sustentada pelos Jardins do Palácio de Cristal (11 ha) e pela Fundação Eng. António de Almeida.
 
 - **Zona ocidental (Foz, Nevogilde, Aldoar)**: acessibilidade consistentemente elevada (>15 m²/hab), beneficiando da proximidade ao Parque da Cidade (80 ha), à Frente Atlântica e ao corredor de jardins marítimos. É a única zona do concelho onde a acessibilidade excede largamente o limiar.
 
-- **Eixo Boavista–Palácio de Cristal**: acessibilidade adequada (9–15 m²/hab), sustentada pelos Jardins do Palácio de Cristal (11 ha) e pela Fundação Eng. António de Almeida.
-
-- **Centro histórico e Baixa (Sé, Miragaia, Vitória, Cedofeita)**: défice severo (0–3 m²/hab). O tecido urbano densíssimo e a escassez de espaços verdes de dimensão significativa produzem valores de acessibilidade próximos de zero — agravados pela elevada densidade populacional. Os pequenos jardins existentes (Cordoaria, Praça da República, S. Lázaro) são insuficientes para a população envolvente.
-
-- **Interior de Paranhos e Ramalde**: valores heterogéneos, com o Parque Central da Asprela (6 ha) e o Parque de Requesende a beneficiar as zonas universitárias, mas bolsas de défice severo nos bairros residenciais intermédios.
-
-- **Campanhã**: o Parque Oriental (16 ha) e a Quinta de Bonjóia melhoram pontualmente a acessibilidade, mas a estrutura verde pública permanece fragmentada. A zona industrial apresenta valores nulos.
+&nbsp;
 
 ### 4.4. O papel do verde privado
 
@@ -193,13 +235,19 @@ Se se incluísse o verde privado no cálculo de acessibilidade (o que não é co
 
 ---
 
+&nbsp;
+
 ## 5. Discussão
+
+&nbsp;
 
 ### 5.1. Concordância com a literatura
 
 O rácio agregado de 19,3 m²/hab de verde público é coerente com os 18,3 m²/hab reportados por Madureira *et al.* (2018) — a pequena diferença pode dever-se ao crescimento da arborização em espaços existentes e a diferenças de delimitação e de classificação.
 
 A forte heterogeneidade espacial revelada pelo 2SFCA confirma as preocupações de Monteiro *et al.* (2025) sobre a desigualdade térmica no Porto: as zonas identificadas como de maior risco térmico (centro e leste) coincidem com as de menor acessibilidade a verde público. Esta sobreposição sugere um mecanismo de reforço mútuo: a ausência de verde agrava o calor urbano, que por sua vez torna mais urgente a necessidade de espaços verdes para refúgio.
+
+&nbsp;
 
 ### 5.2. Limitações
 
@@ -211,6 +259,8 @@ A forte heterogeneidade espacial revelada pelo 2SFCA confirma as preocupações 
 
 4. **Qualidade do verde**: o método trata todos os metros quadrados de verde como equivalentes. Na realidade, um relvado degradado junto a uma via rápida não presta os mesmos serviços que um parque arborizado com equipamento de lazer. A incorporação de indicadores de qualidade (dimensão das manchas, presença de arvoredo, equipamento) enriqueceria a análise.
 
+&nbsp;
+
 ### 5.3. Implicações para o planeamento
 
 Os resultados sugerem que a estratégia municipal de verde público deveria priorizar investimentos no **eixo central e oriental** — as zonas onde o défice ponderado pela população é mais elevado. Intervenções como a abertura de logradouros e interiores de quarteirão ao uso público, a conversão de terrenos expectantes em jardins de bolso (*pocket parks*), e a arborização intensiva de praças e arruamentos poderiam melhorar significativamente a acessibilidade nas zonas mais carenciadas.
@@ -219,15 +269,19 @@ O contraste entre a abundância de verde privado (1 678 ha) e a escassez de verd
 
 ---
 
+&nbsp;
+
 ## 6. Conclusões
 
-A aplicação do método 2SFCA ao Porto, baseada num inventário de 47 parques e jardins de acesso gratuito (~202 ha), revela que **83,4% do território habitado da cidade apresenta uma acessibilidade efectiva inferior a 9 m²/hab** num raio pedonal de 500 m — apesar de a dotação agregada (~8,7 m²/hab) estar próxima do limiar OMS. O défice concentra-se no eixo central e oriental (Cedofeita, Bonfim, Paranhos interior, Campanhã), precisamente as zonas de maior densidade habitacional e, segundo a literatura, de maior vulnerabilidade térmica.
+A aplicação do método 2SFCA ao Porto, baseada num inventário de 47 parques e jardins de acesso gratuito (~202 ha), revela que **83,9% da população da cidade** — cerca de 203 mil pessoas — vive com uma acessibilidade efectiva inferior a 9 m²/hab num raio pedonal de 500 m. Destes, **63,5% encontram-se em défice crítico** (<3 m²/hab), concentrado no eixo central e oriental (Sé, Santo Ildefonso, Cedofeita, Bonfim, Paranhos interior, Campanhã) — precisamente as zonas de maior densidade habitacional e, segundo a literatura, de maior vulnerabilidade térmica. Apenas 16,1% da população (39 mil pessoas) tem acesso adequado a verde público.
 
 A distinção entre verde formalmente público (PDM) e verde efectivamente usufruível (inventário de parques) é particularmente reveladora: dos ~448 ha classificados pelo PDM como verde público, apenas ~202 ha correspondem a espaços que a população pode efectivamente utilizar sem restrições.
 
 Esta análise demonstra que a métrica agregada per capita é insuficiente para avaliar a equidade no acesso a verde urbano. A acessibilidade espacial — que pondera simultaneamente a oferta, a procura e a distância — oferece um diagnóstico mais fiel da experiência real dos residentes e constitui um instrumento de planeamento mais rigoroso para a priorização de investimentos na criação e melhoria de espaços verdes urbanos.
 
 ---
+
+&nbsp;
 
 ## 7. Nota Metodológica
 
@@ -237,6 +291,8 @@ Todo o processamento foi realizado em Python com *Google Earth Engine*, *scipy*,
 - [`acessibilidade/criar_parques.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/acessibilidade/criar_parques.py) — construção do inventário de 47 parques (Overpass API + PDM)
 
 ---
+
+&nbsp;
 
 ## 8. Referências
 

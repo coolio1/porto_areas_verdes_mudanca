@@ -211,9 +211,9 @@ PARQUES = [
     {
         "nome": "Alameda das Fontainhas",
         "tipo": "jardim",
-        # Miradouro público, não indexado no OSM como leisure
-        "centroid_lat": 41.1413,
-        "centroid_lon": -8.6040,
+        # Miradouro/passeio público, não indexado no OSM como leisure
+        "centroid_lat": 41.1425,
+        "centroid_lon": -8.6001,
         "buffer_m": 60,
     },
     {
