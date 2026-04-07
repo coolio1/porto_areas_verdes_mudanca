@@ -181,12 +181,11 @@ PARQUES = [
         "area_ha": 6,
     },
     {
-        "nome": "Parque Urbano da Lapa",
+        "nome": "Parque Urbano Dr. Mário Soares",
         "tipo": "parque",
-        "osm_type": "way",
-        "osm_id": 1452005414,
-        "area_ha": 1.7,
-        # Parque Urbano Dr. Mário Soares, Dez 2024
+        "osm_type": "relation",
+        "osm_id": 19856457,
+        # Parque Urbano da Lapa, inaugurado Dez 2024
     },
     {
         "nome": "Jardim Botânico do Porto",

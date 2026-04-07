@@ -36,7 +36,7 @@ EXPANSAO = [
         "buffer_m": 196,
     },
     {
-        "nome": "Parque Urbano da Lapa",
+        "nome": "Ampliação do Parque Dr. Mário Soares (Lapa)",
         "area_ha": 4,
         "centroid_lat": 41.1510,
         "centroid_lon": -8.6260,

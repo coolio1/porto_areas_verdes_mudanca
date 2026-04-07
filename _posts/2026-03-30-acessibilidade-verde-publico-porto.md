@@ -88,7 +88,7 @@ Dai (2011) aplicou o 2SFCA a espaços verdes em Atlanta, demonstrando disparidad
 A definição de "verde público" adoptou uma abordagem de inventário explícito, em vez da classificação funcional genérica do PDM. Compilou-se uma lista de **47 parques e jardins de acesso público e gratuito**, partindo do directório oficial da CMP ([ambiente.cm-porto.pt/estrutura-verde/parques-jardins](https://ambiente.cm-porto.pt/estrutura-verde/parques-jardins), 20 espaços) e complementando com espaços omitidos desse directório mas de acesso comprovadamente livre:
 
 - **Gestão municipal directa** (21 espaços): Parque da Cidade, Parque Oriental, Parque do Covelo, Parque de S. Roque, Parque da Pasteleira, Parque das Águas, Parque das Virtudes, Jardim do Passeio Alegre, Jardins do Palácio de Cristal, Jardim da Cordoaria, Jardim do Marquês, Jardim do Carregal, Jardim de Arca d'Água, Jardim de S. Lázaro, Jardim da Praça da República, Quinta de Bonjóia, Rotunda da Boavista, Praça da Galiza, Frente Atlântica (incluindo jardins do Homem do Leme e da Av. de Montevideu), Jardim da Corujeira, Jardim de Teodoro de Sousa.
-- **Gestão institucional ou privada com acesso gratuito** (8 espaços): Parque Central da Asprela, Parque Urbano da Lapa (Dr. Mário Soares), Jardim Botânico do Porto, Parque da Quinta de Lamas, Jardins da Casa Allen, Fundação Eng. António de Almeida, Jardins da FLUP, Parque de Requesende.
+- **Gestão institucional ou privada com acesso gratuito** (8 espaços): Parque Central da Asprela, Parque Urbano Dr. Mário Soares (Lapa), Jardim Botânico do Porto, Parque da Quinta de Lamas, Jardins da Casa Allen, Fundação Eng. António de Almeida, Jardins da FLUP, Parque de Requesende.
 - **Espaços adicionais identificados** (9 espaços): Viveiro Municipal, Jardim Paulo Vallada, Jardim da Praça do Império, Alameda das Fontainhas, Jardins da Praia de Gondarém, Jardins da Praia do Molhe, Jardim do Calém e das Sobreiras, e outros jardins marítimos.
 - **Micro-jardins e praças ajardinadas** (9 espaços): Jardim de Belém, Jardim Palmira Milheiro, Jardim da Praça de Liège, Jardim de Fradelos, Jardim do Campo 24 de Agosto, Jardim de Antero de Quental, Jardim da Praça de Francisco Sá Carneiro, Jardim de Sarah Afonso, Jardim do Largo da Paz.
 
@@ -169,7 +169,7 @@ A tabela seguinte lista os 47 espaços inventariados e a respectiva área calcul
 | Jardim de Sarah Afonso | 10 400 |
 | Alameda das Fontainhas | 11 300 |
 | Jardim de Teodoro de Sousa | 7 800 |
-| Parque Urbano da Lapa | 17 000 |
+| Parque Urbano Dr. Mário Soares | 8 200 |
 | Jardim do Marquês | 6 800 |
 | Jardim de São Lázaro | 5 700 |
 | Jardim Palmira Milheiro | 5 200 |
@@ -187,7 +187,7 @@ A tabela seguinte lista os 47 espaços inventariados e a respectiva área calcul
 | Jardins da Praia de Gondarém | 900 |
 | Praça da Galiza | 800 |
 | Jardins da FLUP | 500 |
-| **Total** | **2 027 100** |
+| **Total** | **2 018 300** |
 
 Os restantes ~246 ha de verde do PDM que não integram o inventário de parques são apresentados na camada "Verde pago ou não usufruível". Esta distinção — entre verde formalmente público e verde efectivamente usufruível — é central para a análise de acessibilidade.
 
