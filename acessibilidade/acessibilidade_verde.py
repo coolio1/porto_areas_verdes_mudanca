@@ -515,6 +515,67 @@ if not os.path.exists(lowpop_path):
 else:
     print("  baixa_densidade.png já existe, a saltar...")
 
+# ===== Phase 4c: Proximidade 300m (Konijnendijk 3-30-300) =====
+# Para cada pixel habitado: existe um parque ≥1 ha a ≤300 m?
+PROX_RADIUS_M = 300
+PARK_MIN_AREA_M2 = 10_000  # 1 ha
+prox_path = os.path.join(LAYERS_DIR, "proximidade_300m.png")
+if not os.path.exists(prox_path):
+    print("\nA calcular proximidade 300m (Konijnendijk)...")
+    # Filtrar parques com área ≥1 ha
+    parques_grandes = parques_gdf[
+        parques_gdf.geometry.area * (M_PER_DEG_LAT * M_PER_DEG_LON) >= PARK_MIN_AREA_M2
+    ]
+    print(f"  Parques >=1 ha: {len(parques_grandes)} de {len(parques_gdf)}")
+    if len(parques_grandes) > 0:
+        parques_grandes_union = parques_grandes.geometry.union_all()
+        # Máscara binária dos parques grandes
+        inside_grandes = contains_xy(parques_grandes_union, *coords_flat).reshape(
+            grid_h, grid_w
+        )
+        grandes_binary = inside_grandes.astype(np.float64)
+        # Kernel circular de 300m
+        prox_rx = int(round(PROX_RADIUS_M / px_w_m))
+        prox_ry = int(round(PROX_RADIUS_M / px_h_m))
+        ky2, kx2 = np.ogrid[-prox_ry : prox_ry + 1, -prox_rx : prox_rx + 1]
+        kernel_300 = (
+            (kx2 * px_w_m) ** 2 + (ky2 * px_h_m) ** 2 <= PROX_RADIUS_M**2
+        ).astype(np.float64)
+        print(
+            f"  Kernel 300m: {kernel_300.shape}, {kernel_300.sum():.0f} pixels activos"
+        )
+        # Convolução: se > 0, existe parque ≥1ha a ≤300m
+        reach_300 = (
+            ndimage.convolve(grandes_binary, kernel_300, mode="constant", cval=0.0) > 0
+        )
+        # Apenas pixels dentro do Porto e com população
+        coberto = reach_300 & porto_mask
+        nao_coberto = ~reach_300 & porto_mask
+        # Estatísticas populacionais
+        pop_coberto = pop_corrected[coberto].sum()
+        pop_nao_coberto = pop_corrected[nao_coberto].sum()
+        pct_coberto = pop_coberto / total_pop_porto * 100
+        pct_nao_coberto = pop_nao_coberto / total_pop_porto * 100
+        print(f"  A <=300m de parque >=1ha: {pop_coberto:.0f} hab ({pct_coberto:.1f}%)")
+        print(
+            f"  A >300m de parque >=1ha: {pop_nao_coberto:.0f} hab ({pct_nao_coberto:.1f}%)"
+        )
+        # PNG: verde onde coberto, vermelho onde não coberto (só pixels habitados)
+        prox_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
+        habitado = porto_mask & (pop_500m >= POP_500M_MIN)
+        prox_rgba[habitado & coberto] = [46, 125, 50, 255]  # verde (#2E7D32)
+        prox_rgba[habitado & ~coberto] = [183, 28, 28, 255]  # vermelho (#B71C1C)
+        Image.fromarray(prox_rgba).save(prox_path)
+        print(
+            f"  proximidade_300m.png guardado ({os.path.getsize(prox_path) // 1024} KB)"
+        )
+    else:
+        print("  AVISO: nenhum parque >=1 ha encontrado")
+        prox_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
+        Image.fromarray(prox_rgba).save(prox_path)
+else:
+    print(f"\nProximidade 300m: a reutilizar {prox_path}")
+
 # ===== Phase 5: Municipios (reutilizar ou descarregar) =====
 muni_path = os.path.join(PARENT_LAYERS, "municipios.png")
 if not os.path.exists(muni_path):
@@ -546,6 +607,7 @@ ghspop_b64 = to_base64(os.path.join(PARENT_LAYERS, "ghspop.png"))
 acc_b64 = to_base64(acc_path)
 lowpop_b64 = to_base64(lowpop_path)
 muni_b64 = to_base64(muni_path)
+prox_b64 = to_base64(prox_path)
 
 # Carregar GeoJSON dos parques nomeados (se existir)
 parques_geojson_path = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
@@ -701,6 +763,21 @@ html = f'''<!DOCTYPE html>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS recomenda &ge;9 m&sup2;/hab</div>
   </div>
 
+  <div id="prox-legend" style="display:none;margin:4px 0 8px 0;">
+    <div class="section">Proximidade 300m (Konijnendijk 3-30-300)</div>
+    <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
+        <span style="color:#666;">&le;300m de parque &ge;1 ha (cumpre)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#B71C1C;display:inline-block;"></span>
+        <span style="color:#666;">&gt;300m de parque &ge;1 ha (n&atilde;o cumpre)</span>
+      </div>
+    </div>
+    <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS: &ge;0,5 ha de verde a &lt;300m de casa</div>
+  </div>
+
   <div class="section">Camadas</div>
   <div id="layer-rows"></div>
 
@@ -747,6 +824,15 @@ var accLayer = {{
   src: "{acc_b64}",
   opacity: 0.7,
   show: true
+}};
+
+// Proximidade 300m (Konijnendijk 3-30-300, pré-colorida)
+var proxLayer = {{
+  id: "proximidade_300m",
+  label: "Proximidade 300m (3-30-300)",
+  src: "{prox_b64}",
+  opacity: 0.7,
+  show: false
 }};
 
 // Máscara de baixa densidade (cinza claro, topo de tudo)
@@ -913,6 +999,42 @@ async function init() {{
   accRow.appendChild(accCb); accRow.appendChild(accSw); accRow.appendChild(accLb);
   // Acessibilidade no topo
   div.insertBefore(accRow, div.firstChild);
+
+  // --- Proximidade 300m (Konijnendijk 3-30-300, pré-colorida) ---
+  var proxOverlay = L.imageOverlay(proxLayer.src, bounds, {{opacity: proxLayer.opacity, pane: 'accPane'}});
+  if (proxLayer.show) proxOverlay.addTo(map);
+
+  var proxRow = document.createElement('div'); proxRow.className = 'row';
+  var proxCb = document.createElement('input'); proxCb.type = 'checkbox'; proxCb.checked = proxLayer.show;
+  proxCb.addEventListener('change', function() {{
+    if (this.checked) {{
+      proxOverlay.addTo(map);
+      // Desligar acessibilidade (mutuamente exclusivas)
+      accCb.checked = false;
+      map.removeLayer(accOverlay);
+      if (window._lowPopOverlay) map.removeLayer(window._lowPopOverlay);
+      document.getElementById('acc-legend').style.display = 'none';
+      document.getElementById('prox-legend').style.display = 'block';
+    }} else {{
+      map.removeLayer(proxOverlay);
+      document.getElementById('prox-legend').style.display = 'none';
+    }}
+  }});
+  // Quando liga acessibilidade, desligar proximidade
+  var origAccChange = accCb.onchange;
+  accCb.addEventListener('change', function() {{
+    if (this.checked) {{
+      proxCb.checked = false;
+      map.removeLayer(proxOverlay);
+      document.getElementById('prox-legend').style.display = 'none';
+      document.getElementById('acc-legend').style.display = 'block';
+    }}
+  }});
+  var proxSw = document.createElement('span'); proxSw.className = 'swatch';
+  proxSw.style.background = 'linear-gradient(to right, #B71C1C, #2E7D32)';
+  var proxLb = document.createElement('label'); proxLb.textContent = proxLayer.label; proxLb.style.fontSize = '12px';
+  proxRow.appendChild(proxCb); proxRow.appendChild(proxSw); proxRow.appendChild(proxLb);
+  div.insertBefore(proxRow, accRow.nextSibling);
 
   // --- Camada combinada "Parques e Jardins" (raster verde + contornos GeoJSON) ---
   // Pane no topo de tudo, opaco
