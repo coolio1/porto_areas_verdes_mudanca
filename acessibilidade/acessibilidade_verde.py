@@ -307,11 +307,21 @@ else:
 # A máscara para o 2SFCA usa os parques
 publico_union = parques_union
 
-# --- Verde pago ou não usufruível: polígonos PDM \ parques (sólido) ---
+# --- Estratégia de expansão (CMP) ---
+expansao_path = os.path.join(SCRIPT_DIR, "expansao_verde.geojson")
+expansao_union = None
+if os.path.exists(expansao_path):
+    expansao_gdf = gpd.read_file(expansao_path).to_crs(epsg=4326)
+    expansao_union = expansao_gdf.geometry.union_all()
+    print(f"  {len(expansao_gdf)} espaços de expansão carregados")
+
+# --- Verde pago ou não usufruível: polígonos PDM \ parques \ expansão (sólido) ---
 verde_pago_path = os.path.join(LAYERS_DIR, "verde_pago.png")
 if not os.path.exists(verde_pago_path):
-    print("  A calcular verde pago (PDM fora dos parques, sólido)...")
+    print("  A calcular verde pago (PDM fora dos parques e expansão, sólido)...")
     pdm_minus_parques = pdm_verde_union.difference(parques_union)
+    if expansao_union is not None:
+        pdm_minus_parques = pdm_minus_parques.difference(expansao_union)
     inside_pago = contains_xy(pdm_minus_parques, *coords_flat).reshape(grid_h, grid_w)
     pago_arr = np.zeros((grid_h, grid_w, 4), dtype=np.uint8)
     pago_arr[inside_pago, 3] = 255
@@ -320,6 +330,25 @@ if not os.path.exists(verde_pago_path):
     print(f"  verde_pago.png guardado ({n_pago} pixels)")
 else:
     print("  verde_pago.png já existe, a saltar...")
+
+# --- Camada de expansão ---
+verde_exp_path = os.path.join(LAYERS_DIR, "verde_expansao.png")
+if not os.path.exists(verde_exp_path):
+    if expansao_union is not None:
+        print("  A gerar camada de expansão...")
+        # Expansão \ parques actuais (evitar sobreposição)
+        exp_minus_parques = expansao_union.difference(parques_union)
+        inside_exp = contains_xy(exp_minus_parques, *coords_flat).reshape(
+            grid_h, grid_w
+        )
+        exp_arr = np.zeros((grid_h, grid_w, 4), dtype=np.uint8)
+        exp_arr[inside_exp, 3] = 255
+        Image.fromarray(exp_arr).save(verde_exp_path)
+        print(f"  verde_expansao.png guardado ({inside_exp.sum()} pixels)")
+    else:
+        print("  AVISO: expansao_verde.geojson não encontrado — sem camada de expansão")
+else:
+    print("  verde_expansao.png já existe, a saltar...")
 
 # ===== Phase 3: 2SFCA (cálculo a ~30m) =====
 print("\nA calcular 2SFCA (300m)...")
@@ -443,7 +472,7 @@ if not os.path.exists(lowpop_path):
     print("  A gerar máscara de baixa densidade...")
     low_pop_mask = porto_mask & (pop_upscaled <= 10)
     low_pop_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
-    low_pop_rgba[low_pop_mask] = [200, 200, 200, 255]  # cinza claro, opaco
+    low_pop_rgba[low_pop_mask] = [200, 200, 200, 204]  # cinza claro, 80% opaco
     Image.fromarray(low_pop_rgba).save(lowpop_path)
     print(f"  baixa_densidade.png guardado ({low_pop_mask.sum()} pixels)")
 else:
@@ -475,6 +504,7 @@ def to_base64(filepath):
 verde_pub_b64 = to_base64(verde_pub_path)
 verde_priv_b64 = to_base64(os.path.join(PARENT_LAYERS, "interior_subsistente.png"))
 verde_pago_b64 = to_base64(verde_pago_path)
+verde_exp_b64 = to_base64(verde_exp_path) if os.path.exists(verde_exp_path) else ""
 ghspop_b64 = to_base64(os.path.join(PARENT_LAYERS, "ghspop.png"))
 acc_b64 = to_base64(acc_path)
 lowpop_b64 = to_base64(lowpop_path)
@@ -494,6 +524,12 @@ else:
     print(
         "  AVISO: parques_porto.geojson não encontrado — correr criar_parques.py primeiro"
     )
+
+# Carregar GeoJSON da expansão (para contornos e etiquetas no mapa)
+expansao_geojson_str = ""
+if os.path.exists(expansao_path):
+    with open(expansao_path, "r", encoding="utf-8") as f:
+        expansao_geojson_str = f.read()
 
 basemaps = [
     (
@@ -562,6 +598,7 @@ html = f'''<!DOCTYPE html>
   .section {{ font-size:11px; color:#888; font-weight:bold; margin:8px 0 4px 0; }}
   select {{ background:#f5f5f5; color:#222; border:1px solid #ccc; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }}
   .park-label {{ background:rgba(255,255,255,0.85)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#1B5E20; padding:1px 5px; border-radius:3px; }}
+  .exp-label {{ background:rgba(255,255,255,0.85)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#00695C; padding:1px 5px; border-radius:3px; font-style:italic; }}
   @media (max-width: 768px) {{
     #panel {{
       left:6px; right:6px; bottom:6px; min-width:unset;
@@ -671,6 +708,7 @@ html = f'''<!DOCTYPE html>
 
 <script>
 var parquesData = {parques_geojson_str if parques_geojson_str else "null"};
+var expansaoData = {expansao_geojson_str if expansao_geojson_str else "null"};
 var map = L.map('map').setView([41.155, -8.63], 13);
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
@@ -720,6 +758,15 @@ var outroVerdeLayer = {{
   label: "Verde pago ou n\\u00e3o usufru\\u00edvel",
   color: "#8D6E63",
   src: "{verde_pago_b64}",
+  show: false
+}};
+
+// Estratégia de expansão (CMP) — azul-esverdeado
+var expansaoLayer = {{
+  id: "verde_expansao",
+  label: "Estrat\\u00e9gia de expans\\u00e3o (CMP)",
+  color: "#00897B",
+  src: "{verde_exp_b64}",
   show: false
 }};
 
@@ -909,6 +956,67 @@ async function init() {{
   var pLb = document.createElement('label'); pLb.textContent = 'Parques e Jardins'; pLb.style.fontSize = '12px';
   pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
   div.insertBefore(pRow, accRow.nextSibling);
+
+  // --- Camada GeoJSON de expansão (contornos + etiquetas) ---
+  var expansaoGeoLayer = null;
+  if (expansaoData) {{
+    map.createPane('expansaoGeoPane');
+    map.getPane('expansaoGeoPane').style.zIndex = 525;
+
+    expansaoGeoLayer = L.geoJson(expansaoData, {{
+      pane: 'expansaoGeoPane',
+      style: function(f) {{
+        return {{
+          color: '#00695C', weight: 2, opacity: 0.9,
+          fillColor: '#00897B', fillOpacity: 0.08,
+          dashArray: f.properties.fonte === 'manual' ? '4 4' : null
+        }};
+      }},
+      onEachFeature: function(f, layer) {{
+        var p = f.properties;
+        var html = '<b style="font-size:13px;">' + p.nome + '</b><br>';
+        html += '<span style="color:#666;">Expans\\u00e3o planeada &mdash; ' + p.area_ha_planeada + ' ha</span>';
+        layer.bindPopup(html);
+        layer.bindTooltip(p.nome, {{
+          permanent: true, direction: 'center',
+          className: 'exp-label',
+          offset: [0, 0]
+        }});
+      }}
+    }});
+
+    map.on('zoomend', function() {{
+      var labels = document.querySelectorAll('.exp-label');
+      var z = map.getZoom();
+      labels.forEach(function(l) {{ l.style.display = z >= 14 ? '' : 'none'; }});
+    }});
+    map.fire('zoomend');
+  }}
+
+  // Raster de expansão (mesma pane que GeoJSON)
+  var expRasterOverlay = null;
+  if (expansaoLayer.src) {{
+    var expMask = await extractMask(expansaoLayer.src);
+    var expSrc = renderColored(expMask, expansaoLayer.color);
+    expRasterOverlay = L.imageOverlay(expSrc, bounds, {{pane: 'expansaoGeoPane'}});
+  }}
+
+  // Checkbox para expansão (raster + contornos)
+  var eRow = document.createElement('div'); eRow.className = 'row';
+  var eCb = document.createElement('input'); eCb.type = 'checkbox'; eCb.checked = false;
+  eCb.addEventListener('change', function() {{
+    if (this.checked) {{
+      if (expRasterOverlay) expRasterOverlay.addTo(map);
+      if (expansaoGeoLayer) expansaoGeoLayer.addTo(map);
+    }} else {{
+      if (expRasterOverlay) map.removeLayer(expRasterOverlay);
+      if (expansaoGeoLayer) map.removeLayer(expansaoGeoLayer);
+    }}
+  }});
+  var eSw = document.createElement('span'); eSw.className = 'swatch'; eSw.style.backgroundColor = '#00897B';
+  var eLb = document.createElement('label'); eLb.textContent = 'Estrat\\u00e9gia de expans\\u00e3o (CMP)'; eLb.style.fontSize = '12px';
+  eRow.appendChild(eCb); eRow.appendChild(eSw); eRow.appendChild(eLb);
+  div.insertBefore(eRow, pRow.nextSibling);
 
   // --- Baixa densidade (acima da acessibilidade, abaixo dos parques) ---
   map.createPane('lowPopPane');
