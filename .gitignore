@@ -9,3 +9,7 @@ CAOP_Continente_2025-gpkg/
 .env
 *.db
 CLC/
+*.npy
+*.npz
+*.bak
+.superpowers/
