@@ -569,6 +569,10 @@ if not os.path.exists(prox_path):
         print(
             f"  proximidade_300m.png guardado ({os.path.getsize(prox_path) // 1024} KB)"
         )
+        # Cache arrays de proximidade para análises derivadas
+        np.save(os.path.join(LAYERS_DIR, "kernel_300.npy"), kernel_300)
+        np.save(os.path.join(LAYERS_DIR, "reach_300.npy"), reach_300)
+        print("  Arrays proximidade 300m guardados em cache (.npy)")
     else:
         print("  AVISO: nenhum parque >=1 ha encontrado")
         prox_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
