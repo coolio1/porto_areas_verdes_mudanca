@@ -1021,7 +1021,6 @@ async function init() {{
     }}
   }});
   // Quando liga acessibilidade, desligar proximidade
-  var origAccChange = accCb.onchange;
   accCb.addEventListener('change', function() {{
     if (this.checked) {{
       proxCb.checked = false;
