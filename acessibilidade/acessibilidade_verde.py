@@ -829,7 +829,7 @@ var accLayer = {{
 // Proximidade 300m (Konijnendijk 3-30-300, pré-colorida)
 var proxLayer = {{
   id: "proximidade_300m",
-  label: "Proximidade 300m (3-30-300)",
+  label: "Proximidade 300m",
   src: "{prox_b64}",
   opacity: 0.7,
   show: false
@@ -1009,14 +1009,15 @@ async function init() {{
   proxCb.addEventListener('change', function() {{
     if (this.checked) {{
       proxOverlay.addTo(map);
+      if (window._lowPopOverlay) window._lowPopOverlay.addTo(map);
       // Desligar acessibilidade (mutuamente exclusivas)
       accCb.checked = false;
       map.removeLayer(accOverlay);
-      if (window._lowPopOverlay) map.removeLayer(window._lowPopOverlay);
       document.getElementById('acc-legend').style.display = 'none';
       document.getElementById('prox-legend').style.display = 'block';
     }} else {{
       map.removeLayer(proxOverlay);
+      if (window._lowPopOverlay) map.removeLayer(window._lowPopOverlay);
       document.getElementById('prox-legend').style.display = 'none';
     }}
   }});
