@@ -25,6 +25,10 @@ plugins:
 exclude:
   - "*.py"
   - "*.pyc"
+  - "__pycache__/"
+  - "*.bak"
+  - "*.npy"
+  - "*.npz"
   - CAOP_Continente_2025-gpkg
   - layers/test
   - .claude
