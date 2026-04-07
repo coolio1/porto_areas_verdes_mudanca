@@ -402,14 +402,16 @@ print(f"  Abaixo do limiar OMS (9 m²/hab): {pct_below_9:.1f}%")
 # ===== Phase 4: Colorir acessibilidade =====
 print("\nA colorir mapa de acessibilidade...")
 
-# Paleta divergente: vermelho → laranja → amarelo → verde claro → verde escuro
-# Classes: 0-3 (severo), 3-6 (insuficiente), 6-9 (limiar), 9-15 (adequado), 15+ (bom)
+# Paleta divergente: cinzento → vermelho escuro → vermelho → laranja → amarelo → verde
+# Classes refinadas no extremo baixo para mostrar influência de parques pequenos
 CLASSES = [
-    (0, 3, np.array([215, 38, 61])),  # vermelho (#D7263D)
-    (3, 6, np.array([232, 168, 56])),  # laranja (#E8A838)
-    (6, 9, np.array([255, 215, 0])),  # amarelo (#FFD700)
-    (9, 15, np.array([139, 195, 74])),  # verde claro (#8BC34A)
-    (15, 999, np.array([46, 125, 50])),  # verde escuro (#2E7D32)
+    (0, 0.5, np.array([136, 14, 14])),  # bordô — sem verde
+    (0.5, 1, np.array([183, 28, 28])),  # vermelho escuro
+    (1, 3, np.array([229, 57, 53])),  # vermelho — severo
+    (3, 6, np.array([232, 168, 56])),  # laranja — insuficiente
+    (6, 9, np.array([255, 215, 0])),  # amarelo — limiar OMS
+    (9, 15, np.array([139, 195, 74])),  # verde claro — adequado
+    (15, 999, np.array([46, 125, 50])),  # verde escuro — bom
 ]
 
 # Criar imagem RGBA na resolução de cálculo
@@ -442,7 +444,13 @@ acc_path = os.path.join(LAYERS_DIR, "acessibilidade_2sfca.png")
 acc_img_display.save(acc_path)
 print(f"  acessibilidade_2sfca.png guardado ({os.path.getsize(acc_path) // 1024} KB)")
 
-def_path = None  # Défice removido — usar apenas acessibilidade
+# ===== Phase 4b: Máscara de baixa densidade (pop ≤ 10 hab/pixel nativo) =====
+print("  A gerar máscara de baixa densidade...")
+low_pop_mask = porto_mask & (pop_upscaled <= 10)
+low_pop_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
+low_pop_rgba[low_pop_mask] = [200, 200, 200, 180]  # cinza claro, semi-transparente
+Image.fromarray(low_pop_rgba).save(os.path.join(LAYERS_DIR, "baixa_densidade.png"))
+print(f"  baixa_densidade.png guardado ({low_pop_mask.sum()} pixels)")
 
 # ===== Phase 5: Municipios (reutilizar ou descarregar) =====
 muni_path = os.path.join(PARENT_LAYERS, "municipios.png")
@@ -472,6 +480,7 @@ verde_priv_b64 = to_base64(os.path.join(PARENT_LAYERS, "interior_subsistente.png
 verde_pago_b64 = to_base64(verde_pago_path)
 ghspop_b64 = to_base64(os.path.join(PARENT_LAYERS, "ghspop.png"))
 acc_b64 = to_base64(acc_path)
+lowpop_b64 = to_base64(os.path.join(LAYERS_DIR, "baixa_densidade.png"))
 muni_b64 = to_base64(muni_path)
 
 # Carregar GeoJSON dos parques nomeados (se existir)
@@ -602,8 +611,16 @@ html = f'''<!DOCTYPE html>
     <div style="font-size:10px;color:#888;margin-bottom:2px;">m&sup2;/hab (raio 500m)</div>
     <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
       <div style="display:flex;align-items:center;gap:4px;">
-        <span style="width:14px;height:12px;border-radius:2px;background:#D7263D;display:inline-block;"></span>
-        <span style="color:#666;">0 &ndash; 3 (d&eacute;fice severo)</span>
+        <span style="width:14px;height:12px;border-radius:2px;background:#880E0E;display:inline-block;"></span>
+        <span style="color:#666;">&lt;0.5 (sem verde)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#B71C1C;display:inline-block;"></span>
+        <span style="color:#666;">0.5 &ndash; 1 (d&eacute;fice cr&iacute;tico)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#E53935;display:inline-block;"></span>
+        <span style="color:#666;">1 &ndash; 3 (d&eacute;fice severo)</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#E8A838;display:inline-block;"></span>
@@ -620,10 +637,6 @@ html = f'''<!DOCTYPE html>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
         <span style="color:#666;">&gt;15 (bom)</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:4px;margin-top:2px;">
-        <span style="width:14px;height:12px;border-radius:2px;background:transparent;border:1px solid #ccc;display:inline-block;"></span>
-        <span style="color:#999;">Sem c&aacute;lculo (baixa densidade)</span>
       </div>
     </div>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS recomenda &ge;9 m&sup2;/hab</div>
@@ -650,7 +663,7 @@ html = f'''<!DOCTYPE html>
 
   <hr style="border-color:#ddd;margin:10px 0 4px 0;">
   <span style="color:#aaa;font-size:10px;">Sentinel-2 10m (ESA) &bull; GHS-POP 100m (JRC)<br>
-  38 parques e jardins (CMP + OSM)<br>
+  47 parques e jardins (CMP + OSM)<br>
   M&eacute;todo: Two-Step Floating Catchment Area</span>
   </div>
 </div>
@@ -673,6 +686,14 @@ var accLayer = {{
   label: "Acessibilidade a 500m",
   src: "{acc_b64}",
   opacity: 0.7,
+  show: true
+}};
+
+// Máscara de baixa densidade (cinza claro, topo de tudo)
+var lowPopLayer = {{
+  id: "baixa_densidade",
+  label: "Baixa densidade (\\u2264 10 hab/pixel)",
+  src: "{lowpop_b64}",
   show: true
 }};
 
@@ -812,7 +833,7 @@ async function init() {{
     if (this.checked) accOverlay.addTo(map); else map.removeLayer(accOverlay);
   }});
   var accSw = document.createElement('span'); accSw.className = 'swatch';
-  accSw.style.background = 'linear-gradient(to right, #D7263D, #E8A838, #FFD700, #8BC34A, #2E7D32)';
+  accSw.style.background = 'linear-gradient(to right, #880E0E, #B71C1C, #E53935, #E8A838, #FFD700, #8BC34A, #2E7D32)';
   var accLb = document.createElement('label'); accLb.textContent = accLayer.label; accLb.style.fontSize = '12px';
   accRow.appendChild(accCb); accRow.appendChild(accSw); accRow.appendChild(accLb);
   // Acessibilidade no topo
@@ -845,8 +866,6 @@ async function init() {{
         var area = p.area_ha ? p.area_ha + ' ha (oficial)' : p.area_calc_ha + ' ha (calc.)';
         var html = '<b style="font-size:13px;">' + p.nome + '</b><br>';
         html += '<span style="color:#666;">' + (p.tipo || '') + ' &mdash; ' + area + '</span>';
-        if (p.horario_verao) html += '<br><span style="font-size:11px;">Ver\\u00e3o: ' + p.horario_verao + '</span>';
-        if (p.horario_inverno) html += '<br><span style="font-size:11px;">Inverno: ' + p.horario_inverno + '</span>';
         layer.bindPopup(html);
         layer.bindTooltip(p.nome, {{
           permanent: true, direction: 'center',
@@ -881,6 +900,22 @@ async function init() {{
   var pLb = document.createElement('label'); pLb.textContent = 'Parques e Jardins'; pLb.style.fontSize = '12px';
   pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
   div.insertBefore(pRow, accRow.nextSibling);
+
+  // --- Baixa densidade (topo de tudo) ---
+  map.createPane('lowPopPane');
+  map.getPane('lowPopPane').style.zIndex = 475;
+  var lowPopOverlay = L.imageOverlay(lowPopLayer.src, bounds, {{pane: 'lowPopPane'}});
+  if (lowPopLayer.show) lowPopOverlay.addTo(map);
+
+  var lpRow = document.createElement('div'); lpRow.className = 'row';
+  var lpCb = document.createElement('input'); lpCb.type = 'checkbox'; lpCb.checked = lowPopLayer.show;
+  lpCb.addEventListener('change', function() {{
+    if (this.checked) lowPopOverlay.addTo(map); else map.removeLayer(lowPopOverlay);
+  }});
+  var lpSw = document.createElement('span'); lpSw.className = 'swatch'; lpSw.style.backgroundColor = '#C8C8C8';
+  var lpLb = document.createElement('label'); lpLb.textContent = lowPopLayer.label; lpLb.style.fontSize = '12px';
+  lpRow.appendChild(lpCb); lpRow.appendChild(lpSw); lpRow.appendChild(lpLb);
+  div.appendChild(lpRow);
 }}
 
 init();
