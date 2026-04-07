@@ -274,8 +274,8 @@ PARQUES = [
     {
         "nome": "Parque de Requesende",
         "tipo": "parque",
-        # 6 ways fragmentados no OSM — buscar por bbox
-        "osm_bbox_park": (41.158, -8.642, 41.167, -8.630),
+        # 4 ways fragmentados no OSM (Ramalde) — buscar por bbox
+        "osm_bbox_park": (41.174, -8.642, 41.179, -8.635),
     },
     {
         "nome": "Jardim do Calém e das Sobreiras",

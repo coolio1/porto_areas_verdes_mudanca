@@ -31,8 +31,8 @@ EXPANSAO = [
     {
         "nome": "Ampliação do Parque de Requesende",
         "area_ha": 12,
-        "centroid_lat": 41.1600,
-        "centroid_lon": -8.6310,
+        "centroid_lat": 41.1770,
+        "centroid_lon": -8.6390,
         "buffer_m": 196,
     },
     {
