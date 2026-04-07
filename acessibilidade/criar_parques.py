@@ -21,7 +21,11 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
 PDM_PATH = os.path.join(os.path.dirname(SCRIPT_DIR), "CLC", "po_cqs.gpkg")
 
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+OVERPASS_URLS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+]
 
 # ===== Definição dos 20 parques oficiais (CMP) =====
 # osm_type: 'way' ou 'relation'
@@ -361,6 +365,24 @@ PARQUES = [
 ]
 
 
+def _overpass_query(query):
+    """Executar query Overpass com fallback entre servidores."""
+    last_err = None
+    for url in OVERPASS_URLS:
+        for attempt in range(3):
+            try:
+                resp = requests.post(url, data={"data": query}, timeout=120)
+                resp.raise_for_status()
+                return resp.json()
+            except Exception as e:
+                last_err = e
+                print(f"  Tentativa {attempt + 1} falhou ({url.split('/')[2]}): {e}")
+                if attempt < 2:
+                    time.sleep(10)
+        print("  A tentar servidor alternativo...")
+    raise last_err
+
+
 def fetch_osm_geometries(parques):
     """Buscar geometrias de todos os parques com OSM ID numa única query Overpass."""
     # Recolher todos os IDs (single e multi)
@@ -379,29 +401,25 @@ def fetch_osm_geometries(parques):
     if not parts:
         return {}
 
-    query = f"[out:json][timeout:60];({' '.join(parts)});out geom;"
-    print(f"  A consultar Overpass API ({len(parts)} elementos)...")
-
-    for attempt in range(3):
-        try:
-            resp = requests.post(OVERPASS_URL, data={"data": query}, timeout=60)
-            resp.raise_for_status()
-            data = resp.json()
-            break
-        except Exception as e:
-            print(f"  Tentativa {attempt + 1} falhou: {e}")
-            if attempt < 2:
-                time.sleep(5)
-            else:
-                raise
-
-    # Mapear osm_type/osm_id → geometria Shapely
+    # Dividir em lotes de 10 para evitar timeouts do Overpass
+    BATCH_SIZE = 10
     geom_map = {}
-    for el in data.get("elements", []):
-        key = f"{el['type']}/{el['id']}"
-        geom = _overpass_element_to_geometry(el)
-        if geom is not None:
-            geom_map[key] = geom
+    for i in range(0, len(parts), BATCH_SIZE):
+        batch = parts[i : i + BATCH_SIZE]
+        query = f"[out:json][timeout:120];({' '.join(batch)});out geom;"
+        print(
+            f"  A consultar Overpass API (lote {i // BATCH_SIZE + 1}, {len(batch)} elementos)..."
+        )
+        if i > 0:
+            time.sleep(5)
+
+        data = _overpass_query(query)
+
+        for el in data.get("elements", []):
+            key = f"{el['type']}/{el['id']}"
+            geom = _overpass_element_to_geometry(el)
+            if geom is not None:
+                geom_map[key] = geom
 
     print(f"  Obtidas {len(geom_map)} geometrias")
     return geom_map
@@ -510,21 +528,10 @@ def get_pdm_frente_atlantica():
 def fetch_osm_bbox_parks(bbox):
     """Buscar todos os ways leisure=park numa bbox e unir."""
     s, w, n, e = bbox
-    query = f'[out:json][timeout:30];way["leisure"="park"]({s},{w},{n},{e});out geom;'
+    query = f'[out:json][timeout:60];way["leisure"="park"]({s},{w},{n},{e});out geom;'
     print(f"  A consultar Overpass (parks em bbox {bbox})...")
-    time.sleep(5)  # Evitar rate limit após query anterior
-    for attempt in range(3):
-        try:
-            resp = requests.post(OVERPASS_URL, data={"data": query}, timeout=60)
-            resp.raise_for_status()
-            break
-        except Exception as e:
-            print(f"  Tentativa {attempt + 1} falhou: {e}")
-            if attempt < 2:
-                time.sleep(10)
-            else:
-                raise
-    data = resp.json()
+    time.sleep(10)  # Evitar rate limit após query anterior
+    data = _overpass_query(query)
     polys = []
     for el in data.get("elements", []):
         g = _overpass_element_to_geometry(el)
@@ -576,7 +583,11 @@ def main():
         fonte = None
 
         if "osm_bbox_park" in p:
-            geom = fetch_osm_bbox_parks(p["osm_bbox_park"])
+            try:
+                geom = fetch_osm_bbox_parks(p["osm_bbox_park"])
+            except Exception as exc:
+                print(f"  AVISO: {nome} — bbox query falhou ({exc})")
+                geom = None
             if geom:
                 fonte = "osm"
             else:

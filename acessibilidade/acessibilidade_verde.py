@@ -287,11 +287,16 @@ xx, yy = np.meshgrid(xs, ys)
 coords_flat = (xx.ravel(), yy.ravel())
 
 # --- Verde público: Sentinel-2 verde ∩ parques oficiais ---
+# Pixels dentro dos parques sem verde Sentinel-2 são pintados com verde sólido
+# (jardins pequenos/urbanos onde a copa não domina o pixel)
 verde_pub_path = os.path.join(LAYERS_DIR, "verde_publico.png")
 if not os.path.exists(verde_pub_path):
     print("  A mascarar verde para parques oficiais...")
     arr = np.array(img_ref)
     inside_parques = contains_xy(parques_union, *coords_flat).reshape(grid_h, grid_w)
+    # Pixels dentro dos parques sem verde Sentinel-2: pintar verde sólido
+    sem_verde = inside_parques & (arr[:, :, 3] == 0)
+    arr[sem_verde] = [56, 142, 60, 255]  # verde sólido (#388E3C)
     arr[~inside_parques, 3] = 0
     Image.fromarray(arr).save(verde_pub_path)
     n_pub = (arr[:, :, 3] > 0).sum()
@@ -376,13 +381,11 @@ print(
 pop_500m = ndimage.convolve(pop_corrected, kernel, mode="constant", cval=0.0)
 
 # Acessibilidade = verde / pop (m²/hab)
-# Filtro: excluir pixels com densidade local < 40 hab/pixel_100m (~4000 hab/km²)
-# Evita colorir zonas não-residenciais (parques, indústria, rio)
-POP_PIXEL_MIN = 10  # hab por pixel nativo GHS-POP (100m)
-pop_local_mask = pop_upscaled >= POP_PIXEL_MIN
-accessibility = np.where(
-    pop_local_mask & (pop_500m > 0.5), green_500m / pop_500m, np.nan
-)
+# Filtro: excluir pixels sem população significativa no raio de 500m
+# Usa pop_500m (não pop_upscaled local) para não esconder jardins/parques
+# cujo pixel GHS-POP é 0 mas têm residentes nas imediações
+POP_500M_MIN = 50  # hab mínimos no raio de 500m
+accessibility = np.where(pop_500m >= POP_500M_MIN, green_500m / pop_500m, np.nan)
 
 valid = ~np.isnan(accessibility)
 print(

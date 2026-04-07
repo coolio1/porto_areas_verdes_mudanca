@@ -52,6 +52,29 @@ GEE/
 - **Cada sub-projecto tem a sua pasta** — nunca espalhar ficheiros de dados pela raiz
 - **Links no `index.html`** devem apontar para o caminho correcto dentro da pasta (ex: `atropelamentos/dashboard_atropelamentos.html`)
 
+## Acessibilidade — pipeline de regeneração
+
+O mapa de acessibilidade (`acessibilidade/`) usa PNGs em cache na pasta `acessibilidade/layers/`. Estes PNGs são gerados a partir dos dados de parques (`parques_porto.geojson`) e **não se actualizam automaticamente** quando os dados mudam.
+
+**Ao alterar parques (adicionar, remover, editar geometria):**
+1. Actualizar `criar_parques.py` (lista PARQUES) e/ou `parques_porto.geojson`
+2. **Apagar os PNGs em cache** que dependem dos parques antes de regenerar:
+   - `layers/verde_publico.png` (verde Sentinel-2 ∩ parques)
+   - `layers/verde_pago.png` (PDM \ parques)
+   - `layers/acessibilidade_2sfca.png` (resultado do cálculo)
+3. Correr `python acessibilidade_verde.py` — só regenera PNGs que não existam
+
+Se não se apagarem os PNGs, o script salta a regeneração e usa dados antigos — os novos parques ficam **invisíveis no cálculo de acessibilidade** e na camada visual.
+
+**Overpass API:**
+- Pode dar timeout com muitos elementos — o script divide em lotes e tenta servidores alternativos
+- Se falhar persistentemente, usar `adicionar_jardins.py` (OSM API v0.6, mais estável) para adicionar parques individualmente ao GeoJSON existente
+
+## Validação
+- Após alterar um script, verificar pelo menos que executa sem erros de sintaxe: `python -m py_compile <script>.py`
+- Scripts GEE dependem de autenticação — se `ee.Initialize()` falhar, não é bug do código
+- Mapas HTML gerados devem abrir no browser e mostrar layers correctamente
+
 ## Regras de código
 
 - Python com `ee` (Earth Engine API) e `geemap` quando aplicável
