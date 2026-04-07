@@ -75,6 +75,12 @@ Se não se apagarem os PNGs, o script salta a regeneração e usa dados antigos 
 - Scripts GEE dependem de autenticação — se `ee.Initialize()` falhar, não é bug do código
 - Mapas HTML gerados devem abrir no browser e mostrar layers correctamente
 
+## Artigos (`_posts/`)
+
+- **Espaçamento antes de títulos**: gerido pelo CSS em `_layouts/default.html` (`article h2 { margin-top: 2.5rem }`, `article h3 { margin-top: 2rem }`). **Não usar `&nbsp;`** — o espaçamento é automático.
+- Formato: Markdown com acentuação PT-PT correcta
+- Referências bibliográficas no final, ordenadas alfabeticamente
+
 ## Regras de código
 
 - Python com `ee` (Earth Engine API) e `geemap` quando aplicável

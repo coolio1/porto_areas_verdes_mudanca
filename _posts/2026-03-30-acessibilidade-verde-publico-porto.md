@@ -159,40 +159,38 @@ Os 1 678 ha de verde privado (quarteirões, logradouros, moradias) prestam servi
 
 ---
 
-## 5. Comparação com Lisboa e Cidades Internacionais
+## 5. O Porto no Contexto Europeu e Internacional
 
-O défice de acessibilidade a verde no Porto não é um caso isolado. A maioria das cidades europeias densas enfrenta uma tensão semelhante entre métricas agregadas favoráveis e desigualdades locais severas.
+O défice de acessibilidade a verde no Porto não é um caso isolado — mas a comparação com outras cidades exige cautela, porque os valores de m²/hab variam enormemente conforme a definição adoptada: verde público acessível, verde público total (incluindo parques periféricos), ou verde total (incluindo florestas urbanas). A tabela seguinte compara o Porto com Lisboa e oito cidades internacionais, distinguindo os valores "com tudo" dos valores "efectivos".
 
-### 5.1. Lisboa
+### 5.1. Lisboa: o mesmo problema com números diferentes
 
-Lisboa reporta ~37 m²/hab de verde público — mas este valor inclui o Parque Florestal de Monsanto (~900 ha), que sozinho distorce a métrica. Sem Monsanto, a dotação cai para ~7–10 m²/hab, comparável ao Porto. Catarino *et al.* (2025) calcularam um índice de equidade verde (*Urban Green Equity Index*) de 0,387 para Lisboa (abaixo da média das 26 capitais europeias analisadas), com desigualdades intra-urbanas marcadas entre bairros como o Parque das Nações e zonas como Marvila ou Beato. O estudo do projecto GREEN SURGE (2015) já documentara esta fragmentação. Tal como no Porto, a métrica agregada mascara a realidade — o problema é estruturalmente o mesmo.
+Lisboa é o caso comparativo mais directo. A cidade reporta ~37 m²/hab de verde público — mas este valor inclui o Parque Florestal de Monsanto (~900 ha), que sozinho representa cerca de metade do verde total. Sem Monsanto, a dotação cai para ~7–10 m²/hab, comparável ao Porto sem o Parque da Cidade. Catarino *et al.* (2025), num estudo de 26 capitais europeias, calcularam para Lisboa um *Urban Green Equity Index* de 0,387 — abaixo da média europeia — com desigualdades intra-urbanas marcadas: bairros como o Parque das Nações dispõem de verde abundante, enquanto Marvila e Beato apresentam défices severos. O projecto GREEN SURGE (2015) já documentara esta fragmentação. O diagnóstico é estruturalmente o mesmo que no Porto: um ou dois grandes parques periféricos mascaram a escassez no tecido urbano denso.
 
-### 5.2. Cidades europeias
+### 5.2. Panorama internacional
 
-| Cidade | Verde/hab (m²) | Pop. a <300 m de verde | Observação |
-|---|---:|---|---|
-| **Porto** | 8,7 (usufruível) | ~80% (a 800 m) | 83,9% abaixo de 9 m²/hab em acessibilidade efectiva |
-| **Lisboa** | 7–37 | ~85% | Monsanto distorce; UGEI = 0,387 |
-| **Barcelona** | 7 (sem Collserola) | 33% | Pior caso mediterrânico; plano Green Belts 2030 |
-| **Paris** | 8,6 (intra-muros) | — | 42–55% abaixo de 10 m²/hab; plano bioclimático 2035 |
-| **Copenhaga** | ~32 | ≥80% | Meta: todos a <15 min a pé de parque |
-| **Amesterdão** | ~24 | — | Standard holandês: 60 m²/hab a 500 m |
-| **Berlim** | ~88 | ~74% (DE) | Standard: ≥0,5 ha a <500 m de casa |
-| **Viena** | 55–95 | — | Excelente agregado; distritos centrais <2 m²/hab |
-| **Londres** | ~32 | ~87% (10 min) | 750 mil pessoas com <0,44 m²/hab |
-| **Singapura** | ~66 | — | "City in a Garden"; heterogeneidade por *planning area* |
+| Cidade | Verde/hab | Valor efectivo | Desigualdade intra-urbana |
+|---|---|---|---|
+| **Porto** | 19,3 m² (PDM total) | **8,7 m²** (usufruível) | 83,9% da pop. abaixo de 9 m²/hab; centro histórico ≈0 |
+| **Lisboa** | ~37 m² (c/ Monsanto) | **~7–10 m²** (s/ Monsanto) | UGEI 0,387; Marvila/Beato vs. Parque das Nações |
+| **Barcelona** | ~17 m² (c/ Collserola) | **~7 m²** (s/ Collserola) | Apenas 33% da pop. a <300 m de parque urbano |
+| **Paris** | ~10,6 m² (c/ Bois) | **~8,6 m²** (intra-muros) | 42–55% abaixo de 10 m²/hab; plano bioclimático 2035 |
+| **Copenhaga** | ~32 m² | **~32 m²** | ≥80% a <300 m de verde; meta: todos a <15 min a pé |
+| **Amesterdão** | ~24 m² | **~24 m²** | Standard NL: 60 m²/hab acessível num raio de 500 m |
+| **Berlim** | ~88 m² (c/ florestas) | **variável** | Standard: ≥0,5 ha a <500 m; 74% da pop. a <300 m |
+| **Viena** | 55–95 m² (c/ Wienerwald) | **<2 m²** nos distritos centrais | Josefstadt 0,8 m²; Neubau 1,2 m²; Margareten 1,5 m² |
+| **Londres** | ~32 m² (16 m² parques) | **<0,44 m²** para 750 mil pessoas | 47% da área é verde, mas distribuição muito desigual |
+| **Singapura** | ~66 m² | **variável** | 46% do território é verde; heterogeneidade por área de planeamento |
 
-Fontes: Russo & Cirella (2018); Kabisch & Haase (2014); Tan & Samsudin (2021); Catarino *et al.* (2025); EEA (2022); dados municipais.
+Fontes: Russo & Cirella (2018); Kabisch & Haase (2014); Tan & Samsudin (2021); Catarino *et al.* (2025); EEA (2022); Haslauer *et al.* (2023); dados municipais.
 
-### 5.3. Um padrão recorrente
+### 5.3. Três lições da comparação
 
-Três conclusões emergem desta comparação:
+**1. O "efeito Monsanto" é universal.** Porto, Lisboa, Barcelona, Paris e Viena partilham o mesmo padrão: um ou dois grandes parques periféricos (Parque da Cidade, Monsanto, Collserola, Bois de Boulogne/Vincennes, Wienerwald) que inflacionam os indicadores agregados enquanto os bairros densos do centro ficam com valores próximos de zero. As cidades do Sul da Europa são particularmente afectadas pela combinação de centros históricos compactos com malha verde residual. O Porto encaixa-se neste padrão mediterrânico de défice estrutural.
 
-1. **As cidades densas do Sul da Europa** (Porto, Lisboa, Barcelona, Paris) partilham o mesmo défice estrutural: núcleos históricos com verde residual e grandes parques periféricos que inflacionam os indicadores agregados. O Porto encaixa-se neste padrão mediterrânico.
+**2. Ter muito verde não garante equidade.** Viena ilustra isto de forma extrema: com 55–95 m²/hab no agregado, é uma das cidades mais verdes da Europa — mas os distritos centrais de Josefstadt e Neubau ficam abaixo de 1,5 m²/hab, valores comparáveis aos piores do centro do Porto. Londres, com 47% da sua área classificada como verde, ainda tem 750 mil pessoas com menos de 0,44 m²/hab (CPRE London). A lição é clara: a quantidade total de verde não substitui a acessibilidade local.
 
-2. **Mesmo as cidades "verdes"** (Viena, Londres, Berlim) apresentam desigualdades intra-urbanas severas. Viena tem 55–95 m²/hab no agregado, mas os distritos de Josefstadt e Neubau ficam abaixo de 1,5 m²/hab — valores comparáveis aos piores do centro do Porto. A quantidade total de verde não garante equidade no acesso.
-
-3. **O standard de 9 m²/hab** frequentemente atribuído à OMS tem, na realidade, origem provável no Decreto Ministerial italiano de 1968 (Przewoźna *et al.*, 2024). A OMS recomenda oficialmente que todos os residentes tenham **≥0,5 ha de verde a <300 m de casa** (OMS, 2016). A regra 3-30-300 de Konijnendijk (2023) — 3 árvores visíveis de cada casa, 30% de cobertura de copa por bairro, 300 m até ao verde mais próximo — oferece um enquadramento mais completo. Quental (2010) utilizou a distância ponderada pela população ao espaço verde mais próximo como indicador de sustentabilidade territorial na AMP, revelando que a distância média se situava nos 1 110 m — quase quatro vezes o limiar de 300 m.
+**3. O standard de 9 m²/hab precisa de ser repensado.** O limiar de 9 m²/hab, frequentemente atribuído à OMS, tem na realidade origem provável no Decreto Ministerial italiano de 1968 (Przewoźna *et al.*, 2024). A OMS recomenda oficialmente que todos os residentes tenham acesso a **≥0,5 ha de verde a <300 m de casa** (OMS, 2016) — um critério de proximidade, não de área per capita. A regra 3-30-300 de Konijnendijk (2023) vai mais longe: 3 árvores visíveis de cada casa, 30% de cobertura de copa por bairro, 300 m até ao verde mais próximo. Na AMP, Quental (2010) mediu uma distância média ponderada de 1 110 m ao espaço verde mais próximo — quase quatro vezes o limiar da OMS. Copenhaga e Amesterdão adoptaram standards ainda mais exigentes (15 min a pé e 60 m²/hab a 500 m, respectivamente), demonstrando que é possível estabelecer metas ambiciosas.
 
 ---
 
