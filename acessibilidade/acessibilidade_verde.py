@@ -423,16 +423,9 @@ for lo, hi, color in CLASSES:
 
 # Máscara do município do Porto (clipar resultados ao concelho)
 print("  A aplicar mascara do municipio...")
-import geopandas as _gpd
-
-muni_gdf = _gpd.read_file(PDM_LOCAL, layer="PO_QSFUNCIONAL_PL").to_crs(epsg=4326)
+muni_gdf = gpd.read_file(PDM_LOCAL, layer="PO_QSFUNCIONAL_PL").to_crs(epsg=4326)
 porto_boundary = muni_gdf.union_all()
-xs = np.linspace(LON_MIN, LON_MAX, calc_w)
-ys = np.linspace(LAT_MAX, LAT_MIN, calc_h)
-xx, yy = np.meshgrid(xs, ys)
-from shapely import contains_xy as _cxy_muni
-
-porto_mask = _cxy_muni(porto_boundary, xx.ravel(), yy.ravel()).reshape(calc_h, calc_w)
+porto_mask = contains_xy(porto_boundary, *coords_flat).reshape(calc_h, calc_w)
 # Apagar pixels fora do Porto
 acc_rgba[~porto_mask, 3] = 0
 print(f"  Pixels fora do Porto removidos: {(~porto_mask).sum()}")
@@ -445,12 +438,16 @@ acc_img_display.save(acc_path)
 print(f"  acessibilidade_2sfca.png guardado ({os.path.getsize(acc_path) // 1024} KB)")
 
 # ===== Phase 4b: Máscara de baixa densidade (pop ≤ 10 hab/pixel nativo) =====
-print("  A gerar máscara de baixa densidade...")
-low_pop_mask = porto_mask & (pop_upscaled <= 10)
-low_pop_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
-low_pop_rgba[low_pop_mask] = [200, 200, 200, 180]  # cinza claro, semi-transparente
-Image.fromarray(low_pop_rgba).save(os.path.join(LAYERS_DIR, "baixa_densidade.png"))
-print(f"  baixa_densidade.png guardado ({low_pop_mask.sum()} pixels)")
+lowpop_path = os.path.join(LAYERS_DIR, "baixa_densidade.png")
+if not os.path.exists(lowpop_path):
+    print("  A gerar máscara de baixa densidade...")
+    low_pop_mask = porto_mask & (pop_upscaled <= 10)
+    low_pop_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
+    low_pop_rgba[low_pop_mask] = [200, 200, 200, 180]  # cinza claro, semi-transparente
+    Image.fromarray(low_pop_rgba).save(lowpop_path)
+    print(f"  baixa_densidade.png guardado ({low_pop_mask.sum()} pixels)")
+else:
+    print("  baixa_densidade.png já existe, a saltar...")
 
 # ===== Phase 5: Municipios (reutilizar ou descarregar) =====
 muni_path = os.path.join(PARENT_LAYERS, "municipios.png")
@@ -480,7 +477,7 @@ verde_priv_b64 = to_base64(os.path.join(PARENT_LAYERS, "interior_subsistente.png
 verde_pago_b64 = to_base64(verde_pago_path)
 ghspop_b64 = to_base64(os.path.join(PARENT_LAYERS, "ghspop.png"))
 acc_b64 = to_base64(acc_path)
-lowpop_b64 = to_base64(os.path.join(LAYERS_DIR, "baixa_densidade.png"))
+lowpop_b64 = to_base64(lowpop_path)
 muni_b64 = to_base64(muni_path)
 
 # Carregar GeoJSON dos parques nomeados (se existir)
@@ -637,6 +634,10 @@ html = f'''<!DOCTYPE html>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
         <span style="color:#666;">&gt;15 (bom)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;margin-top:2px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#C8C8C8;display:inline-block;"></span>
+        <span style="color:#666;">Baixa densidade (&le;10 hab/pixel)</span>
       </div>
     </div>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS recomenda &ge;9 m&sup2;/hab</div>
@@ -830,7 +831,13 @@ async function init() {{
   var accRow = document.createElement('div'); accRow.className = 'row';
   var accCb = document.createElement('input'); accCb.type = 'checkbox'; accCb.checked = accLayer.show;
   accCb.addEventListener('change', function() {{
-    if (this.checked) accOverlay.addTo(map); else map.removeLayer(accOverlay);
+    if (this.checked) {{
+      accOverlay.addTo(map);
+      if (window._lowPopOverlay) window._lowPopOverlay.addTo(map);
+    }} else {{
+      map.removeLayer(accOverlay);
+      if (window._lowPopOverlay) map.removeLayer(window._lowPopOverlay);
+    }}
   }});
   var accSw = document.createElement('span'); accSw.className = 'swatch';
   accSw.style.background = 'linear-gradient(to right, #880E0E, #B71C1C, #E53935, #E8A838, #FFD700, #8BC34A, #2E7D32)';
@@ -901,21 +908,12 @@ async function init() {{
   pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
   div.insertBefore(pRow, accRow.nextSibling);
 
-  // --- Baixa densidade (topo de tudo) ---
+  // --- Baixa densidade (acima da acessibilidade, abaixo dos parques) ---
   map.createPane('lowPopPane');
   map.getPane('lowPopPane').style.zIndex = 475;
   var lowPopOverlay = L.imageOverlay(lowPopLayer.src, bounds, {{pane: 'lowPopPane'}});
-  if (lowPopLayer.show) lowPopOverlay.addTo(map);
-
-  var lpRow = document.createElement('div'); lpRow.className = 'row';
-  var lpCb = document.createElement('input'); lpCb.type = 'checkbox'; lpCb.checked = lowPopLayer.show;
-  lpCb.addEventListener('change', function() {{
-    if (this.checked) lowPopOverlay.addTo(map); else map.removeLayer(lowPopOverlay);
-  }});
-  var lpSw = document.createElement('span'); lpSw.className = 'swatch'; lpSw.style.backgroundColor = '#C8C8C8';
-  var lpLb = document.createElement('label'); lpLb.textContent = lowPopLayer.label; lpLb.style.fontSize = '12px';
-  lpRow.appendChild(lpCb); lpRow.appendChild(lpSw); lpRow.appendChild(lpLb);
-  div.appendChild(lpRow);
+  window._lowPopOverlay = lowPopOverlay;
+  if (accLayer.show) lowPopOverlay.addTo(map);
 }}
 
 init();

@@ -494,19 +494,6 @@ def _overpass_element_to_geometry(el):
     return None
 
 
-def make_buffer_polygon(lat, lon, radius_m):
-    """Criar polígono circular a partir de centróide (aproximação em graus)."""
-    deg_lat = radius_m / 111320
-    deg_lon = radius_m / (111320 * math.cos(math.radians(lat)))
-    return (
-        Point(lon, lat)
-        .buffer(1)
-        .affine_transform(
-            [deg_lon, 0, 0, deg_lat, lon - deg_lon * lon, lat - deg_lat * lat]
-        )
-    )
-
-
 def get_pdm_frente_atlantica():
     """Extrair polígonos PDM da frente atlântica (apenas costa oceânica)."""
     print("  A carregar PDM para Frente Atlântica...")
@@ -530,7 +517,6 @@ def fetch_osm_bbox_parks(bbox):
     s, w, n, e = bbox
     query = f'[out:json][timeout:60];way["leisure"="park"]({s},{w},{n},{e});out geom;'
     print(f"  A consultar Overpass (parks em bbox {bbox})...")
-    time.sleep(10)  # Evitar rate limit após query anterior
     data = _overpass_query(query)
     polys = []
     for el in data.get("elements", []):

@@ -118,6 +118,10 @@
         <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
         <span style="color:#666;">&gt;15 (bom)</span>
       </div>
+      <div style="display:flex;align-items:center;gap:4px;margin-top:2px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#C8C8C8;display:inline-block;"></span>
+        <span style="color:#666;">Baixa densidade (&le;10 hab/pixel)</span>
+      </div>
     </div>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS recomenda &ge;9 m&sup2;/hab</div>
   </div>
@@ -47076,7 +47080,13 @@ async function init() {
   var accRow = document.createElement('div'); accRow.className = 'row';
   var accCb = document.createElement('input'); accCb.type = 'checkbox'; accCb.checked = accLayer.show;
   accCb.addEventListener('change', function() {
-    if (this.checked) accOverlay.addTo(map); else map.removeLayer(accOverlay);
+    if (this.checked) {
+      accOverlay.addTo(map);
+      if (window._lowPopOverlay) window._lowPopOverlay.addTo(map);
+    } else {
+      map.removeLayer(accOverlay);
+      if (window._lowPopOverlay) map.removeLayer(window._lowPopOverlay);
+    }
   });
   var accSw = document.createElement('span'); accSw.className = 'swatch';
   accSw.style.background = 'linear-gradient(to right, #880E0E, #B71C1C, #E53935, #E8A838, #FFD700, #8BC34A, #2E7D32)';
@@ -47147,21 +47157,12 @@ async function init() {
   pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
   div.insertBefore(pRow, accRow.nextSibling);
 
-  // --- Baixa densidade (topo de tudo) ---
+  // --- Baixa densidade (acima da acessibilidade, abaixo dos parques) ---
   map.createPane('lowPopPane');
   map.getPane('lowPopPane').style.zIndex = 475;
   var lowPopOverlay = L.imageOverlay(lowPopLayer.src, bounds, {pane: 'lowPopPane'});
-  if (lowPopLayer.show) lowPopOverlay.addTo(map);
-
-  var lpRow = document.createElement('div'); lpRow.className = 'row';
-  var lpCb = document.createElement('input'); lpCb.type = 'checkbox'; lpCb.checked = lowPopLayer.show;
-  lpCb.addEventListener('change', function() {
-    if (this.checked) lowPopOverlay.addTo(map); else map.removeLayer(lowPopOverlay);
-  });
-  var lpSw = document.createElement('span'); lpSw.className = 'swatch'; lpSw.style.backgroundColor = '#C8C8C8';
-  var lpLb = document.createElement('label'); lpLb.textContent = lowPopLayer.label; lpLb.style.fontSize = '12px';
-  lpRow.appendChild(lpCb); lpRow.appendChild(lpSw); lpRow.appendChild(lpLb);
-  div.appendChild(lpRow);
+  window._lowPopOverlay = lowPopOverlay;
+  if (accLayer.show) lowPopOverlay.addTo(map);
 }
 
 init();
