@@ -484,16 +484,13 @@ lowpop_path = os.path.join(LAYERS_DIR, "baixa_densidade.png")
 if not os.path.exists(lowpop_path):
     print("  A gerar máscara de baixa densidade...")
     low_pop_mask = porto_mask & (pop_upscaled <= 10)
-    # Suavizar bordas com gaussian blur no canal alfa
-    alpha_raw = np.where(low_pop_mask, 204.0, 0.0)
-    alpha_smooth = ndimage.gaussian_filter(alpha_raw, sigma=6)
-    # Preservar interior sólido, suavizar apenas as bordas
-    alpha_smooth = np.clip(alpha_smooth, 0, 204).astype(np.uint8)
+    # Arredondar contornos: blur + threshold (remove degraus pixelizados)
+    mask_float = low_pop_mask.astype(np.float64)
+    mask_smooth = ndimage.gaussian_filter(mask_float, sigma=4)
+    mask_rounded = mask_smooth > 0.5  # threshold → contornos curvos mas nítidos
+    mask_rounded &= porto_mask
     low_pop_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
-    low_pop_rgba[:, :, 0:3] = 200  # cinza claro
-    low_pop_rgba[:, :, 3] = alpha_smooth
-    # Apagar fora do Porto
-    low_pop_rgba[~porto_mask, 3] = 0
+    low_pop_rgba[mask_rounded] = [200, 200, 200, 204]  # cinza claro, 80% opaco
     Image.fromarray(low_pop_rgba).save(lowpop_path)
     print(f"  baixa_densidade.png guardado ({low_pop_mask.sum()} pixels)")
 else:
