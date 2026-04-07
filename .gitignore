@@ -12,4 +12,5 @@ CLC/
 *.npy
 *.npz
 *.bak
+*.mp4
 .superpowers/
