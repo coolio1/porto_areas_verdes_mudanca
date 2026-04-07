@@ -434,13 +434,9 @@ print("\nA colorir mapa de acessibilidade...")
 # Paleta divergente: cinzento → vermelho escuro → vermelho → laranja → amarelo → verde
 # Classes refinadas no extremo baixo para mostrar influência de parques pequenos
 CLASSES = [
-    (0, 0.5, np.array([136, 14, 14])),  # bordô — sem verde
-    (0.5, 1, np.array([183, 28, 28])),  # vermelho escuro
-    (1, 3, np.array([229, 57, 53])),  # vermelho — severo
-    (3, 6, np.array([232, 168, 56])),  # laranja — insuficiente
-    (6, 9, np.array([255, 215, 0])),  # amarelo — limiar OMS
-    (9, 15, np.array([139, 195, 74])),  # verde claro — adequado
-    (15, 999, np.array([46, 125, 50])),  # verde escuro — bom
+    (0, 3, np.array([183, 28, 28])),  # vermelho — défice crítico
+    (3, 9, np.array([232, 168, 56])),  # laranja — insuficiente
+    (9, 999, np.array([46, 125, 50])),  # verde — adequado
 ]
 
 # Criar imagem RGBA na resolução de cálculo
@@ -645,36 +641,20 @@ html = f'''<!DOCTYPE html>
     <div style="font-size:10px;color:#888;margin-bottom:2px;">m&sup2;/hab (raio 500m)</div>
     <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
       <div style="display:flex;align-items:center;gap:4px;">
-        <span style="width:14px;height:12px;border-radius:2px;background:#880E0E;display:inline-block;"></span>
-        <span style="color:#666;">&lt;0.5 (sem verde)</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#B71C1C;display:inline-block;"></span>
-        <span style="color:#666;">0.5 &ndash; 1 (d&eacute;fice cr&iacute;tico)</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:4px;">
-        <span style="width:14px;height:12px;border-radius:2px;background:#E53935;display:inline-block;"></span>
-        <span style="color:#666;">1 &ndash; 3 (d&eacute;fice severo)</span>
+        <span style="color:#666;">0 &ndash; 3 (d&eacute;fice cr&iacute;tico)</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#E8A838;display:inline-block;"></span>
-        <span style="color:#666;">3 &ndash; 6 (insuficiente)</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:4px;">
-        <span style="width:14px;height:12px;border-radius:2px;background:#FFD700;display:inline-block;"></span>
-        <span style="color:#666;">6 &ndash; 9 (limiar OMS)</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:4px;">
-        <span style="width:14px;height:12px;border-radius:2px;background:#8BC34A;display:inline-block;"></span>
-        <span style="color:#666;">9 &ndash; 15 (adequado)</span>
+        <span style="color:#666;">3 &ndash; 9 (insuficiente)</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
-        <span style="color:#666;">&gt;15 (bom)</span>
+        <span style="color:#666;">&gt;9 (adequado)</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;margin-top:2px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#C8C8C8;display:inline-block;"></span>
-        <span style="color:#666;">Baixa densidade (&le;10 hab/pixel)</span>
+        <span style="color:#666;">Baixa densidade</span>
       </div>
     </div>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS recomenda &ge;9 m&sup2;/hab</div>
@@ -731,7 +711,7 @@ var accLayer = {{
 // Máscara de baixa densidade (cinza claro, topo de tudo)
 var lowPopLayer = {{
   id: "baixa_densidade",
-  label: "Baixa densidade (\\u2264 10 hab/pixel)",
+  label: "Baixa densidade",
   src: "{lowpop_b64}",
   show: true
 }};
@@ -923,10 +903,12 @@ async function init() {{
         var html = '<b style="font-size:13px;">' + p.nome + '</b><br>';
         html += '<span style="color:#666;">' + (p.tipo || '') + ' &mdash; ' + area + '</span>';
         layer.bindPopup(html);
+        var tOff = [0, 0];
+        if (p.nome === 'Parque de Requesende') tOff = [0, -20];
         layer.bindTooltip(p.nome, {{
           permanent: true, direction: 'center',
           className: 'park-label',
-          offset: [0, 0]
+          offset: tOff
         }});
       }}
     }});
