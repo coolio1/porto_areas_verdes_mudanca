@@ -48,7 +48,7 @@ GEE/
 - **Layers ficam na pasta do seu pipeline**: `layers/` (actual), `layers_historico/` (histórico), `1947/layers/` (1947)
 - **Ficheiros de teste/debug** nunca ficam nas pastas de layers — apagar depois de usar
 - **Scripts obsoletos** apagam-se directamente (git e disco sincronizados)
-- **`_config.yml` exclude** deve incluir: `*.py`, docs, .claude, .superpowers
+- **`_config.yml` exclude** deve incluir: `*.py`, docs, .claude, .superpowers, `__pycache__/`, `*.bak`, `*.npy`, `*.npz`
 - **Cada sub-projecto tem a sua pasta** — nunca espalhar ficheiros de dados pela raiz
 - **Links no `index.html`** devem apontar para o caminho correcto dentro da pasta (ex: `atropelamentos/dashboard_atropelamentos.html`)
 
@@ -90,3 +90,11 @@ Se não se apagarem os PNGs, o script salta a regeneração e usa dados antigos 
 - Vídeo em MP4 (não GIF); texto renderizado via PIL (não cv2) para suportar acentos
 - Proporções geográficas correctas são essenciais (cos(latitude) correction)
 - `.db` é gerado por `compilar_dados.py` e gitignored — não commitar
+
+## Higiene do repositório
+
+- **`.gitignore` obrigatório** — deve conter: `__pycache__/`, `*.pyc`, `.claude/`, `.superpowers/`, `*.bak`, `.env`, `*.db`, `*.npy`, `*.npz`, `*.mp4`
+- **`requirements.txt`** — manter actualizado ao adicionar dependências Python
+- **Ficheiros binários grandes** (MP4, NPY, DB) são gitignored — nunca rastrear no Git
+- **Scripts de uso único** — apagar após execução, não acumular no repo
+- **Ficheiros `.bak`** — apagar do disco após confirmar que o original está no Git
