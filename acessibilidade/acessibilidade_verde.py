@@ -416,6 +416,24 @@ pop_500m = ndimage.convolve(pop_corrected, kernel, mode="constant", cval=0.0)
 POP_500M_MIN = 50  # hab mínimos no raio de 500m
 accessibility = np.where(pop_500m >= POP_500M_MIN, green_500m / pop_500m, np.nan)
 
+# Cache arrays para análises derivadas (ex: conversão verde pago/privado)
+np.save(os.path.join(LAYERS_DIR, "pop_corrected.npy"), pop_corrected)
+np.save(os.path.join(LAYERS_DIR, "green_m2.npy"), green_m2)
+np.save(os.path.join(LAYERS_DIR, "green_500m.npy"), green_500m)
+np.save(os.path.join(LAYERS_DIR, "pop_500m.npy"), pop_500m)
+np.save(os.path.join(LAYERS_DIR, "accessibility.npy"), accessibility)
+np.save(os.path.join(LAYERS_DIR, "kernel_2sfca.npy"), kernel)
+np.savez(
+    os.path.join(LAYERS_DIR, "calc_params.npz"),
+    pixel_area_m2=pixel_area_m2,
+    POP_500M_MIN=POP_500M_MIN,
+    px_w_m=px_w_m,
+    px_h_m=px_h_m,
+    calc_w=calc_w,
+    calc_h=calc_h,
+)
+print("  Arrays 2SFCA guardados em cache (.npy/.npz)")
+
 valid = ~np.isnan(accessibility)
 print(
     f"  Acessibilidade: min={np.nanmin(accessibility):.1f}, "
@@ -451,6 +469,7 @@ print("  A aplicar mascara do municipio...")
 muni_gdf = gpd.read_file(PDM_LOCAL, layer="PO_QSFUNCIONAL_PL").to_crs(epsg=4326)
 porto_boundary = muni_gdf.union_all()
 porto_mask = contains_xy(porto_boundary, *coords_flat).reshape(calc_h, calc_w)
+np.save(os.path.join(LAYERS_DIR, "porto_mask.npy"), porto_mask)
 # Apagar pixels fora do Porto
 acc_rgba[~porto_mask, 3] = 0
 print(f"  Pixels fora do Porto removidos: {(~porto_mask).sum()}")
