@@ -26,9 +26,29 @@ CAOP_PATH = os.path.join(
     "CAOP2025_municipios.shp",
 )
 
-# Espaços da estratégia de expansão (excluindo Lapa, Sobreiras e Requesende
-# que já existem no inventário de parques actuais)
+# Espaços da estratégia de expansão CMP
 EXPANSAO = [
+    {
+        "nome": "Ampliação do Parque de Requesende",
+        "area_ha": 12,
+        "centroid_lat": 41.1600,
+        "centroid_lon": -8.6310,
+        "buffer_m": 196,
+    },
+    {
+        "nome": "Parque Urbano da Lapa",
+        "area_ha": 4,
+        "centroid_lat": 41.1510,
+        "centroid_lon": -8.6260,
+        "buffer_m": 113,
+    },
+    {
+        "nome": "Jardim de Sobreiras",
+        "area_ha": 1.8,
+        "centroid_lat": 41.1475,
+        "centroid_lon": -8.6598,
+        "buffer_m": 76,
+    },
     {
         "nome": "Parque da Prelada",
         "area_ha": 21,

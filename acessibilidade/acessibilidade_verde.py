@@ -903,12 +903,10 @@ async function init() {{
         var html = '<b style="font-size:13px;">' + p.nome + '</b><br>';
         html += '<span style="color:#666;">' + (p.tipo || '') + ' &mdash; ' + area + '</span>';
         layer.bindPopup(html);
-        var tOff = [0, 0];
-        if (p.nome === 'Parque de Requesende') tOff = [0, -20];
         layer.bindTooltip(p.nome, {{
           permanent: true, direction: 'center',
           className: 'park-label',
-          offset: tOff
+          offset: [0, 0]
         }});
       }}
     }});
