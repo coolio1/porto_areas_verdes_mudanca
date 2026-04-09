@@ -213,7 +213,7 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 - Lopes, H.S., Vidal, D.G., Cherif, N., Silva, L. & Remoaldo, P.C. (2025). Green infrastructure and its influence on urban heat island, heat risk, and air pollution: A case study of Porto (Portugal). *Journal of Environmental Management*, 376, 124446.
 - Madureira, H., Andresen, T. & Monteiro, A. (2011). Green structure and planning evolution in Porto. *Urban Forestry & Urban Greening*, 10(2), 141–149.
 - Madureira, H. & Andresen, T. (2014). Planning for multifunctional urban green infrastructures: Promises and challenges. *Urban Design International*, 19, 38–49.
-- Quental, L.N.F.P. (2010). *Modeling a sustainable urban structure: An application to the Metropolitan Area of Porto*. Tese de Doutoramento em Engenharia do Território, Instituto Superior Técnico, Universidade Técnica de Lisboa.
+- Quental, N. (2010). *Modeling a sustainable urban structure: An application to the Metropolitan Area of Porto*. Tese de Doutoramento em Engenharia do Território, Instituto Superior Técnico, Universidade Técnica de Lisboa.
 - Roy, D.P. *et al.* (2016). Characterization of Landsat-7 to Landsat-8 reflective wavelength and normalized difference vegetation index continuity. *Remote Sensing of Environment*, 185, 57–70.
 
 ---
