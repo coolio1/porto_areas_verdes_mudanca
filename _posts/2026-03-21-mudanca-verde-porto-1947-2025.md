@@ -220,7 +220,6 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 
 ## Mapas interativos
 
-- **[Ortofoto 1947 — vegetação e edificado]({{ site.baseurl }}/1947/orto_1947.html)** — classificação Random Forest sobre o voo SPLAL
 - **[Mapa histórico (1985–2024)]({{ site.baseurl }}/ndvi_historico.html)** — alternância entre épocas, máscaras de vegetação, zonas de perda e ganho
 - **[Mapa detalhado (2016–2025)]({{ site.baseurl }}/mapa.html)** — classificação árvores/solo/edificado a 10 m
 
