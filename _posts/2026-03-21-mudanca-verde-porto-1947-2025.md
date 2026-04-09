@@ -10,8 +10,6 @@ tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação, animação, deteção
 
 ---
 
-&nbsp;
-
 ## 1. Introdução
 
 O espaço verde urbano desempenha um papel ecológico e social insubstituível, fornecendo serviços de ecossistema vitais — desde a mitigação do efeito de ilha de calor até à promoção da saúde pública, regulação hidrológica e manutenção da biodiversidade (Madureira *et al.*, 2018). Contudo, nas últimas décadas, a cidade do Porto tem sido palco de uma intensa transformação territorial, com a progressiva conversão de solos permeáveis em superfícies impermeabilizadas.
@@ -27,8 +25,6 @@ Utilizando fotografia aérea histórica e imagens de satélite processadas em *G
 
 ---
 
-&nbsp;
-
 ## 2. Enquadramento e Revisão da Literatura
 
 A evolução da estrutura verde do Porto tem sido documentada por diversos autores, que evidenciam um padrão histórico de declínio das áreas permeáveis e de forte densificação urbana. Madureira *et al.* (2011) demonstraram que, no final do século XIX (1892), cerca de 75% da superfície do concelho era ocupada por coberto verde — predominantemente agrícola e florestal. Em 2000, esse valor havia decaído para aproximadamente 30%, uma transformação impulsionada por uma redução de 92% na tipologia de verde agrícola e de 52% no verde arborizado. Os mesmos autores descrevem o processo de planeamento ao longo do século XX como "uma oportunidade perdida" para a manutenção de uma estrutura verde contínua e multifuncional, resultando numa paisagem altamente fragmentada de manchas pequenas e isoladas (Madureira & Andresen, 2014).
@@ -43,8 +39,6 @@ Quanto aos serviços de ecossistema prestados pela infraestrutura verde remanesc
 
 ---
 
-&nbsp;
-
 ## 3. Animação: 37 anos de crescimento urbano
 
 <video controls width="100%" poster="{{ site.baseurl }}/animacao/frame_2024.png">
@@ -55,13 +49,9 @@ A animação mostra a evolução bienal do Porto entre 1987 e 2024, com dados in
 
 ---
 
-&nbsp;
-
 ## 4. Metodologia
 
 Para garantir rigor na avaliação de uma série temporal de quase 80 anos e contornar os desafios inerentes à variabilidade de sensores e fontes, a metodologia foi estruturada em três abordagens complementares.
-
-&nbsp;
 
 ### 4.1. Classificação do Ortofoto Aéreo de 1947 (0,49 m)
 
@@ -70,8 +60,6 @@ A análise do período pré-satélite baseou-se nos ortofotomapas históricos ge
 A classificação em duas classes — **vegetação** e **edificado** — utilizou um modelo *Random Forest* (100 árvores) treinado sobre quatro *features* de textura local extraídas de cada pixel: intensidade média, média local (janela), desvio-padrão local e gradiente. Os pontos de treino foram selecionados manualmente a partir de coordenadas fornecidas pelo utilizador, abrangendo 13 amostras de vegetação e 5 de edificado em zonas diversas do município. A máscara do limite municipal foi obtida via GEE (CAOP 2025), e fragmentos classificados inferiores a um limiar mínimo de pixels foram removidos por filtragem morfológica.
 
 Após a classificação inicial, um segundo *pipeline* de limpeza cruzou os resultados com camadas independentes — a vegetação Landsat de 1985, as árvores e solo Sentinel-2 actuais — para remover falsos positivos de edificado em zonas comprovadamente verdes. Um filtro de maioria (15 × 15 pixels) suavizou o ruído residual. A máscara do rio Douro foi excluída (transparente) para não contaminar as estatísticas.
-
-&nbsp;
 
 ### 4.2. Análise Histórica (1985–2024) com Landsat (30 m)
 
@@ -84,8 +72,6 @@ A comparação direta entre os sensores *Thematic Mapper* (TM, Landsat 5) e *Ope
    - **Manchas florestais maduras** (Serralves e Parque da Cidade) — NDVI elevado
 
 Para cada época, extraiu-se o NDVI nestes pontos de referência e calculou-se uma regressão linear que alinha os valores com a época de referência (1985–90), corrigindo simultaneamente diferenças de sensor, atmosfera e calibração. A vegetação foi classificada com um limiar de **NDVI ≥ 0,25** aplicado à mediana de verão (Junho–Setembro), agregando entre 54 e 70 cenas por época.
-
-&nbsp;
 
 ### 4.3. Análise Detalhada (2016–2025) com Sentinel-2 (10 m)
 
@@ -117,19 +103,13 @@ O *pipeline* incluiu a análise de **81 cenas Sentinel-2**, validação de separ
 
 ---
 
-&nbsp;
-
 ## 5. Resultados e Discussão
-
-&nbsp;
 
 ### 5.1. O Ponto de Partida: Porto em 1947
 
 A classificação do ortofoto aéreo de 1947 revela um município ainda predominantemente verde: **59,7% de vegetação (2 473 ha)** contra **40,3% de edificado (1 669 ha)**. Este resultado é coerente com a ordem de grandeza de Guilherme *et al.* (2022), que estimaram 31% de elementos construídos artificiais (ABE) em 1947. A diferença (40% vs. 31%) reflecte divergências metodológicas expectáveis: a classificação *Random Forest* sobre textura em escala de cinzentos tende a classificar como edificado certas superfícies minerais (caminhos de terra batida, muros de propriedades agrícolas, afloramentos) que na fotointerpretação manual de Guilherme *et al.* foram integradas nas categorias permeáveis. A classificação por textura não dispõe de informação espectral multibanda, o que limita a capacidade de distinguir solo mineral de superfícies construídas — um viés conservador que sobrestima ligeiramente o edificado.
 
 Independentemente desta diferença metodológica, ambas as estimativas convergem no essencial: **em 1947, a maioria do território municipal era permeável e vegetado**, com uma vasta matriz de quintas, hortas e terrenos agrícolas que se estendiam pelas freguesias periféricas de Paranhos, Ramalde e Campanhã. A cidade densa restringia-se ao centro histórico e aos eixos de expansão oitocentista.
-
-&nbsp;
 
 ### 5.2. Evolução Histórica e Ritmos de Perda (1947–2024)
 
@@ -174,8 +154,6 @@ A cidade regressa a uma trajetória de **perda acelerada (−165 ha em 8 anos)**
 | 2016 | 3 732 | 31,4% | −1 620 ha |
 | 2024 | 3 567 | **30,0%** | **−1 785 ha** |
 
-&nbsp;
-
 ### 5.3. Padrões Espaciais de Transformação
 
 A distribuição geográfica da perda de vegetação confirma a evolução assimétrica documentada na literatura:
@@ -185,8 +163,6 @@ A distribuição geográfica da perda de vegetação confirma a evolução assim
 - **Centro Histórico (Sé, Miragaia, Cedofeita):** sofreu alterações marginais por já se encontrar profundamente impermeabilizado no arranque da série temporal (década de 1980). Não havia verde para perder.
 
 - **Periferias Norte e Este (Paranhos, Ramalde, Campanhã):** sofreram a maior transformação. As grandes quintas e áreas agrícolas visíveis em 1987 foram inteiramente reconfiguradas ao longo dos eixos viários, dando lugar a um *continuum* edificado. Esta distribuição valida a tese de que a **acessibilidade viária foi o vetor primordial do crescimento urbano**, um padrão consistente com a dinâmica observada por Guilherme *et al.* (2022) para a zona norte da cidade.
-
-&nbsp;
 
 ### 5.4. Análise Granular e Tipológica (2016–2025)
 
@@ -215,8 +191,6 @@ Nota positiva: o algoritmo detetou **127 hectares de solo/relva que transitaram 
 
 ---
 
-&nbsp;
-
 ## 6. Conclusões
 
 A integração de fotografia aérea histórica (1947) com dados de satélite de média e alta resolução espacial permite afirmar, com elevada precisão quantitativa, que o Porto perdeu **metade da sua matriz verde** ao longo de quase 80 anos — de 59,7% de cobertura vegetal em 1947 para 30,0% em 2024. Só no período coberto pela série Landsat (1985–2024), a perda líquida foi de **1 785 hectares**. O trabalho demonstra que esta perda foi de natureza fortemente tipológica: vitimou sobretudo os solos outrora agrícolas e prados abertos (cobertura herbácea), enquanto a estrutura arbórea manteve uma **resiliência notável** perante a pressão urbanística — um padrão consistente ao longo de múltiplas escalas temporais e espaciais, e convergente com as conclusões independentes de Guilherme *et al.* (2022) baseadas em fotointerpretação.
@@ -228,8 +202,6 @@ Ao melhorar a metodologia de calibração espectral multitemporal (PIF), a filtr
 Os resultados acarretam implicações diretas para o planeamento urbano. Dado que 32,6% do município se encontra em zonas de elevado risco térmico (Monteiro *et al.*, 2025), e que a perda de vegetação se concentra nos solos permeáveis herbáceos — fundamentais para a regulação hidrológica e a mitigação do escoamento superficial —, torna-se imperativo que as futuras políticas urbanísticas foquem não apenas na proteção do estrato arbóreo, mas também na **fixação e permeabilidade dos últimos redutos de solo e cobertura herbácea**. A resiliência da cobertura arbórea, embora encorajadora, não deve obscurecer o colapso silencioso dos solos permeáveis — o substrato ecológico que sustenta a capacidade de infiltração, a recarga de aquíferos e a regulação microclimática à escala do bairro.
 
 ---
-
-&nbsp;
 
 ## 7. Referências
 
@@ -246,8 +218,6 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 
 ---
 
-&nbsp;
-
 ## Mapas interativos
 
 - **[Ortofoto 1947 — vegetação e edificado]({{ site.baseurl }}/1947/orto_1947.html)** — classificação Random Forest sobre o voo SPLAL
@@ -255,8 +225,6 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 - **[Mapa detalhado (2016–2025)]({{ site.baseurl }}/mapa.html)** — classificação árvores/solo/edificado a 10 m
 
 ---
-
-&nbsp;
 
 ## Código
 
