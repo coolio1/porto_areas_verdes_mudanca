@@ -503,6 +503,16 @@ lowpop_path = os.path.join(LAYERS_DIR, "baixa_densidade.png")
 if not os.path.exists(lowpop_path):
     print("  A gerar máscara de baixa densidade...")
     low_pop_mask = porto_mask & (pop_upscaled <= 10)
+    # Remover manchas < 10 ha
+    MIN_AREA_HA = 10
+    min_pixels = int(MIN_AREA_HA * 10_000 / pixel_area_m2)
+    labeled, n_features = ndimage.label(low_pop_mask)
+    for i in range(1, n_features + 1):
+        if (labeled == i).sum() < min_pixels:
+            low_pop_mask[labeled == i] = False
+    print(
+        f"  Removidas {n_features - ndimage.label(low_pop_mask)[1]} manchas < {MIN_AREA_HA} ha (min {min_pixels} px)"
+    )
     # Arredondar contornos: blur + threshold (remove degraus pixelizados)
     mask_float = low_pop_mask.astype(np.float64)
     mask_smooth = ndimage.gaussian_filter(mask_float, sigma=4)
@@ -516,17 +526,17 @@ else:
     print("  baixa_densidade.png já existe, a saltar...")
 
 # ===== Phase 4c: Proximidade 300m (Konijnendijk 3-30-300) =====
-# Para cada pixel habitado: existe um parque ≥1 ha a ≤300 m?
+# Para cada pixel habitado: existe um parque ≥0,5 ha a ≤300 m?
 PROX_RADIUS_M = 300
-PARK_MIN_AREA_M2 = 10_000  # 1 ha
+PARK_MIN_AREA_M2 = 5_000  # 0.5 ha
 prox_path = os.path.join(LAYERS_DIR, "proximidade_300m.png")
 if not os.path.exists(prox_path):
     print("\nA calcular proximidade 300m (Konijnendijk)...")
-    # Filtrar parques com área ≥1 ha
+    # Filtrar parques com área ≥0,5 ha
     parques_grandes = parques_gdf[
         parques_gdf.geometry.area * (M_PER_DEG_LAT * M_PER_DEG_LON) >= PARK_MIN_AREA_M2
     ]
-    print(f"  Parques >=1 ha: {len(parques_grandes)} de {len(parques_gdf)}")
+    print(f"  Parques >=0.5 ha: {len(parques_grandes)} de {len(parques_gdf)}")
     if len(parques_grandes) > 0:
         parques_grandes_union = parques_grandes.geometry.union_all()
         # Máscara binária dos parques grandes
@@ -544,7 +554,7 @@ if not os.path.exists(prox_path):
         print(
             f"  Kernel 300m: {kernel_300.shape}, {kernel_300.sum():.0f} pixels activos"
         )
-        # Convolução: se > 0, existe parque ≥1ha a ≤300m
+        # Convolução: se > 0, existe parque ≥0,5ha a ≤300m
         reach_300 = (
             ndimage.convolve(grandes_binary, kernel_300, mode="constant", cval=0.0) > 0
         )
@@ -556,9 +566,11 @@ if not os.path.exists(prox_path):
         pop_nao_coberto = pop_corrected[nao_coberto].sum()
         pct_coberto = pop_coberto / total_pop_porto * 100
         pct_nao_coberto = pop_nao_coberto / total_pop_porto * 100
-        print(f"  A <=300m de parque >=1ha: {pop_coberto:.0f} hab ({pct_coberto:.1f}%)")
         print(
-            f"  A >300m de parque >=1ha: {pop_nao_coberto:.0f} hab ({pct_nao_coberto:.1f}%)"
+            f"  A <=300m de parque >=0.5ha: {pop_coberto:.0f} hab ({pct_coberto:.1f}%)"
+        )
+        print(
+            f"  A >300m de parque >=0.5ha: {pop_nao_coberto:.0f} hab ({pct_nao_coberto:.1f}%)"
         )
         # PNG: verde onde coberto, vermelho onde não coberto (só pixels habitados)
         prox_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
@@ -574,7 +586,7 @@ if not os.path.exists(prox_path):
         np.save(os.path.join(LAYERS_DIR, "reach_300.npy"), reach_300)
         print("  Arrays proximidade 300m guardados em cache (.npy)")
     else:
-        print("  AVISO: nenhum parque >=1 ha encontrado")
+        print("  AVISO: nenhum parque >=0.5 ha encontrado")
         prox_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
         Image.fromarray(prox_rgba).save(prox_path)
 else:
@@ -772,11 +784,11 @@ html = f'''<!DOCTYPE html>
     <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
-        <span style="color:#666;">&le;300m de parque &ge;1 ha (cumpre)</span>
+        <span style="color:#666;">&le;300m de parque &ge;0,5 ha (cumpre)</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#B71C1C;display:inline-block;"></span>
-        <span style="color:#666;">&gt;300m de parque &ge;1 ha (n&atilde;o cumpre)</span>
+        <span style="color:#666;">&gt;300m de parque &ge;0,5 ha (n&atilde;o cumpre)</span>
       </div>
     </div>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS: &ge;0,5 ha de verde a &lt;300m de casa</div>

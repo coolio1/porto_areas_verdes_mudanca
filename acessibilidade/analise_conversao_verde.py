@@ -3,7 +3,7 @@ Análise de conversão de verde para colmatar défice de proximidade (300m).
 
 Simula a adição sequencial de espaços verdes — estratégia de expansão (CMP),
 verde pago ou não usufruível, e verde privado — até atingir ~80% da população
-a ≤300m de um parque ≥1 ha (critério Konijnendijk 3-30-300).
+a ≤300m de um parque ≥0,5 ha (critério Konijnendijk 3-30-300).
 
 Lê arrays em cache (.npy) do script acessibilidade_verde.py e gera:
   - layers/candidatos_conversao.png (overlay)
@@ -30,7 +30,7 @@ LON_MIN, LON_MAX = -8.70, -8.54
 LAT_MIN, LAT_MAX = 41.13, 41.19
 BOUNDS = [[41.13, -8.70], [41.19, -8.54]]
 
-PARK_MIN_AREA_M2 = 10_000  # 1 ha (critério Konijnendijk)
+PARK_MIN_AREA_M2 = 5_000  # 0.5 ha
 TARGET_PCT = 90.0  # objectivo: 90% da população coberta
 MIN_AREA_PAGO = 500  # m² mínimo para verde pago
 MIN_AREA_PRIV = 2000  # m² mínimo para verde privado
@@ -74,7 +74,7 @@ pop_coberta_actual = pop_corrected[coberto_actual & habitado].sum()
 pct_actual = pop_coberta_actual / total_pop * 100
 print(f"  Populacao total: {total_pop:.0f} hab")
 print(
-    f"  Cobertura actual (<=300m de parque >=1ha): {pop_coberta_actual:.0f} hab ({pct_actual:.1f}%)"
+    f"  Cobertura actual (<=300m de parque >=0.5ha): {pop_coberta_actual:.0f} hab ({pct_actual:.1f}%)"
 )
 
 # ===== Carregar candidatos por prioridade =====
@@ -207,7 +207,7 @@ for c in all_candidates:
 
     mask_i = c["mask"]
 
-    # Só contribui se ≥1 ha (critério Konijnendijk para o raio de 300m)
+    # Só contribui se ≥0,5 ha (critério Konijnendijk para o raio de 300m)
     if c["area_m2"] < PARK_MIN_AREA_M2:
         continue
 
@@ -493,11 +493,11 @@ html = f'''<!DOCTYPE html>
     <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
-        <span style="color:#666;">&le;300m de parque &ge;1 ha (cumpre)</span>
+        <span style="color:#666;">&le;300m de parque &ge;0,5 ha (cumpre)</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#B71C1C;display:inline-block;"></span>
-        <span style="color:#666;">&gt;300m de parque &ge;1 ha (n&atilde;o cumpre)</span>
+        <span style="color:#666;">&gt;300m de parque &ge;0,5 ha (n&atilde;o cumpre)</span>
       </div>
     </div>
     <div style="color:#aaa;font-size:9px;margin-top:4px;">Cobertura actual: {pct_actual:.1f}% &rarr; objectivo: {TARGET_PCT:.0f}%</div>
@@ -516,7 +516,7 @@ html = f'''<!DOCTYPE html>
 
   <hr style="border-color:#ddd;margin:10px 0 4px 0;">
   <span style="color:#aaa;font-size:10px;">Sentinel-2 10m (ESA) &bull; GHS-POP 100m (JRC)<br>
-  Crit&eacute;rio: Konijnendijk 3-30-300 (&ge;1 ha a &le;300m)</span>
+  Crit&eacute;rio: Konijnendijk 3-30-300 (&ge;0,5 ha a &le;300m)</span>
   </div>
 </div>
 

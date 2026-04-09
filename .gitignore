@@ -14,3 +14,4 @@ CLC/
 *.bak
 *.mp4
 .superpowers/
+.secrets.baseline

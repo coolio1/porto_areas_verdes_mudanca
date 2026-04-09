@@ -155,14 +155,14 @@ O inventário totaliza **47 parques e jardins** (~202 ha), inferior aos 448 ha d
 
 ### 4.4. Proximidade 300m: o critério de Konijnendijk
 
-A regra 3-30-300 (Konijnendijk, 2023) propõe que todos os residentes devem ter acesso a um espaço verde de ≥1 ha a ≤300 m de casa. Aplicando este critério aos 28 parques do inventário com área ≥1 ha:
+A regra 3-30-300 (Konijnendijk, 2023) propõe que todos os residentes devem ter acesso a um espaço verde a ≤300 m de casa. Embora a formulação original refira parques de ≥1 ha, adoptamos aqui o limiar de ≥0,5 ha — alinhado com a recomendação da OMS (WHO, 2016) — por melhor reflectir a escala dos espaços verdes urbanos do Porto, onde muitos jardins e praças com funções recreativas relevantes ficam abaixo de 1 ha. Aplicando este critério aos parques do inventário com área ≥0,5 ha:
 
-| Critério 300m (parques ≥1 ha) | População | % |
+| Critério 300m (parques ≥0,5 ha) | População | % |
 |---|---:|---:|
-| Cumpre (≤300 m) | 78 938 | 32,6% |
-| Não cumpre (>300 m) | 163 487 | 67,4% |
+| Cumpre (≤300 m) | 89 093 | 36,8% |
+| Não cumpre (>300 m) | 153 332 | 63,2% |
 
-**Dois terços da população do Porto** não tem acesso a um parque de dimensão significativa a uma distância pedonal curta. Este resultado complementa o 2SFCA: mesmo os 20,3% da população na faixa "insuficiente" (3–9 m²/hab) podem estar a mais de 300 m do parque mais próximo — a acessibilidade 2SFCA reflecte parques distantes que "chegam" ao raio de 500 m mas não ao de 300 m.
+**Quase dois terços da população do Porto** (63,2%) não tem acesso a um parque de dimensão significativa a uma distância pedonal curta. Este resultado complementa o 2SFCA: mesmo os 20,3% da população na faixa "insuficiente" (3–9 m²/hab) podem estar a mais de 300 m do parque mais próximo — a acessibilidade 2SFCA reflecte parques distantes que "chegam" ao raio de 500 m mas não ao de 300 m.
 
 ### 4.5. Verde privado: o paradoxo de equidade
 
@@ -223,7 +223,7 @@ A estratégia municipal deveria priorizar o **eixo central e oriental** — onde
 
 ## 7. Conclusões
 
-**83,9% da população do Porto** vive com acessibilidade a verde público inferior a 9 m²/hab num raio de 500 m. **63,5%** encontra-se em défice crítico (<3 m²/hab), concentrado no centro e leste — as zonas mais densas e termicamente vulneráveis. Apenas 16,1% tem acesso adequado. Aplicando o critério de proximidade de Konijnendijk (2023), **67,4% da população** não tem um parque de ≥1 ha a ≤300 m de casa.
+**83,9% da população do Porto** vive com acessibilidade a verde público inferior a 9 m²/hab num raio de 500 m. **63,5%** encontra-se em défice crítico (<3 m²/hab), concentrado no centro e leste — as zonas mais densas e termicamente vulneráveis. Apenas 16,1% tem acesso adequado. Aplicando o critério de proximidade de Konijnendijk (2023), **63,2% da população** não tem um parque de ≥0,5 ha a ≤300 m de casa.
 
 Dos 448 ha classificados como verde público pelo PDM, apenas ~202 ha são efectivamente usufruíveis. A métrica agregada per capita é insuficiente para avaliar a equidade — e o Porto não é caso único: Lisboa, Barcelona e Paris partilham o mesmo padrão de défice estrutural em núcleos densos.
 
