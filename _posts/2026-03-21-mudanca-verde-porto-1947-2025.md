@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1985–2025)"
-description: "Análise quantitativa da evolução do solo e vegetação no Porto entre 1985 e 2025, com dados Sentinel-2, Landsat e NDVI via Google Earth Engine."
+title: "Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1947–2025)"
+description: "Análise quantitativa da evolução do solo e vegetação no Porto entre 1947 e 2025, com ortofotomapa aéreo, Landsat, Sentinel-2 e NDVI via Google Earth Engine."
 date: 2026-03-21
-tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação, animação, deteção remota]
+tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação, animação, deteção remota, ortofoto, 1947]
 ---
 
-**Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1985–2025): Uma Análise Quantitativa Baseada em Deteção Remota**
+**Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1947–2025): Uma Análise Quantitativa Baseada em Deteção Remota**
 
 ---
 
@@ -18,8 +18,9 @@ O espaço verde urbano desempenha um papel ecológico e social insubstituível, 
 
 Monteiro *et al.* (2025) demonstraram recentemente que 32,6% do território municipal se encontra em zonas de elevado risco térmico, com a intensidade da ilha de calor urbana (UHI) particularmente pronunciada durante as noites de verão — um fenómeno agravado pela escassez de infraestrutura verde, sobretudo em áreas socioeconomicamente desfavorecidas. A quantificação rigorosa da evolução da cobertura vegetal torna-se, assim, não apenas um exercício académico mas um instrumento de planeamento urbano com implicações diretas na saúde pública e na resiliência climática.
 
-Utilizando imagens de satélite e algoritmos processados em *Google Earth Engine*, este trabalho analisa a evolução quantitativa e espacial da vegetação no município do Porto ao longo de 40 anos. Através da conjugação de dados multitemporais de média resolução (Landsat a 30 m) e de alta resolução (Sentinel-2 a 10 m), avalia-se o ritmo da expansão do edificado à custa dos espaços verdes, o balanço líquido de perdas e ganhos, e a tipologia da vegetação afetada. Os resultados dialogam diretamente com a literatura existente, atualizando e validando os padrões documentados por Guilherme *et al.* (2022) e Madureira *et al.* (2011) através de deteção remota espectral e temporal.
+Utilizando fotografia aérea histórica e imagens de satélite processadas em *Google Earth Engine*, este trabalho analisa a evolução quantitativa e espacial da vegetação no município do Porto ao longo de quase 80 anos. Através da conjugação de um ortofotomapa aéreo de 1947 (0,49 m/pixel), dados multitemporais de média resolução (Landsat a 30 m) e de alta resolução (Sentinel-2 a 10 m), avalia-se o ritmo da expansão do edificado à custa dos espaços verdes, o balanço líquido de perdas e ganhos, e a tipologia da vegetação afetada. Os resultados dialogam diretamente com a literatura existente, atualizando e validando os padrões documentados por Guilherme *et al.* (2022) e Madureira *et al.* (2011) através de deteção remota espectral e temporal.
 
+- **Classificação do ortofoto aéreo de 1947** — Random Forest sobre textura local a 0,49 m
 - **Animação do crescimento urbano 1987–2024** — evolução bienal vectorial em 4K
 - **Análise histórica 1985–2024** — Landsat a 30 m, com NDVI harmonizado entre sensores
 - **Análise detalhada 2016–2025** — Sentinel-2 a 10 m, com classificação árvores/solo/edificado
@@ -58,11 +59,21 @@ A animação mostra a evolução bienal do Porto entre 1987 e 2024, com dados in
 
 ## 4. Metodologia
 
-Para garantir rigor na avaliação de uma série temporal de 40 anos e contornar os desafios inerentes à variabilidade de sensores, a metodologia foi estruturada em duas abordagens complementares.
+Para garantir rigor na avaliação de uma série temporal de quase 80 anos e contornar os desafios inerentes à variabilidade de sensores e fontes, a metodologia foi estruturada em três abordagens complementares.
 
 &nbsp;
 
-### 4.1. Análise Histórica (1985–2024) com Landsat (30 m)
+### 4.1. Classificação do Ortofoto Aéreo de 1947 (0,49 m)
+
+A análise do período pré-satélite baseou-se nos ortofotomapas históricos georreferenciados e ortorrectificados por Gonçalves, Pinhal & Lino (s.d.) a partir das 24 fotografias aéreas do voo SPLAL de 1947, servidos via WMS pelo CIIMAR/FCUP. O ortofoto, em escala de cinzentos, foi processado por *tiles* de 1 km × 1 km a 2048 × 2048 pixels (resolução efetiva de 0,49 m/pixel), cobrindo toda a área do município com uma grelha de 18 × 9 *tiles*.
+
+A classificação em duas classes — **vegetação** e **edificado** — utilizou um modelo *Random Forest* (100 árvores) treinado sobre quatro *features* de textura local extraídas de cada pixel: intensidade média, média local (janela), desvio-padrão local e gradiente. Os pontos de treino foram selecionados manualmente a partir de coordenadas fornecidas pelo utilizador, abrangendo 13 amostras de vegetação e 5 de edificado em zonas diversas do município. A máscara do limite municipal foi obtida via GEE (CAOP 2025), e fragmentos classificados inferiores a um limiar mínimo de pixels foram removidos por filtragem morfológica.
+
+Após a classificação inicial, um segundo *pipeline* de limpeza cruzou os resultados com camadas independentes — a vegetação Landsat de 1985, as árvores e solo Sentinel-2 actuais — para remover falsos positivos de edificado em zonas comprovadamente verdes. Um filtro de maioria (15 × 15 pixels) suavizou o ruído residual. A máscara do rio Douro foi excluída (transparente) para não contaminar as estatísticas.
+
+&nbsp;
+
+### 4.2. Análise Histórica (1985–2024) com Landsat (30 m)
 
 A comparação direta entre os sensores *Thematic Mapper* (TM, Landsat 5) e *Operational Land Imager* (OLI, Landsat 8/9) requer correção radiométrica, visto que as diferentes respostas espectrais inflacionam sistematicamente o NDVI no Landsat 8. Para mitigar este enviesamento, aplicou-se um duplo nível de harmonização:
 
@@ -76,7 +87,7 @@ Para cada época, extraiu-se o NDVI nestes pontos de referência e calculou-se u
 
 &nbsp;
 
-### 4.2. Análise Detalhada (2016–2025) com Sentinel-2 (10 m)
+### 4.3. Análise Detalhada (2016–2025) com Sentinel-2 (10 m)
 
 A classificação granular exigiu a separação entre estrato arbóreo e estrato herbáceo/solo — um problema clássico em deteção remota a 10 metros de resolução. O algoritmo explorou as **assinaturas sazonais divergentes** destas tipologias: enquanto as árvores mantêm NDVI elevado (> 0,7) no final de Maio/início de Junho, o estrato herbáceo (frequentemente não regado ou cortado) apresenta uma quebra acentuada no sinal (NDVI < 0,3).
 
@@ -112,19 +123,32 @@ O *pipeline* incluiu a análise de **81 cenas Sentinel-2**, validação de separ
 
 &nbsp;
 
-### 5.1. Evolução Histórica e Ritmos de Perda (1985–2024)
+### 5.1. O Ponto de Partida: Porto em 1947
 
-A análise longitudinal da série Landsat revela que a cidade do Porto passou de uma cobertura vegetal (NDVI ≥ 0,25) de **45,0% (5 352 ha)** no final da década de 1980 para **30,0% (3 567 ha)** em 2024. Este decréscimo representa uma **perda líquida de 1 785 hectares** — um valor altamente congruente com a evidência de Guilherme *et al.* (2022), que aponta para 62% de ocupação artificial do solo em 2019 (deixando cerca de 38% para solos permeáveis e verdes).
+A classificação do ortofoto aéreo de 1947 revela um município ainda predominantemente verde: **59,7% de vegetação (2 473 ha)** contra **40,3% de edificado (1 669 ha)**. Este resultado é coerente com a ordem de grandeza de Guilherme *et al.* (2022), que estimaram 31% de elementos construídos artificiais (ABE) em 1947. A diferença (40% vs. 31%) reflecte divergências metodológicas expectáveis: a classificação *Random Forest* sobre textura em escala de cinzentos tende a classificar como edificado certas superfícies minerais (caminhos de terra batida, muros de propriedades agrícolas, afloramentos) que na fotointerpretação manual de Guilherme *et al.* foram integradas nas categorias permeáveis. A classificação por textura não dispõe de informação espectral multibanda, o que limita a capacidade de distinguir solo mineral de superfícies construídas — um viés conservador que sobrestima ligeiramente o edificado.
 
-| Época | Satélite | Área verde (ha) | % do município |
-|-------|----------|----------------|----------------|
-| 1985–90 | Landsat 5 | 5 352 | **45,0%** |
-| 1995–00 | Landsat 5 | 4 240 | 35,6% |
-| 2001–05 | Landsat 5 | 3 572 | 30,0% |
-| 2016–17 | Landsat 8 | 3 732 | 31,4% |
-| 2023–24 | Landsat 8 | 3 567 | **30,0%** |
+Independentemente desta diferença metodológica, ambas as estimativas convergem no essencial: **em 1947, a maioria do território municipal era permeável e vegetado**, com uma vasta matriz de quintas, hortas e terrenos agrícolas que se estendiam pelas freguesias periféricas de Paranhos, Ramalde e Campanhã. A cidade densa restringia-se ao centro histórico e aos eixos de expansão oitocentista.
 
-O balanço bruto entre 1987 e 2024 quantifica-se em **2 266 hectares de vegetação destruída** contra **481 hectares de vegetação ganha**. A dinâmica desta perda balizou-se em três fases cronológicas distintas:
+&nbsp;
+
+### 5.2. Evolução Histórica e Ritmos de Perda (1947–2024)
+
+Conjugando o ortofoto de 1947 com a série Landsat, obtém-se uma trajectória de quase oito décadas. A cobertura vegetal caiu de **59,7%** em 1947 para **45,0%** no final dos anos 1980 e para **30,0%** em 2024. Em termos relativos, o município perdeu **metade da sua matriz verde** entre 1947 e o presente — uma transformação consistente com a duplicação da superfície artificial documentada por Guilherme *et al.* (2022), de 31% em 1947 para 62% em 2019.
+
+A maior parte desta perda ocorreu nas décadas de 1950 a 1980, antes da era dos satélites: entre 1947 e 1985, a cobertura vegetal recuou de 59,7% para 45,0%, uma contracção de **quase 15 pontos percentuais** num período de forte crescimento demográfico e expansão industrial no Porto.
+
+| Época | Fonte | % verde do município |
+|-------|-------|---------------------|
+| **1947** | **Ortofoto SPLAL (RF)** | **59,7%** |
+| 1985–90 | Landsat 5 (NDVI) | 45,0% |
+| 1995–00 | Landsat 5 (NDVI) | 35,6% |
+| 2001–05 | Landsat 5 (NDVI) | 30,0% |
+| 2016–17 | Landsat 8 (NDVI) | 31,4% |
+| 2023–24 | Landsat 8 (NDVI) | 30,0% |
+
+**Nota metodológica:** O valor de 1947 deriva de classificação por textura em escala de cinzentos (duas classes: vegetação/edificado), enquanto a série Landsat utiliza um limiar espectral (NDVI ≥ 0,25). As duas abordagens não são comparáveis pixel a pixel, mas a convergência com os dados publicados por Guilherme *et al.* (2022) e Madureira *et al.* (2011) — que apontam para ~70–75% de coberto verde no final do séc. XIX e ~38% em 2019 — reforça a robustez da tendência de longo prazo.
+
+A série Landsat permite quantificar as dinâmicas com maior detalhe. A análise longitudinal revela que a cidade passou de **5 352 ha** de vegetação (NDVI ≥ 0,25) no final da década de 1980 para **3 567 ha** em 2024 — uma **perda líquida de 1 785 hectares** neste período. O balanço bruto entre 1987 e 2024 quantifica-se em **2 266 hectares de vegetação destruída** contra **481 hectares de vegetação ganha**. A dinâmica desta perda balizou-se em três fases cronológicas distintas:
 
 #### Fase I — 1987–2003: Expansão Acelerada
 
@@ -152,7 +176,7 @@ A cidade regressa a uma trajetória de **perda acelerada (−165 ha em 8 anos)**
 
 &nbsp;
 
-### 5.2. Padrões Espaciais de Transformação
+### 5.3. Padrões Espaciais de Transformação
 
 A distribuição geográfica da perda de vegetação confirma a evolução assimétrica documentada na literatura:
 
@@ -164,7 +188,7 @@ A distribuição geográfica da perda de vegetação confirma a evolução assim
 
 &nbsp;
 
-### 5.3. Análise Granular e Tipológica (2016–2025)
+### 5.4. Análise Granular e Tipológica (2016–2025)
 
 A dissecação da última década com recurso ao Sentinel-2 (10 m) introduz uma camada analítica crítica, permitindo distinguir entre cobertura arbórea e herbácea.
 
@@ -195,9 +219,11 @@ Nota positiva: o algoritmo detetou **127 hectares de solo/relva que transitaram 
 
 ## 6. Conclusões
 
-A integração de dados de satélite de média e alta resolução espacial permite afirmar, com elevada precisão quantitativa, que o Porto perdeu **um terço da sua matriz verde histórica** ao longo dos últimos 40 anos (−1 785 hectares). O trabalho demonstra que esta perda foi de natureza fortemente tipológica: vitimou sobretudo os solos outrora agrícolas e prados abertos (cobertura herbácea), enquanto a estrutura arbórea manteve uma **resiliência notável** perante a pressão urbanística — um padrão consistente ao longo de múltiplas escalas temporais e espaciais, e convergente com as conclusões independentes de Guilherme *et al.* (2022) baseadas em fotointerpretação.
+A integração de fotografia aérea histórica (1947) com dados de satélite de média e alta resolução espacial permite afirmar, com elevada precisão quantitativa, que o Porto perdeu **metade da sua matriz verde** ao longo de quase 80 anos — de 59,7% de cobertura vegetal em 1947 para 30,0% em 2024. Só no período coberto pela série Landsat (1985–2024), a perda líquida foi de **1 785 hectares**. O trabalho demonstra que esta perda foi de natureza fortemente tipológica: vitimou sobretudo os solos outrora agrícolas e prados abertos (cobertura herbácea), enquanto a estrutura arbórea manteve uma **resiliência notável** perante a pressão urbanística — um padrão consistente ao longo de múltiplas escalas temporais e espaciais, e convergente com as conclusões independentes de Guilherme *et al.* (2022) baseadas em fotointerpretação.
 
-Ao melhorar a metodologia de calibração espectral multitemporal (PIF) e a filtragem fenológica sazonal, esta análise oferece um diagnóstico reprodutível e atualizado. A ausência de estudos publicados que analisem a série temporal NDVI do Porto a partir de Landsat para o período 1985–2024 confere originalidade a este contributo.
+A classificação do ortofoto de 1947 revela ainda que a maior contracção percentual ocorreu nas décadas pré-satélite (1947–1985), período de forte crescimento demográfico e expansão industrial que reduziu a cobertura verde de ~60% para ~45%. Este dado sublinha a importância de fontes históricas pré-Landsat para uma compreensão completa da trajectória urbana.
+
+Ao melhorar a metodologia de calibração espectral multitemporal (PIF), a filtragem fenológica sazonal e a extensão da série temporal a 1947, esta análise oferece um diagnóstico reprodutível e atualizado. A ausência de estudos publicados que combinem a classificação quantitativa de ortofotomapas aéreos históricos com a série temporal NDVI Landsat para o Porto confere originalidade a este contributo.
 
 Os resultados acarretam implicações diretas para o planeamento urbano. Dado que 32,6% do município se encontra em zonas de elevado risco térmico (Monteiro *et al.*, 2025), e que a perda de vegetação se concentra nos solos permeáveis herbáceos — fundamentais para a regulação hidrológica e a mitigação do escoamento superficial —, torna-se imperativo que as futuras políticas urbanísticas foquem não apenas na proteção do estrato arbóreo, mas também na **fixação e permeabilidade dos últimos redutos de solo e cobertura herbácea**. A resiliência da cobertura arbórea, embora encorajadora, não deve obscurecer o colapso silencioso dos solos permeáveis — o substrato ecológico que sustenta a capacidade de infiltração, a recarga de aquíferos e a regulação microclimática à escala do bairro.
 
@@ -224,6 +250,7 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 
 ## Mapas interativos
 
+- **[Ortofoto 1947 — vegetação e edificado]({{ site.baseurl }}/1947/orto_1947.html)** — classificação Random Forest sobre o voo SPLAL
 - **[Mapa histórico (1985–2024)]({{ site.baseurl }}/ndvi_historico.html)** — alternância entre épocas, máscaras de vegetação, zonas de perda e ganho
 - **[Mapa detalhado (2016–2025)]({{ site.baseurl }}/mapa.html)** — classificação árvores/solo/edificado a 10 m
 
@@ -235,6 +262,8 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 
 Todo o *pipeline* está disponível no repositório:
 
+- [`1947/orto_1947.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/1947/orto_1947.py) — classificação do ortofoto 1947 (tiles WMS + Random Forest)
+- [`1947/clean_1947.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/1947/clean_1947.py) — limpeza/pós-processamento com máscaras Sentinel e Landsat
 - [`ndvi_historico.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/ndvi_historico.py) — análise histórica 1985–2024 (Landsat + normalização PIF)
 - [`porto_publish.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/porto_publish.py) — pipeline Sentinel-2 (classificação + mapa)
 - [`test_area.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/test_area.py) — calibração na área de teste
