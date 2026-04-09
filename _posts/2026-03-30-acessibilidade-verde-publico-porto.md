@@ -240,29 +240,29 @@ Processamento em Python com *Google Earth Engine*, *scipy*, *NumPy* e *Shapely*.
 
 ## 9. Referências
 
-- Catarino, L. *et al.* (2025). Mapping Green Space Inequalities in 26 European Cities. *Land*, 14(12), 2362.
-- Dai, D. (2011). Racial/ethnic and socioeconomic disparities in urban green space accessibility: Where to intervene? *Landscape and Urban Planning*, 102(4), 234–244.
-- EEA (2022). *Who benefits from nature in cities? Social inequalities in access to urban green and blue spaces across Europe*. European Environment Agency.
-- Graça, M., Alves, P., Gonçalves, J., Nowak, D.J., Hoehn, R., Farinha-Marques, P. & Cunha, M. (2018). Assessing how green space types affect ecosystem services delivery in Porto, Portugal. *Landscape and Urban Planning*, 170, 195–208.
+- Catarino, L. *et al.* (2025). Mapping Green Space Inequalities in 26 European Cities. *Land*, 14(12), 2362. [doi:10.3390/land14122362](https://doi.org/10.3390/land14122362)
+- Dai, D. (2011). Racial/ethnic and socioeconomic disparities in urban green space accessibility: Where to intervene? *Landscape and Urban Planning*, 102(4), 234–244. [doi:10.1016/j.landurbplan.2011.05.002](https://doi.org/10.1016/j.landurbplan.2011.05.002)
+- EEA (2022). *Who benefits from nature in cities? Social inequalities in access to urban green and blue spaces across Europe*. European Environment Agency. [https://www.eea.europa.eu/publications/who-benefits-from-nature-in](https://www.eea.europa.eu/publications/who-benefits-from-nature-in)
+- Graça, M., Alves, P., Gonçalves, J., Nowak, D.J., Hoehn, R., Farinha-Marques, P. & Cunha, M. (2018). Assessing how green space types affect ecosystem services delivery in Porto, Portugal. *Landscape and Urban Planning*, 170, 195–208. [doi:10.1016/j.landurbplan.2017.11.007](https://doi.org/10.1016/j.landurbplan.2017.11.007)
 - GREEN SURGE (2015). *Lisbon, Portugal — Case study portrait*. GREEN SURGE Project, EU FP7.
-- Hoffimann, E., Barros, H. & Ribeiro, A.I. (2017). Socioeconomic inequalities in green space quality and accessibility — Evidence from a Southern European city. *International Journal of Environmental Research and Public Health*, 14(8), 916.
-- Kabisch, N. & Haase, D. (2014). Green justice or just green? Provision of urban green spaces in Berlin, Germany. *Landscape and Urban Planning*, 122, 129–139.
-- Konijnendijk, C.C. (2023). Evidence-based guidelines for greener, healthier, more resilient neighbourhoods: Introducing the 3-30-300 rule. *Journal of Forestry Research*, 34, 821–830.
-- Langford, M., Higgs, G., Radcliffe, J. & White, S. (2008). Urban population distribution models and service accessibility estimation. *Computers, Environment and Urban Systems*, 32(1), 66–80.
-- Lopes, H.S., Vidal, D.G., Cherif, N., Silva, L. & Remoaldo, P.C. (2025). Green infrastructure and its influence on urban heat island, heat risk, and air pollution: A case study of Porto (Portugal). *Journal of Environmental Management*, 376, 124446.
-- Luo, W. & Qi, Y. (2009). An enhanced two-step floating catchment area (E2SFCA) method for measuring spatial accessibility to primary care physicians. *Health & Place*, 15(4), 1100–1107.
-- Luo, W. & Wang, F. (2003). Measures of spatial accessibility to health care in a GIS environment: Synthesis and a case study in the Chicago region. *Environment and Planning B*, 30(6), 865–884.
-- Nghiem, L.T., Zhang, Y., Oh, R.R.Y., Chang, C.C., Tan, C.L., Shanahan, D.F. & Carrasco, L.R. (2021). Equity in green and blue spaces availability in Singapore. *Landscape and Urban Planning*, 210, 104083.
-- OMS (2016). *Urban green spaces and health: A review of evidence*. WHO Regional Office for Europe.
-- Przewoźna, P. *et al.* (2024). Accessibility to urban green spaces: A critical review of the WHO standard. *Ecological Indicators*, 166.
+- Hoffimann, E., Barros, H. & Ribeiro, A.I. (2017). Socioeconomic inequalities in green space quality and accessibility — Evidence from a Southern European city. *International Journal of Environmental Research and Public Health*, 14(8), 916. [doi:10.3390/ijerph14080916](https://doi.org/10.3390/ijerph14080916)
+- Kabisch, N. & Haase, D. (2014). Green justice or just green? Provision of urban green spaces in Berlin, Germany. *Landscape and Urban Planning*, 122, 129–139. [doi:10.1016/j.landurbplan.2013.11.016](https://doi.org/10.1016/j.landurbplan.2013.11.016)
+- Konijnendijk, C.C. (2023). Evidence-based guidelines for greener, healthier, more resilient neighbourhoods: Introducing the 3-30-300 rule. *Journal of Forestry Research*, 34, 821–830. [doi:10.1007/s11676-022-01523-z](https://doi.org/10.1007/s11676-022-01523-z)
+- Langford, M., Higgs, G., Radcliffe, J. & White, S. (2008). Urban population distribution models and service accessibility estimation. *Computers, Environment and Urban Systems*, 32(1), 66–80. [doi:10.1016/j.compenvurbsys.2007.06.001](https://doi.org/10.1016/j.compenvurbsys.2007.06.001)
+- Lopes, H.S., Vidal, D.G., Cherif, N., Silva, L. & Remoaldo, P.C. (2025). Green infrastructure and its influence on urban heat island, heat risk, and air pollution: A case study of Porto (Portugal). *Journal of Environmental Management*, 376, 124446. [doi:10.1016/j.jenvman.2025.124446](https://doi.org/10.1016/j.jenvman.2025.124446)
+- Luo, W. & Qi, Y. (2009). An enhanced two-step floating catchment area (E2SFCA) method for measuring spatial accessibility to primary care physicians. *Health & Place*, 15(4), 1100–1107. [doi:10.1016/j.healthplace.2009.06.002](https://doi.org/10.1016/j.healthplace.2009.06.002)
+- Luo, W. & Wang, F. (2003). Measures of spatial accessibility to health care in a GIS environment: Synthesis and a case study in the Chicago region. *Environment and Planning B*, 30(6), 865–884. [doi:10.1068/b29120](https://doi.org/10.1068/b29120)
+- Nghiem, L.T., Zhang, Y., Oh, R.R.Y., Chang, C.C., Tan, C.L., Shanahan, D.F. & Carrasco, L.R. (2021). Equity in green and blue spaces availability in Singapore. *Landscape and Urban Planning*, 210, 104083. [doi:10.1016/j.landurbplan.2021.104083](https://doi.org/10.1016/j.landurbplan.2021.104083)
+- OMS (2016). *Urban green spaces and health: A review of evidence*. WHO Regional Office for Europe. [https://www.who.int/europe/publications/i/item/WHO-EURO-2016-3352-43111-60341](https://www.who.int/europe/publications/i/item/WHO-EURO-2016-3352-43111-60341)
+- Przewoźna, P. *et al.* (2024). Accessibility to urban green spaces: A critical review of the WHO standard. *Ecological Indicators*, 166. [doi:10.1016/j.ecolind.2024.112357](https://doi.org/10.1016/j.ecolind.2024.112357)
 - Quental, N. (2010). *Modeling a sustainable urban structure: An application to the Metropolitan Area of Porto*. Tese de doutoramento, Instituto Superior Técnico.
 - Quental, N. (2026). Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1947–2025). *Relatório técnico*.
-- Quental, N. & Macedo, M. (2006). *Indicadores de desenvolvimento sustentável para o Grande Porto*. Futuro Sustentável / Universidade Católica Portuguesa.
-- Rigolon, A. (2016). A complex landscape of inequity in access to urban parks: A literature review. *Landscape and Urban Planning*, 153, 160–169.
-- Russo, A. & Cirella, G.T. (2018). Modern compact cities: How much greenery do we need? *International Journal of Environmental Research and Public Health*, 15(10), 2180.
-- Saraiva, M., Cavallaro, F., Sá Marques, T., Teixeira, B. & Ribeiro, G. (2025). Assessing equity in the accessibility to urban greenspaces: A socio-spatial vulnerability perspective in Porto, Portugal. *Environment and Planning B*.
-- Schiavina, M., Freire, S. & MacManus, K. (2023). GHS-POP R2023A — GHS population grid multitemporal (1975–2030). *European Commission, Joint Research Centre*.
-- Wolch, J.R., Byrne, J. & Newell, J.P. (2014). Urban green space, public health, and environmental justice: The challenge of making cities 'just green enough'. *Landscape and Urban Planning*, 125, 234–244.
+- Quental, N. & Macedo, M. (2006). *Indicadores de desenvolvimento sustentável para o Grande Porto*. Futuro Sustentável / Universidade Católica Portuguesa. [https://www.slideshare.net/nquental/indicadores-de-sustentabilidade-para-o-grande-porto](https://www.slideshare.net/nquental/indicadores-de-sustentabilidade-para-o-grande-porto)
+- Rigolon, A. (2016). A complex landscape of inequity in access to urban parks: A literature review. *Landscape and Urban Planning*, 153, 160–169. [doi:10.1016/j.landurbplan.2016.05.017](https://doi.org/10.1016/j.landurbplan.2016.05.017)
+- Russo, A. & Cirella, G.T. (2018). Modern compact cities: How much greenery do we need? *International Journal of Environmental Research and Public Health*, 15(10), 2180. [doi:10.3390/ijerph15102180](https://doi.org/10.3390/ijerph15102180)
+- Saraiva, M., Cavallaro, F., Sá Marques, T., Teixeira, B. & Ribeiro, G. (2025). Assessing equity in the accessibility to urban greenspaces: A socio-spatial vulnerability perspective in Porto, Portugal. *Environment and Planning B*. [doi:10.1177/23998083251407460](https://doi.org/10.1177/23998083251407460)
+- Schiavina, M., Freire, S. & MacManus, K. (2023). GHS-POP R2023A — GHS population grid multitemporal (1975–2030). *European Commission, Joint Research Centre*. [https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe](https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe)
+- Wolch, J.R., Byrne, J. & Newell, J.P. (2014). Urban green space, public health, and environmental justice: The challenge of making cities 'just green enough'. *Landscape and Urban Planning*, 125, 234–244. [doi:10.1016/j.landurbplan.2014.01.017](https://doi.org/10.1016/j.landurbplan.2014.01.017)
 
 ---
 

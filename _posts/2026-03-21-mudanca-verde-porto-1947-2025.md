@@ -205,16 +205,16 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 
 ## 7. Referências
 
-- Gonçalves, J.A., Pinhal, A. & Lino, R.S. (s.d.). *Mapas e fotografias aéreas históricas do Porto*. Faculdade de Ciências da Universidade do Porto / Câmara Municipal do Porto / Centro de Informação Geoespacial do Exército. Disponível em: [https://www.fc.up.pt/pessoas/jagoncal/porto/](https://www.fc.up.pt/pessoas/jagoncal/porto/)
-- Graça, M., Alves, P., Gonçalves, J., Nowak, D.J., Hoehn, R., Farinha-Marques, P. & Cunha, M. (2018). Assessing how green space types affect ecosystem services delivery in Porto, Portugal. *Landscape and Urban Planning*, 170, 195–208.
-- Guilherme, F., Garcia Moreno, E., Gonçalves, J.A., Carretero, M.A. & Farinha-Marques, P. (2022). Looking Closer at the Patterns of Land Cover in the City of Porto, Portugal, between 1947 and 2019. *Land*, 11(10), 1828.
-- Guilherme, F., Gonçalves, J.A., Carretero, M.A. & Farinha-Marques, P. (2024a). Assessment of land cover trajectories as an indicator of urban habitat temporal continuity. *Landscape and Urban Planning*, 242.
-- Guilherme, F., Vicente, J.R., Carretero, M.A. & Farinha-Marques, P. (2024b). Mapping multigroup responses to land cover legacy for urban biodiversity conservation. *Biological Conservation*, 291, 110489.
-- Lopes, H.S., Vidal, D.G., Cherif, N., Silva, L. & Remoaldo, P.C. (2025). Green infrastructure and its influence on urban heat island, heat risk, and air pollution: A case study of Porto (Portugal). *Journal of Environmental Management*, 376, 124446.
-- Madureira, H., Andresen, T. & Monteiro, A. (2011). Green structure and planning evolution in Porto. *Urban Forestry & Urban Greening*, 10(2), 141–149.
-- Madureira, H. & Andresen, T. (2014). Planning for multifunctional urban green infrastructures: Promises and challenges. *Urban Design International*, 19, 38–49.
+- Gonçalves, J.A., Pinhal, A. & Lino, R.S. (s.d.). *Mapas e fotografias aéreas históricas do Porto*. FCUP / CMP / CIGeoE. [https://www.fc.up.pt/pessoas/jagoncal/porto/](https://www.fc.up.pt/pessoas/jagoncal/porto/)
+- Graça, M., Alves, P., Gonçalves, J., Nowak, D.J., Hoehn, R., Farinha-Marques, P. & Cunha, M. (2018). Assessing how green space types affect ecosystem services delivery in Porto, Portugal. *Landscape and Urban Planning*, 170, 195–208. [doi:10.1016/j.landurbplan.2017.11.007](https://doi.org/10.1016/j.landurbplan.2017.11.007)
+- Guilherme, F., Garcia Moreno, E., Gonçalves, J.A., Carretero, M.A. & Farinha-Marques, P. (2022). Looking Closer at the Patterns of Land Cover in the City of Porto, Portugal, between 1947 and 2019. *Land*, 11(10), 1828. [doi:10.3390/land11101828](https://doi.org/10.3390/land11101828)
+- Guilherme, F., Gonçalves, J.A., Carretero, M.A. & Farinha-Marques, P. (2024a). Assessment of land cover trajectories as an indicator of urban habitat temporal continuity. *Landscape and Urban Planning*, 242. [doi:10.1016/j.landurbplan.2023.104952](https://doi.org/10.1016/j.landurbplan.2023.104952)
+- Guilherme, F., Vicente, J.R., Carretero, M.A. & Farinha-Marques, P. (2024b). Mapping multigroup responses to land cover legacy for urban biodiversity conservation. *Biological Conservation*, 291, 110489. [doi:10.1016/j.biocon.2024.110489](https://doi.org/10.1016/j.biocon.2024.110489)
+- Lopes, H.S., Vidal, D.G., Cherif, N., Silva, L. & Remoaldo, P.C. (2025). Green infrastructure and its influence on urban heat island, heat risk, and air pollution: A case study of Porto (Portugal). *Journal of Environmental Management*, 376, 124446. [doi:10.1016/j.jenvman.2025.124446](https://doi.org/10.1016/j.jenvman.2025.124446)
+- Madureira, H., Andresen, T. & Monteiro, A. (2011). Green structure and planning evolution in Porto. *Urban Forestry & Urban Greening*, 10(2), 141–149. [doi:10.1016/j.ufug.2010.12.004](https://doi.org/10.1016/j.ufug.2010.12.004)
+- Madureira, H. & Andresen, T. (2014). Planning for multifunctional urban green infrastructures: Promises and challenges. *Urban Design International*, 19, 38–49. [doi:10.1057/udi.2013.11](https://doi.org/10.1057/udi.2013.11)
 - Quental, N. (2010). *Modeling a sustainable urban structure: An application to the Metropolitan Area of Porto*. Tese de Doutoramento em Engenharia do Território, Instituto Superior Técnico, Universidade Técnica de Lisboa.
-- Roy, D.P. *et al.* (2016). Characterization of Landsat-7 to Landsat-8 reflective wavelength and normalized difference vegetation index continuity. *Remote Sensing of Environment*, 185, 57–70.
+- Roy, D.P. *et al.* (2016). Characterization of Landsat-7 to Landsat-8 reflective wavelength and normalized difference vegetation index continuity. *Remote Sensing of Environment*, 185, 57–70. [doi:10.1016/j.rse.2015.12.024](https://doi.org/10.1016/j.rse.2015.12.024)
 
 ---
 
