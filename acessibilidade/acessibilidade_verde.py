@@ -336,24 +336,14 @@ if not os.path.exists(verde_pago_path):
 else:
     print("  verde_pago.png já existe, a saltar...")
 
-# --- Camada de expansão ---
-verde_exp_path = os.path.join(LAYERS_DIR, "verde_expansao.png")
-if not os.path.exists(verde_exp_path):
-    if expansao_union is not None:
-        print("  A gerar camada de expansão...")
-        # Expansão \ parques actuais (evitar sobreposição)
-        exp_minus_parques = expansao_union.difference(parques_union)
-        inside_exp = contains_xy(exp_minus_parques, *coords_flat).reshape(
-            grid_h, grid_w
-        )
-        exp_arr = np.zeros((grid_h, grid_w, 4), dtype=np.uint8)
-        exp_arr[inside_exp, 3] = 255
-        Image.fromarray(exp_arr).save(verde_exp_path)
-        print(f"  verde_expansao.png guardado ({inside_exp.sum()} pixels)")
-    else:
-        print("  AVISO: expansao_verde.geojson não encontrado — sem camada de expansão")
-else:
-    print("  verde_expansao.png já existe, a saltar...")
+# --- Centróides da expansão (CMP) ---
+expansao_centroids = []
+if os.path.exists(expansao_path):
+    expansao_gdf_c = gpd.read_file(expansao_path).to_crs(epsg=4326)
+    for _, row in expansao_gdf_c.iterrows():
+        c = row.geometry.centroid
+        expansao_centroids.append([c.y, c.x])
+    print(f"  {len(expansao_centroids)} centróides de expansão calculados")
 
 # ===== Phase 3: 2SFCA (cálculo a ~30m) =====
 print("\nA calcular 2SFCA (300m)...")
@@ -623,7 +613,6 @@ def to_base64(filepath):
 verde_pub_b64 = to_base64(verde_pub_path)
 verde_priv_b64 = to_base64(os.path.join(PARENT_LAYERS, "interior_subsistente.png"))
 verde_pago_b64 = to_base64(verde_pago_path)
-verde_exp_b64 = to_base64(verde_exp_path) if os.path.exists(verde_exp_path) else ""
 ghspop_b64 = to_base64(os.path.join(PARENT_LAYERS, "ghspop.png"))
 acc_b64 = to_base64(acc_path)
 lowpop_b64 = to_base64(lowpop_path)
@@ -645,11 +634,8 @@ else:
         "  AVISO: parques_porto.geojson não encontrado — correr criar_parques.py primeiro"
     )
 
-# Carregar GeoJSON da expansão (para contornos e etiquetas no mapa)
-expansao_geojson_str = ""
-if os.path.exists(expansao_path):
-    with open(expansao_path, "r", encoding="utf-8") as f:
-        expansao_geojson_str = f.read()
+# Centróides da expansão (para círculos no mapa)
+expansao_centroids_str = _json.dumps(expansao_centroids)
 
 basemaps = [
     (
@@ -718,7 +704,6 @@ html = f'''<!DOCTYPE html>
   .section {{ font-size:11px; color:#888; font-weight:bold; margin:8px 0 4px 0; }}
   select {{ background:#f5f5f5; color:#222; border:1px solid #ccc; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }}
   .park-label {{ background:rgba(255,255,255,0.85)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#1B5E20; padding:1px 5px; border-radius:3px; }}
-  .exp-label {{ background:rgba(255,255,255,0.85)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#00695C; padding:1px 5px; border-radius:3px; font-style:italic; }}
   @media (max-width: 768px) {{
     #panel {{
       left:6px; right:6px; bottom:6px; min-width:unset;
@@ -827,7 +812,7 @@ html = f'''<!DOCTYPE html>
 
 <script>
 var parquesData = {parques_geojson_str if parques_geojson_str else "null"};
-var expansaoData = {expansao_geojson_str if expansao_geojson_str else "null"};
+var expansaoCentroids = {expansao_centroids_str};
 var map = L.map('map').setView([41.155, -8.63], 13);
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
@@ -886,15 +871,6 @@ var outroVerdeLayer = {{
   label: "Verde pago ou n\\u00e3o usufru\\u00edvel",
   color: "#8D6E63",
   src: "{verde_pago_b64}",
-  show: false
-}};
-
-// Estratégia de expansão (CMP) — azul-esverdeado
-var expansaoLayer = {{
-  id: "verde_expansao",
-  label: "Estrat\\u00e9gia de expans\\u00e3o (CMP)",
-  color: "#00897B",
-  src: "{verde_exp_b64}",
   show: false
 }};
 
@@ -1121,61 +1097,24 @@ async function init() {{
   pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
   div.insertBefore(pRow, proxRow.nextSibling);
 
-  // --- Camada GeoJSON de expansão (contornos + etiquetas) ---
-  var expansaoGeoLayer = null;
-  if (expansaoData) {{
-    map.createPane('expansaoGeoPane');
-    map.getPane('expansaoGeoPane').style.zIndex = 525;
+  // --- Estratégia de expansão (CMP) — círculos nos centróides ---
+  map.createPane('expansaoPane');
+  map.getPane('expansaoPane').style.zIndex = 625;
+  var expansaoMarkers = L.layerGroup([], {{pane: 'expansaoPane'}});
+  expansaoCentroids.forEach(function(c) {{
+    L.circleMarker(c, {{
+      radius: 8, color: '#00897B', fillColor: '#00897B',
+      fillOpacity: 1, opacity: 1, weight: 0, pane: 'expansaoPane',
+      interactive: false
+    }}).addTo(expansaoMarkers);
+  }});
 
-    expansaoGeoLayer = L.geoJson(expansaoData, {{
-      pane: 'expansaoGeoPane',
-      style: function(f) {{
-        return {{
-          color: '#00695C', weight: 2, opacity: 0.9,
-          fillColor: '#00897B', fillOpacity: 0.08,
-          dashArray: f.properties.fonte === 'manual' ? '4 4' : null
-        }};
-      }},
-      onEachFeature: function(f, layer) {{
-        var p = f.properties;
-        var html = '<b style="font-size:13px;">' + p.nome + '</b><br>';
-        html += '<span style="color:#666;">Expans\\u00e3o planeada &mdash; ' + p.area_ha_planeada + ' ha</span>';
-        layer.bindPopup(html);
-        layer.bindTooltip(p.nome, {{
-          permanent: true, direction: 'center',
-          className: 'exp-label',
-          offset: [0, 0]
-        }});
-      }}
-    }});
-
-    map.on('zoomend', function() {{
-      var labels = document.querySelectorAll('.exp-label');
-      var z = map.getZoom();
-      labels.forEach(function(l) {{ l.style.display = z >= 14 ? '' : 'none'; }});
-    }});
-    map.fire('zoomend');
-  }}
-
-  // Raster de expansão (mesma pane que GeoJSON)
-  var expRasterOverlay = null;
-  if (expansaoLayer.src) {{
-    var expMask = await extractMask(expansaoLayer.src);
-    var expSrc = renderColored(expMask, expansaoLayer.color);
-    expRasterOverlay = L.imageOverlay(expSrc, bounds, {{pane: 'expansaoGeoPane'}});
-  }}
-
-  // Checkbox para expansão (raster + contornos)
+  // Checkbox para expansão
   var eRow = document.createElement('div'); eRow.className = 'row';
   var eCb = document.createElement('input'); eCb.type = 'checkbox'; eCb.checked = false;
   eCb.addEventListener('change', function() {{
-    if (this.checked) {{
-      if (expRasterOverlay) expRasterOverlay.addTo(map);
-      if (expansaoGeoLayer) expansaoGeoLayer.addTo(map);
-    }} else {{
-      if (expRasterOverlay) map.removeLayer(expRasterOverlay);
-      if (expansaoGeoLayer) map.removeLayer(expansaoGeoLayer);
-    }}
+    if (this.checked) {{ expansaoMarkers.addTo(map); }}
+    else {{ map.removeLayer(expansaoMarkers); }}
   }});
   var eSw = document.createElement('span'); eSw.className = 'swatch'; eSw.style.backgroundColor = '#00897B';
   var eLb = document.createElement('label'); eLb.textContent = 'Estrat\\u00e9gia de expans\\u00e3o (CMP)'; eLb.style.fontSize = '12px';
