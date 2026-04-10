@@ -113,6 +113,14 @@ O verde privado (`layers/interior_subsistente.png`) é calculado por `interiores
 - Proporções geográficas correctas são essenciais (cos(latitude) correction)
 - `.db` é gerado por `compilar_dados.py` e gitignored — não commitar
 
+## Lições aprendidas
+
+- **fetch() em vez de inline** — dados partilhados entre páginas (parques, expansão CMP) devem ser carregados via `fetch()` em runtime, nunca embutidos no HTML. Commit a7743cb corrigiu isto.
+- **Verificar consumidores antes de alterar dados** — ao editar `parques_porto.geojson` ou qualquer fonte partilhada, grep por todos os ficheiros que a referenciam e actualizar em cadeia.
+- **OBIA abandonada para 1947** — classificação pixel com Random Forest e texturas locais funciona melhor que OBIA para o ortofoto P&B (resolução insuficiente para segmentação).
+- **Overpass API instável** — dividir queries grandes em lotes e usar servidores alternativos; para adições individuais, preferir OSM API v0.6.
+- **Nunca inventar referências** — verificar sempre autores, anos e títulos online antes de citar.
+
 ## Higiene do repositório
 
 - **`.gitignore` obrigatório** — deve conter: `__pycache__/`, `*.pyc`, `.claude/`, `.superpowers/`, `*.bak`, `.env`, `*.db`, `*.npy`, `*.npz`, `*.mp4`
