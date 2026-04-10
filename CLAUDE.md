@@ -52,19 +52,41 @@ GEE/
 - **Cada sub-projecto tem a sua pasta** — nunca espalhar ficheiros de dados pela raiz
 - **Links no `index.html`** devem apontar para o caminho correcto dentro da pasta (ex: `atropelamentos/dashboard_atropelamentos.html`)
 
+## Camadas de verde — definições e dependências
+
+O projecto usa **três camadas de verde mutuamente exclusivas**:
+
+1. **Parques e jardins** (`parques_porto.geojson`): espaços verdes de acesso público gratuito. Polígonos obtidos preferencialmente do PDM (fruição colectiva) ou OSM. Fonte autoritativa.
+2. **Verde pago ou não usufruível** (`verde_pago.png`): pixels que são (a) dentro de polígonos PDM das categorias verde de fruição colectiva, lúdico-produtiva, protecção e enquadramento, ou associada a equipamento — **excluindo** frente atlântica e ribeirinha; (b) verdes no Sentinel-2; (c) **fora** de qualquer parque/jardim.
+3. **Verde privado** (`interior_subsistente.png`): pixels verdes no Sentinel-2 que **não** são parques/jardins **nem** verde pago, **nem** estradas. Corresponde a logradouros, quarteirões e quintas privadas.
+
+**Hierarquia**: parques > verde pago > verde privado. Ao alterar parques, as outras camadas devem ser regeneradas.
+
 ## Acessibilidade — pipeline de regeneração
 
-O mapa de acessibilidade (`acessibilidade/`) usa PNGs em cache na pasta `acessibilidade/layers/`. Estes PNGs são gerados a partir dos dados de parques (`parques_porto.geojson`) e **não se actualizam automaticamente** quando os dados mudam.
+O mapa de acessibilidade (`acessibilidade/`) usa PNGs em cache na pasta `acessibilidade/layers/`.
 
 **Ao alterar parques (adicionar, remover, editar geometria):**
-1. Actualizar `criar_parques.py` (lista PARQUES) e/ou `parques_porto.geojson`
-2. **Apagar os PNGs em cache** que dependem dos parques antes de regenerar:
-   - `layers/verde_publico.png` (verde Sentinel-2 ∩ parques)
-   - `layers/verde_pago.png` (PDM \ parques)
-   - `layers/acessibilidade_2sfca.png` (resultado do cálculo)
+1. Editar `parques_porto.geojson` directamente (preferir polígonos PDM ou OSM)
+2. **Apagar os PNGs em cache** que dependem dos parques:
+   - `layers/verde_publico.png`, `layers/verde_pago.png`, `layers/acessibilidade_2sfca.png`
+   - `layers/proximidade_300m.png`, `layers/kernel_300.npy`, `layers/reach_300.npy`
 3. Correr `python acessibilidade_verde.py` — só regenera PNGs que não existam
+4. **Depois**: regenerar o verde privado (ver abaixo)
 
-Se não se apagarem os PNGs, o script salta a regeneração e usa dados antigos — os novos parques ficam **invisíveis no cálculo de acessibilidade** e na camada visual.
+## Verde privado — pipeline de regeneração
+
+O verde privado (`layers/interior_subsistente.png`) é calculado por `interiores_quarteiroes.py`:
+
+1. **Classificação Sentinel-2** — base: `acessibilidade/layers/verde_total.png` (todos os pixels verdes)
+2. **Subtrair parques e jardins** — camada `acessibilidade/parques_porto.geojson`
+3. **Subtrair verde pago** — camada `acessibilidade/layers/verde_pago.png`
+4. **Máscara de estradas** — OSM (buffer por tipo de via)
+5. **Vectorização e filtragem** — área mínima e forma
+
+**Para regenerar sem GEE**: apagar `layers/interior_subsistente.png` e `layers/interior_perdido.png`, depois correr `python interiores_quarteiroes.py`. A fase 1 re-descarrega do GEE (~30s); as fases 2-5 são locais.
+
+**Alternativa rápida (sem GEE)**: usar `acessibilidade/layers/verde_total.png` como base, aplicar as máscaras de parques + verde pago + estradas localmente.
 
 **Overpass API:**
 - Pode dar timeout com muitos elementos — o script divide em lotes e tenta servidores alternativos

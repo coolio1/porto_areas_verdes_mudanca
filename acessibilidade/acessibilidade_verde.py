@@ -531,17 +531,17 @@ else:
     print("  baixa_densidade.png já existe, a saltar...")
 
 # ===== Phase 4c: Proximidade 300m (Konijnendijk 3-30-300) =====
-# Para cada pixel habitado: existe um parque ≥0,5 ha a ≤300 m?
+# Para cada pixel habitado: existe um parque ≥0,4 ha a ≤300 m?
 PROX_RADIUS_M = 300
-PARK_MIN_AREA_M2 = 5_000  # 0.5 ha
+PARK_MIN_AREA_M2 = 4_000  # 0.4 ha
 prox_path = os.path.join(LAYERS_DIR, "proximidade_300m.png")
 if not os.path.exists(prox_path):
     print("\nA calcular proximidade 300m (Konijnendijk)...")
-    # Filtrar parques com área ≥0,5 ha
+    # Filtrar parques com área ≥0,4 ha
     parques_grandes = parques_gdf[
         parques_gdf.geometry.area * (M_PER_DEG_LAT * M_PER_DEG_LON) >= PARK_MIN_AREA_M2
     ]
-    print(f"  Parques >=0.5 ha: {len(parques_grandes)} de {len(parques_gdf)}")
+    print(f"  Parques >=0.4 ha: {len(parques_grandes)} de {len(parques_gdf)}")
     if len(parques_grandes) > 0:
         parques_grandes_union = parques_grandes.geometry.union_all()
         # Máscara binária dos parques grandes
@@ -572,10 +572,10 @@ if not os.path.exists(prox_path):
         pct_coberto = pop_coberto / total_pop_porto * 100
         pct_nao_coberto = pop_nao_coberto / total_pop_porto * 100
         print(
-            f"  A <=300m de parque >=0.5ha: {pop_coberto:.0f} hab ({pct_coberto:.1f}%)"
+            f"  A <=300m de parque >=0.4ha: {pop_coberto:.0f} hab ({pct_coberto:.1f}%)"
         )
         print(
-            f"  A >300m de parque >=0.5ha: {pop_nao_coberto:.0f} hab ({pct_nao_coberto:.1f}%)"
+            f"  A >300m de parque >=0.4ha: {pop_nao_coberto:.0f} hab ({pct_nao_coberto:.1f}%)"
         )
         # PNG: verde onde coberto, vermelho onde não coberto (só pixels habitados)
         prox_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
@@ -591,7 +591,7 @@ if not os.path.exists(prox_path):
         np.save(os.path.join(LAYERS_DIR, "reach_300.npy"), reach_300)
         print("  Arrays proximidade 300m guardados em cache (.npy)")
     else:
-        print("  AVISO: nenhum parque >=0.5 ha encontrado")
+        print("  AVISO: nenhum parque >=0.4 ha encontrado")
         prox_rgba = np.zeros((calc_h, calc_w, 4), dtype=np.uint8)
         Image.fromarray(prox_rgba).save(prox_path)
 else:
@@ -789,14 +789,14 @@ html = f'''<!DOCTYPE html>
     <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
-        <span style="color:#666;">&le;300m de parque &ge;0,5 ha (cumpre)</span>
+        <span style="color:#666;">&le;300m de parque &ge;0,4 ha (cumpre)</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#B71C1C;display:inline-block;"></span>
-        <span style="color:#666;">&gt;300m de parque &ge;0,5 ha (n&atilde;o cumpre)</span>
+        <span style="color:#666;">&gt;300m de parque &ge;0,4 ha (n&atilde;o cumpre)</span>
       </div>
     </div>
-    <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS: &ge;0,5 ha de verde a &lt;300m de casa</div>
+    <div style="color:#aaa;font-size:9px;margin-top:4px;">OMS: &ge;0,4 ha de verde a &lt;300m de casa</div>
   </div>
 
   <div class="section">Camadas</div>
