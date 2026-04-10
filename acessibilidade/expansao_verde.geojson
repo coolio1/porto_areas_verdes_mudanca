@@ -34,20 +34,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -8.659799999999992,
-          41.14750000000001
-        ]
-      },
-      "properties": {
-        "nome": "Jardim de Sobreiras",
-        "area_ha_planeada": 1.8
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -8.6297,
           41.1743
         ]
@@ -62,8 +48,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -8.5941,
-          41.1413
+          -8.600581117887543,
+          41.14226432982156
         ]
       },
       "properties": {
@@ -76,8 +62,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -8.588000000000005,
-          41.16200000000001
+          -8.584219834088161,
+          41.165771333798475
         ]
       },
       "properties": {
@@ -104,8 +90,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -8.5824,
-          41.167
+          -8.574183508167648,
+          41.175189649248445
         ]
       },
       "properties": {
@@ -230,8 +216,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -8.577499999999993,
-          41.15479999999999
+          -8.576328280985411,
+          41.15394202570633
         ]
       },
       "properties": {

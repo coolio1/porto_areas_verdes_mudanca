@@ -602,13 +602,15 @@ lowpop_b64 = to_base64(lowpop_path)
 muni_b64 = to_base64(muni_path)
 prox_b64 = to_base64(prox_path)
 
-# Contar parques (para legenda estática)
+# Carregar GeoJSONs (embutidos como fallback para file://, fetch() actualiza em HTTP)
 import json as _json
 
 parques_geojson_path = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
+parques_geojson_str = "null"
 if os.path.exists(parques_geojson_path):
     with open(parques_geojson_path, "r", encoding="utf-8") as f:
-        _pdata = _json.load(f)
+        parques_geojson_str = f.read()
+    _pdata = _json.loads(parques_geojson_str)
     n_parques = len(_pdata["features"])
     print(f"  Parques nomeados: {n_parques} carregados")
 else:
@@ -616,6 +618,15 @@ else:
     print(
         "  AVISO: parques_porto.geojson não encontrado — correr criar_parques.py primeiro"
     )
+
+expansao_path = os.path.join(SCRIPT_DIR, "expansao_verde.geojson")
+expansao_path = os.path.join(SCRIPT_DIR, "expansao_verde.geojson")
+expansao_geojson_str = "null"
+if os.path.exists(expansao_path):
+    with open(expansao_path, "r", encoding="utf-8") as f:
+        expansao_geojson_str = f.read()
+    _edata = _json.loads(expansao_geojson_str)
+    print(f"  Expansão: {len(_edata['features'])} centróides carregados")
 
 basemaps = [
     (
@@ -798,22 +809,29 @@ html = f'''<!DOCTYPE html>
 </div>
 
 <script>
-var parquesData = null;
-var expansaoCentroids = [];
+// Fallback inline (funciona em file://); fetch() actualiza em HTTP (GitHub Pages)
 var map = L.map('map').setView([41.155, -8.63], 13);
+var parquesData = {parques_geojson_str};
+var _expRaw = {expansao_geojson_str};
+var expansaoCentroids = _expRaw ? _expRaw.features.map(function(f) {{
+  return {{lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0],
+          nome: f.properties.nome, area: f.properties.area_ha_planeada}};
+}}) : [];
 
-// Carregar GeoJSONs em runtime (evita re-gerar HTML ao editar dados)
-fetch('parques_porto.geojson').then(r => r.json()).then(function(data) {{
-  parquesData = data;
-  if (typeof initParques === 'function') initParques();
-}});
-fetch('expansao_verde.geojson').then(r => r.json()).then(function(data) {{
-  expansaoCentroids = data.features.map(function(f) {{
-    return {{lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0],
-            nome: f.properties.nome, area: f.properties.area_ha_planeada}};
-  }});
-  if (typeof initExpansao === 'function') initExpansao();
-}});
+// Em HTTP, recarregar do ficheiro (dados sempre actualizados sem re-gerar HTML)
+try {{
+  fetch('parques_porto.geojson').then(function(r) {{ return r.json(); }}).then(function(data) {{
+    parquesData = data;
+    if (typeof initParques === 'function') initParques();
+  }}).catch(function() {{}});
+  fetch('expansao_verde.geojson').then(function(r) {{ return r.json(); }}).then(function(data) {{
+    expansaoCentroids = data.features.map(function(f) {{
+      return {{lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0],
+              nome: f.properties.nome, area: f.properties.area_ha_planeada}};
+    }});
+    if (typeof initExpansao === 'function') initExpansao();
+  }}).catch(function() {{}});
+}} catch(e) {{}}
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
 document.getElementById('basemap-select').addEventListener('change', function() {{
@@ -1109,7 +1127,7 @@ async function init() {{
     if (this.checked) {{ expansaoMarkers.addTo(map); }}
     else {{ map.removeLayer(expansaoMarkers); }}
   }});
-  var eSw = document.createElement('span'); eSw.className = 'swatch'; eSw.style.backgroundColor = '#00897B';
+  var eSw = document.createElement('span'); eSw.className = 'swatch'; eSw.style.backgroundColor = '#4DB6AC'; eSw.style.border = '1.5px solid #00796B';
   var eLb = document.createElement('label'); eLb.textContent = 'Estrat\\u00e9gia de expans\\u00e3o (CMP)'; eLb.style.fontSize = '12px';
   eRow.appendChild(eCb); eRow.appendChild(eSw); eRow.appendChild(eLb);
   div.insertBefore(eRow, pRow.nextSibling);
@@ -1117,8 +1135,8 @@ async function init() {{
   window.initExpansao = function() {{
     expansaoCentroids.forEach(function(c) {{
       var m = L.circleMarker([c.lat, c.lng], {{
-        radius: 8, color: '#00897B', fillColor: '#00897B',
-        fillOpacity: 1, opacity: 1, weight: 0, pane: 'expansaoPane'
+        radius: 7, color: '#00796B', fillColor: '#4DB6AC',
+        fillOpacity: 0.7, opacity: 0.9, weight: 1.5, pane: 'expansaoPane'
       }}).addTo(expansaoMarkers);
       m.bindTooltip('<b>' + c.nome + '</b><br>' + c.area + ' ha', {{direction: 'top', offset: [0, -8]}});
       L.marker([c.lat, c.lng], {{

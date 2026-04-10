@@ -19,8 +19,6 @@ from PIL import Image
 from scipy import ndimage
 from shapely.geometry import mapping, shape
 from shapely.ops import unary_union
-import geopandas as gpd
-from shapely import contains_xy
 from rasterio.features import shapes as rasterio_shapes
 from rasterio.transform import Affine
 
@@ -75,7 +73,7 @@ pop_coberta_actual = pop_corrected[coberto_actual & habitado].sum()
 pct_actual = pop_coberta_actual / total_pop * 100
 print(f"  Populacao total: {total_pop:.0f} hab")
 print(
-    f"  Cobertura actual (<=300m de parque >=0.5ha): {pop_coberta_actual:.0f} hab ({pct_actual:.1f}%)"
+    f"  Cobertura actual (<=300m de parque >=0.4ha): {pop_coberta_actual:.0f} hab ({pct_actual:.1f}%)"
 )
 
 # ===== Carregar candidatos por prioridade =====
@@ -87,52 +85,141 @@ ys = np.linspace(LAT_MAX, LAT_MIN, calc_h)
 xx, yy = np.meshgrid(xs, ys)
 coords_flat = (xx.ravel(), yy.ravel())
 
-# --- 1. Estratégia de expansão (CMP) ---
+# Carregar verde pago (usado pela expansão e candidatos)
+verde_pago_path = os.path.join(LAYERS_DIR, "verde_pago.png")
+vp_img = np.array(Image.open(verde_pago_path).convert("RGBA"))
+
+# --- 1. Estratégia de expansão (CMP) — flood-fill de verde pago a partir dos centróides ---
 expansao_path = os.path.join(SCRIPT_DIR, "expansao_verde.geojson")
 parques_path = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
 
 expansao_candidates = []
 if os.path.exists(expansao_path):
-    exp_gdf = gpd.read_file(expansao_path).to_crs(epsg=4326)
-    parques_gdf = gpd.read_file(parques_path).to_crs(epsg=4326)
-    parques_union = parques_gdf.geometry.union_all()
+    import math
+    from heapq import heappush, heappop
 
-    for _, row in exp_gdf.iterrows():
-        geom = row.geometry.difference(parques_union)
-        if geom.is_empty:
+    with open(expansao_path, "r", encoding="utf-8") as f:
+        exp_data = json.load(f)
+
+    # Carregar verde pago como máscara disponível
+    verde_pago_mask_exp = vp_img[:, :, 3] > 0
+    already_claimed = np.zeros_like(verde_pago_mask_exp)
+
+    # Processar por área planeada decrescente (maiores primeiro, sem sobreposição)
+    features_sorted = sorted(
+        exp_data["features"],
+        key=lambda f: f["properties"]["area_ha_planeada"],
+        reverse=True,
+    )
+
+    for feat in features_sorted:
+        nome = feat["properties"]["nome"]
+        area_plan_m2 = feat["properties"]["area_ha_planeada"] * 10000
+        lon, lat = feat["geometry"]["coordinates"]
+
+        # Pixel do centróide
+        cx = int(round((lon - LON_MIN) / (LON_MAX - LON_MIN) * (calc_w - 1)))
+        cy = int(round((LAT_MAX - lat) / (LAT_MAX - LAT_MIN) * (calc_h - 1)))
+
+        available = verde_pago_mask_exp & ~already_claimed
+
+        # Se centróide não cai em verde pago, encontrar pixel mais próximo
+        seed_y, seed_x = cy, cx
+        if not (0 <= cy < calc_h and 0 <= cx < calc_w and available[cy, cx]):
+            best_dist = float("inf")
+            search_r = 80  # ~500m
+            for dy in range(-search_r, search_r + 1):
+                for dx in range(-search_r, search_r + 1):
+                    ny, nx = cy + dy, cx + dx
+                    if 0 <= ny < calc_h and 0 <= nx < calc_w and available[ny, nx]:
+                        d = math.sqrt((dx * px_w_m) ** 2 + (dy * px_h_m) ** 2)
+                        if d < best_dist:
+                            best_dist = d
+                            seed_y, seed_x = ny, nx
+            if best_dist == float("inf"):
+                print(f"  AVISO: {nome} — sem verde pago acessível, a saltar")
+                continue
+
+        # BFS por distância ao centróide, apenas por verde pago contíguo
+        captured = np.zeros_like(verde_pago_mask_exp)
+        visited = np.zeros_like(verde_pago_mask_exp)
+        heap = [(0.0, seed_y, seed_x)]
+        visited[seed_y, seed_x] = True
+        total_area = 0
+
+        while heap and total_area < area_plan_m2:
+            dist, py, px = heappop(heap)
+            if not available[py, px]:
+                continue
+            captured[py, px] = True
+            total_area += pixel_area_m2
+
+            for dy in [-1, 0, 1]:
+                for dx in [-1, 0, 1]:
+                    if dy == 0 and dx == 0:
+                        continue
+                    ny, nx = py + dy, px + dx
+                    if 0 <= ny < calc_h and 0 <= nx < calc_w and not visited[ny, nx]:
+                        visited[ny, nx] = True
+                        if available[ny, nx]:
+                            d = math.sqrt(
+                                ((nx - cx) * px_w_m) ** 2 + ((ny - cy) * px_h_m) ** 2
+                            )
+                            heappush(heap, (d, ny, nx))
+
+        already_claimed |= captured
+        rows_i, cols_i = np.where(captured)
+        if len(rows_i) == 0:
             continue
-        inside = contains_xy(geom, *coords_flat).reshape(calc_h, calc_w)
-        area_m2 = inside.sum() * pixel_area_m2
-        if area_m2 < 1:
-            continue
-        rows_i, cols_i = np.where(inside)
-        cy, cx = rows_i.mean(), cols_i.mean()
         expansao_candidates.append(
             {
                 "tipo": "expansao",
-                "nome": row.get("nome", ""),
-                "area_m2": area_m2,
-                "area_ha": area_m2 / 10000,
-                "lat": LAT_MAX - (cy / calc_h) * (LAT_MAX - LAT_MIN),
-                "lon": LON_MIN + (cx / calc_w) * (LON_MAX - LON_MIN),
-                "mask": inside,
+                "nome": nome,
+                "area_m2": total_area,
+                "area_ha": total_area / 10000,
+                "area_planeada_ha": feat["properties"]["area_ha_planeada"],
+                "lat": LAT_MAX - (rows_i.mean() / calc_h) * (LAT_MAX - LAT_MIN),
+                "lon": LON_MIN + (cols_i.mean() / calc_w) * (LON_MAX - LON_MIN),
+                "mask": captured,
             }
         )
-    expansao_candidates.sort(key=lambda c: c["area_m2"], reverse=True)
+        pct_cap = total_area / area_plan_m2 * 100
+        print(
+            f"  {nome:<45} {total_area / 10000:>5.1f}/{feat['properties']['area_ha_planeada']:.0f} ha ({pct_cap:.0f}%)"
+        )
+
     print(f"  Expansao (CMP): {len(expansao_candidates)} areas")
 else:
     print("  AVISO: expansao_verde.geojson nao encontrado")
 
-# --- 2. Verde pago ou não usufruível ---
-verde_pago_path = os.path.join(LAYERS_DIR, "verde_pago.png")
-vp_img = np.array(Image.open(verde_pago_path).convert("RGBA"))
+# --- 2. Verde pago ou não usufruível (excluindo pixels já capturados pela expansão) ---
 verde_pago_mask = vp_img[:, :, 3] > 0
 
-pago_labels, n_pago = ndimage.label(verde_pago_mask)
+# Excluir pixels já capturados pela expansão
+expansao_total_mask = np.zeros_like(verde_pago_mask)
+for exp_c in expansao_candidates:
+    expansao_total_mask |= exp_c["mask"]
+verde_pago_restante = verde_pago_mask & ~expansao_total_mask
+
+# Clustering: dilatar manchas em 50m, re-labeling, depois usar máscara original
+CLUSTER_RADIUS_M = 50
+cluster_rx = int(round(CLUSTER_RADIUS_M / px_w_m))
+cluster_ry = int(round(CLUSTER_RADIUS_M / px_h_m))
+ky_c, kx_c = np.ogrid[-cluster_ry : cluster_ry + 1, -cluster_rx : cluster_rx + 1]
+kernel_cluster = (
+    (kx_c * px_w_m) ** 2 + (ky_c * px_h_m) ** 2 <= CLUSTER_RADIUS_M**2
+).astype(bool)
+pago_dilated = ndimage.binary_dilation(verde_pago_restante, structure=kernel_cluster)
+pago_labels, n_pago = ndimage.label(pago_dilated)
+# Aplicar labels à máscara original (sem dilatação)
+pago_labels = pago_labels * verde_pago_restante
+
 pago_candidates = []
 for rid in range(1, n_pago + 1):
     rmask = pago_labels == rid
     area_m2 = rmask.sum() * pixel_area_m2
+    if area_m2 < 1:
+        continue
     rows_i, cols_i = np.where(rmask)
     cy, cx = rows_i.mean(), cols_i.mean()
     pago_candidates.append(
@@ -146,55 +233,26 @@ for rid in range(1, n_pago + 1):
             "mask": rmask,
         }
     )
-print(f"  Verde pago ou nao usufruivel: {len(pago_candidates)} regioes")
-
-# --- 2b. Absorção: expansão absorve verde pago próximo (100m) ---
-ABSORB_RADIUS_M = 100
-absorb_rx = int(round(ABSORB_RADIUS_M / px_w_m))
-absorb_ry = int(round(ABSORB_RADIUS_M / px_h_m))
-ky_a, kx_a = np.ogrid[-absorb_ry : absorb_ry + 1, -absorb_rx : absorb_rx + 1]
-kernel_absorb = (
-    (kx_a * px_w_m) ** 2 + (ky_a * px_h_m) ** 2 <= ABSORB_RADIUS_M**2
-).astype(bool)
-
-absorbed_indices = set()
-for exp_c in expansao_candidates:
-    exp_dilated = ndimage.binary_dilation(exp_c["mask"], structure=kernel_absorb)
-    for j, pago_c in enumerate(pago_candidates):
-        if j in absorbed_indices:
-            continue
-        if (exp_dilated & pago_c["mask"]).any():
-            # Absorver: unir máscara do verde pago à expansão
-            exp_c["mask"] = exp_c["mask"] | pago_c["mask"]
-            absorbed_indices.add(j)
-
-# Actualizar área das expansões que absorveram verde pago
-for exp_c in expansao_candidates:
-    exp_c["area_m2"] = exp_c["mask"].sum() * pixel_area_m2
-    exp_c["area_ha"] = exp_c["area_m2"] / 10000
-    rows_i, cols_i = np.where(exp_c["mask"])
-    exp_c["lat"] = LAT_MAX - (rows_i.mean() / calc_h) * (LAT_MAX - LAT_MIN)
-    exp_c["lon"] = LON_MIN + (cols_i.mean() / calc_w) * (LON_MAX - LON_MIN)
-
-# Remover regiões pago absorvidas
-pago_candidates = [
-    c for j, c in enumerate(pago_candidates) if j not in absorbed_indices
-]
+n_clustered = n_pago - len(pago_candidates)
 print(
-    f"  Absorcao: {len(absorbed_indices)} regioes pago absorvidas por expansao (buffer {ABSORB_RADIUS_M}m)"
+    f"  Verde pago restante: {len(pago_candidates)} clusters (agrupados a <{CLUSTER_RADIUS_M}m)"
 )
-print(f"  Verde pago restante: {len(pago_candidates)} regioes")
 
-# --- 3. Verde privado ---
+# --- 3. Verde privado (com clustering a 50m) ---
 verde_priv_path = os.path.join(PARENT_LAYERS, "interior_subsistente.png")
 vr_img = np.array(Image.open(verde_priv_path).convert("RGBA"))
 verde_priv_mask = vr_img[:, :, 3] > 0
 
-priv_labels, n_priv = ndimage.label(verde_priv_mask)
+priv_dilated = ndimage.binary_dilation(verde_priv_mask, structure=kernel_cluster)
+priv_labels, n_priv = ndimage.label(priv_dilated)
+priv_labels = priv_labels * verde_priv_mask
+
 priv_candidates = []
 for rid in range(1, n_priv + 1):
     rmask = priv_labels == rid
     area_m2 = rmask.sum() * pixel_area_m2
+    if area_m2 < 1:
+        continue
     rows_i, cols_i = np.where(rmask)
     cy, cx = rows_i.mean(), cols_i.mean()
     priv_candidates.append(
@@ -208,7 +266,9 @@ for rid in range(1, n_priv + 1):
             "mask": rmask,
         }
     )
-print(f"  Verde privado: {len(priv_candidates)} regioes")
+print(
+    f"  Verde privado: {len(priv_candidates)} clusters (agrupados a <{CLUSTER_RADIUS_M}m)"
+)
 
 # ===== Simulação greedy por impacto populacional =====
 # Dentro de cada categoria (expansão → pago → privado), escolher iterativamente
@@ -294,11 +354,30 @@ def greedy_select(candidates, coberto, pop_coberta, pct, selected):
     return coberto, pop_coberta, pct
 
 
-# Categoria 1: Expansão CMP
-print("  --- Expansao CMP ---")
-coberto, pop_coberta, pct = greedy_select(
-    expansao_candidates, coberto, pop_coberta, pct, selected
-)
+# Categoria 1: Expansão CMP — incondicional (todas as expansões são implementadas)
+print("  --- Expansao CMP (incondicional) ---")
+for exp_c in expansao_candidates:
+    reach_new = ndimage.binary_dilation(exp_c["mask"], structure=kernel_300_bool)
+    coberto_novo = coberto | (reach_new & porto_mask)
+    pop_nova = pop_corrected[coberto_novo & habitado].sum()
+    delta = pop_nova - pop_coberta
+
+    exp_c["rank"] = len(selected) + 1
+    exp_c["pop_delta"] = delta
+    exp_c["pct_antes"] = pop_coberta / total_pop * 100
+    exp_c["pct_depois"] = pop_nova / total_pop * 100
+    exp_c["pop_coberta_acum"] = pop_nova
+    selected.append(exp_c)
+
+    coberto = coberto_novo
+    pop_coberta = pop_nova
+    pct = exp_c["pct_depois"]
+
+    print(
+        f"  #{exp_c['rank']:>2}: {exp_c['nome']:<35} {exp_c['area_ha']:>6.2f} ha  "
+        f"+{delta:>6.0f} hab  -> {pct:.1f}%"
+    )
+print(f"  Apos expansao CMP: {pct:.1f}%")
 
 # Categoria 2: Verde pago
 if pct < TARGET_PCT:
@@ -433,7 +512,12 @@ muni_b64 = to_base64(os.path.join(PARENT_LAYERS, "municipios.png"))
 
 geojson_str = json.dumps(geojson, ensure_ascii=False)
 
-# parques_porto.geojson é carregado via fetch() no HTML
+# Carregar parques (fallback inline para file://, fetch() actualiza em HTTP)
+parques_geojson_str = "null"
+parques_path_gj = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
+if os.path.exists(parques_path_gj):
+    with open(parques_path_gj, "r", encoding="utf-8") as fh:
+        parques_geojson_str = fh.read()
 
 basemaps = [
     (
@@ -590,13 +674,13 @@ html = f'''<!DOCTYPE html>
 
 <script>
 var candidatosData = {geojson_str};
-var parquesData = null;
+var parquesData = {parques_geojson_str};
 var map = L.map('map').setView([41.155, -8.63], 13);
 
-fetch('parques_porto.geojson').then(r => r.json()).then(function(data) {{
+fetch('parques_porto.geojson').then(function(r) {{ return r.json(); }}).then(function(data) {{
   parquesData = data;
   if (typeof initParques === 'function') initParques();
-}});
+}}).catch(function() {{}});
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
 document.getElementById('basemap-select').addEventListener('change', function() {{
