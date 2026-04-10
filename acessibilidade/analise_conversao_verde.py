@@ -3,7 +3,7 @@ Análise de conversão de verde para colmatar défice de proximidade (300m).
 
 Simula a adição sequencial de espaços verdes — estratégia de expansão (CMP),
 verde pago ou não usufruível, e verde privado — até atingir ~80% da população
-a ≤300m de um parque ≥0,5 ha (critério Konijnendijk 3-30-300).
+a ≤300m de um parque ≥0,4 ha (critério Konijnendijk 3-30-300).
 
 Lê arrays em cache (.npy) do script acessibilidade_verde.py e gera:
   - layers/candidatos_conversao.png (overlay)
@@ -21,6 +21,8 @@ from shapely.geometry import mapping, shape
 from shapely.ops import unary_union
 import geopandas as gpd
 from shapely import contains_xy
+from rasterio.features import shapes as rasterio_shapes
+from rasterio.transform import Affine
 
 # ===== Configuração =====
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +33,7 @@ LON_MIN, LON_MAX = -8.70, -8.54
 LAT_MIN, LAT_MAX = 41.13, 41.19
 BOUNDS = [[41.13, -8.70], [41.19, -8.54]]
 
-PARK_MIN_AREA_M2 = 5_000  # 0.5 ha
+PARK_MIN_AREA_M2 = 4_000  # 0.4 ha
 TARGET_PCT = 80.0  # objectivo: 80% da população coberta
 
 # ===== Carregar arrays em cache =====
