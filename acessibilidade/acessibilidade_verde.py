@@ -735,6 +735,13 @@ html = f'''<!DOCTYPE html>
     .leaflet-top {{ top:50px; }}
     #credit {{ display:none; }}
   }}
+  .expansao-label span {{
+    font: bold 10px 'Segoe UI', Arial, sans-serif;
+    color: #00695C;
+    white-space: nowrap;
+    text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+    pointer-events: none;
+  }}
 </style>
 </head>
 <body>
@@ -1114,6 +1121,15 @@ async function init() {{
       fillOpacity: 1, opacity: 1, weight: 0, pane: 'expansaoPane'
     }}).addTo(expansaoMarkers);
     m.bindTooltip('<b>' + c.nome + '</b><br>' + c.area + ' ha', {{direction: 'top', offset: [0, -8]}});
+    L.marker([c.lat, c.lng], {{
+      pane: 'expansaoPane',
+      icon: L.divIcon({{
+        className: 'expansao-label',
+        html: '<span>' + c.nome + '</span>',
+        iconSize: [0, 0],
+        iconAnchor: [0, 22]
+      }})
+    }}).addTo(expansaoMarkers);
   }});
 
   // Checkbox para expansão
