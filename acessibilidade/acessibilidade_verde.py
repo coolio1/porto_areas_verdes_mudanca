@@ -286,7 +286,7 @@ ys = np.linspace(LAT_MAX, LAT_MIN, grid_h)
 xx, yy = np.meshgrid(xs, ys)
 coords_flat = (xx.ravel(), yy.ravel())
 
-# --- Verde público: Sentinel-2 verde ∩ parques oficiais ---
+# --- Verde público: Sentinel-2 verde x parques oficiais ---
 # Pixels dentro dos parques sem verde Sentinel-2 são pintados com verde sólido
 # (jardins pequenos/urbanos onde a copa não domina o pixel)
 verde_pub_path = os.path.join(LAYERS_DIR, "verde_publico.png")
@@ -315,19 +315,24 @@ if os.path.exists(expansao_path):
     expansao_union = expansao_gdf.geometry.union_all()
     print(f"  {len(expansao_gdf)} espaços de expansão carregados")
 
-# --- Verde pago ou não usufruível: polígonos PDM \ parques \ expansão (sólido) ---
+# --- Verde pago ou não usufruível: (PDM verde x Sentinel-2 verde) \ parques ---
 verde_pago_path = os.path.join(LAYERS_DIR, "verde_pago.png")
 if not os.path.exists(verde_pago_path):
-    print("  A calcular verde pago (PDM fora dos parques e expansão, sólido)...")
+    print("  A calcular verde pago (PDM verde x Sentinel-2 verde, fora dos parques)...")
     pdm_minus_parques = pdm_verde_union.difference(parques_union)
-    if expansao_union is not None:
-        pdm_minus_parques = pdm_minus_parques.difference(expansao_union)
-    inside_pago = contains_xy(pdm_minus_parques, *coords_flat).reshape(grid_h, grid_w)
+    inside_pdm = contains_xy(pdm_minus_parques, *coords_flat).reshape(grid_h, grid_w)
+    # Cruzar com pixels verdes reais (Sentinel-2) para excluir edificado
+    verde_total_arr = np.array(Image.open(verde_total_path).convert("RGBA"))
+    sentinel_green = verde_total_arr[:, :, 3] > 0
+    inside_pago = inside_pdm & sentinel_green
     pago_arr = np.zeros((grid_h, grid_w, 4), dtype=np.uint8)
     pago_arr[inside_pago, 3] = 255
     Image.fromarray(pago_arr).save(verde_pago_path)
     n_pago = inside_pago.sum()
-    print(f"  verde_pago.png guardado ({n_pago} pixels)")
+    n_removed = inside_pdm.sum() - n_pago
+    print(
+        f"  verde_pago.png guardado ({n_pago} pixels, {n_removed} edificado removido)"
+    )
 else:
     print("  verde_pago.png já existe, a saltar...")
 

@@ -17,7 +17,8 @@ import base64
 import numpy as np
 from PIL import Image
 from scipy import ndimage
-from shapely.geometry import MultiPoint, mapping
+from shapely.geometry import mapping, shape
+from shapely.ops import unary_union
 import geopandas as gpd
 from shapely import contains_xy
 
@@ -31,9 +32,7 @@ LAT_MIN, LAT_MAX = 41.13, 41.19
 BOUNDS = [[41.13, -8.70], [41.19, -8.54]]
 
 PARK_MIN_AREA_M2 = 5_000  # 0.5 ha
-TARGET_PCT = 90.0  # objectivo: 90% da população coberta
-MIN_AREA_PAGO = 500  # m² mínimo para verde pago
-MIN_AREA_PRIV = 2000  # m² mínimo para verde privado
+TARGET_PCT = 80.0  # objectivo: 80% da população coberta
 
 # ===== Carregar arrays em cache =====
 print("A carregar arrays em cache...")
@@ -132,8 +131,6 @@ pago_candidates = []
 for rid in range(1, n_pago + 1):
     rmask = pago_labels == rid
     area_m2 = rmask.sum() * pixel_area_m2
-    if area_m2 < MIN_AREA_PAGO:
-        continue
     rows_i, cols_i = np.where(rmask)
     cy, cx = rows_i.mean(), cols_i.mean()
     pago_candidates.append(
@@ -147,10 +144,44 @@ for rid in range(1, n_pago + 1):
             "mask": rmask,
         }
     )
-pago_candidates.sort(key=lambda c: c["area_m2"], reverse=True)
+print(f"  Verde pago ou nao usufruivel: {len(pago_candidates)} regioes")
+
+# --- 2b. Absorção: expansão absorve verde pago próximo (100m) ---
+ABSORB_RADIUS_M = 100
+absorb_rx = int(round(ABSORB_RADIUS_M / px_w_m))
+absorb_ry = int(round(ABSORB_RADIUS_M / px_h_m))
+ky_a, kx_a = np.ogrid[-absorb_ry : absorb_ry + 1, -absorb_rx : absorb_rx + 1]
+kernel_absorb = (
+    (kx_a * px_w_m) ** 2 + (ky_a * px_h_m) ** 2 <= ABSORB_RADIUS_M**2
+).astype(bool)
+
+absorbed_indices = set()
+for exp_c in expansao_candidates:
+    exp_dilated = ndimage.binary_dilation(exp_c["mask"], structure=kernel_absorb)
+    for j, pago_c in enumerate(pago_candidates):
+        if j in absorbed_indices:
+            continue
+        if (exp_dilated & pago_c["mask"]).any():
+            # Absorver: unir máscara do verde pago à expansão
+            exp_c["mask"] = exp_c["mask"] | pago_c["mask"]
+            absorbed_indices.add(j)
+
+# Actualizar área das expansões que absorveram verde pago
+for exp_c in expansao_candidates:
+    exp_c["area_m2"] = exp_c["mask"].sum() * pixel_area_m2
+    exp_c["area_ha"] = exp_c["area_m2"] / 10000
+    rows_i, cols_i = np.where(exp_c["mask"])
+    exp_c["lat"] = LAT_MAX - (rows_i.mean() / calc_h) * (LAT_MAX - LAT_MIN)
+    exp_c["lon"] = LON_MIN + (cols_i.mean() / calc_w) * (LON_MAX - LON_MIN)
+
+# Remover regiões pago absorvidas
+pago_candidates = [
+    c for j, c in enumerate(pago_candidates) if j not in absorbed_indices
+]
 print(
-    f"  Verde pago ou nao usufruivel: {len(pago_candidates)} regioes (>= {MIN_AREA_PAGO} m2)"
+    f"  Absorcao: {len(absorbed_indices)} regioes pago absorvidas por expansao (buffer {ABSORB_RADIUS_M}m)"
 )
+print(f"  Verde pago restante: {len(pago_candidates)} regioes")
 
 # --- 3. Verde privado ---
 verde_priv_path = os.path.join(PARENT_LAYERS, "interior_subsistente.png")
@@ -162,8 +193,6 @@ priv_candidates = []
 for rid in range(1, n_priv + 1):
     rmask = priv_labels == rid
     area_m2 = rmask.sum() * pixel_area_m2
-    if area_m2 < MIN_AREA_PRIV:
-        continue
     rows_i, cols_i = np.where(rmask)
     cy, cx = rows_i.mean(), cols_i.mean()
     priv_candidates.append(
@@ -177,15 +206,12 @@ for rid in range(1, n_priv + 1):
             "mask": rmask,
         }
     )
-priv_candidates.sort(key=lambda c: c["area_m2"], reverse=True)
-print(f"  Verde privado: {len(priv_candidates)} regioes (>= {MIN_AREA_PRIV} m2)")
+print(f"  Verde privado: {len(priv_candidates)} regioes")
 
-# Lista ordenada: expansão → pago → privado (dentro de cada, maior → menor)
-all_candidates = expansao_candidates + pago_candidates + priv_candidates
-print(f"  Total: {len(all_candidates)} candidatos")
-
-# ===== Simulação sequencial de proximidade 300m =====
-print(f"\nA simular adicao sequencial (objectivo: {TARGET_PCT:.0f}% cobertura)...")
+# ===== Simulação greedy por impacto populacional =====
+# Dentro de cada categoria (expansão → pago → privado), escolher iterativamente
+# o candidato que cobre mais população não coberta (greedy best-first).
+print(f"\nA simular adicao greedy (objectivo: {TARGET_PCT:.0f}% cobertura)...")
 
 TIPO_LABELS = {
     "expansao": "Estrategia de expansao (CMP)",
@@ -198,61 +224,92 @@ pop_coberta = pop_coberta_actual
 pct = pct_actual
 selected = []
 
-nao_coberto = habitado & ~coberto
 kernel_300_bool = kernel_300 > 0
+kr, kc = kernel_300.shape[0] // 2, kernel_300.shape[1] // 2
 
-for c in all_candidates:
-    if pct >= TARGET_PCT:
-        break
 
-    mask_i = c["mask"]
+def greedy_select(candidates, coberto, pop_coberta, pct, selected):
+    """Selecciona candidatos por impacto populacional decrescente (greedy)."""
+    remaining = list(range(len(candidates)))
+    while remaining and pct < TARGET_PCT:
+        best_idx = None
+        best_delta = 0
+        best_coberto = None
+        best_pop = 0
+        best_pct = 0
 
-    # Só contribui se ≥0,5 ha (critério Konijnendijk para o raio de 300m)
-    if c["area_m2"] < PARK_MIN_AREA_M2:
-        continue
+        for idx in remaining:
+            c = candidates[idx]
+            if c["area_m2"] < PARK_MIN_AREA_M2:
+                continue
+            mask_i = c["mask"]
+            # Pré-filtro: bbox + margem do kernel intersecta zonas não cobertas?
+            rows_i, cols_i = np.where(mask_i)
+            r_lo = max(0, rows_i.min() - kr)
+            r_hi = min(calc_h, rows_i.max() + kr + 1)
+            c_lo = max(0, cols_i.min() - kc)
+            c_hi = min(calc_w, cols_i.max() + kc + 1)
+            nao_coberto_local = (
+                habitado[r_lo:r_hi, c_lo:c_hi] & ~coberto[r_lo:r_hi, c_lo:c_hi]
+            )
+            if not nao_coberto_local.any():
+                continue
 
-    # Pré-filtro rápido: a região sobrepõe-se a zonas não-cobertas (com margem)?
-    # Verificar se algum pixel da região está perto de população não coberta
-    rows_i, cols_i = np.where(mask_i)
-    r_min, r_max = rows_i.min(), rows_i.max()
-    c_min, c_max = cols_i.min(), cols_i.max()
-    # Expandir bbox pelo raio do kernel
-    kr, kc = kernel_300.shape[0] // 2, kernel_300.shape[1] // 2
-    r_lo = max(0, r_min - kr)
-    r_hi = min(calc_h, r_max + kr + 1)
-    c_lo = max(0, c_min - kc)
-    c_hi = min(calc_w, c_max + kc + 1)
-    if not nao_coberto[r_lo:r_hi, c_lo:c_hi].any():
-        continue
+            reach_new = ndimage.binary_dilation(mask_i, structure=kernel_300_bool)
+            coberto_novo = coberto | (reach_new & porto_mask)
+            pop_nova = pop_corrected[coberto_novo & habitado].sum()
+            delta = pop_nova - pop_coberta
 
-    # Dilatar com kernel_300 (binary_dilation é mais rápido que convolve para binário)
-    reach_new = ndimage.binary_dilation(mask_i, structure=kernel_300_bool)
+            if delta > best_delta:
+                best_idx = idx
+                best_delta = delta
+                best_coberto = coberto_novo
+                best_pop = pop_nova
+                best_pct = pop_nova / total_pop * 100
 
-    # Nova cobertura
-    coberto_novo = coberto | (reach_new & porto_mask)
-    pop_coberta_nova = pop_corrected[coberto_novo & habitado].sum()
+        if best_idx is None or best_delta < 1:
+            break
 
-    delta_pop = pop_coberta_nova - pop_coberta
-    if delta_pop < 1:
-        continue
+        c = candidates[best_idx]
+        remaining.remove(best_idx)
+        pct = best_pct
+        c["rank"] = len(selected) + 1
+        c["pop_delta"] = best_delta
+        c["pct_antes"] = pop_coberta / total_pop * 100
+        c["pct_depois"] = best_pct
+        c["pop_coberta_acum"] = best_pop
+        selected.append(c)
 
-    pct_novo = pop_coberta_nova / total_pop * 100
-    c["rank"] = len(selected) + 1
-    c["pop_delta"] = delta_pop
-    c["pct_antes"] = pct
-    c["pct_depois"] = pct_novo
-    c["pop_coberta_acum"] = pop_coberta_nova
-    selected.append(c)
+        coberto = best_coberto
+        pop_coberta = best_pop
 
-    coberto = coberto_novo
-    nao_coberto = habitado & ~coberto
-    pop_coberta = pop_coberta_nova
-    pct = pct_novo
+        print(
+            f"  #{c['rank']:>2}: {TIPO_LABELS[c['tipo']][:20]:<20} {c['area_ha']:>6.2f} ha  "
+            f"+{best_delta:>6.0f} hab  -> {pct:.1f}%"
+            f"{'  ' + c['nome'] if c['nome'] else ''}"
+        )
 
-    print(
-        f"  #{c['rank']:>2}: {TIPO_LABELS[c['tipo']][:20]:<20} {c['area_ha']:>6.2f} ha  "
-        f"+{delta_pop:>6.0f} hab  -> {pct:.1f}%"
-        f"{'  ' + c['nome'] if c['nome'] else ''}"
+    return coberto, pop_coberta, pct
+
+
+# Categoria 1: Expansão CMP
+print("  --- Expansao CMP ---")
+coberto, pop_coberta, pct = greedy_select(
+    expansao_candidates, coberto, pop_coberta, pct, selected
+)
+
+# Categoria 2: Verde pago
+if pct < TARGET_PCT:
+    print("  --- Verde pago ou nao usufruivel ---")
+    coberto, pop_coberta, pct = greedy_select(
+        pago_candidates, coberto, pop_coberta, pct, selected
+    )
+
+# Categoria 3: Verde privado
+if pct < TARGET_PCT:
+    print("  --- Verde privado ---")
+    coberto, pop_coberta, pct = greedy_select(
+        priv_candidates, coberto, pop_coberta, pct, selected
     )
 
 print(f"\n  Resultado: {len(selected)} espacos necessarios para {pct:.1f}% cobertura")
@@ -306,24 +363,36 @@ Image.fromarray(prox_sim_rgba).save(prox_sim_path)
 print(f"  Guardado ({os.path.getsize(prox_sim_path) // 1024} KB)")
 print(f"  Cobertura simulada: {pct:.1f}% (vs actual {pct_actual:.1f}%)")
 
-# ===== Gerar GeoJSON =====
+# ===== Gerar GeoJSON (vectorização fiel via rasterio) =====
 print("A gerar candidatos_conversao.geojson...")
+
+# Transformação affine: pixel → coordenadas geográficas
+transform = Affine(
+    (LON_MAX - LON_MIN) / calc_w,
+    0,
+    LON_MIN,
+    0,
+    -(LAT_MAX - LAT_MIN) / calc_h,
+    LAT_MAX,
+)
+
 features = []
 for c in selected:
-    rows_i, cols_i = np.where(c["mask"])
-    if len(rows_i) > 2000:
-        idx = np.random.default_rng(42).choice(len(rows_i), 2000, replace=False)
-        rows_i, cols_i = rows_i[idx], cols_i[idx]
-    lats = LAT_MAX - (rows_i / calc_h) * (LAT_MAX - LAT_MIN)
-    lons = LON_MIN + (cols_i / calc_w) * (LON_MAX - LON_MIN)
-    points = MultiPoint(list(zip(lons.tolist(), lats.tolist())))
-    hull = points.convex_hull
-    if hull.is_empty:
+    mask_u8 = c["mask"].astype(np.uint8)
+    polys = []
+    for geom_dict, val in rasterio_shapes(mask_u8, transform=transform):
+        if val == 1:
+            polys.append(shape(geom_dict))
+    if not polys:
+        continue
+
+    poly = unary_union(polys).simplify(0.0002, preserve_topology=True)
+    if poly.is_empty:
         continue
     features.append(
         {
             "type": "Feature",
-            "geometry": mapping(hull),
+            "geometry": mapping(poly),
             "properties": {
                 "rank": c["rank"],
                 "tipo": TIPO_LABELS[c["tipo"]],
