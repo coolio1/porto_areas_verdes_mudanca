@@ -826,6 +826,9 @@ async function init() {{
     }});
     map.fire('zoomend');
   }};
+
+  // Se o fetch() já terminou antes de init(), chamar agora
+  if (parquesData) initParques();
 }}
 
 init();

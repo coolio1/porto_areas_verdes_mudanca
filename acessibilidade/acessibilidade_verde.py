@@ -307,14 +307,6 @@ else:
 # A máscara para o 2SFCA usa os parques
 publico_union = parques_union
 
-# --- Estratégia de expansão (CMP) ---
-expansao_path = os.path.join(SCRIPT_DIR, "expansao_verde.geojson")
-expansao_union = None
-if os.path.exists(expansao_path):
-    expansao_gdf = gpd.read_file(expansao_path).to_crs(epsg=4326)
-    expansao_union = expansao_gdf.geometry.union_all()
-    print(f"  {len(expansao_gdf)} espaços de expansão carregados")
-
 # --- Verde pago ou não usufruível: (PDM verde x Sentinel-2 verde) \ parques ---
 verde_pago_path = os.path.join(LAYERS_DIR, "verde_pago.png")
 if not os.path.exists(verde_pago_path):
@@ -1147,6 +1139,10 @@ async function init() {{
   var lowPopOverlay = L.imageOverlay(lowPopLayer.src, bounds, {{pane: 'lowPopPane'}});
   window._lowPopOverlay = lowPopOverlay;
   if (accLayer.show) lowPopOverlay.addTo(map);
+
+  // Se os fetch() já terminaram antes de init(), chamar agora
+  if (parquesData) initParques();
+  if (expansaoCentroids.length > 0) initExpansao();
 }}
 
 init();
