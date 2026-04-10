@@ -256,8 +256,8 @@ gdf = gpd.read_file(PDM_LOCAL, layer="PO_QSFUNCIONAL_PL").to_crs(epsg=4326)
 VERDE_PDM = [
     "Área verde de fruição coletiva",
     "Área verde lúdico-produtiva",
+    "Área verde de proteção e enquadramento",
     "Área verde associada a equipamento",
-    "Área de frente atlântica e ribeirinha",
 ]
 mask_pdm = gdf["sc_espaco"].isin(VERDE_PDM)
 if mask_pdm.sum() == 0:
@@ -820,7 +820,7 @@ html = f'''<!DOCTYPE html>
 
   <hr style="border-color:#ddd;margin:10px 0 4px 0;">
   <span style="color:#aaa;font-size:10px;">Sentinel-2 10m (ESA) &bull; GHS-POP 100m (JRC)<br>
-  47 parques e jardins (CMP + OSM)<br>
+  {len(_pdata["features"])} parques e jardins (CMP + OSM)<br>
   M&eacute;todo: Two-Step Floating Catchment Area</span>
   </div>
 </div>
@@ -1083,9 +1083,9 @@ async function init() {{
       }},
       onEachFeature: function(f, layer) {{
         var p = f.properties;
-        var area = p.area_ha ? p.area_ha + ' ha (oficial)' : p.area_calc_ha + ' ha (calc.)';
+        var area = p.area_calc_ha ? p.area_calc_ha + ' ha' : '';
         var html = '<b style="font-size:13px;">' + p.nome + '</b><br>';
-        html += '<span style="color:#666;">' + (p.tipo || '') + ' &mdash; ' + area + '</span>';
+        html += '<span style="color:#666;">' + (p.tipo || '') + (area ? ' &mdash; ' + area : '') + '</span>';
         layer.bindPopup(html);
         layer.bindTooltip(p.nome, {{
           permanent: true, direction: 'center',

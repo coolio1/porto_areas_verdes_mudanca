@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Acessibilidade a Espaços Verdes Públicos no Porto: Uma Análise Espacial pelo Método 2SFCA"
-description: "Mapa de acessibilidade da população do Porto a espaços verdes públicos (m²/hab, raio 500m), usando o método Two-Step Floating Catchment Area com dados GHS-POP e inventário de 47 parques e jardins."
+description: "Mapa de acessibilidade da população do Porto a espaços verdes públicos (m²/hab, raio 500m), usando o método Two-Step Floating Catchment Area com dados GHS-POP e inventário de 79 parques e jardins."
 date: 2026-03-30
 tags: [porto, acessibilidade, verde público, 2sfca, gee, ghs-pop, osm, sentinel-2]
 ---
@@ -14,7 +14,7 @@ tags: [porto, acessibilidade, verde público, 2sfca, gee, ghs-pop, osm, sentinel
 
 O Porto dispõe de 19,3 m² de espaço verde público por habitante — acima do limiar de 9 m²/hab frequentemente atribuído à OMS. Porém, esta métrica agregada esconde uma realidade desigual: quem vive junto ao Parque da Cidade tem uma dotação generosa; quem habita na Sé, em Campanhã ou no interior de Paranhos pode não ter nenhum espaço verde acessível a pé.
 
-Este trabalho aplica o método *Two-Step Floating Catchment Area* (2SFCA) ao município do Porto, cruzando um inventário de 47 parques e jardins de acesso público gratuito, a classificação de uso do solo por Sentinel-2, e a grelha de população GHS-POP. O resultado é um mapa da acessibilidade efectiva a verde público em m² por habitante num raio pedonal de 500 m.
+Este trabalho aplica o método *Two-Step Floating Catchment Area* (2SFCA) ao município do Porto, cruzando um inventário de 79 parques e jardins de acesso público gratuito, a classificação de uso do solo por Sentinel-2, e a grelha de população GHS-POP. O resultado é um mapa da acessibilidade efectiva a verde público em m² por habitante num raio pedonal de 500 m.
 
 ---
 
@@ -44,7 +44,7 @@ O método *Two-Step Floating Catchment Area* (Luo & Wang, 2003) supera estas lim
 
 | Dado | Fonte | Resolução | Período |
 |------|-------|-----------|---------|
-| Parques e jardins públicos | Inventário próprio (CMP + OSM + levantamento) | vectorial (47 polígonos) | 2026 |
+| Parques e jardins públicos | Inventário próprio (CMP + OSM + levantamento) | vectorial (78 polígonos) | 2026 |
 | Classificação verde | Sentinel-2 (ESA) | 10 m | 2024–2025 |
 | Verde não usufruível | PDM Porto 2021 (CMP) | vectorial (132 polígonos) | 2021 |
 | População | GHS-POP (JRC/EC) | 100 m | 2020 |
@@ -52,17 +52,17 @@ O método *Two-Step Floating Catchment Area* (Luo & Wang, 2003) supera estas lim
 
 ### 3.2. Inventário de parques
 
-Compilou-se uma lista de **47 parques e jardins de acesso público e gratuito**, partindo do directório oficial da CMP (20 espaços) e complementando com espaços omitidos mas de acesso comprovadamente livre: gestão municipal (21), gestão institucional com acesso gratuito (8), espaços adicionais identificados (9) e micro-jardins (9). Contornos obtidos via OpenStreetMap (Overpass API / API v0.6), com polígonos PDM e buffers georreferenciados como recurso. Área total: **~202 hectares**.
+Compilou-se uma lista de **79 parques e jardins de acesso público e gratuito**, partindo do directório oficial da CMP (20 espaços) e complementando com espaços omitidos mas de acesso comprovadamente livre: praças, largos, jardins de bairro, parques infantis e alamedas identificados via OpenStreetMap, PDM e levantamento de campo. Contornos obtidos preferencialmente via polígonos PDM (categoria "fruição colectiva") e OpenStreetMap (Overpass API / API v0.6). Área total: **~217 hectares**.
 
 A classificação Sentinel-2 seguiu a metodologia multi-sazonal descrita em Quental (2026), com 90,4% de concordância com o ESA WorldCover 2021 para a classe arbórea. Esta classificação é utilizada para a **camada visual** do mapa, mas o cálculo de acessibilidade usa a área total dos polígonos.
 
-Os 132 polígonos do PDM que **não correspondem** a nenhum dos 47 parques (jardins de escolas, hortas com acesso restrito, separadores viários) são apresentados como "Verde pago ou não usufruível".
+Os polígonos do PDM que **não correspondem** a nenhum dos 79 parques (jardins de escolas, hortas com acesso restrito, separadores viários) são apresentados como "Verde pago ou não usufruível".
 
 ### 3.3. Cálculo do 2SFCA
 
 Implementação em versão raster contínua no Google Earth Engine:
 
-1. Máscara binária dos 47 parques × área do pixel (57 m²)
+1. Máscara binária dos 79 parques × área do pixel (57 m²)
 2. Soma focal do verde num kernel circular de raio 500 m (76×58 pixels)
 3. Soma focal da população (GHS-POP, corrigida para reamostragem: factor ~1/175)
 4. Filtro: exclui pixels com <50 hab no raio de 500 m
@@ -76,61 +76,93 @@ O raio de 500 m é um compromisso entre o limiar europeu de 300 m (OMS, 2016) e 
 
 ### 4.1. Verde público: inventário
 
-O inventário totaliza **47 parques e jardins** (~202 ha), inferior aos 448 ha do PDM por excluir espaços sem usufruto livre. Os 202 ha correspondem a **~8,7 m²/hab** — ligeiramente abaixo do limiar de 9 m²/hab.
+O inventário totaliza **79 parques e jardins** (~217 ha), inferior aos 448 ha do PDM por excluir espaços sem usufruto livre. Os 217 ha correspondem a **~8,9 m²/hab** — ligeiramente abaixo do limiar de 9 m²/hab.
 
 <details>
-<summary><strong>Tabela: 47 parques e jardins inventariados (clicar para expandir)</strong></summary>
+<summary><strong>Tabela: 79 parques e jardins inventariados (clicar para expandir)</strong></summary>
 
 | Parque / Jardim | Área (m²) |
 |---|---:|
 | Parque da Cidade | 714 300 |
-| Parque Oriental | 193 200 |
-| Frente Atlântica | 170 500 |
+| Parque Oriental | 185 500 |
 | Parque da Pasteleira | 91 500 |
 | Jardim do Palácio de Cristal | 88 400 |
 | Parque do Covelo | 75 700 |
 | Viveiro Municipal | 66 500 |
-| Parque Central da Asprela | 56 600 |
+| Parque Central da Asprela | 64 300 |
+| Parque da Alameda de Cartes | 64 200 |
 | Parque de São Roque | 52 200 |
 | Quinta de Bonjóia | 47 800 |
 | Jardim Botânico do Porto | 43 000 |
 | Jardim do Passeio Alegre | 38 700 |
+| Jardim do Palácio do Freixo | 34 100 |
 | Parque de Requesende | 31 600 |
 | Rotunda da Boavista | 30 800 |
 | Parque das Águas | 27 600 |
-| Jardim da Avenida de Montevideu | 27 300 |
+| Jardins da Avenida de Montevideu | 27 300 |
 | Jardim do Calém e das Sobreiras | 25 100 |
 | Jardim de Arca d'Água | 22 700 |
-| Jardim da Praça da República | 20 000 |
+| Mata da Pasteleira | 21 900 |
 | Jardim da Corujeira | 19 800 |
+| Passeio das Virtudes | 18 300 |
+| Jardins do Palácio dos Carrancas | 18 000 |
+| Jardim da Praça da República | 17 900 |
 | Jardim da Cordoaria | 16 500 |
 | Jardim da Praça de Francisco Sá Carneiro | 15 000 |
 | Jardim do Homem do Leme | 14 800 |
+| Jardim José Roquette | 14 100 |
+| Jardim de Teodoro de Sousa | 14 000 |
 | Parque da Fundação Eng. António de Almeida | 13 700 |
 | Jardim Paulo Vallada | 13 600 |
 | Parque das Virtudes | 12 400 |
-| Alameda das Fontainhas | 11 300 |
 | Jardim de Sarah Afonso | 10 400 |
+| Jardim da Praça Rainha Dona Amélia | 10 400 |
+| Jardim de Carrilho Videira | 8 800 |
+| Jardim Machado de Assis | 8 700 |
 | Parque Urbano Dr. Mário Soares | 8 200 |
-| Jardim de Teodoro de Sousa | 7 800 |
+| Rua de Manuel Bandeira | 7 800 |
+| Rua Diogo Botelho | 7 800 |
+| Largo do Priorado | 7 200 |
+| Jardim de Guedes de Oliveira | 7 000 |
 | Jardim do Marquês | 6 800 |
+| Praceta da Cidade da Praia | 6 800 |
+| Rua de Diogo Botelho | 6 100 |
+| Largo de Soares dos Reis | 5 900 |
+| Parque Infantil do Amial | 5 800 |
 | Jardim de São Lázaro | 5 700 |
-| Jardim Palmira Milheiro | 5 200 |
+| Alameda das Fontainhas | 5 700 |
+| Jardim Palmira Milheiro | 5 400 |
+| Rua dos Choupos | 5 100 |
+| Praça dos Álamos | 5 100 |
+| Parque dos Sobreiros | 4 900 |
+| Parque Infantil da Areosa | 4 900 |
 | Jardim da Praça de Liège | 4 800 |
+| Jardim Senhora do Porto | 4 800 |
+| Jardim da Av. dos Combatentes / R. da Alegria | 4 700 |
+| Rua de Alfredo Keil | 4 700 |
+| Jardim Arnaldo Gama | 4 400 |
+| Jardim da Avenida Brasil | 4 400 |
+| Parque Infantil Bessa Leite | 4 100 |
 | Jardim da Praça do Império | 4 000 |
+| Jardim Ezequiel de Campos | 3 900 |
 | Parque da Quinta de Lamas | 3 800 |
-| Jardins da Praia do Molhe | 3 700 |
+| Parque Infantil da Prelada | 3 800 |
 | Jardim do Campo 24 de Agosto | 3 700 |
+| Jardins da Praia do Molhe | 3 700 |
+| Escadas Carolina Michaelis | 3 400 |
+| Praça da Ribeira Grande | 3 400 |
+| Largo Cap. Pinheiro Torres de Meireles | 3 100 |
 | Jardim de Fradelos | 3 000 |
-| Jardim de Antero de Quental | 2 800 |
-| Jardim de Belém | 1 900 |
+| Jardim do Largo de Dom João III | 2 800 |
 | Jardim do Carregal | 1 900 |
+| Jardim de Belém | 1 900 |
 | Jardins da Casa Allen | 1 500 |
+| Largo do Dr. Tito Fontes | 1 500 |
 | Jardim do Largo da Paz | 1 200 |
-| Jardins da Praia de Gondarém | 900 |
+| Parque da Fonte do Outeiro | 900 |
 | Praça da Galiza | 800 |
 | Jardins da FLUP | 500 |
-| **Total** | **2 018 300** |
+| **Total** | **2 166 500** |
 
 </details>
 
@@ -138,11 +170,11 @@ O inventário totaliza **47 parques e jardins** (~202 ha), inferior aos 448 ha d
 
 | Classe de acessibilidade | População | % |
 |---|---:|---:|
-| Défice crítico (0–3 m²/hab) | 154 033 | 63,5% |
-| Insuficiente (3–9 m²/hab) | 49 330 | 20,3% |
-| Adequado (>9 m²/hab) | 39 062 | 16,1% |
+| Défice crítico (0–3 m²/hab) | 135 719 | 56,0% |
+| Insuficiente (3–9 m²/hab) | 62 396 | 25,7% |
+| Adequado (>9 m²/hab) | 44 310 | 18,3% |
 
-**83,9% da população do Porto** — ~203 mil pessoas — vive com acessibilidade inferior a 9 m²/hab num raio de 500 m. Quase dois terços (63,5%) estão em défice crítico (<3 m²/hab). Apenas 16,1% tem acesso adequado.
+**81,7% da população do Porto** — ~198 mil pessoas — vive com acessibilidade inferior a 9 m²/hab num raio de 500 m. Mais de metade (56,0%) está em défice crítico (<3 m²/hab). Apenas 18,3% tem acesso adequado.
 
 ### 4.3. Padrão geográfico
 
@@ -159,10 +191,10 @@ A regra 3-30-300 (Konijnendijk, 2023) propõe que todos os residentes devem ter 
 
 | Critério 300m (parques ≥0,5 ha) | População | % |
 |---|---:|---:|
-| Cumpre (≤300 m) | 89 093 | 36,8% |
-| Não cumpre (>300 m) | 153 332 | 63,2% |
+| Cumpre (≤300 m) | 120 981 | 49,9% |
+| Não cumpre (>300 m) | 121 444 | 50,1% |
 
-**Quase dois terços da população do Porto** (63,2%) não tem acesso a um parque de dimensão significativa a uma distância pedonal curta. Este resultado complementa o 2SFCA: mesmo os 20,3% da população na faixa "insuficiente" (3–9 m²/hab) podem estar a mais de 300 m do parque mais próximo — a acessibilidade 2SFCA reflecte parques distantes que "chegam" ao raio de 500 m mas não ao de 300 m.
+**Cerca de metade da população do Porto** (50,1%) não tem acesso a um parque de dimensão significativa a uma distância pedonal curta. Este resultado complementa o 2SFCA: parte da população na faixa "insuficiente" (3–9 m²/hab) pode estar a mais de 300 m do parque mais próximo — a acessibilidade 2SFCA reflecte parques distantes que "chegam" ao raio de 500 m mas não ao de 300 m.
 
 ### 4.5. Verde privado: o paradoxo de equidade
 
@@ -182,7 +214,7 @@ Lisboa é o caso comparativo mais directo. A cidade reporta ~37 m²/hab de verde
 
 | Cidade | Verde/hab | Valor efectivo | Desigualdade intra-urbana |
 |---|---|---|---|
-| **Porto** | 19,3 m² (PDM total) | **8,7 m²** (usufruível) | 83,9% da pop. abaixo de 9 m²/hab; centro histórico ≈0 |
+| **Porto** | 19,3 m² (PDM total) | **8,9 m²** (usufruível) | 81,7% da pop. abaixo de 9 m²/hab; centro histórico ≈0 |
 | **Lisboa** | ~37 m² (c/ Monsanto) | **~7–10 m²** (s/ Monsanto) | UGEI 0,387; Marvila/Beato vs. Parque das Nações |
 | **Barcelona** | ~17 m² (c/ Collserola) | **~7 m²** (s/ Collserola) | Apenas 33% da pop. a <300 m de parque urbano |
 | **Paris** | ~10,6 m² (c/ Bois) | **~8,6 m²** (intra-muros) | 42–55% abaixo de 10 m²/hab; plano bioclimático 2035 |
@@ -223,9 +255,9 @@ A estratégia municipal deveria priorizar o **eixo central e oriental** — onde
 
 ## 7. Conclusões
 
-**83,9% da população do Porto** vive com acessibilidade a verde público inferior a 9 m²/hab num raio de 500 m. **63,5%** encontra-se em défice crítico (<3 m²/hab), concentrado no centro e leste — as zonas mais densas e termicamente vulneráveis. Apenas 16,1% tem acesso adequado. Aplicando o critério de proximidade de Konijnendijk (2023), **63,2% da população** não tem um parque de ≥0,5 ha a ≤300 m de casa.
+**82,4% da população do Porto** vive com acessibilidade a verde público inferior a 9 m²/hab num raio de 500 m. **56,5%** encontra-se em défice crítico (<3 m²/hab), concentrado no centro e leste — as zonas mais densas e termicamente vulneráveis. Apenas 17,9% tem acesso adequado. Aplicando o critério de proximidade de Konijnendijk (2023), **50,9% da população** não tem um parque de ≥0,5 ha a ≤300 m de casa.
 
-Dos 448 ha classificados como verde público pelo PDM, apenas ~202 ha são efectivamente usufruíveis. A métrica agregada per capita é insuficiente para avaliar a equidade — e o Porto não é caso único: Lisboa, Barcelona e Paris partilham o mesmo padrão de défice estrutural em núcleos densos.
+Dos 448 ha classificados como verde público pelo PDM, apenas ~214 ha são efectivamente usufruíveis. A métrica agregada per capita é insuficiente para avaliar a equidade — e o Porto não é caso único: Lisboa, Barcelona e Paris partilham o mesmo padrão de défice estrutural em núcleos densos.
 
 ---
 
@@ -234,7 +266,7 @@ Dos 448 ha classificados como verde público pelo PDM, apenas ~202 ha são efect
 Processamento em Python com *Google Earth Engine*, *scipy*, *NumPy* e *Shapely*. Código aberto:
 
 - [`acessibilidade_verde.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/acessibilidade/acessibilidade_verde.py) — pipeline completo (classificação + 2SFCA + HTML)
-- [`criar_parques.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/acessibilidade/criar_parques.py) — inventário de 47 parques (Overpass API + PDM)
+- [`criar_parques.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/acessibilidade/criar_parques.py) — inventário de 79 parques (Overpass API + PDM)
 
 ---
 
@@ -268,4 +300,4 @@ Processamento em Python com *Google Earth Engine*, *scipy*, *NumPy* e *Shapely*.
 
 ## Mapa interactivo
 
-**[Acessibilidade a Verde Público — Porto]({{ site.baseurl }}/acessibilidade/acessibilidade_verde.html)** — mapa com camadas de acessibilidade 2SFCA, parques e jardins (47 espaços com popups), verde pago/não usufruível e verde privado
+**[Acessibilidade a Verde Público — Porto]({{ site.baseurl }}/acessibilidade/acessibilidade_verde.html)** — mapa com camadas de acessibilidade 2SFCA, parques e jardins (78 espaços com popups), verde pago/não usufruível e verde privado
