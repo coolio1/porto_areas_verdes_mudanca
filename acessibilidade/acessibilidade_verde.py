@@ -342,7 +342,14 @@ if os.path.exists(expansao_path):
     expansao_gdf_c = gpd.read_file(expansao_path).to_crs(epsg=4326)
     for _, row in expansao_gdf_c.iterrows():
         c = row.geometry.centroid
-        expansao_centroids.append([c.y, c.x])
+        expansao_centroids.append(
+            {
+                "lat": c.y,
+                "lng": c.x,
+                "nome": row.get("nome", ""),
+                "area": row.get("area_ha_planeada", ""),
+            }
+        )
     print(f"  {len(expansao_centroids)} centróides de expansão calculados")
 
 # ===== Phase 3: 2SFCA (cálculo a ~30m) =====
@@ -1102,11 +1109,11 @@ async function init() {{
   map.getPane('expansaoPane').style.zIndex = 625;
   var expansaoMarkers = L.layerGroup([], {{pane: 'expansaoPane'}});
   expansaoCentroids.forEach(function(c) {{
-    L.circleMarker(c, {{
+    var m = L.circleMarker([c.lat, c.lng], {{
       radius: 8, color: '#00897B', fillColor: '#00897B',
-      fillOpacity: 1, opacity: 1, weight: 0, pane: 'expansaoPane',
-      interactive: false
+      fillOpacity: 1, opacity: 1, weight: 0, pane: 'expansaoPane'
     }}).addTo(expansaoMarkers);
+    m.bindTooltip('<b>' + c.nome + '</b><br>' + c.area + ' ha', {{direction: 'top', offset: [0, -8]}});
   }});
 
   // Checkbox para expansão

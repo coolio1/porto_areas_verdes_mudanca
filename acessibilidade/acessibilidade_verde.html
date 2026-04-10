@@ -23364,7 +23364,7 @@ var parquesData = {
     }
   ]
 };
-var expansaoCentroids = [[41.177, -8.639], [41.151, -8.626], [41.1475, -8.6598], [41.173721, -8.630327], [41.1445, -8.602], [41.162, -8.588], [41.158, -8.582], [41.163, -8.58], [41.159, -8.671], [41.16698, -8.65854], [41.158827, -8.573607], [41.168, -8.657], [41.165594, -8.584463], [41.165, -8.585], [41.15, -8.638], [41.15, -8.635], [41.165, -8.65], [41.1548, -8.5775], [41.1515, -8.6475]];
+var expansaoCentroids = [{"lat": 41.177, "lng": -8.639, "nome": "Amplia\u00e7\u00e3o do Parque de Requesende", "area": 12.0}, {"lat": 41.151, "lng": -8.626, "nome": "Parque Urbano da Lapa", "area": 4.0}, {"lat": 41.1475, "lng": -8.6598, "nome": "Jardim de Sobreiras", "area": 1.8}, {"lat": 41.173721, "lng": -8.630327, "nome": "Parque da Prelada", "area": 21.0}, {"lat": 41.1445, "lng": -8.602, "nome": "Parque das Fontainhas/Carquejeiras", "area": 14.0}, {"lat": 41.162, "lng": -8.588, "nome": "Parque das Antas", "area": 5.0}, {"lat": 41.158, "lng": -8.582, "nome": "Parque de Noeda", "area": 8.0}, {"lat": 41.163, "lng": -8.58, "nome": "Parque de Contumil", "area": 7.0}, {"lat": 41.159, "lng": -8.671, "nome": "Parque da Ervilha", "area": 6.0}, {"lat": 41.16698, "lng": -8.65854, "nome": "Parque Desportivo de Ramalde", "area": 5.0}, {"lat": 41.158827, "lng": -8.573607, "nome": "Parque de Cartes", "area": 5.0}, {"lat": 41.168, "lng": -8.657, "nome": "Parque Urbano de Aldoar", "area": 4.0}, {"lat": 41.165594, "lng": -8.584463, "nome": "Corredor Verde da Charca de Salgueiros", "area": 4.0}, {"lat": 41.165, "lng": -8.585, "nome": "Jardim frontal \u00e0 Escola Nicolau Nasoni", "area": 4.0}, {"lat": 41.15, "lng": -8.638, "nome": "Jardim da R. de D. Pedro de Meneses", "area": 4.0}, {"lat": 41.15, "lng": -8.635, "nome": "Jardim Nun'Alvares", "area": 2.0}, {"lat": 41.165, "lng": -8.65, "nome": "Jardim da Vilarinha", "area": 2.0}, {"lat": 41.1548, "lng": -8.5775, "nome": "Jardim Monte da Bela", "area": 2.0}, {"lat": 41.1515, "lng": -8.6475, "nome": "Corredor ribeirinho do Aleixo", "area": 1.8}];
 var map = L.map('map').setView([41.155, -8.63], 13);
 var baseTile = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap'}).addTo(map);
 
@@ -23654,11 +23654,11 @@ async function init() {
   map.getPane('expansaoPane').style.zIndex = 625;
   var expansaoMarkers = L.layerGroup([], {pane: 'expansaoPane'});
   expansaoCentroids.forEach(function(c) {
-    L.circleMarker(c, {
+    var m = L.circleMarker([c.lat, c.lng], {
       radius: 8, color: '#00897B', fillColor: '#00897B',
-      fillOpacity: 1, opacity: 1, weight: 0, pane: 'expansaoPane',
-      interactive: false
+      fillOpacity: 1, opacity: 1, weight: 0, pane: 'expansaoPane'
     }).addTo(expansaoMarkers);
+    m.bindTooltip('<b>' + c.nome + '</b><br>' + c.area + ' ha', {direction: 'top', offset: [0, -8]});
   });
 
   // Checkbox para expansão
