@@ -433,10 +433,7 @@ muni_b64 = to_base64(os.path.join(PARENT_LAYERS, "municipios.png"))
 
 geojson_str = json.dumps(geojson, ensure_ascii=False)
 
-parques_geojson_str = "null"
-if os.path.exists(parques_path):
-    with open(parques_path, "r", encoding="utf-8") as fh:
-        parques_geojson_str = fh.read()
+# parques_porto.geojson é carregado via fetch() no HTML
 
 basemaps = [
     (
@@ -593,8 +590,13 @@ html = f'''<!DOCTYPE html>
 
 <script>
 var candidatosData = {geojson_str};
-var parquesData = {parques_geojson_str};
+var parquesData = null;
 var map = L.map('map').setView([41.155, -8.63], 13);
+
+fetch('parques_porto.geojson').then(r => r.json()).then(function(data) {{
+  parquesData = data;
+  if (typeof initParques === 'function') initParques();
+}});
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
 document.getElementById('basemap-select').addEventListener('change', function() {{
@@ -795,8 +797,9 @@ async function init() {{
     ctxDiv.appendChild(row);
   }}
 
-  // --- Parques GeoJSON (contornos, contexto) ---
-  if (parquesData) {{
+  // --- Parques GeoJSON (contornos, contexto) — carregado via fetch ---
+  window.initParques = function() {{
+    if (!parquesData) return;
     var parquesGeoLayer = L.geoJson(parquesData, {{
       pane: 'parquesPane',
       style: function() {{
@@ -822,7 +825,7 @@ async function init() {{
       labels.forEach(function(l) {{ l.style.display = z >= 15 ? '' : 'none'; }});
     }});
     map.fire('zoomend');
-  }}
+  }};
 }}
 
 init();

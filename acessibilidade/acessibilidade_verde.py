@@ -336,22 +336,6 @@ if not os.path.exists(verde_pago_path):
 else:
     print("  verde_pago.png já existe, a saltar...")
 
-# --- Centróides da expansão (CMP) ---
-expansao_centroids = []
-if os.path.exists(expansao_path):
-    expansao_gdf_c = gpd.read_file(expansao_path).to_crs(epsg=4326)
-    for _, row in expansao_gdf_c.iterrows():
-        c = row.geometry.centroid
-        expansao_centroids.append(
-            {
-                "lat": c.y,
-                "lng": c.x,
-                "nome": row.get("nome", ""),
-                "area": row.get("area_ha_planeada", ""),
-            }
-        )
-    print(f"  {len(expansao_centroids)} centróides de expansão calculados")
-
 # ===== Phase 3: 2SFCA (cálculo a ~30m) =====
 print("\nA calcular 2SFCA (300m)...")
 
@@ -626,23 +610,20 @@ lowpop_b64 = to_base64(lowpop_path)
 muni_b64 = to_base64(muni_path)
 prox_b64 = to_base64(prox_path)
 
-# Carregar GeoJSON dos parques nomeados (se existir)
+# Contar parques (para legenda estática)
+import json as _json
+
 parques_geojson_path = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
-parques_geojson_str = ""
 if os.path.exists(parques_geojson_path):
     with open(parques_geojson_path, "r", encoding="utf-8") as f:
-        parques_geojson_str = f.read()
-    import json as _json
-
-    _pdata = _json.loads(parques_geojson_str)
-    print(f"  Parques nomeados: {len(_pdata['features'])} carregados")
+        _pdata = _json.load(f)
+    n_parques = len(_pdata["features"])
+    print(f"  Parques nomeados: {n_parques} carregados")
 else:
+    n_parques = 0
     print(
         "  AVISO: parques_porto.geojson não encontrado — correr criar_parques.py primeiro"
     )
-
-# Centróides da expansão (para círculos no mapa)
-expansao_centroids_str = _json.dumps(expansao_centroids)
 
 basemaps = [
     (
@@ -819,15 +800,28 @@ html = f'''<!DOCTYPE html>
 
   <hr style="border-color:#ddd;margin:10px 0 4px 0;">
   <span style="color:#aaa;font-size:10px;">Sentinel-2 10m (ESA) &bull; GHS-POP 100m (JRC)<br>
-  {len(_pdata["features"])} parques e jardins (CMP + OSM)<br>
+  {n_parques} parques e jardins (CMP + OSM)<br>
   M&eacute;todo: Two-Step Floating Catchment Area</span>
   </div>
 </div>
 
 <script>
-var parquesData = {parques_geojson_str if parques_geojson_str else "null"};
-var expansaoCentroids = {expansao_centroids_str};
+var parquesData = null;
+var expansaoCentroids = [];
 var map = L.map('map').setView([41.155, -8.63], 13);
+
+// Carregar GeoJSONs em runtime (evita re-gerar HTML ao editar dados)
+fetch('parques_porto.geojson').then(r => r.json()).then(function(data) {{
+  parquesData = data;
+  if (typeof initParques === 'function') initParques();
+}});
+fetch('expansao_verde.geojson').then(r => r.json()).then(function(data) {{
+  expansaoCentroids = data.features.map(function(f) {{
+    return {{lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0],
+            nome: f.properties.nome, area: f.properties.area_ha_planeada}};
+  }});
+  if (typeof initExpansao === 'function') initExpansao();
+}});
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
 document.getElementById('basemap-select').addEventListener('change', function() {{
@@ -1058,10 +1052,28 @@ async function init() {{
   var greenOverlay = L.imageOverlay(greenSrc, bounds, {{pane: 'parquesPane'}});
   greenOverlay.addTo(map);
 
-  // Contornos GeoJSON dos parques
+  // Contornos GeoJSON dos parques (carregado via fetch)
   var parquesGeoLayer = null;
-  if (parquesData) {{
 
+  // Checkbox único para raster + contornos
+  var pRow = document.createElement('div'); pRow.className = 'row';
+  var pCb = document.createElement('input'); pCb.type = 'checkbox'; pCb.checked = true;
+  pCb.addEventListener('change', function() {{
+    if (this.checked) {{
+      greenOverlay.addTo(map);
+      if (parquesGeoLayer) parquesGeoLayer.addTo(map);
+    }} else {{
+      map.removeLayer(greenOverlay);
+      if (parquesGeoLayer) map.removeLayer(parquesGeoLayer);
+    }}
+  }});
+  var pSw = document.createElement('span'); pSw.className = 'swatch'; pSw.style.backgroundColor = '#2E7D32';
+  var pLb = document.createElement('label'); pLb.textContent = 'Parques e Jardins'; pLb.style.fontSize = '12px';
+  pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
+  div.insertBefore(pRow, proxRow.nextSibling);
+
+  window.initParques = function() {{
+    if (!parquesData) return;
     parquesGeoLayer = L.geoJson(parquesData, {{
       pane: 'parquesPane',
       style: function(f) {{
@@ -1084,53 +1096,19 @@ async function init() {{
         }});
       }}
     }});
-    parquesGeoLayer.addTo(map);
-
+    if (pCb.checked) parquesGeoLayer.addTo(map);
     map.on('zoomend', function() {{
       var labels = document.querySelectorAll('.park-label');
       var z = map.getZoom();
       labels.forEach(function(l) {{ l.style.display = z >= 14 ? '' : 'none'; }});
     }});
     map.fire('zoomend');
-  }}
-
-  // Checkbox único para raster + contornos
-  var pRow = document.createElement('div'); pRow.className = 'row';
-  var pCb = document.createElement('input'); pCb.type = 'checkbox'; pCb.checked = true;
-  pCb.addEventListener('change', function() {{
-    if (this.checked) {{
-      greenOverlay.addTo(map);
-      if (parquesGeoLayer) parquesGeoLayer.addTo(map);
-    }} else {{
-      map.removeLayer(greenOverlay);
-      if (parquesGeoLayer) map.removeLayer(parquesGeoLayer);
-    }}
-  }});
-  var pSw = document.createElement('span'); pSw.className = 'swatch'; pSw.style.backgroundColor = '#2E7D32';
-  var pLb = document.createElement('label'); pLb.textContent = 'Parques e Jardins'; pLb.style.fontSize = '12px';
-  pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
-  div.insertBefore(pRow, proxRow.nextSibling);
+  }};
 
   // --- Estratégia de expansão (CMP) — círculos nos centróides ---
   map.createPane('expansaoPane');
   map.getPane('expansaoPane').style.zIndex = 625;
   var expansaoMarkers = L.layerGroup([], {{pane: 'expansaoPane'}});
-  expansaoCentroids.forEach(function(c) {{
-    var m = L.circleMarker([c.lat, c.lng], {{
-      radius: 8, color: '#00897B', fillColor: '#00897B',
-      fillOpacity: 1, opacity: 1, weight: 0, pane: 'expansaoPane'
-    }}).addTo(expansaoMarkers);
-    m.bindTooltip('<b>' + c.nome + '</b><br>' + c.area + ' ha', {{direction: 'top', offset: [0, -8]}});
-    L.marker([c.lat, c.lng], {{
-      pane: 'expansaoPane',
-      icon: L.divIcon({{
-        className: 'expansao-label',
-        html: '<span>' + c.nome + '</span>',
-        iconSize: [0, 0],
-        iconAnchor: [0, 22]
-      }})
-    }}).addTo(expansaoMarkers);
-  }});
 
   // Checkbox para expansão
   var eRow = document.createElement('div'); eRow.className = 'row';
@@ -1143,6 +1121,25 @@ async function init() {{
   var eLb = document.createElement('label'); eLb.textContent = 'Estrat\\u00e9gia de expans\\u00e3o (CMP)'; eLb.style.fontSize = '12px';
   eRow.appendChild(eCb); eRow.appendChild(eSw); eRow.appendChild(eLb);
   div.insertBefore(eRow, pRow.nextSibling);
+
+  window.initExpansao = function() {{
+    expansaoCentroids.forEach(function(c) {{
+      var m = L.circleMarker([c.lat, c.lng], {{
+        radius: 8, color: '#00897B', fillColor: '#00897B',
+        fillOpacity: 1, opacity: 1, weight: 0, pane: 'expansaoPane'
+      }}).addTo(expansaoMarkers);
+      m.bindTooltip('<b>' + c.nome + '</b><br>' + c.area + ' ha', {{direction: 'top', offset: [0, -8]}});
+      L.marker([c.lat, c.lng], {{
+        pane: 'expansaoPane',
+        icon: L.divIcon({{
+          className: 'expansao-label',
+          html: '<span>' + c.nome + '</span>',
+          iconSize: [0, 0],
+          iconAnchor: [0, 22]
+        }})
+      }}).addTo(expansaoMarkers);
+    }});
+  }};
 
   // --- Baixa densidade (acima da acessibilidade, abaixo dos parques) ---
   map.createPane('lowPopPane');
