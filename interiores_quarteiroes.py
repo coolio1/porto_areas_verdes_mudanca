@@ -3,75 +3,95 @@ import requests
 import os
 import base64
 import io
-import json
 from dotenv import load_dotenv
 
-load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)
 
-porto = ee.Geometry.Polygon([
-    [[-8.70, 41.13], [-8.54, 41.13], [-8.54, 41.19], [-8.70, 41.19]]
-])
+porto = ee.Geometry.Polygon(
+    [[[-8.70, 41.13], [-8.54, 41.13], [-8.54, 41.19], [-8.70, 41.19]]]
+)
 BOUNDS = [[41.13, -8.70], [41.19, -8.54]]
 DIM = 2048
 
-municipios = ee.FeatureCollection(f'projects/{GEE_PROJECT}/assets/CAOP2025_municipios')
+municipios = ee.FeatureCollection(f"projects/{GEE_PROJECT}/assets/CAOP2025_municipios")
 municipiosPorto = municipios.filterBounds(porto)
 
-BANDS = ['B3', 'B4', 'B8', 'B11', 'SCL']
+BANDS = ["B3", "B4", "B8", "B11", "SCL"]
+
 
 def getS2col(start, end):
-    s2 = (ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
-        .filterBounds(porto).filterDate(start, end)
-        .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30))
-        .select(BANDS))
+    s2 = (
+        ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+        .filterBounds(porto)
+        .filterDate(start, end)
+        .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 30))
+        .select(BANDS)
+    )
+
     def process(img):
-        scl = img.select('SCL')
+        scl = img.select("SCL")
         clear = scl.eq(4).Or(scl.eq(5)).Or(scl.eq(6)).Or(scl.eq(2)).Or(scl.eq(11))
-        ndvi = img.normalizedDifference(['B8', 'B4']).rename('ndvi')
-        ndbi = img.normalizedDifference(['B11', 'B8']).rename('ndbi')
-        nir_green = img.select('B8').divide(img.select('B3').max(1)).rename('nir_green')
-        green = img.select('B3').rename('green')
+        ndvi = img.normalizedDifference(["B8", "B4"]).rename("ndvi")
+        ndbi = img.normalizedDifference(["B11", "B8"]).rename("ndbi")
+        nir_green = img.select("B8").divide(img.select("B3").max(1)).rename("nir_green")
+        green = img.select("B3").rename("green")
         return ndvi.addBands(ndbi).addBands(nir_green).addBands(green).updateMask(clear)
+
     return s2.map(process)
+
 
 def getComposite(years):
     all_col = ee.ImageCollection([])
     spring_col = ee.ImageCollection([])
     for year in years:
-        full = getS2col(f'{year}-05-01', f'{year}-10-31')
+        full = getS2col(f"{year}-05-01", f"{year}-10-31")
         all_col = all_col.merge(full)
-        spring = getS2col(f'{year}-05-15', f'{year}-06-30')
+        spring = getS2col(f"{year}-05-15", f"{year}-06-30")
         spring_col = spring_col.merge(spring)
     median = all_col.median().clip(porto)
-    spring_ndvi = spring_col.select('ndvi').reduce(
-        ee.Reducer.percentile([15])).rename('spring_ndvi').clip(porto)
-    ndvi_min = all_col.select('ndvi').reduce(
-        ee.Reducer.percentile([10])).rename('ndvi_min').clip(porto)
+    spring_ndvi = (
+        spring_col.select("ndvi")
+        .reduce(ee.Reducer.percentile([15]))
+        .rename("spring_ndvi")
+        .clip(porto)
+    )
+    ndvi_min = (
+        all_col.select("ndvi")
+        .reduce(ee.Reducer.percentile([10]))
+        .rename("ndvi_min")
+        .clip(porto)
+    )
     return median.addBands(spring_ndvi).addBands(ndvi_min)
 
-print('A calcular compositos Sentinel-2...')
+
+print("A calcular compositos Sentinel-2...")
 s2_early = getComposite([2016, 2017])
-s2_late  = getComposite([2024, 2025])
+s2_late = getComposite([2024, 2025])
 
 # ESA WorldCover 10m (2021) como desempate
-esa = ee.Image('ESA/WorldCover/v200/2021').select('Map').clip(porto)
+esa = ee.Image("ESA/WorldCover/v200/2021").select("Map").clip(porto)
 esaBuilt = esa.eq(50)
+
 
 def classify(ndvi, ndbi, nirgreen, green, spring_ndvi, ndvi_min):
     b3_ok = green.lt(600).Or(green.lt(800).And(ndvi_min.gte(0.5)))
-    isTreeStrict = (ndvi.gte(0.5)
+    isTreeStrict = (
+        ndvi.gte(0.5)
         .And(spring_ndvi.gte(0.7))
         .And(ndvi_min.gte(0.3))
         .And(nirgreen.gte(4))
-        .And(b3_ok))
+        .And(b3_ok)
+    )
     b3_ok_mixed = green.lt(600).Or(green.lt(800).And(ndvi_min.gte(0.5)))
-    isMixed = (ndvi.gte(0.5)
+    isMixed = (
+        ndvi.gte(0.5)
         .And(spring_ndvi.gte(0.5))
         .And(ndvi_min.gte(0.2))
         .And(b3_ok_mixed)
-        .And(isTreeStrict.Not()))
+        .And(isTreeStrict.Not())
+    )
     isTree = isTreeStrict.Or(isMixed)
     clear_built = ndvi.lt(0.2).And(ndbi.gte(-0.1))
     esa_tiebreak = ndvi.gte(0.2).And(ndvi.lt(0.35)).And(esaBuilt)
@@ -79,22 +99,27 @@ def classify(ndvi, ndbi, nirgreen, green, spring_ndvi, ndvi_min):
     isSolo = isTree.Not().And(isBuilt.Not())
     return isTree, isBuilt, isSolo
 
-ndvi_e = s2_early.select('ndvi')
-ndbi_e = s2_early.select('ndbi')
-nirgreen_e = s2_early.select('nir_green')
-green_e = s2_early.select('green')
-spring_ndvi_e = s2_early.select('spring_ndvi')
-ndvi_min_e = s2_early.select('ndvi_min')
 
-ndvi_l = s2_late.select('ndvi')
-ndbi_l = s2_late.select('ndbi')
-nirgreen_l = s2_late.select('nir_green')
-green_l = s2_late.select('green')
-spring_ndvi_l = s2_late.select('spring_ndvi')
-ndvi_min_l = s2_late.select('ndvi_min')
+ndvi_e = s2_early.select("ndvi")
+ndbi_e = s2_early.select("ndbi")
+nirgreen_e = s2_early.select("nir_green")
+green_e = s2_early.select("green")
+spring_ndvi_e = s2_early.select("spring_ndvi")
+ndvi_min_e = s2_early.select("ndvi_min")
 
-isTree_e, isBuilt_e, isSolo_e = classify(ndvi_e, ndbi_e, nirgreen_e, green_e, spring_ndvi_e, ndvi_min_e)
-isTree_l_base, isBuilt_l_base, _ = classify(ndvi_l, ndbi_l, nirgreen_l, green_l, spring_ndvi_l, ndvi_min_l)
+ndvi_l = s2_late.select("ndvi")
+ndbi_l = s2_late.select("ndbi")
+nirgreen_l = s2_late.select("nir_green")
+green_l = s2_late.select("green")
+spring_ndvi_l = s2_late.select("spring_ndvi")
+ndvi_min_l = s2_late.select("ndvi_min")
+
+isTree_e, isBuilt_e, isSolo_e = classify(
+    ndvi_e, ndbi_e, nirgreen_e, green_e, spring_ndvi_e, ndvi_min_e
+)
+isTree_l_base, isBuilt_l_base, _ = classify(
+    ndvi_l, ndbi_l, nirgreen_l, green_l, spring_ndvi_l, ndvi_min_l
+)
 
 # Persistence rule: built in 2016 stays built unless NDVI 2025 >= 0.45
 stays_built = isBuilt_e.And(ndvi_l.lt(0.45))
@@ -103,9 +128,9 @@ isTree_l = isTree_l_base.And(isBuilt_l.Not())
 isSolo_l = isTree_l.Not().And(isBuilt_l.Not())
 
 # ----- Zona centro = interior da VCI (Via de Cintura Interna) -----
-print('A obter traçado da VCI...')
-from shapely.geometry import LineString, Polygon as ShapelyPolygon
-from shapely.ops import linemerge, polygonize, unary_union as union_geom
+print("A obter traçado da VCI...")
+from shapely.geometry import LineString
+from shapely.ops import unary_union as union_geom
 
 VCI_QUERY = """
 [out:json][timeout:60];
@@ -116,36 +141,41 @@ out skel qt;
 """
 
 vci_data = None
-for overpass_url in ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']:
+for overpass_url in [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+]:
     for attempt in range(3):
-        print(f'  A tentar {overpass_url} (tentativa {attempt+1})...')
+        print(f"  A tentar {overpass_url} (tentativa {attempt + 1})...")
         try:
-            resp = requests.get(overpass_url, params={'data': VCI_QUERY}, timeout=90)
+            resp = requests.get(overpass_url, params={"data": VCI_QUERY}, timeout=90)
             if resp.status_code == 200:
                 vci_data = resp.json()
                 break
         except Exception:
             pass
         import time as _time
+
         _time.sleep(5)
     if vci_data:
         break
 
 # Construir nós e segmentos da VCI
 vci_nodes = {}
-for el in vci_data['elements']:
-    if el['type'] == 'node':
-        vci_nodes[el['id']] = (el['lon'], el['lat'])
+for el in vci_data["elements"]:
+    if el["type"] == "node":
+        vci_nodes[el["id"]] = (el["lon"], el["lat"])
 
 vci_lines = []
-for el in vci_data['elements']:
-    if el['type'] == 'way' and 'nodes' in el:
-        coords = [vci_nodes[n] for n in el['nodes'] if n in vci_nodes]
+for el in vci_data["elements"]:
+    if el["type"] == "way" and "nodes" in el:
+        coords = [vci_nodes[n] for n in el["nodes"] if n in vci_nodes]
         if len(coords) >= 2:
             vci_lines.append(LineString(coords))
 
 # Juntar segmentos, buffer para unir as 2 faixas, subtrair ao bbox
 from shapely.geometry import Point, box as shapely_box
+
 vci_buffer = union_geom(vci_lines).buffer(0.0003)  # ~30m junta as faixas
 porto_box = shapely_box(-8.70, 41.13, -8.54, 41.19)
 remaining = porto_box.difference(vci_buffer)
@@ -153,20 +183,20 @@ remaining = porto_box.difference(vci_buffer)
 # Encontrar o polígono que contém o centro do Porto
 porto_center = Point(-8.61, 41.155)
 centro_union = None
-if remaining.geom_type == 'MultiPolygon':
+if remaining.geom_type == "MultiPolygon":
     for p in remaining.geoms:
         if p.contains(porto_center):
             centro_union = p
             break
-elif remaining.geom_type == 'Polygon' and remaining.contains(porto_center):
+elif remaining.geom_type == "Polygon" and remaining.contains(porto_center):
     centro_union = remaining
 
 if centro_union:
-    print(f'  Interior da VCI encontrado (área: {centro_union.area:.6f} graus²)')
+    print(f"  Interior da VCI encontrado (área: {centro_union.area:.6f} graus²)")
     ee_coords = [list(centro_union.exterior.coords)]
     centro_ee = ee.Geometry.Polygon(ee_coords)
 else:
-    print('  AVISO: interior da VCI não encontrado, a usar porto inteiro')
+    print("  AVISO: interior da VCI não encontrado, a usar porto inteiro")
     centro_ee = porto
 
 is_centro = ee.Image.constant(1).clip(centro_ee).unmask(0).clip(porto)
@@ -180,96 +210,104 @@ subsistente = isGreen_l.selfMask()
 perdido = isGreen_e.And(isBuilt_l).selfMask()
 
 # GHS-POP 2020 (densidade populacional 100m)
-print('A preparar camada de densidade populacional (GHS-POP)...')
-ghspop = ee.Image('JRC/GHSL/P2023A/GHS_POP/2020').select('population_count').clip(porto)
+print("A preparar camada de densidade populacional (GHS-POP)...")
+ghspop = ee.Image("JRC/GHSL/P2023A/GHS_POP/2020").select("population_count").clip(porto)
 # Visualizar com paleta quente (transparente onde pop=0)
 ghspop_vis = ghspop.updateMask(ghspop.gt(0)).visualize(
-    min=0, max=150, palette=['#f5e6d0', '#d4b896', '#b08a5e', '#8b6934', '#6b4a1e', '#4a2f0a']
+    min=0,
+    max=150,
+    palette=["#f5e6d0", "#d4b896", "#b08a5e", "#8b6934", "#6b4a1e", "#4a2f0a"],
 )
 
-print('Classificacao concluida.')
+print("Classificacao concluida.")
 
 from PIL import Image
 import numpy as np
 import time
 
-os.makedirs('layers', exist_ok=True)
+os.makedirs("layers", exist_ok=True)
+
 
 def download_layer(image, color_hex, filename):
-    filepath = f'layers/{filename}'
+    filepath = f"layers/{filename}"
     if os.path.exists(filepath):
-        print(f'  {filename} ja existe, a saltar...')
+        print(f"  {filename} ja existe, a saltar...")
         return filepath
     vis = image.visualize(palette=[color_hex], min=0, max=1)
     for attempt in range(3):
-        url = vis.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png'})
-        print(f'  A descarregar {filename}...')
+        url = vis.getThumbURL({"region": porto, "dimensions": DIM, "format": "png"})
+        print(f"  A descarregar {filename}...")
         r = requests.get(url)
         try:
-            img = Image.open(io.BytesIO(r.content)).convert('RGBA')
+            img = Image.open(io.BytesIO(r.content)).convert("RGBA")
             break
         except Exception as e:
-            print(f'  Tentativa {attempt+1} falhou: {e}')
+            print(f"  Tentativa {attempt + 1} falhou: {e}")
             if attempt < 2:
                 time.sleep(3)
             else:
                 return None
     arr = np.array(img)
-    dark = (arr[:,:,0] < 10) & (arr[:,:,1] < 10) & (arr[:,:,2] < 10)
+    dark = (arr[:, :, 0] < 10) & (arr[:, :, 1] < 10) & (arr[:, :, 2] < 10)
     arr[dark, 3] = 0
     img = Image.fromarray(arr)
     img.save(filepath)
-    print(f'  {filename} guardado ({os.path.getsize(filepath)//1024} KB)')
+    print(f"  {filename} guardado ({os.path.getsize(filepath) // 1024} KB)")
     return filepath
+
 
 def download_rgb_layer(image, filename):
     """Download pre-visualized RGB layer (e.g., GHS-POP with palette)."""
-    filepath = f'layers/{filename}'
+    filepath = f"layers/{filename}"
     if os.path.exists(filepath):
-        print(f'  {filename} ja existe, a saltar...')
+        print(f"  {filename} ja existe, a saltar...")
         return filepath
     for attempt in range(3):
-        url = image.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png'})
-        print(f'  A descarregar {filename}...')
+        url = image.getThumbURL({"region": porto, "dimensions": DIM, "format": "png"})
+        print(f"  A descarregar {filename}...")
         r = requests.get(url)
         try:
-            img = Image.open(io.BytesIO(r.content)).convert('RGBA')
+            img = Image.open(io.BytesIO(r.content)).convert("RGBA")
             break
         except Exception as e:
-            print(f'  Tentativa {attempt+1} falhou: {e}')
+            print(f"  Tentativa {attempt + 1} falhou: {e}")
             if attempt < 2:
                 time.sleep(3)
             else:
                 return None
     # Tornar pixels pretos/quase-pretos transparentes
     arr = np.array(img)
-    dark = (arr[:,:,0] < 10) & (arr[:,:,1] < 10) & (arr[:,:,2] < 10)
+    dark = (arr[:, :, 0] < 10) & (arr[:, :, 1] < 10) & (arr[:, :, 2] < 10)
     arr[dark, 3] = 0
     Image.fromarray(arr).save(filepath)
-    print(f'  {filename} guardado ({os.path.getsize(filepath)//1024} KB)')
+    print(f"  {filename} guardado ({os.path.getsize(filepath) // 1024} KB)")
     return filepath
 
-print('\nA descarregar camadas...')
-download_layer(subsistente, '2E7D32', 'interior_subsistente.png')
-download_layer(perdido, 'D7263D', 'interior_perdido.png')
-download_rgb_layer(ghspop_vis, 'ghspop.png')
+
+print("\nA descarregar camadas...")
+download_layer(subsistente, "2E7D32", "interior_subsistente.png")
+download_layer(perdido, "D7263D", "interior_perdido.png")
+download_rgb_layer(ghspop_vis, "ghspop.png")
 # Interior VCI: rasterizar contorno localmente (geometria vem do OSM, não do GEE)
-centro_path = 'layers/centro_alargado.png'
+centro_path = "layers/centro_alargado.png"
 if not os.path.exists(centro_path) and centro_union is not None:
-    print('  A rasterizar contorno da VCI...')
-    ref_img = Image.open('layers/interior_subsistente.png')
+    print("  A rasterizar contorno da VCI...")
+    ref_img = Image.open("layers/interior_subsistente.png")
     W, H = ref_img.size
     centro_boundary = centro_union.boundary
-    centro_img = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    centro_img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     from PIL import ImageDraw
+
     draw = ImageDraw.Draw(centro_img)
     lon_min, lon_max = -8.70, -8.54
     lat_min, lat_max = 41.13, 41.19
+
     def geo_to_pixel(lon, lat):
         x = (lon - lon_min) / (lon_max - lon_min) * W
         y = (lat_max - lat) / (lat_max - lat_min) * H
         return (x, y)
-    if centro_boundary.geom_type == 'MultiLineString':
+
+    if centro_boundary.geom_type == "MultiLineString":
         lines = centro_boundary.geoms
     else:
         lines = [centro_boundary]
@@ -278,87 +316,72 @@ if not os.path.exists(centro_path) and centro_union is not None:
         if len(coords) >= 2:
             draw.line(coords, fill=(255, 215, 0, 255), width=3)
     centro_img.save(centro_path)
-    print(f'  centro_alargado.png guardado ({os.path.getsize(centro_path)//1024} KB)')
+    print(f"  centro_alargado.png guardado ({os.path.getsize(centro_path) // 1024} KB)")
 else:
-    print('  centro_alargado.png ja existe, a saltar...')
+    print("  centro_alargado.png ja existe, a saltar...")
 
 # Municipios (reuse if exists)
-muni_styled = ee.Image().byte().paint(featureCollection=municipiosPorto, color=1, width=3)
-download_layer(muni_styled, '444444', 'municipios.png')
+muni_styled = (
+    ee.Image().byte().paint(featureCollection=municipiosPorto, color=1, width=3)
+)
+download_layer(muni_styled, "444444", "municipios.png")
 
-from shapely.geometry import shape, box, MultiPolygon
-from shapely.ops import unary_union
 
-# ----- Phase 2: OSM park mask -----
-# ----- Phase 2: Mascara de exclusao via PDM 2021 (fonte oficial CMP) -----
-print('\nA carregar mascara de exclusao do PDM 2021...')
+# ----- Phase 2: Subtrair parques e jardins + verde pago -----
 import geopandas as gpd
+from shapely import contains_xy
 
-PDM_URL = 'https://opendata.porto.digital/dataset/e6bff4b8-ebe8-4048-a3ca-6a1640da8293/resource/44b228a4-1df1-4e67-b44b-c19cfa7bdf97/download/po_cqs.gpkg'
-PDM_LOCAL = os.path.join(os.path.dirname(__file__), 'CLC', 'po_cqs.gpkg')
 
-# Descarregar PDM se nao existir localmente
-if not os.path.exists(PDM_LOCAL):
-    print('  A descarregar GeoPackage do PDM...')
-    os.makedirs(os.path.dirname(PDM_LOCAL), exist_ok=True)
-    r = requests.get(PDM_URL, timeout=120)
-    with open(PDM_LOCAL, 'wb') as f:
-        f.write(r.content)
-    print(f'  PDM guardado ({os.path.getsize(PDM_LOCAL)//1024} KB)')
-
-# Carregar qualificacao funcional e reprojectar para WGS84
-gdf = gpd.read_file(PDM_LOCAL, layer='PO_QSFUNCIONAL_PL').to_crs(epsg=4326)
-
-# Categorias a excluir (espacos publicos: verdes, equipamentos, infraestruturas)
-EXCLUIR_CATEGORIAS = [
-    'Espaços verdes e frente atlântica e ribeirinha',
-    'Espaços de uso especial - Equipamentos',
-    'Espaços de uso especial - Infraestruturas',
-]
-# Tentar com encoding correcto e fallback para encoding danificado
-mask = gdf['c_espaco'].isin(EXCLUIR_CATEGORIAS)
-if mask.sum() == 0:
-    # Encoding pode estar danificado no gpkg, tentar match parcial
-    for idx, val in enumerate(gdf['c_espaco'].unique()):
-        if 'verde' in val.lower() or 'equip' in val.lower() or 'infra' in val.lower():
-            mask = mask | (gdf['c_espaco'] == val)
-
-excluir = gdf[mask]
-print(f'  {len(excluir)} poligonos PDM a excluir:')
-for cat in excluir['c_espaco'].unique():
-    n = (excluir['c_espaco'] == cat).sum()
-    print(f'    {cat}: {n}')
-
-parks_union = excluir.geometry.union_all() if len(excluir) > 0 else MultiPolygon()
-print(f'  Mascara PDM pronta')
-
-def apply_osm_mask(filepath, parks_geom):
-    if parks_geom.is_empty:
+def apply_geom_mask(filepath, geom, label):
+    """Remove pixels dentro de uma geometria."""
+    if geom.is_empty:
         return
-    img = Image.open(filepath).convert('RGBA')
+    img = Image.open(filepath).convert("RGBA")
     w, h = img.size
     arr = np.array(img)
-
-    lon_min, lon_max = -8.70, -8.54
-    lat_min, lat_max = 41.13, 41.19
-
-    from shapely import contains_xy
-    xs = np.linspace(lon_min, lon_max, w)
-    ys = np.linspace(lat_max, lat_min, h)
+    xs = np.linspace(-8.70, -8.54, w)
+    ys = np.linspace(41.19, 41.13, h)
     xx, yy = np.meshgrid(xs, ys)
-    mask = contains_xy(parks_geom, xx.ravel(), yy.ravel()).reshape(h, w)
-
+    mask = contains_xy(geom, xx.ravel(), yy.ravel()).reshape(h, w)
+    n_masked = (arr[:, :, 3] > 0) & mask
     arr[mask, 3] = 0
     Image.fromarray(arr).save(filepath)
-    n_masked = mask.sum()
-    print(f'  {os.path.basename(filepath)}: {n_masked} pixels mascarados (parques)')
+    print(
+        f"  {os.path.basename(filepath)}: {n_masked.sum()} pixels mascarados ({label})"
+    )
 
-apply_osm_mask('layers/interior_subsistente.png', parks_union)
-apply_osm_mask('layers/interior_perdido.png', parks_union)
-print('Mascara PDM aplicada.')
+
+def apply_raster_mask(filepath, mask_path, label):
+    """Remove pixels que coincidem com outra camada raster."""
+    mask_img = Image.open(mask_path).convert("RGBA")
+    mask_arr = np.array(mask_img)[:, :, 3] > 0
+    img = Image.open(filepath).convert("RGBA")
+    arr = np.array(img)
+    n_masked = ((arr[:, :, 3] > 0) & mask_arr).sum()
+    arr[mask_arr, 3] = 0
+    Image.fromarray(arr).save(filepath)
+    print(f"  {os.path.basename(filepath)}: {n_masked} pixels mascarados ({label})")
+
+
+# 2a. Subtrair parques e jardins (inventario)
+parques_path = os.path.join("acessibilidade", "parques_porto.geojson")
+if os.path.exists(parques_path):
+    print("\nA subtrair parques e jardins...")
+    parques_gdf = gpd.read_file(parques_path).to_crs(epsg=4326)
+    parques_union = parques_gdf.geometry.union_all()
+    apply_geom_mask("layers/interior_subsistente.png", parques_union, "parques")
+    apply_geom_mask("layers/interior_perdido.png", parques_union, "parques")
+    print(f"  {len(parques_gdf)} parques subtraidos.")
+
+# 2b. Subtrair verde pago
+verde_pago_path = os.path.join("acessibilidade", "layers", "verde_pago.png")
+if os.path.exists(verde_pago_path):
+    print("A subtrair verde pago...")
+    apply_raster_mask("layers/interior_subsistente.png", verde_pago_path, "verde pago")
+    apply_raster_mask("layers/interior_perdido.png", verde_pago_path, "verde pago")
 
 # ----- Phase 2b: Mascara de estradas (OSM) -----
-print('\nA descarregar estradas do OSM...')
+print("\nA descarregar estradas do OSM...")
 
 ROADS_QUERY = """
 [out:json][timeout:90];
@@ -371,11 +394,14 @@ out skel qt;
 """
 
 roads_data = None
-for overpass_url in ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']:
+for overpass_url in [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+]:
     for attempt in range(3):
-        print(f'  A tentar {overpass_url} (tentativa {attempt+1})...')
+        print(f"  A tentar {overpass_url} (tentativa {attempt + 1})...")
         try:
-            resp = requests.get(overpass_url, params={'data': ROADS_QUERY}, timeout=120)
+            resp = requests.get(overpass_url, params={"data": ROADS_QUERY}, timeout=120)
             if resp.status_code == 200:
                 try:
                     roads_data = resp.json()
@@ -390,29 +416,30 @@ for overpass_url in ['https://overpass-api.de/api/interpreter', 'https://overpas
 
 if roads_data:
     road_nodes = {}
-    for el in roads_data['elements']:
-        if el['type'] == 'node':
-            road_nodes[el['id']] = (el['lon'], el['lat'])
+    for el in roads_data["elements"]:
+        if el["type"] == "node":
+            road_nodes[el["id"]] = (el["lon"], el["lat"])
 
     road_lines = []
-    for el in roads_data['elements']:
-        if el['type'] == 'way' and 'nodes' in el:
-            coords = [road_nodes[n] for n in el['nodes'] if n in road_nodes]
+    for el in roads_data["elements"]:
+        if el["type"] == "way" and "nodes" in el:
+            coords = [road_nodes[n] for n in el["nodes"] if n in road_nodes]
             if len(coords) >= 2:
                 road_lines.append(LineString(coords))
 
-    print(f'  {len(road_lines)} segmentos de estrada encontrados')
+    print(f"  {len(road_lines)} segmentos de estrada encontrados")
 
     # Buffer de ~10m (em graus: ~0.00012 a lat 41)
     roads_buffered = union_geom(road_lines).buffer(0.00012)
 
     def apply_roads_mask(filepath, roads_geom):
-        img = Image.open(filepath).convert('RGBA')
+        img = Image.open(filepath).convert("RGBA")
         w, h = img.size
         arr = np.array(img)
         lon_min, lon_max = -8.70, -8.54
         lat_min, lat_max = 41.13, 41.19
         from shapely import contains_xy as _cxy
+
         xs = np.linspace(lon_min, lon_max, w)
         ys = np.linspace(lat_max, lat_min, h)
         xx, yy = np.meshgrid(xs, ys)
@@ -420,61 +447,70 @@ if roads_data:
         arr[rmask, 3] = 0
         Image.fromarray(arr).save(filepath)
         n_masked = rmask.sum()
-        print(f'  {os.path.basename(filepath)}: {n_masked} pixels mascarados (estradas)')
+        print(
+            f"  {os.path.basename(filepath)}: {n_masked} pixels mascarados (estradas)"
+        )
 
-    apply_roads_mask('layers/interior_subsistente.png', roads_buffered)
-    apply_roads_mask('layers/interior_perdido.png', roads_buffered)
-    print('Mascara de estradas aplicada.')
+    apply_roads_mask("layers/interior_subsistente.png", roads_buffered)
+    apply_roads_mask("layers/interior_perdido.png", roads_buffered)
+    print("Mascara de estradas aplicada.")
 else:
-    print('  AVISO: Overpass indisponivel, mascara de estradas nao aplicada')
+    print("  AVISO: Overpass indisponivel, mascara de estradas nao aplicada")
 
 # ----- Phase 2b: Filtragem vectorial (area + linearidade) -----
-print('\nA filtrar por area e forma (vectorial)...')
+print("\nA filtrar por area e forma (vectorial)...")
 from scipy import ndimage
 
 # Resolucao: graus por pixel
-ref_img = Image.open('layers/interior_subsistente.png')
+ref_img = Image.open("layers/interior_subsistente.png")
 W, H = ref_img.size
 lon_min, lon_max = -8.70, -8.54
 lat_min, lat_max = 41.13, 41.19
-dx_deg = (lon_max - lon_min) / W   # graus/pixel em longitude
-dy_deg = (lat_max - lat_min) / H   # graus/pixel em latitude
+dx_deg = (lon_max - lon_min) / W  # graus/pixel em longitude
+dy_deg = (lat_max - lat_min) / H  # graus/pixel em latitude
 # Conversao aproximada a metros (lat ~41.16)
 import math
+
 lat_mid = (lat_min + lat_max) / 2
 m_per_deg_lat = 111320
 m_per_deg_lon = 111320 * math.cos(math.radians(lat_mid))
 pixel_area_m2 = (dx_deg * m_per_deg_lon) * (dy_deg * m_per_deg_lat)
-print(f'  Resolucao: {dx_deg*m_per_deg_lon:.1f} x {dy_deg*m_per_deg_lat:.1f} m/pixel, area pixel: {pixel_area_m2:.0f} m2')
+print(
+    f"  Resolucao: {dx_deg * m_per_deg_lon:.1f} x {dy_deg * m_per_deg_lat:.1f} m/pixel, area pixel: {pixel_area_m2:.0f} m2"
+)
 
 # Mascara VCI rasterizada para distinguir centro/periferia
 from shapely import contains_xy as _contains_xy
+
 xs_grid = np.linspace(lon_min, lon_max, W)
 ys_grid = np.linspace(lat_max, lat_min, H)
 xx_grid, yy_grid = np.meshgrid(xs_grid, ys_grid)
 if centro_union is not None:
-    vci_mask = _contains_xy(centro_union, xx_grid.ravel(), yy_grid.ravel()).reshape(H, W)
+    vci_mask = _contains_xy(centro_union, xx_grid.ravel(), yy_grid.ravel()).reshape(
+        H, W
+    )
 else:
     vci_mask = np.ones((H, W), dtype=bool)
 
-MIN_AREA_CENTRO = 3000       # m2
-MIN_AREA_PERIFERIA = 40000   # m2
+MIN_AREA_CENTRO = 3000  # m2
+MIN_AREA_PERIFERIA = 40000  # m2
+
 
 def filter_by_vector(filepath):
     """Vectorizar pixels, filtrar por area e forma, guardar PNG limpo."""
-    img = Image.open(filepath).convert('RGBA')
+    img = Image.open(filepath).convert("RGBA")
     arr = np.array(img)
     # Mascara binaria: pixel visivel (alpha > 0)
     visible = arr[:, :, 3] > 0
 
     # Etiquetar componentes conexos
     labeled, n_features = ndimage.label(visible)
-    print(f'  {os.path.basename(filepath)}: {n_features} componentes encontrados')
+    print(f"  {os.path.basename(filepath)}: {n_features} componentes encontrados")
 
     kept = 0
     removed_area = 0
     for label_id in range(1, n_features + 1):
-        component = (labeled == label_id)
+        component = labeled == label_id
         n_pixels = component.sum()
         area_m2 = n_pixels * pixel_area_m2
 
@@ -491,53 +527,71 @@ def filter_by_vector(filepath):
         kept += 1
 
     Image.fromarray(arr).save(filepath)
-    print(f'    Mantidos: {kept}, removidos por area: {removed_area}')
+    print(f"    Mantidos: {kept}, removidos por area: {removed_area}")
 
-filter_by_vector('layers/interior_subsistente.png')
-filter_by_vector('layers/interior_perdido.png')
-print('Filtragem vectorial concluida.')
+
+filter_by_vector("layers/interior_subsistente.png")
+filter_by_vector("layers/interior_perdido.png")
+print("Filtragem vectorial concluida.")
 
 # ----- Phase 3: HTML map -----
-print('\nA construir mapa...')
+print("\nA construir mapa...")
+
 
 def to_base64(filepath):
-    with open(filepath, 'rb') as f:
-        return 'data:image/png;base64,' + base64.b64encode(f.read()).decode()
+    with open(filepath, "rb") as f:
+        return "data:image/png;base64," + base64.b64encode(f.read()).decode()
+
 
 # Camada de fundo (RGB, opacidade 70%)
-BACKGROUND_LAYER = ('ghspop', 'Densidade populacional', to_base64('layers/ghspop.png'), 0.7, False)
+BACKGROUND_LAYER = (
+    "ghspop",
+    "Densidade populacional",
+    to_base64("layers/ghspop.png"),
+    0.7,
+    False,
+)
 
 # Camadas principais (monocromaticas, recoloraveis)
 MAP_LAYERS = [
-    ('interior_subsistente', 'Subsistente', '#2E7D32', True),
-    ('interior_perdido', 'Perdido (2016-2025)', '#D7263D', True),
-    ('centro_alargado', 'Interior VCI', '#FFD700', True),
-    ('municipios', 'Limites municipais', '#444444', True),
+    ("interior_subsistente", "Subsistente", "#2E7D32", True),
+    ("interior_perdido", "Perdido (2016-2025)", "#D7263D", True),
+    ("centro_alargado", "Interior VCI", "#FFD700", True),
+    ("municipios", "Limites municipais", "#444444", True),
 ]
 
 layers_js_items = []
 for lid, label, color, show in MAP_LAYERS:
-    b64 = to_base64(f'layers/{lid}.png')
+    b64 = to_base64(f"layers/{lid}.png")
     layers_js_items.append(
         f'{{id:"{lid}",label:"{label}",color:"{color}",show:{str(show).lower()},src:"{b64}"}}'
     )
-layers_js = ',\n'.join(layers_js_items)
+layers_js = ",\n".join(layers_js_items)
 
 bg_id, bg_label, bg_src, bg_opacity, bg_show = BACKGROUND_LAYER
 bg_js = f'{{id:"{bg_id}",label:"{bg_label}",opacity:{bg_opacity},show:{str(bg_show).lower()},src:"{bg_src}"}}'
 
 basemaps = [
-    ('CartoDB Positron', 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'),
-    ('CartoDB Dark', 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'),
-    ('OpenStreetMap', 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'),
-    ('Satelite', 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
+    (
+        "CartoDB Positron",
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    ),
+    ("CartoDB Dark", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"),
+    (
+        "OpenStreetMap",
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+    ),
+    (
+        "Satelite",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    ),
 ]
-basemap_options = ''.join(
-    f'<option value="{url}"{"selected" if i==0 else ""}>{name}</option>'
+basemap_options = "".join(
+    f'<option value="{url}"{"selected" if i == 0 else ""}>{name}</option>'
     for i, (name, url) in enumerate(basemaps)
 )
 
-html = f'''<!DOCTYPE html>
+html = f"""<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -731,12 +785,13 @@ init();
   <a href="https://www.linkedin.com/in/nquental/" target="_blank" style="color:#555;text-decoration:none;">Nuno Quental</a>
 </div>
 </body>
-</html>'''
+</html>"""
 
-output = 'interiores_quarteiroes.html'
-with open(output, 'w', encoding='utf-8') as f:
+output = "interiores_quarteiroes.html"
+with open(output, "w", encoding="utf-8") as f:
     f.write(html)
-print(f'\nMapa guardado em {output} ({os.path.getsize(output)//1024} KB)')
+print(f"\nMapa guardado em {output} ({os.path.getsize(output) // 1024} KB)")
 
 import webbrowser
+
 webbrowser.open(output)
