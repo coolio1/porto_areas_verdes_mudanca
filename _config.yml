@@ -1,0 +1,44 @@
+title: "Porto Verde — Monitorizar o Ambiente com Dados de Satelite"
+description: "Artigos sobre GIS, ambiente e detecao remota em Portugal, usando Google Earth Engine."
+url: "https://coolio1.github.io"
+baseurl: "/porto_areas_verdes_mudanca"
+lang: pt
+
+author:
+  name: "Quentin"
+
+permalink: /posts/:slug/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+google_site_verification: "Lkfn0DpuOYZdEePSv1vr4_iStVt6XfX5_mb4Sw3jXfY"
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+exclude:
+  - "*.py"
+  - "*.pyc"
+  - "__pycache__/"
+  - "*.bak"
+  - "*.npy"
+  - "*.npz"
+  - CAOP_Continente_2025-gpkg
+  - layers/test
+  - .claude
+  - .superpowers
+  - docs
+  - archive
+  - "*.gpkg"
+  - CLC
+  - CLAUDE.md
+  - "atropelamentos/Porto_2019_24h.pdf"
+  - googlec78d03be03954350.html
+  - Gemfile
+  - Gemfile.lock

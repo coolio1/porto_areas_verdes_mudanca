@@ -1,0 +1,243 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.639000000000001,
+          41.177000000000014
+        ]
+      },
+      "properties": {
+        "nome": "Ampliação do Parque de Requesende",
+        "area_ha_planeada": 12
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.615,
+          41.1578
+        ]
+      },
+      "properties": {
+        "nome": "Parque Urbano da Lapa",
+        "area_ha_planeada": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.6297,
+          41.1743
+        ]
+      },
+      "properties": {
+        "nome": "Parque da Prelada",
+        "area_ha_planeada": 21
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.600581117887543,
+          41.14226432982156
+        ]
+      },
+      "properties": {
+        "nome": "Parque das Fontainhas/Carquejeiras",
+        "area_ha_planeada": 14
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.584219834088161,
+          41.165771333798475
+        ]
+      },
+      "properties": {
+        "nome": "Parque das Antas",
+        "area_ha_planeada": 5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.5829,
+          41.1464
+        ]
+      },
+      "properties": {
+        "nome": "Parque de Noeda",
+        "area_ha_planeada": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.574183508167648,
+          41.175189649248445
+        ]
+      },
+      "properties": {
+        "nome": "Parque de Contumil",
+        "area_ha_planeada": 7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.6753,
+          41.1585
+        ]
+      },
+      "properties": {
+        "nome": "Parque da Ervilha",
+        "area_ha_planeada": 6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.658540288853615,
+          41.16697960102153
+        ]
+      },
+      "properties": {
+        "nome": "Parque Desportivo de Ramalde",
+        "area_ha_planeada": 5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.5741,
+          41.1596
+        ]
+      },
+      "properties": {
+        "nome": "Parque de Cartes",
+        "area_ha_planeada": 5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.6686,
+          41.1731
+        ]
+      },
+      "properties": {
+        "nome": "Parque Urbano de Aldoar",
+        "area_ha_planeada": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.6148,
+          41.1729
+        ]
+      },
+      "properties": {
+        "nome": "Corredor Verde da Charca de Salgueiros",
+        "area_ha_planeada": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.5786,
+          41.1712
+        ]
+      },
+      "properties": {
+        "nome": "Jardim frontal à Escola Nicolau Nasoni",
+        "area_ha_planeada": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.6808,
+          41.1643
+        ]
+      },
+      "properties": {
+        "nome": "Jardim Nun'Alvares",
+        "area_ha_planeada": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.6655,
+          41.1674
+        ]
+      },
+      "properties": {
+        "nome": "Jardim da Vilarinha",
+        "area_ha_planeada": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.576328280985411,
+          41.15394202570633
+        ]
+      },
+      "properties": {
+        "nome": "Jardim Monte da Bela",
+        "area_ha_planeada": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.647500000000008,
+          41.15150000000003
+        ]
+      },
+      "properties": {
+        "nome": "Corredor ribeirinho do Aleixo",
+        "area_ha_planeada": 1.8
+      }
+    }
+  ]
+}

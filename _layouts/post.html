@@ -1,0 +1,15 @@
+---
+layout: default
+---
+<article>
+  <h1 style="font-size: 1.8rem; margin-bottom: 0.3rem;">{{ page.title }}</h1>
+  <p style="color: #666; font-size: 0.9rem; margin-bottom: 2rem;">
+    {{ page.date | date: "%d %B %Y" }}
+    {% if page.tags %} &middot; {% for tag in page.tags %}<span style="background:#e8e8e0;padding:0.1em 0.5em;border-radius:3px;font-size:0.85rem;">{{ tag }}</span> {% endfor %}{% endif %}
+  </p>
+  {{ content }}
+  <hr style="margin: 3rem 0 1.5rem; border: none; border-top: 1px solid #ddd;">
+  <p style="font-size: 0.9rem; color: #666;">
+    <a href="{{ site.baseurl }}/">&larr; Voltar aos artigos</a>
+  </p>
+</article>

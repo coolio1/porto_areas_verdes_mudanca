@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% seo %}
+  <link rel="icon" type="image/png" href="{{ site.baseurl }}/favicon.png">
+  <link rel="icon" type="image/x-icon" href="{{ site.baseurl }}/favicon.ico">
+  <style>
+    :root {
+      --green: #2E7D32;
+      --dark: #1a1a2e;
+      --light: #fafaf7;
+      --text: #2a2a2a;
+      --muted: #777;
+      --accent: #228B22;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--light);
+      line-height: 1.7;
+    }
+    header {
+      background: var(--dark);
+      color: white;
+      padding: 1.8rem 1rem 0.6rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: -0.3px;
+    }
+    header h1 a { color: white; text-decoration: none; }
+    header h1 strong { font-weight: 700; color: #66bb6a; }
+    header p {
+      color: #888;
+      margin-top: 0.2rem;
+      font-size: 0.82rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    nav {
+      background: var(--dark);
+      padding: 0.7rem 1rem 0.9rem;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 0.35rem 0.9rem;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    nav a:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    main {
+      max-width: 780px;
+      margin: 2rem auto;
+      padding: 0 1.2rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 3rem;
+    }
+    article h2 { margin-top: 2.5rem; }
+    article h3 { margin-top: 2rem; }
+    a { color: var(--accent); }
+    img { max-width: 100%; border-radius: 4px; }
+    code {
+      background: #e8e8e0;
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 1.2rem 0;
+    }
+    pre code { background: none; padding: 0; color: inherit; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.2rem 0;
+      font-size: 0.92rem;
+    }
+    thead th {
+      background: var(--dark);
+      color: white;
+      font-weight: 600;
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      letter-spacing: 0.2px;
+    }
+    thead th:last-child { text-align: right; }
+    tbody td {
+      padding: 0.45rem 0.8rem;
+      border-bottom: 1px solid #e0e0d8;
+    }
+    tbody td:last-child { text-align: right; }
+    tbody tr:nth-child(even) { background: #f5f5ef; }
+    tbody tr:hover { background: #eef2e8; }
+    tbody tr:last-child td { border-bottom: 2px solid var(--dark); }
+    tbody tr:last-child { font-weight: 600; }
+    @media (max-width: 768px) {
+      header { padding: 1.2rem 0.8rem 0.4rem; }
+      header h1 { font-size: 1.2rem; }
+      nav { padding: 0.5rem 0.6rem 0.7rem; gap: 0.2rem; }
+      nav a { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
+      main { margin: 1rem auto; padding: 0 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="{{ site.baseurl }}/">Porto <strong>Verde</strong></a></h1>
+    <p>Sat&eacute;lite &middot; Ambiente &middot; Urbanismo</p>
+  </header>
+  <nav>
+    <a href="{{ site.baseurl }}/">Início</a>
+    <a href="{{ site.baseurl }}/mapa.html">Mapa 2016-2025</a>
+    <a href="{{ site.baseurl }}/ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
+    <a href="{{ site.baseurl }}/interiores_quarteiroes.html">Verde Privado</a>
+    <a href="{{ site.baseurl }}/acessibilidade/acessibilidade_verde.html">Acessibilidade</a>
+    <a href="{{ site.baseurl }}/atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
+    <a href="{{ site.baseurl }}/sobre/">Sobre</a>
+    <a href="https://github.com/coolio1/porto_areas_verdes_mudanca" target="_blank">GitHub</a>
+  </nav>
+  <main>
+    {{ content }}
+  </main>
+  <footer>
+    <a href="https://coolio1.github.io/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dotted var(--muted);">Nuno Quental</a><br>
+    Dados abertos: Sentinel-2, Landsat, OSM, PDM Porto
+  </footer>
+</body>
+</html>

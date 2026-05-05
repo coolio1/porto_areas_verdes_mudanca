@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+_site/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+CAOP_Continente_2025-gpkg/
+.claude/
+.env
+*.db
+CLC/
+*.npy
+*.npz
+*.bak
+*.mp4
+.superpowers/
+.secrets.baseline
+Dados Filipa Guilherme/
+Screenshot 2026-03-22 163928.png
+.mcp.json
+GEE/

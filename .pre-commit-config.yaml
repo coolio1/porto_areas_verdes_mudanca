@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+
+  - repo: local
+    hooks:
+      - id: validate-geojson
+        name: Validar ficheiros GeoJSON
+        entry: python -c "import sys,json; [json.load(open(f,encoding='utf-8')) for f in sys.argv[1:]]"
+        language: system
+        files: \.geojson$
+
+      - id: check-leaflet-init
+        name: Verificar inicialização Leaflet nos HTMLs
+        entry: python check_leaflet_init.py
+        language: system
+        files: \.html$
