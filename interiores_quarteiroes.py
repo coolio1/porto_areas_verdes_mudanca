@@ -1,9 +1,13 @@
 import ee
 import requests
 import os
-import base64
 import io
+import sys
 from dotenv import load_dotenv
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "acessibilidade"))
+from acessibilidade_gee import getS2col, getComposite, classify
+from interiores_html import build_html
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
@@ -18,86 +22,13 @@ DIM = 2048
 municipios = ee.FeatureCollection(f"projects/{GEE_PROJECT}/assets/CAOP2025_municipios")
 municipiosPorto = municipios.filterBounds(porto)
 
-BANDS = ["B3", "B4", "B8", "B11", "SCL"]
-
-
-def getS2col(start, end):
-    s2 = (
-        ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
-        .filterBounds(porto)
-        .filterDate(start, end)
-        .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 30))
-        .select(BANDS)
-    )
-
-    def process(img):
-        scl = img.select("SCL")
-        clear = scl.eq(4).Or(scl.eq(5)).Or(scl.eq(6)).Or(scl.eq(2)).Or(scl.eq(11))
-        ndvi = img.normalizedDifference(["B8", "B4"]).rename("ndvi")
-        ndbi = img.normalizedDifference(["B11", "B8"]).rename("ndbi")
-        nir_green = img.select("B8").divide(img.select("B3").max(1)).rename("nir_green")
-        green = img.select("B3").rename("green")
-        return ndvi.addBands(ndbi).addBands(nir_green).addBands(green).updateMask(clear)
-
-    return s2.map(process)
-
-
-def getComposite(years):
-    all_col = ee.ImageCollection([])
-    spring_col = ee.ImageCollection([])
-    for year in years:
-        full = getS2col(f"{year}-05-01", f"{year}-10-31")
-        all_col = all_col.merge(full)
-        spring = getS2col(f"{year}-05-15", f"{year}-06-30")
-        spring_col = spring_col.merge(spring)
-    median = all_col.median().clip(porto)
-    spring_ndvi = (
-        spring_col.select("ndvi")
-        .reduce(ee.Reducer.percentile([15]))
-        .rename("spring_ndvi")
-        .clip(porto)
-    )
-    ndvi_min = (
-        all_col.select("ndvi")
-        .reduce(ee.Reducer.percentile([10]))
-        .rename("ndvi_min")
-        .clip(porto)
-    )
-    return median.addBands(spring_ndvi).addBands(ndvi_min)
-
-
 print("A calcular compositos Sentinel-2...")
-s2_early = getComposite([2016, 2017])
-s2_late = getComposite([2024, 2025])
+s2_early = getComposite([2016, 2017], porto)
+s2_late = getComposite([2024, 2025], porto)
 
 # ESA WorldCover 10m (2021) como desempate
 esa = ee.Image("ESA/WorldCover/v200/2021").select("Map").clip(porto)
 esaBuilt = esa.eq(50)
-
-
-def classify(ndvi, ndbi, nirgreen, green, spring_ndvi, ndvi_min):
-    b3_ok = green.lt(600).Or(green.lt(800).And(ndvi_min.gte(0.5)))
-    isTreeStrict = (
-        ndvi.gte(0.5)
-        .And(spring_ndvi.gte(0.7))
-        .And(ndvi_min.gte(0.3))
-        .And(nirgreen.gte(4))
-        .And(b3_ok)
-    )
-    b3_ok_mixed = green.lt(600).Or(green.lt(800).And(ndvi_min.gte(0.5)))
-    isMixed = (
-        ndvi.gte(0.5)
-        .And(spring_ndvi.gte(0.5))
-        .And(ndvi_min.gte(0.2))
-        .And(b3_ok_mixed)
-        .And(isTreeStrict.Not())
-    )
-    isTree = isTreeStrict.Or(isMixed)
-    clear_built = ndvi.lt(0.2).And(ndbi.gte(-0.1))
-    esa_tiebreak = ndvi.gte(0.2).And(ndvi.lt(0.35)).And(esaBuilt)
-    isBuilt = clear_built.Or(esa_tiebreak)
-    isSolo = isTree.Not().And(isBuilt.Not())
-    return isTree, isBuilt, isSolo
 
 
 ndvi_e = s2_early.select("ndvi")
@@ -115,10 +46,10 @@ spring_ndvi_l = s2_late.select("spring_ndvi")
 ndvi_min_l = s2_late.select("ndvi_min")
 
 isTree_e, isBuilt_e, isSolo_e = classify(
-    ndvi_e, ndbi_e, nirgreen_e, green_e, spring_ndvi_e, ndvi_min_e
+    ndvi_e, ndbi_e, nirgreen_e, green_e, spring_ndvi_e, ndvi_min_e, esaBuilt
 )
 isTree_l_base, isBuilt_l_base, _ = classify(
-    ndvi_l, ndbi_l, nirgreen_l, green_l, spring_ndvi_l, ndvi_min_l
+    ndvi_l, ndbi_l, nirgreen_l, green_l, spring_ndvi_l, ndvi_min_l, esaBuilt
 )
 
 # Persistence rule: built in 2016 stays built unless NDVI 2025 >= 0.45
@@ -536,262 +467,4 @@ print("Filtragem vectorial concluida.")
 
 # ----- Phase 3: HTML map -----
 print("\nA construir mapa...")
-
-
-def to_base64(filepath):
-    with open(filepath, "rb") as f:
-        return "data:image/png;base64," + base64.b64encode(f.read()).decode()
-
-
-# Camada de fundo (RGB, opacidade 70%)
-BACKGROUND_LAYER = (
-    "ghspop",
-    "Densidade populacional",
-    to_base64("layers/ghspop.png"),
-    0.7,
-    False,
-)
-
-# Camadas principais (monocromaticas, recoloraveis)
-MAP_LAYERS = [
-    ("interior_subsistente", "Subsistente", "#2E7D32", True),
-    ("interior_perdido", "Perdido (2016-2025)", "#D7263D", True),
-    ("centro_alargado", "Interior VCI", "#FFD700", True),
-    ("municipios", "Limites municipais", "#444444", True),
-]
-
-layers_js_items = []
-for lid, label, color, show in MAP_LAYERS:
-    b64 = to_base64(f"layers/{lid}.png")
-    layers_js_items.append(
-        f'{{id:"{lid}",label:"{label}",color:"{color}",show:{str(show).lower()},src:"{b64}"}}'
-    )
-layers_js = ",\n".join(layers_js_items)
-
-bg_id, bg_label, bg_src, bg_opacity, bg_show = BACKGROUND_LAYER
-bg_js = f'{{id:"{bg_id}",label:"{bg_label}",opacity:{bg_opacity},show:{str(bg_show).lower()},src:"{bg_src}"}}'
-
-basemaps = [
-    (
-        "CartoDB Positron",
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    ),
-    ("CartoDB Dark", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"),
-    (
-        "OpenStreetMap",
-        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-    ),
-    (
-        "Satelite",
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    ),
-]
-basemap_options = "".join(
-    f'<option value="{url}"{"selected" if i == 0 else ""}>{name}</option>'
-    for i, (name, url) in enumerate(basemaps)
-)
-
-html = f"""<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Verde Privado — Porto</title>
-<meta name="description" content="Mapa dos espaços verdes privados encravados no tecido urbano do Porto: os que subsistem e os que foram perdidos (Sentinel-2 + PDM).">
-<link rel="canonical" href="https://coolio1.github.io/porto_areas_verdes_mudanca/interiores_quarteiroes.html">
-<meta property="og:title" content="Verde Privado — Porto">
-<meta property="og:description" content="Espaços verdes privados encravados no tecido urbano do Porto: os que subsistem e os que foram perdidos.">
-<meta property="og:url" content="https://coolio1.github.io/porto_areas_verdes_mudanca/interiores_quarteiroes.html">
-<meta property="og:type" content="website">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<style>
-  body {{ margin:0; }}
-  #map {{ position:absolute; top:0; bottom:0; width:100%; }}
-  #nav {{
-    position:fixed; top:10px; right:10px; z-index:1000;
-    display:flex; gap:6px; font:11px 'Segoe UI',Arial,sans-serif;
-  }}
-  #nav a {{
-    background:rgba(255,255,255,0.9); color:#444; text-decoration:none;
-    padding:4px 10px; border-radius:5px; box-shadow:0 1px 4px rgba(0,0,0,0.15);
-  }}
-  #nav a:hover {{ background:#fff; color:#222; }}
-  #nav a.active {{ background:var(--green,#2E7D32); color:#fff; }}
-  #panel {{
-    position:fixed; bottom:20px; left:20px; z-index:1000;
-    background:rgba(255,255,255,0.95); padding:14px 18px; border-radius:10px;
-    font:13px 'Segoe UI',Arial,sans-serif; color:#222;
-    box-shadow:0 2px 10px rgba(0,0,0,0.2); min-width:260px;
-    max-height:90vh; overflow-y:auto; line-height:1.8;
-  }}
-  .row {{ display:flex; align-items:center; gap:6px; margin:2px 0; }}
-  .row input[type=checkbox] {{ width:15px; height:15px; cursor:pointer; margin:0; }}
-  .row label {{ cursor:pointer; }}
-  .swatch {{ width:14px; height:14px; border-radius:3px; display:inline-block; }}
-  .section {{ font-size:11px; color:#888; font-weight:bold; margin:8px 0 4px 0; }}
-  select {{ background:#f5f5f5; color:#222; border:1px solid #ccc; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }}
-</style>
-</head>
-<body>
-<div id="nav">
-  <a href="index.html">In&iacute;cio</a>
-  <a href="mapa.html">Mapa 2016-2025</a>
-  <a href="ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
-  <a href="interiores_quarteiroes.html" class="active">Verde Privado</a>
-  <a href="acessibilidade/acessibilidade_verde.html">Acessibilidade</a>
-  <a href="atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
-</div>
-<div id="map"></div>
-<div id="panel">
-  <b style="font-size:14px;">Verde Privado</b><br>
-  <span style="color:#888;font-size:10px;">Espa&ccedil;os verdes privados encravados no tecido urbano</span>
-
-  <div class="section">Camadas</div>
-  <div id="layer-rows"></div>
-
-  <hr style="border-color:#ddd;margin:10px 0 6px 0;">
-  <div class="section">Contexto</div>
-  <div id="bg-rows"></div>
-  <div id="pop-legend" style="display:none;margin:4px 0 0 22px;">
-    <div style="font-size:10px;color:#888;margin-bottom:2px;">hab/pixel (100m)</div>
-    <div style="display:flex;align-items:center;gap:4px;">
-      <span style="font-size:9px;color:#888;">0</span>
-      <div style="width:120px;height:10px;border-radius:3px;background:linear-gradient(to right,#f5e6d0,#d4b896,#b08a5e,#8b6934,#6b4a1e,#4a2f0a);"></div>
-      <span style="font-size:9px;color:#888;">150+</span>
-    </div>
-  </div>
-
-  <hr style="border-color:#ddd;margin:10px 0 6px 0;">
-  <div class="section">Fundo</div>
-  <select id="basemap-select">{basemap_options}</select>
-
-  <hr style="border-color:#ddd;margin:10px 0 4px 0;">
-  <span style="color:#aaa;font-size:10px;">Sentinel-2 10m (ESA) &bull; 2016-17 vs 2024-25<br>Parques exclu&iacute;dos via OpenStreetMap</span>
-</div>
-
-<script>
-var map = L.map('map').setView([41.155, -8.63], 13);
-var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
-
-document.getElementById('basemap-select').addEventListener('change', function() {{
-  map.removeLayer(baseTile);
-  baseTile = L.tileLayer(this.value, {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
-}});
-
-var bounds = {BOUNDS};
-var bgLayer = {bg_js};
-var layers = [{layers_js}];
-var state = [];
-var bgOverlay = null;
-
-function hexToRgb(h) {{
-  h = h.replace('#','');
-  return [parseInt(h.substr(0,2),16), parseInt(h.substr(2,2),16), parseInt(h.substr(4,2),16)];
-}}
-
-function extractMask(src) {{
-  return new Promise(function(r) {{
-    var i = new Image();
-    i.onload = function() {{
-      var c = document.createElement('canvas');
-      c.width = i.width; c.height = i.height;
-      var x = c.getContext('2d');
-      x.drawImage(i, 0, 0);
-      var d = x.getImageData(0, 0, c.width, c.height);
-      var a = new Uint8Array(d.data.length / 4);
-      for (var j = 0; j < a.length; j++) a[j] = d.data[j * 4 + 3];
-      r({{w: c.width, h: c.height, alpha: a}});
-    }};
-    i.src = src;
-  }});
-}}
-
-function renderColored(m, hex) {{
-  var rgb = hexToRgb(hex);
-  var c = document.createElement('canvas');
-  c.width = m.w; c.height = m.h;
-  var x = c.getContext('2d');
-  var d = x.createImageData(m.w, m.h);
-  for (var i = 0; i < m.alpha.length; i++) {{
-    d.data[i*4] = rgb[0]; d.data[i*4+1] = rgb[1];
-    d.data[i*4+2] = rgb[2]; d.data[i*4+3] = m.alpha[i];
-  }}
-  x.putImageData(d, 0, 0);
-  return c.toDataURL();
-}}
-
-async function init() {{
-  // Pane dedicado para camada de fundo (z-index abaixo do overlay padrao)
-  map.createPane('bgPane');
-  map.getPane('bgPane').style.zIndex = 250;
-  bgOverlay = L.imageOverlay(bgLayer.src, bounds, {{opacity: bgLayer.opacity, pane: 'bgPane'}});
-  if (bgLayer.show) bgOverlay.addTo(map);
-  var bgDiv = document.getElementById('bg-rows');
-  var bgRow = document.createElement('div');
-  bgRow.className = 'row';
-  var bgCb = document.createElement('input');
-  bgCb.type = 'checkbox'; bgCb.checked = bgLayer.show;
-  bgCb.addEventListener('change', function() {{
-    if (this.checked) {{ bgOverlay.addTo(map); document.getElementById('pop-legend').style.display='block'; }}
-    else {{ map.removeLayer(bgOverlay); document.getElementById('pop-legend').style.display='none'; }}
-  }});
-  var bgLb = document.createElement('label');
-  bgLb.textContent = bgLayer.label;
-  bgLb.style.fontSize = '12px';
-  bgRow.appendChild(bgCb);
-  bgRow.appendChild(bgLb);
-  bgDiv.appendChild(bgRow);
-
-  // Camadas principais
-  var div = document.getElementById('layer-rows');
-  for (var i = 0; i < layers.length; i++) {{
-    var L_ = layers[i];
-    var m = await extractMask(L_.src);
-    var cs = renderColored(m, L_.color);
-    var ov = L.imageOverlay(cs, bounds);
-    if (L_.show) ov.addTo(map);
-    state.push({{overlay: ov, mask: m, color: L_.color}});
-
-    var row = document.createElement('div');
-    row.className = 'row';
-
-    var cb = document.createElement('input');
-    cb.type = 'checkbox'; cb.checked = L_.show; cb.dataset.idx = i;
-    cb.addEventListener('change', function() {{
-      var idx = +this.dataset.idx;
-      if (this.checked) state[idx].overlay.addTo(map);
-      else map.removeLayer(state[idx].overlay);
-    }});
-
-    var sw = document.createElement('span');
-    sw.className = 'swatch';
-    sw.style.backgroundColor = L_.color;
-
-    var lb = document.createElement('label');
-    lb.textContent = L_.label;
-    lb.style.fontSize = '12px';
-
-    row.appendChild(cb);
-    row.appendChild(sw);
-    row.appendChild(lb);
-    div.appendChild(row);
-  }}
-}}
-
-init();
-</script>
-<div style="position:fixed;bottom:6px;right:10px;z-index:1000;font:10px 'Segoe UI',Arial,sans-serif;color:#888;background:rgba(255,255,255,0.85);padding:2px 8px;border-radius:4px;">
-  <a href="https://www.linkedin.com/in/nquental/" target="_blank" style="color:#555;text-decoration:none;">Nuno Quental</a>
-</div>
-</body>
-</html>"""
-
-output = "interiores_quarteiroes.html"
-with open(output, "w", encoding="utf-8") as f:
-    f.write(html)
-print(f"\nMapa guardado em {output} ({os.path.getsize(output) // 1024} KB)")
-
-import webbrowser
-
-webbrowser.open(output)
+build_html(os.path.dirname(os.path.abspath(__file__)), "layers", BOUNDS)
