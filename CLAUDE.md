@@ -12,7 +12,9 @@ GEE/
 ├── _config.yml, _layouts/, _posts/, index.html, sobre.md   # Jekyll site (GitHub Pages)
 ├── porto_publish.py        # Mapa actual (Sentinel-2 2016-2025) → mapa.html
 ├── ndvi_historico.py       # Mapa histórico (1947-2024, Landsat) → ndvi_historico.html
+├── ndvi_historico_html.py  # Módulo HTML do mapa histórico (build_html)
 ├── interiores_quarteiroes.py  # Verde Privado → interiores_quarteiroes.html
+├── interiores_html.py      # Módulo HTML do verde privado (build_html)
 ├── porto_stats.py          # Estatísticas de uso do solo
 ├── test_area.py            # Calibração (área teste Serralves)
 ├── 1947/                   # Classificação ortofoto 1947
@@ -31,6 +33,13 @@ GEE/
 │   ├── schema.sql          # Schema da base de dados
 │   ├── *.csv, *.json       # Dados (ANSR, INE, notícias)
 │   └── *.xlsx, *.pdf       # Anexos originais ANSR
+├── acessibilidade/         # Acessibilidade a verde público
+│   ├── acessibilidade_verde.py   # Pipeline principal → acessibilidade_verde.html
+│   ├── acessibilidade_html.py    # Módulo HTML (build_html)
+│   ├── acessibilidade_gee.py     # Funções GEE partilhadas (Sentinel-2, download)
+│   ├── analise_conversao_verde.py  # Candidatos a conversão → conversao_verde.html
+│   ├── conversao_html.py         # Módulo HTML da conversão (build_html)
+│   └── layers/                   # Layers em cache (PNGs, .npy, .npz)
 ├── layers/                 # Layers do mapa actual (Sentinel-2)
 ├── layers_historico/       # Layers do mapa histórico (Landsat)
 └── docs/                   # Planos e specs (excluído do Jekyll)
