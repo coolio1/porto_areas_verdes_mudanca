@@ -258,7 +258,9 @@ async function init() {{
     var tipoColors = {{
       'Estrategia de expansao (CMP)': '#00897B',
       'Verde pago ou nao usufruivel': '#8D6E63',
-      'Verde privado': '#1565C0'
+      'Verde privado': '#1565C0',
+      'Parques e Jardins ja existentes': '#2E7D32',
+      'Parques e Jardins já existentes': '#2E7D32'
     }};
     candGeoLayer = L.geoJson(candidatosData, {{
       pane: 'candGeoPane',
@@ -266,7 +268,7 @@ async function init() {{
         var color = tipoColors[f.properties.tipo] || '#888';
         return {{
           color: color, weight: 2.5, opacity: 0.9,
-          fillColor: color, fillOpacity: 0.05
+          fillColor: color, fillOpacity: 0.55
         }};
       }},
       onEachFeature: function(f, layer) {{
@@ -278,12 +280,17 @@ async function init() {{
         html += '<br><span style="color:#2E7D32;">+' + p.pop_delta.toLocaleString() + ' hab cobertos</span>';
         html += '<br><span style="color:#444;">Cobertura: ' + p.pct_antes + '% &rarr; ' + p.pct_depois + '%</span>';
         layer.bindPopup(html);
-        var label = p.nome ? p.nome : '#' + p.rank;
+        var label = '#' + p.rank + (p.nome ? ' — ' + p.nome : '');
         layer.bindTooltip(label, {{
           permanent: true, direction: 'center',
           className: 'cand-label',
           offset: [0, 0]
         }});
+        if (p.label_lat && p.label_lon) {{
+          layer.on('tooltipopen', function() {{
+            layer.getTooltip().setLatLng([p.label_lat, p.label_lon]);
+          }});
+        }}
       }}
     }});
     candGeoLayer.addTo(map);
@@ -395,9 +402,8 @@ async function init() {{
       pane: 'parquesPane',
       style: function() {{
         return {{
-          color: '#1B5E20', weight: 1.5, opacity: 0.6,
-          fillColor: '#2E7D32', fillOpacity: 0.03,
-          dashArray: '3 3'
+          color: '#1B5E20', weight: 2.5, opacity: 0.9,
+          fillColor: '#2E7D32', fillOpacity: 0.45
         }};
       }},
       onEachFeature: function(f, layer) {{

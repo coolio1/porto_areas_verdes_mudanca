@@ -16,7 +16,6 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
     """Gera acessibilidade_verde.html a partir das camadas PNG já calculadas."""
     print("\nA construir mapa...")
 
-    verde_pub_b64 = to_base64(verde_pub_path)
     verde_priv_b64 = to_base64(os.path.join(parent_layers, "interior_subsistente.png"))
     verde_pago_b64 = to_base64(verde_pago_path)
     ghspop_b64 = to_base64(os.path.join(parent_layers, "ghspop.png"))
@@ -286,13 +285,6 @@ var lowPopLayer = {{
   show: true
 }};
 
-// Verde público raster (usado dentro da camada combinada "Parques e Jardins")
-var greenLayer = {{
-  id: "verde_publico",
-  color: "#2E7D32",
-  src: "{verde_pub_b64}",
-}};
-
 // Camada de verde privado (monocromática azul)
 var greenPrivLayer = {{
   id: "verde_privado",
@@ -470,29 +462,20 @@ async function init() {{
   proxRow.appendChild(proxCb); proxRow.appendChild(proxSw); proxRow.appendChild(proxLb);
   div.insertBefore(proxRow, accRow.nextSibling);
 
-  // --- Camada combinada "Parques e Jardins" (raster verde + contornos GeoJSON) ---
-  // Pane no topo de tudo, opaco
+  // --- Camada "Parques e Jardins" (só polígonos GeoJSON) ---
   map.createPane('parquesPane');
   map.getPane('parquesPane').style.zIndex = 550;
-
-  // Raster: verde público (Sentinel-2 dentro dos parques)
-  var greenMask = await extractMask(greenLayer.src);
-  var greenSrc = renderColored(greenMask, greenLayer.color);
-  var greenOverlay = L.imageOverlay(greenSrc, bounds, {{pane: 'parquesPane'}});
-  greenOverlay.addTo(map);
 
   // Contornos GeoJSON dos parques (carregado via fetch)
   var parquesGeoLayer = null;
 
-  // Checkbox único para raster + contornos
+  // Checkbox para polígonos
   var pRow = document.createElement('div'); pRow.className = 'row';
   var pCb = document.createElement('input'); pCb.type = 'checkbox'; pCb.checked = true;
   pCb.addEventListener('change', function() {{
     if (this.checked) {{
-      greenOverlay.addTo(map);
       if (parquesGeoLayer) parquesGeoLayer.addTo(map);
     }} else {{
-      map.removeLayer(greenOverlay);
       if (parquesGeoLayer) map.removeLayer(parquesGeoLayer);
     }}
   }});
@@ -508,7 +491,7 @@ async function init() {{
       style: function(f) {{
         return {{
           color: '#1B5E20', weight: 2.5, opacity: 0.9,
-          fillColor: '#2E7D32', fillOpacity: 0.08,
+          fillColor: '#2E7D32', fillOpacity: 0.45,
           dashArray: f.properties.fonte === 'manual' ? '4 4' : null
         }};
       }},
