@@ -147,6 +147,10 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
         <span style="width:14px;height:12px;border-radius:2px;background:#1565C0;display:inline-block;"></span>
         <span style="color:#666;">Verde privado</span>
       </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#FF8F00;display:inline-block;"></span>
+        <span style="color:#666;">Parques e Jardins j&aacute; existentes</span>
+      </div>
     </div>
     <div class="section" style="margin-top:6px;">Proximidade 300m (Konijnendijk)</div>
     <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
@@ -259,8 +263,8 @@ async function init() {{
       'Estrategia de expansao (CMP)': '#00897B',
       'Verde pago ou nao usufruivel': '#8D6E63',
       'Verde privado': '#1565C0',
-      'Parques e Jardins ja existentes': '#2E7D32',
-      'Parques e Jardins já existentes': '#2E7D32'
+      'Parques e Jardins ja existentes': '#FF8F00',
+      'Parques e Jardins já existentes': '#FF8F00'
     }};
     candGeoLayer = L.geoJson(candidatosData, {{
       pane: 'candGeoPane',
@@ -316,7 +320,7 @@ async function init() {{
     }}
   }});
   var cSw = document.createElement('span'); cSw.className = 'swatch';
-  cSw.style.background = 'linear-gradient(135deg, #00897B 33%, #8D6E63 66%, #1565C0 100%)';
+  cSw.style.background = 'linear-gradient(135deg, #00897B 25%, #8D6E63 50%, #1565C0 75%, #FF8F00 100%)';
   var cLb = document.createElement('label'); cLb.textContent = 'Candidatos a convers\\u00e3o'; cLb.style.fontSize = '12px';
   cRow.appendChild(cCb); cRow.appendChild(cSw); cRow.appendChild(cLb);
   div.appendChild(cRow);
