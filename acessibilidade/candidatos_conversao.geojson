@@ -1723,7 +1723,12 @@
         "area_ha": 2.51,
         "label_lat": 41.176996,
         "label_lon": -8.597284,
-        "source": "manual"
+        "source": "manual",
+        "pop_delta": 0,
+        "pct_antes": 64.7,
+        "pct_depois": 64.7,
+        "lat": 41.1728,
+        "lon": -8.6007
       }
     },
     {
