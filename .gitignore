@@ -13,6 +13,7 @@ CLC/
 *.npz
 *.bak
 *.mp4
+!animacao/animacao_cairo.mp4
 .superpowers/
 .secrets.baseline
 Dados Filipa Guilherme/
