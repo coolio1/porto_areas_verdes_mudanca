@@ -402,8 +402,9 @@ async function init() {{
       pane: 'parquesPane',
       style: function() {{
         return {{
-          color: '#1B5E20', weight: 2.5, opacity: 0.9,
-          fillColor: '#2E7D32', fillOpacity: 0.45
+          color: '#1B5E20', weight: 1.5, opacity: 0.6,
+          fillColor: '#2E7D32', fillOpacity: 0.03,
+          dashArray: '3 3'
         }};
       }},
       onEachFeature: function(f, layer) {{
