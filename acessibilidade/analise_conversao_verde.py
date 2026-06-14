@@ -490,6 +490,16 @@ for c in selected:
 
 geojson = {"type": "FeatureCollection", "features": features}
 geojson_path = os.path.join(SCRIPT_DIR, "candidatos_conversao.geojson")
+# Guard: recusa sobrescrever se existirem features manuais (rank > 23)
+if os.path.exists(geojson_path):
+    with open(geojson_path, encoding='utf-8') as _f:
+        _existing = json.load(_f)
+    _manual = [ft for ft in _existing['features'] if ft['properties'].get('rank', 0) > 23]
+    if _manual:
+        print(f"ERRO: candidatos_conversao.geojson tem {len(_manual)} features manuais (ranks "
+              f"{sorted(ft['properties']['rank'] for ft in _manual)}). "
+              f"Não sobrescrevo. Apaga o ficheiro manualmente se quiseres regenerar.")
+        import sys; sys.exit(1)
 with open(geojson_path, "w", encoding="utf-8") as f:
     json.dump(geojson, f, ensure_ascii=False, indent=2)
 print(f"  {len(features)} poligonos guardados")
