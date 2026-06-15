@@ -15,7 +15,6 @@ PAGES = [
     ("acessibilidade/acessibilidade_verde.html",      "Acessibilidade"),
     ("acessibilidade/conversao_verde.html",           "Conversão"),
     ("atropelamentos/dashboard_atropelamentos.html",  "Atropelamentos"),
-    ("1947/orto_1947.html",                           "Porto 1947"),
 ]
 
 
