@@ -15,6 +15,7 @@ CLC/
 *.mp4
 !animacao/animacao_cairo.mp4
 .superpowers/
+.playwright-mcp/
 .secrets.baseline
 Dados Filipa Guilherme/
 Screenshot 2026-03-22 163928.png
