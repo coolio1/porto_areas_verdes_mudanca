@@ -1,26 +1,39 @@
 """Gera conversao_verde.html a partir das layers de candidatos a conversao."""
-import base64
 import json
 import os
+
+import numpy as np
+from PIL import Image
+
+
+def _make_colored_png(src_path, dst_path, hex_color):
+    """Aplica cor sólida à máscara alpha e guarda PNG colorido."""
+    if not os.path.exists(src_path):
+        return False
+    arr = np.array(Image.open(src_path).convert('RGBA'))
+    r, g, b = int(hex_color[1:3], 16), int(hex_color[3:5], 16), int(hex_color[5:7], 16)
+    alpha = arr[:, :, 3].copy()
+    arr[:, :, :3] = [r, g, b]
+    arr[:, :, 3] = alpha
+    Image.fromarray(arr).save(dst_path)
+    return True
 
 
 def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, pct, target_pct, bounds,
                sfca_actual_pct=None, sfca_sim_pct=None):
     """Constroi mapa HTML de candidatos a conversao e escreve para script_dir."""
 
-    def to_base64(filepath):
-        if not os.path.exists(filepath):
-            return None
-        with open(filepath, "rb") as fh:
-            return "data:image/png;base64," + base64.b64encode(fh.read()).decode()
-
-    prox_sim_b64     = to_base64(os.path.join(layers_dir, "proximidade_simulada.png"))
-    prox_actual_b64  = to_base64(os.path.join(layers_dir, "proximidade_300m.png"))
-    sfca_sim_b64     = to_base64(os.path.join(layers_dir, "acessibilidade_2sfca_sim.png"))
-    sfca_actual_b64  = to_base64(os.path.join(layers_dir, "acessibilidade_2sfca.png"))
-    verde_pub_b64    = to_base64(os.path.join(layers_dir, "verde_publico.png"))
-    lowpop_b64       = to_base64(os.path.join(layers_dir, "baixa_densidade.png"))
-    muni_b64         = to_base64(os.path.join(parent_layers_dir, "municipios.png"))
+    # PNGs coloridos para camadas de contexto (sem extracção de máscara via canvas)
+    _make_colored_png(
+        os.path.join(layers_dir, "verde_publico.png"),
+        os.path.join(layers_dir, "verde_publico_colored.png"),
+        "#2E7D32"
+    )
+    _make_colored_png(
+        os.path.join(parent_layers_dir, "municipios.png"),
+        os.path.join(parent_layers_dir, "municipios_colored.png"),
+        "#444444"
+    )
 
     if pct_actual is None or pct is None:
         raise ValueError("pct_actual e pct são obrigatórios para gerar o mapa de conversão")
@@ -28,31 +41,24 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
     sfca_actual_label = f"{sfca_actual_pct:.1f}%" if sfca_actual_pct is not None else "actual"
     sfca_sim_label    = f"{sfca_sim_pct:.1f}%"    if sfca_sim_pct    is not None else "simulado"
 
-    def to_js(b64):
-        return f'"{b64}"' if b64 else "null"
-
     geojson_str = json.dumps(geojson, ensure_ascii=False)
 
-    parques_geojson_str = "null"
-    parques_path_gj = os.path.join(script_dir, "parques_porto.geojson")
-    if os.path.exists(parques_path_gj):
-        with open(parques_path_gj, "r", encoding="utf-8") as fh:
-            parques_geojson_str = fh.read()
+    def js_path(abs_path, rel_url):
+        return f"'{rel_url}'" if os.path.exists(abs_path) else "null"
+
+    prox_sim_js  = js_path(os.path.join(layers_dir, "proximidade_simulada.png"),    "layers/proximidade_simulada.png")
+    prox_act_js  = js_path(os.path.join(layers_dir, "proximidade_300m.png"),         "layers/proximidade_300m.png")
+    sfca_sim_js  = js_path(os.path.join(layers_dir, "acessibilidade_2sfca_sim.png"), "layers/acessibilidade_2sfca_sim.png")
+    sfca_act_js  = js_path(os.path.join(layers_dir, "acessibilidade_2sfca.png"),     "layers/acessibilidade_2sfca.png")
+    lowpop_js    = js_path(os.path.join(layers_dir, "baixa_densidade.png"),           "layers/baixa_densidade.png")
+    verde_pub_js = js_path(os.path.join(layers_dir, "verde_publico_colored.png"),     "layers/verde_publico_colored.png")
+    muni_js      = js_path(os.path.join(parent_layers_dir, "municipios_colored.png"), "../layers/municipios_colored.png")
 
     basemaps = [
-        (
-            "CartoDB Positron",
-            "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        ),
+        ("CartoDB Positron", "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"),
         ("CartoDB Dark", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"),
-        (
-            "OpenStreetMap",
-            "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-        ),
-        (
-            "Satélite",
-            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        ),
+        ("OpenStreetMap", "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"),
+        ("Satélite", "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"),
     ]
     basemap_options = "".join(
         f'<option value="{url}"{"selected" if i == 0 else ""}>{name}</option>'
@@ -217,7 +223,7 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
 
 <script>
 var candidatosData = {geojson_str};
-var parquesData = {parques_geojson_str};
+var parquesData = null;
 var map = L.map('map').setView([41.155, -8.63], 13);
 
 fetch('parques_porto.geojson').then(function(r) {{ return r.json(); }}).then(function(data) {{
@@ -232,51 +238,15 @@ document.getElementById('basemap-select').addEventListener('change', function() 
 }});
 
 var bounds = {bounds};
-var PROX_SIM_SRC  = {to_js(prox_sim_b64)};
-var PROX_ACT_SRC  = {to_js(prox_actual_b64)};
-var SFCA_SIM_SRC  = {to_js(sfca_sim_b64)};
-var SFCA_ACT_SRC  = {to_js(sfca_actual_b64)};
-var LOWPOP_SRC    = {to_js(lowpop_b64)};
-var VERDE_PUB_SRC = {to_js(verde_pub_b64)};
-var MUNI_SRC      = {to_js(muni_b64)};
+var PROX_SIM_SRC  = {prox_sim_js};
+var PROX_ACT_SRC  = {prox_act_js};
+var SFCA_SIM_SRC  = {sfca_sim_js};
+var SFCA_ACT_SRC  = {sfca_act_js};
+var LOWPOP_SRC    = {lowpop_js};
+var VERDE_PUB_SRC = {verde_pub_js};
+var MUNI_SRC      = {muni_js};
 
-function hexToRgb(h) {{
-  h = h.replace('#','');
-  return [parseInt(h.substr(0,2),16), parseInt(h.substr(2,2),16), parseInt(h.substr(4,2),16)];
-}}
-
-function extractMask(src) {{
-  return new Promise(function(r) {{
-    var i = new Image();
-    i.onload = function() {{
-      var c = document.createElement('canvas');
-      c.width = i.width; c.height = i.height;
-      var x = c.getContext('2d');
-      x.drawImage(i, 0, 0);
-      var d = x.getImageData(0, 0, c.width, c.height);
-      var a = new Uint8Array(d.data.length / 4);
-      for (var j = 0; j < a.length; j++) a[j] = d.data[j * 4 + 3];
-      r({{w: c.width, h: c.height, alpha: a}});
-    }};
-    i.src = src;
-  }});
-}}
-
-function renderColored(m, hex) {{
-  var rgb = hexToRgb(hex);
-  var c = document.createElement('canvas');
-  c.width = m.w; c.height = m.h;
-  var x = c.getContext('2d');
-  var d = x.createImageData(m.w, m.h);
-  for (var i = 0; i < m.alpha.length; i++) {{
-    d.data[i*4] = rgb[0]; d.data[i*4+1] = rgb[1];
-    d.data[i*4+2] = rgb[2]; d.data[i*4+3] = m.alpha[i];
-  }}
-  x.putImageData(d, 0, 0);
-  return c.toDataURL();
-}}
-
-async function init() {{
+function init() {{
   map.createPane('proxPane');
   map.getPane('proxPane').style.zIndex = 350;
   map.createPane('lowPopPane');
@@ -341,7 +311,6 @@ async function init() {{
     map.fire('zoomend');
   }}
 
-
   // --- Overlays ---
   var proxSimOverlay = PROX_SIM_SRC ? L.imageOverlay(PROX_SIM_SRC, bounds, {{opacity: 0.7, pane: 'proxPane'}}) : null;
   var proxActOverlay = PROX_ACT_SRC ? L.imageOverlay(PROX_ACT_SRC, bounds, {{opacity: 0.7, pane: 'proxPane'}}) : null;
@@ -353,7 +322,6 @@ async function init() {{
   if (proxSimOverlay) proxSimOverlay.addTo(map);
   if (lowPopOverlay) lowPopOverlay.addTo(map);
 
-  // Activa um overlay e desliga todos os outros
   function activateOverlay(overlay, withLowPop) {{
     if (proxSimOverlay) map.removeLayer(proxSimOverlay);
     if (proxActOverlay) map.removeLayer(proxActOverlay);
@@ -398,7 +366,6 @@ async function init() {{
   sfcaGroup.appendChild(sfcaActBtn); sfcaGroup.appendChild(sfcaSimBtn);
   div.appendChild(sfcaGroup);
 
-  // Limpar estado activo de todos os botões
   function clearActive() {{
     proxActBtn.classList.remove('active');
     proxSimBtn.classList.remove('active');
@@ -452,9 +419,7 @@ async function init() {{
   for (var i = 0; i < ctxLayers.length; i++) {{
     var L_ = ctxLayers[i];
     if (!L_.src) {{ ctxOverlays.push(null); continue; }}
-    var m = await extractMask(L_.src);
-    var cs = renderColored(m, L_.color);
-    var ov = L.imageOverlay(cs, bounds);
+    var ov = L.imageOverlay(L_.src, bounds);
     if (L_.show) ov.addTo(map);
     ctxOverlays.push(ov);
 
@@ -502,7 +467,6 @@ async function init() {{
     map.fire('zoomend');
   }};
 
-  // Se o fetch() já terminou antes de init(), chamar agora
   if (parquesData) initParques();
 }}
 
