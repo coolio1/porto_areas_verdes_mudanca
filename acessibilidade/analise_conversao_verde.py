@@ -201,10 +201,10 @@ print(f"  Pop adequada: {sfca_actual_pct:.1f}% -> {sfca_sim_pct:.1f}%")
 # ===== Guardar metadados para regeneração rápida =====
 import json as _json
 metadata = {
-    "pct_actual": pct_actual,
-    "pct_simulado": pct_sim,
-    "sfca_actual_pct": sfca_actual_pct,
-    "sfca_sim_pct": sfca_sim_pct,
+    "pct_actual": float(pct_actual),
+    "pct_simulado": float(pct_sim),
+    "sfca_actual_pct": float(sfca_actual_pct),
+    "sfca_sim_pct": float(sfca_sim_pct),
 }
 with open(os.path.join(LAYERS_DIR, "conversao_metadata.json"), "w", encoding="utf-8") as _f:
     _json.dump(metadata, _f)
