@@ -22,6 +22,9 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
     lowpop_b64       = to_base64(os.path.join(layers_dir, "baixa_densidade.png"))
     muni_b64         = to_base64(os.path.join(parent_layers_dir, "municipios.png"))
 
+    if pct_actual is None or pct is None:
+        raise ValueError("pct_actual e pct são obrigatórios para gerar o mapa de conversão")
+
     sfca_actual_label = f"{sfca_actual_pct:.1f}%" if sfca_actual_pct is not None else "actual"
     sfca_sim_label    = f"{sfca_sim_pct:.1f}%"    if sfca_sim_pct    is not None else "simulado"
 
@@ -338,30 +341,6 @@ async function init() {{
     map.fire('zoomend');
   }}
 
-  // Checkbox candidatos
-  var cRow = document.createElement('div'); cRow.className = 'row';
-  var cCb = document.createElement('input'); cCb.type = 'checkbox'; cCb.checked = true;
-  var _savedSimBtn = null;
-  cCb.addEventListener('change', function() {{
-    if (this.checked) {{
-      if (candGeoLayer) candGeoLayer.addTo(map);
-      proxSimBtn.disabled = false; proxSimBtn.style.opacity = '';
-      sfcaSimBtn.disabled  = false; sfcaSimBtn.style.opacity  = '';
-      if (_savedSimBtn) {{ _savedSimBtn.click(); _savedSimBtn = null; }}
-    }} else {{
-      if (candGeoLayer) map.removeLayer(candGeoLayer);
-      if (proxSimBtn.classList.contains('active'))      {{ _savedSimBtn = proxSimBtn; }}
-      else if (sfcaSimBtn.classList.contains('active')) {{ _savedSimBtn = sfcaSimBtn; }}
-      if (_savedSimBtn) {{ clearActive(); activateOverlay(null, false); }}
-      proxSimBtn.disabled = true; proxSimBtn.style.opacity = '0.4';
-      sfcaSimBtn.disabled  = true; sfcaSimBtn.style.opacity  = '0.4';
-    }}
-  }});
-  var cSw = document.createElement('span'); cSw.className = 'swatch';
-  cSw.style.background = 'linear-gradient(135deg, #00897B 33%, #8D6E63 66%, #1565C0 100%)';
-  var cLb = document.createElement('label'); cLb.textContent = 'Candidatos a conversão'; cLb.style.fontSize = '12px';
-  cRow.appendChild(cCb); cRow.appendChild(cSw); cRow.appendChild(cLb);
-  div.appendChild(cRow);
 
   // --- Overlays ---
   var proxSimOverlay = PROX_SIM_SRC ? L.imageOverlay(PROX_SIM_SRC, bounds, {{opacity: 0.7, pane: 'proxPane'}}) : null;
