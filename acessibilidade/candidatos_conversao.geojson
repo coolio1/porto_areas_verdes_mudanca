@@ -2439,204 +2439,8 @@
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "MultiPolygon",
-        "coordinates": [
-          [
-            [
-              [
-                -8.634510446901496,
-                41.17946114434194
-              ],
-              [
-                -8.6348179009332,
-                41.17840995145172
-              ],
-              [
-                -8.636489280512194,
-                41.17882349186899
-              ],
-              [
-                -8.6363652,
-                41.179032
-              ],
-              [
-                -8.6362874,
-                41.1791652
-              ],
-              [
-                -8.636282,
-                41.1792318
-              ],
-              [
-                -8.6361828,
-                41.1792298
-              ],
-              [
-                -8.6360326,
-                41.1792581
-              ],
-              [
-                -8.6352432,
-                41.1795866
-              ],
-              [
-                -8.6347954,
-                41.1796208
-              ],
-              [
-                -8.634383666632324,
-                41.179551178575686
-              ],
-              [
-                -8.634510446901496,
-                41.17946114434194
-              ]
-            ]
-          ],
-          [
-            [
-              [
-                -8.63425665618877,
-                41.17964137626999
-              ],
-              [
-                -8.634282288874958,
-                41.1796231729701
-              ],
-              [
-                -8.6342677,
-                41.1796356
-              ],
-              [
-                -8.634255257319998,
-                41.17965796075826
-              ],
-              [
-                -8.63425665618877,
-                41.17964137626999
-              ]
-            ]
-          ],
-          [
-            [
-              [
-                -8.634237167269742,
-                41.17987242992949
-              ],
-              [
-                -8.634241170720825,
-                41.1798249664441
-              ],
-              [
-                -8.6342757,
-                41.1798718
-              ],
-              [
-                -8.6343562,
-                41.1799263
-              ],
-              [
-                -8.634395031505404,
-                41.1799681829038
-              ],
-              [
-                -8.634237167269742,
-                41.17987242992949
-              ]
-            ]
-          ],
-          [
-            [
-              [
-                -8.636426231355392,
-                41.18012000278683
-              ],
-              [
-                -8.63556884207417,
-                41.18068016084336
-              ],
-              [
-                -8.634754430539383,
-                41.180186177348986
-              ],
-              [
-                -8.634847,
-                41.1801625
-              ],
-              [
-                -8.6348336,
-                41.1801443
-              ],
-              [
-                -8.6348658,
-                41.1801342
-              ],
-              [
-                -8.6351126,
-                41.1801827
-              ],
-              [
-                -8.635472,
-                41.1801827
-              ],
-              [
-                -8.6354961,
-                41.1802796
-              ],
-              [
-                -8.6356946,
-                41.1801685
-              ],
-              [
-                -8.6359172,
-                41.180114
-              ],
-              [
-                -8.6359145,
-                41.1800737
-              ],
-              [
-                -8.6362664,
-                41.1799528
-              ],
-              [
-                -8.63645,
-                41.1798898
-              ],
-              [
-                -8.6364691,
-                41.1798832
-              ],
-              [
-                -8.63651780877632,
-                41.179864876859455
-              ],
-              [
-                -8.636426231355392,
-                41.18012000278683
-              ]
-            ]
-          ]
-        ]
-      },
       "properties": {
         "rank": 24,
-        "tipo": "Verde privado",
-        "nome": "Parque de Requesende",
-        "area_ha": 1.877,
-        "pop_delta": 0,
-        "pct_antes": 80.5,
-        "pct_depois": 80.5,
-        "lat": 41.17936,
-        "lon": -8.63544,
-        "source": "manual"
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "rank": 25,
         "nome": "Parque dos Salgados",
         "tipo": "Verde privado",
         "area_ha": 2.65,
@@ -2737,7 +2541,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 26,
+        "rank": 25,
         "nome": "Rua de Fernando Távora",
         "tipo": "Verde privado",
         "area_ha": 2.29,
@@ -2790,7 +2594,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 27,
+        "rank": 26,
         "nome": "Parque de Contumil",
         "tipo": "Verde privado",
         "area_ha": 7.54,
@@ -2989,7 +2793,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 28,
+        "rank": 27,
         "nome": "Parque Oriental",
         "tipo": "Verde privado",
         "area_ha": 9.41,
@@ -3154,7 +2958,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 29,
+        "rank": 28,
         "nome": "Quinta junto à Escola Nicolau Nasoni",
         "tipo": "Verde privado",
         "area_ha": 4.56,
@@ -3321,7 +3125,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 30,
+        "rank": 29,
         "nome": "Salgueiros",
         "tipo": "Verde privado",
         "area_ha": 3.75,
@@ -3378,7 +3182,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 31,
+        "rank": 30,
         "nome": "Aguas Ferreas",
         "tipo": "Verde em PDM / fechado ao publico",
         "area_ha": 0.53,
@@ -3471,7 +3275,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 32,
+        "rank": 31,
         "nome": "Casa de Ramalde",
         "tipo": "Verde em PDM / fechado ao publico",
         "area_ha": 2.44,
@@ -3529,7 +3333,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 33,
+        "rank": 32,
         "nome": "Casa da Viscondessa de Santiago de Lobão",
         "tipo": "Verde privado",
         "area_ha": 1.17,
@@ -3568,7 +3372,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 34,
+        "rank": 33,
         "nome": "Palacete Pinto Leite",
         "tipo": "Verde privado",
         "area_ha": 1.75,
@@ -3639,7 +3443,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 35,
+        "rank": 34,
         "nome": "Companhia Aurifícia",
         "tipo": "Verde privado",
         "area_ha": 2.3,
@@ -3746,7 +3550,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 36,
+        "rank": 35,
         "nome": "Doze Casas",
         "tipo": "Verde privado",
         "area_ha": 2.37,
@@ -3825,7 +3629,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 37,
+        "rank": 36,
         "nome": "Santa Catarina",
         "tipo": "Verde privado",
         "area_ha": 1.57,
@@ -3900,7 +3704,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 38,
+        "rank": 37,
         "nome": "Quartel do Monte Pedral",
         "tipo": "Verde privado",
         "area_ha": 0.4,
@@ -3939,7 +3743,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 39,
+        "rank": 38,
         "nome": "Antigo centro hípico e Quartel do Bom Pastor",
         "tipo": "Verde privado",
         "area_ha": 1.84,
@@ -4004,7 +3808,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 40,
+        "rank": 39,
         "nome": "Campo Lindo",
         "tipo": "Verde privado",
         "area_ha": 0.69,
@@ -4055,7 +3859,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 41,
+        "rank": 40,
         "nome": "Curtumes Ameal",
         "tipo": "Verde privado",
         "area_ha": 1.61,
@@ -4142,7 +3946,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 42,
+        "rank": 41,
         "nome": "Reconversão parque estacionamento Trindade",
         "tipo": "Verde privado",
         "area_ha": 0.56,
@@ -4193,7 +3997,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 43,
+        "rank": 42,
         "nome": "Escola Ramalho Ortigão",
         "tipo": "Verde privado",
         "area_ha": 2.22,
@@ -4248,7 +4052,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 44,
+        "rank": 43,
         "nome": "Convento de Francos",
         "tipo": "Verde privado",
         "area_ha": 2.32,
@@ -4377,7 +4181,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 45,
+        "rank": 44,
         "nome": "Lima 5",
         "tipo": "Verde privado",
         "area_ha": 1.61,
@@ -4424,7 +4228,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 46,
+        "rank": 45,
         "nome": "Carvalhido",
         "tipo": "Verde privado",
         "area_ha": 0.42,
