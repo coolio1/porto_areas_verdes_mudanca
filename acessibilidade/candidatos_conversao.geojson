@@ -1056,74 +1056,6 @@
     {
       "type": "Feature",
       "geometry": {
-        "type": "MultiPolygon",
-        "coordinates": [
-          [
-            [
-              [
-                -8.615625,
-                41.15707412223667
-              ],
-              [
-                -8.615703125,
-                41.156918075422624
-              ],
-              [
-                -8.615703125,
-                41.15707412223667
-              ],
-              [
-                -8.615625,
-                41.15707412223667
-              ]
-            ]
-          ],
-          [
-            [
-              [
-                -8.615625,
-                41.15707412223667
-              ],
-              [
-                -8.614921874999999,
-                41.15879063719116
-              ],
-              [
-                -8.614687499999999,
-                41.15879063719116
-              ],
-              [
-                -8.614843749999999,
-                41.15801040312093
-              ],
-              [
-                -8.615546875,
-                41.15707412223667
-              ],
-              [
-                -8.615625,
-                41.15707412223667
-              ]
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "rank": 9,
-        "tipo": "Estrategia de expansao (CMP)",
-        "nome": "Parque Urbano da Lapa",
-        "area_ha": 0.43,
-        "pop_delta": 11,
-        "pct_antes": 61.5,
-        "pct_depois": 61.5,
-        "lat": 41.158,
-        "lon": -8.6152,
-        "source": "manual"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
@@ -1183,7 +1115,7 @@
         ]
       },
       "properties": {
-        "rank": 10,
+        "rank": 9,
         "tipo": "Estrategia de expansao (CMP)",
         "nome": "Parque Urbano de Aldoar",
         "area_ha": 3.19,
@@ -1303,7 +1235,7 @@
         ]
       },
       "properties": {
-        "rank": 11,
+        "rank": 10,
         "tipo": "Estrategia de expansao (CMP)",
         "nome": "Jardim frontal à Escola Nicolau Nasoni",
         "area_ha": 4.13,
@@ -1361,7 +1293,7 @@
         ]
       },
       "properties": {
-        "rank": 12,
+        "rank": 11,
         "tipo": "Estrategia de expansao (CMP)",
         "nome": "Jardim Nun'Alvares",
         "area_ha": 2.0,
@@ -1507,7 +1439,7 @@
         ]
       },
       "properties": {
-        "rank": 13,
+        "rank": 12,
         "tipo": "Estrategia de expansao (CMP)",
         "nome": "Jardim da Vilarinha",
         "area_ha": 2.0,
@@ -1681,7 +1613,7 @@
         ]
       },
       "properties": {
-        "rank": 14,
+        "rank": 13,
         "tipo": "Estrategia de expansao (CMP)",
         "nome": "Jardim Monte da Bela",
         "area_ha": 5.0,
@@ -1741,7 +1673,7 @@
         ]
       },
       "properties": {
-        "rank": 15,
+        "rank": 14,
         "tipo": "Verde em PDM / fechado ao publico",
         "nome": "Quinta Amarela",
         "area_ha": 0.91,
@@ -1809,7 +1741,7 @@
         ]
       },
       "properties": {
-        "rank": 16,
+        "rank": 15,
         "tipo": "Verde em PDM / fechado ao publico",
         "nome": "Rua da Bouça",
         "area_ha": 0.59,
@@ -1931,7 +1863,7 @@
         ]
       },
       "properties": {
-        "rank": 17,
+        "rank": 16,
         "tipo": "Verde privado",
         "nome": "Jardim Nun'Álvares",
         "area_ha": 7.968,
@@ -1987,7 +1919,7 @@
         ]
       },
       "properties": {
-        "rank": 18,
+        "rank": 17,
         "tipo": "Verde privado",
         "nome": "Parque da Ervilha",
         "area_ha": 1.938,
@@ -2131,7 +2063,7 @@
         ]
       },
       "properties": {
-        "rank": 19,
+        "rank": 18,
         "tipo": "Verde privado",
         "nome": "Corredor ribeirinho do Aleixo",
         "area_ha": 3.256,
@@ -2245,7 +2177,7 @@
         ]
       },
       "properties": {
-        "rank": 20,
+        "rank": 19,
         "tipo": "Verde em PDM / fechado ao publico",
         "nome": "Jardins da FLUP",
         "area_ha": 4.158,
@@ -2323,7 +2255,7 @@
         ]
       },
       "properties": {
-        "rank": 21,
+        "rank": 20,
         "tipo": "Verde em PDM / fechado ao publico",
         "nome": "Casa das Artes",
         "area_ha": 0.74,
@@ -2377,7 +2309,7 @@
         ]
       },
       "properties": {
-        "rank": 22,
+        "rank": 21,
         "tipo": "Estrategia de expansao (CMP)",
         "nome": "Corredor ribeirinho do Aleixo",
         "area_ha": 1.712,
@@ -2435,7 +2367,7 @@
         ]
       },
       "properties": {
-        "rank": 23,
+        "rank": 22,
         "tipo": "Verde privado",
         "nome": "Jardim do Palácio de Cristal",
         "area_ha": 1.134,
@@ -2493,7 +2425,7 @@
         ]
       },
       "properties": {
-        "rank": 24,
+        "rank": 23,
         "tipo": "Verde privado",
         "nome": "Parque Urbano de Aldoar",
         "area_ha": 1.65,
@@ -2689,7 +2621,7 @@
         ]
       },
       "properties": {
-        "rank": 25,
+        "rank": 24,
         "tipo": "Verde privado",
         "nome": "Parque de Requesende",
         "area_ha": 1.877,
@@ -2704,7 +2636,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 26,
+        "rank": 25,
         "nome": "Parque dos Salgados",
         "tipo": "Verde privado",
         "area_ha": 2.65,
@@ -2805,7 +2737,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 27,
+        "rank": 26,
         "nome": "Rua de Fernando Távora",
         "tipo": "Verde privado",
         "area_ha": 2.29,
@@ -2858,7 +2790,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 28,
+        "rank": 27,
         "nome": "Parque de Contumil",
         "tipo": "Verde privado",
         "area_ha": 7.54,
@@ -3057,7 +2989,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 29,
+        "rank": 28,
         "nome": "Parque Oriental",
         "tipo": "Verde privado",
         "area_ha": 9.41,
@@ -3222,7 +3154,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 30,
+        "rank": 29,
         "nome": "Quinta junto à Escola Nicolau Nasoni",
         "tipo": "Verde privado",
         "area_ha": 4.56,
@@ -3389,7 +3321,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 31,
+        "rank": 30,
         "nome": "Salgueiros",
         "tipo": "Verde privado",
         "area_ha": 3.75,
@@ -3446,7 +3378,7 @@
     {
       "type": "Feature",
       "properties": {
-        "rank": 32,
+        "rank": 31,
         "nome": "Aguas Ferreas",
         "tipo": "Estrategia de expansao (CMP)",
         "area_ha": 0.53,
