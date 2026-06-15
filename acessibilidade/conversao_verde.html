@@ -22968,10 +22968,6 @@ var parquesData = {
 };
 var map = L.map('map').setView([41.155, -8.63], 13);
 
-fetch('parques_porto.geojson').then(function(r) { return r.json(); }).then(function(data) {
-  parquesData = data;
-  if (typeof initParques === 'function') initParques();
-}).catch(function() {});
 var baseTile = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap'}).addTo(map);
 
 document.getElementById('basemap-select').addEventListener('change', function() {
@@ -23026,8 +23022,10 @@ function init() {
         if (p.nome) html += ' &mdash; ' + p.nome;
         html += '<br><span style="color:#666;">' + p.tipo + '</span>';
         html += '<br><span style="color:#666;">&Aacute;rea: ' + p.area_ha + ' ha</span>';
-        html += '<br><span style="color:#2E7D32;">+' + p.pop_delta.toLocaleString() + ' hab cobertos</span>';
-        html += '<br><span style="color:#444;">Cobertura: ' + p.pct_antes + '% &rarr; ' + p.pct_depois + '%</span>';
+        if (p.pop_delta != null) {
+          html += '<br><span style="color:#2E7D32;">+' + p.pop_delta.toLocaleString() + ' hab cobertos</span>';
+          html += '<br><span style="color:#444;">Cobertura: ' + p.pct_antes + '% &rarr; ' + p.pct_depois + '%</span>';
+        }
         layer.bindPopup(html);
         var label = '#' + p.rank + (p.nome ? ' — ' + p.nome : '');
         layer.bindTooltip(label, {
@@ -23086,7 +23084,7 @@ function init() {
   proxActBtn.textContent = 'Actual 60%';
 
   var proxSimBtn = document.createElement('button'); proxSimBtn.className = 'ab-btn active';
-  proxSimBtn.textContent = 'Simulado 73%';
+  proxSimBtn.textContent = 'Simulado 60%';
 
   proxGroup.appendChild(proxActBtn); proxGroup.appendChild(proxSimBtn);
   div.appendChild(proxGroup);
@@ -23099,10 +23097,10 @@ function init() {
   var sfcaGroup = document.createElement('div'); sfcaGroup.className = 'ab-group';
 
   var sfcaActBtn = document.createElement('button'); sfcaActBtn.className = 'ab-btn';
-  sfcaActBtn.textContent = 'Actual 22.8%';
+  sfcaActBtn.textContent = 'Actual actual';
 
   var sfcaSimBtn = document.createElement('button'); sfcaSimBtn.className = 'ab-btn';
-  sfcaSimBtn.textContent = 'Simulado 36.7%';
+  sfcaSimBtn.textContent = 'Simulado simulado';
 
   sfcaGroup.appendChild(sfcaActBtn); sfcaGroup.appendChild(sfcaSimBtn);
   div.appendChild(sfcaGroup);

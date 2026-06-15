@@ -198,6 +198,17 @@ Image.fromarray(acc_sim_rgba).save(acc_sim_path)
 print(f"  Guardado ({os.path.getsize(acc_sim_path) // 1024} KB)")
 print(f"  Pop adequada: {sfca_actual_pct:.1f}% -> {sfca_sim_pct:.1f}%")
 
+# ===== Guardar metadados para regeneração rápida =====
+import json as _json
+metadata = {
+    "pct_actual": pct_actual,
+    "pct_simulado": pct_sim,
+    "sfca_actual_pct": sfca_actual_pct,
+    "sfca_sim_pct": sfca_sim_pct,
+}
+with open(os.path.join(LAYERS_DIR, "conversao_metadata.json"), "w", encoding="utf-8") as _f:
+    _json.dump(metadata, _f)
+
 # ===== Gerar HTML =====
 build_html(SCRIPT_DIR, LAYERS_DIR, PARENT_LAYERS, geojson,
            pct_actual, pct_sim, TARGET_PCT, BOUNDS,

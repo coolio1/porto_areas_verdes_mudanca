@@ -9,6 +9,7 @@ Se um PNG não existe, avisa e tenta continuar.
 import os
 import sys
 import json
+import numpy as np
 
 # Importar função de construção do HTML
 from conversao_html import build_html
@@ -39,8 +40,26 @@ if os.path.exists(metadata_path):
     except Exception as e:
         print(f"[AVISO] Nao foi possivel carregar metadados: {e}")
 else:
-    print("[AVISO] conversao_metadata.json nao encontrado")
-    print("  Nota: dados de cobertura serao vazios ate correr analise_conversao_verde.py")
+    print("[AVISO] conversao_metadata.json nao encontrado — a calcular pct_actual dos arrays em cache...")
+    try:
+        pop_corrected = np.load(os.path.join(LAYERS_DIR, "pop_corrected.npy"))
+        porto_mask    = np.load(os.path.join(LAYERS_DIR, "porto_mask.npy"))
+        reach_300     = np.load(os.path.join(LAYERS_DIR, "reach_300.npy"))
+        pop_500m      = np.load(os.path.join(LAYERS_DIR, "pop_500m.npy"))
+        params        = np.load(os.path.join(LAYERS_DIR, "calc_params.npz"))
+        POP_500M_MIN  = float(params["POP_500M_MIN"])
+        habitado      = porto_mask & (pop_500m >= POP_500M_MIN)
+        total_pop     = pop_corrected[porto_mask].sum()
+        coberto       = reach_300 & porto_mask
+        pct_actual    = float(pop_corrected[coberto & habitado].sum() / total_pop * 100)
+        pct           = pct_actual  # pct_sim desconhecido até correr analise_conversao_verde.py
+        sfca_actual_pct = None
+        sfca_sim_pct    = None
+        print(f"[OK] pct_actual calculado: {pct_actual:.1f}%")
+        print("  [NOTA] pct_simulado indisponivel — correr analise_conversao_verde.py para metricas completas")
+    except Exception as e:
+        print(f"[ERRO] Nao foi possivel calcular pct_actual: {e}")
+        sys.exit(1)
 
 # Carregar candidatos do GeoJSON
 candidatos_path = os.path.join(SCRIPT_DIR, "candidatos_conversao.geojson")
