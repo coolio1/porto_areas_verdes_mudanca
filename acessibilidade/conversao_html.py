@@ -378,7 +378,7 @@ function init() {{
       clearActive(); activateOverlay(null, false);
     }} else {{
       clearActive(); this.classList.add('active');
-      activateOverlay(proxActOverlay, false);
+      activateOverlay(proxActOverlay, true);
     }}
   }});
 
@@ -396,7 +396,7 @@ function init() {{
       clearActive(); activateOverlay(null, false);
     }} else {{
       clearActive(); this.classList.add('active');
-      activateOverlay(sfcaActOverlay, false);
+      activateOverlay(sfcaActOverlay, true);
     }}
   }});
 
@@ -405,7 +405,7 @@ function init() {{
       clearActive(); activateOverlay(null, false);
     }} else {{
       clearActive(); this.classList.add('active');
-      activateOverlay(sfcaSimOverlay, false);
+      activateOverlay(sfcaSimOverlay, true);
     }}
   }});
 
