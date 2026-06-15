@@ -11,7 +11,7 @@ import os, re, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ROOT)
-from nav import get_nav
+from nav import get_nav, get_jekyll_nav
 
 # (ficheiro relativo à raiz, canonical_path, depth)
 TARGETS = [
@@ -73,6 +73,27 @@ for rel_path, canonical, depth in TARGETS:
         f.write(new_content)
     patched.append(rel_path)
     os.system(f'git -C "{ROOT}" add "{full_path}"')
+
+# Regenerar _includes/nav.html para Jekyll
+includes_dir = os.path.join(ROOT, "_includes")
+os.makedirs(includes_dir, exist_ok=True)
+jekyll_nav_path = os.path.join(includes_dir, "nav.html")
+expected_jekyll = get_jekyll_nav() + "\n"
+
+current_jekyll = ""
+if os.path.exists(jekyll_nav_path):
+    with open(jekyll_nav_path, encoding="utf-8") as f:
+        current_jekyll = f.read()
+
+if current_jekyll != expected_jekyll:
+    if CHECK_ONLY:
+        print("[divergência] _includes/nav.html", file=sys.stderr)
+        errors += 1
+    else:
+        with open(jekyll_nav_path, "w", encoding="utf-8") as f:
+            f.write(expected_jekyll)
+        os.system(f'git -C "{ROOT}" add "{jekyll_nav_path}"')
+        patched.append("_includes/nav.html")
 
 for p in patched:
     print(f"[patch] {p}")

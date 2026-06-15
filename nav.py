@@ -5,6 +5,10 @@ Quando adicionares uma nova página:
   1. Adiciona uma linha a PAGES
   2. Adiciona a entrada correspondente em patch_nav.py (TARGETS)
   3. Corre:  python patch_nav.py   (ou faz commit — o hook faz-o automaticamente)
+
+Para páginas Jekyll (_layouts/default.html):
+  A nav é gerada em _includes/nav.html por get_jekyll_nav().
+  patch_nav.py regenera-a automaticamente — não editar _includes/nav.html à mão.
 """
 
 PAGES = [
@@ -16,6 +20,28 @@ PAGES = [
     ("acessibilidade/conversao_verde.html",           "Propostas"),
     ("atropelamentos/dashboard_atropelamentos.html",  "Atropelamentos"),
 ]
+
+# Páginas Jekyll-only (não têm nav Python — não entram em PAGES nem em TARGETS)
+_JEKYLL_EXTRA = [
+    ("sobre/", "Sobre"),
+]
+_GITHUB_URL = "https://github.com/coolio1/porto_areas_verdes_mudanca"
+
+
+def get_jekyll_nav():
+    """
+    Devolve o bloco <nav>...</nav> para Jekyll (_includes/nav.html).
+    Usa {{ site.baseurl }} — processado pelo Liquid em build time.
+    """
+    base = "{{ site.baseurl }}"
+    lines = []
+    for canonical, label in PAGES:
+        href = base + "/" if canonical == "index.html" else base + "/" + canonical
+        lines.append(f'  <a href="{href}">{label}</a>')
+    for path, label in _JEKYLL_EXTRA:
+        lines.append(f'  <a href="{base}/{path}">{label}</a>')
+    lines.append(f'  <a href="{_GITHUB_URL}" target="_blank">GitHub</a>')
+    return "<nav>\n" + "\n".join(lines) + "\n</nav>"
 
 
 def get_nav(active_canonical, depth=0):
