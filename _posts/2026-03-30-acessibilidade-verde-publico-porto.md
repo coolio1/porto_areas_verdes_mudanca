@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Acessibilidade a Espaços Verdes Públicos no Porto: Uma Análise Espacial pelo Método 2SFCA"
-description: "Mapa de acessibilidade da população do Porto a espaços verdes públicos (m²/hab, raio 500m), usando o método Two-Step Floating Catchment Area com dados GHS-POP e inventário de 77 parques e jardins."
+description: "Mapa de acessibilidade da população do Porto a espaços verdes públicos (m²/hab, raio 500m), usando o método Two-Step Floating Catchment Area com dados GHS-POP e inventário de 78 parques e jardins."
 date: 2026-03-30
 tags: [porto, acessibilidade, verde público, 2sfca, gee, ghs-pop, osm, sentinel-2]
 ---
@@ -14,7 +14,7 @@ tags: [porto, acessibilidade, verde público, 2sfca, gee, ghs-pop, osm, sentinel
 
 O Porto dispõe de 19,3 m² de espaço verde público por habitante — acima do limiar de 9 m²/hab frequentemente atribuído à OMS. Porém, esta métrica agregada esconde uma realidade desigual: quem vive junto ao Parque da Cidade tem uma dotação generosa; quem habita na Sé, em Campanhã ou no interior de Paranhos pode não ter nenhum espaço verde acessível a pé.
 
-Este trabalho aplica o método *Two-Step Floating Catchment Area* (2SFCA) ao município do Porto, cruzando um inventário de 77 parques e jardins de acesso público gratuito, a classificação de uso do solo por Sentinel-2, e a grelha de população GHS-POP. O resultado é um mapa da acessibilidade efectiva a verde público em m² por habitante num raio pedonal de 500 m.
+Este trabalho aplica o método *Two-Step Floating Catchment Area* (2SFCA) ao município do Porto, cruzando um inventário de 78 parques e jardins de acesso público gratuito, a classificação de uso do solo por Sentinel-2, e a grelha de população GHS-POP. O resultado é um mapa da acessibilidade efectiva a verde público em m² por habitante num raio pedonal de 500 m.
 
 ---
 
@@ -24,7 +24,7 @@ Este trabalho aplica o método *Two-Step Floating Catchment Area* (2SFCA) ao mun
 
 A tensão entre indicadores agregados favoráveis e realidades locais deficitárias é um tema recorrente na literatura sobre o Porto. Quental (2010), na sua tese sobre modelação de estrutura urbana sustentável na Área Metropolitana do Porto, já identificava a distribuição espacial assimétrica da infraestrutura verde como um dos principais desafios da sustentabilidade urbana na região. A análise GIS de Quental para as 130 freguesias da AMP revelou que a distância média ponderada pela população ao espaço verde mais próximo era de 1 110 m em 2006 (contra 1 403 m em 1991) — uma melhoria ao longo do tempo, mas ainda muito acima do limiar de 300 m recomendado pela OMS — e que "algumas áreas densas de Vila Nova de Gaia, Gondomar e Matosinhos estão bastante mal equipadas" em termos de verde acessível (Quental, 2010, p. 262). Quental & Macedo (2006), no diagnóstico de indicadores de desenvolvimento sustentável para o Grande Porto, quantificaram esta assimetria e alertaram para a insuficiência das métricas per capita como instrumento de planeamento.
 
-Graça *et al.* (2018) mapearam 95 espaços verdes no Porto (~424 ha). A presente análise identifica **448 ha de verde público classificado** pelo PDM 2021 — valor coerente. Contudo, desta área, apenas ~249 ha correspondem a parques e jardins de acesso efectivamente livre. Hoffimann *et al.* (2017), usando análise de rede viária e o *Public Open Space Tool*, demonstraram que o acesso a verde no Porto varia com o estatuto socioeconómico: 90% da população nos bairros menos desfavorecidos vive a ≤800 m de um espaço verde, contra 75,8% nos mais desfavorecidos. Saraiva *et al.* (2025) confirmaram estas desigualdades com análise de correspondência múltipla aplicada a 89 espaços verdes públicos.
+Graça *et al.* (2018) mapearam 95 espaços verdes no Porto (~424 ha). A presente análise identifica **448 ha de verde público classificado** pelo PDM 2021 — valor coerente. Contudo, desta área, apenas ~252 ha correspondem a parques e jardins de acesso efectivamente livre. Hoffimann *et al.* (2017), usando análise de rede viária e o *Public Open Space Tool*, demonstraram que o acesso a verde no Porto varia com o estatuto socioeconómico: 90% da população nos bairros menos desfavorecidos vive a ≤800 m de um espaço verde, contra 75,8% nos mais desfavorecidos. Saraiva *et al.* (2025) confirmaram estas desigualdades com análise de correspondência múltipla aplicada a 89 espaços verdes públicos.
 
 A escassez de verde acessível no Porto resulta de uma transformação urbana profunda iniciada a meados do século XX. Guilherme (2024) mostrou que a superfície artificializada do município duplicou entre 1947 e 2019 — de 31% para 62% do território — enquanto a vegetação herbácea, que correspondia a ~40% da área total em 1947, colapsou para ~10% em 2019. Guilherme *et al.* (2024), analisando as trajectórias de uso do solo para o mesmo período, estimaram que mais de um terço do município (35,1%) perdeu completamente a cobertura vegetal, e que apenas 25,3% manteve vegetação contínua desde 1947. O resultado mais saliente para o planeamento: os habitats arborizados sobreviveram principalmente nos parques e jardins públicos, enquanto os habitats herbáceos — as hortas, pastagens e terrenos expectantes que outrora cobriam ~40% da cidade — estão hoje *"extremely susceptible to new urban development"* (Guilherme *et al.*, 2024) e reduzidos a 5,2% do município.
 
@@ -46,7 +46,7 @@ O método *Two-Step Floating Catchment Area* (Luo & Wang, 2003) supera estas lim
 
 | Dado | Fonte | Resolução | Período |
 |------|-------|-----------|---------|
-| Parques e jardins públicos | Inventário próprio (CMP + OSM + levantamento) | vectorial (77 polígonos) | 2026 |
+| Parques e jardins públicos | Inventário próprio (CMP + OSM + levantamento) | vectorial (78 polígonos) | 2026 |
 | Classificação verde | Sentinel-2 (ESA) | 10 m | 2024–2025 |
 | Verde não usufruível | PDM Porto 2021 (CMP) | vectorial (132 polígonos) | 2021 |
 | População | GHS-POP (JRC/EC) | 100 m | 2020 |
@@ -54,7 +54,7 @@ O método *Two-Step Floating Catchment Area* (Luo & Wang, 2003) supera estas lim
 
 ### 3.2. Inventário de parques
 
-Compilou-se uma lista de **77 parques e jardins de acesso público e gratuito**, partindo do directório oficial da CMP (20 espaços) e complementando com espaços omitidos mas de acesso comprovadamente livre: praças, largos, jardins de bairro, parques infantis e alamedas identificados via OpenStreetMap, PDM e levantamento de campo. Contornos obtidos preferencialmente via polígonos PDM (categoria "fruição colectiva") e OpenStreetMap (Overpass API / API v0.6). Área total: **~251 hectares**.
+Compilou-se uma lista de **78 parques e jardins de acesso público e gratuito**, partindo do directório oficial da CMP (20 espaços) e complementando com espaços omitidos mas de acesso comprovadamente livre: praças, largos, jardins de bairro, parques infantis e alamedas identificados via OpenStreetMap, PDM e levantamento de campo. Contornos obtidos preferencialmente via polígonos PDM (categoria "fruição colectiva") e OpenStreetMap (Overpass API / API v0.6). Área total: **~252 hectares**.
 
 A classificação Sentinel-2 seguiu a metodologia multi-sazonal descrita em Quental (2026), com 90,4% de concordância com o ESA WorldCover 2021 para a classe arbórea. Esta classificação é utilizada para a **camada visual** do mapa, mas o cálculo de acessibilidade usa a área total dos polígonos.
 
@@ -78,10 +78,10 @@ O raio de 500 m é um compromisso entre o limiar europeu de 300 m (OMS, 2016) e 
 
 ### 4.1. Verde público: inventário
 
-O inventário totaliza **77 parques e jardins** (~251 ha), inferior aos 448 ha do PDM por excluir espaços sem usufruto livre. Os 251 ha correspondem a **~10,4 m²/hab** — ligeiramente acima do limiar de 9 m²/hab.
+O inventário totaliza **78 parques e jardins** (~252 ha), inferior aos 448 ha do PDM por excluir espaços sem usufruto livre. Os 252 ha correspondem a **~10,4 m²/hab** — ligeiramente acima do limiar de 9 m²/hab.
 
 <details>
-<summary><strong>Tabela: 77 parques e jardins inventariados (clicar para expandir)</strong></summary>
+<summary><strong>Tabela: 78 parques e jardins inventariados (clicar para expandir)</strong></summary>
 
 | Parque / Jardim | Área (m²) |
 |---|---:|
@@ -126,6 +126,7 @@ O inventário totaliza **77 parques e jardins** (~251 ha), inferior aos 448 ha d
 | Parque Urbano Dr. Mário Soares | 8 200 |
 | Rua de Manuel Bandeira | 7 800 |
 | Rua Diogo Botelho | 7 800 |
+| Santa Luzia | 7 227 |
 | Largo do Priorado | 7 200 |
 | Jardim de Guedes de Oliveira | 7 000 |
 | Jardim do Marquês | 6 800 |
@@ -162,7 +163,7 @@ O inventário totaliza **77 parques e jardins** (~251 ha), inferior aos 448 ha d
 | Jardim do Largo da Paz | 1 200 |
 | Parque da Fonte do Outeiro | 900 |
 | Praça da Galiza | 800 |
-| **Total** | **2 508 530** |
+| **Total** | **2 515 757** |
 
 </details>
 
@@ -170,11 +171,11 @@ O inventário totaliza **77 parques e jardins** (~251 ha), inferior aos 448 ha d
 
 | Classe de acessibilidade | População | % |
 |---|---:|---:|
-| Défice crítico (0–3 m²/hab) | 121 675 | 50,2% |
-| Insuficiente (3–9 m²/hab) | 66 899 | 27,6% |
-| Adequado (>9 m²/hab) | 53 851 | 22,2% |
+| Défice crítico (0–3 m²/hab) | 119 799 | 49,4% |
+| Insuficiente (3–9 m²/hab) | 67 268 | 27,7% |
+| Adequado (>9 m²/hab) | 55 358 | 22,8% |
 
-**77,8% da população do Porto** — ~189 mil pessoas — vive com acessibilidade inferior a 9 m²/hab num raio de 500 m. Mais de metade (50,2%) está em défice crítico (<3 m²/hab). Apenas 22,2% tem acesso adequado.
+**77,2% da população do Porto** — ~187 mil pessoas — vive com acessibilidade inferior a 9 m²/hab num raio de 500 m. Quase metade (49,4%) está em défice crítico (<3 m²/hab). Apenas 22,8% tem acesso adequado.
 
 ### 4.3. Padrão geográfico
 
@@ -187,14 +188,14 @@ O inventário totaliza **77 parques e jardins** (~251 ha), inferior aos 448 ha d
 
 ### 4.4. Proximidade 300m: o critério de Konijnendijk
 
-A regra 3-30-300 (Konijnendijk, 2023) propõe que todos os residentes devem ter acesso a um espaço verde a ≤300 m de casa. Embora a formulação original refira parques de ≥1 ha, adoptamos aqui o limiar de ≥0,4 ha — por melhor reflectir a escala dos espaços verdes urbanos do Porto, onde muitos jardins e praças com funções recreativas relevantes ficam abaixo de 1 ha. Aplicando este critério aos 62 parques do inventário com área ≥0,4 ha:
+A regra 3-30-300 (Konijnendijk, 2023) propõe que todos os residentes devem ter acesso a um espaço verde a ≤300 m de casa. Embora a formulação original refira parques de ≥1 ha, adoptamos aqui o limiar de ≥0,4 ha — por melhor reflectir a escala dos espaços verdes urbanos do Porto, onde muitos jardins e praças com funções recreativas relevantes ficam abaixo de 1 ha. Aplicando este critério aos 63 parques do inventário com área ≥0,4 ha:
 
 | Critério 300m (parques ≥0,4 ha) | População | % |
 |---|---:|---:|
-| Cumpre (≤300 m) | 145 072 | 59,8% |
-| Não cumpre (>300 m) | 97 353 | 40,2% |
+| Cumpre (≤300 m) | 146 240 | 60,3% |
+| Não cumpre (>300 m) | 96 185 | 39,7% |
 
-**40,2% da população do Porto** — ~97 mil pessoas — não tem acesso a um parque de dimensão significativa a uma distância pedonal curta. Este resultado complementa o 2SFCA: parte da população na faixa "insuficiente" (3–9 m²/hab) pode estar a mais de 300 m do parque mais próximo — a acessibilidade 2SFCA reflecte parques distantes que "chegam" ao raio de 500 m mas não ao de 300 m.
+**39,7% da população do Porto** — ~96 mil pessoas — não tem acesso a um parque de dimensão significativa a uma distância pedonal curta. Este resultado complementa o 2SFCA: parte da população na faixa "insuficiente" (3–9 m²/hab) pode estar a mais de 300 m do parque mais próximo — a acessibilidade 2SFCA reflecte parques distantes que "chegam" ao raio de 500 m mas não ao de 300 m.
 
 ### 4.5. Verde privado: o paradoxo de equidade
 
@@ -249,15 +250,15 @@ O raio de 500 m é euclidiano; a distância real pela rede viária é superior, 
 
 ### Implicações
 
-A estratégia municipal deveria priorizar o **eixo central e oriental** — onde o défice ponderado pela população é mais severo. Intervenções possíveis: abertura de logradouros ao uso público, conversão de terrenos expectantes em jardins de bolso (*pocket parks*), arborização intensiva de praças. O contraste entre 1 678 ha de verde privado e ~249 ha de verde usufruível levanta a questão da permeabilização: incentivos à abertura parcial de logradouros, servidões de passagem, cedências verdes em operações urbanísticas — mecanismos que Quental (2010) já propunha como instrumento de reequilíbrio territorial no Porto.
+A estratégia municipal deveria priorizar o **eixo central e oriental** — onde o défice ponderado pela população é mais severo. Intervenções possíveis: abertura de logradouros ao uso público, conversão de terrenos expectantes em jardins de bolso (*pocket parks*), arborização intensiva de praças. O contraste entre 1 678 ha de verde privado e ~252 ha de verde usufruível levanta a questão da permeabilização: incentivos à abertura parcial de logradouros, servidões de passagem, cedências verdes em operações urbanísticas — mecanismos que Quental (2010) já propunha como instrumento de reequilíbrio territorial no Porto.
 
 ---
 
 ## 7. Conclusões
 
-**77,8% da população do Porto** vive com acessibilidade a verde público inferior a 9 m²/hab num raio de 500 m. **50,2%** encontra-se em défice crítico (<3 m²/hab), concentrado no centro e leste — as zonas mais densas e termicamente vulneráveis. Apenas 22,2% tem acesso adequado. Aplicando o critério de proximidade de Konijnendijk (2023), **40,2% da população** não tem um parque de ≥0,4 ha a ≤300 m de casa.
+**77,2% da população do Porto** vive com acessibilidade a verde público inferior a 9 m²/hab num raio de 500 m. **49,4%** encontra-se em défice crítico (<3 m²/hab), concentrado no centro e leste — as zonas mais densas e termicamente vulneráveis. Apenas 22,8% tem acesso adequado. Aplicando o critério de proximidade de Konijnendijk (2023), **39,7% da população** não tem um parque de ≥0,4 ha a ≤300 m de casa.
 
-Dos 448 ha classificados como verde público pelo PDM, apenas ~251 ha são efectivamente usufruíveis. A métrica agregada per capita é insuficiente para avaliar a equidade — e o Porto não é caso único: Lisboa, Barcelona e Paris partilham o mesmo padrão de défice estrutural em núcleos densos.
+Dos 448 ha classificados como verde público pelo PDM, apenas ~252 ha são efectivamente usufruíveis. A métrica agregada per capita é insuficiente para avaliar a equidade — e o Porto não é caso único: Lisboa, Barcelona e Paris partilham o mesmo padrão de défice estrutural em núcleos densos.
 
 ---
 
