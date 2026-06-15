@@ -226,10 +226,6 @@ var candidatosData = {geojson_str};
 var parquesData = {parques_geojson_str};
 var map = L.map('map').setView([41.155, -8.63], 13);
 
-fetch('parques_porto.geojson').then(function(r) {{ return r.json(); }}).then(function(data) {{
-  parquesData = data;
-  if (typeof initParques === 'function') initParques();
-}}).catch(function() {{}});
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
 document.getElementById('basemap-select').addEventListener('change', function() {{
@@ -284,8 +280,10 @@ function init() {{
         if (p.nome) html += ' &mdash; ' + p.nome;
         html += '<br><span style="color:#666;">' + p.tipo + '</span>';
         html += '<br><span style="color:#666;">&Aacute;rea: ' + p.area_ha + ' ha</span>';
-        html += '<br><span style="color:#2E7D32;">+' + p.pop_delta.toLocaleString() + ' hab cobertos</span>';
-        html += '<br><span style="color:#444;">Cobertura: ' + p.pct_antes + '% &rarr; ' + p.pct_depois + '%</span>';
+        if (p.pop_delta != null) {{
+          html += '<br><span style="color:#2E7D32;">+' + p.pop_delta.toLocaleString() + ' hab cobertos</span>';
+          html += '<br><span style="color:#444;">Cobertura: ' + p.pct_antes + '% &rarr; ' + p.pct_depois + '%</span>';
+        }}
         layer.bindPopup(html);
         var label = '#' + p.rank + (p.nome ? ' — ' + p.nome : '');
         layer.bindTooltip(label, {{

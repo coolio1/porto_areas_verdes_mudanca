@@ -1,0 +1,10 @@
+[     267ms] TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at Object.onEachFeature (http://localhost:8765/conversao_verde.html:23029:68)
+    at e.addData (https://unpkg.com/leaflet@1.9.4/dist/leaflet.js:5:86542)
+    at e.addData (https://unpkg.com/leaflet@1.9.4/dist/leaflet.js:5:86372)
+    at e.initialize (https://unpkg.com/leaflet@1.9.4/dist/leaflet.js:5:86210)
+    at new e (https://unpkg.com/leaflet@1.9.4/dist/leaflet.js:5:2708)
+    at Object.Si (https://unpkg.com/leaflet@1.9.4/dist/leaflet.js:5:88543)
+    at init (http://localhost:8765/conversao_verde.html:23013:22)
+    at http://localhost:8765/conversao_verde.html:23231:1
+[     445ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8765/favicon.ico:0

@@ -15,14 +15,42 @@ Camadas:
 
 import ee
 import os
+import sys
 import math
 import time
+import argparse
+import hashlib
+import json
 import numpy as np
 from PIL import Image
 from scipy import ndimage
 from dotenv import load_dotenv
 from acessibilidade_gee import getS2col, getComposite, classify, download_mono_layer, download_greyscale
 from acessibilidade_html import build_html
+
+# ===== Modo rápido (--html-only) =====
+_parser = argparse.ArgumentParser(description="Acessibilidade a verde público — Porto")
+_parser.add_argument('--html-only', action='store_true',
+                     help='Regenerar HTML apenas (~2s); sem recalcular GEE/arrays')
+_args = _parser.parse_args()
+
+if _args.html_only:
+    _script_dir = os.path.dirname(os.path.abspath(__file__))
+    _layers_dir = os.path.join(_script_dir, "layers")
+    _parent_layers = os.path.join(os.path.dirname(_script_dir), "layers")
+    _bounds = [[41.13, -8.70], [41.19, -8.54]]
+    print("Modo rápido: a regenerar HTML sem recalcular...")
+    build_html(
+        _script_dir, _layers_dir, _parent_layers, _bounds,
+        os.path.join(_layers_dir, "verde_publico.png"),
+        os.path.join(_layers_dir, "verde_pago.png"),
+        os.path.join(_layers_dir, "acessibilidade_2sfca.png"),
+        os.path.join(_layers_dir, "baixa_densidade.png"),
+        os.path.join(_parent_layers, "municipios.png"),
+        os.path.join(_layers_dir, "proximidade_300m.png"),
+    )
+    print("HTML regenerado. Para recalcular: python acessibilidade_verde.py")
+    sys.exit(0)
 
 # ===== Configuração =====
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
@@ -154,6 +182,21 @@ parques_gdf = gpd.read_file(parques_path).to_crs(epsg=4326)
 parques_union = parques_gdf.geometry.union_all()
 print(f"  {len(parques_gdf)} parques oficiais CMP carregados")
 
+# Hash-based cache invalidation: se parques_porto.geojson mudou, regenerar camadas dependentes
+CACHE_STATE_PATH = os.path.join(LAYERS_DIR, '.cache_state.json')
+_cache_state = {}
+if os.path.exists(CACHE_STATE_PATH):
+    with open(CACHE_STATE_PATH) as _f:
+        try:
+            _cache_state = json.load(_f)
+        except Exception:
+            pass
+with open(parques_path, 'rb') as _f:
+    _parques_hash = hashlib.sha256(_f.read()).hexdigest()[:16]
+parques_changed = _cache_state.get('parques_hash') != _parques_hash
+if parques_changed:
+    print("  parques_porto.geojson alterado — a invalidar cache verde_pub/verde_pago/prox...")
+
 # Grid de coordenadas (reutilizado por ambas as camadas)
 img_ref = Image.open(verde_total_path).convert("RGBA")
 grid_w, grid_h = img_ref.size
@@ -166,7 +209,7 @@ coords_flat = (xx.ravel(), yy.ravel())
 # Pixels dentro dos parques sem verde Sentinel-2 são pintados com verde sólido
 # (jardins pequenos/urbanos onde a copa não domina o pixel)
 verde_pub_path = os.path.join(LAYERS_DIR, "verde_publico.png")
-if not os.path.exists(verde_pub_path):
+if not os.path.exists(verde_pub_path) or parques_changed:
     print("  A mascarar verde para parques oficiais...")
     arr = np.array(img_ref)
     inside_parques = contains_xy(parques_union, *coords_flat).reshape(grid_h, grid_w)
@@ -185,7 +228,7 @@ publico_union = parques_union
 
 # --- Verde pago ou não usufruível: (PDM verde x Sentinel-2 verde) \ parques ---
 verde_pago_path = os.path.join(LAYERS_DIR, "verde_pago.png")
-if not os.path.exists(verde_pago_path):
+if not os.path.exists(verde_pago_path) or parques_changed:
     print("  A calcular verde pago (PDM verde x Sentinel-2 verde, fora dos parques)...")
     pdm_minus_parques = pdm_verde_union.difference(parques_union)
     inside_pdm = contains_xy(pdm_minus_parques, *coords_flat).reshape(grid_h, grid_w)
@@ -384,7 +427,7 @@ else:
 PROX_RADIUS_M = 300
 PARK_MIN_AREA_M2 = 4_000  # 0.4 ha
 prox_path = os.path.join(LAYERS_DIR, "proximidade_300m.png")
-if not os.path.exists(prox_path):
+if not os.path.exists(prox_path) or parques_changed:
     print("\nA calcular proximidade 300m (Konijnendijk)...")
     # Filtrar parques com área ≥0,4 ha
     parques_grandes = parques_gdf[
@@ -461,6 +504,11 @@ else:
 
 
 # ===== Phase 6: HTML =====
+# Guardar hash actualizado (só depois de todas as fases completarem com sucesso)
+_cache_state['parques_hash'] = _parques_hash
+with open(CACHE_STATE_PATH, 'w') as _f:
+    json.dump(_cache_state, _f)
+
 print("\nA construir mapa...")
 build_html(SCRIPT_DIR, LAYERS_DIR, PARENT_LAYERS, BOUNDS,
            verde_pub_path, verde_pago_path, acc_path, lowpop_path,

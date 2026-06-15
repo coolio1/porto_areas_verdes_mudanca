@@ -151,21 +151,16 @@ parques_path = os.path.join(SCRIPT_DIR, "parques_porto.geojson")
 with open(parques_path, encoding="utf-8") as f:
     parques_geojson = json.load(f)
 
-park_mask = np.zeros((calc_h, calc_w), dtype=bool)
-for feat in parques_geojson["features"]:
-    geom = shape(feat["geometry"])
-    m = rasterize([(geom, 1)], out_shape=(calc_h, calc_w),
-                  transform=transform, fill=0, dtype=np.uint8).astype(bool)
-    park_mask |= m
+park_mask = rasterize(
+    [(shape(f["geometry"]), 1) for f in parques_geojson["features"]],
+    out_shape=(calc_h, calc_w), transform=transform, fill=0, dtype=np.uint8,
+).astype(bool)
 print(f"  Parques: {park_mask.sum()} px = {park_mask.sum() * pixel_area_m2 / 10000:.1f} ha")
 
-# Rasterizar todos os candidatos
-cand_mask_all = np.zeros((calc_h, calc_w), dtype=bool)
-for feat in geojson["features"]:
-    geom = shape(feat["geometry"])
-    m = rasterize([(geom, 1)], out_shape=(calc_h, calc_w),
-                  transform=transform, fill=0, dtype=np.uint8).astype(bool)
-    cand_mask_all |= m
+cand_mask_all = rasterize(
+    [(shape(f["geometry"]), 1) for f in geojson["features"]],
+    out_shape=(calc_h, calc_w), transform=transform, fill=0, dtype=np.uint8,
+).astype(bool)
 print(f"  Candidatos: {cand_mask_all.sum()} px = {cand_mask_all.sum() * pixel_area_m2 / 10000:.1f} ha")
 
 # Verde simulado: parques + candidatos completamente verdes

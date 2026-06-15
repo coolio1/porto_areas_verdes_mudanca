@@ -1,15 +1,29 @@
 """Phase 6 — geração do mapa HTML de acessibilidade a verde público."""
 
 import os
-import base64
 import json as _json
+import numpy as np
+from PIL import Image
 
 
-def to_base64(filepath):
-    if not os.path.exists(filepath):
-        return None
-    with open(filepath, "rb") as f:
-        return "data:image/png;base64," + base64.b64encode(f.read()).decode()
+def _make_colored_png(src_path, dst_path, hex_color):
+    """Aplica cor sólida à máscara alpha e guarda PNG colorido."""
+    if not os.path.exists(src_path):
+        return False
+    arr = np.array(Image.open(src_path).convert('RGBA'))
+    r, g, b = int(hex_color[1:3], 16), int(hex_color[3:5], 16), int(hex_color[5:7], 16)
+    alpha = arr[:, :, 3].copy()
+    arr[:, :, :3] = [r, g, b]
+    arr[:, :, 3] = alpha
+    Image.fromarray(arr).save(dst_path)
+    return True
+
+
+def _js_src(abs_path, script_dir):
+    """Devolve URL relativa para o HTML (com aspas) ou 'null' se ficheiro não existe."""
+    if abs_path and os.path.exists(abs_path):
+        return "'" + os.path.relpath(abs_path, script_dir).replace(os.sep, '/') + "'"
+    return 'null'
 
 
 def build_html(script_dir, layers_dir, parent_layers, bounds,
@@ -18,13 +32,25 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
     """Gera acessibilidade_verde.html a partir das camadas PNG já calculadas."""
     print("\nA construir mapa...")
 
-    verde_priv_b64 = to_base64(os.path.join(parent_layers, "interior_subsistente.png"))
-    verde_pago_b64 = to_base64(verde_pago_path)
-    ghspop_b64 = to_base64(os.path.join(parent_layers, "ghspop.png"))
-    acc_b64 = to_base64(acc_path)
-    lowpop_b64 = to_base64(lowpop_path)
-    muni_b64 = to_base64(muni_path)
-    prox_b64 = to_base64(prox_path)
+    # Gerar PNGs pré-coloridos (evita canvas CORS em file://)
+    verde_pago_col = os.path.join(layers_dir, "verde_pago_colored.png")
+    _make_colored_png(verde_pago_path, verde_pago_col, "#8D6E63")
+
+    verde_priv_src = os.path.join(parent_layers, "interior_subsistente.png")
+    verde_priv_col = os.path.join(parent_layers, "interior_subsistente_colored.png")
+    _make_colored_png(verde_priv_src, verde_priv_col, "#1565C0")
+
+    muni_col = os.path.join(parent_layers, "municipios_colored.png")
+    _make_colored_png(muni_path, muni_col, "#444444")
+
+    # URLs relativas para o HTML
+    acc_js        = _js_src(acc_path,       script_dir)
+    prox_js       = _js_src(prox_path,      script_dir)
+    lowpop_js     = _js_src(lowpop_path,    script_dir)
+    ghspop_js     = _js_src(os.path.join(parent_layers, "ghspop.png"), script_dir)
+    verde_pago_js = _js_src(verde_pago_col, script_dir)
+    verde_priv_js = _js_src(verde_priv_col, script_dir)
+    muni_js       = _js_src(muni_col,       script_dir)
 
     parques_geojson_path = os.path.join(script_dir, "parques_porto.geojson")
     parques_geojson_str = "null"
@@ -36,24 +62,13 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
         print(f"  Parques nomeados: {n_parques} carregados")
     else:
         n_parques = 0
-        print(
-            "  AVISO: parques_porto.geojson não encontrado — correr criar_parques.py primeiro"
-        )
+        print("  AVISO: parques_porto.geojson não encontrado — correr criar_parques.py primeiro")
 
     basemaps = [
-        (
-            "CartoDB Positron",
-            "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        ),
-        ("CartoDB Dark", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"),
-        (
-            "OpenStreetMap",
-            "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-        ),
-        (
-            "Satélite",
-            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        ),
+        ("CartoDB Positron", "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"),
+        ("CartoDB Dark",     "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"),
+        ("OpenStreetMap",    "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"),
+        ("Satélite",         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"),
     ]
     basemap_options = "".join(
         f'<option value="{url}"{"selected" if i == 0 else ""}>{name}</option>'
@@ -214,17 +229,8 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
 </div>
 
 <script>
-// Fallback inline (funciona em file://); fetch() actualiza em HTTP (GitHub Pages)
 var map = L.map('map').setView([41.155, -8.63], 13);
 var parquesData = {parques_geojson_str};
-
-// Em HTTP, recarregar do ficheiro (dados sempre actualizados sem re-gerar HTML)
-try {{
-  fetch('parques_porto.geojson').then(function(r) {{ return r.json(); }}).then(function(data) {{
-    parquesData = data;
-    if (typeof initParques === 'function') initParques();
-  }}).catch(function() {{}});
-}} catch(e) {{}}
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
 
 document.getElementById('basemap-select').addEventListener('change', function() {{
@@ -234,144 +240,103 @@ document.getElementById('basemap-select').addEventListener('change', function() 
 
 var bounds = {bounds};
 
-// Camada de acessibilidade (pré-colorida, 70% opacidade, on por defeito)
 var accLayer = {{
   id: "acessibilidade",
   label: "Acessibilidade a 500m",
-  src: "{acc_b64}",
+  src: {acc_js},
   opacity: 0.7,
   show: true
 }};
 
-// Proximidade 300m (Konijnendijk 3-30-300, pré-colorida)
 var proxLayer = {{
   id: "proximidade_300m",
   label: "Proximidade 300m",
-  src: "{prox_b64}",
+  src: {prox_js},
   opacity: 0.7,
   show: false
 }};
 
-// Máscara de baixa densidade (cinza claro, topo de tudo)
 var lowPopLayer = {{
   id: "baixa_densidade",
   label: "Baixa densidade",
-  src: "{lowpop_b64}",
+  src: {lowpop_js},
   show: true
 }};
 
-// Camada de verde privado (monocromática azul)
 var greenPrivLayer = {{
   id: "verde_privado",
   label: "Verde privado",
   color: "#1565C0",
-  src: "{verde_priv_b64}",
+  src: {verde_priv_js},
   show: false
 }};
 
-// Camada de verde pago ou não usufruível — castanho
 var outroVerdeLayer = {{
   id: "verde_pago",
   label: "Verde em PDM / fechado ao p\\u00fablico",
   color: "#8D6E63",
-  src: "{verde_pago_b64}",
+  src: {verde_pago_js},
   show: false
 }};
 
-// Limites municipais
 var muniLayer = {{
   id: "municipios",
   label: "Limites municipais",
   color: "#444444",
-  src: "{muni_b64}",
+  src: {muni_js},
   show: true
 }};
 
-// Contexto: densidade populacional
 var bgLayer = {{
   id: "ghspop",
   label: "Densidade populacional",
-  src: "{ghspop_b64}",
+  src: {ghspop_js},
   opacity: 0.7,
   show: false
 }};
 
-function hexToRgb(h) {{
-  h = h.replace('#','');
-  return [parseInt(h.substr(0,2),16), parseInt(h.substr(2,2),16), parseInt(h.substr(4,2),16)];
-}}
-
-function extractMask(src) {{
-  return new Promise(function(r) {{
-    var i = new Image();
-    i.onload = function() {{
-      var c = document.createElement('canvas');
-      c.width = i.width; c.height = i.height;
-      var x = c.getContext('2d');
-      x.drawImage(i, 0, 0);
-      var d = x.getImageData(0, 0, c.width, c.height);
-      var a = new Uint8Array(d.data.length / 4);
-      for (var j = 0; j < a.length; j++) a[j] = d.data[j * 4 + 3];
-      r({{w: c.width, h: c.height, alpha: a}});
-    }};
-    i.src = src;
-  }});
-}}
-
-function renderColored(m, hex) {{
-  var rgb = hexToRgb(hex);
-  var c = document.createElement('canvas');
-  c.width = m.w; c.height = m.h;
-  var x = c.getContext('2d');
-  var d = x.createImageData(m.w, m.h);
-  for (var i = 0; i < m.alpha.length; i++) {{
-    d.data[i*4] = rgb[0]; d.data[i*4+1] = rgb[1];
-    d.data[i*4+2] = rgb[2]; d.data[i*4+3] = m.alpha[i];
-  }}
-  x.putImageData(d, 0, 0);
-  return c.toDataURL();
-}}
-
-async function init() {{
-  // Pane para camada de fundo (z-index baixo)
+function init() {{
   map.createPane('bgPane');
   map.getPane('bgPane').style.zIndex = 250;
 
-  // Pane para acessibilidade (topo)
   map.createPane('accPane');
   map.getPane('accPane').style.zIndex = 450;
 
   // --- Camada de fundo: densidade pop ---
-  var bgOverlay = L.imageOverlay(bgLayer.src, bounds, {{opacity: bgLayer.opacity, pane: 'bgPane'}});
-  if (bgLayer.show) bgOverlay.addTo(map);
+  var bgOverlay = bgLayer.src ? L.imageOverlay(bgLayer.src, bounds, {{opacity: bgLayer.opacity, pane: 'bgPane'}}) : null;
+  if (bgOverlay && bgLayer.show) bgOverlay.addTo(map);
   var bgDiv = document.getElementById('bg-rows');
   var bgRow = document.createElement('div'); bgRow.className = 'row';
   var bgCb = document.createElement('input'); bgCb.type = 'checkbox'; bgCb.checked = bgLayer.show;
   bgCb.addEventListener('change', function() {{
-    if (this.checked) {{ bgOverlay.addTo(map); document.getElementById('pop-legend').style.display='block'; }}
-    else {{ map.removeLayer(bgOverlay); document.getElementById('pop-legend').style.display='none'; }}
+    if (this.checked) {{
+      if (bgOverlay) bgOverlay.addTo(map);
+      document.getElementById('pop-legend').style.display = 'block';
+    }} else {{
+      if (bgOverlay) map.removeLayer(bgOverlay);
+      document.getElementById('pop-legend').style.display = 'none';
+    }}
   }});
-  var bgLb = document.createElement('label'); bgLb.textContent = bgLayer.label; bgLb.style.fontSize='12px';
+  var bgLb = document.createElement('label'); bgLb.textContent = bgLayer.label; bgLb.style.fontSize = '12px';
   bgRow.appendChild(bgCb); bgRow.appendChild(bgLb); bgDiv.appendChild(bgRow);
 
-  // --- Camadas principais ---
+  // --- Camadas principais (pré-coloridas em Python) ---
   var monoLayers = [greenPrivLayer, outroVerdeLayer, muniLayer];
   var div = document.getElementById('layer-rows');
   var overlays = [];
 
   for (var i = 0; i < monoLayers.length; i++) {{
     var L_ = monoLayers[i];
-    var m = await extractMask(L_.src);
-    var cs = renderColored(m, L_.color);
-    var ov = L.imageOverlay(cs, bounds);
-    if (L_.show) ov.addTo(map);
+    var ov = L_.src ? L.imageOverlay(L_.src, bounds) : null;
+    if (ov && L_.show) ov.addTo(map);
     overlays.push(ov);
 
     var row = document.createElement('div'); row.className = 'row';
     var cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = L_.show; cb.dataset.idx = i;
     cb.addEventListener('change', function() {{
       var idx = +this.dataset.idx;
-      if (this.checked) overlays[idx].addTo(map); else map.removeLayer(overlays[idx]);
+      if (this.checked) {{ if (overlays[idx]) overlays[idx].addTo(map); }}
+      else {{ if (overlays[idx]) map.removeLayer(overlays[idx]); }}
     }});
     var sw = document.createElement('span'); sw.className = 'swatch'; sw.style.backgroundColor = L_.color;
     var lb = document.createElement('label'); lb.textContent = L_.label; lb.style.fontSize = '12px';
@@ -379,18 +344,18 @@ async function init() {{
     div.appendChild(row);
   }}
 
-  // --- Acessibilidade (topo, pré-colorida) ---
-  var accOverlay = L.imageOverlay(accLayer.src, bounds, {{opacity: accLayer.opacity, pane: 'accPane'}});
-  if (accLayer.show) accOverlay.addTo(map);
+  // --- Acessibilidade (pré-colorida, topo) ---
+  var accOverlay = accLayer.src ? L.imageOverlay(accLayer.src, bounds, {{opacity: accLayer.opacity, pane: 'accPane'}}) : null;
+  if (accOverlay && accLayer.show) accOverlay.addTo(map);
 
   var accRow = document.createElement('div'); accRow.className = 'row';
   var accCb = document.createElement('input'); accCb.type = 'checkbox'; accCb.checked = accLayer.show;
   accCb.addEventListener('change', function() {{
     if (this.checked) {{
-      accOverlay.addTo(map);
+      if (accOverlay) accOverlay.addTo(map);
       if (window._lowPopOverlay) window._lowPopOverlay.addTo(map);
     }} else {{
-      map.removeLayer(accOverlay);
+      if (accOverlay) map.removeLayer(accOverlay);
       if (window._lowPopOverlay) map.removeLayer(window._lowPopOverlay);
     }}
   }});
@@ -398,35 +363,32 @@ async function init() {{
   accSw.style.background = 'linear-gradient(to right, #880E0E, #B71C1C, #E53935, #E8A838, #FFD700, #8BC34A, #2E7D32)';
   var accLb = document.createElement('label'); accLb.textContent = accLayer.label; accLb.style.fontSize = '12px';
   accRow.appendChild(accCb); accRow.appendChild(accSw); accRow.appendChild(accLb);
-  // Acessibilidade no topo
   div.insertBefore(accRow, div.firstChild);
 
-  // --- Proximidade 300m (Konijnendijk 3-30-300, pré-colorida) ---
-  var proxOverlay = L.imageOverlay(proxLayer.src, bounds, {{opacity: proxLayer.opacity, pane: 'accPane'}});
-  if (proxLayer.show) proxOverlay.addTo(map);
+  // --- Proximidade 300m (Konijnendijk 3-30-300) ---
+  var proxOverlay = proxLayer.src ? L.imageOverlay(proxLayer.src, bounds, {{opacity: proxLayer.opacity, pane: 'accPane'}}) : null;
+  if (proxOverlay && proxLayer.show) proxOverlay.addTo(map);
 
   var proxRow = document.createElement('div'); proxRow.className = 'row';
   var proxCb = document.createElement('input'); proxCb.type = 'checkbox'; proxCb.checked = proxLayer.show;
   proxCb.addEventListener('change', function() {{
     if (this.checked) {{
-      proxOverlay.addTo(map);
+      if (proxOverlay) proxOverlay.addTo(map);
       if (window._lowPopOverlay) window._lowPopOverlay.addTo(map);
-      // Desligar acessibilidade (mutuamente exclusivas)
       accCb.checked = false;
-      map.removeLayer(accOverlay);
+      if (accOverlay) map.removeLayer(accOverlay);
       document.getElementById('acc-legend').style.display = 'none';
       document.getElementById('prox-legend').style.display = 'block';
     }} else {{
-      map.removeLayer(proxOverlay);
+      if (proxOverlay) map.removeLayer(proxOverlay);
       if (window._lowPopOverlay) map.removeLayer(window._lowPopOverlay);
       document.getElementById('prox-legend').style.display = 'none';
     }}
   }});
-  // Quando liga acessibilidade, desligar proximidade
   accCb.addEventListener('change', function() {{
     if (this.checked) {{
       proxCb.checked = false;
-      map.removeLayer(proxOverlay);
+      if (proxOverlay) map.removeLayer(proxOverlay);
       document.getElementById('prox-legend').style.display = 'none';
       document.getElementById('acc-legend').style.display = 'block';
     }}
@@ -437,22 +399,17 @@ async function init() {{
   proxRow.appendChild(proxCb); proxRow.appendChild(proxSw); proxRow.appendChild(proxLb);
   div.insertBefore(proxRow, accRow.nextSibling);
 
-  // --- Camada "Parques e Jardins" (só polígonos GeoJSON) ---
+  // --- Parques e Jardins (GeoJSON) ---
   map.createPane('parquesPane');
   map.getPane('parquesPane').style.zIndex = 550;
 
-  // Contornos GeoJSON dos parques (carregado via fetch)
   var parquesGeoLayer = null;
 
-  // Checkbox para polígonos
   var pRow = document.createElement('div'); pRow.className = 'row';
   var pCb = document.createElement('input'); pCb.type = 'checkbox'; pCb.checked = true;
   pCb.addEventListener('change', function() {{
-    if (this.checked) {{
-      if (parquesGeoLayer) parquesGeoLayer.addTo(map);
-    }} else {{
-      if (parquesGeoLayer) map.removeLayer(parquesGeoLayer);
-    }}
+    if (this.checked) {{ if (parquesGeoLayer) parquesGeoLayer.addTo(map); }}
+    else {{ if (parquesGeoLayer) map.removeLayer(parquesGeoLayer); }}
   }});
   var pSw = document.createElement('span'); pSw.className = 'swatch'; pSw.style.backgroundColor = '#2E7D32';
   var pLb = document.createElement('label'); pLb.textContent = 'Parques e Jardins'; pLb.style.fontSize = '12px';
@@ -494,11 +451,10 @@ async function init() {{
   // --- Baixa densidade (acima da acessibilidade, abaixo dos parques) ---
   map.createPane('lowPopPane');
   map.getPane('lowPopPane').style.zIndex = 475;
-  var lowPopOverlay = L.imageOverlay(lowPopLayer.src, bounds, {{pane: 'lowPopPane'}});
+  var lowPopOverlay = lowPopLayer.src ? L.imageOverlay(lowPopLayer.src, bounds, {{pane: 'lowPopPane'}}) : null;
   window._lowPopOverlay = lowPopOverlay;
-  if (accLayer.show) lowPopOverlay.addTo(map);
+  if (lowPopOverlay && accLayer.show) lowPopOverlay.addTo(map);
 
-  // Se os fetch() já terminaram antes de init(), chamar agora
   if (parquesData) initParques();
 }}
 
