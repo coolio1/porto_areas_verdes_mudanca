@@ -13,7 +13,7 @@ PAGES = [
     ("ndvi_historico.html",                           "Histórico 1947-2024"),
     ("interiores_quarteiroes.html",                   "Verde Privado"),
     ("acessibilidade/acessibilidade_verde.html",      "Acessibilidade"),
-    ("acessibilidade/conversao_verde.html",           "Conversão"),
+    ("acessibilidade/conversao_verde.html",           "Propostas"),
     ("atropelamentos/dashboard_atropelamentos.html",  "Atropelamentos"),
 ]
 
