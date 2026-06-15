@@ -203,15 +203,52 @@ Os 1 678 ha de verde privado (quarteirões, logradouros, moradias) prestam servi
 
 ---
 
-## 5. O Porto no Contexto Europeu e Internacional
+## 5. Cenário de Conversão: 46 Candidatos a Parque Público
+
+### 5.1. Critérios de selecção
+
+Os 46 espaços candidatos foram identificados a partir do cruzamento entre o mapa de acessibilidade 2SFCA e a classificação de uso do solo por Sentinel-2: terrenos com défice de proximidade e cobertura vegetal detectável (verde privado, expectante ou semi-abandonado), localizados preferencialmente em categorias do PDM que admitem reconversão (verde lúdico-produtivo, protecção e enquadramento, ou solo urbano de génese ilegal). A selecção prioritiza o eixo central e oriental do município — as zonas de maior défice documentadas na secção 4.3. Não foram incluídos terrenos edificados, espaços já vedados com uso definido, nem a frente atlântica e ribeirinha, servida pelos parques existentes.
+
+### 5.2. Resultados da simulação
+
+A conversão simultânea dos 46 candidatos (~142,6 ha) representaria um acréscimo de 57% à área de verde público actualmente usufruível (~252,5 ha → ~395 ha), elevando a dotação per capita de ~10,4 para ~16,3 m²/hab.
+
+**Proximidade 300m (critério Konijnendijk)**
+
+| | Actual | Simulado | Ganho |
+|---|---:|---:|---:|
+| Cumpre ≤300 m de parque ≥0,4 ha | 146 240 hab (60,3%) | 204 319 hab (84,3%) | +58 079 hab (+24,0 p.p.) |
+| Não cumpre | 96 185 hab (39,7%) | 38 106 hab (15,7%) | −58 079 hab |
+
+A conversão reduziria o défice de proximidade de **39,7% para 15,7%** da população — ~58 000 pessoas passariam a ter um parque ≥0,4 ha a ≤300 m de casa.
+
+**Acessibilidade 2SFCA (raio 500m)**
+
+| Classe de acessibilidade | Actual | Simulado | Variação |
+|---|---:|---:|---:|
+| Défice crítico (0–3 m²/hab) | 119 799 hab (49,4%) | 44 121 hab (18,2%) | −31,2 p.p. |
+| Insuficiente (3–9 m²/hab) | 67 268 hab (27,7%) | 98 909 hab (40,8%) | +13,1 p.p. |
+| Adequado (≥9 m²/hab) | 55 358 hab (22,8%) | 99 394 hab (41,0%) | +18,2 p.p. |
+
+A população em défice crítico reduziria de **49,4% para 18,2%** (−31,2 p.p.), correspondente a ~75 700 pessoas que sairiam da classe mais crítica. A população com acessibilidade adequada quase duplicaria, de **22,8% para 41,0%**.
+
+### 5.3. Limites da simulação
+
+A simulação assume conversão simultânea e integral de todos os candidatos — cenário improvável num horizonte realista de planeamento. Todos os espaços são tratados como verde público equivalente aos parques existentes, sem considerar qualidade, arborização, equipamento ou resistências fundiárias. O efeito sobre o centro histórico permanece limitado pela escassez de terrenos disponíveis: os 15,7% que persistiriam fora do raio de 300 m — concentrados principalmente na Baixa e Sé — dificilmente serão servidos sem intervenções de maior envergadura (desafectação de espaços actualmente vedados, cobertura de infraestruturas, micro-jardins de bolso em praças existentes).
+
+O mapa interactivo das propostas, com comparação A/B antes/depois e detalhe por espaço candidato, está disponível em **[Propostas de Conversão a Verde]({{ site.baseurl }}/acessibilidade/conversao_verde.html)**.
+
+---
+
+## 6. O Porto no Contexto Europeu e Internacional
 
 O défice de acessibilidade a verde no Porto não é um caso isolado — mas a comparação com outras cidades exige cautela, porque os valores de m²/hab variam enormemente conforme a definição adoptada: verde público acessível, verde público total (incluindo parques periféricos), ou verde total (incluindo florestas urbanas). A tabela seguinte compara o Porto com Lisboa e oito cidades internacionais, distinguindo os valores "com tudo" dos valores "efectivos".
 
-### 5.1. Lisboa: o mesmo problema com números diferentes
+### 6.1. Lisboa: o mesmo problema com números diferentes
 
 Lisboa é o caso comparativo mais directo. A cidade reporta ~37 m²/hab de verde público — mas este valor inclui o Parque Florestal de Monsanto (~900 ha), que sozinho representa cerca de metade do verde total. Sem Monsanto, a dotação cai para ~7–10 m²/hab, comparável ao Porto sem o Parque da Cidade. Catarino *et al.* (2025), num estudo de 26 capitais europeias, calcularam para Lisboa um *Urban Green Equity Index* de 0,387 — abaixo da média europeia — com desigualdades intra-urbanas marcadas: bairros como o Parque das Nações dispõem de verde abundante, enquanto Marvila e Beato apresentam défices severos. O projecto GREEN SURGE (2015) já documentara esta fragmentação. O diagnóstico é estruturalmente o mesmo que no Porto: um ou dois grandes parques periféricos mascaram a escassez no tecido urbano denso.
 
-### 5.2. Panorama internacional
+### 6.2. Panorama internacional
 
 | Cidade | Verde/hab | Valor efectivo | Desigualdade intra-urbana |
 |---|---|---|---|
@@ -228,7 +265,7 @@ Lisboa é o caso comparativo mais directo. A cidade reporta ~37 m²/hab de verde
 
 Fontes: Russo & Cirella (2018); Kabisch & Haase (2014); Nghiem *et al.* (2021); Catarino *et al.* (2025); EEA (2022); dados municipais.
 
-### 5.3. Três lições da comparação
+### 6.3. Três lições da comparação
 
 **1. O "efeito Monsanto" é universal.** Porto, Lisboa, Barcelona, Paris e Viena partilham o mesmo padrão: um ou dois grandes parques periféricos (Parque da Cidade, Monsanto, Collserola, Bois de Boulogne/Vincennes, Wienerwald) que inflacionam os indicadores agregados enquanto os bairros densos do centro ficam com valores próximos de zero. As cidades do Sul da Europa são particularmente afectadas pela combinação de centros históricos compactos com malha verde residual. O Porto encaixa-se neste padrão mediterrânico de défice estrutural.
 
@@ -238,7 +275,7 @@ Fontes: Russo & Cirella (2018); Kabisch & Haase (2014); Nghiem *et al.* (2021); 
 
 ---
 
-## 6. Discussão
+## 7. Discussão
 
 ### Concordância com a literatura
 
@@ -254,15 +291,17 @@ A estratégia municipal deveria priorizar o **eixo central e oriental** — onde
 
 ---
 
-## 7. Conclusões
+## 8. Conclusões
 
 **77,2% da população do Porto** vive com acessibilidade a verde público inferior a 9 m²/hab num raio de 500 m. **49,4%** encontra-se em défice crítico (<3 m²/hab), concentrado no centro e leste — as zonas mais densas e termicamente vulneráveis. Apenas 22,8% tem acesso adequado. Aplicando o critério de proximidade de Konijnendijk (2023), **39,7% da população** não tem um parque de ≥0,4 ha a ≤300 m de casa.
 
 Dos 448 ha classificados como verde público pelo PDM, apenas ~252 ha são efectivamente usufruíveis. A métrica agregada per capita é insuficiente para avaliar a equidade — e o Porto não é caso único: Lisboa, Barcelona e Paris partilham o mesmo padrão de défice estrutural em núcleos densos.
 
+A conversão dos 46 candidatos identificados (~142,6 ha) permitiria reduzir o défice de proximidade de 39,7% para 15,7% da população, e a população em défice crítico 2SFCA de 49,4% para 18,2% — mantendo ainda um núcleo central irredutível onde a escassez de terrenos disponíveis limita as soluções convencionais.
+
 ---
 
-## 8. Nota Metodológica
+## 9. Nota Metodológica
 
 Processamento em Python com *Google Earth Engine*, *scipy*, *NumPy* e *Shapely*. Código aberto:
 
@@ -271,7 +310,7 @@ Processamento em Python com *Google Earth Engine*, *scipy*, *NumPy* e *Shapely*.
 
 ---
 
-## 9. Referências
+## 10. Referências
 
 - Catarino, L. *et al.* (2025). Mapping Green Space Inequalities in 26 European Cities. *Land*, 14(12), 2362. [doi:10.3390/land14122362](https://doi.org/10.3390/land14122362)
 - Dai, D. (2011). Racial/ethnic and socioeconomic disparities in urban green space accessibility: Where to intervene? *Landscape and Urban Planning*, 102(4), 234–244. [doi:10.1016/j.landurbplan.2011.05.002](https://doi.org/10.1016/j.landurbplan.2011.05.002)
@@ -301,6 +340,8 @@ Processamento em Python com *Google Earth Engine*, *scipy*, *NumPy* e *Shapely*.
 
 ---
 
-## Mapa interactivo
+## Mapas interactivos
 
 **[Acessibilidade a Verde Público — Porto]({{ site.baseurl }}/acessibilidade/acessibilidade_verde.html)** — mapa com camadas de acessibilidade 2SFCA, parques e jardins (77 espaços com popups), verde pago/não usufruível e verde privado
+
+**[Propostas de Conversão a Verde]({{ site.baseurl }}/acessibilidade/conversao_verde.html)** — 46 candidatos a parque público com comparação A/B antes/depois e detalhe por espaço candidato
