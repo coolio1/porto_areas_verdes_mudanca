@@ -94,23 +94,12 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
     text-align: center;
   }
 
-  .articles-section { margin: 2.5rem 0; }
-  .articles-section h2 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 1rem;
+  .map-card .card-body time {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
   }
-  .article-item {
-    padding: 1rem 0;
-    border-bottom: 1px solid #e8e8e0;
-  }
-  .article-item:last-child { border-bottom: none; }
-  .article-item h3 { font-size: 0.95rem; margin-bottom: 0.2rem; }
-  .article-item h3 a { color: var(--text); text-decoration: none; }
-  .article-item h3 a:hover { color: var(--green); }
-  .article-item time { font-size: 0.8rem; color: var(--muted); }
-  .article-item p { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
 </style>
 
 <div class="hero">
@@ -172,6 +161,18 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
       <p>Dashboard de sinistralidade rodoviária com peões e ciclistas.</p>
     </div>
   </a>
+
+  {% for post in site.posts %}
+  <a href="{{ post.url | prepend: site.baseurl }}" class="map-card">
+    <div class="card-color" style="background:linear-gradient(90deg, #1e3a5f, #2d6a9f);"></div>
+    <div class="card-body">
+      <span class="tag" style="background:#e8eef7; color:#1e3a5f;">Artigo</span>
+      <h3>{{ post.title }}</h3>
+      <time>{{ post.date | date: "%d %b %Y" }}</time>
+      <p>{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
+    </div>
+  </a>
+  {% endfor %}
 </div>
 
 <div class="video-section">
@@ -184,13 +185,3 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
   <p class="video-caption">Evolução bienal vectorial do edificado, dados Landsat.</p>
 </div>
 
-<div class="articles-section">
-  <h2>Artigos</h2>
-  {% for post in site.posts %}
-  <div class="article-item">
-    <h3><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
-    <time>{{ post.date | date: "%d %b %Y" }}</time>
-    <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
-  </div>
-  {% endfor %}
-</div>
