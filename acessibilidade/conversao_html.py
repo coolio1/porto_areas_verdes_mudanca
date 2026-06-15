@@ -1,9 +1,13 @@
 """Gera conversao_verde.html a partir das layers de candidatos a conversao."""
 import json
 import os
+import sys
 
 import numpy as np
 from PIL import Image
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from nav import get_nav
 
 
 def _make_colored_png(src_path, dst_path, hex_color):
@@ -144,16 +148,7 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
 </style>
 </head>
 <body>
-<div id="nav">
-  <a href="../index.html">In&iacute;cio</a>
-  <a href="../mapa.html">Mapa 2016-2025</a>
-  <a href="../ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
-  <a href="../interiores_quarteiroes.html">Verde Privado</a>
-  <a href="acessibilidade_verde.html">Acessibilidade</a>
-  <a href="conversao_verde.html" class="active">Convers&atilde;o</a>
-  <a href="../atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
-  <a href="../1947/orto_1947.html">Porto 1947</a>
-</div>
+{get_nav('acessibilidade/conversao_verde.html', depth=1)}
 <div id="map"></div>
 <div id="panel">
   <button id="panel-toggle" onclick="var p=document.getElementById('panel');p.classList.toggle('collapsed');this.textContent=p.classList.contains('collapsed')?'&#9650; Abrir legenda':'&#9660; Fechar';">&#9660; Fechar</button>
@@ -188,7 +183,7 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
         <span style="color:#666;">&gt;300m de parque &ge;0,5 ha (n&atilde;o cumpre)</span>
       </div>
     </div>
-    <div class="section" style="margin-top:6px;">Acessibilidade 2SFCA (m&sup2;/hab)</div>
+    <div class="section" style="margin-top:6px;">Acessibilidade 500m (m&sup2;/hab)</div>
     <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
@@ -350,7 +345,7 @@ function init() {{
 
   // --- Grupos A/B: 2SFCA ---
   var sfcaLabel = document.createElement('div'); sfcaLabel.className = 'section'; sfcaLabel.style.marginTop = '4px';
-  sfcaLabel.textContent = 'Acessibilidade 2SFCA';
+  sfcaLabel.textContent = 'Acessibilidade 500m';
   div.appendChild(sfcaLabel);
 
   var sfcaGroup = document.createElement('div'); sfcaGroup.className = 'ab-group';
