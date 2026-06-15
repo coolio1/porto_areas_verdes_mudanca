@@ -432,7 +432,7 @@ function init() {{
   // --- Parques GeoJSON ---
   var parquesGeoLayer = null;
   var pRow = document.createElement('div'); pRow.className = 'row';
-  var pCb = document.createElement('input'); pCb.type = 'checkbox'; pCb.checked = true;
+  var pCb = document.createElement('input'); pCb.type = 'checkbox'; pCb.checked = false;
   pCb.addEventListener('change', function() {{
     if (this.checked) {{
       if (parquesGeoLayer) parquesGeoLayer.addTo(map);
