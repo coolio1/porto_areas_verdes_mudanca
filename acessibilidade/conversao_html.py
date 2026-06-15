@@ -4,19 +4,29 @@ import json
 import os
 
 
-def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, pct, target_pct, bounds):
+def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, pct, target_pct, bounds,
+               sfca_actual_pct=None, sfca_sim_pct=None):
     """Constroi mapa HTML de candidatos a conversao e escreve para script_dir."""
 
     def to_base64(filepath):
+        if not os.path.exists(filepath):
+            return None
         with open(filepath, "rb") as fh:
             return "data:image/png;base64," + base64.b64encode(fh.read()).decode()
 
-    cand_b64 = to_base64(os.path.join(layers_dir, "candidatos_conversao.png"))
-    prox_sim_b64 = to_base64(os.path.join(layers_dir, "proximidade_simulada.png"))
-    prox_actual_b64 = to_base64(os.path.join(layers_dir, "proximidade_300m.png"))
-    verde_pub_b64 = to_base64(os.path.join(layers_dir, "verde_publico.png"))
-    lowpop_b64 = to_base64(os.path.join(layers_dir, "baixa_densidade.png"))
-    muni_b64 = to_base64(os.path.join(parent_layers_dir, "municipios.png"))
+    prox_sim_b64     = to_base64(os.path.join(layers_dir, "proximidade_simulada.png"))
+    prox_actual_b64  = to_base64(os.path.join(layers_dir, "proximidade_300m.png"))
+    sfca_sim_b64     = to_base64(os.path.join(layers_dir, "acessibilidade_2sfca_sim.png"))
+    sfca_actual_b64  = to_base64(os.path.join(layers_dir, "acessibilidade_2sfca.png"))
+    verde_pub_b64    = to_base64(os.path.join(layers_dir, "verde_publico.png"))
+    lowpop_b64       = to_base64(os.path.join(layers_dir, "baixa_densidade.png"))
+    muni_b64         = to_base64(os.path.join(parent_layers_dir, "municipios.png"))
+
+    sfca_actual_label = f"{sfca_actual_pct:.1f}%" if sfca_actual_pct is not None else "actual"
+    sfca_sim_label    = f"{sfca_sim_pct:.1f}%"    if sfca_sim_pct    is not None else "simulado"
+
+    def to_js(b64):
+        return f'"{b64}"' if b64 else "null"
 
     geojson_str = json.dumps(geojson, ensure_ascii=False)
 
@@ -89,6 +99,14 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
   select {{ background:#f5f5f5; color:#222; border:1px solid #ccc; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }}
   .park-label {{ background:rgba(255,255,255,0.85)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#1B5E20; padding:1px 5px; border-radius:3px; }}
   .cand-label {{ background:rgba(255,255,255,0.9)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#00695C; padding:1px 5px; border-radius:3px; font-weight:bold; }}
+  .ab-group {{ display:flex; gap:4px; margin:2px 0 6px; }}
+  .ab-btn {{
+    flex:1; padding:5px 4px; border:1px solid #ccc; border-radius:5px;
+    background:#f5f5f5; color:#555; font-size:11px; cursor:pointer;
+    font-family:'Segoe UI',Arial,sans-serif; line-height:1.3; text-align:center;
+  }}
+  .ab-btn:hover {{ background:#e0e0e0; }}
+  .ab-btn.active {{ background:#00897B; color:#fff; border-color:#00897B; font-weight:bold; }}
   @media (max-width: 768px) {{
     #panel {{
       left:6px; right:6px; bottom:6px; min-width:unset;
@@ -103,6 +121,7 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
     #panel select {{ font-size:10px; padding:2px 4px; }}
     #panel hr {{ margin:4px 0 !important; }}
     #panel .swatch {{ width:10px; height:10px; }}
+    #panel .ab-btn {{ font-size:10px; padding:4px 2px; }}
     #panel.collapsed .panel-body {{ display:none; }}
     #panel-toggle {{ display:block; }}
     #nav {{
@@ -141,7 +160,7 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#8D6E63;display:inline-block;"></span>
-        <span style="color:#666;">Verde pago ou n&atilde;o usufru&iacute;vel</span>
+        <span style="color:#666;">Verde em PDM / fechado ao p&uacute;blico</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
         <span style="width:14px;height:12px;border-radius:2px;background:#1565C0;display:inline-block;"></span>
@@ -159,7 +178,21 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
         <span style="color:#666;">&gt;300m de parque &ge;0,5 ha (n&atilde;o cumpre)</span>
       </div>
     </div>
-    <div style="color:#aaa;font-size:9px;margin-top:4px;">Cobertura actual: {pct_actual:.1f}% &rarr; objectivo: {target_pct:.0f}%</div>
+    <div class="section" style="margin-top:6px;">Acessibilidade 2SFCA (m&sup2;/hab)</div>
+    <div style="display:flex;flex-direction:column;gap:2px;font-size:10px;">
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#2E7D32;display:inline-block;"></span>
+        <span style="color:#666;">Adequado (&ge;9 m&sup2;/hab)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#E8A838;display:inline-block;"></span>
+        <span style="color:#666;">Insuficiente (3&ndash;9 m&sup2;/hab)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <span style="width:14px;height:12px;border-radius:2px;background:#B71C1C;display:inline-block;"></span>
+        <span style="color:#666;">D&eacute;fice cr&iacute;tico (&lt;3 m&sup2;/hab)</span>
+      </div>
+    </div>
   </div>
 
   <div class="section">Camadas</div>
@@ -196,6 +229,13 @@ document.getElementById('basemap-select').addEventListener('change', function() 
 }});
 
 var bounds = {bounds};
+var PROX_SIM_SRC  = {to_js(prox_sim_b64)};
+var PROX_ACT_SRC  = {to_js(prox_actual_b64)};
+var SFCA_SIM_SRC  = {to_js(sfca_sim_b64)};
+var SFCA_ACT_SRC  = {to_js(sfca_actual_b64)};
+var LOWPOP_SRC    = {to_js(lowpop_b64)};
+var VERDE_PUB_SRC = {to_js(verde_pub_b64)};
+var MUNI_SRC      = {to_js(muni_b64)};
 
 function hexToRgb(h) {{
   h = h.replace('#','');
@@ -248,16 +288,12 @@ async function init() {{
   var div = document.getElementById('layer-rows');
   var ctxDiv = document.getElementById('ctx-rows');
 
-  // --- Candidatos raster ---
-  var candOverlay = L.imageOverlay("{cand_b64}", bounds, {{opacity: 0.85, pane: 'candPane'}});
-  candOverlay.addTo(map);
-
-  // --- Candidatos GeoJSON (contornos + popups) ---
+  // --- Candidatos GeoJSON (polígonos + popups) ---
   var candGeoLayer = null;
   if (candidatosData && candidatosData.features.length > 0) {{
     var tipoColors = {{
       'Estrategia de expansao (CMP)': '#00897B',
-      'Verde pago ou nao usufruivel': '#8D6E63',
+      'Verde em PDM / fechado ao publico': '#8D6E63',
       'Verde privado': '#1565C0'
     }};
     candGeoLayer = L.geoJson(candidatosData, {{
@@ -266,8 +302,8 @@ async function init() {{
       style: function(f) {{
         var color = tipoColors[f.properties.tipo] || '#888';
         return {{
-          color: color, weight: 2.5, opacity: 0.9,
-          fillColor: color, fillOpacity: 0.55
+          color: color, weight: 2, opacity: 1,
+          fillColor: color, fillOpacity: 0.45
         }};
       }},
       onEachFeature: function(f, layer) {{
@@ -305,77 +341,138 @@ async function init() {{
   // Checkbox candidatos
   var cRow = document.createElement('div'); cRow.className = 'row';
   var cCb = document.createElement('input'); cCb.type = 'checkbox'; cCb.checked = true;
+  var _savedSimBtn = null;
   cCb.addEventListener('change', function() {{
     if (this.checked) {{
-      candOverlay.addTo(map);
       if (candGeoLayer) candGeoLayer.addTo(map);
+      proxSimBtn.disabled = false; proxSimBtn.style.opacity = '';
+      sfcaSimBtn.disabled  = false; sfcaSimBtn.style.opacity  = '';
+      if (_savedSimBtn) {{ _savedSimBtn.click(); _savedSimBtn = null; }}
     }} else {{
-      map.removeLayer(candOverlay);
       if (candGeoLayer) map.removeLayer(candGeoLayer);
+      if (proxSimBtn.classList.contains('active'))      {{ _savedSimBtn = proxSimBtn; }}
+      else if (sfcaSimBtn.classList.contains('active')) {{ _savedSimBtn = sfcaSimBtn; }}
+      if (_savedSimBtn) {{ clearActive(); activateOverlay(null, false); }}
+      proxSimBtn.disabled = true; proxSimBtn.style.opacity = '0.4';
+      sfcaSimBtn.disabled  = true; sfcaSimBtn.style.opacity  = '0.4';
     }}
   }});
   var cSw = document.createElement('span'); cSw.className = 'swatch';
   cSw.style.background = 'linear-gradient(135deg, #00897B 33%, #8D6E63 66%, #1565C0 100%)';
-  var cLb = document.createElement('label'); cLb.textContent = 'Candidatos a convers\\u00e3o'; cLb.style.fontSize = '12px';
+  var cLb = document.createElement('label'); cLb.textContent = 'Candidatos a conversão'; cLb.style.fontSize = '12px';
   cRow.appendChild(cCb); cRow.appendChild(cSw); cRow.appendChild(cLb);
   div.appendChild(cRow);
 
-  // --- Proximidade simulada (com candidatos implementados) ---
-  var proxSimOverlay = L.imageOverlay("{prox_sim_b64}", bounds, {{opacity: 0.7, pane: 'proxPane'}});
-  proxSimOverlay.addTo(map);
+  // --- Overlays ---
+  var proxSimOverlay = PROX_SIM_SRC ? L.imageOverlay(PROX_SIM_SRC, bounds, {{opacity: 0.7, pane: 'proxPane'}}) : null;
+  var proxActOverlay = PROX_ACT_SRC ? L.imageOverlay(PROX_ACT_SRC, bounds, {{opacity: 0.7, pane: 'proxPane'}}) : null;
+  var sfcaSimOverlay = SFCA_SIM_SRC ? L.imageOverlay(SFCA_SIM_SRC, bounds, {{opacity: 0.7, pane: 'proxPane'}}) : null;
+  var sfcaActOverlay = SFCA_ACT_SRC ? L.imageOverlay(SFCA_ACT_SRC, bounds, {{opacity: 0.7, pane: 'proxPane'}}) : null;
+  var lowPopOverlay  = LOWPOP_SRC   ? L.imageOverlay(LOWPOP_SRC, bounds, {{pane: 'lowPopPane'}}) : null;
 
-  var lowPopOverlay = L.imageOverlay("{lowpop_b64}", bounds, {{pane: 'lowPopPane'}});
-  lowPopOverlay.addTo(map);
+  // Default: proximidade simulada
+  if (proxSimOverlay) proxSimOverlay.addTo(map);
+  if (lowPopOverlay) lowPopOverlay.addTo(map);
 
-  // Proximidade actual (para comparação)
-  var proxActualOverlay = L.imageOverlay("{prox_actual_b64}", bounds, {{opacity: 0.7, pane: 'proxPane'}});
+  // Activa um overlay e desliga todos os outros
+  function activateOverlay(overlay, withLowPop) {{
+    if (proxSimOverlay) map.removeLayer(proxSimOverlay);
+    if (proxActOverlay) map.removeLayer(proxActOverlay);
+    if (sfcaSimOverlay) map.removeLayer(sfcaSimOverlay);
+    if (sfcaActOverlay) map.removeLayer(sfcaActOverlay);
+    if (lowPopOverlay)  map.removeLayer(lowPopOverlay);
+    if (overlay) {{
+      overlay.addTo(map);
+      if (withLowPop && lowPopOverlay) lowPopOverlay.addTo(map);
+    }}
+  }}
 
-  var proxSimRow = document.createElement('div'); proxSimRow.className = 'row';
-  var proxSimCb = document.createElement('input'); proxSimCb.type = 'checkbox'; proxSimCb.checked = true;
-  proxSimCb.addEventListener('change', function() {{
-    if (this.checked) {{
-      proxSimOverlay.addTo(map); lowPopOverlay.addTo(map);
+  // --- Grupos A/B: Proximidade ---
+  var proxLabel = document.createElement('div'); proxLabel.className = 'section'; proxLabel.style.marginTop = '4px';
+  proxLabel.textContent = 'Proximidade 300m';
+  div.appendChild(proxLabel);
+
+  var proxGroup = document.createElement('div'); proxGroup.className = 'ab-group';
+
+  var proxActBtn = document.createElement('button'); proxActBtn.className = 'ab-btn';
+  proxActBtn.textContent = 'Actual {pct_actual:.0f}%';
+
+  var proxSimBtn = document.createElement('button'); proxSimBtn.className = 'ab-btn active';
+  proxSimBtn.textContent = 'Simulado {pct:.0f}%';
+
+  proxGroup.appendChild(proxActBtn); proxGroup.appendChild(proxSimBtn);
+  div.appendChild(proxGroup);
+
+  // --- Grupos A/B: 2SFCA ---
+  var sfcaLabel = document.createElement('div'); sfcaLabel.className = 'section'; sfcaLabel.style.marginTop = '4px';
+  sfcaLabel.textContent = 'Acessibilidade 2SFCA';
+  div.appendChild(sfcaLabel);
+
+  var sfcaGroup = document.createElement('div'); sfcaGroup.className = 'ab-group';
+
+  var sfcaActBtn = document.createElement('button'); sfcaActBtn.className = 'ab-btn';
+  sfcaActBtn.textContent = 'Actual {sfca_actual_label}';
+
+  var sfcaSimBtn = document.createElement('button'); sfcaSimBtn.className = 'ab-btn';
+  sfcaSimBtn.textContent = 'Simulado {sfca_sim_label}';
+
+  sfcaGroup.appendChild(sfcaActBtn); sfcaGroup.appendChild(sfcaSimBtn);
+  div.appendChild(sfcaGroup);
+
+  // Limpar estado activo de todos os botões
+  function clearActive() {{
+    proxActBtn.classList.remove('active');
+    proxSimBtn.classList.remove('active');
+    sfcaActBtn.classList.remove('active');
+    sfcaSimBtn.classList.remove('active');
+  }}
+
+  proxActBtn.addEventListener('click', function() {{
+    if (this.classList.contains('active')) {{
+      clearActive(); activateOverlay(null, false);
     }} else {{
-      map.removeLayer(proxSimOverlay); map.removeLayer(lowPopOverlay);
+      clearActive(); this.classList.add('active');
+      activateOverlay(proxActOverlay, false);
     }}
   }});
-  var proxSimSw = document.createElement('span'); proxSimSw.className = 'swatch';
-  proxSimSw.style.background = 'linear-gradient(to right, #B71C1C, #2E7D32)';
-  var proxSimLb = document.createElement('label'); proxSimLb.textContent = 'Proximidade simulada ({pct:.0f}%)'; proxSimLb.style.fontSize = '12px';
-  proxSimRow.appendChild(proxSimCb); proxSimRow.appendChild(proxSimSw); proxSimRow.appendChild(proxSimLb);
-  div.appendChild(proxSimRow);
 
-  var proxActRow = document.createElement('div'); proxActRow.className = 'row';
-  var proxActCb = document.createElement('input'); proxActCb.type = 'checkbox'; proxActCb.checked = false;
-  proxActCb.addEventListener('change', function() {{
-    if (this.checked) {{
-      proxActualOverlay.addTo(map);
-      proxSimCb.checked = false; map.removeLayer(proxSimOverlay);
+  proxSimBtn.addEventListener('click', function() {{
+    if (this.classList.contains('active')) {{
+      clearActive(); activateOverlay(null, false);
     }} else {{
-      map.removeLayer(proxActualOverlay);
+      clearActive(); this.classList.add('active');
+      activateOverlay(proxSimOverlay, true);
     }}
   }});
-  proxSimCb.addEventListener('change', function() {{
-    if (this.checked) {{
-      proxActCb.checked = false; map.removeLayer(proxActualOverlay);
+
+  sfcaActBtn.addEventListener('click', function() {{
+    if (this.classList.contains('active')) {{
+      clearActive(); activateOverlay(null, false);
+    }} else {{
+      clearActive(); this.classList.add('active');
+      activateOverlay(sfcaActOverlay, false);
     }}
   }});
-  var proxActSw = document.createElement('span'); proxActSw.className = 'swatch';
-  proxActSw.style.background = 'linear-gradient(to right, #B71C1C, #2E7D32)';
-  proxActSw.style.opacity = '0.5';
-  var proxActLb = document.createElement('label'); proxActLb.textContent = 'Proximidade actual ({pct_actual:.0f}%)'; proxActLb.style.fontSize = '12px';
-  proxActRow.appendChild(proxActCb); proxActRow.appendChild(proxActSw); proxActRow.appendChild(proxActLb);
-  div.appendChild(proxActRow);
+
+  sfcaSimBtn.addEventListener('click', function() {{
+    if (this.classList.contains('active')) {{
+      clearActive(); activateOverlay(null, false);
+    }} else {{
+      clearActive(); this.classList.add('active');
+      activateOverlay(sfcaSimOverlay, false);
+    }}
+  }});
 
   // --- Contexto: parques, municipios ---
   var ctxLayers = [
-    {{ id: "verde_publico", label: "Parques e Jardins", color: "#2E7D32", src: "{verde_pub_b64}", show: false }},
-    {{ id: "municipios", label: "Limites municipais", color: "#444444", src: "{muni_b64}", show: true }},
+    {{ id: "verde_publico", label: "Parques e Jardins", color: "#2E7D32", src: VERDE_PUB_SRC, show: false }},
+    {{ id: "municipios", label: "Limites municipais", color: "#444444", src: MUNI_SRC, show: true }},
   ];
   var ctxOverlays = [];
 
   for (var i = 0; i < ctxLayers.length; i++) {{
     var L_ = ctxLayers[i];
+    if (!L_.src) {{ ctxOverlays.push(null); continue; }}
     var m = await extractMask(L_.src);
     var cs = renderColored(m, L_.color);
     var ov = L.imageOverlay(cs, bounds);
@@ -386,7 +483,9 @@ async function init() {{
     var cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = L_.show; cb.dataset.idx = i;
     cb.addEventListener('change', function() {{
       var idx = +this.dataset.idx;
-      if (this.checked) ctxOverlays[idx].addTo(map); else map.removeLayer(ctxOverlays[idx]);
+      var ov = ctxOverlays[idx];
+      if (!ov) return;
+      if (this.checked) ov.addTo(map); else map.removeLayer(ov);
     }});
     var sw = document.createElement('span'); sw.className = 'swatch'; sw.style.backgroundColor = L_.color;
     var lb = document.createElement('label'); lb.textContent = L_.label; lb.style.fontSize = '12px';
@@ -433,7 +532,7 @@ init();
 <div id="credit" style="position:fixed;bottom:6px;right:10px;z-index:1000;font:10px 'Segoe UI',Arial,sans-serif;color:#888;background:rgba(255,255,255,0.85);padding:2px 8px;border-radius:4px;">
   <a href="https://www.linkedin.com/in/nquental/" target="_blank" style="color:#555;text-decoration:none;">Nuno Quental</a>
 </div>
-<script>if(window.innerWidth<=768){{var p=document.getElementById('panel'),b=document.getElementById('panel-toggle');p.classList.add('collapsed');b.textContent='\\u25B2 Abrir legenda';}}</script>
+<script>if(window.innerWidth<=768){{var p=document.getElementById('panel'),b=document.getElementById('panel-toggle');p.classList.add('collapsed');b.textContent='▲ Abrir legenda';}}</script>
 </body>
 </html>'''
 

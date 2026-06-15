@@ -38,14 +38,6 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
             "  AVISO: parques_porto.geojson não encontrado — correr criar_parques.py primeiro"
         )
 
-    expansao_path = os.path.join(script_dir, "expansao_verde.geojson")
-    expansao_geojson_str = "null"
-    if os.path.exists(expansao_path):
-        with open(expansao_path, "r", encoding="utf-8") as f:
-            expansao_geojson_str = f.read()
-        _edata = _json.loads(expansao_geojson_str)
-        print(f"  Expansão: {len(_edata['features'])} centróides carregados")
-
     basemaps = [
         (
             "CartoDB Positron",
@@ -137,13 +129,6 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
     .leaflet-top {{ top:50px; }}
     #credit {{ display:none; }}
   }}
-  .expansao-label span {{
-    font: bold 10px 'Segoe UI', Arial, sans-serif;
-    color: #00695C;
-    white-space: nowrap;
-    text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
-    pointer-events: none;
-  }}
 </style>
 </head>
 <body>
@@ -230,24 +215,12 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
 // Fallback inline (funciona em file://); fetch() actualiza em HTTP (GitHub Pages)
 var map = L.map('map').setView([41.155, -8.63], 13);
 var parquesData = {parques_geojson_str};
-var _expRaw = {expansao_geojson_str};
-var expansaoCentroids = _expRaw ? _expRaw.features.map(function(f) {{
-  return {{lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0],
-          nome: f.properties.nome, area: f.properties.area_ha_planeada}};
-}}) : [];
 
 // Em HTTP, recarregar do ficheiro (dados sempre actualizados sem re-gerar HTML)
 try {{
   fetch('parques_porto.geojson').then(function(r) {{ return r.json(); }}).then(function(data) {{
     parquesData = data;
     if (typeof initParques === 'function') initParques();
-  }}).catch(function() {{}});
-  fetch('expansao_verde.geojson').then(function(r) {{ return r.json(); }}).then(function(data) {{
-    expansaoCentroids = data.features.map(function(f) {{
-      return {{lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0],
-              nome: f.properties.nome, area: f.properties.area_ha_planeada}};
-    }});
-    if (typeof initExpansao === 'function') initExpansao();
   }}).catch(function() {{}});
 }} catch(e) {{}}
 var baseTile = L.tileLayer('{basemaps[0][1]}', {{maxZoom:19, attribution:'&copy; OpenStreetMap'}}).addTo(map);
@@ -297,7 +270,7 @@ var greenPrivLayer = {{
 // Camada de verde pago ou não usufruível — castanho
 var outroVerdeLayer = {{
   id: "verde_pago",
-  label: "Verde pago ou n\\u00e3o usufru\\u00edvel",
+  label: "Verde em PDM / fechado ao p\\u00fablico",
   color: "#8D6E63",
   src: "{verde_pago_b64}",
   show: false
@@ -516,42 +489,6 @@ async function init() {{
     map.fire('zoomend');
   }};
 
-  // --- Estratégia de expansão (CMP) — círculos nos centróides ---
-  map.createPane('expansaoPane');
-  map.getPane('expansaoPane').style.zIndex = 625;
-  var expansaoMarkers = L.layerGroup([], {{pane: 'expansaoPane'}});
-
-  // Checkbox para expansão
-  var eRow = document.createElement('div'); eRow.className = 'row';
-  var eCb = document.createElement('input'); eCb.type = 'checkbox'; eCb.checked = false;
-  eCb.addEventListener('change', function() {{
-    if (this.checked) {{ expansaoMarkers.addTo(map); }}
-    else {{ map.removeLayer(expansaoMarkers); }}
-  }});
-  var eSw = document.createElement('span'); eSw.className = 'swatch'; eSw.style.backgroundColor = '#4DB6AC'; eSw.style.border = '1.5px solid #00796B';
-  var eLb = document.createElement('label'); eLb.textContent = 'Estrat\\u00e9gia de expans\\u00e3o (CMP)'; eLb.style.fontSize = '12px';
-  eRow.appendChild(eCb); eRow.appendChild(eSw); eRow.appendChild(eLb);
-  div.insertBefore(eRow, pRow.nextSibling);
-
-  window.initExpansao = function() {{
-    expansaoCentroids.forEach(function(c) {{
-      var m = L.circleMarker([c.lat, c.lng], {{
-        radius: 7, color: '#00796B', fillColor: '#4DB6AC',
-        fillOpacity: 0.7, opacity: 0.9, weight: 1.5, pane: 'expansaoPane'
-      }}).addTo(expansaoMarkers);
-      m.bindTooltip('<b>' + c.nome + '</b><br>' + c.area + ' ha', {{direction: 'top', offset: [0, -8]}});
-      L.marker([c.lat, c.lng], {{
-        pane: 'expansaoPane',
-        icon: L.divIcon({{
-          className: 'expansao-label',
-          html: '<span>' + c.nome + '</span>',
-          iconSize: [0, 0],
-          iconAnchor: [0, 22]
-        }})
-      }}).addTo(expansaoMarkers);
-    }});
-  }};
-
   // --- Baixa densidade (acima da acessibilidade, abaixo dos parques) ---
   map.createPane('lowPopPane');
   map.getPane('lowPopPane').style.zIndex = 475;
@@ -561,7 +498,6 @@ async function init() {{
 
   // Se os fetch() já terminaram antes de init(), chamar agora
   if (parquesData) initParques();
-  if (expansaoCentroids.length > 0) initExpansao();
 }}
 
 init();
