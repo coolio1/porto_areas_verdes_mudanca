@@ -155,7 +155,9 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
   <a href="../ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
   <a href="../interiores_quarteiroes.html">Verde Privado</a>
   <a href="acessibilidade_verde.html" class="active">Acessibilidade</a>
+  <a href="conversao_verde.html">Convers&atilde;o</a>
   <a href="../atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
+  <a href="../1947/orto_1947.html">Porto 1947</a>
 </div>
 <div id="map"></div>
 <div id="panel">

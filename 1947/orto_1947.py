@@ -544,9 +544,27 @@ def build_html(layer_paths, stats):
   .row label {{ cursor:pointer; }}
   .section {{ font-size:11px; color:#aaa; font-weight:bold; margin:8px 0 4px 0; }}
   select {{ background:#333; color:#eee; border:1px solid #555; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }}
+  #nav {{ position:fixed; top:10px; right:10px; z-index:9999; display:flex; gap:6px; font:11px 'Segoe UI',Arial,sans-serif; }}
+  #nav a {{ background:rgba(255,255,255,0.9); color:#444; text-decoration:none; padding:4px 10px; border-radius:5px; box-shadow:0 1px 4px rgba(0,0,0,0.15); }}
+  #nav a:hover {{ background:#fff; color:#222; }}
+  #nav a.active {{ background:#2E7D32; color:#fff; }}
+  @media(max-width:600px){{
+    #nav {{ top:4px; right:4px; left:4px; flex-wrap:wrap; gap:3px; justify-content:center; }}
+    #nav a {{ font-size:9px !important; padding:2px 6px !important; }}
+  }}
 </style>
 </head>
 <body>
+<div id="nav">
+  <a href="../index.html">In&iacute;cio</a>
+  <a href="../mapa.html">Mapa 2016-2025</a>
+  <a href="../ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
+  <a href="../interiores_quarteiroes.html">Verde Privado</a>
+  <a href="../acessibilidade/acessibilidade_verde.html">Acessibilidade</a>
+  <a href="../acessibilidade/conversao_verde.html">Convers&atilde;o</a>
+  <a href="../atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
+  <a href="orto_1947.html" class="active">Porto 1947</a>
+</div>
 <div id="map"></div>
 <div id="panel">
   <b style="font-size:14px;">Porto 1947</b><br>

@@ -34,7 +34,17 @@
     text-align:right;
   }
   .panel-body { display:block; }
-  @media (max-width: 768px) {
+      #nav {
+      position:fixed; top:10px; right:10px; z-index:9999;
+      display:flex; gap:6px; font:11px 'Segoe UI',Arial,sans-serif;
+    }
+    #nav a {
+      background:rgba(255,255,255,0.9); color:#444; text-decoration:none;
+      padding:4px 10px; border-radius:5px; box-shadow:0 1px 4px rgba(0,0,0,0.15);
+    }
+    #nav a:hover { background:#fff; color:#222; }
+    #nav a.active { background:#2E7D32; color:#fff; }
+    @media (max-width: 768px) {
     #panel {
       left:6px; right:6px; bottom:6px; min-width:unset;
       padding:8px 10px; font-size:11px; line-height:1.3;
@@ -61,13 +71,15 @@
 </style>
 </head>
 <body>
-<div id="nav" style="position:fixed;top:10px;right:10px;z-index:1000;display:flex;gap:6px;font:11px 'Segoe UI',Arial,sans-serif;">
-  <a href="../" style="background:rgba(255,255,255,0.9);color:#444;text-decoration:none;padding:4px 10px;border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,0.15);">Início</a>
-  <a href="../mapa.html" style="background:rgba(255,255,255,0.9);color:#444;text-decoration:none;padding:4px 10px;border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,0.15);">Mapa 2016-2025</a>
-  <a href="../ndvi_historico.html" style="background:rgba(255,255,255,0.9);color:#444;text-decoration:none;padding:4px 10px;border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,0.15);">Hist&oacute;rico 1947-2024</a>
-  <a href="../interiores_quarteiroes.html" style="background:rgba(255,255,255,0.9);color:#444;text-decoration:none;padding:4px 10px;border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,0.15);">Verde Privado</a>
-  <a href="../acessibilidade/acessibilidade_verde.html" style="background:rgba(255,255,255,0.9);color:#444;text-decoration:none;padding:4px 10px;border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,0.15);">Acessibilidade</a>
-  <a href="../atropelamentos/dashboard_atropelamentos.html" style="background:rgba(255,255,255,0.9);color:#444;text-decoration:none;padding:4px 10px;border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,0.15);">Atropelamentos</a>
+<div id="nav">
+  <a href="../index.html">Início</a>
+  <a href="../mapa.html">Mapa 2016-2025</a>
+  <a href="../ndvi_historico.html">Histórico 1947-2024</a>
+  <a href="../interiores_quarteiroes.html">Verde Privado</a>
+  <a href="../acessibilidade/acessibilidade_verde.html">Acessibilidade</a>
+  <a href="../acessibilidade/conversao_verde.html">Conversão</a>
+  <a href="../atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
+  <a href="orto_1947.html" class="active">Porto 1947</a>
 </div>
 <div id="map"></div>
 <div id="panel">

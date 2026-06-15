@@ -202,9 +202,23 @@ def gerar_html(casos, agregados):
             padding: 16px 20px; margin-bottom: 24px; font-size: 0.9rem; color: #94a3b8;
         }}
         .note-box strong {{ color: #f59e0b; }}
+        #nav {{ position:fixed; top:10px; right:10px; z-index:1000; display:flex; gap:6px; font:11px 'Segoe UI',Arial,sans-serif; }}
+        #nav a {{ background:rgba(255,255,255,0.9); color:#444; text-decoration:none; padding:4px 10px; border-radius:5px; box-shadow:0 1px 4px rgba(0,0,0,0.15); }}
+        #nav a:hover {{ background:#fff; color:#222; }}
+        #nav a.active {{ background:#ef4444; color:#fff; }}
     </style>
 </head>
 <body>
+<div id="nav">
+  <a href="../index.html">In&iacute;cio</a>
+  <a href="../mapa.html">Mapa 2016-2025</a>
+  <a href="../ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
+  <a href="../interiores_quarteiroes.html">Verde Privado</a>
+  <a href="../acessibilidade/acessibilidade_verde.html">Acessibilidade</a>
+  <a href="../acessibilidade/conversao_verde.html">Convers&atilde;o</a>
+  <a href="dashboard_atropelamentos.html" class="active">Atropelamentos</a>
+  <a href="../1947/orto_1947.html">Porto 1947</a>
+</div>
 
 <div class="header">
     <h1>Atropelamentos de Peões e Ciclistas — Grande Porto</h1>
