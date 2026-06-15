@@ -1,0 +1,533 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - heading "Porto Verde" [level=1] [ref=e3]:
+      - link "Porto Verde" [ref=e4] [cursor=pointer]:
+        - /url: /porto_areas_verdes_mudanca/
+        - text: Porto
+        - strong [ref=e5]: Verde
+    - paragraph [ref=e6]: Satélite · Ambiente · Urbanismo
+  - navigation [ref=e7]:
+    - link "Início" [ref=e8] [cursor=pointer]:
+      - /url: /porto_areas_verdes_mudanca/
+    - link "Mapa 2016-2025" [ref=e9] [cursor=pointer]:
+      - /url: /porto_areas_verdes_mudanca/mapa.html
+    - link "Histórico 1947-2024" [ref=e10] [cursor=pointer]:
+      - /url: /porto_areas_verdes_mudanca/ndvi_historico.html
+    - link "Verde Privado" [ref=e11] [cursor=pointer]:
+      - /url: /porto_areas_verdes_mudanca/interiores_quarteiroes.html
+    - link "Acessibilidade" [ref=e12] [cursor=pointer]:
+      - /url: /porto_areas_verdes_mudanca/acessibilidade/acessibilidade_verde.html
+    - link "Atropelamentos" [ref=e13] [cursor=pointer]:
+      - /url: /porto_areas_verdes_mudanca/atropelamentos/dashboard_atropelamentos.html
+    - link "Sobre" [ref=e14] [cursor=pointer]:
+      - /url: /porto_areas_verdes_mudanca/sobre/
+    - link "GitHub" [ref=e15] [cursor=pointer]:
+      - /url: https://github.com/coolio1/porto_areas_verdes_mudanca
+  - main [ref=e16]:
+    - article [ref=e17]:
+      - 'heading "Acessibilidade a Espaços Verdes Públicos no Porto: Uma Análise Espacial pelo Método 2SFCA" [level=1] [ref=e18]'
+      - paragraph [ref=e19]: 30 March 2026 · porto acessibilidade verde público 2sfca gee ghs-pop osm sentinel-2
+      - paragraph [ref=e20]:
+        - strong [ref=e21]: "Acessibilidade a Espaços Verdes Públicos no Porto: Uma Análise Espacial pelo Método Two-Step Floating Catchment Area"
+      - separator [ref=e22]
+      - heading "1. Introdução" [level=2] [ref=e23]
+      - paragraph [ref=e24]: "O Porto dispõe de 19,3 m² de espaço verde público por habitante — acima do limiar de 9 m²/hab frequentemente atribuído à OMS. Porém, esta métrica agregada esconde uma realidade desigual: quem vive junto ao Parque da Cidade tem uma dotação generosa; quem habita na Sé, em Campanhã ou no interior de Paranhos pode não ter nenhum espaço verde acessível a pé."
+      - paragraph [ref=e25]:
+        - text: Este trabalho aplica o método
+        - emphasis [ref=e26]: Two-Step Floating Catchment Area
+        - text: (2SFCA) ao município do Porto, cruzando um inventário de 79 parques e jardins de acesso público gratuito, a classificação de uso do solo por Sentinel-2, e a grelha de população GHS-POP. O resultado é um mapa da acessibilidade efectiva a verde público em m² por habitante num raio pedonal de 500 m.
+      - separator [ref=e27]
+      - heading "2. Enquadramento" [level=2] [ref=e28]
+      - 'heading "2.1. Verde público no Porto: a ilusão do agregado" [level=3] [ref=e29]'
+      - paragraph [ref=e30]: A tensão entre indicadores agregados favoráveis e realidades locais deficitárias é um tema recorrente na literatura sobre o Porto. Quental (2010), na sua tese sobre modelação de estrutura urbana sustentável na Área Metropolitana do Porto, já identificava a distribuição espacial assimétrica da infraestrutura verde como um dos principais desafios da sustentabilidade urbana na região. A análise GIS de Quental para as 130 freguesias da AMP revelou que a distância média ponderada pela população ao espaço verde mais próximo era de 1 110 m em 2006 (contra 1 403 m em 1991) — uma melhoria ao longo do tempo, mas ainda muito acima do limiar de 300 m recomendado pela OMS — e que “algumas áreas densas de Vila Nova de Gaia, Gondomar e Matosinhos estão bastante mal equipadas” em termos de verde acessível (Quental, 2010, p. 262). Quental & Macedo (2006), no diagnóstico de indicadores de desenvolvimento sustentável para o Grande Porto, quantificaram esta assimetria e alertaram para a insuficiência das métricas per capita como instrumento de planeamento.
+      - paragraph [ref=e31]:
+        - text: Graça
+        - emphasis [ref=e32]: et al.
+        - text: (2018) mapearam 95 espaços verdes no Porto (~424 ha). A presente análise identifica
+        - strong [ref=e33]: 448 ha de verde público classificado
+        - text: pelo PDM 2021 — valor coerente. Contudo, desta área, apenas ~202 ha correspondem a parques e jardins de acesso efectivamente livre. Hoffimann
+        - emphasis [ref=e34]: et al.
+        - text: (2017), usando análise de rede viária e o
+        - emphasis [ref=e35]: Public Open Space Tool
+        - text: ", demonstraram que o acesso a verde no Porto varia com o estatuto socioeconómico: 90% da população nos bairros menos desfavorecidos vive a ≤800 m de um espaço verde, contra 75,8% nos mais desfavorecidos. Saraiva"
+        - emphasis [ref=e36]: et al.
+        - text: (2025) confirmaram estas desigualdades com análise de correspondência múltipla aplicada a 89 espaços verdes públicos.
+      - heading "2.2. Equidade e vulnerabilidade térmica" [level=3] [ref=e37]
+      - paragraph [ref=e38]:
+        - text: Wolch
+        - emphasis [ref=e39]: et al.
+        - text: (2014) sintetizaram a evidência de que populações de menor rendimento tendem a residir em bairros com menor acesso a verde — o
+        - emphasis [ref=e40]: green gentrification paradox
+        - text: . No Porto, Lopes
+        - emphasis [ref=e41]: et al.
+        - text: (2025) demonstraram que 32,6% do território se encontra em zonas de elevado risco térmico, precisamente nas áreas de maior densidade e menor cobertura vegetal. Os modelos de Quental (2010) para a AMP — que classificaram a estrutura territorial de 130 freguesias em domínios de sustentabilidade usando redes neuronais, equações estruturais e regressão múltipla — já mostravam que a forma urbana compacta favorece padrões de mobilidade e consumo mais sustentáveis, mas que o rendimento e a dimensão das famílias são os factores que mais influenciam os padrões ambientais à escala da freguesia. Este resultado reforça a necessidade de intervir directamente na infraestrutura verde das zonas densas, onde a forma urbana por si só não compensa o défice.
+      - heading "2.3. O método 2SFCA" [level=3] [ref=e42]
+      - paragraph [ref=e43]: "As métricas tradicionais — área per capita por freguesia, buffers de proximidade, NDVI médio — apresentam limitações conhecidas: diluem a informação em médias administrativas, não distinguem dimensão dos espaços, ou confundem verde público com privado."
+      - paragraph [ref=e44]:
+        - text: O método
+        - emphasis [ref=e45]: Two-Step Floating Catchment Area
+        - text: "(Luo & Wang, 2003) supera estas limitações ao considerar simultaneamente a oferta (área verde) e a procura (população) num raio definido. Para cada espaço verde, calcula-se o rácio área/população servida; para cada ponto de população, somam-se os rácios dos espaços acessíveis. O resultado captura o efeito de saturação: um parque pequeno rodeado por muita gente vale menos, por pessoa, do que um parque grande com pouca população. Dai (2011) aplicou-o a Atlanta, Rigolon (2016) evidenciou o papel da qualidade dos parques, e Luo & Qi (2009) propuseram a variante com decaimento gaussiano — embora para raios pedonais curtos (≤500 m) a diferença prática seja marginal (Langford"
+        - emphasis [ref=e46]: et al.
+        - text: ", 2008)."
+      - separator [ref=e47]
+      - heading "3. Dados e Metodologia" [level=2] [ref=e48]
+      - heading "3.1. Fontes de dados" [level=3] [ref=e49]
+      - table [ref=e50]:
+        - rowgroup [ref=e51]:
+          - row "Dado Fonte Resolução Período" [ref=e52]:
+            - columnheader "Dado" [ref=e53]
+            - columnheader "Fonte" [ref=e54]
+            - columnheader "Resolução" [ref=e55]
+            - columnheader "Período" [ref=e56]
+        - rowgroup [ref=e57]:
+          - row "Parques e jardins públicos Inventário próprio (CMP + OSM + levantamento) vectorial (78 polígonos) 2026" [ref=e58]:
+            - cell "Parques e jardins públicos" [ref=e59]
+            - cell "Inventário próprio (CMP + OSM + levantamento)" [ref=e60]
+            - cell "vectorial (78 polígonos)" [ref=e61]
+            - cell "2026" [ref=e62]
+          - row "Classificação verde Sentinel-2 (ESA) 10 m 2024–2025" [ref=e63]:
+            - cell "Classificação verde" [ref=e64]
+            - cell "Sentinel-2 (ESA)" [ref=e65]
+            - cell "10 m" [ref=e66]
+            - cell "2024–2025" [ref=e67]
+          - row "Verde não usufruível PDM Porto 2021 (CMP) vectorial (132 polígonos) 2021" [ref=e68]:
+            - cell "Verde não usufruível" [ref=e69]
+            - cell "PDM Porto 2021 (CMP)" [ref=e70]
+            - cell "vectorial (132 polígonos)" [ref=e71]
+            - cell "2021" [ref=e72]
+          - row "População GHS-POP (JRC/EC) 100 m 2020" [ref=e73]:
+            - cell "População" [ref=e74]
+            - cell "GHS-POP (JRC/EC)" [ref=e75]
+            - cell "100 m" [ref=e76]
+            - cell "2020" [ref=e77]
+          - row "Limites municipais CAOP 2025 (DGT) vectorial 2025" [ref=e78]:
+            - cell "Limites municipais" [ref=e79]
+            - cell "CAOP 2025 (DGT)" [ref=e80]
+            - cell "vectorial" [ref=e81]
+            - cell "2025" [ref=e82]
+      - heading "3.2. Inventário de parques" [level=3] [ref=e83]
+      - paragraph [ref=e84]:
+        - text: Compilou-se uma lista de
+        - strong [ref=e85]: 79 parques e jardins de acesso público e gratuito
+        - text: ", partindo do directório oficial da CMP (20 espaços) e complementando com espaços omitidos mas de acesso comprovadamente livre: praças, largos, jardins de bairro, parques infantis e alamedas identificados via OpenStreetMap, PDM e levantamento de campo. Contornos obtidos preferencialmente via polígonos PDM (categoria “fruição colectiva”) e OpenStreetMap (Overpass API / API v0.6). Área total:"
+        - strong [ref=e86]: ~217 hectares
+        - text: .
+      - paragraph [ref=e87]:
+        - text: A classificação Sentinel-2 seguiu a metodologia multi-sazonal descrita em Quental (2026), com 90,4% de concordância com o ESA WorldCover 2021 para a classe arbórea. Esta classificação é utilizada para a
+        - strong [ref=e88]: camada visual
+        - text: do mapa, mas o cálculo de acessibilidade usa a área total dos polígonos.
+      - paragraph [ref=e89]:
+        - text: Os polígonos do PDM que
+        - strong [ref=e90]: não correspondem
+        - text: a nenhum dos 79 parques (jardins de escolas, hortas com acesso restrito, separadores viários) são apresentados como “Verde pago ou não usufruível”.
+      - heading "3.3. Cálculo do 2SFCA" [level=3] [ref=e91]
+      - paragraph [ref=e92]: "Implementação em versão raster contínua no Google Earth Engine:"
+      - list [ref=e93]:
+        - listitem [ref=e94]: Máscara binária dos 79 parques × área do pixel (57 m²)
+        - listitem [ref=e95]: Soma focal do verde num kernel circular de raio 500 m (76×58 pixels)
+        - listitem [ref=e96]: "Soma focal da população (GHS-POP, corrigida para reamostragem: factor ~1/175)"
+        - listitem [ref=e97]: "Filtro: exclui pixels com <50 hab no raio de 500 m"
+        - listitem [ref=e98]: Acessibilidade = verde_500m / pop_500m (m²/hab)
+      - paragraph [ref=e99]: O raio de 500 m é um compromisso entre o limiar europeu de 300 m (OMS, 2016) e a topografia acidentada do Porto.
+      - separator [ref=e100]
+      - heading "4. Resultados" [level=2] [ref=e101]
+      - 'heading "4.1. Verde público: inventário" [level=3] [ref=e102]'
+      - paragraph [ref=e103]:
+        - text: O inventário totaliza
+        - strong [ref=e104]: 79 parques e jardins
+        - text: (~217 ha), inferior aos 448 ha do PDM por excluir espaços sem usufruto livre. Os 217 ha correspondem a
+        - strong [ref=e105]: ~8,9 m²/hab
+        - text: — ligeiramente abaixo do limiar de 9 m²/hab.
+      - group [ref=e106]:
+        - 'generic "Tabela: 79 parques e jardins inventariados (clicar para expandir)" [ref=e107]':
+          - strong [ref=e108]: "Tabela: 79 parques e jardins inventariados (clicar para expandir)"
+        - text: "| Parque / Jardim | Área (m²) | |---|---:| | Parque da Cidade | 714 300 | | Parque Oriental | 185 500 | | Parque da Pasteleira | 91 500 | | Jardim do Palácio de Cristal | 88 400 | | Parque do Covelo | 75 700 | | Viveiro Municipal | 66 500 | | Parque Central da Asprela | 64 300 | | Parque da Alameda de Cartes | 64 200 | | Parque de São Roque | 52 200 | | Quinta de Bonjóia | 47 800 | | Jardim Botânico do Porto | 43 000 | | Jardim do Passeio Alegre | 38 700 | | Jardim do Palácio do Freixo | 34 100 | | Parque de Requesende | 31 600 | | Rotunda da Boavista | 30 800 | | Parque das Águas | 27 600 | | Jardins da Avenida de Montevideu | 27 300 | | Jardim do Calém e das Sobreiras | 25 100 | | Jardim de Arca d'Água | 22 700 | | Mata da Pasteleira | 21 900 | | Jardim da Corujeira | 19 800 | | Passeio das Virtudes | 18 300 | | Jardins do Palácio dos Carrancas | 18 000 | | Jardim da Praça da República | 17 900 | | Jardim da Cordoaria | 16 500 | | Jardim da Praça de Francisco Sá Carneiro | 15 000 | | Jardim do Homem do Leme | 14 800 | | Jardim José Roquette | 14 100 | | Jardim de Teodoro de Sousa | 14 000 | | Parque da Fundação Eng. António de Almeida | 13 700 | | Jardim Paulo Vallada | 13 600 | | Parque das Virtudes | 12 400 | | Jardim de Sarah Afonso | 10 400 | | Jardim da Praça Rainha Dona Amélia | 10 400 | | Jardim de Carrilho Videira | 8 800 | | Jardim Machado de Assis | 8 700 | | Parque Urbano Dr. Mário Soares | 8 200 | | Rua de Manuel Bandeira | 7 800 | | Rua Diogo Botelho | 7 800 | | Largo do Priorado | 7 200 | | Jardim de Guedes de Oliveira | 7 000 | | Jardim do Marquês | 6 800 | | Praceta da Cidade da Praia | 6 800 | | Rua de Diogo Botelho | 6 100 | | Largo de Soares dos Reis | 5 900 | | Parque Infantil do Amial | 5 800 | | Jardim de São Lázaro | 5 700 | | Alameda das Fontainhas | 5 700 | | Jardim Palmira Milheiro | 5 400 | | Rua dos Choupos | 5 100 | | Praça dos Álamos | 5 100 | | Parque dos Sobreiros | 4 900 | | Parque Infantil da Areosa | 4 900 | | Jardim da Praça de Liège | 4 800 | | Jardim Senhora do Porto | 4 800 | | Jardim da Av. dos Combatentes / R. da Alegria | 4 700 | | Rua de Alfredo Keil | 4 700 | | Jardim Arnaldo Gama | 4 400 | | Jardim da Avenida Brasil | 4 400 | | Parque Infantil Bessa Leite | 4 100 | | Jardim da Praça do Império | 4 000 | | Jardim Ezequiel de Campos | 3 900 | | Parque da Quinta de Lamas | 3 800 | | Parque Infantil da Prelada | 3 800 | | Jardim do Campo 24 de Agosto | 3 700 | | Jardins da Praia do Molhe | 3 700 | | Escadas Carolina Michaelis | 3 400 | | Praça da Ribeira Grande | 3 400 | | Largo Cap. Pinheiro Torres de Meireles | 3 100 | | Jardim de Fradelos | 3 000 | | Jardim do Largo de Dom João III | 2 800 | | Jardim do Carregal | 1 900 | | Jardim de Belém | 1 900 | | Jardins da Casa Allen | 1 500 | | Largo do Dr. Tito Fontes | 1 500 | | Jardim do Largo da Paz | 1 200 | | Parque da Fonte do Outeiro | 900 | | Praça da Galiza | 800 | | Jardins da FLUP | 500 | | **Total** | **2 166 500** |"
+      - 'heading "4.2. Acessibilidade 2SFCA: a desigualdade revelada" [level=3] [ref=e109]'
+      - table [ref=e110]:
+        - rowgroup [ref=e111]:
+          - row "Classe de acessibilidade População %" [ref=e112]:
+            - columnheader "Classe de acessibilidade" [ref=e113]
+            - columnheader "População" [ref=e114]
+            - columnheader "%" [ref=e115]
+        - rowgroup [ref=e116]:
+          - row "Défice crítico (0–3 m²/hab) 135 719 56,0%" [ref=e117]:
+            - cell "Défice crítico (0–3 m²/hab)" [ref=e118]
+            - cell "135 719" [ref=e119]
+            - cell "56,0%" [ref=e120]
+          - row "Insuficiente (3–9 m²/hab) 62 396 25,7%" [ref=e121]:
+            - cell "Insuficiente (3–9 m²/hab)" [ref=e122]
+            - cell "62 396" [ref=e123]
+            - cell "25,7%" [ref=e124]
+          - row "Adequado (>9 m²/hab) 44 310 18,3%" [ref=e125]:
+            - cell "Adequado (>9 m²/hab)" [ref=e126]
+            - cell "44 310" [ref=e127]
+            - cell "18,3%" [ref=e128]
+      - paragraph [ref=e129]:
+        - strong [ref=e130]: 81,7% da população do Porto
+        - text: — ~198 mil pessoas — vive com acessibilidade inferior a 9 m²/hab num raio de 500 m. Mais de metade (56,0%) está em défice crítico (<3 m²/hab). Apenas 18,3% tem acesso adequado.
+      - heading "4.3. Padrão geográfico" [level=3] [ref=e131]
+      - list [ref=e132]:
+        - listitem [ref=e133]:
+          - strong [ref=e134]: Centro histórico e Baixa
+          - text: "(Sé, Miragaia, Santo Ildefonso): défice crítico. Tecido urbano denso, espaços verdes diminutos (Cordoaria, S. Lázaro) insuficientes para a população. Zona com o défice mais severo do concelho."
+        - listitem [ref=e135]:
+          - strong [ref=e136]: Cedofeita interior e Bonfim
+          - text: ": 0–6 m²/hab. Malha consolidada com poucos interstícios verdes."
+        - listitem [ref=e137]:
+          - strong [ref=e138]: Paranhos e Ramalde interiores
+          - text: ": heterogéneos. O Parque da Asprela e o de Requesende servem a zona universitária, mas os bairros entre a VCI e a Circunvalação apresentam défice."
+        - listitem [ref=e139]:
+          - strong [ref=e140]: Campanhã
+          - text: ": Parque Oriental e Quinta de Bonjóia melhoram pontualmente, mas a zona industrial e os bairros a norte ficam próximos de zero."
+        - listitem [ref=e141]:
+          - strong [ref=e142]: Eixo Boavista–Palácio de Cristal
+          - text: ": adequado (>9 m²/hab)."
+        - listitem [ref=e143]:
+          - strong [ref=e144]: Foz–Nevogilde–Aldoar
+          - text: ": consistentemente >15 m²/hab — Parque da Cidade, Frente Atlântica, jardins marítimos. Única zona que excede largamente o limiar."
+      - 'heading "4.4. Proximidade 300m: o critério de Konijnendijk" [level=3] [ref=e145]'
+      - paragraph [ref=e146]: "A regra 3-30-300 (Konijnendijk, 2023) propõe que todos os residentes devem ter acesso a um espaço verde a ≤300 m de casa. Embora a formulação original refira parques de ≥1 ha, adoptamos aqui o limiar de ≥0,4 ha — por melhor reflectir a escala dos espaços verdes urbanos do Porto, onde muitos jardins e praças com funções recreativas relevantes ficam abaixo de 1 ha. Aplicando este critério aos 61 parques do inventário com área ≥0,4 ha:"
+      - table [ref=e147]:
+        - rowgroup [ref=e148]:
+          - row "Critério 300m (parques ≥0,4 ha) População %" [ref=e149]:
+            - columnheader "Critério 300m (parques ≥0,4 ha)" [ref=e150]
+            - columnheader "População" [ref=e151]
+            - columnheader "%" [ref=e152]
+        - rowgroup [ref=e153]:
+          - row "Cumpre (≤300 m) 135 315 55,8%" [ref=e154]:
+            - cell "Cumpre (≤300 m)" [ref=e155]
+            - cell "135 315" [ref=e156]
+            - cell "55,8%" [ref=e157]
+          - row "Não cumpre (>300 m) 107 110 44,2%" [ref=e158]:
+            - cell "Não cumpre (>300 m)" [ref=e159]
+            - cell "107 110" [ref=e160]
+            - cell "44,2%" [ref=e161]
+      - paragraph [ref=e162]:
+        - strong [ref=e163]: 44,2% da população do Porto
+        - text: "— ~107 mil pessoas — não tem acesso a um parque de dimensão significativa a uma distância pedonal curta. Este resultado complementa o 2SFCA: parte da população na faixa “insuficiente” (3–9 m²/hab) pode estar a mais de 300 m do parque mais próximo — a acessibilidade 2SFCA reflecte parques distantes que “chegam” ao raio de 500 m mas não ao de 300 m."
+      - 'heading "4.5. Verde privado: o paradoxo de equidade" [level=3] [ref=e164]'
+      - paragraph [ref=e165]: Os 1 678 ha de verde privado (quarteirões, logradouros, moradias) prestam serviços ecossistémicos locais — mas não são acessíveis ao público. As zonas com mais verde privado são as mesmas que já dispõem de mais verde público, enquanto as zonas densas carecem de ambos.
+      - separator [ref=e166]
+      - heading "5. O Porto no Contexto Europeu e Internacional" [level=2] [ref=e167]
+      - paragraph [ref=e168]: "O défice de acessibilidade a verde no Porto não é um caso isolado — mas a comparação com outras cidades exige cautela, porque os valores de m²/hab variam enormemente conforme a definição adoptada: verde público acessível, verde público total (incluindo parques periféricos), ou verde total (incluindo florestas urbanas). A tabela seguinte compara o Porto com Lisboa e oito cidades internacionais, distinguindo os valores “com tudo” dos valores “efectivos”."
+      - 'heading "5.1. Lisboa: o mesmo problema com números diferentes" [level=3] [ref=e169]'
+      - paragraph [ref=e170]:
+        - text: Lisboa é o caso comparativo mais directo. A cidade reporta ~37 m²/hab de verde público — mas este valor inclui o Parque Florestal de Monsanto (~900 ha), que sozinho representa cerca de metade do verde total. Sem Monsanto, a dotação cai para ~7–10 m²/hab, comparável ao Porto sem o Parque da Cidade. Catarino
+        - emphasis [ref=e171]: et al.
+        - text: (2025), num estudo de 26 capitais europeias, calcularam para Lisboa um
+        - emphasis [ref=e172]: Urban Green Equity Index
+        - text: "de 0,387 — abaixo da média europeia — com desigualdades intra-urbanas marcadas: bairros como o Parque das Nações dispõem de verde abundante, enquanto Marvila e Beato apresentam défices severos. O projecto GREEN SURGE (2015) já documentara esta fragmentação. O diagnóstico é estruturalmente o mesmo que no Porto: um ou dois grandes parques periféricos mascaram a escassez no tecido urbano denso."
+      - heading "5.2. Panorama internacional" [level=3] [ref=e173]
+      - table [ref=e174]:
+        - rowgroup [ref=e175]:
+          - row "Cidade Verde/hab Valor efectivo Desigualdade intra-urbana" [ref=e176]:
+            - columnheader "Cidade" [ref=e177]
+            - columnheader "Verde/hab" [ref=e178]
+            - columnheader "Valor efectivo" [ref=e179]
+            - columnheader "Desigualdade intra-urbana" [ref=e180]
+        - rowgroup [ref=e181]:
+          - row "Porto 19,3 m² (PDM total) 8,9 m² (usufruível) 81,7% da pop. abaixo de 9 m²/hab; centro histórico ≈0" [ref=e182]:
+            - cell "Porto" [ref=e183]:
+              - strong [ref=e184]: Porto
+            - cell "19,3 m² (PDM total)" [ref=e185]
+            - cell "8,9 m² (usufruível)" [ref=e186]:
+              - strong [ref=e187]: 8,9 m²
+              - text: (usufruível)
+            - cell "81,7% da pop. abaixo de 9 m²/hab; centro histórico ≈0" [ref=e188]
+          - row "Lisboa ~37 m² (c/ Monsanto) ~7–10 m² (s/ Monsanto) UGEI 0,387; Marvila/Beato vs. Parque das Nações" [ref=e189]:
+            - cell "Lisboa" [ref=e190]:
+              - strong [ref=e191]: Lisboa
+            - cell "~37 m² (c/ Monsanto)" [ref=e192]
+            - cell "~7–10 m² (s/ Monsanto)" [ref=e193]:
+              - strong [ref=e194]: ~7–10 m²
+              - text: (s/ Monsanto)
+            - cell "UGEI 0,387; Marvila/Beato vs. Parque das Nações" [ref=e195]
+          - row "Barcelona ~17 m² (c/ Collserola) ~7 m² (s/ Collserola) Apenas 33% da pop. a <300 m de parque urbano" [ref=e196]:
+            - cell "Barcelona" [ref=e197]:
+              - strong [ref=e198]: Barcelona
+            - cell "~17 m² (c/ Collserola)" [ref=e199]
+            - cell "~7 m² (s/ Collserola)" [ref=e200]:
+              - strong [ref=e201]: ~7 m²
+              - text: (s/ Collserola)
+            - cell "Apenas 33% da pop. a <300 m de parque urbano" [ref=e202]
+          - row "Paris ~10,6 m² (c/ Bois) ~8,6 m² (intra-muros) 42–55% abaixo de 10 m²/hab; plano bioclimático 2035" [ref=e203]:
+            - cell "Paris" [ref=e204]:
+              - strong [ref=e205]: Paris
+            - cell "~10,6 m² (c/ Bois)" [ref=e206]
+            - cell "~8,6 m² (intra-muros)" [ref=e207]:
+              - strong [ref=e208]: ~8,6 m²
+              - text: (intra-muros)
+            - cell "42–55% abaixo de 10 m²/hab; plano bioclimático 2035" [ref=e209]
+          - 'row "Copenhaga ~32 m² ~32 m² ≥80% a <300 m de verde; meta: todos a <15 min a pé" [ref=e210]':
+            - cell "Copenhaga" [ref=e211]:
+              - strong [ref=e212]: Copenhaga
+            - cell "~32 m²" [ref=e213]
+            - cell "~32 m²" [ref=e214]:
+              - strong [ref=e215]: ~32 m²
+            - 'cell "≥80% a <300 m de verde; meta: todos a <15 min a pé" [ref=e216]'
+          - 'row "Amesterdão ~24 m² ~24 m² Standard NL: 60 m²/hab acessível num raio de 500 m" [ref=e217]':
+            - cell "Amesterdão" [ref=e218]:
+              - strong [ref=e219]: Amesterdão
+            - cell "~24 m²" [ref=e220]
+            - cell "~24 m²" [ref=e221]:
+              - strong [ref=e222]: ~24 m²
+            - 'cell "Standard NL: 60 m²/hab acessível num raio de 500 m" [ref=e223]'
+          - 'row "Berlim ~88 m² (c/ florestas) variável Standard: ≥0,5 ha a <500 m; 74% da pop. a <300 m" [ref=e224]':
+            - cell "Berlim" [ref=e225]:
+              - strong [ref=e226]: Berlim
+            - cell "~88 m² (c/ florestas)" [ref=e227]
+            - cell "variável" [ref=e228]:
+              - strong [ref=e229]: variável
+            - 'cell "Standard: ≥0,5 ha a <500 m; 74% da pop. a <300 m" [ref=e230]'
+          - row "Viena 55–95 m² (c/ Wienerwald) <2 m² nos distritos centrais Josefstadt 0,8 m²; Neubau 1,2 m²; Margareten 1,5 m²" [ref=e231]:
+            - cell "Viena" [ref=e232]:
+              - strong [ref=e233]: Viena
+            - cell "55–95 m² (c/ Wienerwald)" [ref=e234]
+            - cell "<2 m² nos distritos centrais" [ref=e235]:
+              - strong [ref=e236]: <2 m²
+              - text: nos distritos centrais
+            - cell "Josefstadt 0,8 m²; Neubau 1,2 m²; Margareten 1,5 m²" [ref=e237]
+          - row "Londres ~32 m² (16 m² parques) <0,44 m² para 750 mil pessoas 47% da área é verde, mas distribuição muito desigual" [ref=e238]:
+            - cell "Londres" [ref=e239]:
+              - strong [ref=e240]: Londres
+            - cell "~32 m² (16 m² parques)" [ref=e241]
+            - cell "<0,44 m² para 750 mil pessoas" [ref=e242]:
+              - strong [ref=e243]: <0,44 m²
+              - text: para 750 mil pessoas
+            - cell "47% da área é verde, mas distribuição muito desigual" [ref=e244]
+          - row "Singapura ~66 m² variável 46% do território é verde; heterogeneidade por área de planeamento" [ref=e245]:
+            - cell "Singapura" [ref=e246]:
+              - strong [ref=e247]: Singapura
+            - cell "~66 m²" [ref=e248]
+            - cell "variável" [ref=e249]:
+              - strong [ref=e250]: variável
+            - cell "46% do território é verde; heterogeneidade por área de planeamento" [ref=e251]
+      - paragraph [ref=e252]:
+        - text: "Fontes: Russo & Cirella (2018); Kabisch & Haase (2014); Nghiem"
+        - emphasis [ref=e253]: et al.
+        - text: (2021); Catarino
+        - emphasis [ref=e254]: et al.
+        - text: (2025); EEA (2022); dados municipais.
+      - heading "5.3. Três lições da comparação" [level=3] [ref=e255]
+      - paragraph [ref=e256]:
+        - strong [ref=e257]: 1. O “efeito Monsanto” é universal.
+        - text: "Porto, Lisboa, Barcelona, Paris e Viena partilham o mesmo padrão: um ou dois grandes parques periféricos (Parque da Cidade, Monsanto, Collserola, Bois de Boulogne/Vincennes, Wienerwald) que inflacionam os indicadores agregados enquanto os bairros densos do centro ficam com valores próximos de zero. As cidades do Sul da Europa são particularmente afectadas pela combinação de centros históricos compactos com malha verde residual. O Porto encaixa-se neste padrão mediterrânico de défice estrutural."
+      - paragraph [ref=e258]:
+        - strong [ref=e259]: 2. Ter muito verde não garante equidade.
+        - text: "Viena ilustra isto de forma extrema: com 55–95 m²/hab no agregado, é uma das cidades mais verdes da Europa — mas os distritos centrais de Josefstadt e Neubau ficam abaixo de 1,5 m²/hab, valores comparáveis aos piores do centro do Porto. Londres, com 47% da sua área classificada como verde, ainda tem 750 mil pessoas com menos de 0,44 m²/hab (CPRE London). A lição é clara: a quantidade total de verde não substitui a acessibilidade local."
+      - paragraph [ref=e260]:
+        - strong [ref=e261]: 3. O standard de 9 m²/hab precisa de ser repensado.
+        - text: O limiar de 9 m²/hab, frequentemente atribuído à OMS, tem na realidade origem provável no Decreto Ministerial italiano de 1968 (Przewoźna
+        - emphasis [ref=e262]: et al.
+        - text: ", 2024). A OMS recomenda oficialmente que todos os residentes tenham acesso a"
+        - strong [ref=e263]: ≥0,5 ha de verde a <300 m de casa
+        - text: "(OMS, 2016) — um critério de proximidade, não de área per capita. A regra 3-30-300 de Konijnendijk (2023) vai mais longe: 3 árvores visíveis de cada casa, 30% de cobertura de copa por bairro, 300 m até ao verde mais próximo. Na AMP, Quental (2010) mediu uma distância média ponderada de 1 110 m ao espaço verde mais próximo — quase quatro vezes o limiar da OMS. Copenhaga e Amesterdão adoptaram standards ainda mais exigentes (15 min a pé e 60 m²/hab a 500 m, respectivamente), demonstrando que é possível estabelecer metas ambiciosas."
+      - separator [ref=e264]
+      - heading "6. Discussão" [level=2] [ref=e265]
+      - heading "Concordância com a literatura" [level=3] [ref=e266]
+      - paragraph [ref=e267]:
+        - text: "A forte heterogeneidade revelada pelo 2SFCA confirma três décadas de alertas sobre a desigualdade verde no Porto: desde o diagnóstico de indicadores de sustentabilidade do Grande Porto (Quental & Macedo, 2006), passando pelas desigualdades socioeconómicas documentadas por Hoffimann"
+        - emphasis [ref=e268]: et al.
+        - text: (2017), até à vulnerabilidade térmica de Lopes
+        - emphasis [ref=e269]: et al.
+        - text: (2025). As zonas de maior risco térmico coincidem com as de menor acessibilidade a verde — um reforço mútuo entre ausência de verde e calor urbano. Quental (2010) demonstrou que a distância ao espaço verde mais próximo na AMP diminuiu de 1 403 m (1991) para 1 110 m (2006), reflectindo investimentos em parques, mas que a variável
+        - code [ref=e270]: green space distance
+        - text: não se revelou estatisticamente significativa na modelação da mobilidade — sugerindo que a mera proximidade a verde, sem massa crítica de área, pode não ser suficiente para alterar comportamentos. Esta observação sublinha a importância de avaliar a acessibilidade efectiva (área por habitante, como no 2SFCA) e não apenas a distância ao parque mais próximo.
+      - heading "Limitações" [level=3] [ref=e271]
+      - paragraph [ref=e272]: O raio de 500 m é euclidiano; a distância real pela rede viária é superior, especialmente nas encostas do Porto. Os dados de população (GHS-POP 2020) podem não reflectir alterações recentes do alojamento local. O método trata todos os m² de verde como equivalentes — a incorporação de qualidade (arvoredo, equipamento, como proposto por Rigolon, 2016) enriqueceria a análise. Podem existir pequenos espaços verdes de acesso livre não contemplados no inventário.
+      - heading "Implicações" [level=3] [ref=e273]
+      - paragraph [ref=e274]:
+        - text: A estratégia municipal deveria priorizar o
+        - strong [ref=e275]: eixo central e oriental
+        - text: "— onde o défice ponderado pela população é mais severo. Intervenções possíveis: abertura de logradouros ao uso público, conversão de terrenos expectantes em jardins de bolso ("
+        - emphasis [ref=e276]: pocket parks
+        - text: "), arborização intensiva de praças. O contraste entre 1 678 ha de verde privado e 202 ha de verde usufruível levanta a questão da permeabilização: incentivos à abertura parcial de logradouros, servidões de passagem, cedências verdes em operações urbanísticas — mecanismos que Quental (2010) já propunha como instrumento de reequilíbrio territorial no Porto."
+      - separator [ref=e277]
+      - heading "7. Conclusões" [level=2] [ref=e278]
+      - paragraph [ref=e279]:
+        - strong [ref=e280]: 81,7% da população do Porto
+        - text: vive com acessibilidade a verde público inferior a 9 m²/hab num raio de 500 m.
+        - strong [ref=e281]: 56,0%
+        - text: encontra-se em défice crítico (<3 m²/hab), concentrado no centro e leste — as zonas mais densas e termicamente vulneráveis. Apenas 18,3% tem acesso adequado. Aplicando o critério de proximidade de Konijnendijk (2023),
+        - strong [ref=e282]: 44,2% da população
+        - text: não tem um parque de ≥0,4 ha a ≤300 m de casa.
+      - paragraph [ref=e283]: "Dos 448 ha classificados como verde público pelo PDM, apenas ~217 ha são efectivamente usufruíveis. A métrica agregada per capita é insuficiente para avaliar a equidade — e o Porto não é caso único: Lisboa, Barcelona e Paris partilham o mesmo padrão de défice estrutural em núcleos densos."
+      - separator [ref=e284]
+      - heading "8. Nota Metodológica" [level=2] [ref=e285]
+      - paragraph [ref=e286]:
+        - text: Processamento em Python com
+        - emphasis [ref=e287]: Google Earth Engine
+        - text: ","
+        - emphasis [ref=e288]: scipy
+        - text: ","
+        - emphasis [ref=e289]: NumPy
+        - text: e
+        - emphasis [ref=e290]: Shapely
+        - text: ". Código aberto:"
+      - list [ref=e291]:
+        - listitem [ref=e292]:
+          - link "acessibilidade_verde.py" [ref=e293] [cursor=pointer]:
+            - /url: https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/acessibilidade/acessibilidade_verde.py
+            - code [ref=e294]: acessibilidade_verde.py
+          - text: — pipeline completo (classificação + 2SFCA + HTML)
+        - listitem [ref=e295]:
+          - link "criar_parques.py" [ref=e296] [cursor=pointer]:
+            - /url: https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/acessibilidade/criar_parques.py
+            - code [ref=e297]: criar_parques.py
+          - text: — inventário de 79 parques (Overpass API + PDM)
+      - separator [ref=e298]
+      - heading "9. Referências" [level=2] [ref=e299]
+      - list [ref=e300]:
+        - listitem [ref=e301]:
+          - text: Catarino, L.
+          - emphasis [ref=e302]: et al.
+          - text: (2025). Mapping Green Space Inequalities in 26 European Cities.
+          - emphasis [ref=e303]: Land
+          - text: ", 14(12), 2362."
+          - link "doi:10.3390/land14122362" [ref=e304] [cursor=pointer]:
+            - /url: https://doi.org/10.3390/land14122362
+        - listitem [ref=e305]:
+          - text: "Dai, D. (2011). Racial/ethnic and socioeconomic disparities in urban green space accessibility: Where to intervene?"
+          - emphasis [ref=e306]: Landscape and Urban Planning
+          - text: ", 102(4), 234–244."
+          - link "doi:10.1016/j.landurbplan.2011.05.002" [ref=e307] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.landurbplan.2011.05.002
+        - listitem [ref=e308]:
+          - text: EEA (2022).
+          - emphasis [ref=e309]: Who benefits from nature in cities? Social inequalities in access to urban green and blue spaces across Europe
+          - text: . European Environment Agency.
+          - link "https://www.eea.europa.eu/publications/who-benefits-from-nature-in" [ref=e310] [cursor=pointer]:
+            - /url: https://www.eea.europa.eu/publications/who-benefits-from-nature-in
+        - listitem [ref=e311]:
+          - text: Graça, M., Alves, P., Gonçalves, J., Nowak, D.J., Hoehn, R., Farinha-Marques, P. & Cunha, M. (2018). Assessing how green space types affect ecosystem services delivery in Porto, Portugal.
+          - emphasis [ref=e312]: Landscape and Urban Planning
+          - text: ", 170, 195–208."
+          - link "doi:10.1016/j.landurbplan.2017.11.007" [ref=e313] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.landurbplan.2017.11.007
+        - listitem [ref=e314]:
+          - text: GREEN SURGE (2015).
+          - emphasis [ref=e315]: Lisbon, Portugal — Case study portrait
+          - text: . GREEN SURGE Project, EU FP7.
+        - listitem [ref=e316]:
+          - text: Hoffimann, E., Barros, H. & Ribeiro, A.I. (2017). Socioeconomic inequalities in green space quality and accessibility — Evidence from a Southern European city.
+          - emphasis [ref=e317]: International Journal of Environmental Research and Public Health
+          - text: ", 14(8), 916."
+          - link "doi:10.3390/ijerph14080916" [ref=e318] [cursor=pointer]:
+            - /url: https://doi.org/10.3390/ijerph14080916
+        - listitem [ref=e319]:
+          - text: Kabisch, N. & Haase, D. (2014). Green justice or just green? Provision of urban green spaces in Berlin, Germany.
+          - emphasis [ref=e320]: Landscape and Urban Planning
+          - text: ", 122, 129–139."
+          - link "doi:10.1016/j.landurbplan.2013.11.016" [ref=e321] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.landurbplan.2013.11.016
+        - listitem [ref=e322]:
+          - text: "Konijnendijk, C.C. (2023). Evidence-based guidelines for greener, healthier, more resilient neighbourhoods: Introducing the 3-30-300 rule."
+          - emphasis [ref=e323]: Journal of Forestry Research
+          - text: ", 34, 821–830."
+          - link "doi:10.1007/s11676-022-01523-z" [ref=e324] [cursor=pointer]:
+            - /url: https://doi.org/10.1007/s11676-022-01523-z
+        - listitem [ref=e325]:
+          - text: Langford, M., Higgs, G., Radcliffe, J. & White, S. (2008). Urban population distribution models and service accessibility estimation.
+          - emphasis [ref=e326]: Computers, Environment and Urban Systems
+          - text: ", 32(1), 66–80."
+          - link "doi:10.1016/j.compenvurbsys.2007.06.001" [ref=e327] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.compenvurbsys.2007.06.001
+        - listitem [ref=e328]:
+          - text: "Lopes, H.S., Vidal, D.G., Cherif, N., Silva, L. & Remoaldo, P.C. (2025). Green infrastructure and its influence on urban heat island, heat risk, and air pollution: A case study of Porto (Portugal)."
+          - emphasis [ref=e329]: Journal of Environmental Management
+          - text: ", 376, 124446."
+          - link "doi:10.1016/j.jenvman.2025.124446" [ref=e330] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.jenvman.2025.124446
+        - listitem [ref=e331]:
+          - text: Luo, W. & Qi, Y. (2009). An enhanced two-step floating catchment area (E2SFCA) method for measuring spatial accessibility to primary care physicians.
+          - emphasis [ref=e332]: Health & Place
+          - text: ", 15(4), 1100–1107."
+          - link "doi:10.1016/j.healthplace.2009.06.002" [ref=e333] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.healthplace.2009.06.002
+        - listitem [ref=e334]:
+          - text: "Luo, W. & Wang, F. (2003). Measures of spatial accessibility to health care in a GIS environment: Synthesis and a case study in the Chicago region."
+          - emphasis [ref=e335]: Environment and Planning B
+          - text: ", 30(6), 865–884."
+          - link "doi:10.1068/b29120" [ref=e336] [cursor=pointer]:
+            - /url: https://doi.org/10.1068/b29120
+        - listitem [ref=e337]:
+          - text: Nghiem, L.T., Zhang, Y., Oh, R.R.Y., Chang, C.C., Tan, C.L., Shanahan, D.F. & Carrasco, L.R. (2021). Equity in green and blue spaces availability in Singapore.
+          - emphasis [ref=e338]: Landscape and Urban Planning
+          - text: ", 210, 104083."
+          - link "doi:10.1016/j.landurbplan.2021.104083" [ref=e339] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.landurbplan.2021.104083
+        - listitem [ref=e340]:
+          - text: OMS (2016).
+          - emphasis [ref=e341]: "Urban green spaces and health: A review of evidence"
+          - text: . WHO Regional Office for Europe.
+          - link "https://www.who.int/europe/publications/i/item/WHO-EURO-2016-3352-43111-60341" [ref=e342] [cursor=pointer]:
+            - /url: https://www.who.int/europe/publications/i/item/WHO-EURO-2016-3352-43111-60341
+        - listitem [ref=e343]:
+          - text: Przewoźna, P.
+          - emphasis [ref=e344]: et al.
+          - text: "(2024). Accessibility to urban green spaces: A critical review of the WHO standard."
+          - emphasis [ref=e345]: Ecological Indicators
+          - text: ", 166."
+          - link "doi:10.1016/j.ecolind.2024.112357" [ref=e346] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.ecolind.2024.112357
+        - listitem [ref=e347]:
+          - text: Quental, N. (2010).
+          - emphasis [ref=e348]: "Modeling a sustainable urban structure: An application to the Metropolitan Area of Porto"
+          - text: . Tese de doutoramento, Instituto Superior Técnico.
+          - link "PDF" [ref=e349] [cursor=pointer]:
+            - /url: https://coolio1.github.io/pdfs/2010-08-02%20-%20Tese%20de%20doutoramento.pdf
+        - listitem [ref=e350]:
+          - text: Quental, N. (2026). Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1947–2025).
+          - link "https://coolio1.github.io/porto_areas_verdes_mudanca/posts/mudanca-verde-porto-1947-2025/" [ref=e351] [cursor=pointer]:
+            - /url: https://coolio1.github.io/porto_areas_verdes_mudanca/posts/mudanca-verde-porto-1947-2025/
+        - listitem [ref=e352]:
+          - text: Quental, N. & Macedo, M. (2006).
+          - emphasis [ref=e353]: Indicadores de desenvolvimento sustentável para o Grande Porto
+          - text: . Futuro Sustentável / Universidade Católica Portuguesa.
+          - link "PDF" [ref=e354] [cursor=pointer]:
+            - /url: https://coolio1.github.io/pdfs/2005%20-%20Indicadores%20de%20sustentabilidade%20para%20o%20Grande%20Porto.pdf
+        - listitem [ref=e355]:
+          - text: "Rigolon, A. (2016). A complex landscape of inequity in access to urban parks: A literature review."
+          - emphasis [ref=e356]: Landscape and Urban Planning
+          - text: ", 153, 160–169."
+          - link "doi:10.1016/j.landurbplan.2016.05.017" [ref=e357] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.landurbplan.2016.05.017
+        - listitem [ref=e358]:
+          - text: "Russo, A. & Cirella, G.T. (2018). Modern compact cities: How much greenery do we need?"
+          - emphasis [ref=e359]: International Journal of Environmental Research and Public Health
+          - text: ", 15(10), 2180."
+          - link "doi:10.3390/ijerph15102180" [ref=e360] [cursor=pointer]:
+            - /url: https://doi.org/10.3390/ijerph15102180
+        - listitem [ref=e361]:
+          - text: "Saraiva, M., Cavallaro, F., Sá Marques, T., Teixeira, B. & Ribeiro, G. (2025). Assessing equity in the accessibility to urban greenspaces: A socio-spatial vulnerability perspective in Porto, Portugal."
+          - emphasis [ref=e362]: Environment and Planning B
+          - text: .
+          - link "doi:10.1177/23998083251407460" [ref=e363] [cursor=pointer]:
+            - /url: https://doi.org/10.1177/23998083251407460
+        - listitem [ref=e364]:
+          - text: Schiavina, M., Freire, S. & MacManus, K. (2023). GHS-POP R2023A — GHS population grid multitemporal (1975–2030).
+          - emphasis [ref=e365]: European Commission, Joint Research Centre
+          - text: .
+          - link "https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe" [ref=e366] [cursor=pointer]:
+            - /url: https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe
+        - listitem [ref=e367]:
+          - text: "Wolch, J.R., Byrne, J. & Newell, J.P. (2014). Urban green space, public health, and environmental justice: The challenge of making cities ‘just green enough’."
+          - emphasis [ref=e368]: Landscape and Urban Planning
+          - text: ", 125, 234–244."
+          - link "doi:10.1016/j.landurbplan.2014.01.017" [ref=e369] [cursor=pointer]:
+            - /url: https://doi.org/10.1016/j.landurbplan.2014.01.017
+      - separator [ref=e370]
+      - heading "Mapa interactivo" [level=2] [ref=e371]
+      - paragraph [ref=e372]:
+        - strong [ref=e373]:
+          - link "Acessibilidade a Verde Público — Porto" [ref=e374] [cursor=pointer]:
+            - /url: /porto_areas_verdes_mudanca/acessibilidade/acessibilidade_verde.html
+        - text: — mapa com camadas de acessibilidade 2SFCA, parques e jardins (78 espaços com popups), verde pago/não usufruível e verde privado
+      - separator [ref=e375]
+      - paragraph [ref=e376]:
+        - link "← Voltar aos artigos" [ref=e377] [cursor=pointer]:
+          - /url: /porto_areas_verdes_mudanca/
+  - contentinfo [ref=e378]:
+    - link "Nuno Quental" [ref=e379] [cursor=pointer]:
+      - /url: https://coolio1.github.io/
+    - text: "Dados abertos: Sentinel-2, Landsat, OSM, PDM Porto"

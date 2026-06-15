@@ -18,6 +18,7 @@ Gera:
 """
 
 import os
+import sys
 import json
 import numpy as np
 from PIL import Image
@@ -77,6 +78,9 @@ print(f"  Arrays carregados: {calc_w}x{calc_h}, pixel={pixel_area_m2:.0f} m2")
 # Cobertura actual (baseline)
 habitado = porto_mask & (pop_500m >= POP_500M_MIN)
 total_pop = pop_corrected[porto_mask].sum()
+if total_pop == 0:
+    print("ERRO: população total zero — verificar porto_mask e pop_corrected")
+    sys.exit(1)
 coberto_actual = reach_300 & porto_mask
 pop_coberta_actual = pop_corrected[coberto_actual & habitado].sum()
 pct_actual = pop_coberta_actual / total_pop * 100
@@ -170,7 +174,8 @@ green_m2_sim[park_mask]    = pixel_area_m2
 green_m2_sim[cand_mask_all] = pixel_area_m2
 
 green_500m_sim  = ndimage.convolve(green_m2_sim, kernel_2sfca, mode="constant", cval=0.0)
-accessibility_sim = np.where(pop_500m >= POP_500M_MIN, green_500m_sim / pop_500m, np.nan)
+pop_500m_safe = np.where(pop_500m > 0, pop_500m, 1)  # evita divisão por zero em np.where
+accessibility_sim = np.where(pop_500m >= POP_500M_MIN, green_500m_sim / pop_500m_safe, np.nan)
 
 # Estatísticas comparativas
 valid_act = ~np.isnan(accessibility)  & porto_mask

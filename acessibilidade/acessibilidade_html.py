@@ -6,6 +6,8 @@ import json as _json
 
 
 def to_base64(filepath):
+    if not os.path.exists(filepath):
+        return None
     with open(filepath, "rb") as f:
         return "data:image/png;base64," + base64.b64encode(f.read()).decode()
 

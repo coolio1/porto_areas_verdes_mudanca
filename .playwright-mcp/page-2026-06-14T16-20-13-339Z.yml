@@ -1,0 +1,108 @@
+- generic [active]:
+  - generic [ref=e1]:
+    - link "Início" [ref=e2] [cursor=pointer]:
+      - /url: ../index.html
+    - link "Mapa 2016-2025" [ref=e3] [cursor=pointer]:
+      - /url: ../mapa.html
+    - link "Histórico 1947-2024" [ref=e4] [cursor=pointer]:
+      - /url: ../ndvi_historico.html
+    - link "Verde Privado" [ref=e5] [cursor=pointer]:
+      - /url: ../interiores_quarteiroes.html
+    - link "Acessibilidade" [ref=e6] [cursor=pointer]:
+      - /url: acessibilidade_verde.html
+    - link "Conversão" [ref=e7] [cursor=pointer]:
+      - /url: conversao_verde.html
+    - link "Atropelamentos" [ref=e8] [cursor=pointer]:
+      - /url: ../atropelamentos/dashboard_atropelamentos.html
+  - generic [ref=e9]:
+    - generic:
+      - generic:
+        - tooltip "#1 — Parque da Prelada"
+        - tooltip "#2 — Parque das Fontainhas/Carquejeiras"
+        - tooltip "#3 — Ampliação do Parque de Requesende"
+        - tooltip "#4 — Parque de Noeda"
+        - tooltip "#5 — Parque de Contumil"
+        - tooltip "#6 — Parque da Ervilha"
+        - tooltip "#7 — Parque das Antas"
+        - tooltip "#8 — Parque Desportivo de Ramalde"
+        - tooltip "#9 — Parque de Cartes"
+        - tooltip "#10 — Parque Urbano da Lapa"
+        - tooltip "#11 — Parque Urbano de Aldoar"
+        - tooltip "#12 — Corredor Verde da Charca de Salgueiros"
+        - tooltip "#13 — Jardim frontal à Escola Nicolau Nasoni"
+        - tooltip "#14 — Jardim Nun'Alvares"
+        - tooltip "#15 — Jardim da Vilarinha"
+        - tooltip "#16 — Jardim Monte da Bela"
+        - tooltip "#20"
+        - tooltip "#21"
+        - tooltip "#24 — Jardim Nun'Álvares"
+        - tooltip "#25 — Parque da Ervilha"
+        - tooltip "#26 — Corredor ribeirinho do Aleixo"
+        - tooltip "#28 — Jardins da FLUP"
+        - tooltip "#29 — Casa das Artes"
+        - tooltip "#30 — Corredor ribeirinho do Aleixo"
+        - tooltip "#31"
+        - tooltip "#32 — Parque Urbano de Aldoar"
+        - tooltip "#33 — Parque de Requesende"
+        - tooltip "#35 — Parque dos Salgados"
+      - generic:
+        - img
+      - generic:
+        - img
+    - generic:
+      - generic [ref=e191]:
+        - button "Zoom in" [ref=e192] [cursor=pointer]: +
+        - button "Zoom out" [ref=e193] [cursor=pointer]: −
+      - generic [ref=e194]:
+        - link "Leaflet" [ref=e195] [cursor=pointer]:
+          - /url: https://leafletjs.com
+          - img [ref=e196]
+          - text: Leaflet
+        - text: "| © OpenStreetMap"
+  - generic [ref=e201]:
+    - text: Candidatos a Conversão
+    - generic [ref=e202]: Simulação sequencial para atingir 80% de cobertura a ≤300m (Konijnendijk)
+    - generic [ref=e203]:
+      - generic [ref=e204]: Candidatos (por prioridade)
+      - generic [ref=e205]:
+        - generic [ref=e208]: Estratégia de expansão (CMP)
+        - generic [ref=e211]: Verde pago ou não usufruível
+        - generic [ref=e214]: Verde privado
+      - generic [ref=e215]: Proximidade 300m (Konijnendijk)
+      - generic [ref=e216]:
+        - generic [ref=e219]: ≤300m de parque ≥0,5 ha (cumpre)
+        - generic [ref=e222]: ">300m de parque ≥0,5 ha (não cumpre)"
+      - generic [ref=e223]: "Cobertura actual: 55.8% → objectivo: 80%"
+    - generic [ref=e224]: Camadas
+    - generic [ref=e225]:
+      - generic [ref=e226]:
+        - checkbox [checked] [ref=e227] [cursor=pointer]
+        - generic [ref=e229] [cursor=pointer]: Candidatos a conversão
+      - generic [ref=e230]:
+        - checkbox [checked] [ref=e231] [cursor=pointer]
+        - generic [ref=e233] [cursor=pointer]: Proximidade simulada (80%)
+      - generic [ref=e234]:
+        - checkbox [ref=e235] [cursor=pointer]
+        - generic [ref=e237] [cursor=pointer]: Proximidade actual (56%)
+    - separator [ref=e238]
+    - generic [ref=e239]: Contexto
+    - generic [ref=e240]:
+      - generic [ref=e241]:
+        - checkbox [ref=e242] [cursor=pointer]
+        - generic [ref=e244] [cursor=pointer]: Parques e Jardins
+      - generic [ref=e245]:
+        - checkbox [checked] [ref=e246] [cursor=pointer]
+        - generic [ref=e248] [cursor=pointer]: Limites municipais
+    - separator [ref=e249]
+    - generic [ref=e250]: Fundo
+    - combobox [ref=e251]:
+      - option "CartoDB Positron" [selected]
+      - option "CartoDB Dark"
+      - option "OpenStreetMap"
+      - option "Satélite"
+    - separator [ref=e252]
+    - generic [ref=e253]:
+      - text: Sentinel-2 10m (ESA) • GHS-POP 100m (JRC)
+      - text: "Critério: Konijnendijk 3-30-300 (≥0,5 ha a ≤300m)"
+  - link "Nuno Quental" [ref=e255] [cursor=pointer]:
+    - /url: https://www.linkedin.com/in/nquental/

@@ -1,0 +1,114 @@
+- generic:
+  - generic [ref=e1]:
+    - link "Início" [ref=e2] [cursor=pointer]:
+      - /url: ../index.html
+    - link "Mapa 2016-2025" [ref=e3] [cursor=pointer]:
+      - /url: ../mapa.html
+    - link "Histórico 1947-2024" [ref=e4] [cursor=pointer]:
+      - /url: ../ndvi_historico.html
+    - link "Verde Privado" [ref=e5] [cursor=pointer]:
+      - /url: ../interiores_quarteiroes.html
+    - link "Acessibilidade" [ref=e6] [cursor=pointer]:
+      - /url: acessibilidade_verde.html
+    - link "Conversão" [ref=e7] [cursor=pointer]:
+      - /url: conversao_verde.html
+    - link "Atropelamentos" [ref=e8] [cursor=pointer]:
+      - /url: ../atropelamentos/dashboard_atropelamentos.html
+  - generic [ref=e9]:
+    - generic:
+      - generic:
+        - tooltip "#1 — Parque da Prelada"
+        - tooltip "#2 — Parque das Fontainhas/Carquejeiras"
+        - tooltip "#3 — Ampliação do Parque de Requesende"
+        - tooltip "#4 — Parque de Noeda"
+        - tooltip "#5 — Parque de Contumil"
+        - tooltip "#6 — Parque da Ervilha"
+        - tooltip "#7 — Parque das Antas"
+        - tooltip "#8 — Parque Desportivo de Ramalde"
+        - tooltip "#10 — Parque Urbano da Lapa"
+        - tooltip "#11 — Parque Urbano de Aldoar"
+        - tooltip "#13 — Jardim frontal à Escola Nicolau Nasoni"
+        - tooltip "#14 — Jardim Nun'Alvares"
+        - tooltip "#15 — Jardim da Vilarinha"
+        - tooltip "#16 — Jardim Monte da Bela"
+        - tooltip "#20 — Quinta Amarela"
+        - tooltip "#21 — Rua da Bouça"
+        - tooltip "#24 — Jardim Nun'Álvares"
+        - tooltip "#25 — Parque da Ervilha"
+        - tooltip "#26 — Corredor ribeirinho do Aleixo"
+        - tooltip "#28 — Jardins da FLUP"
+        - tooltip "#29 — Casa das Artes"
+        - tooltip "#30 — Corredor ribeirinho do Aleixo"
+        - tooltip "#31 — Jardim do Palácio de Cristal"
+        - tooltip "#32 — Parque Urbano de Aldoar"
+        - tooltip "#33 — Parque de Requesende"
+        - tooltip "#35 — Parque dos Salgados"
+        - tooltip "#36 — Rua de Fernando Távora"
+        - tooltip "#37 — Parque de Contumil"
+        - tooltip "#38 — Parque Oriental"
+        - tooltip "#39 — Quinta junto à Escola Nicolau Nasoni"
+        - tooltip "#40 — Salgueiros"
+      - generic:
+        - img
+      - generic:
+        - img
+    - generic:
+      - generic [ref=e118]:
+        - button "Zoom in" [ref=e119] [cursor=pointer]: +
+        - button "Zoom out" [ref=e120] [cursor=pointer]: −
+      - generic [ref=e121]:
+        - link "Leaflet" [ref=e122] [cursor=pointer]:
+          - /url: https://leafletjs.com
+          - img [ref=e123]
+          - text: Leaflet
+        - text: "| © OpenStreetMap"
+  - generic [ref=e128]:
+    - text: Candidatos a Conversão
+    - generic [ref=e129]: Simulação sequencial para atingir 80% de cobertura a ≤300m (Konijnendijk)
+    - generic [ref=e130]:
+      - generic [ref=e131]: Candidatos (por prioridade)
+      - generic [ref=e132]:
+        - generic [ref=e135]: Estratégia de expansão (CMP)
+        - generic [ref=e138]: Verde em PDM / fechado ao público
+        - generic [ref=e141]: Verde privado
+      - generic [ref=e142]: Proximidade 300m (Konijnendijk)
+      - generic [ref=e143]:
+        - generic [ref=e146]: ≤300m de parque ≥0,5 ha (cumpre)
+        - generic [ref=e149]: ">300m de parque ≥0,5 ha (não cumpre)"
+      - generic [ref=e150]: Acessibilidade 2SFCA (m²/hab)
+      - generic [ref=e151]:
+        - generic [ref=e154]: Adequado (≥9 m²/hab)
+        - generic [ref=e157]: Insuficiente (3–9 m²/hab)
+        - generic [ref=e160]: Défice crítico (<3 m²/hab)
+    - generic [ref=e161]: Camadas
+    - generic [ref=e162]:
+      - generic [ref=e163]: Proximidade 300m
+      - generic [ref=e164]:
+        - button "Actual 60%" [ref=e165] [cursor=pointer]
+        - button "Simulado 73%" [ref=e166] [cursor=pointer]
+      - generic [ref=e167]: Acessibilidade 2SFCA
+      - generic [ref=e168]:
+        - button "Actual 22.2%" [active] [ref=e169] [cursor=pointer]
+        - button "Simulado 35.4%" [ref=e170] [cursor=pointer]
+    - separator [ref=e171]
+    - generic [ref=e172]: Contexto
+    - generic [ref=e173]:
+      - generic [ref=e174]:
+        - checkbox [ref=e175] [cursor=pointer]
+        - generic [ref=e177] [cursor=pointer]: Parques e Jardins
+      - generic [ref=e178]:
+        - checkbox [checked] [ref=e179] [cursor=pointer]
+        - generic [ref=e181] [cursor=pointer]: Limites municipais
+    - separator [ref=e182]
+    - generic [ref=e183]: Fundo
+    - combobox [ref=e184]:
+      - option "CartoDB Positron" [selected]
+      - option "CartoDB Dark"
+      - option "OpenStreetMap"
+      - option "Satélite"
+    - separator [ref=e185]
+    - generic [ref=e186]:
+      - text: Sentinel-2 10m (ESA) • GHS-POP 100m (JRC)
+      - text: "Critério: Konijnendijk 3-30-300 (≥0,5 ha a ≤300m)"
+  - link "Nuno Quental" [ref=e188] [cursor=pointer]:
+    - /url: https://www.linkedin.com/in/nquental/

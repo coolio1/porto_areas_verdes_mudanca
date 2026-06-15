@@ -1,0 +1,57 @@
+- generic [active]:
+  - generic [ref=e1]:
+    - link "Início" [ref=e2] [cursor=pointer]:
+      - /url: ../index.html
+    - link "Mapa 2016-2025" [ref=e3] [cursor=pointer]:
+      - /url: ../mapa.html
+    - link "Histórico 1947-2024" [ref=e4] [cursor=pointer]:
+      - /url: ../ndvi_historico.html
+    - link "Verde Privado" [ref=e5] [cursor=pointer]:
+      - /url: ../interiores_quarteiroes.html
+    - link "Acessibilidade" [ref=e6] [cursor=pointer]:
+      - /url: acessibilidade_verde.html
+    - link "Conversão" [ref=e7] [cursor=pointer]:
+      - /url: conversao_verde.html
+    - link "Atropelamentos" [ref=e8] [cursor=pointer]:
+      - /url: ../atropelamentos/dashboard_atropelamentos.html
+  - generic [ref=e9]:
+    - generic:
+      - generic [ref=e10]:
+        - button "Zoom in" [ref=e11] [cursor=pointer]: +
+        - button "Zoom out" [ref=e12] [cursor=pointer]: −
+      - generic [ref=e13]:
+        - link "Leaflet" [ref=e14] [cursor=pointer]:
+          - /url: https://leafletjs.com
+          - img [ref=e15]
+          - text: Leaflet
+        - text: "| © OpenStreetMap"
+  - generic [ref=e20]:
+    - text: Candidatos a Conversão
+    - generic [ref=e21]: Simulação sequencial para atingir 80% de cobertura a ≤300m (Konijnendijk)
+    - generic [ref=e22]:
+      - generic [ref=e23]: Candidatos (por prioridade)
+      - generic [ref=e24]:
+        - generic [ref=e27]: Estratégia de expansão (CMP)
+        - generic [ref=e30]: Verde pago ou não usufruível
+        - generic [ref=e33]: Verde privado
+      - generic [ref=e34]: Proximidade 300m (Konijnendijk)
+      - generic [ref=e35]:
+        - generic [ref=e38]: ≤300m de parque ≥0,5 ha (cumpre)
+        - generic [ref=e41]: ">300m de parque ≥0,5 ha (não cumpre)"
+      - generic [ref=e42]: "Cobertura actual: 55.8% → objectivo: 80%"
+    - generic [ref=e43]: Camadas
+    - separator [ref=e44]
+    - generic [ref=e45]: Contexto
+    - separator [ref=e46]
+    - generic [ref=e47]: Fundo
+    - combobox [ref=e48]:
+      - option "CartoDB Positron" [selected]
+      - option "CartoDB Dark"
+      - option "OpenStreetMap"
+      - option "Satélite"
+    - separator [ref=e49]
+    - generic [ref=e50]:
+      - text: Sentinel-2 10m (ESA) • GHS-POP 100m (JRC)
+      - text: "Critério: Konijnendijk 3-30-300 (≥0,5 ha a ≤300m)"
+  - link "Nuno Quental" [ref=e52] [cursor=pointer]:
+    - /url: https://www.linkedin.com/in/nquental/

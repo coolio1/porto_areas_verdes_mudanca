@@ -25,11 +25,6 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
 
     # PNGs coloridos para camadas de contexto (sem extracção de máscara via canvas)
     _make_colored_png(
-        os.path.join(layers_dir, "verde_publico.png"),
-        os.path.join(layers_dir, "verde_publico_colored.png"),
-        "#2E7D32"
-    )
-    _make_colored_png(
         os.path.join(parent_layers_dir, "municipios.png"),
         os.path.join(parent_layers_dir, "municipios_colored.png"),
         "#444444"
@@ -43,6 +38,12 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
 
     geojson_str = json.dumps(geojson, ensure_ascii=False)
 
+    parques_geojson_str = "null"
+    parques_path = os.path.join(script_dir, "parques_porto.geojson")
+    if os.path.exists(parques_path):
+        with open(parques_path, "r", encoding="utf-8") as _f:
+            parques_geojson_str = _f.read()
+
     def js_path(abs_path, rel_url):
         return f"'{rel_url}'" if os.path.exists(abs_path) else "null"
 
@@ -51,7 +52,6 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
     sfca_sim_js  = js_path(os.path.join(layers_dir, "acessibilidade_2sfca_sim.png"), "layers/acessibilidade_2sfca_sim.png")
     sfca_act_js  = js_path(os.path.join(layers_dir, "acessibilidade_2sfca.png"),     "layers/acessibilidade_2sfca.png")
     lowpop_js    = js_path(os.path.join(layers_dir, "baixa_densidade.png"),           "layers/baixa_densidade.png")
-    verde_pub_js = js_path(os.path.join(layers_dir, "verde_publico_colored.png"),     "layers/verde_publico_colored.png")
     muni_js      = js_path(os.path.join(parent_layers_dir, "municipios_colored.png"), "../layers/municipios_colored.png")
 
     basemaps = [
@@ -223,7 +223,7 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
 
 <script>
 var candidatosData = {geojson_str};
-var parquesData = null;
+var parquesData = {parques_geojson_str};
 var map = L.map('map').setView([41.155, -8.63], 13);
 
 fetch('parques_porto.geojson').then(function(r) {{ return r.json(); }}).then(function(data) {{
@@ -243,7 +243,6 @@ var PROX_ACT_SRC  = {prox_act_js};
 var SFCA_SIM_SRC  = {sfca_sim_js};
 var SFCA_ACT_SRC  = {sfca_act_js};
 var LOWPOP_SRC    = {lowpop_js};
-var VERDE_PUB_SRC = {verde_pub_js};
 var MUNI_SRC      = {muni_js};
 
 function init() {{
@@ -409,9 +408,8 @@ function init() {{
     }}
   }});
 
-  // --- Contexto: parques, municipios ---
+  // --- Contexto: municipios ---
   var ctxLayers = [
-    {{ id: "verde_publico", label: "Parques e Jardins", color: "#2E7D32", src: VERDE_PUB_SRC, show: false }},
     {{ id: "municipios", label: "Limites municipais", color: "#444444", src: MUNI_SRC, show: true }},
   ];
   var ctxOverlays = [];
@@ -437,32 +435,50 @@ function init() {{
     ctxDiv.appendChild(row);
   }}
 
-  // --- Parques GeoJSON (contornos, contexto) — carregado via fetch ---
+  // --- Parques GeoJSON ---
+  var parquesGeoLayer = null;
+  var pRow = document.createElement('div'); pRow.className = 'row';
+  var pCb = document.createElement('input'); pCb.type = 'checkbox'; pCb.checked = true;
+  pCb.addEventListener('change', function() {{
+    if (this.checked) {{
+      if (parquesGeoLayer) parquesGeoLayer.addTo(map);
+    }} else {{
+      if (parquesGeoLayer) map.removeLayer(parquesGeoLayer);
+    }}
+  }});
+  var pSw = document.createElement('span'); pSw.className = 'swatch'; pSw.style.backgroundColor = '#2E7D32';
+  var pLb = document.createElement('label'); pLb.textContent = 'Parques e Jardins'; pLb.style.fontSize = '12px';
+  pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
+  ctxDiv.appendChild(pRow);
+
   window.initParques = function() {{
     if (!parquesData) return;
-    var parquesGeoLayer = L.geoJson(parquesData, {{
+    parquesGeoLayer = L.geoJson(parquesData, {{
       pane: 'parquesPane',
-      style: function() {{
+      style: function(f) {{
         return {{
-          color: '#1B5E20', weight: 1.5, opacity: 0.6,
-          fillColor: '#2E7D32', fillOpacity: 0.03,
-          dashArray: '3 3'
+          color: '#1B5E20', weight: 2.5, opacity: 0.9,
+          fillColor: '#2E7D32', fillOpacity: 0.45
         }};
       }},
       onEachFeature: function(f, layer) {{
-        layer.bindTooltip(f.properties.nome, {{
+        var p = f.properties;
+        var area = p.area_calc_ha ? p.area_calc_ha + ' ha' : '';
+        var html = '<b style="font-size:13px;">' + p.nome + '</b><br>';
+        html += '<span style="color:#666;">' + (p.tipo || '') + (area ? ' &mdash; ' + area : '') + '</span>';
+        layer.bindPopup(html);
+        layer.bindTooltip(p.nome, {{
           permanent: true, direction: 'center',
           className: 'park-label',
           offset: [0, 0]
         }});
       }}
     }});
-    parquesGeoLayer.addTo(map);
-
+    if (pCb.checked) parquesGeoLayer.addTo(map);
     map.on('zoomend', function() {{
       var labels = document.querySelectorAll('.park-label');
       var z = map.getZoom();
-      labels.forEach(function(l) {{ l.style.display = z >= 15 ? '' : 'none'; }});
+      labels.forEach(function(l) {{ l.style.display = z >= 14 ? '' : 'none'; }});
     }});
     map.fire('zoomend');
   }};
