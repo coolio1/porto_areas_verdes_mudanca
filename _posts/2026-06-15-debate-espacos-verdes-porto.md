@@ -3,6 +3,7 @@ layout: post
 title: "Espaços Verdes do Porto: o Debate que Junta Ciência, Memória e Esperança"
 description: "Reportagem da sessão pública de 15 de Junho de 2026, organizada pela Campo Aberto e pelo GARRA, em que ciência, mapeamento cidadão e dados de sete décadas se cruzaram para debater o futuro verde do Porto."
 date: 2026-06-15
+image: /assets/images/sessao-espacos-verdes-painel.jpg
 tags: [porto, espaços verdes, campo aberto, garra, arborização, acessibilidade, biodiversidade]
 ---
 

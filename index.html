@@ -25,11 +25,62 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
     margin-right: auto;
   }
 
+  /* Stats strip */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+  }
+  .stat-item {
+    text-align: center;
+    padding: 1.2rem 1rem;
+    border-right: 1px solid #f0f0f0;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number {
+    display: block;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+  }
+  .stat-label {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.35rem;
+  }
+
+  /* Two-column layout */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 2.5rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+  .section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Maps grid */
   .map-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.4rem;
-    margin: 1.5rem 0 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.2rem;
   }
   .map-card {
     background: white;
@@ -71,7 +122,28 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
     border-radius: 3px;
     margin-bottom: 0.5rem;
   }
+  .map-card .card-body time {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
 
+  /* Articles column */
+  .articles-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .card-thumb {
+    display: block;
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+
+  /* Video */
   .video-section {
     margin: 2rem 0;
   }
@@ -94,11 +166,19 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
     text-align: center;
   }
 
-  .map-card .card-body time {
-    display: block;
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-bottom: 0.3rem;
+  /* Responsive */
+  @media (max-width: 800px) {
+    .main-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 580px) {
+    .stats-strip {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stat-item:nth-child(2) { border-right: none; }
+    .stat-item:nth-child(1),
+    .stat-item:nth-child(2) { border-bottom: 1px solid #f0f0f0; }
   }
 </style>
 
@@ -107,72 +187,107 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
   <p>Mapas interactivos de vegetação, uso do solo e mudanças urbanas, construídos com dados de satélite abertos.</p>
 </div>
 
-<div class="map-grid">
-  <a href="{{ site.baseurl }}/mapa.html" class="map-card">
-    <div class="card-color" style="background:linear-gradient(90deg, #228B22, #D7263D);"></div>
-    <div class="card-body">
-      <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Sentinel-2 10m</span>
-      <h3>Mudanças 2016 &mdash; 2025</h3>
-      <p>Classificação de árvores, solo e edificado. Transições detectadas entre os dois períodos.</p>
-    </div>
-  </a>
+<div class="stats-strip">
+  <div class="stat-item">
+    <span class="stat-number">77,2%</span>
+    <span class="stat-label">sem acessibilidade a verde</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">49,4%</span>
+    <span class="stat-label">em défice crítico</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">46</span>
+    <span class="stat-label">candidatos a parque público</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">+57%</span>
+    <span class="stat-label">área verde com conversão</span>
+  </div>
+</div>
 
-  <a href="{{ site.baseurl }}/ndvi_historico.html" class="map-card">
-    <div class="card-color" style="background:linear-gradient(90deg, #4a7c59, #1a3a24);"></div>
-    <div class="card-body">
-      <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Landsat 30-60m</span>
-      <h3>Histórico 1947 &mdash; 2024</h3>
-      <p>Ortofoto aérea de 1947 e seis décadas de vegetação Landsat com normalização inter-sensor.</p>
-    </div>
-  </a>
+<div class="main-layout">
 
-  <a href="{{ site.baseurl }}/interiores_quarteiroes.html" class="map-card">
-    <div class="card-color" style="background:linear-gradient(90deg, #2E7D32, #D7263D);"></div>
-    <div class="card-body">
-      <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Sentinel-2 + PDM</span>
-      <h3>Verde Privado</h3>
-      <p>Espaços verdes privados encravados no tecido urbano: os que subsistem e os que foram perdidos.</p>
-    </div>
-  </a>
+  <div class="maps-col">
+    <h3 class="section-title">Mapas e dados</h3>
+    <div class="map-grid">
 
-  <a href="{{ site.baseurl }}/acessibilidade/acessibilidade_verde.html" class="map-card">
-    <div class="card-color" style="background:linear-gradient(90deg, #D7263D, #FFD700, #2E7D32);"></div>
-    <div class="card-body">
-      <span class="tag" style="background:#fff3e0; color:#E8A838;">2SFCA + GHS-POP + PDM</span>
-      <h3>Acessibilidade a Verde P&uacute;blico</h3>
-      <p>Acessibilidade da popula&ccedil;&atilde;o a espa&ccedil;os verdes p&uacute;blicos (m&sup2;/hab, raio 500m). M&eacute;todo 2SFCA.</p>
-    </div>
-  </a>
+      <a href="{{ site.baseurl }}/mapa.html" class="map-card">
+        <div class="card-color" style="background:linear-gradient(90deg, #228B22, #D7263D);"></div>
+        <div class="card-body">
+          <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Sentinel-2 10m</span>
+          <h3>Mudanças 2016 &mdash; 2025</h3>
+          <p>Classificação de árvores, solo e edificado. Transições detectadas entre os dois períodos.</p>
+        </div>
+      </a>
 
-  <a href="{{ site.baseurl }}/acessibilidade/conversao_verde.html" class="map-card">
-    <div class="card-color" style="background:linear-gradient(90deg, #1565C0, #2E7D32);"></div>
-    <div class="card-body">
-      <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Konijnendijk 3-30-300 + PDM</span>
-      <h3>Propostas de Convers&atilde;o a Verde</h3>
-      <p>46 candidatos a parque p&uacute;blico que colmatam o d&eacute;fice de proximidade (300m) na cidade do Porto.</p>
-    </div>
-  </a>
+      <a href="{{ site.baseurl }}/ndvi_historico.html" class="map-card">
+        <div class="card-color" style="background:linear-gradient(90deg, #4a7c59, #1a3a24);"></div>
+        <div class="card-body">
+          <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Landsat 30-60m</span>
+          <h3>Histórico 1947 &mdash; 2024</h3>
+          <p>Ortofoto aérea de 1947 e seis décadas de vegetação Landsat com normalização inter-sensor.</p>
+        </div>
+      </a>
 
-  <a href="{{ site.baseurl }}/atropelamentos/dashboard_atropelamentos.html" class="map-card">
-    <div class="card-color" style="background:linear-gradient(90deg, #ef4444, #f97316);"></div>
-    <div class="card-body">
-      <span class="tag" style="background:#fef2f2; color:#ef4444;">ANSR + Notícias</span>
-      <h3>Atropelamentos &mdash; Grande Porto</h3>
-      <p>Dashboard de sinistralidade rodoviária com peões e ciclistas.</p>
-    </div>
-  </a>
+      <a href="{{ site.baseurl }}/interiores_quarteiroes.html" class="map-card">
+        <div class="card-color" style="background:linear-gradient(90deg, #2E7D32, #D7263D);"></div>
+        <div class="card-body">
+          <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Sentinel-2 + PDM</span>
+          <h3>Verde Privado</h3>
+          <p>Espaços verdes privados encravados no tecido urbano: os que subsistem e os que foram perdidos.</p>
+        </div>
+      </a>
 
-  {% for post in site.posts %}
-  <a href="{{ post.url | prepend: site.baseurl }}" class="map-card">
-    <div class="card-color" style="background:linear-gradient(90deg, #1e3a5f, #2d6a9f);"></div>
-    <div class="card-body">
-      <span class="tag" style="background:#e8eef7; color:#1e3a5f;">Artigo</span>
-      <h3>{{ post.title }}</h3>
-      <time>{{ post.date | date: "%d %b %Y" }}</time>
-      <p>{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
+      <a href="{{ site.baseurl }}/acessibilidade/acessibilidade_verde.html" class="map-card">
+        <div class="card-color" style="background:linear-gradient(90deg, #D7263D, #FFD700, #2E7D32);"></div>
+        <div class="card-body">
+          <span class="tag" style="background:#fff3e0; color:#E8A838;">2SFCA + GHS-POP + PDM</span>
+          <h3>Acessibilidade a Verde P&uacute;blico</h3>
+          <p>Acessibilidade da popula&ccedil;&atilde;o a espa&ccedil;os verdes p&uacute;blicos (m&sup2;/hab, raio 500m). M&eacute;todo 2SFCA.</p>
+        </div>
+      </a>
+
+      <a href="{{ site.baseurl }}/acessibilidade/conversao_verde.html" class="map-card">
+        <div class="card-color" style="background:linear-gradient(90deg, #1565C0, #2E7D32);"></div>
+        <div class="card-body">
+          <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Konijnendijk 3-30-300 + PDM</span>
+          <h3>Propostas de Convers&atilde;o a Verde</h3>
+          <p>46 candidatos a parque p&uacute;blico que colmatam o d&eacute;fice de proximidade (300m) na cidade do Porto.</p>
+        </div>
+      </a>
+
+      <a href="{{ site.baseurl }}/atropelamentos/dashboard_atropelamentos.html" class="map-card">
+        <div class="card-color" style="background:linear-gradient(90deg, #ef4444, #f97316);"></div>
+        <div class="card-body">
+          <span class="tag" style="background:#fef2f2; color:#ef4444;">ANSR + Notícias</span>
+          <h3>Atropelamentos &mdash; Grande Porto</h3>
+          <p>Dashboard de sinistralidade rodoviária com peões e ciclistas.</p>
+        </div>
+      </a>
+
     </div>
-  </a>
-  {% endfor %}
+  </div>
+
+  <div class="articles-col">
+    <h3 class="section-title">Artigos</h3>
+    {% for post in site.posts %}
+    <a href="{{ post.url | prepend: site.baseurl }}" class="map-card">
+      {% if post.image %}
+      <img src="{{ site.baseurl }}{{ post.image }}" alt="{{ post.title }}" class="card-thumb">
+      {% else %}
+      <div class="card-color" style="background:linear-gradient(90deg, #1e3a5f, #2d6a9f);"></div>
+      {% endif %}
+      <div class="card-body">
+        <span class="tag" style="background:#e8eef7; color:#1e3a5f;">Artigo</span>
+        <h3>{{ post.title }}</h3>
+        <time>{{ post.date | date: "%d %b %Y" }}</time>
+        <p>{{ post.description | default: post.excerpt | strip_html | truncatewords: 22 }}</p>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
 </div>
 
 <div class="video-section">
@@ -184,4 +299,3 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
   </div>
   <p class="video-caption">Evolução bienal vectorial do edificado, dados Landsat.</p>
 </div>
-
