@@ -50,11 +50,17 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
   }
   .stat-label {
     display: block;
-    font-size: 0.68rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
     margin-top: 0.35rem;
+  }
+  .stat-context {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+    line-height: 1.35;
   }
 
   /* Two-column layout */
@@ -190,19 +196,23 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
 <div class="stats-strip">
   <div class="stat-item">
     <span class="stat-number">77,2%</span>
-    <span class="stat-label">sem acessibilidade a verde</span>
+    <span class="stat-label">da população do Porto</span>
+    <span class="stat-context">vive sem acesso adequado a espaço verde público (raio 500m, método 2SFCA)</span>
   </div>
   <div class="stat-item">
     <span class="stat-number">49,4%</span>
     <span class="stat-label">em défice crítico</span>
+    <span class="stat-context">menos de 3&nbsp;m²/hab — concentrado no centro e zona oriental</span>
   </div>
   <div class="stat-item">
     <span class="stat-number">46</span>
-    <span class="stat-label">candidatos a parque público</span>
+    <span class="stat-label">terrenos identificados</span>
+    <span class="stat-context">candidatos a conversão em parque público, sem necessidade de expropriar</span>
   </div>
   <div class="stat-item">
     <span class="stat-number">+57%</span>
-    <span class="stat-label">área verde com conversão</span>
+    <span class="stat-label">mais verde público</span>
+    <span class="stat-context">e 58&nbsp;000 pessoas com um parque a menos de 300m, se os candidatos forem convertidos</span>
   </div>
 </div>
 
