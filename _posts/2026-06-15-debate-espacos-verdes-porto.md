@@ -7,10 +7,6 @@ image: /assets/images/sessao-espacos-verdes-painel.jpg
 tags: [porto, espaços verdes, campo aberto, garra, arborização, acessibilidade, biodiversidade]
 ---
 
-**Espaços Verdes do Porto: o Debate que Junta Ciência, Memória e Esperança**
-
----
-
 No dia 15 de Junho de 2026, umas 25 pessoas reuniram-se para discutir a evolução dos espaços verdes do Porto, num encontro promovido pela associação Campo Aberto em colaboração com o Grupo GARRA, sessão em que se cruzaram mais de sete décadas de dados científicos e imagens de satélite com a experiência de quem trabalha todos os dias pela arborização da cidade.
 
 ![Panorâmica da sala durante a sessão pública sobre espaços verdes do Porto]({{ site.baseurl }}/assets/images/sessao-espacos-verdes-painel.jpg)
