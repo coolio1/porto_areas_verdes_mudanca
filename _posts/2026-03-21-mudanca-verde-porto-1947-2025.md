@@ -3,7 +3,7 @@ layout: post
 title: "Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1947–2025)"
 description: "Análise quantitativa da evolução do solo e vegetação no Porto entre 1947 e 2025, com ortofotomapa aéreo, Landsat, Sentinel-2 e NDVI via Google Earth Engine."
 date: 2026-03-21
-image: /assets/images/cards/historico.jpg
+image: /assets/images/artigo-mudanca-solo.jpg
 tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação, animação, deteção remota, ortofoto, 1947]
 ---
 
