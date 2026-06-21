@@ -52,24 +52,16 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
     padding: 1.2rem 1.4rem;
   }
   .map-card .card-body h3 {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
     margin-bottom: 0.4rem;
   }
   .map-card .card-body p {
     font-size: 0.85rem;
     color: var(--muted);
     line-height: 1.5;
-  }
-  .map-card .card-body .tag {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 2px 8px;
-    border-radius: 3px;
-    margin-bottom: 0.5rem;
   }
   .map-card .card-body time {
     display: block;
@@ -140,7 +132,6 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
       <a href="{{ site.baseurl }}/acessibilidade/conversao_verde.html" class="map-card">
         <img src="{{ site.baseurl }}/assets/images/cards/conversao.jpg" class="card-thumb" style="object-position:center center" alt="Propostas de Conversão a Verde">
         <div class="card-body">
-          <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Konijnendijk 3-30-300 + PDM</span>
           <h3>Propostas de Convers&atilde;o a Verde</h3>
           <p>46 candidatos a parque p&uacute;blico que colmatam o d&eacute;fice de proximidade (300m) na cidade do Porto.</p>
         </div>
@@ -149,7 +140,6 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
       <a href="{{ site.baseurl }}/acessibilidade/acessibilidade_verde.html" class="map-card">
         <img src="{{ site.baseurl }}/assets/images/cards/acessibilidade.jpg" class="card-thumb" style="object-position:center center" alt="Acessibilidade a Verde Público">
         <div class="card-body">
-          <span class="tag" style="background:#fff3e0; color:#E8A838;">2SFCA + GHS-POP + PDM</span>
           <h3>Acessibilidade a Verde P&uacute;blico</h3>
           <p>Acessibilidade da popula&ccedil;&atilde;o a espa&ccedil;os verdes p&uacute;blicos (m&sup2;/hab, raio 500m). M&eacute;todo 2SFCA.</p>
         </div>
@@ -158,7 +148,6 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
       <a href="{{ site.baseurl }}/mapa.html" class="map-card">
         <img src="{{ site.baseurl }}/assets/images/cards/mudancas.jpg" class="card-thumb" style="object-position:center center" alt="Mudanças 2016-2025">
         <div class="card-body">
-          <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Sentinel-2 10m</span>
           <h3>Mudanças 2016 &mdash; 2025</h3>
           <p>Classificação de árvores, solo e edificado. Transições detectadas entre os dois períodos.</p>
         </div>
@@ -167,7 +156,6 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
       <a href="{{ site.baseurl }}/ndvi_historico.html" class="map-card">
         <img src="{{ site.baseurl }}/assets/images/cards/historico.jpg" class="card-thumb" style="object-position:center center" alt="Histórico 1947-2024">
         <div class="card-body">
-          <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Landsat 30-60m</span>
           <h3>Histórico 1947 &mdash; 2024</h3>
           <p>Ortofoto aérea de 1947 e seis décadas de vegetação Landsat com normalização inter-sensor.</p>
         </div>
@@ -176,7 +164,6 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
       <a href="{{ site.baseurl }}/interiores_quarteiroes.html" class="map-card">
         <img src="{{ site.baseurl }}/assets/images/cards/verde_privado.jpg" class="card-thumb" style="object-position:center center" alt="Verde Privado">
         <div class="card-body">
-          <span class="tag" style="background:#e8f5e9; color:#2E7D32;">Sentinel-2 + PDM</span>
           <h3>Verde Privado</h3>
           <p>Espaços verdes privados encravados no tecido urbano: os que subsistem e os que foram perdidos.</p>
         </div>
@@ -185,7 +172,6 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
       <a href="{{ site.baseurl }}/atropelamentos/dashboard_atropelamentos.html" class="map-card">
         <img src="{{ site.baseurl }}/assets/images/cards/atropelamentos.jpg" class="card-thumb" style="object-position:center center" alt="Atropelamentos — Grande Porto">
         <div class="card-body">
-          <span class="tag" style="background:#fef2f2; color:#ef4444;">ANSR + Notícias</span>
           <h3>Atropelamentos &mdash; Grande Porto</h3>
           <p>Dashboard de sinistralidade rodoviária com peões e ciclistas.</p>
         </div>
@@ -203,7 +189,6 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
       <div class="card-color" style="background:linear-gradient(90deg, #1e3a5f, #2d6a9f);"></div>
       {% endif %}
       <div class="card-body">
-        <span class="tag" style="background:#e8eef7; color:#1e3a5f;">Artigo</span>
         <h3>{{ post.title }}</h3>
         <time>{{ post.date | date: "%d %b %Y" }}</time>
         <p>{{ post.description | default: post.excerpt | strip_html | truncatewords: 22 }}</p>
