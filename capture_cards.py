@@ -75,6 +75,22 @@ def capture(page, m):
     # Pausa extra para tiles carregarem
     time.sleep(m["extra_wait"])
 
+    # Esconder controlos, legendas e nav antes do screenshot
+    page.evaluate("""() => {
+        const hide = [
+            '.leaflet-control-container',
+            '.leaflet-control',
+            '.legend', '.info',
+            '#legend', '#panel', '#controls', '#sidebar',
+            '.legend-container', '.map-legend',
+            '#nav', '.nav-fixed', 'nav',
+            '.leaflet-bottom', '.leaflet-top'
+        ];
+        hide.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => { el.style.display = 'none'; });
+        });
+    }""")
+
     # Screenshot da área do mapa (#map ou .leaflet-container, senão full page)
     map_el = page.query_selector("#map") or page.query_selector(".leaflet-container")
     out = OUT_DIR / f"{slug}.jpg"
