@@ -23,9 +23,9 @@ PAGES = [
 
 # Páginas Jekyll-only (não têm nav Python — não entram em PAGES nem em TARGETS)
 _JEKYLL_EXTRA = [
+    ("artigos/", "Artigos"),
     ("sobre/", "Sobre"),
 ]
-_GITHUB_URL = "https://github.com/coolio1/porto_areas_verdes_mudanca"
 
 
 def get_jekyll_nav():
@@ -40,7 +40,6 @@ def get_jekyll_nav():
         lines.append(f'  <a href="{href}">{label}</a>')
     for path, label in _JEKYLL_EXTRA:
         lines.append(f'  <a href="{base}/{path}">{label}</a>')
-    lines.append(f'  <a href="{_GITHUB_URL}" target="_blank">GitHub</a>')
     return "<nav>\n" + "\n".join(lines) + "\n</nav>"
 
 
