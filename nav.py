@@ -21,7 +21,7 @@ PAGES = [
     ("atropelamentos/dashboard_atropelamentos.html",  "Atropelamentos"),
 ]
 
-# Páginas Jekyll-only (não têm nav Python — não entram em PAGES nem em TARGETS)
+# Páginas Jekyll-only (não entram em PAGES nem em TARGETS mas aparecem em AMBOS os navs)
 _JEKYLL_EXTRA = [
     ("artigos/", "Artigos"),
     ("sobre/", "Sobre"),
@@ -64,5 +64,9 @@ def get_nav(active_canonical, depth=0):
 
         cls = ' class="active"' if canonical == active_canonical else ""
         lines.append(f'  <a href="{href}"{cls}>{label}</a>')
+
+    for path, label in _JEKYLL_EXTRA:
+        href = prefix + path if depth > 0 else path
+        lines.append(f'  <a href="{href}">{label}</a>')
 
     return "<div id=\"nav\">\n" + "\n".join(lines) + "\n</div>"
