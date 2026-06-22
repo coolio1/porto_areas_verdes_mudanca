@@ -45,7 +45,7 @@ layout: default
     margin: 1.8rem 0 0.3rem;
   }
   /* caption: *italic* alone on line after image */
-  article p > em:only-child {
+  article p:has(> img) + p > em:only-child {
     display: block;
     text-align: center;
     font-size: 0.82rem;
