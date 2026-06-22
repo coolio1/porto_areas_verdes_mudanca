@@ -1,0 +1,45 @@
+---
+layout: default
+title: Artigos
+description: "Todos os artigos publicados no Porto Verde."
+---
+
+<style>
+  .post-list { list-style: none; margin: 0; padding: 0; }
+  .post-list li {
+    border-bottom: 1px solid #eee;
+    padding: 1.2rem 0;
+  }
+  .post-list li:last-child { border-bottom: none; }
+  .post-list time {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .post-list a {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .post-list a:hover { color: var(--accent); }
+  .post-list p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    line-height: 1.5;
+  }
+</style>
+
+<h1 style="font-size:1.4rem; font-weight:700; margin-bottom:1.5rem;">Artigos</h1>
+
+<ul class="post-list">
+  {% for post in site.posts %}
+  <li>
+    <time>{{ post.date | date: "%d %b %Y" }}</time>
+    <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+    {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
