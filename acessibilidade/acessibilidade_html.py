@@ -84,6 +84,8 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
 <title>Acessibilidade a Verde P&uacute;blico — Porto</title>
 <meta name="description" content="Mapa de acessibilidade da população do Porto a espaços verdes públicos (m²/hab, raio 500m), usando o método 2SFCA com dados GHS-POP e PDM.">
 <link rel="canonical" href="https://coolio1.github.io/porto_areas_verdes_mudanca/acessibilidade/acessibilidade_verde.html">

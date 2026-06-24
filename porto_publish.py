@@ -226,6 +226,8 @@ html = f'''<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <title>Espaço verde do Porto — Mudança 2016-2025</title>
 <meta name="description" content="Mapa interactivo da mudança de uso do solo no Porto entre 2016 e 2025, com classificação Sentinel-2 (árvores, solo, edificado).">
 <link rel="canonical" href="https://coolio1.github.io/porto_areas_verdes_mudanca/mapa.html">

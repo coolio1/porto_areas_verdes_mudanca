@@ -519,6 +519,8 @@ def build_html(layer_paths, stats):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
 <title>Uso do solo — Porto 1947</title>
 <meta name="description" content="Classificação do uso do solo no Porto em 1947, baseada na ortofoto aérea CIIMAR/FCUP com Random Forest (vegetação e edificado).">
 <link rel="canonical" href="https://coolio1.github.io/porto_areas_verdes_mudanca/1947/orto_1947.html">
