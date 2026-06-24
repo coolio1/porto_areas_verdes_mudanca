@@ -283,9 +283,28 @@ function init() {{
           html += '<br><span style="color:#444;">Cobertura: ' + p.pct_antes + '% &rarr; ' + p.pct_depois + '%</span>';
         }}
         layer.bindPopup(html);
+        var label = '#' + p.rank + (p.nome ? ' — ' + p.nome : '');
+        layer.bindTooltip(label, {{
+          permanent: true, direction: 'center',
+          className: 'cand-label',
+          offset: [0, 0]
+        }});
+        if (p.label_lat && p.label_lon) {{
+          layer.on('tooltipopen', function() {{
+            layer.getTooltip().setLatLng([p.label_lat, p.label_lon]);
+          }});
+        }}
       }}
     }});
     candGeoLayer.addTo(map);
+
+    var candLabelsOn = true;
+    map.on('zoomend', function() {{
+      var labels = document.querySelectorAll('.cand-label');
+      var z = map.getZoom();
+      labels.forEach(function(l) {{ l.style.display = (candLabelsOn && z >= 13) ? '' : 'none'; }});
+    }});
+    map.fire('zoomend');
   }}
 
   // --- Overlays ---
@@ -428,6 +447,20 @@ function init() {{
   var pLb = document.createElement('label'); pLb.textContent = 'Parques e Jardins'; pLb.style.fontSize = '12px';
   pRow.appendChild(pCb); pRow.appendChild(pSw); pRow.appendChild(pLb);
   ctxDiv.appendChild(pRow);
+
+  // --- Toggle nomes dos candidatos ---
+  var nRow = document.createElement('div'); nRow.className = 'row';
+  var nCb = document.createElement('input'); nCb.type = 'checkbox'; nCb.checked = true;
+  nCb.addEventListener('change', function() {{
+    candLabelsOn = this.checked;
+    var z = map.getZoom();
+    document.querySelectorAll('.cand-label').forEach(function(l) {{
+      l.style.display = (candLabelsOn && z >= 13) ? '' : 'none';
+    }});
+  }});
+  var nLb = document.createElement('label'); nLb.textContent = 'Nomes dos candidatos'; nLb.style.fontSize = '12px';
+  nRow.appendChild(nCb); nRow.appendChild(nLb);
+  ctxDiv.appendChild(nRow);
 
   window.initParques = function() {{
     if (!parquesData) return;

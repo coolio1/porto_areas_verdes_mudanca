@@ -84,7 +84,8 @@ def capture(page, m):
             '#legend', '#panel', '#controls', '#sidebar',
             '.legend-container', '.map-legend',
             '#nav', '.nav-fixed', 'nav',
-            '.leaflet-bottom', '.leaflet-top'
+            '.leaflet-bottom', '.leaflet-top',
+            '.cand-label', '.park-label'
         ];
         hide.forEach(sel => {
             document.querySelectorAll(sel).forEach(el => { el.style.display = 'none'; });
