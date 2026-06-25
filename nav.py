@@ -54,8 +54,17 @@ def get_nav(active_canonical, depth=0):
     prefix = "../" * depth
     current_dir = "/".join(active_canonical.split("/")[:-1])
 
-    lines = []
+    logo = (
+        f'  <a href="{prefix}index.html"'
+        f' style="padding:0;background:none;box-shadow:none;line-height:0;">'
+        f'<img src="{prefix}assets/images/logo-porto-verde.png" alt="Porto Verde"'
+        f' style="height:26px;width:auto;vertical-align:middle;border-radius:0;'
+        f'filter:drop-shadow(0 1px 2px rgba(0,0,0,0.2));"></a>'
+    )
+    lines = [logo]
     for canonical, label in PAGES:
+        if canonical == "index.html":
+            continue  # já representado pelo logo
         if depth > 0:
             target_dir = "/".join(canonical.split("/")[:-1])
             href = canonical.split("/")[-1] if current_dir == target_dir else prefix + canonical
