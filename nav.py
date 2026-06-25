@@ -54,17 +54,8 @@ def get_nav(active_canonical, depth=0):
     prefix = "../" * depth
     current_dir = "/".join(active_canonical.split("/")[:-1])
 
-    logo = (
-        f'  <a href="{prefix}index.html"'
-        f' style="padding:0;background:none;box-shadow:none;line-height:0;">'
-        f'<img src="{prefix}assets/images/logo-porto-verde.png" alt="Porto Verde"'
-        f' style="height:26px;width:auto;vertical-align:middle;border-radius:0;'
-        f'filter:drop-shadow(0 1px 2px rgba(0,0,0,0.2));"></a>'
-    )
-    lines = [logo]
+    lines = []
     for canonical, label in PAGES:
-        if canonical == "index.html":
-            continue  # já representado pelo logo
         if depth > 0:
             target_dir = "/".join(canonical.split("/")[:-1])
             href = canonical.split("/")[-1] if current_dir == target_dir else prefix + canonical
@@ -79,3 +70,26 @@ def get_nav(active_canonical, depth=0):
         lines.append(f'  <a href="{href}">{label}</a>')
 
     return "<div id=\"nav\">\n" + "\n".join(lines) + "\n</div>"
+
+
+def get_footer_logo(depth=0):
+    """
+    Devolve o bloco <div id="footer-logo">...</div> para mapas standalone.
+    Logo centrado no fundo com o link para o index e crédito "Nuno Quental".
+    Esconde o #credit original via <style> inline.
+    """
+    prefix = "../" * depth
+    return (
+        '<div id="footer-logo" style="position:fixed;bottom:10px;left:50%;'
+        'transform:translateX(-50%);z-index:1000;text-align:center;pointer-events:none;">\n'
+        '  <style>#credit{display:none!important}'
+        '@media(max-width:768px){#footer-logo{display:none!important}}</style>\n'
+        f'  <a href="{prefix}index.html" style="display:inline-block;pointer-events:auto;">'
+        f'<img src="{prefix}assets/images/logo-porto-verde.png" alt="Porto Verde"'
+        ' style="height:52px;width:auto;border-radius:0;display:block;margin:0 auto;'
+        'filter:drop-shadow(0 1px 3px rgba(0,0,0,0.2));"></a>\n'
+        '  <a href="https://coolio1.github.io/" target="_blank"'
+        ' style="display:block;margin-top:3px;font:10px \'Segoe UI\',Arial,sans-serif;'
+        'color:#888;text-decoration:none;pointer-events:auto;">Nuno Quental</a>\n'
+        '</div>'
+    )
