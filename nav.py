@@ -80,8 +80,8 @@ def get_footer_logo(depth=0):
     """
     prefix = "../" * depth
     return (
-        '<div id="footer-logo" style="position:fixed;bottom:10px;left:50%;'
-        'transform:translateX(-50%);z-index:1000;text-align:center;pointer-events:none;">\n'
+        '<div id="footer-logo" style="position:fixed;bottom:10px;right:10px;'
+        'z-index:1000;text-align:center;pointer-events:none;">\n'
         '  <style>#credit{display:none!important}'
         '@media(max-width:768px){#footer-logo{display:none!important}}</style>\n'
         f'  <a href="{prefix}index.html" style="display:inline-block;pointer-events:auto;">'
