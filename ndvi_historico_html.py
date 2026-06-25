@@ -73,7 +73,7 @@ def build_html(script_dir, layers_dir, bounds, bounds_1947, epochs, layers_1947,
         ('OpenStreetMap', 'osm'),
     ]
     basemap_options = ''.join(
-        f'<option value="{key}"{"selected" if i == 0 else ""}>{name}</option>'
+        f'<option value="{key}"{"selected" if key == "positron" else ""}>{name}</option>'
         for i, (name, key) in enumerate(basemaps)
     )
 
@@ -171,7 +171,7 @@ def build_html(script_dir, layers_dir, bounds, bounds_1947, epochs, layers_1947,
 
 <script>
 var map = L.map('map').setView([41.155, -8.63], 13);
-var baseTile = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {maxZoom:19, attribution:''}).addTo(map);
+var baseTile = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {maxZoom:19, attribution:''}).addTo(map);
 var wmsLayer = null;
 
 document.getElementById('basemap-select').addEventListener('change', function() {

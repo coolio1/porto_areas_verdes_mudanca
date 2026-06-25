@@ -128,8 +128,8 @@
   <hr style="border-color:#555;margin:10px 0 6px 0;">
   <div class="section">Fundo</div>
   <select id="basemap-select">
-    <option value="dark" selected>CartoDB Dark</option>
-    <option value="positron">CartoDB Positron</option>
+    <option value="dark">CartoDB Dark</option>
+    <option value="positron" selected>CartoDB Positron</option>
     <option value="orto1947">Ortofoto 1947</option>
     <option value="satellite">Satélite (atual)</option>
     <option value="osm">OpenStreetMap</option>
@@ -148,7 +148,7 @@
 var map = L.map('map').setView([41.155, -8.63], 13);
 
 // --- Basemap management ---
-var baseTile = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {maxZoom:19, attribution:''}).addTo(map);
+var baseTile = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {maxZoom:19, attribution:''}).addTo(map);
 var wmsLayer = null;
 
 document.getElementById('basemap-select').addEventListener('change', function() {
