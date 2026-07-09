@@ -11,6 +11,8 @@ Em [30 de março de 2026]({{ site.baseurl }}/posts/carta-aberta-aurificia/), dez
 
 Perante isto, um grupo de cidadãos e a associação Campo Aberto – Associação de Defesa do Ambiente apresentaram, a 5 de julho de 2026, uma denúncia formal junto do Departamento Central de Contencioso do Estado e Interesses Coletivos e Difusos (DCCEICD) da Procuradoria-Geral da República, pedindo a intervenção urgente do Ministério Público e o decretamento de uma providência cautelar que suspenda imediatamente os trabalhos.
 
+[Ler a denúncia completa (PDF)]({{ site.baseurl }}/assets/pdfs/denuncia-mp-aurificia-2026.pdf) — *dados de identificação pessoal dos denunciantes foram ocultados nesta cópia.*
+
 ![Fotografia aérea do logradouro da Companhia Aurifícia]({{ site.baseurl }}/assets/images/aurificia-denuncia-foto-aerea.jpg)
 *O logradouro arborizado entre a Rua de Álvares Cabral e a Rua dos Bragas, antes do início do arranque de árvores.*
 
