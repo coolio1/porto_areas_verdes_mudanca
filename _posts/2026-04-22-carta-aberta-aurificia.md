@@ -35,6 +35,8 @@ O momento de impor condicionantes eficazes ao projeto é este, na fase de licenc
 
 Um urbanismo que continue a destruir em vez de fazer cidade não interessa ao Porto.
 
+**Atualização (9 de julho de 2026):** perante o silêncio persistente da Câmara Municipal e o início do arranque de árvores no local a 3 de julho de 2026, os denunciantes apresentaram uma [denúncia formal ao Ministério Público]({{ site.baseurl }}/posts/denuncia-ministerio-publico-aurificia/), pedindo a suspensão cautelar urgente dos trabalhos.
+
 ---
 
 **Os signatários**
