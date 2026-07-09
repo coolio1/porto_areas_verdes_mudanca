@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Denúncia ao Ministério Público: arranque de árvores na Companhia Aurifícia enquanto a Câmara do Porto mantém silêncio"
-description: "Cidadãos e a associação Campo Aberto denunciam ao Ministério Público o início do abate de árvores no interior do quarteirão classificado da antiga Companhia Aurifícia, e pedem a suspensão cautelar urgente das obras."
+description: "Cidadãos e as associações Campo Aberto e Quercus denunciam ao Ministério Público o início do abate de árvores no interior do quarteirão classificado da antiga Companhia Aurifícia, e pedem a suspensão cautelar urgente das obras."
 date: 2026-07-09
 tags: [urbanismo, porto, verde, património, denúncia]
 image: /assets/images/aurificia-denuncia-foto-aerea.jpg
@@ -9,7 +9,7 @@ image: /assets/images/aurificia-denuncia-foto-aerea.jpg
 
 Em [30 de março de 2026]({{ site.baseurl }}/posts/carta-aberta-aurificia/), dezassete cidadãos enviaram uma carta aberta ao Presidente da Câmara Municipal do Porto a alertar para as ilegalidades do projeto de reconversão da antiga Companhia Aurifícia — 122 fogos e 252 lugares de estacionamento a ocupar quase por completo um dos últimos grandes logradouros verdes do centro do Porto. Mais de três meses depois, a autarquia nunca respondeu, nunca facultou um único documento do procedimento — e, a 3 de julho de 2026, começou o arranque de árvores no interior do quarteirão classificado.
 
-Perante isto, um grupo de cidadãos e a associação Campo Aberto – Associação de Defesa do Ambiente apresentaram, a 5 de julho de 2026, uma denúncia formal junto do Departamento Central de Contencioso do Estado e Interesses Coletivos e Difusos (DCCEICD) da Procuradoria-Geral da República, pedindo a intervenção urgente do Ministério Público e o decretamento de uma providência cautelar que suspenda imediatamente os trabalhos.
+Perante isto, um grupo de cidadãos e as associações Campo Aberto – Associação de Defesa do Ambiente e Quercus – Associação Nacional de Conservação da Natureza apresentaram, a 5 de julho de 2026, uma denúncia formal junto do Departamento Central de Contencioso do Estado e Interesses Coletivos e Difusos (DCCEICD) da Procuradoria-Geral da República, pedindo a intervenção urgente do Ministério Público e o decretamento de uma providência cautelar que suspenda imediatamente os trabalhos.
 
 [Ler a denúncia completa (PDF)]({{ site.baseurl }}/assets/pdfs/denuncia-mp-aurificia-2026.pdf) — *dados de identificação pessoal dos denunciantes foram ocultados nesta cópia.*
 
@@ -57,6 +57,6 @@ Cada árvore abatida e cada metro quadrado de solo permeável destruído no inte
 
 **Pelos denunciantes**
 
-Campo Aberto – Associação de Defesa do Ambiente
+Campo Aberto – Associação de Defesa do Ambiente · Quercus – Associação Nacional de Conservação da Natureza
 
 Alda Sousa · Ana Paula Gago · Celina Raposo · Helena Alice Fevereiro Ferreira · Jorge Vilhena Mesquita · José Alberto Rio Fernandes · José Carlos Costa Marques · Luis Nuno Ferreira Pacheco Quental · Paulo Ferrero · Pedro Pardinhas
