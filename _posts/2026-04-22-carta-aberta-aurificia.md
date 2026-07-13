@@ -4,7 +4,7 @@ title: "Carta aberta ao Presidente da Câmara Municipal do Porto – pela reform
 description: "Dezassete cidadãos pedem ao Presidente da CMP a revisão do projeto de 85 milhões de euros na Antiga Companhia Aurifícia: 122 fogos e 252 lugares de estacionamento que violam o PDM e destroem o último grande logradouro verde do centro do Porto."
 date: 2026-04-22
 tags: [urbanismo, porto, verde, património, carta-aberta]
-image: /assets/images/aurificia-foto-aerea.gif
+image: /assets/images/aurificia-fachada-historica.jpg
 ---
 
 *Publicado originalmente em [Campo Aberto](https://www.campoaberto.pt/2026/04/22/mais-um-clamoroso-erro-urbanistico-no-porto/), 22 de Abril de 2026.*

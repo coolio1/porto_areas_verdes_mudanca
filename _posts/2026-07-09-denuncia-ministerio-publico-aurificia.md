@@ -13,9 +13,6 @@ Perante isto, um grupo de cidadãos e as associações Campo Aberto – Associa�
 
 [Ler a denúncia completa (PDF)]({{ site.baseurl }}/assets/pdfs/denuncia-mp-aurificia-2026.pdf) — *dados de identificação pessoal dos denunciantes foram ocultados nesta cópia.*
 
-![Fotografia aérea do logradouro da Companhia Aurifícia]({{ site.baseurl }}/assets/images/aurificia-denuncia-foto-aerea.jpg)
-*O logradouro arborizado entre a Rua de Álvares Cabral e a Rua dos Bragas, antes do início do arranque de árvores.*
-
 ## Um historial de silêncio administrativo
 
 A cronologia documentada na denúncia é elucidativa:
