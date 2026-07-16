@@ -14,7 +14,7 @@ from playwright.sync_api import sync_playwright
 if sys.stdout.encoding != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-BASE_URL = "https://coolio1.github.io/porto_areas_verdes_mudanca"
+BASE_URL = "https://portoverde.pt"
 OUT_DIR = Path(__file__).parent / "assets" / "images" / "cards"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 

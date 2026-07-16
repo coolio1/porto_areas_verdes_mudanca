@@ -87,10 +87,10 @@ def gerar_html(casos, agregados):
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <title>Atropelamentos no Grande Porto — Dashboard</title>
     <meta name="description" content="Dashboard de sinistralidade rodoviária com peões e ciclistas no Grande Porto, com dados ANSR e notícias geolocalizadas.">
-    <link rel="canonical" href="https://coolio1.github.io/porto_areas_verdes_mudanca/atropelamentos/dashboard_atropelamentos.html">
+    <link rel="canonical" href="https://portoverde.pt/atropelamentos/dashboard_atropelamentos.html">
     <meta property="og:title" content="Atropelamentos no Grande Porto — Dashboard">
     <meta property="og:description" content="Dashboard de sinistralidade rodoviária com peões e ciclistas no Grande Porto.">
-    <meta property="og:url" content="https://coolio1.github.io/porto_areas_verdes_mudanca/atropelamentos/dashboard_atropelamentos.html">
+    <meta property="og:url" content="https://portoverde.pt/atropelamentos/dashboard_atropelamentos.html">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

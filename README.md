@@ -2,16 +2,16 @@
 
 Projecto de detecção remota e análise geoespacial sobre a evolução dos espaços verdes do Porto (1947–2025).
 
-**[coolio1.github.io/porto_areas_verdes_mudanca](https://coolio1.github.io/porto_areas_verdes_mudanca/)**
+**[portoverde.pt](https://portoverde.pt/)**
 
 ## Mapas interactivos
 
-- [Mapa actual](https://coolio1.github.io/porto_areas_verdes_mudanca/mapa.html) — classificação Sentinel-2 (2016–2025): verde público, verde pago, verde privado
-- [Mapa histórico](https://coolio1.github.io/porto_areas_verdes_mudanca/ndvi_historico.html) — evolução NDVI via Landsat (1984–2024)
-- [Verde privado](https://coolio1.github.io/porto_areas_verdes_mudanca/interiores_quarteiroes.html) — logradouros e quintais detectados por satélite
-- [Acessibilidade](https://coolio1.github.io/porto_areas_verdes_mudanca/acessibilidade/acessibilidade_verde.html) — acessibilidade pedonal aos espaços verdes (2SFCA)
-- [Conversão urbanística](https://coolio1.github.io/porto_areas_verdes_mudanca/acessibilidade/conversao_verde.html) — áreas verdes perdidas para construção
-- [Sinistralidade rodoviária](https://coolio1.github.io/porto_areas_verdes_mudanca/atropelamentos/dashboard_atropelamentos.html) — dashboard de atropelamentos no Grande Porto
+- [Mapa actual](https://portoverde.pt/mapa.html) — classificação Sentinel-2 (2016–2025): verde público, verde pago, verde privado
+- [Mapa histórico](https://portoverde.pt/ndvi_historico.html) — evolução NDVI via Landsat (1984–2024)
+- [Verde privado](https://portoverde.pt/interiores_quarteiroes.html) — logradouros e quintais detectados por satélite
+- [Acessibilidade](https://portoverde.pt/acessibilidade/acessibilidade_verde.html) — acessibilidade pedonal aos espaços verdes (2SFCA)
+- [Conversão urbanística](https://portoverde.pt/acessibilidade/conversao_verde.html) — áreas verdes perdidas para construção
+- [Sinistralidade rodoviária](https://portoverde.pt/atropelamentos/dashboard_atropelamentos.html) — dashboard de atropelamentos no Grande Porto
 
 ## Fontes de dados
 
