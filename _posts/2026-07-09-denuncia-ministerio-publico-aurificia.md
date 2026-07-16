@@ -11,6 +11,10 @@ Em [30 de março de 2026]({{ site.baseurl }}/posts/carta-aberta-aurificia/), dez
 
 Perante isto, um grupo de cidadãos e as associações Campo Aberto – Associação de Defesa do Ambiente e Quercus – Associação Nacional de Conservação da Natureza apresentaram, a 5 de julho de 2026, uma denúncia formal junto do Departamento Central de Contencioso do Estado e Interesses Coletivos e Difusos (DCCEICD) da Procuradoria-Geral da República, pedindo a intervenção urgente do Ministério Público e o decretamento de uma providência cautelar que suspenda imediatamente os trabalhos.
 
+<div style="position:relative;width:100%;aspect-ratio:16/9;margin:1.2rem 0;">
+  <iframe src="https://www.youtube.com/embed/T9GuY9sORX0" title="YouTube video player" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:4px;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+
 [Ler a denúncia completa (PDF)]({{ site.baseurl }}/assets/pdfs/denuncia-mp-aurificia-2026.pdf) — *dados de identificação pessoal dos denunciantes foram ocultados nesta cópia.*
 
 ## Um historial de silêncio administrativo
