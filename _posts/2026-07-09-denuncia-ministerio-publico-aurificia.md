@@ -15,7 +15,7 @@ Perante isto, um grupo de cidadãos e as associações Campo Aberto – Associa�
   <iframe src="https://www.youtube.com/embed/T9GuY9sORX0" title="YouTube video player" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:4px;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
-[Ler a denúncia completa (PDF)]({{ site.baseurl }}/assets/pdfs/denuncia-mp-aurificia-2026.pdf) — *dados de identificação pessoal dos denunciantes foram ocultados nesta cópia.*
+[Ler a denúncia completa (PDF)]({{ site.baseurl }}/assets/pdfs/denuncia-mp-aurificia-2026.pdf)
 
 ## Um historial de silêncio administrativo
 
