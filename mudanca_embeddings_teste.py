@@ -121,3 +121,84 @@ layer_paths = {}
 for label, threshold, _desc in THRESHOLDS:
     layer_paths[label] = download_change_layer(threshold, label)
 print(f'  Ficheiros gerados: {list(layer_paths.values())}')
+
+# ============================================================
+# HTML standalone de inspeccao (Leaflet, sem nav — nao e pagina do site)
+# ============================================================
+def to_b64(filepath):
+    with open(filepath, 'rb') as f:
+        return base64.b64encode(f.read()).decode()
+
+test_layers = [
+    (label, desc, label == 'pi4', to_b64(layer_paths[label]))
+    for label, _threshold, desc in THRESHOLDS
+]
+
+layer_js = ',\n'.join([
+    f'  {{id:"{lid}", label:"{desc}", show:{str(show).lower()}, '
+    f'src:"data:image/png;base64,{b64}"}}'
+    for lid, desc, show, b64 in test_layers
+])
+
+center_lat = (BOUNDS[0][0] + BOUNDS[1][0]) / 2
+center_lon = (BOUNDS[0][1] + BOUNDS[1][1]) / 2
+
+html = f'''<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Teste mudanca embeddings AlphaEarth - Serralves</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  body {{ margin:0; }} #map {{ position:absolute; top:0; bottom:0; width:100%; }}
+  #panel {{ position:fixed; bottom:20px; left:20px; z-index:1000;
+    background:rgba(30,30,30,0.95); padding:14px 18px; border-radius:10px;
+    font:13px 'Segoe UI',sans-serif; color:#eee; line-height:2.0; max-width:320px; }}
+  .row {{ display:flex; align-items:center; gap:8px; }}
+  .row input[type=checkbox] {{ width:15px; height:15px; cursor:pointer; }}
+  .row input[type=range] {{ width:70px; }}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="panel">
+  <b>Teste: mudanca via embeddings AlphaEarth</b><br>
+  <span style="color:#aaa;font-size:10px;">Contagem de mudancas 2018-2025 (0-8) | Serralves 1500m</span>
+  <div id="rows"></div>
+</div>
+<script>
+var map = L.map('map').setView([{center_lat}, {center_lon}], 15);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+  maxZoom:19, attribution:'Esri'
+}}).addTo(map);
+var bounds = {BOUNDS};
+var layers = [{layer_js}];
+var state = [];
+function init(){{
+  var div = document.getElementById('rows');
+  for (var i = 0; i < layers.length; i++) {{
+    var L_ = layers[i];
+    var ov = L.imageOverlay(L_.src, bounds, {{opacity: 0.75}});
+    if (L_.show) ov.addTo(map);
+    state.push({{overlay: ov}});
+    var row = document.createElement('div'); row.className = 'row';
+    var cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = L_.show; cb.dataset.idx = i;
+    cb.addEventListener('change', function(){{
+      var idx = +this.dataset.idx;
+      if (this.checked) state[idx].overlay.addTo(map); else map.removeLayer(state[idx].overlay);
+    }});
+    var lb = document.createElement('label'); lb.textContent = L_.label;
+    row.appendChild(cb); row.appendChild(lb); div.appendChild(row);
+  }}
+}}
+init();
+</script>
+</body>
+</html>'''
+
+with open('mudanca_embeddings_teste.html', 'w', encoding='utf-8') as f:
+    f.write(html)
+print('\nmudanca_embeddings_teste.html gerado')
+
+webbrowser.open('mudanca_embeddings_teste.html')
