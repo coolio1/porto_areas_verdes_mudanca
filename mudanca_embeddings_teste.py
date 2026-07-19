@@ -87,3 +87,37 @@ stats = default_count.reduceRegion(
 ).getInfo()
 print(f'  Media de mudancas/pixel: {stats.get("count_mean"):.2f}')
 print(f'  Maximo de mudancas/pixel: {stats.get("count_max")}')
+
+# ============================================================
+# Thumbnails: contagem de mudancas visualizada, 3 thresholds
+# ============================================================
+# Paleta sequencial branco -> vermelho escuro, 9 niveis (contagem 0 a 8)
+PALETTE = ['ffffff', 'ffe0b2', 'ffcc80', 'ffab91', 'ff8a65',
+           'ff7043', 'f4511e', 'd84315', '7f0000']
+DIM = 1024
+
+THRESHOLDS = [
+    ('pi6', math.pi / 6, 'Threshold pi/6 (mais sensivel)'),
+    ('pi4', math.pi / 4, 'Threshold pi/4 (default do sample)'),
+    ('pi3', math.pi / 3, 'Threshold pi/3 (mais conservador)'),
+]
+
+def download_change_layer(threshold, label):
+    """Descarrega a contagem de mudancas visualizada (paleta 0-8) como PNG."""
+    img = get_change_count_image(threshold)
+    vis = img.visualize(min=0, max=8, palette=PALETTE)
+    url = vis.getThumbURL({'region': area, 'dimensions': DIM, 'format': 'png'})
+    print(f'  A descarregar mudanca_{label}...')
+    r = requests.get(url)
+    r.raise_for_status()
+    os.makedirs('layers/test', exist_ok=True)
+    filepath = f'layers/test/mudanca_{label}.png'
+    with open(filepath, 'wb') as f:
+        f.write(r.content)
+    return filepath
+
+print('\nA descarregar camadas de contagem de mudancas (3 thresholds)...')
+layer_paths = {}
+for label, threshold, _desc in THRESHOLDS:
+    layer_paths[label] = download_change_layer(threshold, label)
+print(f'  Ficheiros gerados: {list(layer_paths.values())}')
