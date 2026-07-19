@@ -60,3 +60,30 @@ print(f'  Bandas do embedding 2020: {len(band_names)} bandas ({band_names[0]}...
 n_images_2020 = (EMBEDDINGS.filterBounds(area)
     .filter(ee.Filter.calendarRange(2020, 2020, 'year')).size().getInfo())
 print(f'  Imagens 2020 cobrindo a area de teste: {n_images_2020}')
+
+# ============================================================
+# Contagem de mudancas 2018-2025 (8 comparacoes ano-a-ano)
+# ============================================================
+def get_change_count_image(threshold):
+    """Numero de anos (2018-2025) em que o pixel mudou significativamente.
+
+    Compara cada ano ao anterior (2017 e o baseline do primeiro par).
+    Retorna imagem de banda unica 'count', valores 0-8.
+    """
+    count = ee.Image.constant(0).rename('count')
+    for year in range(2018, 2026):
+        prev = year_embedding(year - 1)
+        cur = year_embedding(year)
+        changed = get_angle(prev, cur).gt(threshold).rename('count')
+        count = count.add(changed)
+    return count.clip(area).rename('count')
+
+# --- Validacao numerica antes de gerar visuais (threshold default pi/4) ---
+print('\nA validar contagem de mudancas (threshold pi/4, area de teste)...')
+default_count = get_change_count_image(math.pi / 4)
+stats = default_count.reduceRegion(
+    reducer=ee.Reducer.mean().combine(ee.Reducer.max(), sharedInputs=True),
+    geometry=area, scale=10, maxPixels=1e8
+).getInfo()
+print(f'  Media de mudancas/pixel: {stats.get("count_mean"):.2f}')
+print(f'  Maximo de mudancas/pixel: {stats.get("count_max")}')
