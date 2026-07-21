@@ -4,7 +4,11 @@ import os
 import base64
 from dotenv import load_dotenv
 
-load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+LAYERS_DIR = os.path.join(ROOT_DIR, 'layers')
+
+load_dotenv(os.path.join(ROOT_DIR, '.env'))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)
 
@@ -123,7 +127,7 @@ treesToBuilt = isTree_e.And(isBuilt_l).And(ndviDrop.gte(0.15))
 soloToBuilt  = isSolo_e.And(isBuilt_l).And(ndviDrop.gte(0.1))
 soloToTrees  = isTree_e.Not().And(isTree_l).And(ndvi_l.subtract(ndvi_e).gte(0.15))
 
-os.makedirs('layers', exist_ok=True)
+os.makedirs(LAYERS_DIR, exist_ok=True)
 DIM = 2048
 
 def download_layer(image, color_hex, filename):
@@ -131,7 +135,7 @@ def download_layer(image, color_hex, filename):
     from PIL import Image
     import io, time
 
-    filepath = f'layers/{filename}'
+    filepath = os.path.join(LAYERS_DIR, filename)
     if os.path.exists(filepath):
         print(f'  {filename} ja existe, a saltar...')
         return filepath
@@ -201,7 +205,7 @@ ALL_LAYERS_PLUS = ALL_LAYERS + [('municipios', None, 'Limites municipais', 'FFFF
 import json
 layers_js_items = []
 for lid, mask, label, color, show in ALL_LAYERS_PLUS:
-    b64 = to_base64(f'layers/{lid}.png')
+    b64 = to_base64(os.path.join(LAYERS_DIR, f'{lid}.png'))
     layers_js_items.append(
         f'{{id:"{lid}",label:"{label}",color:"#{color}",show:{str(show).lower()},src:"{b64}"}}'
     )
@@ -230,10 +234,10 @@ html = f'''<!DOCTYPE html>
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <title>Espaço verde do Porto — Mudança 2016-2025</title>
 <meta name="description" content="Mapa interactivo da mudança de uso do solo no Porto entre 2016 e 2025, com classificação Sentinel-2 (árvores, solo, edificado).">
-<link rel="canonical" href="https://portoverde.pt/mapa.html">
+<link rel="canonical" href="https://portoverde.pt/mapa/mapa.html">
 <meta property="og:title" content="Espaço verde do Porto — Mudança 2016-2025">
 <meta property="og:description" content="Mapa interactivo da mudança de uso do solo no Porto entre 2016 e 2025, com classificação Sentinel-2.">
-<meta property="og:url" content="https://portoverde.pt/mapa.html">
+<meta property="og:url" content="https://portoverde.pt/mapa/mapa.html">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -404,7 +408,7 @@ init();
 </body>
 </html>'''
 
-output = 'index.html'
+output = os.path.join(SCRIPT_DIR, 'mapa.html')
 with open(output, 'w', encoding='utf-8') as f:
     f.write(html)
 print(f'\nMapa guardado em {output} ({os.path.getsize(output)//1024} KB)')
