@@ -33,19 +33,19 @@ MAPS = [
     },
     {
         "slug": "mudancas",
-        "url": f"{BASE_URL}/mapa.html",
+        "url": f"{BASE_URL}/mapa/mapa.html",
         "wait_for": ".leaflet-tile-loaded",
         "extra_wait": 5,
     },
     {
         "slug": "historico",
-        "url": f"{BASE_URL}/ndvi_historico.html",
+        "url": f"{BASE_URL}/ndvi_historico/ndvi_historico.html",
         "wait_for": ".leaflet-tile-loaded",
         "extra_wait": 5,
     },
     {
         "slug": "verde_privado",
-        "url": f"{BASE_URL}/interiores_quarteiroes.html",
+        "url": f"{BASE_URL}/interiores/interiores_quarteiroes.html",
         "wait_for": ".leaflet-tile-loaded",
         "extra_wait": 5,
     },
