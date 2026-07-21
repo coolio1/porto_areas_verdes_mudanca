@@ -8,15 +8,24 @@
 ## Estrutura do projecto
 
 ```
-GEE/
+(raiz do projecto)
 ├── _config.yml, _layouts/, _posts/, index.html, sobre.md   # Jekyll site (GitHub Pages)
-├── porto_publish.py        # Mapa actual (Sentinel-2 2016-2025) → mapa.html
-├── ndvi_historico.py       # Mapa histórico (1947-2024, Landsat) → ndvi_historico.html
-├── ndvi_historico_html.py  # Módulo HTML do mapa histórico (build_html)
-├── interiores_quarteiroes.py  # Verde Privado → interiores_quarteiroes.html
-├── interiores_html.py      # Módulo HTML do verde privado (build_html)
-├── porto_stats.py          # Estatísticas de uso do solo
+├── nav.py, patch_nav.py    # Fonte única da nav + patcher (git pre-commit hook)
+├── capture_cards.py        # Thumbnails dos cards do index (Playwright)
+├── check_leaflet_init.py   # Validação Leaflet (pre-commit hook)
 ├── test_area.py            # Calibração (área teste Serralves)
+├── mapa/                   # Mapa actual (Sentinel-2 2016-2025)
+│   ├── porto_publish.py    # Pipeline → mapa.html
+│   ├── porto_stats.py      # Estatísticas de uso do solo
+│   └── mapa.html
+├── ndvi_historico/         # Mapa histórico (1947-2024, Landsat)
+│   ├── ndvi_historico.py       # Pipeline → ndvi_historico.html
+│   ├── ndvi_historico_html.py  # Módulo HTML (build_html)
+│   └── ndvi_historico.html
+├── interiores/             # Verde Privado
+│   ├── interiores_quarteiroes.py  # Pipeline → interiores_quarteiroes.html
+│   ├── interiores_html.py         # Módulo HTML (build_html)
+│   └── interiores_quarteiroes.html
 ├── 1947/                   # Classificação ortofoto 1947
 │   ├── orto_1947.py        # Pipeline de classificação (tiles WMS + RF)
 │   ├── clean_1947.py       # Limpeza/pós-processamento do mosaico
@@ -55,7 +64,7 @@ GEE/
 ## Regras de organização
 
 - **Cada script gera o seu HTML** — nunca editar HTMLs à mão
-- **Layers ficam na pasta do seu pipeline**: `layers/` (actual), `layers_historico/` (histórico), `1947/layers/` (1947)
+- **Layers ficam na raiz do projecto, não na pasta do script**: `layers/` (partilhada entre `mapa/` e `interiores/` — o verde privado subtrai-se da mesma classificação Sentinel-2), `layers_historico/` (usada por `ndvi_historico/`), `1947/layers/` (usada só por `1947/`, essa sim dentro da própria pasta)
 - **Ficheiros de teste/debug** nunca ficam nas pastas de layers — apagar depois de usar
 - **Scripts obsoletos** apagam-se directamente (git e disco sincronizados)
 - **`_config.yml` exclude** deve incluir: `*.py`, docs, .claude, .superpowers, `__pycache__/`, `*.bak`, `*.npy`, `*.npz`
@@ -86,7 +95,7 @@ O mapa de acessibilidade (`acessibilidade/`) usa PNGs em cache na pasta `acessib
 
 ## Verde privado — pipeline de regeneração
 
-O verde privado (`layers/interior_subsistente.png`) é calculado por `interiores_quarteiroes.py`:
+O verde privado (`layers/interior_subsistente.png`) é calculado por `interiores/interiores_quarteiroes.py`:
 
 1. **Classificação Sentinel-2** — base: `acessibilidade/layers/verde_total.png` (todos os pixels verdes)
 2. **Subtrair parques e jardins** — camada `acessibilidade/parques_porto.geojson`
@@ -94,7 +103,7 @@ O verde privado (`layers/interior_subsistente.png`) é calculado por `interiores
 4. **Máscara de estradas** — OSM (buffer por tipo de via)
 5. **Vectorização e filtragem** — área mínima e forma
 
-**Para regenerar sem GEE**: apagar `layers/interior_subsistente.png` e `layers/interior_perdido.png`, depois correr `python interiores_quarteiroes.py`. A fase 1 re-descarrega do GEE (~30s); as fases 2-5 são locais.
+**Para regenerar sem GEE**: apagar `layers/interior_subsistente.png` e `layers/interior_perdido.png`, depois correr `python interiores/interiores_quarteiroes.py` a partir da raiz do projecto. A fase 1 re-descarrega do GEE (~30s); as fases 2-5 são locais.
 
 **Alternativa rápida (sem GEE)**: usar `acessibilidade/layers/verde_total.png` como base, aplicar as máscaras de parques + verde pago + estradas localmente.
 
