@@ -299,7 +299,7 @@ def apply_raster_mask(filepath, mask_path, label):
 
 
 # 2a. Subtrair parques e jardins (inventario)
-parques_path = os.path.join("acessibilidade", "parques_porto.geojson")
+parques_path = os.path.join(ROOT_DIR, "acessibilidade", "parques_porto.geojson")
 if os.path.exists(parques_path):
     print("\nA subtrair parques e jardins...")
     parques_gdf = gpd.read_file(parques_path).to_crs(epsg=4326)
