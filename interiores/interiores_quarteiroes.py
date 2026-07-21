@@ -5,11 +5,15 @@ import io
 import sys
 from dotenv import load_dotenv
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "acessibilidade"))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+LAYERS_DIR = os.path.join(ROOT_DIR, "layers")
+
+sys.path.insert(0, os.path.join(ROOT_DIR, "acessibilidade"))
 from acessibilidade_gee import getS2col, getComposite, classify
 from interiores_html import build_html
 
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+load_dotenv(os.path.join(ROOT_DIR, ".env"))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)
 
@@ -156,11 +160,11 @@ from PIL import Image
 import numpy as np
 import time
 
-os.makedirs("layers", exist_ok=True)
+os.makedirs(LAYERS_DIR, exist_ok=True)
 
 
 def download_layer(image, color_hex, filename):
-    filepath = f"layers/{filename}"
+    filepath = os.path.join(LAYERS_DIR, filename)
     if os.path.exists(filepath):
         print(f"  {filename} ja existe, a saltar...")
         return filepath
@@ -189,7 +193,7 @@ def download_layer(image, color_hex, filename):
 
 def download_rgb_layer(image, filename):
     """Download pre-visualized RGB layer (e.g., GHS-POP with palette)."""
-    filepath = f"layers/{filename}"
+    filepath = os.path.join(LAYERS_DIR, filename)
     if os.path.exists(filepath):
         print(f"  {filename} ja existe, a saltar...")
         return filepath
@@ -220,10 +224,10 @@ download_layer(subsistente, "2E7D32", "interior_subsistente.png")
 download_layer(perdido, "D7263D", "interior_perdido.png")
 download_rgb_layer(ghspop_vis, "ghspop.png")
 # Interior VCI: rasterizar contorno localmente (geometria vem do OSM, não do GEE)
-centro_path = "layers/centro_alargado.png"
+centro_path = os.path.join(LAYERS_DIR, "centro_alargado.png")
 if not os.path.exists(centro_path) and centro_union is not None:
     print("  A rasterizar contorno da VCI...")
-    ref_img = Image.open("layers/interior_subsistente.png")
+    ref_img = Image.open(os.path.join(LAYERS_DIR, "interior_subsistente.png"))
     W, H = ref_img.size
     centro_boundary = centro_union.boundary
     centro_img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
@@ -300,16 +304,16 @@ if os.path.exists(parques_path):
     print("\nA subtrair parques e jardins...")
     parques_gdf = gpd.read_file(parques_path).to_crs(epsg=4326)
     parques_union = parques_gdf.geometry.union_all()
-    apply_geom_mask("layers/interior_subsistente.png", parques_union, "parques")
-    apply_geom_mask("layers/interior_perdido.png", parques_union, "parques")
+    apply_geom_mask(os.path.join(LAYERS_DIR, "interior_subsistente.png"), parques_union, "parques")
+    apply_geom_mask(os.path.join(LAYERS_DIR, "interior_perdido.png"), parques_union, "parques")
     print(f"  {len(parques_gdf)} parques subtraidos.")
 
 # 2b. Subtrair verde pago
-verde_pago_path = os.path.join("acessibilidade", "layers", "verde_pago.png")
+verde_pago_path = os.path.join(ROOT_DIR, "acessibilidade", "layers", "verde_pago.png")
 if os.path.exists(verde_pago_path):
     print("A subtrair verde pago...")
-    apply_raster_mask("layers/interior_subsistente.png", verde_pago_path, "verde pago")
-    apply_raster_mask("layers/interior_perdido.png", verde_pago_path, "verde pago")
+    apply_raster_mask(os.path.join(LAYERS_DIR, "interior_subsistente.png"), verde_pago_path, "verde pago")
+    apply_raster_mask(os.path.join(LAYERS_DIR, "interior_perdido.png"), verde_pago_path, "verde pago")
 
 # ----- Phase 2b: Mascara de estradas (OSM) -----
 print("\nA descarregar estradas do OSM...")
@@ -382,8 +386,8 @@ if roads_data:
             f"  {os.path.basename(filepath)}: {n_masked} pixels mascarados (estradas)"
         )
 
-    apply_roads_mask("layers/interior_subsistente.png", roads_buffered)
-    apply_roads_mask("layers/interior_perdido.png", roads_buffered)
+    apply_roads_mask(os.path.join(LAYERS_DIR, "interior_subsistente.png"), roads_buffered)
+    apply_roads_mask(os.path.join(LAYERS_DIR, "interior_perdido.png"), roads_buffered)
     print("Mascara de estradas aplicada.")
 else:
     print("  AVISO: Overpass indisponivel, mascara de estradas nao aplicada")
@@ -393,7 +397,7 @@ print("\nA filtrar por area e forma (vectorial)...")
 from scipy import ndimage
 
 # Resolucao: graus por pixel
-ref_img = Image.open("layers/interior_subsistente.png")
+ref_img = Image.open(os.path.join(LAYERS_DIR, "interior_subsistente.png"))
 W, H = ref_img.size
 lon_min, lon_max = -8.70, -8.54
 lat_min, lat_max = 41.13, 41.19
@@ -461,10 +465,10 @@ def filter_by_vector(filepath):
     print(f"    Mantidos: {kept}, removidos por area: {removed_area}")
 
 
-filter_by_vector("layers/interior_subsistente.png")
-filter_by_vector("layers/interior_perdido.png")
+filter_by_vector(os.path.join(LAYERS_DIR, "interior_subsistente.png"))
+filter_by_vector(os.path.join(LAYERS_DIR, "interior_perdido.png"))
 print("Filtragem vectorial concluida.")
 
 # ----- Phase 3: HTML map -----
 print("\nA construir mapa...")
-build_html(os.path.dirname(os.path.abspath(__file__)), "layers", BOUNDS)
+build_html(SCRIPT_DIR, LAYERS_DIR, BOUNDS)
