@@ -66,10 +66,10 @@ def build_html(script_dir, layers_dir, bounds):
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <title>Verde Privado — Porto</title>
 <meta name="description" content="Mapa dos espaços verdes privados encravados no tecido urbano do Porto: os que subsistem e os que foram perdidos (Sentinel-2 + PDM).">
-<link rel="canonical" href="https://portoverde.pt/interiores_quarteiroes.html">
+<link rel="canonical" href="https://portoverde.pt/interiores/interiores_quarteiroes.html">
 <meta property="og:title" content="Verde Privado — Porto">
 <meta property="og:description" content="Espaços verdes privados encravados no tecido urbano do Porto: os que subsistem e os que foram perdidos.">
-<meta property="og:url" content="https://portoverde.pt/interiores_quarteiroes.html">
+<meta property="og:url" content="https://portoverde.pt/interiores/interiores_quarteiroes.html">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
