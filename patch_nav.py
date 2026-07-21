@@ -15,13 +15,13 @@ from nav import get_nav, get_jekyll_nav, get_footer_logo
 
 # (ficheiro relativo à raiz, canonical_path, depth)
 TARGETS = [
-    ("mapa.html",                                     "mapa.html",                                    0),
-    ("ndvi_historico.html",                           "ndvi_historico.html",                          0),
-    ("interiores_quarteiroes.html",                   "interiores_quarteiroes.html",                  0),
-    ("acessibilidade/acessibilidade_verde.html",      "acessibilidade/acessibilidade_verde.html",     1),
-    ("acessibilidade/conversao_verde.html",           "acessibilidade/conversao_verde.html",          1),
-    ("atropelamentos/dashboard_atropelamentos.html",  "atropelamentos/dashboard_atropelamentos.html", 1),
-    ("1947/orto_1947.html",                           "1947/orto_1947.html",                          1),
+    ("mapa/mapa.html",                                 "mapa/mapa.html",                                1),
+    ("ndvi_historico/ndvi_historico.html",             "ndvi_historico/ndvi_historico.html",            1),
+    ("interiores/interiores_quarteiroes.html",         "interiores/interiores_quarteiroes.html",        1),
+    ("acessibilidade/acessibilidade_verde.html",       "acessibilidade/acessibilidade_verde.html",      1),
+    ("acessibilidade/conversao_verde.html",            "acessibilidade/conversao_verde.html",           1),
+    ("atropelamentos/dashboard_atropelamentos.html",   "atropelamentos/dashboard_atropelamentos.html",  1),
+    ("1947/orto_1947.html",                            "1947/orto_1947.html",                           1),
 ]
 
 NAV_RE    = re.compile(r'<div id="nav"[^>]*>.*?</div>', re.DOTALL)

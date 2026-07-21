@@ -13,9 +13,9 @@ Para páginas Jekyll (_layouts/default.html):
 
 PAGES = [
     ("index.html",                                    "Início"),
-    ("mapa.html",                                     "Mapa 2016-2025"),
-    ("ndvi_historico.html",                           "Histórico 1947-2024"),
-    ("interiores_quarteiroes.html",                   "Verde Privado"),
+    ("mapa/mapa.html",                                "Mapa 2016-2025"),
+    ("ndvi_historico/ndvi_historico.html",            "Histórico 1947-2024"),
+    ("interiores/interiores_quarteiroes.html",        "Verde Privado"),
     ("acessibilidade/acessibilidade_verde.html",      "Acessibilidade"),
     ("acessibilidade/conversao_verde.html",           "Propostas"),
     ("atropelamentos/dashboard_atropelamentos.html",  "Atropelamentos"),
