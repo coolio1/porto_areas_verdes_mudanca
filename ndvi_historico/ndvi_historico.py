@@ -13,7 +13,11 @@ Image.MAX_IMAGE_PIXELS = None
 from dotenv import load_dotenv
 from ndvi_historico_html import build_html
 
-load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+LAYERS_DIR = os.path.join(ROOT_DIR, 'layers_historico')
+
+load_dotenv(os.path.join(ROOT_DIR, '.env'))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)
 
@@ -287,7 +291,7 @@ for name, sensor, years in EPOCHS:
 # ============================================================
 # Download das camadas
 # ============================================================
-os.makedirs('layers_historico', exist_ok=True)
+os.makedirs(LAYERS_DIR, exist_ok=True)
 DIM = 2048
 
 # Paleta NDVI: castanho -> amarelo -> verde escuro
@@ -326,11 +330,11 @@ def _robust_download(vis_image, filepath, label, transparent_black=False):
 
 def download_ndvi(image, filename, label):
     vis = image.visualize(min=0, max=0.8, palette=NDVI_PALETTE)
-    return _robust_download(vis, f'layers_historico/{filename}', label)
+    return _robust_download(vis, os.path.join(LAYERS_DIR, filename), label)
 
 def download_mask(image, color_hex, filename):
     vis = image.visualize(palette=[color_hex], min=0, max=1)
-    return _robust_download(vis, f'layers_historico/{filename}', filename, transparent_black=True)
+    return _robust_download(vis, os.path.join(LAYERS_DIR, filename), filename, transparent_black=True)
 
 # ============================================================
 # Mascaras de vegetacao (NDVI >= 0.4) por epoca
@@ -441,8 +445,8 @@ print(f'  Balanco liquido: {(gain_count - loss_count) * PIXEL_AREA_HA:+.0f} ha')
 
 
 build_html(
-    os.path.dirname(os.path.abspath(__file__)),
-    'layers_historico',
+    SCRIPT_DIR,
+    LAYERS_DIR,
     BOUNDS,
     BOUNDS_1947,
     EPOCHS,
