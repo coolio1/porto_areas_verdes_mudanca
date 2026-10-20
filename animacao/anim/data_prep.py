@@ -3,7 +3,6 @@ import ee
 import os
 import io
 import requests
-import numpy as np
 from PIL import Image, ImageDraw
 from dotenv import load_dotenv
 from .config import LON_MIN, LON_MAX, LAT_MIN, LAT_MAX, LAYERS_DIR, ROAD_COLOR

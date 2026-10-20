@@ -10,7 +10,7 @@ ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 LAYERS_DIR = os.path.join(ROOT_DIR, "layers")
 
 sys.path.insert(0, os.path.join(ROOT_DIR, "acessibilidade"))
-from acessibilidade_gee import getS2col, getComposite, classify
+from acessibilidade_gee import getComposite, classify
 from interiores_html import build_html
 
 load_dotenv(os.path.join(ROOT_DIR, ".env"))

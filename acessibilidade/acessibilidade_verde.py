@@ -25,7 +25,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage
 from dotenv import load_dotenv
-from acessibilidade_gee import getS2col, getComposite, classify, download_mono_layer, download_greyscale
+from acessibilidade_gee import getComposite, classify, download_mono_layer, download_greyscale
 from acessibilidade_html import build_html
 
 # ===== Modo rápido (--html-only) =====

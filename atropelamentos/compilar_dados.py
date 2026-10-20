@@ -5,7 +5,6 @@ Fontes: ANSR (relatórios públicos), notícias, INE/PORDATA
 
 import sqlite3
 import csv
-import os
 import json
 from pathlib import Path
 

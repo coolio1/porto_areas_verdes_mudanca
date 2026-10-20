@@ -202,7 +202,6 @@ download_layer(muni_styled, 'FFFFFF', 'municipios.png')
 ALL_LAYERS_PLUS = ALL_LAYERS + [('municipios', None, 'Limites municipais', 'FFFFFF', True)]
 
 # Build layer JS data
-import json
 layers_js_items = []
 for lid, mask, label, color, show in ALL_LAYERS_PLUS:
     b64 = to_base64(os.path.join(LAYERS_DIR, f'{lid}.png'))

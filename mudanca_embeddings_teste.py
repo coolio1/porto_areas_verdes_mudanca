@@ -6,12 +6,10 @@ Calibracao numa area pequena antes de decidir se compensa aplicar ao municipio.
 """
 import ee
 import os
-import io
 import math
 import base64
 import webbrowser
 import requests
-from PIL import Image as PILImage
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
