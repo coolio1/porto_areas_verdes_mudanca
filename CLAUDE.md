@@ -7,52 +7,11 @@
 
 ## Estrutura do projecto
 
-```
-(raiz do projecto)
-├── _config.yml, _layouts/, _posts/, index.html, sobre.md   # Jekyll site (GitHub Pages)
-├── nav.py, patch_nav.py    # Fonte única da nav + patcher (git pre-commit hook)
-├── capture_cards.py        # Thumbnails dos cards do index (Playwright)
-├── check_leaflet_init.py   # Validação Leaflet (pre-commit hook)
-├── test_area.py            # Calibração (área teste Serralves)
-├── mapa/                   # Mapa actual (Sentinel-2 2016-2025)
-│   ├── porto_publish.py    # Pipeline → mapa.html
-│   ├── porto_stats.py      # Estatísticas de uso do solo
-│   └── mapa.html
-├── ndvi_historico/         # Mapa histórico (1947-2024, Landsat)
-│   ├── ndvi_historico.py       # Pipeline → ndvi_historico.html
-│   ├── ndvi_historico_html.py  # Módulo HTML (build_html)
-│   └── ndvi_historico.html
-├── interiores/             # Verde Privado
-│   ├── interiores_quarteiroes.py  # Pipeline → interiores_quarteiroes.html
-│   ├── interiores_html.py         # Módulo HTML (build_html)
-│   └── interiores_quarteiroes.html
-├── 1947/                   # Classificação ortofoto 1947
-│   ├── orto_1947.py        # Pipeline de classificação (tiles WMS + RF)
-│   ├── clean_1947.py       # Limpeza/pós-processamento do mosaico
-│   └── layers/             # Layers gerados (uso_1947_*.png)
-├── animacao/               # Animação crescimento urbano
-│   ├── animacao_cairo.py   # Script principal → animacao_cairo.mp4
-│   ├── animacao_edificado.py  # Versão anterior da animação
-│   ├── export_porto_mask.py   # Exportação da máscara do município
-│   ├── frame_1947.py       # Frame estático de 1947
-│   └── anim/               # Módulo Python (config, renderer, sdf_engine, data_prep)
-├── atropelamentos/         # Dashboard sinistralidade rodoviária
-│   ├── mapa_dashboard.py   # Script principal → dashboard_atropelamentos.html
-│   ├── compilar_dados.py   # Compilação de CSVs/fontes → DB (atropelamentos_grande_porto.db)
-│   ├── schema.sql          # Schema da base de dados
-│   ├── *.csv, *.json       # Dados (ANSR, INE, notícias)
-│   └── *.xlsx, *.pdf       # Anexos originais ANSR
-├── acessibilidade/         # Acessibilidade a verde público
-│   ├── acessibilidade_verde.py   # Pipeline principal → acessibilidade_verde.html
-│   ├── acessibilidade_html.py    # Módulo HTML (build_html)
-│   ├── acessibilidade_gee.py     # Funções GEE partilhadas (Sentinel-2, download)
-│   ├── analise_conversao_verde.py  # Candidatos a conversão → conversao_verde.html
-│   ├── conversao_html.py         # Módulo HTML da conversão (build_html)
-│   └── layers/                   # Layers em cache (PNGs, .npy, .npz)
-├── layers/                 # Layers do mapa actual (Sentinel-2)
-├── layers_historico/       # Layers do mapa histórico (Landsat)
-└── docs/                   # Planos e specs (excluído do Jekyll)
-```
+Detalhe completo em `docs/estrutura.md`. Resumo (raiz = site Jekyll/GitHub Pages):
+
+- `mapa/` (Sentinel-2 2016-2025), `ndvi_historico/` (Landsat 1947-2024), `interiores/` (verde privado), `1947/` (classificação ortofoto), `animacao/`, `atropelamentos/` (dashboard + DB), `acessibilidade/` (pipeline 2SFCA + conversão)
+- `layers/`, `layers_historico/` — layers partilhados na raiz; `docs/` — planos e specs (excluído do Jekyll)
+- `nav.py` + `patch_nav.py` (nav única, pre-commit), `capture_cards.py`, `check_leaflet_init.py`
 
 ## Navegação entre páginas
 
@@ -116,67 +75,10 @@ O verde privado (`layers/interior_subsistente.png`) é calculado por `interiores
 - Scripts GEE dependem de autenticação — se `ee.Initialize()` falhar, não é bug do código
 - Mapas HTML gerados devem abrir no browser e mostrar layers correctamente
 
-## Cards do index — protocolo de thumbnails
+## Cards do index e artigos (`_posts/`)
 
-Cada card de mapa no `index.html` tem um thumbnail (`<img class="card-thumb">`) capturado automaticamente via Playwright a partir do GitHub Pages.
+Protocolos de thumbnails e de criação de artigos: skill `porto-verde-posts`. Nunca editar `index.html` para adicionar artigos (lista `site.posts` automaticamente).
 
-### Quando regenerar
-- Ao adicionar um novo card ao `index.html`
-- Ao alterar significativamente o aspecto visual de um mapa existente
-
-### Como capturar
-```bash
-python capture_cards.py
-```
-- Requer Playwright Chromium: `python -m playwright install chromium` (só uma vez)
-- Abre cada URL do GitHub Pages em headless, aguarda tiles Leaflet, faz screenshot do `#map`
-- Guarda em `assets/images/cards/<slug>.jpg` (600×340px, JPEG Q88)
-
-### Ao adicionar um novo card
-1. Adicionar entrada em `MAPS` em `capture_cards.py` com `slug`, `url` e `wait_for`
-2. Correr `python capture_cards.py` (só o novo slug é gerado; os existentes são substituídos se já existirem)
-3. No `index.html`, usar `<img src="{{ site.baseurl }}/assets/images/cards/<slug>.jpg" class="card-thumb" style="object-position:center center" alt="...">`
-4. Commit incluindo a imagem nova e o `index.html`
-
----
-
-## Artigos (`_posts/`) — protocolo de criação
-
-### Passos obrigatórios
-
-1. **Assets primeiro** — copiar para as pastas correctas antes de escrever o Markdown:
-   - Imagens → `assets/images/<slug>-<descricao>.jpg`
-   - PDFs → `assets/pdfs/<nome>-<ano>.pdf`
-   - Áudio → **nunca no repositório** se >25 MB (limite GitHub Pages); alojar externamente e usar link directo ou `<audio src="...">`.
-
-2. **Criar `_posts/YYYY-MM-DD-slug.md`** com front matter obrigatório:
-   ```yaml
-   ---
-   layout: post
-   title: "Título em PT-PT"
-   description: "Descrição de 1-2 frases para SEO e card do índice."
-   date: YYYY-MM-DD
-   tags: [tag1, tag2, ...]
-   ---
-   ```
-
-3. **Links internos** — sempre com prefixo `{{ site.baseurl }}/`:
-   - Imagens: `![alt]({{ site.baseurl }}/assets/images/ficheiro.jpg)`
-   - PDFs: `[texto]({{ site.baseurl }}/assets/pdfs/ficheiro.pdf)`
-   - Legendas de imagem: linha em itálico imediatamente após o `![]()`.
-
-4. **Índice automático** — o `index.html` usa `{% for post in site.posts %}` e lista todos os posts automaticamente. **Nunca editar `index.html`** para adicionar artigos.
-
-5. **Commit e push** — incluir assets e ficheiro `.md` no mesmo commit.
-
-### Regras de formatação
-
-- `##` para secções principais, `###` para subsecções.
-- Espaçamento antes de títulos gerido pelo CSS (`_layouts/default.html`): `article h2 { margin-top: 2.5rem }`. **Não usar `&nbsp;`**.
-- Listas com bullet points (`-`) para enumerações dentro de secções.
-- Emails como `[addr](mailto:addr)`; URLs externas como `[texto](url)`.
-- Referências bibliográficas no final, ordenadas alfabeticamente (em artigos científicos).
-- Acentuação PT-PT correcta em todo o texto.
 
 ## Regras de código
 
@@ -196,7 +98,6 @@ python capture_cards.py
 
 ## Lições aprendidas
 
-- **fetch() em vez de inline** — dados partilhados entre páginas (parques, expansão CMP) devem ser carregados via `fetch()` em runtime, nunca embutidos no HTML. Commit a7743cb corrigiu isto.
 - **Verificar consumidores antes de alterar dados** — ao editar `parques_porto.geojson` ou qualquer fonte partilhada, grep por todos os ficheiros que a referenciam e actualizar em cadeia.
 - **OBIA abandonada para 1947** — classificação pixel com Random Forest e texturas locais funciona melhor que OBIA para o ortofoto P&B (resolução insuficiente para segmentação).
 - **Overpass API instável** — dividir queries grandes em lotes e usar servidores alternativos; para adições individuais, preferir OSM API v0.6.
@@ -212,35 +113,8 @@ python capture_cards.py
 
 Ver skill `/jekyll`. Config específica: `baseurl: /porto_areas_verdes_mudanca`; imagens via `{{ site.baseurl }}/assets/...`.
 
-## Fluxo rápido: regenerar HTML (sem cálculos pesados)
+## Fluxo rápido de regeneração
 
-**Novo fluxo para desenvolvimento rápido — editar parques/candidatos e ver mudanças em ~2s:**
+`acessibilidade/regenerar_html.py` e `regenerar_conversao_html.py` regeneram os HTML em ~2 s a partir dos PNGs em cache. Detalhe em `docs/fluxo-rapido-regeneracao.md`.
 
-```bash
-# Editar parques e jardins
-nano acessibilidade/parques_porto.geojson
-
-# Regenerar acessibilidade_verde.html (reutiliza PNGs em cache)
-cd acessibilidade
-python regenerar_html.py
-# F5 no browser para recarregar
-
-# Editar candidatos a conversão
-nano acessibilidade/candidatos_conversao.geojson
-
-# Regenerar conversao_verde.html (reutiliza PNGs + metadados)
-python regenerar_conversao_html.py
-# F5 no browser para recarregar
-```
-
-**Scripts novos:**
-- `acessibilidade/regenerar_html.py` — regenera acessibilidade_verde.html (~2s)
-- `acessibilidade/regenerar_conversao_html.py` — regenera conversao_verde.html (~2s)
-
-**Fluxo completo (quando pronto com cálculos):**
-```bash
-python acessibilidade/acessibilidade_verde.py        # ~1-2 min (GEE + 2SFCA + HTML)
-python acessibilidade/analise_conversao_verde.py     # ~1-2 min (proximidade + HTML)
-```
-
-**Arquitectura:** GeoJSONs são lidos do disco e embutidos inline nos templates HTML (nunca `fetch()` — bloqueia em `file://`). Scripts rápidos regeneram HTML sem recalcular PNGs. Se faltarem PNGs em cache, o utilizador avisa-se e deve correr acessibilidade_verde.py ou analise_conversao_verde.py.
+**Dados inline, nunca `fetch()`:** os GeoJSON são embutidos nos HTML gerados (`fetch()` falha em `file://`, onde os mapas são abertos). Ao alterar uma fonte partilhada, regenerar todos os HTML que a consomem.
