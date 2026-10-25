@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protótipo — 50 Espaços</title>
+<link rel="stylesheet" href="../../assets/css/50espacos.css">
+<style>
+  /* Cabeçalho e nav do site (cópia de _layouts/default.html, só para o protótipo) */
+  body { margin: 0; background: #fafaf7; font-family: 'Segoe UI', system-ui, sans-serif; }
+  header.site { background: #fafaf7; padding: 1rem 1rem 0.4rem; text-align: center; }
+  header.site img { max-height: 160px; width: auto; max-width: 90%; display: block; margin: 0 auto; }
+  header.site p { color: #888; margin: 0.2rem 0 0; font-size: 0.82rem; }
+  nav.site { background: #1a1a2e; padding: 0.7rem 1rem 0.9rem; display: flex; justify-content: center; gap: 0.3rem; flex-wrap: wrap; }
+  nav.site a { color: #ccc; text-decoration: none; font-size: 0.82rem; font-weight: 500; padding: 0.35rem 0.9rem; border-radius: 6px; }
+  nav.site a.active { background: rgba(255,255,255,0.14); color: #fff; }
+  .aviso { font: 500 0.9rem/1.4 "Schibsted Grotesk", sans-serif; background: #e8c21a; color: #23282b; padding: 0.5rem 1rem; text-align: center; }
+  footer.site { text-align: center; color: #777; font-size: 0.85rem; padding: 2rem 1rem; background: #fafaf7; }
+</style>
+</head>
+<body>
+<div class="aviso">Protótipo visual. Dados de exemplo: a distribuição por concelho, os espaços seleccionados, as fotos e o mapa são ilustrativos.</div>
+
+<header class="site">
+  <a href="#"><img src="../../assets/images/logo-porto-verde.png" alt="Porto Verde"></a>
+  <p><em>Mapas interactivos de vegetação, uso do solo e mudanças urbanas no Porto</em></p>
+</header>
+<nav class="site">
+  <a href="#">Início</a><a href="#">Mapa 2016-2025</a><a href="#">Histórico 1947-2024</a><a href="#">Verde Privado</a>
+  <a href="#" class="active">50 Espaços</a><a href="#">Acessibilidade</a><a href="#">Propostas</a><a href="#">Atropelamentos</a>
+  <a href="#">Artigos</a><a href="#">Sobre</a>
+</nav>
+
+<div class="e50">
+
+<header class="abertura larga">
+  <div class="cabeca">
+    <div class="texto-cabeca">
+      <h1>A campanha dos 50 espaços verdes</h1>
+      <p class="resumo">Em 2006–2008 a Campo Aberto identificou 111 espaços verdes na Área Metropolitana do Porto. Em 2009 seleccionou 50 para defender.</p>
+    </div>
+    <img class="logo-campanha" src="../../assets/images/50espacos-logo.jpg" alt="Logótipo da campanha: 50 espaços verdes em perigo, a preservar">
+  </div>
+  <div class="campo" id="campo" role="group" aria-label="Os 111 espaços, agrupados por concelho"></div>
+  <p class="legenda">
+    <span><span class="amostra cheia"></span>seleccionado em 2009</span>
+    <span><span class="amostra"></span>identificado, não seleccionado</span>
+  </p>
+
+  <nav class="entradas" aria-label="Entrar na secção">
+    <a href="#"><span class="grande">111</span><span class="nome">Espaços, no mapa e em lista</span><span class="nota">Filtrar por concelho, seleccionados e estado actual</span></a>
+    <a href="#"><span class="grande">35</span><span class="nome">Documentos de imprensa</span><span class="nota">Com ligação ao PDF</span></a>
+    <a href="#"><span class="grande">2006</span><span class="nome">A campanha</span><span class="nota">Critérios e metodologia</span></a>
+  </nav>
+</header>
+
+<main class="larga">
+  <section class="ficha coluna" aria-labelledby="t-ficha">
+    <p class="migalhas"><a href="#">50 Espaços</a> / <a href="#">Porto</a> / Ficha de exemplo</p>
+    <h1 id="t-ficha">Espaço de exemplo</h1>
+    <div class="etiquetas">
+      <span class="etiqueta seleccionado">Seleccionado em 2009, posição 3</span>
+      <span class="etiqueta estado">Estado actual: por verificar</span>
+    </div>
+    <dl class="ficha-dados">
+      <div><dt>Concelho</dt><dd>Porto</dd></div>
+      <div><dt>Freguesia</dt><dd>—</dd></div>
+      <div><dt>Área</dt><dd>— ha</dd></div>
+      <div><dt>Proposto por</dt><dd>—</dd></div>
+      <div><dt>Ficha de 2006</dt><dd>n.º —</dd></div>
+    </dl>
+    <div class="texto">
+      <p>Texto de exemplo. Aqui entra o texto fundido de cada espaço, com as datas na própria frase: o que a ficha de 2007 registava, o que se acrescentou em 2015 e o que se sabe desde 2017.</p>
+      <p>Cada afirmação diz de que ano é.</p>
+    </div>
+    <div class="galeria">
+      <div class="moldura"><span>Foto do espaço</span></div>
+      <div class="moldura"><span>Foto do espaço</span></div>
+      <div class="moldura"><span>Foto do espaço</span></div>
+    </div>
+    <div class="moldura mini-mapa"><span>Mini-mapa com a localização</span></div>
+    <p class="nota-mapa">Localização aproximada (2 casas decimais, cerca de 1 km). Fonte: site da campanha, 2017 em diante.</p>
+    <div class="fontes">
+      Fontes
+      <ul><li>Ficha de 2006–2008</li><li>Compilação de 2016</li><li>Site da campanha, 2017 em diante</li></ul>
+    </div>
+  </section>
+
+  <section class="coluna">
+    <h2>Cronologia</h2>
+    <ol class="cronologia">
+      <li><span class="ano">2006</span><br>Exemplo de entrada.</li>
+      <li><span class="ano">2009</span><br>Exemplo de entrada.</li>
+    </ol>
+  </section>
+
+  <section class="coluna">
+    <h2>Imprensa</h2>
+    <div class="ano-bloco"><h3>2009</h3><ul><li>Jornal, data, título, ligação ao PDF</li></ul></div>
+    <div class="ano-bloco"><h3>2008</h3><ul><li>Jornal, data, título, ligação ao PDF</li><li>Jornal, data, título, ligação ao PDF</li></ul></div>
+  </section>
+</main>
+</div>
+
+<footer class="site">Nuno Quental<br>Dados abertos: Sentinel-2, Landsat, OSM, PDM Porto</footer>
+
+<script>
+  // Dados de exemplo: Porto 23 (7 seleccionados), outros concelhos 88 (43 seleccionados).
+  const grupos = [
+    { nome: "Porto", n: 23, sel: 7, cols: 6 },
+    { nome: "Outros concelhos", n: 88, sel: 43, cols: 16 }
+  ];
+  const campo = document.getElementById("campo");
+  let i = 0;
+  grupos.forEach(g => {
+    const sec = document.createElement("div"); sec.className = "grupo";
+    sec.innerHTML = `<h2>${g.nome}<span>${g.n}</span></h2>`;
+    const q = document.createElement("div"); q.className = "quadriculas"; q.style.setProperty("--cols", g.cols);
+    const sels = new Set(Array.from({length: g.sel}, (_, k) => Math.floor(k * g.n / g.sel)));
+    for (let k = 0; k < g.n; k++) {
+      const a = document.createElement("a");
+      a.className = "marca"; a.href = "#";
+      const s = sels.has(k);
+      a.dataset.seleccionado = s; a.dataset.nome = "Espaço de exemplo";
+      a.setAttribute("aria-label", "Espaço de exemplo, " + g.nome + (s ? ", seleccionado" : ""));
+      if (s) a.style.setProperty("--i", i++);
+      q.appendChild(a);
+    }
+    sec.appendChild(q); campo.appendChild(sec);
+  });
+</script>
+</body>
+</html>

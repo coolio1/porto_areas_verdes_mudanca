@@ -1,0 +1,15 @@
+---
+slug: parque-oriental
+fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, webnode-2019]
+revisto: true
+---
+
+O Parque Oriental ocupa o vale do rio Tinto, em Campanhã, encaixado entre a Circunvalação, a VCI e o IC 29/A 43. O rio ainda corria livremente, com fauna e flora de grande valor nas margens, terrenos agrícolas separados por sebes vivas e bosques de sobreiros, espécie protegida por lei. São valências únicas numa cidade que entubou quase todos os seus cursos de água e quase baniu a agricultura, e que devem ser preservadas como factor de identidade e de uma paisagem mais diversa.
+
+A proximidade de bairros como o do Lagarteiro faz com que muitos residentes frequentem a área, e a agricultura ainda se praticava em algumas zonas. Só cerca de 22 ha eram propriedade municipal; o resto era privado e teria de ser expropriado. No PDM do Porto, a maior parte da área está consignada a verde público. Segundo a Câmara Municipal do Porto, em 2014, o parque decorre de uma ideia expressa no PDM de 1992, uma parte significativa dos terrenos já era municipal e as parcelas privadas poderiam passar para a Câmara por perequação compensatória.
+
+A maior ameaça já concretizada foi a Alameda de Azevedo, que dividiu o parque; estava ainda prevista a Colectora de Azevedo, além de empreendimentos imobiliários destinados a custear parcialmente o parque, numa primeira versão com densidade de ocupação excessiva. Em 2014, a Câmara apontava como maiores dificuldades a despoluição do rio Tinto e o Plano de Pormenor da UOPG 23, de que depende a gestão fundiária.
+
+Em Janeiro de 2009 anunciava-se uma primeira fase de cerca de 10 ha, sem data para os restantes 71 ha. Segundo a Câmara, uma equipa de projecto foi constituída em 2001 e a primeira fase, de cerca de 10 ha, ficou concluída em 2009; foi inaugurada em 2010. O parque foi concebido para cerca de 85 ha (80 ha segundo a descrição de 2006–2008), incluindo o troço final dos rios Tinto e Torto e um parque agroflorestal que se estenderia a Gondomar, mas infra-estruturas viárias a que a Campo Aberto se opôs já retiraram parte da área. Em Outubro de 2019 foi inaugurada a segunda fase, que completou o parque com cerca de 16 ha em duas áreas contínuas, segundo a Câmara Municipal do Porto: perto de um quinto da área inicialmente ambicionada.
+
+Na gestão do parque podem participar a Câmara Municipal do Porto, a Junta de Freguesia de Campanhã, associações cívicas do Lagarteiro e do Cerco e, segundo a Câmara em 2014, a União Europeia e os proprietários dos terrenos da UOPG 23.

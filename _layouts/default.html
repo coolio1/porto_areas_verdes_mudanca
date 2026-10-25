@@ -63,6 +63,7 @@
       background: rgba(255,255,255,0.1);
       color: white;
     }
+    main.wide { max-width: none; margin: 0; padding: 0; }
     main {
       max-width: 780px;
       margin: 2rem auto;
@@ -135,7 +136,7 @@
     <p><em>Mapas interactivos de vegetação, uso do solo e mudanças urbanas no Porto</em></p>
   </header>
   {% include nav.html %}
-  <main>
+  <main{% if page.wide %} class="wide"{% endif %}>
     {{ content }}
   </main>
   <footer>

@@ -16,6 +16,7 @@ PAGES = [
     ("mapa/mapa.html",                                "Mapa 2016-2025"),
     ("ndvi_historico/ndvi_historico.html",            "Histórico 1947-2024"),
     ("interiores/interiores_quarteiroes.html",        "Verde Privado"),
+    ("50espacos/",                                    "50 Espaços"),
     ("acessibilidade/acessibilidade_verde.html",      "Acessibilidade"),
     ("acessibilidade/conversao_verde.html",           "Propostas"),
     ("atropelamentos/dashboard_atropelamentos.html",  "Atropelamentos"),
