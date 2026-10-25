@@ -4,7 +4,7 @@ title: Os espaços da campanha
 description: Mapa e lista dos espaços verdes da campanha 50 espaços verdes da Campo Aberto.
 wide: true
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/50espacos.css">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/50espacos.css?v={{ site.time | date: '%s' }}">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <div class="e50">
   <div class="coluna">

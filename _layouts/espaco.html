@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/50espacos.css">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/50espacos.css?v={{ site.time | date: '%s' }}">
 {%- comment -%} Fotos são NN.jpg; delimitações e mapas (delimitacao*, mapa*) vão para "Mapas e plantas". {%- endcomment -%}
 {%- assign fotos_ = "" | split: "" -%}
 {%- assign plantas_ = "" | split: "" -%}
