@@ -166,7 +166,7 @@
 .e50 .ficha-larga { max-width: 68rem; margin: 0 auto; }
 .e50 .ficha-topo { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 0; border-bottom: 1.5px solid var(--grafite); margin-bottom: 1.6rem; }
 .e50 .ficha-topo .logo-topo { margin: 0; }
-.e50 .ficha-topo .logo-topo img { width: auto; height: 3.6rem; max-width: 40vw; }
+.e50 .ficha-topo .logo-topo img { width: auto; height: 6.5rem; max-width: 55vw; }
 .e50 .migalhas { font: 450 0.92rem/1.4 var(--sans); color: var(--suave); margin: 0; padding: 0; }
 .e50 .migalhas a { color: var(--suave); }
 
