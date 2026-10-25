@@ -28,6 +28,17 @@ def test_pipeline_excluida_do_jekyll():
     assert "espacos_pipeline" in _config()["exclude"]
 
 
+def test_front_matter_valido_em_todas_as_paginas_da_seccao():
+    import re
+    import yaml
+    paginas = [*(RAIZ / "50espacos").glob("*.md"), *(RAIZ / "50espacos" / "espacos").glob("*.md"), *(RAIZ / "_espacos").glob("**/*.md")]
+    assert paginas
+    for p in paginas:  # YAML inválido faz o Jekyll ignorar o front matter e perder o layout
+        m = re.match(r"---\r?\n(.*?)\r?\n---", p.read_text(encoding="utf-8"), re.S)
+        assert m, p.name
+        yaml.safe_load(m.group(1))
+
+
 def test_logo_da_campanha_em_todas_as_paginas_da_seccao():
     assert "50espacos-logo" in (RAIZ / "_layouts" / "campanha.html").read_text(encoding="utf-8")
     assert "50espacos-logo" in (RAIZ / "_includes" / "logo_campanha.html").read_text(encoding="utf-8")

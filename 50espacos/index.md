@@ -2,7 +2,7 @@
 layout: campanha
 title: A campanha dos 50 espaços verdes
 resumo: Em 2006–2008 a Campo Aberto identificou 111 espaços verdes na Área Metropolitana do Porto. Em 2009 seleccionou 50 para defender.
-description: A campanha 50 espaços verdes em perigo e a preservar, da Campo Aberto: história, critérios, metodologia e as fichas dos espaços.
+description: "A campanha 50 espaços verdes em perigo e a preservar, da Campo Aberto: história, critérios, metodologia e as fichas dos espaços."
 ---
 ## Como nasceu
 
