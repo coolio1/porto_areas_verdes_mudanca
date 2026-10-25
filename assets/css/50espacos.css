@@ -200,6 +200,10 @@
 .e50 .galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 0.6rem; margin: 2rem 0; }
 .e50 .galeria figure { margin: 0; }
 .e50 .galeria img { width: 100%; height: 11rem; object-fit: cover; display: block; border: 1.5px solid var(--grafite); }
+.e50 .galeria a { cursor: zoom-in; }
+.e50-ampliada { max-width: 96vw; max-height: 96vh; padding: 0; border: 0; background: transparent; }
+.e50-ampliada::backdrop { background: rgba(35, 40, 43, 0.88); }
+.e50-ampliada img { display: block; max-width: 96vw; max-height: 94vh; object-fit: contain; cursor: zoom-out; }
 .e50 .galeria figcaption { font: 450 0.85rem/1.4 var(--sans); color: var(--suave); margin-top: 0.3rem; }
 
 .e50 .fontes { font: 450 0.92rem/1.5 var(--sans); color: var(--suave); border-top: 1.5px solid var(--traco); padding-top: 1rem; margin-top: 2.5rem; }

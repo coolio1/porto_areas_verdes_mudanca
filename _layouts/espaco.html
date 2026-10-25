@@ -32,6 +32,23 @@ layout: default
     {%- endif %}
   </article>
 </div>
+{%- if page.fotos.size > 0 %}
+<dialog class="e50-ampliada" id="ampliada"><img alt=""></dialog>
+<script>
+(function () {
+  var d = document.getElementById('ampliada'); if (!d || !d.showModal) return;
+  var img = d.querySelector('img');
+  document.querySelectorAll('.e50 .galeria a').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      img.src = a.href; img.alt = a.querySelector('img').alt;
+      d.showModal();
+    });
+  });
+  d.addEventListener('click', function () { d.close(); });
+})();
+</script>
+{%- endif %}
 {%- if page.lat and page.lon %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
