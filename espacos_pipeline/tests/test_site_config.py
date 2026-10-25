@@ -48,9 +48,9 @@ def test_logo_da_campanha_em_todas_as_paginas_da_seccao():
 
 def test_layout_espaco_usa_campos_da_spec():
     html = (RAIZ / "_layouts" / "espaco.html").read_text(encoding="utf-8")
-    for campo in ("titulo", "concelho", "freguesia", "area_ha", "fontes", "fotos", "anexos"):
+    for campo in ("titulo", "concelho", "freguesia", "area_ha", "fotos", "anexos"):
         assert f"page.{campo}" in html, campo
-    for campo in ("n_ficha", "proponente", "seleccionado", "estado_actual"):  # nada administrativo nas fichas
+    for campo in ("n_ficha", "proponente", "seleccionado", "estado_actual", "fontes"):  # nada administrativo nas fichas
         assert f"page.{campo}" not in html, campo
 
 

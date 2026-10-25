@@ -8,8 +8,10 @@ wide: true
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <div class="e50">
   <div class="coluna">
-    {% include logo_campanha.html %}
-    <p class="migalhas"><a href="{{ '/50espacos/' | relative_url }}">50 Espaços</a> / Espaços</p>
+    <div class="ficha-topo">
+      {% include logo_campanha.html %}
+      <p class="migalhas"><a href="{{ '/50espacos/' | relative_url }}">50 Espaços</a> / Espaços</p>
+    </div>
     <h1>Os espaços da campanha</h1>
   </div>
   <div id="mapa-espacos" class="moldura" style="min-height:26rem;margin:1rem 0 0.4rem" role="img" aria-label="Mapa dos espaços"><span>Mapa</span></div>

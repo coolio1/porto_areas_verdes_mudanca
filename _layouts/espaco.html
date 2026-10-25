@@ -2,34 +2,58 @@
 layout: default
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/50espacos.css">
+{%- comment -%} Fotos são NN.jpg; delimitações e mapas (delimitacao*, mapa*) vão para "Mapas e plantas". {%- endcomment -%}
+{%- assign fotos_ = "" | split: "" -%}
+{%- assign plantas_ = "" | split: "" -%}
+{%- for f in page.fotos -%}
+  {%- assign nome_ = f.src | split: "/" | last -%}
+  {%- if nome_ contains "mapa" or nome_ contains "delimitacao" -%}{%- assign plantas_ = plantas_ | push: f -%}{%- else -%}{%- assign fotos_ = fotos_ | push: f -%}{%- endif -%}
+{%- endfor -%}
+{%- assign area_ = page.area_ha | round -%}
 <div class="e50">
-  <article class="ficha coluna">
-    {% include logo_campanha.html %}
-    <p class="migalhas"><a href="{{ '/50espacos/' | relative_url }}">50 Espaços</a> / <a href="{{ '/50espacos/espacos/' | relative_url }}">{{ page.concelho }}</a> / {{ page.titulo }}</p>
-    <h1>{{ page.titulo }}</h1>
-    <dl class="ficha-dados">
-      <div><dt>Concelho</dt><dd>{{ page.concelho }}</dd></div>
-      {%- if page.freguesia %}<div><dt>Freguesia</dt><dd>{{ page.freguesia }}</dd></div>{% endif %}
-      {%- if page.area_ha %}<div><dt>Área</dt><dd>{{ page.area_ha }} ha</dd></div>{% endif %}
-    </dl>
-    <div class="texto">{{ content }}</div>
-    {%- if page.fotos.size > 0 %}
+  <article class="ficha ficha-larga">
+    <div class="ficha-topo">
+      {% include logo_campanha.html %}
+      <p class="migalhas"><a href="{{ '/50espacos/espacos/' | relative_url }}">Espaços</a> / {{ page.concelho }}</p>
+    </div>
+    {%- if fotos_.size > 0 %}
+    <figure class="ficha-hero"><a href="{{ fotos_[0].src | relative_url }}" target="_blank" rel="noopener"><img src="{{ fotos_[0].src | relative_url }}" alt="{{ page.titulo | escape }}"></a></figure>
+    {%- endif %}
+    <header class="ficha-cabeca">
+      <h1>{{ page.titulo }}</h1>
+      <dl class="ficha-dados">
+        <div><dt>Concelho</dt><dd>{{ page.concelho }}</dd></div>
+        {%- if page.freguesia %}<div><dt>Freguesia</dt><dd>{{ page.freguesia }}</dd></div>{% endif %}
+        {%- if page.area_ha %}<div><dt>Área</dt><dd>{% if area_ == page.area_ha %}{{ area_ }}{% else %}{{ page.area_ha | replace: ".", "," }}{% endif %} ha</dd></div>{% endif %}
+      </dl>
+    </header>
+    <div class="ficha-corpo">
+      <div class="texto">{{ content }}</div>
+      <aside class="ficha-lado">
+        {%- if page.lat and page.lon %}
+        <div class="moldura mini-mapa" data-lat="{{ page.lat }}" data-lon="{{ page.lon }}"><span>Mapa</span></div>
+        <p class="nota-mapa">Localização aproximada ({{ page.origem_coord }}).</p>
+        {%- endif %}
+        {%- if page.anexos.size > 0 %}
+        <h2>Documentos</h2>
+        <ul class="anexos">{% for a in page.anexos %}<li><a href="{{ a.src | relative_url }}">{{ a.titulo }}</a></li>{% endfor %}</ul>
+        {%- endif %}
+      </aside>
+    </div>
+    {%- if fotos_.size > 1 %}
     <div class="galeria">
-      {%- for f in page.fotos %}
-      <figure><a href="{{ f.src | relative_url }}" target="_blank" rel="noopener"><img src="{{ f.src | relative_url }}" alt="{{ f.legenda | default: page.titulo | escape }}" loading="lazy"></a>{% if f.legenda %}<figcaption>{{ f.legenda }}</figcaption>{% endif %}</figure>
+      {%- for f in fotos_ offset: 1 %}
+      <figure><a href="{{ f.src | relative_url }}" target="_blank" rel="noopener"><img src="{{ f.src | relative_url }}" alt="{{ page.titulo | escape }}" loading="lazy"></a></figure>
       {%- endfor %}
     </div>
     {%- endif %}
-    {%- if page.lat and page.lon %}
-    <div class="moldura mini-mapa" data-lat="{{ page.lat }}" data-lon="{{ page.lon }}"><span>Mapa</span></div>
-    <p class="nota-mapa">Localização aproximada ({{ page.origem_coord }}).</p>
-    {%- endif %}
-    {%- if page.anexos.size > 0 %}
-    <h2>Anexos</h2>
-    <ul>{% for a in page.anexos %}<li><a href="{{ a.src | relative_url }}">{{ a.titulo }}</a></li>{% endfor %}</ul>
-    {%- endif %}
-    {%- if page.fontes.size > 0 %}
-    <div class="fontes">Fontes<ul>{% for f in page.fontes %}<li>{{ f }}</li>{% endfor %}</ul></div>
+    {%- if plantas_.size > 0 %}
+    <h2 class="titulo-plantas">Mapas e plantas</h2>
+    <div class="galeria plantas">
+      {%- for f in plantas_ %}
+      <figure><a href="{{ f.src | relative_url }}" target="_blank" rel="noopener"><img src="{{ f.src | relative_url }}" alt="Mapa de {{ page.titulo | escape }}" loading="lazy"></a></figure>
+      {%- endfor %}
+    </div>
     {%- endif %}
   </article>
 </div>
@@ -39,7 +63,7 @@ layout: default
 (function () {
   var d = document.getElementById('ampliada'); if (!d || !d.showModal) return;
   var img = d.querySelector('img');
-  document.querySelectorAll('.e50 .galeria a').forEach(function (a) {
+  document.querySelectorAll('.e50 .galeria a, .e50 .ficha-hero a').forEach(function (a) {
     a.addEventListener('click', function (e) {
       e.preventDefault();
       img.src = a.href; img.alt = a.querySelector('img').alt;
