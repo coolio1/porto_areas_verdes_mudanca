@@ -77,19 +77,20 @@
 .e50 p { margin: 0 0 1rem; }
 
 /* ——— Abertura ——— */
-.e50 .abertura { padding: 3.5rem 0 1rem; }
+.e50 .abertura { padding: 1.5rem 0 1rem; text-align: left; --quad: clamp(1.5rem, 3vw, 2.3rem); }
 .e50 .abertura h1 { max-width: 22ch; font-size: clamp(1.7rem, 3.2vw + 0.6rem, 2.7rem); }
 .e50 .abertura .resumo {
-  font-size: 1.2rem;
-  max-width: 46ch;
-  margin: 1.2rem 0 2.2rem;
+  font-size: clamp(1.25rem, 1.2vw + 1rem, 1.6rem);
+  line-height: 1.4;
+  max-width: 36ch;
+  margin: 0;
   color: var(--grafite);
 }
 
 /* Título e logo da campanha lado a lado */
-.e50 .cabeca { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem 3rem; justify-content: space-between; }
+.e50 .cabeca { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem 3rem; justify-content: space-between; margin-bottom: 2rem; }
 .e50 .cabeca .texto-cabeca { flex: 1 1 24rem; }
-.e50 .logo-campanha { flex: 0 1 18rem; width: 18rem; max-width: 70%; height: auto; mix-blend-mode: multiply; }
+.e50 .logo-campanha { flex: 0 1 22rem; width: 22rem; max-width: 70%; height: auto; mix-blend-mode: multiply; }
 
 /* Quadrículas: 1 por espaço, agrupadas por concelho */
 .e50 .campo { display: flex; flex-wrap: wrap; gap: 1.6rem 2.4rem; align-items: flex-start; }
@@ -268,10 +269,10 @@
 .e50 .cronologia .ano { font: 750 1.15rem/1.3 var(--sans); color: var(--floresta); }
 
 /* ——— Entradas (três portas para a secção) ——— */
-.e50 .entradas { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0; margin: 2.5rem 0 1rem; border: 1.5px solid var(--grafite); background: var(--superficie); }
+.e50 .entradas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 0; margin: 2rem 0 1rem; border: 1.5px solid var(--grafite); background: var(--superficie); }
 .e50 .entradas a {
   display: block; padding: 1.1rem 1.2rem 1.3rem; color: var(--grafite); text-decoration: none;
-  border-right: 1.5px solid var(--grafite);
+  border-right: 1.5px solid var(--grafite); border-radius: 0; text-align: left;
 }
 .e50 .entradas a:last-child { border-right: 0; }
 .e50 .entradas a:hover, .e50 .entradas a:focus-visible { background: var(--sinal); }
