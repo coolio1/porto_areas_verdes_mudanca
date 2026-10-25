@@ -175,7 +175,7 @@
 .e50 .ficha-hero img { display: block; width: 100%; height: clamp(11rem, 26vw, 17rem); object-fit: cover; border: 1.5px solid var(--grafite); }
 
 .e50 .ficha-cabeca { margin-bottom: 2.2rem; }
-.e50 .ficha h1 { font-size: clamp(2.2rem, 5vw + 0.4rem, 3.8rem); line-height: 1.04; margin: 0 0 1.2rem; padding-left: 1rem; border-left: 0.55rem solid var(--sinal); }
+.e50 .ficha h1 { font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); line-height: 1.15; text-align: left; margin: 0 0 1rem; padding-left: 0.8rem; border-left: 0.4rem solid var(--sinal); }
 
 .e50 .ficha-dados { display: flex; flex-wrap: wrap; gap: 0.4rem 2.8rem; margin: 0; padding-top: 0.9rem; border-top: 1.5px solid var(--traco); }
 .e50 .ficha-dados div { background: none; border: 0; padding: 0; }
