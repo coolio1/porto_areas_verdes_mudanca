@@ -66,3 +66,29 @@ def test_duplicados_entre_origens_e_colisao_de_nomes(tmp_path):
     c = _foto(tmp_path / "c" / "01.jpg", (600, 400))  # diferente, mesmo nome
     rel = copiar_media("x", [a, b, c], tmp_path / "media" / "x")
     assert rel == ["x/01.jpg", "x/01-2.jpg"]
+
+
+def test_voltar_a_copiar_e_idempotente(tmp_path):
+    o = _foto(tmp_path / "orig" / "01.jpg", (500, 500))
+    dest = tmp_path / "media" / "x"
+    assert copiar_media("x", [o], dest) == ["x/01.jpg"]
+    assert copiar_media("x", [o], dest) == ["x/01.jpg"]
+    assert sorted(p.name for p in dest.iterdir()) == ["01.jpg"]
+
+
+def test_atribuir_pastas_usa_a_unica_pasta_livre_da_freguesia():
+    from espacos_pipeline.copiar_media import atribuir_pastas
+    reiv = {"dunas-de-mira": ("gaia", "arcozelo", "95")}
+    existentes = [("gaia", "arcozelo", "95"), ("gaia", "arcozelo", "60"), ("gaia", "canelas", "78")]
+    r = atribuir_pastas(reiv, {"quinta-dos-ananases": ("vila-nova-de-gaia", "Arcozelo")}, existentes)
+    assert r["quinta-dos-ananases"] == ("gaia", "arcozelo", "60") and r["dunas-de-mira"] == ("gaia", "arcozelo", "95")
+
+
+def test_atribuir_pastas_falha_se_ambiguo_ou_sem_pasta():
+    import pytest
+    from espacos_pipeline.copiar_media import atribuir_pastas
+    ex = [("gaia", "arcozelo", "60"), ("gaia", "arcozelo", "61")]
+    with pytest.raises(ValueError):
+        atribuir_pastas({}, {"x": ("vila-nova-de-gaia", "Arcozelo")}, ex)
+    with pytest.raises(ValueError):
+        atribuir_pastas({}, {"x": ("vila-nova-de-gaia", "Canelas")}, ex)

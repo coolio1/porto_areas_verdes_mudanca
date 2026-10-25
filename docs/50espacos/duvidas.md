@@ -26,3 +26,16 @@ Registadas em 2026-10-25 para pesquisa online no fim. Estado: `[ ]` por resolver
 - **Cemitério Inglês (St James)**: único cemitério protestante do Norte, terreno comprado em 1787 pela British Factory, 4 talhões, ~1200 sepulturas, visita por marcação; sem classificação confirmada. Ver [St James Church](https://www.stjamesoporto.org/history.html) e [CWGC](https://www.cwgc.org/visit-us/find-cemeteries-memorials/cemetery-details/2086510/OPORTO%20(ST%20JAMES)%20BRITISH%20CHURCHYARD/).
 - **Pinheiros Mansos**: o topónimo actual é Rua do Pinheiro Manso (Boavista); o pinheiro original caiu no ciclone de 1941. Zona hoje residencial/imobiliário de luxo; nada sobre o logradouro como espaço verde.
 - Por pesquisar: estado actual dos outros espaços, datas da imprensa, 5 fichas reescritas por engano.
+
+## Fase 2 — 88 espaços dos outros 8 concelhos (2026-10-25)
+Todos os textos novos estão em `docs/50espacos/fusao/<concelho>/` com `revisto: false`: só aparecem no site depois de os rever e passar a `true`.
+- [ ] **Revisão dos 88 textos** (Gaia 22, Maia 25, Gondomar 18, Matosinhos 7, Vila do Conde 6, Valongo 4, Espinho 4, Póvoa de Varzim 2). Os mais finos, por falta de fontes: Estrada da Circunvalação, Montes Caulinos, Zona rural do Monte Espinho, Margem do Douro (Medas e Melres).
+- [ ] **Coordenadas**: Ribeira de Vila Cova (Valongo) vinha como `41,0,6`; assumi 41,06. Confirmar.
+- [ ] **Castro de Ovil**: aquisição em 1985 (ficha) ou 1986 (Câmara); usei 1986.
+- [ ] **Espaços sem página no Webnode**: um em Gondomar, um em Maia, um em Matosinhos e os dois da Póvoa de Varzim (só têm ficha e PDF).
+- [ ] **Robinson / Parque Oriental**: o zip repete o id 1443 para dois espaços do Porto.
+- [ ] **Áreas que não batem**: Tabãos 106 ha (ficha 2006) vs 78 ha (PDM); Margens do Leça 57 ha vs cerca de 90 ha propostos pela Câmara; Quinta do Mosteiro de Pedroso 53 ha vs 18 ha da propriedade.
+- [ ] **Quinta do Soeime**: a ficha dizia RAN, a Câmara diz que nunca esteve; segui a Câmara.
+- [ ] **Gaia**: o Arboreto da EB2 de Canelas já não existe (obras da Parque Escolar); texto no passado. Decidir se mantém ficha.
+- [ ] **Media**: 119 MB para os 111 espaços (`50espacos/media/`); o repositório cresce. Avaliar se se reduz a resolução.
+- [ ] **Bug corrigido**: `copiar_media` duplicava fotos (`-2`) ao voltar a correr; agora é idempotente (teste novo).

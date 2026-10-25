@@ -22,3 +22,12 @@ def test_dossier_contem_todas_as_camadas_presentes_e_datas():
 
 def test_dossier_nao_inclui_nomes_de_pessoas_proponentes():
     assert "Ana Silva" not in montar_dossier("quinta-x", _fontes())
+
+
+def test_dossier_junta_camadas_com_titulos_diferentes_por_fonte():
+    f = _fontes()
+    f["pdf"]["5"]["titulo"] = "Quinta X / Mata Y"
+    f["selecao"][0]["nome"] = "Quinta X e zona envolvente"
+    titulos = {"zip": "Quinta X", "pdf": "Quinta X / Mata Y", "webnode": "Quinta X", "selecao": "Quinta X e zona envolvente"}
+    d = montar_dossier("quinta-x", f, titulos)
+    assert "Oficial." in d and "2009-04" in d

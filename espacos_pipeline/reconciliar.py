@@ -71,7 +71,7 @@ def _entradas(fontes: dict, fonte: str, concelho_webnode: str):
                    "seleccionado": s.get("selecao") is not None, "origem": s}
     elif fonte == "webnode":
         for w in fontes.get("webnode", []):
-            yield {"id": None, "titulo": w["titulo"], "concelho": concelho_webnode, "freguesia": w.get("freguesia"),
+            yield {"id": None, "titulo": w["titulo"], "concelho": w.get("concelho") or concelho_webnode, "freguesia": w.get("freguesia"),
                    "coordenadas": coords(w), "seleccionado": w.get("seleccionado"), "origem": w}
 
 
@@ -123,6 +123,12 @@ def reconciliar(fontes: dict, concelho_webnode: str = "porto") -> Relatorio:
             rel.so_numa_fonte.append({"fonte": reg["fontes"][0], "titulo": next(iter(reg["titulo"].values()), None), "id": next(iter(reg["id"].values()), None)})
         _comparar(rel, reg)
     return rel
+
+
+def concelho_do_registo(reg: dict) -> str:
+    """Concelho de um espaço (alguns são a cavalo): prevalece a lista de 2009, depois o PDF, depois a primeira fonte."""
+    c = reg["concelho"]
+    return c.get("selecao") or c.get("pdf") or next(iter(c.values()))
 
 
 def _comparar(rel: Relatorio, r: dict):
@@ -216,7 +222,7 @@ def _carregar() -> dict:
     ler = lambda n: json.loads((EXTRAIDO / n).read_text(encoding="utf-8"))
     return {
         "zip": ler("docx_zip.json"), "projecto": ler("docx_projecto.json"),
-        "pdf": ler("pdf2016.json")["fichas"], "webnode": ler("webnode_porto.json")["espacos"], "selecao": ler("selecao2009.json"),
+        "pdf": ler("pdf2016.json")["fichas"], "webnode": [e for f in sorted(EXTRAIDO.glob("webnode_*.json")) for e in ler(f.name)["espacos"]], "selecao": ler("selecao2009.json"),
     }
 
 

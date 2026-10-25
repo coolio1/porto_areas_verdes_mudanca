@@ -142,3 +142,10 @@ def test_resolver_webnode_acrescenta_quando_ninguem_mais_tem():
     reg = resolver(r)[0]
     assert reg["resolvido"]["coordenadas"] == [41.16, -8.6]
     assert reg["decisoes"] == []
+
+
+def test_concelho_do_registo_prevalece_a_lista_de_2009():
+    from espacos_pipeline.reconciliar import concelho_do_registo
+    reg = {"concelho": {"zip": "valongo", "webnode": "gondomar", "selecao": "gondomar"}}
+    assert concelho_do_registo(reg) == "gondomar"
+    assert concelho_do_registo({"concelho": {"zip": "maia"}}) == "maia"

@@ -7,7 +7,11 @@ from typing import Optional
 
 SELECOES = ("2009-04", "posterior")
 ESTADOS = ("por verificar", "preservado", "parcialmente construído", "destruído", "ameaçado")
-CONCELHOS_FASE1 = {"porto"}
+# Nome público de cada concelho da campanha (chave = slug canónico de `reconciliar.norm_concelho`).
+CONCELHOS = {
+    "porto": "Porto", "vila-nova-de-gaia": "Vila Nova de Gaia", "gondomar": "Gondomar", "maia": "Maia", "matosinhos": "Matosinhos",
+    "vila-do-conde": "Vila do Conde", "espinho": "Espinho", "valongo": "Valongo", "povoa-de-varzim": "Póvoa de Varzim",
+}
 
 # Caixa envolvente da AMP (graus WGS84): apanha o sinal de longitude em falta e gralhas grosseiras.
 BBOX_AMP = {"lat": (40.8, 41.5), "lon": (-8.9, -8.3)}

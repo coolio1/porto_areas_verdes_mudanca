@@ -1,0 +1,15 @@
+---
+slug: margens-do-rio-leca-em-alfena
+fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
+revisto: false
+---
+
+As margens do Rio Leça em Alfena são um vale agrícola de cerca de 57 ha, com campos cultivados, pequenas hortas, vinha em bardos, prados de Inverno e árvores de fruto dispersas, onde o rio entra no concelho de Valongo. A Câmara Municipal de Valongo sugeriu em 2014 prolongar o espaço até ao Parque Socer, em Ermesinde, chamar-lhe «Margens do Rio Leça em Alfena e Ermesinde, entre o Parque de São Lázaro e o Parque de Socer» e delimitá-lo com cerca de 90 ha de espaço agrícola e 7,3 ha de equipamentos.
+
+O Leça nasce no Monte de Santa Luzia, em Santo Tirso, e percorre cerca de 48 km por Valongo, Maia e Matosinhos até desaguar em Leça da Palmeira, no porto de Leixões. No século XIX e princípios do XX era considerado um dos rios mais belos do Norte, com moinhos e açudes entre campos de flores, vinha, hortícolas, linho e milho regados com a sua água. Desde os anos 60 a industrialização, a construção anárquica e os lixos degradaram-no, e até aos anos 90 foi dos rios mais poluídos da Europa. Em Alfena ainda há galeria ribeirinha de choupos, amieiros, salgueiros e freixos, grandes carvalhos-alvarinhos e sobreiros, e já se avistaram lontras e enguias. A monitorização do projecto «Corrente Rio Leça» registou boga, enguia, escalo-do-norte e ruivaco, além de góbio e perca-sol. Nos campos há noras de rega desactivadas, e a Ribeira de Tabãos e a Ribeira de Cabeda juntam-se ao rio neste troço.
+
+O património inclui as capelas de São Lázaro e de Nossa Senhora do Amparo, o calvário de Transleça, o da Costa e o de Aldeia Nova, de 1733, e a Ponte de São Lázaro, de origem românica e classificada como Imóvel de Interesse Municipal, que fazia parte do caminho medieval do Porto para Guimarães. Na zona de lazer de São Lázaro, criada em 1996 nas duas margens, o moinho foi reconvertido em cafetaria e há um ginásio ao ar livre; em Ermesinde, o Parque Socer foi inaugurado em Agosto de 2009.
+
+O troço atravessa áreas de Reserva Agrícola Nacional, em domínio público hídrico, e são sobretudo terrenos privados, excepto os dos equipamentos. A revisão do PDM de Valongo, publicada em Fevereiro de 2015, classifica a área como espaço agrícola, quase coincidente com a RAN e em grande parte com a REN e o leito de cheia. As ameaças são a carga orgânica das águas, a deposição de lixos nas margens, a pressão urbanística e industrial e a destruição dos corredores ripícolas. O projecto «Corrente Rio Leça», que juntou a Câmara, a CCDR-Norte, as juntas de freguesia e a Faculdade de Engenharia da Universidade do Porto, actuou de forma sistemática até 2009 contra ligações ilegais e lixos; desde então a Câmara e as juntas continuam a fazer limpezas pontuais, vistorias e acções de sensibilização.
+
+Sugere-se requalificar e renaturalizar a bacia do Leça, fiscalizar as descargas e eliminar as ligações clandestinas, limpar as margens, monitorizar a água, plantar espécies autóctones, recuperar pontes e moinhos abandonados e fazer educação ambiental e voluntariado em torno da despoluição.

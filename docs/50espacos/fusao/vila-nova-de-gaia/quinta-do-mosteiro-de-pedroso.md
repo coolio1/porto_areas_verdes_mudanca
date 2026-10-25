@@ -1,0 +1,11 @@
+---
+slug: quinta-do-mosteiro-de-pedroso
+fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
+revisto: false
+---
+
+A Quinta do Mosteiro de Pedroso, em Pedroso, tem cerca de 53 ha (a propriedade propriamente dita terá cerca de 18 ha) e fica ao lado do Mosteiro de Pedroso, hoje igreja paroquial. Os muros são altos e é difícil ver o interior. Tem a casa da quinta, com acesso por uma alameda de plátanos, grandes áreas agrícolas, um carvalhal a sudeste e linhas de água que nascem no Monte Murado e afluem ao Rio Febros. O adro e os jardins da entrada têm árvores e arbustos ornamentais, e há edifícios rurais, estábulos, eira e espigueiro de interesse etnográfico, com terra arável e zonas arborizadas favoráveis à agricultura biológica.
+
+O mosteiro era beneditino, foi fundado em 897 e Pedroso foi couto em foral de 1128, com influência sobre 37 freguesias, desde Gaia até Santa Maria da Feira e Aveiro, e 11 igrejas. A igreja é de estilo românico e foi matriz a partir de 1759; conserva a pia baptismal românica, um brasão gótico e a torre medieval. Foi classificado como Monumento de Interesse Público em 14 de Maio de 2014, por proposta da Câmara de 2010, pelo valor simbólico de um mosteiro anterior à nacionalidade, com notável enquadramento agrícola e florestal; a quinta actual é cerca de metade da original, e a sua última função foi a criação de cavalos.
+
+É propriedade privada e quase toda em Reserva Agrícola Nacional. No PDM de 2009 é solo rural (quintas em espaço rural e áreas naturais ribeirinhas, em Estrutura Ecológica Fundamental) e solo urbano (áreas de expansão de tipologia mista), na unidade operativa UOPG PD2 – Quinta do Mosteiro e envolvente, com protecção arqueológica e arquitectónica. Está bem conservada, mas parte estava em obras de urbanização de um condomínio de luxo, e a impermeabilização do solo pode afectar as ribeiras. O Mosteiro tem um coro de jovens com actividade regular. Sugere-se recuperar construções para associações, espaços de artesanato e comércio justo, e actividades lúdicas como passeios a cavalo e agricultura biológica.

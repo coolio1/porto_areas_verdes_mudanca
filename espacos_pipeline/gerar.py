@@ -4,8 +4,8 @@ import re
 from pathlib import Path
 
 from espacos_pipeline.extrair_webnode import area_em_ha
-from espacos_pipeline.modelo import Espaco, slugify, validar_lote
-from espacos_pipeline.reconciliar import RAIZ, _carregar, reconciliar, resolver
+from espacos_pipeline.modelo import CONCELHOS, Espaco, slugify, validar_lote
+from espacos_pipeline.reconciliar import RAIZ, _carregar, concelho_do_registo, reconciliar, resolver
 
 FUSAO = RAIZ / "docs" / "50espacos" / "fusao"
 ROTULO = {"zip": "Ficha de 2006–2008", "pdf": "Compilação 2014–2016 (PDF de 2018)", "webnode": "Webnode da campanha", "selecao": "Lista de Abril de 2009"}
@@ -71,14 +71,14 @@ def gerar(espacos: list, raiz: Path) -> list:
     return escritos + [d]
 
 
-def espacos_do_porto(fontes: dict = None) -> list:
-    """Espaços do Porto reconciliados, com o texto fundido revisto (sem texto se ainda não revisto)."""
+def espacos_do_concelho(concelho: str, fontes: dict = None) -> list:
+    """Espaços de um concelho (slug canónico) reconciliados, com o texto fundido revisto (sem texto se ainda não revisto)."""
     fontes = fontes or _carregar()
     rel = reconciliar(fontes)
     resolver(rel)
     saida = []
     for reg in rel.registos:
-        if "porto" not in reg["concelho"].values():
+        if concelho_do_registo(reg) != concelho:
             continue
         titulo = reg["titulo"].get("webnode") or reg["titulo"].get("pdf") or next(iter(reg["titulo"].values()))
         res = reg["resolvido"]
@@ -88,10 +88,10 @@ def espacos_do_porto(fontes: dict = None) -> list:
         sel = next((s for s in fontes["selecao"] if s["nome"] == reg["titulo"].get("selecao")), None)
         selecao = sel.get("selecao") if sel else None
         ficha = next((f for n in ("zip", "projecto") for f in fontes[n].values() if isinstance(f, dict) and f.get("titulo") in (reg["titulo"].get("zip"), reg["titulo"].get("projecto"))), None)
-        texto_fusao = FUSAO / "porto" / f"{slugify(titulo)}.md"
+        texto_fusao = FUSAO / concelho / f"{slugify(titulo)}.md"
         fotos, anexos = listar_media(slugify(titulo), RAIZ)
         saida.append(Espaco(
-            titulo=titulo, concelho="Porto", seleccionado=bool(res.get("seleccionado")), selecao=selecao if res.get("seleccionado") else None,
+            titulo=titulo, concelho=CONCELHOS[concelho], seleccionado=bool(res.get("seleccionado")), selecao=selecao if res.get("seleccionado") else None,
             texto=(ler_fusao(texto_fusao) if texto_fusao.exists() else None) or "", freguesia=res.get("freguesia"),
             n_ficha=int(ficha["n_ficha"]) if ficha and ficha.get("n_ficha") else None,
             area_ha=area_em_ha(ficha["area_texto"]) if ficha and ficha.get("area_texto") else None,
@@ -104,6 +104,7 @@ def espacos_do_porto(fontes: dict = None) -> list:
 
 
 if __name__ == "__main__":
-    es = espacos_do_porto()
+    fontes = _carregar()
+    es = [e for c in CONCELHOS for e in espacos_do_concelho(c, fontes)]
     es = [e for e in es if e.texto]  # só publica o que tem texto revisto
     print(len(gerar(es, RAIZ)), "ficheiros;", len(es), "espaços com texto revisto")

@@ -5,9 +5,8 @@ import re
 from pathlib import Path
 
 from espacos_pipeline.modelo import slugify
-from espacos_pipeline.reconciliar import RAIZ, _carregar
+from espacos_pipeline.reconciliar import RAIZ, _carregar, concelho_do_registo
 
-DESTINO = RAIZ / "docs" / "50espacos" / "dossiers" / "porto"
 
 
 def _ficha(fontes: dict, fonte: str, slug: str):
@@ -27,11 +26,13 @@ def _descricao(f: dict) -> dict:
     return d or {}
 
 
-def montar_dossier(slug: str, fontes: dict) -> str:
-    ficha = _ficha(fontes, "zip", slug) or _ficha(fontes, "projecto", slug)
-    pdf = next((p for p in fontes.get("pdf", {}).values() if slugify(p.get("titulo", "")) == slug), None)
-    web = next((w for w in fontes.get("webnode", []) if slugify(w["titulo"]) == slug), None)
-    sel = next((s for s in fontes.get("selecao", []) if slugify(s["nome"]) == slug), None)
+def montar_dossier(slug: str, fontes: dict, titulos: dict = None) -> str:
+    """`titulos`: título do espaço em cada fonte (do registo reconciliado); sem ele usa-se o slug em todas."""
+    t = lambda *chaves: next((slugify(titulos[c]) for c in chaves if titulos and titulos.get(c)), slug)
+    ficha = _ficha(fontes, "zip", t("zip", "projecto")) or _ficha(fontes, "projecto", t("projecto", "zip"))
+    pdf = next((p for p in fontes.get("pdf", {}).values() if slugify(p.get("titulo", "")) == t("pdf")), None)
+    web = next((w for w in fontes.get("webnode", []) if slugify(w["titulo"]) == t("webnode")), None)
+    sel = next((s for s in fontes.get("selecao", []) if slugify(s["nome"]) == t("selecao")), None)
     titulo = (ficha or pdf or web or {}).get("titulo", slug)
     out = [f"# Dossier — {titulo}", "", "Fontes por camada (cada uma com a sua data). Não incluir nomes de pessoas nem contactos.", ""]
     if sel:
@@ -48,9 +49,18 @@ def montar_dossier(slug: str, fontes: dict) -> str:
 
 
 if __name__ == "__main__":
+    from espacos_pipeline.modelo import CONCELHOS
+    from espacos_pipeline.reconciliar import reconciliar, resolver
+
     f = _carregar()
-    DESTINO.mkdir(parents=True, exist_ok=True)
-    slugs = sorted({slugify(w["titulo"]) for w in f["webnode"]})
-    for s in slugs:
-        (DESTINO / f"{s}.md").write_text(montar_dossier(s, f), encoding="utf-8")
-    print(len(slugs), "dossiers ->", DESTINO)
+    rel = reconciliar(f)
+    resolver(rel)
+    n = 0
+    for reg in rel.registos:
+        concelho = concelho_do_registo(reg)
+        titulo = reg["titulo"].get("webnode") or reg["titulo"].get("pdf") or next(iter(reg["titulo"].values()))
+        destino = RAIZ / "docs" / "50espacos" / "dossiers" / concelho
+        destino.mkdir(parents=True, exist_ok=True)
+        (destino / f"{slugify(titulo)}.md").write_text(montar_dossier(slugify(titulo), f, reg["titulo"]), encoding="utf-8")
+        n += 1
+    print(n, "dossiers ->", RAIZ / "docs" / "50espacos" / "dossiers")
