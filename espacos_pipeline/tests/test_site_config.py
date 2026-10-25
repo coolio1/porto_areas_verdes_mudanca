@@ -30,9 +30,10 @@ def test_pipeline_excluida_do_jekyll():
 
 def test_layout_espaco_usa_campos_da_spec():
     html = (RAIZ / "_layouts" / "espaco.html").read_text(encoding="utf-8")
-    for campo in ("titulo", "concelho", "freguesia", "seleccionado", "selecao",
-                  "area_ha", "estado_actual", "data_verificacao", "fontes", "fotos", "anexos"):
+    for campo in ("titulo", "concelho", "freguesia", "area_ha", "fontes", "fotos", "anexos"):
         assert f"page.{campo}" in html, campo
+    for campo in ("n_ficha", "proponente", "seleccionado", "estado_actual"):  # nada administrativo nas fichas
+        assert f"page.{campo}" not in html, campo
 
 
 def test_layout_espaco_so_mostra_mapa_com_coordenadas():
