@@ -133,12 +133,12 @@
   background: var(--grafite);
   color: var(--papel);
   padding: 0.25rem 0.5rem;
-  opacity: 0;
+  display: none;
   pointer-events: none;
   z-index: 3;
 }
 .e50 .marca:hover::after,
-.e50 .marca:focus-visible::after { opacity: 1; }
+.e50 .marca:focus-visible::after { display: block; }
 
 .e50 .legenda {
   display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem;
