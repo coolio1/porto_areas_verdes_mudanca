@@ -307,3 +307,6 @@
   .e50 .abertura { padding-top: 2rem; }
   .e50 .marca::after { left: 0; transform: none; }
 }
+
+/* Texto só para leitores de ecrã */
+.e50 .so-leitor { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); border: 0; white-space: nowrap; }
