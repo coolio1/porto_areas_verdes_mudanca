@@ -104,3 +104,6 @@ Ver skill `/jekyll`. Config específica: `baseurl: /porto_areas_verdes_mudanca`;
 `acessibilidade/regenerar_html.py` e `regenerar_conversao_html.py` regeneram os HTML em ~2 s a partir dos PNGs em cache. Detalhe em `docs/fluxo-rapido-regeneracao.md`.
 
 **Dados inline, nunca `fetch()`:** os GeoJSON são embutidos nos HTML gerados (`fetch()` falha em `file://`, onde os mapas são abertos). Ao alterar uma fonte partilhada, regenerar todos os HTML que a consomem.
+
+## NotebookLM
+- Antes de responder sobre factos ou documentos de planeamento urbano e ordenamento (Porto), consultar os cadernos com a tag `porto` (registo em `..\NotebookLM\notebooks.md`) via `cross_notebook_query`, e antes de qualquer `WebSearch` sobre esses temas. Se não consultar, dizer porquê na resposta.
