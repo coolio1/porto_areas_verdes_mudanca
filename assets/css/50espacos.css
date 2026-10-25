@@ -184,7 +184,7 @@
 .e50 .ficha-hero img { display: block; width: 100%; height: clamp(12rem, 26vw, 18rem); object-fit: cover; border: 1.5px solid var(--grafite); }
 
 .e50 .ficha-cabeca { margin-bottom: 2.2rem; background: none; padding: 0; border: 0; }
-.e50 .ficha h1 { font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); line-height: 1.15; text-align: left; margin: 0 0 1rem; padding-left: 0.8rem; border-left: 0.4rem solid var(--sinal); }
+.e50 .ficha h1, .e50 .titulo-pagina { font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); line-height: 1.15; text-align: left; margin: 0 0 1rem; padding-left: 0.8rem; border-left: 0.4rem solid var(--sinal); }
 
 .e50 .ficha-dados { display: flex; flex-wrap: wrap; gap: 0.4rem 2.8rem; margin: 0; padding-top: 0.9rem; border-top: 1.5px solid var(--traco); }
 .e50 .ficha-dados div { background: none; border: 0; padding: 0; }
@@ -220,15 +220,43 @@
 .e50 .logo-topo { display: inline-block; margin: 0 0 1rem; }
 .e50 .logo-topo img { display: block; width: 11rem; max-width: 55vw; height: auto; mix-blend-mode: multiply; }
 
-/* ——— Lista filtrável ——— */
-.e50 .filtros { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; font-family: var(--sans); margin: 1.4rem 0; }
-.e50 .filtros select, .e50 .filtros input[type="search"] {
+/* ——— Lista e mapa dos espaços ——— */
+.e50 .lista-pagina { max-width: 78rem; margin: 0 auto; }
+.e50 .filtros { display: flex; flex-wrap: wrap; gap: 0.7rem 1rem; align-items: center; font-family: var(--sans); margin: 0 0 1.4rem; }
+.e50 .filtro-select { display: inline-flex; align-items: center; gap: 0.6rem; font: 600 0.95rem var(--sans); }
+.e50 .filtros select {
   font: 500 1rem var(--sans); color: var(--grafite); background: var(--superficie);
-  border: 1.5px solid var(--grafite); padding: 0.35rem 0.6rem; border-radius: 0;
+  border: 1.5px solid var(--grafite); padding: 0.4rem 0.7rem; border-radius: 0;
 }
-.e50 table.lista { width: 100%; border-collapse: collapse; font-family: var(--sans); }
-.e50 table.lista th { text-align: left; font-weight: 600; font-size: 0.88rem; color: var(--suave); border-bottom: 1.5px solid var(--grafite); padding: 0.4rem 0.6rem; }
-.e50 table.lista td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--traco); }
+.e50 .filtro-pilula input { position: absolute; opacity: 0; }
+.e50 .filtro-pilula span { display: inline-block; padding: 0.4rem 0.9rem; border: 1.5px solid var(--grafite); font: 600 0.95rem var(--sans); cursor: pointer; background: var(--superficie); }
+.e50 .filtro-pilula input:checked + span { background: var(--sinal); color: #23282b; }
+.e50 .filtro-pilula input:focus-visible + span, .e50 .filtros select:focus-visible { outline: 3px solid var(--rio); outline-offset: 2px; }
+.e50 .contagem { margin: 0 0 0 auto; font: 500 0.95rem var(--sans); color: var(--suave); }
+
+.e50 .lista-mapa { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.2rem; align-items: start; }
+.e50 .mapa-coluna { order: -1; }
+.e50 #mapa-espacos { height: 18rem; border: 1.5px solid var(--grafite); }
+.e50 .espacos-lista { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--grafite); }
+.e50 .espacos-lista li { border-bottom: 1px solid var(--traco); }
+.e50 .espacos-lista li[hidden] { display: none; }
+.e50 .espacos-lista a { display: flex; gap: 0.9rem; align-items: center; padding: 0.6rem 0.4rem; color: var(--grafite); text-decoration: none; }
+.e50 .espacos-lista img, .e50 .espacos-lista .sem-foto { flex: 0 0 4.6rem; width: 4.6rem; height: 4.6rem; object-fit: cover; border: 1.5px solid var(--grafite); background: repeating-linear-gradient(135deg, transparent 0 7px, var(--traco) 7px 8px); }
+.e50 .espacos-lista .info { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.e50 .espacos-lista .nome { font: 700 1.05rem/1.25 var(--sans); }
+.e50 .espacos-lista .local { font: 450 0.9rem/1.3 var(--sans); color: var(--suave); }
+.e50 .espacos-lista .de-50 { align-self: flex-start; margin-top: 0.25rem; padding: 0.05rem 0.45rem; background: var(--sinal); color: #23282b; font: 650 0.8rem/1.4 var(--sans); }
+.e50 .espacos-lista li:hover, .e50 .espacos-lista li.activo, .e50 .espacos-lista li:focus-within { background: var(--superficie); }
+.e50 .espacos-lista li:hover .nome, .e50 .espacos-lista li.activo .nome { color: var(--floresta); text-decoration: underline; }
+.e50 .vazio { font: 500 1rem var(--sans); color: var(--suave); padding: 1rem 0; }
+.e50 .legenda-mapa { background: rgba(255, 255, 255, 0.92); border: 1.5px solid #23282b; padding: 0.35rem 0.6rem; font: 600 0.85rem/1.5 var(--sans); color: #23282b; display: flex; flex-direction: column; }
+.e50 .legenda-mapa .ponto { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 50%; border: 2px solid #23282b; background: #f6f7f4; vertical-align: -0.1rem; margin-right: 0.35rem; }
+.e50 .legenda-mapa .ponto.sel { background: #2e7d32; }
+@media (min-width: 56rem) {
+  .e50 .lista-mapa { grid-template-columns: minmax(20rem, 28rem) minmax(0, 1fr); gap: 2rem; }
+  .e50 .mapa-coluna { order: 0; position: sticky; top: 1rem; }
+  .e50 #mapa-espacos { height: min(40rem, calc(100vh - 6rem)); }
+}
 
 /* ——— Linha do tempo (sequência real) ——— */
 .e50 .cronologia { list-style: none; margin: 1.5rem 0; padding: 0; border-left: 3px solid var(--floresta); }
