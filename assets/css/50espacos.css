@@ -91,6 +91,10 @@
 .e50 .cabeca .texto-cabeca { flex: 1 1 24rem; }
 .e50 .logo-campanha { flex: 0 1 18rem; width: 18rem; max-width: 70%; height: auto; mix-blend-mode: multiply; }
 
+/* Logo da campanha, em tamanho reduzido, nas páginas interiores */
+.e50 .logo-topo { display: inline-block; margin: 0 0 1rem; }
+.e50 .logo-topo img { display: block; width: 11rem; max-width: 55vw; height: auto; mix-blend-mode: multiply; }
+
 /* Quadrículas: 1 por espaço, agrupadas por concelho */
 .e50 .campo { display: flex; flex-wrap: wrap; gap: 1.6rem 2.4rem; align-items: flex-start; }
 .e50 .grupo h2 {
