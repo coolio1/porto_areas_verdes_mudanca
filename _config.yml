@@ -9,12 +9,27 @@ author:
 
 permalink: /posts/:slug/
 
+collections:
+  espacos:
+    output: true
+    permalink: /50espacos/espacos/:path/
+
 defaults:
   - scope:
       path: ""
       type: "posts"
     values:
       layout: "post"
+  - scope:
+      path: ""
+      type: "espacos"
+    values:
+      layout: "espaco"
+      wide: true
+  - scope:
+      path: "50espacos"
+    values:
+      wide: true
 
 google_site_verification: "Lkfn0DpuOYZdEePSv1vr4_iStVt6XfX5_mb4Sw3jXfY"
 
@@ -35,6 +50,7 @@ exclude:
   - .claude
   - .superpowers
   - docs
+  - espacos_pipeline
   - archive
   - "*.gpkg"
   - CLC

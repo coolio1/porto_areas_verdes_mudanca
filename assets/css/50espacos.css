@@ -1,0 +1,268 @@
+/* 50 Espaços — «Dossiê de campo». Tudo sob .e50 para não colidir com o layout default. */
+
+@font-face {
+  font-family: "Schibsted Grotesk";
+  src: url("../fonts/schibsted-grotesk-vf.woff2") format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Literata";
+  src: url("../fonts/literata-vf.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Literata";
+  src: url("../fonts/literata-vf-italic.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+.e50 {
+  --papel: #f6f7f4;
+  --superficie: #ffffff;
+  --floresta: #1f4d2b;
+  --verde: #2e7d32;
+  --sinal: #e8c21a;
+  --grafite: #23282b;
+  --rio: #2b6c8f;
+  --suave: #5d665f;
+  --traco: #c9cfc6;
+  --quad: clamp(1.1rem, 2.3vw, 1.7rem);
+
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --serif: "Literata", Georgia, serif;
+
+  background: var(--papel);
+  color: var(--grafite);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  padding: 0 1rem 4rem;
+}
+
+/* O layout default do site é sempre claro: o tema escuro só se activa com data-theme="dark". */
+:root[data-theme="dark"] .e50 {
+  --papel: #141a16;
+  --superficie: #1b231e;
+  --floresta: #8cc79a;
+  --verde: #6fb07a;
+  --grafite: #e6ebe4;
+  --rio: #7fb8d6;
+  --suave: #a1aca3;
+  --traco: #3a463d;
+}
+
+.e50 *, .e50 *::before, .e50 *::after { box-sizing: border-box; }
+.e50 a { color: var(--rio); text-underline-offset: 0.18em; }
+.e50 a:focus-visible,
+.e50 .marca:focus-visible { outline: 3px solid var(--rio); outline-offset: 2px; }
+
+.e50 .coluna { max-width: 66ch; margin: 0 auto; }
+.e50 .larga { max-width: 64rem; margin: 0 auto; }
+
+.e50 h1, .e50 h2, .e50 h3 {
+  font-family: var(--sans);
+  color: var(--floresta);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+.e50 h1 { font-size: clamp(2.2rem, 5.6vw + 0.5rem, 4.2rem); font-weight: 800; }
+.e50 h2 { font-size: 1.65rem; font-weight: 700; margin: 3rem 0 0.8rem; }
+.e50 h3 { font-size: 1.15rem; font-weight: 650; margin: 2rem 0 0.4rem; }
+.e50 p { margin: 0 0 1rem; }
+
+/* ——— Abertura ——— */
+.e50 .abertura { padding: 3.5rem 0 1rem; }
+.e50 .abertura h1 { max-width: 18ch; }
+.e50 .abertura .resumo {
+  font-size: 1.2rem;
+  max-width: 46ch;
+  margin: 1.2rem 0 2.2rem;
+  color: var(--grafite);
+}
+
+/* Título e logo da campanha lado a lado */
+.e50 .cabeca { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem 3rem; justify-content: space-between; }
+.e50 .cabeca .texto-cabeca { flex: 1 1 24rem; }
+.e50 .logo-campanha { flex: 0 1 18rem; width: 18rem; max-width: 70%; height: auto; mix-blend-mode: multiply; }
+
+/* Quadrículas: 1 por espaço, agrupadas por concelho */
+.e50 .campo { display: flex; flex-wrap: wrap; gap: 1.6rem 2.4rem; align-items: flex-start; }
+.e50 .grupo h2 {
+  font-size: 0.95rem;
+  font-weight: 650;
+  margin: 0 0 0.55rem;
+  color: var(--grafite);
+}
+.e50 .grupo h2 span { color: var(--suave); font-weight: 450; margin-left: 0.4em; }
+.e50 .quadriculas {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 10), var(--quad));
+  gap: clamp(0.25rem, 0.5vw, 0.4rem);
+}
+.e50 .marca {
+  position: relative;
+  display: block;
+  width: var(--quad);
+  height: var(--quad);
+  border: 1.5px solid var(--suave);
+  background: transparent;
+}
+.e50 .marca[data-seleccionado="true"] {
+  background: var(--sinal);
+  border-color: var(--grafite);
+}
+.e50 .marca:hover,
+.e50 .marca:focus-visible { border-color: var(--rio); border-width: 2.5px; }
+
+/* Nome do espaço ao passar o rato ou focar */
+.e50 .marca::after {
+  content: attr(data-nome);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.4rem);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font: 500 0.82rem/1.3 var(--sans);
+  background: var(--grafite);
+  color: var(--papel);
+  padding: 0.25rem 0.5rem;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.e50 .marca:hover::after,
+.e50 .marca:focus-visible::after { opacity: 1; }
+
+.e50 .legenda {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem;
+  margin-top: 1.4rem;
+  font: 450 0.9rem/1.4 var(--sans);
+  color: var(--suave);
+}
+.e50 .legenda .amostra {
+  display: inline-block; width: 0.8rem; height: 0.8rem;
+  border: 1.5px solid var(--suave); vertical-align: -0.1rem; margin-right: 0.4rem;
+}
+.e50 .legenda .amostra.cheia { background: var(--sinal); border-color: var(--grafite); }
+
+/* O único movimento da página: as 50 seleccionadas preenchem-se uma vez */
+@media (prefers-reduced-motion: no-preference) {
+  .e50 .marca[data-seleccionado="true"] {
+    animation: preencher 0.5s ease-out both;
+    animation-delay: calc(var(--i, 0) * 28ms + 150ms);
+  }
+  @keyframes preencher {
+    from { background: transparent; border-color: var(--suave); }
+  }
+}
+
+/* ——— Ficha de um espaço ——— */
+.e50 .migalhas { font: 450 0.9rem/1.4 var(--sans); color: var(--suave); padding-top: 2rem; }
+.e50 .migalhas a { color: var(--suave); }
+.e50 .ficha h1 { font-size: clamp(2rem, 4.4vw + 0.5rem, 3.2rem); margin: 0.6rem 0 1.2rem; }
+
+.e50 .etiquetas { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.4rem; font-family: var(--sans); }
+.e50 .etiqueta {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1.5px solid var(--grafite);
+}
+.e50 .etiqueta.seleccionado { background: var(--sinal); color: #23282b; }
+.e50 .etiqueta.estado { border-color: var(--suave); color: var(--suave); font-weight: 500; }
+
+.e50 .ficha-dados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  margin: 0 0 2rem;
+  border-top: 1.5px solid var(--grafite);
+  border-left: 1.5px solid var(--grafite);
+}
+.e50 .ficha-dados div {
+  padding: 0.55rem 0.8rem 0.7rem;
+  background: var(--superficie);
+  border-right: 1.5px solid var(--grafite);
+  border-bottom: 1.5px solid var(--grafite);
+}
+.e50 .ficha-dados dt { font: 500 0.82rem/1.3 var(--sans); color: var(--suave); }
+.e50 .ficha-dados dd { margin: 0.1rem 0 0; font: 650 1.02rem/1.35 var(--sans); }
+
+.e50 .texto { max-width: 62ch; }
+.e50 .texto p { line-height: 1.7; }
+
+.e50 .galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 0.6rem; margin: 2rem 0; }
+.e50 .galeria figure { margin: 0; }
+.e50 .galeria img { width: 100%; height: 11rem; object-fit: cover; display: block; border: 1.5px solid var(--grafite); }
+.e50 .galeria figcaption { font: 450 0.85rem/1.4 var(--sans); color: var(--suave); margin-top: 0.3rem; }
+
+.e50 .fontes { font: 450 0.92rem/1.5 var(--sans); color: var(--suave); border-top: 1.5px solid var(--traco); padding-top: 1rem; margin-top: 2.5rem; }
+.e50 .fontes ul { margin: 0.3rem 0 0; padding-left: 1.1rem; }
+
+/* ——— Lista filtrável ——— */
+.e50 .filtros { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; font-family: var(--sans); margin: 1.4rem 0; }
+.e50 .filtros select, .e50 .filtros input[type="search"] {
+  font: 500 1rem var(--sans); color: var(--grafite); background: var(--superficie);
+  border: 1.5px solid var(--grafite); padding: 0.35rem 0.6rem; border-radius: 0;
+}
+.e50 table.lista { width: 100%; border-collapse: collapse; font-family: var(--sans); }
+.e50 table.lista th { text-align: left; font-weight: 600; font-size: 0.88rem; color: var(--suave); border-bottom: 1.5px solid var(--grafite); padding: 0.4rem 0.6rem; }
+.e50 table.lista td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--traco); }
+
+/* ——— Linha do tempo (sequência real) ——— */
+.e50 .cronologia { list-style: none; margin: 1.5rem 0; padding: 0; border-left: 3px solid var(--floresta); }
+.e50 .cronologia li { padding: 0 0 1.4rem 1.2rem; position: relative; }
+.e50 .cronologia li::before {
+  content: ""; position: absolute; left: -0.55rem; top: 0.45rem; width: 0.7rem; height: 0.7rem;
+  background: var(--papel); border: 3px solid var(--floresta);
+}
+.e50 .cronologia .ano { font: 750 1.15rem/1.3 var(--sans); color: var(--floresta); }
+
+/* ——— Entradas (três portas para a secção) ——— */
+.e50 .entradas { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0; margin: 2.5rem 0 1rem; border: 1.5px solid var(--grafite); background: var(--superficie); }
+.e50 .entradas a {
+  display: block; padding: 1.1rem 1.2rem 1.3rem; color: var(--grafite); text-decoration: none;
+  border-right: 1.5px solid var(--grafite);
+}
+.e50 .entradas a:last-child { border-right: 0; }
+.e50 .entradas a:hover, .e50 .entradas a:focus-visible { background: var(--sinal); }
+.e50 .entradas .grande { display: block; font: 800 2.4rem/1 var(--sans); color: var(--floresta); }
+.e50 .entradas a:hover .grande, .e50 .entradas a:focus-visible .grande { color: var(--grafite); }
+.e50 .entradas .nome { display: block; font: 650 1.05rem/1.3 var(--sans); margin-top: 0.5rem; }
+.e50 .entradas .nota { display: block; font: 450 0.9rem/1.4 var(--sans); color: var(--suave); margin-top: 0.2rem; }
+.e50 .entradas a:hover .nota, .e50 .entradas a:focus-visible .nota { color: var(--grafite); }
+
+/* ——— Molduras: foto e mini-mapa ——— */
+.e50 .moldura {
+  display: grid; place-items: center; text-align: center; min-height: 11rem;
+  border: 1.5px solid var(--grafite);
+  background: repeating-linear-gradient(135deg, transparent 0 9px, var(--traco) 9px 10px);
+  font: 500 0.9rem/1.4 var(--sans); color: var(--suave);
+}
+.e50 .moldura span { background: var(--papel); padding: 0.15rem 0.5rem; }
+.e50 .mini-mapa { min-height: 14rem; margin: 1.6rem 0 0.4rem; }
+.e50 .nota-mapa { font: 450 0.85rem/1.4 var(--sans); color: var(--suave); }
+
+/* ——— Imprensa ——— */
+.e50 .ano-bloco { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0 1rem; border-top: 1.5px solid var(--grafite); padding: 1rem 0; }
+.e50 .ano-bloco h3 { margin: 0; font-size: 1.6rem; color: var(--floresta); }
+.e50 .ano-bloco ul { list-style: none; margin: 0; padding: 0; font-family: var(--sans); }
+.e50 .ano-bloco li { padding: 0.25rem 0; border-bottom: 1px solid var(--traco); }
+
+@media (max-width: 40rem) {
+  .e50 .entradas { grid-template-columns: 1fr; }
+  .e50 .entradas a { border-right: 0; border-bottom: 1.5px solid var(--grafite); }
+  .e50 .entradas a:last-child { border-bottom: 0; }
+  .e50 .ano-bloco { grid-template-columns: 1fr; }
+}
+@media (max-width: 30rem) {
+  .e50 { font-size: 1rem; }
+  .e50 .abertura { padding-top: 2rem; }
+  .e50 .marca::after { left: 0; transform: none; }
+}
