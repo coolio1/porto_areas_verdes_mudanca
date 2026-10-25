@@ -6,10 +6,6 @@ layout: default
   <article class="ficha coluna">
     <p class="migalhas"><a href="{{ '/50espacos/' | relative_url }}">50 Espaços</a> / <a href="{{ '/50espacos/espacos/' | relative_url }}">{{ page.concelho }}</a> / {{ page.titulo }}</p>
     <h1>{{ page.titulo }}</h1>
-    <div class="etiquetas">
-      {%- if page.seleccionado %}<span class="etiqueta seleccionado">{% if page.selecao == "posterior" %}Entre os 50 desde depois de Abril de 2009{% else %}Seleccionado em Abril de 2009{% endif %}</span>{% endif %}
-      <span class="etiqueta estado">Estado actual: {{ page.estado_actual | default: "por verificar" }}{% if page.data_verificacao %}, verificado em {{ page.data_verificacao }}{% endif %}</span>
-    </div>
     <dl class="ficha-dados">
       <div><dt>Concelho</dt><dd>{{ page.concelho }}</dd></div>
       {%- if page.freguesia %}<div><dt>Freguesia</dt><dd>{{ page.freguesia }}</dd></div>{% endif %}
