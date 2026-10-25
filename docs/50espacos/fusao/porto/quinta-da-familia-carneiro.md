@@ -1,7 +1,7 @@
 ---
 slug: quinta-da-familia-carneiro
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Quinta da família Carneiro fica na freguesia de Aldoar, com entrada pela Rua da Vilarinha e limitada pela Rua da Vilarinha a norte e este e pela Rua de Roriz a norte e oeste. Tem cerca de 2 ha, com um jardim arborizado e um campo de cultivo em utilização: um raro e encantador reduto rural.

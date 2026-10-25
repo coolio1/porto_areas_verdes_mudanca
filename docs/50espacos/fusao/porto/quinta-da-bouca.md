@@ -1,7 +1,7 @@
 ---
 slug: quinta-da-bouca
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, pdf-2014-2016-camada-cidadaos, webnode-2019]
-revisto: false
+revisto: true
 ---
 
 A Quinta da Bouça situa-se na freguesia de Cedofeita, entre a Rua de Alves Redol, a Rua de Cervantes e a linha do Metro, ao lado da estação da Lapa. Tem cerca de 3,4 ha (26 557 m² segundo a Câmara Municipal do Porto em 2014) e era constituída na totalidade por explorações agrícolas na bacia da Ribeira de Massarelos, com predomínio de hortas e pastos, em moldes de agricultura de subsistência dos moradores do perímetro. Não eram conhecidas espécies de relevância faunística, além dos passeriformes comuns que ali nidificam; há uma palmeira (Phoenix canariensis) de relativo interesse de preservação, bem como vários choupos e eucaliptos. O seu interesse reside na raridade de espaços desta tipologia numa malha urbana densa. Diz-se que por ali passava a antiga galeria que levava a água do reservatório da Arca d'Água à Praça dos Leões, e as suas janelas gradeadas podem ver-se no muro da quinta.

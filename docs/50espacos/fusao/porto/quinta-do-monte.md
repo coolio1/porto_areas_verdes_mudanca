@@ -1,7 +1,7 @@
 ---
 slug: quinta-do-monte
 fontes_usadas: [ficha-2006-2008, selecao-2009, webnode-c-2017-2020]
-revisto: false
+revisto: true
 ---
 
 A Quinta do Monte situa-se na Foz Velha, freguesia da Foz do Douro (coordenadas 41,15; -8,67), entre a Travessa Alegre e uma rua com o nome de um padre local, perto da Capela de Nossa Senhora da Conceição. Tem cerca de 1,6 ha e é um jardim com árvores centenárias, algumas das quais estavam a morrer, e diversas árvores de grande porte e espécies nobres (castanheiros, áceres, tílias e várias palmeiras Phoenix canariensis). É apontada como o único espaço verde da Foz Velha, zona histórica classificada, que ainda não foi destruído; nos seus jardins nidificam papagaios e periquitos e, ao que parece, um falcão e um gaio, sem outras espécies de relevância faunística para além dos passeriformes comuns.

@@ -1,7 +1,7 @@
 ---
 slug: caminhos-do-romantico
 fontes_usadas: [ficha-2006-2008, selecao-2009, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, webnode-sem-data]
-revisto: false
+revisto: true
 ---
 
 Os Caminhos do Romântico são cinco percursos pedonais, apoiados em painéis informativos, desenhados no vale de Massarelos (coordenadas WGS84 41,15; -8,63), com acessos pela Rua de Entre-Quintas e pela Rua da Macieirinha, entre outros. Cobrem cerca de 1,9 ha e escaparam à especulação imobiliária, conservando o carácter rural das hortas, quintas, chafarizes e lavadouros do período romântico, com vistas sobre o Douro e a bacia da Ribeira de Massarelos, no Vale de Vilar; as árvores são poucas e a fauna predominante são passeriformes comuns. Em alguns percursos, os moradores cultivam hortas em terrenos privados; parte dos terrenos entre o Seminário e a ribeira pertence ao Episcopado do Porto e estava em grande parte abandonada.

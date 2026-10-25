@@ -1,7 +1,7 @@
 ---
 slug: quinta-dos-frades-menores-capuchinhos
 fontes_usadas: [ficha-2006-2008, selecao-2009]
-revisto: false
+revisto: true
 ---
 
 A Quinta dos Frades Menores Capuchinhos, na freguesia de Paranhos (coordenadas 41,18; -8,62), fica na zona do Amial, junto à Estrada da Circunvalação, delimitada a norte e a oeste pela Rua Nova do Tronco e, a sul e a este, por uma moradia particular e uma instalação industrial. Com 5,7 ha, é uma quinta agrícola e jardim privado, composta por jardins e espaços exteriores dedicados à exploração agrícola. Tem um grande número de japoneiras (Camellia japonica), várias árvores de fruto (nogueiras e nespereiras), duas araucárias de Norfolk, uma criptoméria e uma coralina; a fauna é sobretudo de passeriformes, típica de um pequeno espaço rural arborizado inserido em área urbana, sem outros elementos de paisagem relevantes.

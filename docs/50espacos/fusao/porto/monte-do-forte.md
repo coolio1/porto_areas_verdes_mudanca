@@ -1,7 +1,7 @@
 ---
 slug: monte-do-forte
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 O Monte do Forte, em Campanhã (coordenadas WGS84 41,15; -8,57), é uma pequena elevação de cerca de 5,1 ha com vistas para Gaia, o Bonfim e as Antas, delimitada pelas ruas do Meiral, da Granja e 8 de Setembro; os campos agrícolas entre a Rua 8 de Setembro e o monte não estão nele incluídos. Predominam eucaliptos, carvalhos, plátanos e falsas acácias (Robinia pseudoacacia), além de mato em grande abundância; na avifauna há apenas espécies comuns como pardais, alvéolas brancas e pombos, sem espécie de maior relevo.

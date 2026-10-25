@@ -1,7 +1,7 @@
 ---
 slug: jardim-junto-a-vci
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 O Jardim junto à VCI fica em Ramalde (coordenadas WGS84 41,16; -8,65), junto à urbanização Foco, a norte, entre a VCI, o viaduto das Andresas e a Rua Prof. Damião Peres. É um espaço verde de cerca de 0,7 ha, com relvado e algumas árvores, sobretudo choupos, sobre o qual passa o viaduto das Andresas. Apesar da dimensão reduzida, serve de jardim de proximidade para a população da urbanização Foco e da Escola Secundária Fontes Pereira de Melo e de cortina arbórea para atenuar o impacto visual de um dos nós rodoviários mais importantes da cidade; as aves são sobretudo passeriformes, atraídas pela vegetação do terreno anexo. Entre os residentes foram notados alguns problemas de alergias associados aos choupos. Em 2014–2015, a Campo Aberto registava que a ideia de que as árvores, em particular os choupos, causam as alergias primaveris tem sido contestada por especialistas, e que a Câmara Municipal do Porto promoveu uma conferência de esclarecimento segundo a qual essas alergias se devem sobretudo a gramíneas.

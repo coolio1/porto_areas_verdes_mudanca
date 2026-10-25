@@ -1,7 +1,7 @@
 ---
 slug: morro-das-mimosas
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 O Morro das Mimosas, em Campanhã (coordenadas WGS84 41,17; -8,57), situa-se na Rua de S. Roque da Lameira, em frente aos números 71 a 95. É uma área natural e espaço verde de cerca de 2000 m², uma pequena extensão de mimosas na escarpa de um monte, ao longo de uma rua muito íngreme onde apenas existem blocos de habitação em frente. Predominam as mimosas; na fauna, passeriformes comuns como pardais e pombas. Não há elementos de paisagem relevantes, por o espaço ser reduzido e se situar acima de um muro com cerca de três metros de altura.

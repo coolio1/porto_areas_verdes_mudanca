@@ -1,7 +1,7 @@
 ---
 slug: villa-monte-crasto
 fontes_usadas: [ficha-2006-2008, selecao-2009]
-revisto: false
+revisto: true
 ---
 
 A Villa Monte Crasto, na freguesia de Nevogilde (coordenadas 41,16; -8,68), fica junto ao cruzamento da Rua Marechal Saldanha com a Rua da Índia. É um jardim privado de 1,6 ha, com um jardim de estilo inglês e um pequeno pinhal de eucaliptos e pinheiros. As árvores ornamentais, algumas seculares, incluem magnólias, eucaliptos de flor (encarnada e cor-de-laranja), palmeiras, japoneiras e araucárias.

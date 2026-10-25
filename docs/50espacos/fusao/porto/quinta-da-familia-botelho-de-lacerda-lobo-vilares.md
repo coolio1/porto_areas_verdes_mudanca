@@ -1,7 +1,7 @@
 ---
 slug: quinta-da-familia-botelho-de-lacerda-lobo-vilares
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Quinta da família Botelho de Lacerda Lobo Vilares fica na freguesia de Nevogilde, em frente à Igreja de Nevogilde, limitada a norte pela Avenida da Boavista, a poente pela Rua de Nevogilde e a sul e nascente pela Rua Júlio Dantas. Tem cerca de 1,1 ha e integra uma casa senhorial com jardim e área agrícola. O jardim tem arruamentos de buxo, árvores exóticas (entre elas um jacarandá), fontes, tanques, relvados e canteiros, além de uma zona de bosque e de área agrícola abandonada.

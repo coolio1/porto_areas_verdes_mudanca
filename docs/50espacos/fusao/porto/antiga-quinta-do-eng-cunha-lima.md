@@ -1,7 +1,7 @@
 ---
 slug: antiga-quinta-do-eng-cunha-lima
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 Esta quinta, em Campanhã (coordenadas WGS84 41,16; -8,58), fica entre a Rua de São Roque da Lameira e a Rua da Lameira de Cima, em frente ao antigo quartel da Bela Vista, hoje instalações da PSP. É uma propriedade privada com algumas centenas de anos, em total abandono, com uma área aproximada de 1,3 ha.

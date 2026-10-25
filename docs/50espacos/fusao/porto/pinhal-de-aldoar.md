@@ -1,7 +1,7 @@
 ---
 slug: pinhal-de-aldoar
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, webnode-sem-data]
-revisto: false
+revisto: true
 ---
 
 O Pinhal de Aldoar, na freguesia de Aldoar (coordenadas WGS84 41,17; -8,66), ocupa o quarteirão onde se localizam o cemitério de Aldoar, uma escola secundária e um centro da APPACDM, delimitado por várias ruas, entre elas a da Vilarinha, a Cidade da Beira e a de Moçambique, por um conjunto de moradias e por um bairro de habitação social. Com cerca de 4,3 ha, é um dos últimos testemunhos da zona de floresta que antigamente existia em Aldoar e freguesias limítrofes. Tem alguns pinheiros de grande porte, um número reduzido de espécies autóctones muito antigas (carvalhos, sobreiros, choupos), eucaliptos, e cinco plátanos e duas tílias na entrada traseira do cemitério; na fauna, apenas passeriformes comuns que ali nidificam.

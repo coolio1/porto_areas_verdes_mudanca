@@ -1,7 +1,7 @@
 ---
 slug: ribeira-da-granja
 fontes_usadas: [ficha-2006-2008, selecao-2009, pdf-2014-2016-camada-campo-aberto, pdf-2014-2016-camada-oficial, webnode-c-2017-2020]
-revisto: false
+revisto: true
 ---
 
 A Ribeira da Granja, também chamada da Agra, de Ramalde, de Lordelo, de Grijó, do Senhor da Ajuda, de Penoucos, das Ratas, do Ouro e das Naus, nasce nos Montes Caulinos, em Matosinhos, atravessa as freguesias de Paranhos, Ramalde e Lordelo do Ouro e desagua no Douro, junto ao Jardim de António Cálem (coordenadas 41,16; -8,65). A bacia ocupa 25% da área do concelho e, dos 6,5 km de linha de água, cerca de 80% estavam canalizados, restando troços a descoberto em Lordelo do Ouro (3 ha) e em Ramalde (5 ha). Em 2006–2008 não existia fauna fluvial, por a ribeira estar muito poluída, com uma conduta a descarregar efluentes ilegalmente; as aves eram sobretudo passeriformes. No troço de Lordelo há amieiros, choupos, uma espécie do género Ligustrum, nespereira, figueira e pessegueiro; no de Ramalde, uma plantação recente de salgueiros, amieiros e choupos.

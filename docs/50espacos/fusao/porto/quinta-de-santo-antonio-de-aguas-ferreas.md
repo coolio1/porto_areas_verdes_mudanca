@@ -1,7 +1,7 @@
 ---
 slug: quinta-de-santo-antonio-de-aguas-ferreas
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Quinta de Santo António de Águas Férreas, na freguesia de Cedofeita (coordenadas 41,16; -8,62), ocupa o interior do quarteirão delimitado pela Rua dos Burgães, a Rua do Melo, a linha do Metro do Porto e a Rua do Barão de Forrester, nas traseiras do Tribunal de Família e de Menores. Com 2,6 ha, é uma quinta agrícola com origens no século XVIII e um denso contexto natural de campos, vegetação e um ribeiro. Tem um palácio setecentista, classificado como Imóvel de Interesse Público, um jardim, elementos barrocos e neoclássicos e um chafariz; além de uma palmeira no pátio do palácio, a quinta encontrava-se invadida por matos.

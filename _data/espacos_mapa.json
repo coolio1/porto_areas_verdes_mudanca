@@ -1,0 +1,209 @@
+[
+ {
+  "slug": "antiga-quinta-do-eng-cunha-lima",
+  "titulo": "Antiga Quinta do Eng. Cunha-Lima",
+  "lat": 41.16,
+  "lon": -8.58,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "antigos-terrenos-agricolas-em-aldoar-e-nevogilde",
+  "titulo": "Antigos terrenos agrícolas em Aldoar e Nevogilde",
+  "lat": 41.16,
+  "lon": -8.67,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "porto"
+ },
+ {
+  "slug": "caminhos-do-romantico",
+  "titulo": "Caminhos do Romântico",
+  "lat": 41.15,
+  "lon": -8.63,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "porto"
+ },
+ {
+  "slug": "casa-da-familia-robinson",
+  "titulo": "Casa da Família Robinson",
+  "lat": 41.17,
+  "lon": -8.65,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "jardim-de-espaco-canal",
+  "titulo": "Jardim de Espaço Canal",
+  "lat": 41.16,
+  "lon": -8.65,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "jardim-junto-a-vci",
+  "titulo": "Jardim junto à VCI",
+  "lat": 41.16,
+  "lon": -8.65,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "jardins-do-hospital-conde-de-ferreira",
+  "titulo": "Jardins do Hospital Conde de Ferreira",
+  "lat": 41.17,
+  "lon": -8.59,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "monte-do-forte",
+  "titulo": "Monte do Forte",
+  "lat": 41.15,
+  "lon": -8.57,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "morro-das-mimosas",
+  "titulo": "Morro das Mimosas",
+  "lat": 41.17,
+  "lon": -8.57,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "parque-e-cemiterio-da-igreja-de-saint-james-cemiterio-ingles",
+  "titulo": "Parque e cemitério da Igreja de Saint James (Cemitério Inglês)",
+  "lat": 41.15,
+  "lon": -8.62,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "parque-oriental",
+  "titulo": "Parque Oriental",
+  "lat": 41.16,
+  "lon": -8.57,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "porto"
+ },
+ {
+  "slug": "pinhal-de-aldoar",
+  "titulo": "Pinhal de Aldoar",
+  "lat": 41.17,
+  "lon": -8.66,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "pinheiros-mansos-e-logradouros-adjacentes",
+  "titulo": "Pinheiros Mansos e logradouros adjacentes",
+  "lat": 41.16,
+  "lon": -8.65,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "quinta-antiga-perto-da-prelada",
+  "titulo": "Quinta Antiga Perto da Prelada",
+  "lat": 41.18,
+  "lon": -8.63,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "porto"
+ },
+ {
+  "slug": "quinta-da-bouca",
+  "titulo": "Quinta da Bouça",
+  "lat": 41.16,
+  "lon": -8.62,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "porto"
+ },
+ {
+  "slug": "quinta-da-familia-botelho-de-lacerda-lobo-vilares",
+  "titulo": "Quinta da família Botelho de Lacerda Lobo Vilares",
+  "lat": 41.17,
+  "lon": -8.68,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "quinta-da-familia-carneiro",
+  "titulo": "Quinta da Família Carneiro",
+  "lat": 41.17,
+  "lon": -8.67,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "quinta-da-prelada",
+  "titulo": "Quinta da Prelada",
+  "lat": 41.17,
+  "lon": -8.63,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "porto"
+ },
+ {
+  "slug": "quinta-de-santo-antonio-de-aguas-ferreas",
+  "titulo": "Quinta de Santo António de Águas Férreas",
+  "lat": 41.16,
+  "lon": -8.62,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "quinta-do-monte",
+  "titulo": "Quinta do Monte",
+  "lat": 41.15,
+  "lon": -8.67,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "quinta-dos-frades-menores-capuchinhos",
+  "titulo": "Quinta dos Frades Menores Capuchinhos",
+  "lat": 41.18,
+  "lon": -8.62,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ },
+ {
+  "slug": "ribeira-da-granja",
+  "titulo": "Ribeira da Granja",
+  "lat": 41.16,
+  "lon": -8.65,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "porto"
+ },
+ {
+  "slug": "villa-monte-crasto",
+  "titulo": "Villa Monte Crasto",
+  "lat": 41.16,
+  "lon": -8.68,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "porto"
+ }
+]

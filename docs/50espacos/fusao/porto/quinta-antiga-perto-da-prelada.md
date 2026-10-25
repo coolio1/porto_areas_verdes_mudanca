@@ -1,7 +1,7 @@
 ---
 slug: quinta-antiga-perto-da-prelada
 fontes_usadas: [webnode-2019]
-revisto: false
+revisto: true
 ---
 
 A Quinta Antiga Perto da Prelada é atravessada pela Ribeira da Granja num troço a descoberto, em cujas margens foi assinalada uma mata de sobreiros.

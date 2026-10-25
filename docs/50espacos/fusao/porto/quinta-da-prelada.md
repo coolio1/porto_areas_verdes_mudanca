@@ -1,7 +1,7 @@
 ---
 slug: quinta-da-prelada
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-campo-aberto, webnode-2019]
-revisto: false
+revisto: true
 ---
 
 A Quinta da Prelada, na freguesia de Ramalde, tem cerca de 22,8 ha e estende-se dos dois lados da VCI, junto ao Hospital da Prelada e ao Parque de Campismo da Prelada, com limite a norte nas ruas de Maria Lamas, de Santa Luzia e do Monte dos Burgos e a sul na Travessa da Prelada. É uma grande quinta de valiosíssimo património, parcialmente esventrada pela VCI desde 1989. Os primeiros proprietários promoveram entre 1743 e 1758 uma residência de verão, entregue a um arquitecto italiano que traçou também o jardim com labirinto de buxo e o envolvimento paisagístico, com fontes, chafarizes e escadarias em granito, e um lago com uma ilha e um castelinho de recreio. Integrava a Mata da Prelada, com árvores centenárias, e são visíveis do exterior duas tílias de grande porte, uma araucária e alguns choupos; a paisagem do parque de campismo é dominada por pinheiros e eucaliptos.

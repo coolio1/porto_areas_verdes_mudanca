@@ -1,7 +1,7 @@
 ---
 slug: jardim-de-espaco-canal
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Jardim de Espaço Canal fica em Ramalde (coordenadas WGS84 41,16; -8,65), delimitado a nascente pela VCI, a poente pela Rua do Beato Inácio de Azevedo, a norte pelo nó de acesso da A1 para a Boavista e Parque da Cidade e a sul pela Avenida da Boavista. É um espaço verde de cerca de 1,3 ha, muito bem arborizado, limpo e ajardinado, exemplo do que deveriam ser os espaços que marginam a VCI como barreira arbórea e espaço verde de proximidade. A flora inclui cupressos, tílias, cerejeiras de jardim, palmeiras (Phoenix canariensis), pináceas (Picea sitchensis), áceres, salgueiros, freixos e choupos; a fauna, passeriformes comuns.

@@ -1,7 +1,7 @@
 ---
 slug: antigos-terrenos-agricolas-em-aldoar-e-nevogilde
 fontes_usadas: [ficha-2006-2008, selecao-2009, pdf-2014-2016-camada-campo-aberto, webnode-sem-data]
-revisto: false
+revisto: true
 ---
 
 Estes terrenos ocupam três áreas entre a Avenida da Boavista e a Praça do Império, separadas pelas ruas do Crasto e do Molhe, em Aldoar e Nevogilde (coordenadas WGS84 41,16; -8,67), com cerca de 25 a 27 ha. São terrenos agrícolas banhados pela Ribeira de Aldoar, com poucas espécies arbóreas, vegetação típica da sucessão ecológica de terrenos abandonados e alguma vegetação ripícola; há zonas sem aproveitamento agrícola e outras com pequenas hortas de agricultura de subsistência. Têm importância como espaço de relativa grande dimensão numa zona urbana muito massificada, com uma ribeira que desagua no mar e uma zona de máxima infiltração, e como corredor ecológico entre o Parque da Cidade, o Parque da Pasteleira, as zonas verdes da foz e o rio Douro.

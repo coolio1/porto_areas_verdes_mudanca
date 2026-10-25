@@ -1,7 +1,7 @@
 ---
 slug: casa-da-familia-robinson
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Casa da Família Robinson é uma quinta com jardim e quintal em Ramalde (coordenadas WGS84 41,17; -8,65), no quarteirão delimitado pela Rua Felizardo de Lima, pelas traseiras da Rua do Dr. Melo Leote, pela Rua de Campos Monteiro e pelas traseiras da Rua Direita de Campinas. É uma quinta agrícola e jardim privado, com cerca de 1 ha, construída por um súbdito britânico radicado no Porto na primeira metade do século XX; algumas obras posteriores não lhe desvirtuaram o interesse e foi vendida pelos herdeiros.

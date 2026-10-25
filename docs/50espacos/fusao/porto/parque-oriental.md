@@ -1,7 +1,7 @@
 ---
 slug: parque-oriental
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, webnode-2019]
-revisto: false
+revisto: true
 ---
 
 O Parque Oriental ocupa o vale do rio Tinto, em Campanhã, encaixado entre a Circunvalação, a VCI e o IC 29/A 43. O rio ainda corria livremente, com fauna e flora de grande valor nas margens, terrenos agrícolas separados por sebes vivas e bosques de sobreiros, espécie protegida por lei. São valências únicas numa cidade que entubou quase todos os seus cursos de água e quase baniu a agricultura, e que devem ser preservadas como factor de identidade e de uma paisagem mais diversa.
