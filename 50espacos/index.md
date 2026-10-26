@@ -1,39 +1,120 @@
 ---
-layout: campanha
-title: "Campanha «50 Espaços Verdes»"
-resumo: Em 2006–2008 a Campo Aberto identificou 111 espaços verdes na Área Metropolitana do Porto. Em 2009 seleccionou 50 para defender.
-description: "A campanha 50 espaços verdes em perigo e a preservar, da Campo Aberto: história, critérios, metodologia e as fichas dos espaços."
+layout: default
+title: "Campanha «50 Espaços Verdes»: mapa e lista dos espaços"
+description: "Os 111 espaços verdes da Área Metropolitana do Porto identificados pela Campo Aberto, 50 deles seleccionados: mapa, lista e filtros por concelho."
+wide: true
 ---
-## Como nasceu
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/50espacos.css?v={{ site.time | date: '%s' }}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<div class="e50">
+  <div class="lista-pagina">
+    {% include topo_campanha.html %}
+    <h1 class="so-leitor">Campanha «50 Espaços Verdes»: mapa e lista dos espaços</h1>
+    {%- assign n_sel = site.espacos | where_exp: "e", "e.seleccionado == true" | size -%}
+    {%- assign n_conc = site.espacos | map: "concelho" | uniq | size -%}
+    <dl class="faixa">
+      <div><dt>espaços</dt><dd>{{ site.espacos.size }}</dd></div>
+      <div><dt>seleccionados</dt><dd>{{ n_sel }}</dd></div>
+      <div><dt>concelhos</dt><dd>{{ n_conc }}</dd></div>
+    </dl>
+    <form class="filtros" aria-label="Filtros">
+      <label class="filtro-select">Concelho
+        <select id="f-concelho"><option value="">Todos</option>
+        {%- assign concelhos = site.espacos | map: "concelho" | uniq | sort -%}
+        {%- for c in concelhos %}<option value="{{ c }}">{{ c }}</option>{% endfor -%}
+        </select>
+      </label>
+      <label class="filtro-pilula"><input type="checkbox" id="f-50"><span>Só os 50</span></label>
+      <p class="contagem" id="contagem" aria-live="polite"></p>
+    </form>
+    <div class="lista-mapa">
+      <ul class="espacos-lista" id="espacos-lista">
+        {%- assign ordenados = site.espacos | sort: "titulo" -%}
+        {%- for e in ordenados %}
+        {%- assign thumb = "" -%}
+        {%- for f in e.fotos -%}{%- unless f.src contains "/mapa" or f.src contains "delimitacao" -%}{%- if thumb == "" -%}{%- assign thumb = f.src -%}{%- endif -%}{%- endunless -%}{%- endfor %}
+        <li data-slug="{{ e.slug }}" data-concelho="{{ e.concelho }}" data-50="{{ e.seleccionado | default: false }}">
+          <a href="{{ e.url | relative_url }}">
+            {%- if thumb != "" %}<img src="{{ thumb | relative_url }}" alt="" loading="lazy">{% else %}<span class="sem-foto" aria-hidden="true"></span>{% endif %}
+            <span class="info">
+              <span class="nome">{{ e.titulo }}</span>
+              <span class="local">{% if e.freguesia %}{{ e.freguesia }}, {% endif %}{{ e.concelho }}</span>
+              {%- if e.seleccionado %}<span class="de-50">Entre os 50</span>{% endif %}
+            </span>
+          </a>
+        </li>
+        {%- endfor %}
+      </ul>
+      <p class="vazio" id="vazio" hidden>Nenhum espaço com estes filtros.</p>
+      <div class="mapa-coluna">
+        <div id="mapa-espacos" class="moldura" role="img" aria-label="Mapa dos espaços"><span>Mapa</span></div>
+        <p class="nota-mapa">Localizações aproximadas (2 casas decimais, cerca de 1 km).</p>
+      </div>
+    </div>
+    {% include rodape_campanha.html %}
+  </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+  var pontos = {{ site.data.espacos_mapa | jsonify }};
+  var base = {{ site.baseurl | jsonify }};
+  var el = document.getElementById('mapa-espacos');
+  el.textContent = ''; el.classList.remove('moldura');
+  var mapa = L.map(el, {scrollWheelZoom: false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapa);
+  var normal = function (p) { return {radius: 8, weight: 2, color: '#23282B', fillOpacity: 0.9, fillColor: p.seleccionado ? '#2E7D32' : '#F6F7F4'}; };
+  var marcas = {}, grupo = [];
+  pontos.forEach(function (p) {
+    var m = L.circleMarker([p.lat, p.lon], normal(p)).addTo(mapa);
+    m.bindTooltip(p.titulo);
+    m.on('click', function () { location.href = base + '/50espacos/espacos/' + p.concelho + '/' + p.slug + '/'; });
+    marcas[p.slug] = {m: m, p: p};
+    grupo.push([p.lat, p.lon]);
+  });
+  if (grupo.length) mapa.fitBounds(grupo, {padding: [30, 30], animate: false}); else mapa.setView([41.16, -8.62], 12);
 
-A Área Metropolitana do Porto perdeu, a um ritmo acelerado, as quintas e os campos agrícolas que formavam o seu mosaico de paisagens. Em Outubro de 2006 a Campo Aberto lançou a campanha «50 espaços verdes em perigo – 50 espaços verdes a preservar», apresentada em sessão pública na Faculdade de Ciências da Universidade do Porto a 25 de Outubro desse ano. O objectivo: localizar, ajudar a conservar e promover a utilização de espaços verdes relevantes que, estando em risco, mereçam ser preservados.
+  var legenda = L.control({position: 'bottomleft'});
+  legenda.onAdd = function () {
+    var d = L.DomUtil.create('div', 'legenda-mapa');
+    d.innerHTML = '<span><i class="ponto sel"></i> Entre os 50</span><span><i class="ponto"></i> Outros espaços</span>';
+    return d;
+  };
+  legenda.addTo(mapa);
 
-A particularidade da campanha é que o inventário e a selecção resultaram da participação de cidadãos e de colectividades: escolas, juntas de freguesia, associações, cooperativas. A área abrangida era a do Grande Porto: Espinho, Gondomar, Maia, Matosinhos, Porto, Póvoa de Varzim, Valongo, Vila do Conde e Vila Nova de Gaia.
+  var itens = document.querySelectorAll('#espacos-lista li');
+  function realcar(slug, sim) {
+    var k = marcas[slug]; if (!k) return;
+    k.m.setStyle(sim ? {radius: 12, weight: 3, color: '#E8C21A'} : normal(k.p));
+    if (sim) k.m.bringToFront();
+  }
+  itens.forEach(function (li) {
+    li.addEventListener('mouseenter', function () { realcar(li.dataset.slug, true); });
+    li.addEventListener('mouseleave', function () { realcar(li.dataset.slug, false); });
+    li.querySelector('a').addEventListener('focus', function () { realcar(li.dataset.slug, true); });
+    li.querySelector('a').addEventListener('blur', function () { realcar(li.dataset.slug, false); });
+  });
+  Object.keys(marcas).forEach(function (slug) {
+    var li = document.querySelector('#espacos-lista li[data-slug="' + slug + '"]');
+    marcas[slug].m.on('mouseover', function () { if (li) li.classList.add('activo'); });
+    marcas[slug].m.on('mouseout', function () { if (li) li.classList.remove('activo'); });
+  });
 
-## Que espaços
-
-Os critérios não eram rígidos. Em regra, o espaço devia ser verde (área natural, quinta, campo agrícola ou jardim privado), ter valor ecológico, não estar legalmente salvaguardado ou estar ameaçado, ter dimensão socialmente relevante (nada de canteiros) e situar-se no Grande Porto. Com raras excepções, todas as propostas foram validadas.
-
-## Do primeiro apelo à lista de 2009
-
-<ol class="cronologia">
-  <li><span class="ano">2006</span> Lançamento da campanha e abertura à recepção de propostas, depois alargada até 31 de Julho de 2007.</li>
-  <li><span class="ano">2007</span> Em meados do ano estavam propostos mais de 70 espaços. A 15 de Julho realizou-se um almoço biológico e um debate no Jardim Botânico do Porto. Constituíram-se grupos de avaliação: peritos, trabalho, organizações não-governamentais, municípios e administração pública, e empresarial.</li>
-  <li><span class="ano">2008</span> Compilação de informação sobre cada espaço, com contributos dos proponentes, dos proprietários e das autarquias. A 9 de Outubro a Campo Aberto lançou um sítio dedicado à campanha.</li>
-  <li><span class="ano">2009</span> Em Abril ficou fixada a selecção dos 50 espaços a defender. Dos 111 espaços da compilação, 50 foram seleccionados; os outros 61 mantêm valor ecológico.</li>
-  <li><span class="ano">Depois</span> A campanha deu origem ao livro <em>Espaços Verdes e Vivos – um futuro para a Área Metropolitana do Porto</em> e a actualizações das fichas, incluindo a compilação de 2014–2016.</li>
-</ol>
-
-Os 50 não estão ordenados: a selecção distingue os que a Campo Aberto decidiu defender, sem os hierarquizar entre si.
-
-## O que a campanha não pretende
-
-A Campo Aberto não propõe expropriar os terrenos nem alterar direitos de propriedade. A acção situa-se no condicionamento dos usos do solo, regulado pelos planos municipais de ordenamento do território, e a decisão final cabe sempre ao poder político, em particular às autarquias.
-
-## O Porto: um apelo na revisão do PDM
-
-Quando o Plano Director Municipal do Porto esteve em revisão (2016 a 2021), circulou um apelo de subscritores dirigido à Câmara Municipal para salvaguardar os últimos espaços livres do concelho, antigas quintas agrícolas que o PDM em vigor destinava à urbanização. O apelo recorda que a campanha apontou como de salvaguarda urgente a Quinta da Bouça, os antigos terrenos agrícolas em Aldoar e Nevogilde e a quinta antiga perto da Prelada. Sobre Campanhã, a freguesia do Parque Oriental, a Campo Aberto defende um modelo de desenvolvimento diferente do das zonas mais urbanizadas do Porto.
-
-## Corrigir ou acrescentar informação
-
-Sabe de uma alteração, para melhor ou para pior, num destes espaços? Escreva à Campo Aberto para [contacto@campoaberto.pt](mailto:contacto@campoaberto.pt), com o nome do espaço e, se puder, fotografias e a data da observação.
+  function filtrar() {
+    var c = document.getElementById('f-concelho').value, so50 = document.getElementById('f-50').checked, n = 0, visiveis = [];
+    itens.forEach(function (li) {
+      var ok = (!c || li.dataset.concelho === c) && (!so50 || li.dataset['50'] === 'true');
+      li.hidden = !ok;
+      var k = marcas[li.dataset.slug];
+      if (ok) n++;
+      if (k) { if (ok) { k.m.addTo(mapa); visiveis.push([k.p.lat, k.p.lon]); } else mapa.removeLayer(k.m); }
+    });
+    document.getElementById('contagem').textContent = n + (n === 1 ? ' espaço' : ' espaços');
+    document.getElementById('vazio').hidden = n > 0;
+    if (visiveis.length) mapa.fitBounds(visiveis, {padding: [30, 30], maxZoom: 15, animate: false});
+  }
+  document.getElementById('f-concelho').addEventListener('change', filtrar);
+  document.getElementById('f-50').addEventListener('change', filtrar);
+  filtrar();
+})();
+</script>

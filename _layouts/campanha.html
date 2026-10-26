@@ -3,25 +3,10 @@ layout: default
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/50espacos.css?v={{ site.time | date: '%s' }}">
 <div class="e50">
-  <header class="abertura larga">
-    <div class="cabeca">
-      <div class="texto-cabeca">
-        <h1 class="so-leitor">{{ page.title }}</h1>
-        <p class="resumo">{{ page.resumo }}</p>
-      </div>
-      <img class="logo-campanha" src="{{ site.baseurl }}/assets/images/50espacos-logo.jpg" alt="Logótipo da campanha: 50 espaços verdes em perigo, a preservar">
-    </div>
-    {% include marcas_111.html %}
-    {%- if site.espacos.size < 111 %}
-    <p class="legenda">Publicação por fases: estão já {{ site.espacos.size }} dos 111 espaços.</p>
-    {%- endif %}
-    <nav class="entradas" aria-label="Entrar na secção">
-      <a href="{{ '/50espacos/espacos/' | relative_url }}"><span class="grande">111</span><span class="nome">Espaços, no mapa e em lista</span><span class="nota">Filtrar por concelho e ver os seleccionados</span></a>
-      <a href="{{ '/50espacos/imprensa/' | relative_url }}"><span class="grande">{{ site.data.imprensa.size }}</span><span class="nome">Documentos de imprensa</span><span class="nota">Com ligação ao PDF</span></a>
-      <a href="#campanha"><span class="grande">2006</span><span class="nome">A campanha</span><span class="nota">Critérios e metodologia</span></a>
-    </nav>
-  </header>
-  <main class="larga coluna" id="campanha">
-    {{ content }}
-  </main>
+  <div class="larga">
+    {% include topo_campanha.html %}
+    <main class="coluna" id="campanha">
+      {{ content }}
+    </main>
+  </div>
 </div>

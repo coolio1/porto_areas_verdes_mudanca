@@ -1,0 +1,9 @@
+{%- comment -%} Topo comum da secção: logótipo e ligações. A página actual fica marcada. {%- endcomment -%}
+<div class="ficha-topo">
+  {% include logo_campanha.html %}
+  <nav class="ligacoes" aria-label="Secção 50 espaços verdes">
+    {%- unless page.url == '/50espacos/' %}<a href="{{ '/50espacos/' | relative_url }}">Os espaços</a>{% endunless %}
+    <a href="{{ '/50espacos/campanha/' | relative_url }}"{% if page.url == '/50espacos/campanha/' %} aria-current="page"{% endif %}>A campanha</a>
+    <a href="{{ '/50espacos/imprensa/' | relative_url }}"{% if page.url == '/50espacos/imprensa/' %} aria-current="page"{% endif %}>Imprensa</a>
+  </nav>
+</div>
