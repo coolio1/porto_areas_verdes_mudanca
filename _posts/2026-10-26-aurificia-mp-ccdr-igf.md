@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Companhia Aurifícia: três textos, três entidades, uma mesma operação"
-description: "Em Outubro de 2026 foram enviados ao Ministério Público, à CCDR Norte e ao Património Cultural e à Inspecção-Geral de Finanças textos sobre a operação urbanística da antiga Companhia Aurifícia, no Porto. Resumo do que sustentam e do que pedem."
+title: "Companhia Aurifícia: loteamento sem licença, árvores abatidas sem autorização conhecida"
+description: "Uma operação de 122 fogos que os serviços municipais qualificaram como loteamento foi tramitada como duas edificações, sem licença de loteamento nem consulta pública; árvores foram abatidas sem autorização conhecida. Em Outubro de 2026, três textos seguiram para o Ministério Público, a CCDR Norte e o Património Cultural e a Inspecção-Geral de Finanças."
 date: 2026-10-26
 tags: [urbanismo, porto, verde, património, Aurifícia]
 image: /assets/images/aurificia-denuncia-diagrama-volumes.jpg
