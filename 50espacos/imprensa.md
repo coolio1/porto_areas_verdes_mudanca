@@ -5,6 +5,7 @@ permalink: /50espacos/imprensa/
 ---
 
 # A campanha na imprensa
+{: .titulo-pagina}
 
 37 recortes de imprensa sobre a campanha «50 Espaços Verdes em Perigo, 50 Espaços Verdes a Preservar», por ordem cronológica inversa. Cada ligação abre o recorte em PDF.
 
