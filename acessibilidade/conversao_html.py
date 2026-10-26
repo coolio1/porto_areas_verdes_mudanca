@@ -1,4 +1,6 @@
 """Gera conversao_verde.html a partir das layers de candidatos a conversao."""
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from carto import aplicar_chave
 import json
 import os
 import sys
@@ -508,7 +510,7 @@ init();
 
     output_path = os.path.join(script_dir, "conversao_verde.html")
     with open(output_path, "w", encoding="utf-8") as fh:
-        fh.write(html)
+        fh.write(aplicar_chave(html))
 
     print(f"\nMapa gerado: {output_path}")
     print(f"  Tamanho: {os.path.getsize(output_path) // 1024} KB")

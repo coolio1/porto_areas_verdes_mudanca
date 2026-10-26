@@ -27,6 +27,15 @@ def test_gerar_e_idempotente(tmp_path):
     assert antes == {p: p.read_bytes() for p in tmp_path.rglob("*") if p.is_file()}
 
 
+def test_titulo_publico_sem_sigla_mantem_o_slug(tmp_path):
+    gerar([_e("Barrinha de Esmoriz e Lagoa de Paramos (BELP)", concelho="Espinho")], tmp_path)
+    md = (tmp_path / "_espacos" / "espinho" / "barrinha-de-esmoriz-e-lagoa-de-paramos-belp.md").read_text(encoding="utf-8")
+    assert "title: Barrinha de Esmoriz e Lagoa de Paramos\n" in md and "titulo: Barrinha de Esmoriz e Lagoa de Paramos\n" in md
+    assert "BELP" not in md
+    pontos = json.loads((tmp_path / "_data" / "espacos_mapa.json").read_text(encoding="utf-8"))
+    assert pontos[0]["titulo"] == "Barrinha de Esmoriz e Lagoa de Paramos"
+
+
 def test_espaco_sem_coordenadas_nao_entra_no_mapa(tmp_path):
     gerar([_e(), _e("Sem Mapa", lat=None, lon=None, origem_coord=None)], tmp_path)
     pontos = json.loads((tmp_path / "_data" / "espacos_mapa.json").read_text(encoding="utf-8"))

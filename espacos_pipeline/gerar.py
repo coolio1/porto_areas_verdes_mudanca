@@ -9,6 +9,8 @@ from espacos_pipeline.reconciliar import RAIZ, _carregar, concelho_do_registo, r
 
 FUSAO = RAIZ / "docs" / "50espacos" / "fusao"
 ROTULO = {"zip": "Ficha de 2006–2008", "pdf": "Compilação 2014–2016 (PDF de 2018)", "webnode": "Webnode da campanha", "selecao": "Lista de Abril de 2009"}
+# Título mostrado no site, quando difere do das fontes; o slug (endereço e pasta de fotos) continua o do título original.
+TITULO_PUBLICO = {"barrinha-de-esmoriz-e-lagoa-de-paramos-belp": "Barrinha de Esmoriz e Lagoa de Paramos"}
 CAMPOS = ("titulo", "concelho", "freguesia", "seleccionado", "selecao", "area_ha", "n_ficha", "lat", "lon", "origem_coord", "estado_actual", "data_verificacao")
 
 
@@ -39,10 +41,14 @@ def _escalar(v) -> str:
     return json.dumps(v, ensure_ascii=False)
 
 
+def _titulo(e: Espaco) -> str:
+    return TITULO_PUBLICO.get(e.slug, e.titulo)
+
+
 def _pagina(e: Espaco) -> str:
-    linhas = ["---", f"title: {_escalar(e.titulo)}"]
+    linhas = ["---", f"title: {_escalar(_titulo(e))}"]
     for campo in CAMPOS:
-        v = getattr(e, campo)
+        v = _titulo(e) if campo == "titulo" else getattr(e, campo)
         if v not in (None, ""):
             linhas.append(f"{campo}: {_escalar(v)}")
     for lista in ("fotos", "anexos", "fontes"):
@@ -63,7 +69,7 @@ def gerar(espacos: list, raiz: Path) -> list:
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(_pagina(e), encoding="utf-8", newline="\n")
         escritos.append(p)
-    pontos = [{"slug": e.slug, "titulo": e.titulo, "lat": e.lat, "lon": e.lon, "origem_coord": e.origem_coord,
+    pontos = [{"slug": e.slug, "titulo": _titulo(e), "lat": e.lat, "lon": e.lon, "origem_coord": e.origem_coord,
                "seleccionado": e.seleccionado, "concelho": slugify(e.concelho)} for e in espacos if e.lat is not None]
     d = raiz / "_data" / "espacos_mapa.json"
     d.parent.mkdir(parents=True, exist_ok=True)

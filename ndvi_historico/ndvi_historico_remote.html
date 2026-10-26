@@ -77,7 +77,7 @@
 var map = L.map('map').setView([41.155, -8.63], 13);
 
 // --- Basemap management ---
-var baseTile = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {maxZoom:19, attribution:''}).addTo(map);
+var baseTile = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_4uwz_1_ae45539b82f652a6fa47db0a", {maxZoom:19, attribution:''}).addTo(map);
 var wmsLayer = null;
 
 document.getElementById('basemap-select').addEventListener('change', function() {
@@ -91,7 +91,7 @@ document.getElementById('basemap-select').addEventListener('change', function() 
     }).addTo(map);
   } else {
     var urls = {
-      dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+      dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_4uwz_1_ae45539b82f652a6fa47db0a",
       satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       osm: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     };

@@ -3,6 +3,8 @@ Mapa interactivo e dashboard de atropelamentos - Grande Porto
 Gera um ficheiro HTML com mapa Leaflet + gráficos integrados
 """
 
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from carto import aplicar_chave
 import sqlite3
 import json
 import csv
@@ -427,7 +429,7 @@ def main():
     html = gerar_html(casos, agregados)
 
     with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
-        f.write(html)
+        f.write(aplicar_chave(html))
 
     print(f"Dashboard gerado: {OUTPUT_HTML}")
     print(f"  {len(casos)} casos no mapa")

@@ -5,6 +5,8 @@ Abordagem pixel: 4 features de textura local + Random Forest.
 Treino: coordenadas manuais fornecidas pelo utilizador.
 Fonte WMS: CIIMAR/FCUP. Mascara municipio via GEE (CAOP2025).
 """
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from carto import aplicar_chave
 import ee
 import requests
 import numpy as np
@@ -713,7 +715,7 @@ init();
 
     output = 'orto_1947.html'
     with open(output, 'w', encoding='utf-8') as f:
-        f.write(html)
+        f.write(aplicar_chave(html))
     print(f'\nMapa: {output} ({os.path.getsize(output)//1024} KB)')
     return output
 

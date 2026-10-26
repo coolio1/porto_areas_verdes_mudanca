@@ -40,10 +40,13 @@ def test_front_matter_valido_em_todas_as_paginas_da_seccao():
 
 
 def test_logo_da_campanha_em_todas_as_paginas_da_seccao():
-    assert "50espacos-logo" in (RAIZ / "_layouts" / "campanha.html").read_text(encoding="utf-8")
     assert "50espacos-logo" in (RAIZ / "_includes" / "logo_campanha.html").read_text(encoding="utf-8")
-    for p in (RAIZ / "_layouts" / "espaco.html", RAIZ / "50espacos" / "espacos" / "index.md"):
-        assert "logo_campanha.html" in p.read_text(encoding="utf-8"), p.name
+    assert "campo-aberto-logo" in (RAIZ / "_includes" / "logos_campanha.html").read_text(encoding="utf-8")
+    assert "logo_campanha.html" in (RAIZ / "_includes" / "logos_campanha.html").read_text(encoding="utf-8")
+    assert "logos_campanha.html" in (RAIZ / "_includes" / "topo_campanha.html").read_text(encoding="utf-8")
+    assert "topo_campanha.html" in (RAIZ / "_layouts" / "campanha.html").read_text(encoding="utf-8")
+    assert "logos_campanha.html" in (RAIZ / "50espacos" / "index.md").read_text(encoding="utf-8")
+    assert "logo_campanha.html" in (RAIZ / "_layouts" / "espaco.html").read_text(encoding="utf-8")
 
 
 def test_layout_espaco_usa_campos_da_spec():

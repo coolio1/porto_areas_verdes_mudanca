@@ -9,6 +9,8 @@ Estilo: animated cartographic timelapse (Ollie Bye / NYU Atlas).
 - Painel lateral com dados
 - Transicao organica (crescimento por proximidade)
 """
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from carto import aplicar_chave as com_chave
 import math
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -127,7 +129,7 @@ def download_basemap(lon_min, lat_min, lon_max, lat_max, zoom=14):
             success = False
             for attempt in range(3):
                 try:
-                    r = requests.get(url, timeout=30,
+                    r = requests.get(com_chave(url), timeout=30,
                                      headers={'User-Agent': 'PortoUrbanGrowth/1.0'})
                     r.raise_for_status()
                     tile = Image.open(io.BytesIO(r.content)).convert('RGB')

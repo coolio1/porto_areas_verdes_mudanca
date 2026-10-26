@@ -1,4 +1,6 @@
 """Gera ndvi_historico.html a partir das camadas PNG já calculadas."""
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from carto import aplicar_chave
 import base64
 import io
 import os
@@ -373,6 +375,6 @@ init();
 
     output = os.path.join(script_dir, 'ndvi_historico.html')
     with open(output, 'w', encoding='utf-8') as f:
-        f.write(html)
+        f.write(aplicar_chave(html))
     print(f'\nMapa guardado em {output} ({os.path.getsize(output) // 1024} KB)')
     webbrowser.open(output)

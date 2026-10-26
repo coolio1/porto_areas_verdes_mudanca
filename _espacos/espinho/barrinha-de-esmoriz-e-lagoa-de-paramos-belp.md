@@ -1,6 +1,6 @@
 ---
-title: Barrinha de Esmoriz e Lagoa de Paramos (BELP)
-titulo: Barrinha de Esmoriz e Lagoa de Paramos (BELP)
+title: Barrinha de Esmoriz e Lagoa de Paramos
+titulo: Barrinha de Esmoriz e Lagoa de Paramos
 concelho: Espinho
 freguesia: Paramos
 seleccionado: true

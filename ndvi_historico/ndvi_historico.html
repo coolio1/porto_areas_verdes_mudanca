@@ -47,11 +47,11 @@
 <div id="nav">
   <a href="../index.html">Início</a>
   <a href="../mapa/mapa.html">Mapa 2016-2025</a>
+  <a href="../acessibilidade/conversao_verde.html">Propostas</a>
   <a href="ndvi_historico.html" class="active">Histórico 1947-2024</a>
   <a href="../interiores/interiores_quarteiroes.html">Verde Privado</a>
   <a href="../50espacos/">50 Espaços</a>
   <a href="../acessibilidade/acessibilidade_verde.html">Acessibilidade</a>
-  <a href="../acessibilidade/conversao_verde.html">Propostas</a>
   <a href="../atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
   <a href="../artigos/">Artigos</a>
   <a href="../sobre/">Sobre</a>
@@ -94,7 +94,7 @@
 
 <script>
 var map = L.map('map').setView([41.155, -8.63], 13);
-var baseTile = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {maxZoom:19, attribution:''}).addTo(map);
+var baseTile = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_4uwz_1_ae45539b82f652a6fa47db0a", {maxZoom:19, attribution:''}).addTo(map);
 var wmsLayer = null;
 
 document.getElementById('basemap-select').addEventListener('change', function() {
@@ -108,8 +108,8 @@ document.getElementById('basemap-select').addEventListener('change', function() 
     }).addTo(map);
   } else {
     var urls = {
-      dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-      positron: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_4uwz_1_ae45539b82f652a6fa47db0a",
+      positron: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_4uwz_1_ae45539b82f652a6fa47db0a",
       satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       osm: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     };
