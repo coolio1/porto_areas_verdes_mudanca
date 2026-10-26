@@ -1,7 +1,7 @@
 ---
 slug: monte-de-santo-ovideo
 fontes_usadas: [pdf-2014-2016-camada-2006-2008, pdf-2014-2016-camada-oficial, webnode]
-revisto: false
+revisto: true
 ---
 
 O Monte de Santo Ovídeo, também chamado Monte Crasto, em Vairão (hoje União de Freguesias de Fornelo e Vairão), tem cerca de 30 ha e 123 m de altitude. No topo fica uma capela, com adro, a que se sobe do Largo de Santo Ovídeo e do cruzeiro por uma rampa de calçada, rodeada de sobreiros centenários; as encostas são de prado, e nas cotas mais baixas há um parque de merendas à sombra de sobreiros. A capela é um notável miradouro sobre os campos, bouças e núcleos rurais de Vairão, incluindo o Campus Agrário, a quinta do Crasto e a Tapada da Amora.

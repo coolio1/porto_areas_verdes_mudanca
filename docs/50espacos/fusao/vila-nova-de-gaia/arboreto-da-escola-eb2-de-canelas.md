@@ -1,7 +1,7 @@
 ---
 slug: arboreto-da-escola-eb2-de-canelas
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 O Arboreto da Escola EB2 de Canelas era um espaço verde de cerca de 2 ha, integrado na escola como espaço de educação ambiental. Foi criado no ano lectivo de 1997/98, com o apoio do Parque Biológico de Gaia: limparam-se o terreno e as infestantes, definiram-se caminhos e canteiros e plantaram-se dezenas de espécies, entre freixos, carvalhos, bordos, ciprestes, oliveiras, ginkgos, azevinhos, loureiros, teixos e árvores de fruto. Era frequentado por chamarizes, pardais, andorinhas e outros passeriformes.

@@ -1,7 +1,7 @@
 ---
 slug: monte-de-s-miguel-o-anjo
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 O Monte de São Miguel-o-Anjo, em São Pedro de Fins, é o ponto mais alto do concelho da Maia, a 255 m, numa elevação xistosa. Mede entre 10 e 31 ha, conforme a delimitação. É floresta de eucalipto e pinheiro-bravo, com mimosas e austrálias, mas também sobreiros, carvalho-alvarinho em regeneração, padreiro, loureiro e azevinho. No topo há uma clareira com a capela de São Miguel-o-Anjo e um adro que serve de miradouro, rodeado de muitas plantas ornamentais, como plátano, tília, liquidâmbar, palmeira-das-canárias, teixo e cedro-branco.

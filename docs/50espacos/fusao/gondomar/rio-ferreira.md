@@ -1,7 +1,7 @@
 ---
 slug: rio-ferreira
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, pdf-2014-2016-camada-cidadaos, pdf-2014-2016-camada-ultima-hora]
-revisto: false
+revisto: true
 ---
 
 O Rio Ferreira, com cerca de 21 ha considerados no concelho, é o principal afluente do Rio Sousa. Nasce em Paços de Ferreira, atravessa Paredes, Valongo e Gondomar (Jovim, São Pedro da Cova e Foz do Sousa) e desagua no Sousa, em Foz do Sousa. É um rio de meandros, que corre num vale encaixado entre as Serras de Santa Justa, Pias e Castiçal, com gargantas apertadas e os «Saltos do Ferreira». A bacia tem 184 km² e cerca de 200 mil habitantes.

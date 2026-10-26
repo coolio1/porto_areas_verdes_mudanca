@@ -1,7 +1,7 @@
 ---
 slug: quinta-do-carreiro
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Quinta do Carreiro, em Medas, tem cerca de 1,7 ha e é uma quinta agrícola com componente florestal, atravessada por uma ribeira intermitente, visível no Inverno. Junto à linha de água predominam as espécies ripícolas, e no resto da quinta o pinheiro-bravo e o eucalipto. Já não tem áreas agrícolas em actividade. Dentro da quinta existiu, até meados do século XX, um antigo porto fluvial.

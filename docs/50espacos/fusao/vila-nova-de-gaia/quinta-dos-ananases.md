@@ -1,7 +1,7 @@
 ---
 slug: quinta-dos-ananases
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Quinta dos Ananases, ou das Grades Verdes, em Arcozelo, tem cerca de 13,6 ha e produziu em tempos ananases, que lhe deram o nome; a cultura entrou em declínio no início dos anos 90 do século XX e a quinta está aparentemente abandonada. Tem uma longa alameda de árvores de grande porte à entrada, de rara beleza, com plátanos, pinheiros, carvalhos, palmeiras, tílias, araucária, castanheiros-da-índia, abacateiros e cedro, e fauna de passeriformes, raposa, coelho-bravo, ouriço-cacheiro, esquilo e aves de rapina. Tem uma casa senhorial em ruína e uma construção semelhante a uma torre de menagem junto à estrada nacional. A oeste, num casario da quinta, tem sede um grupo folclórico local.

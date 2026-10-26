@@ -1,7 +1,7 @@
 ---
 slug: mae-de-agua
 fontes_usadas: [pdf-2014-2016-camada-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 A Mãe de Água, em São Pedro de Avioso, é a nascente da Ribeira do Arquinho, também chamada Ribeira de Avioso ou Rio Almorode, no extremo norte do concelho da Maia, numa encosta abrigada pelo Monte Grande, ou Palmazão. Ocupa cerca de 24 ha. A água é límpida e rebenta em borbulhões de areia entre as raízes de um carvalho secular, num local fresco e húmido de fácil observação de fauna e flora, hoje coberto de espécies infestantes. A freguesia tem os maiores povoamentos florestais contínuos do concelho, privados e em monocultura intensiva para as indústrias do papel e da madeira.

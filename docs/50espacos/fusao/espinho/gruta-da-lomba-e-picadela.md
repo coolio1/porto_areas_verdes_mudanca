@@ -1,7 +1,7 @@
 ---
 slug: gruta-da-lomba-e-picadela
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Gruta da Lomba e a Picadela são dois pequenos parques de lazer, em Guetim, na bacia da Ribeira do Mocho, separados pela Rua da Igreja e rodeados de uma zona arborizada. A delimitação inicial tinha 70 ha e a Câmara Municipal de Espinho propôs em 2014 cerca de 95 ha, que incluem partes dos concelhos de Santa Maria da Feira e de Vila Nova de Gaia.

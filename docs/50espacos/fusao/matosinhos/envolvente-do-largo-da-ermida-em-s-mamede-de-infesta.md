@@ -1,7 +1,7 @@
 ---
 slug: envolvente-do-largo-da-ermida-em-s-mamede-de-infesta
 fontes_usadas: [pdf-2014-2016-camada-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, webnode]
-revisto: false
+revisto: true
 ---
 
 A envolvente do Largo da Ermida, em São Mamede de Infesta, é um mosaico de arvoredos, quintais e quintas, com cerca de 2,2 ha, que conserva um carácter rural e agrícola no meio de uma zona de expansão urbana crescente. Reúne antigas quintas e jardins dos séculos XVIII e XIX: um jardim e uma capela, de origem presumivelmente seiscentista; um palacete do início do século XX, onde funciona hoje um externato, com o respectivo jardim; a Quinta do Marques Pinto, a norte do largo, com um palacete de finais do século XIX ou início do XX; e a Quinta do Eduardinho, a sul.

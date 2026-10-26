@@ -1,7 +1,7 @@
 ---
 slug: monte-da-pinta
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Monte da Pinta, em Macieira da Maia, é uma área florestal de cerca de 39 ha, constituída sobretudo por eucaliptos e pinheiros, sem outros elementos de paisagem relevantes. Perto fica um campo de jogos. Pensa-se que o terreno seja público; foi desmatado pela anterior Junta de Freguesia, e uma pequena parte está em Reserva Ecológica Nacional.

@@ -1,7 +1,7 @@
 ---
 slug: rio-febros
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 O Rio Febros é o último afluente da margem esquerda do Douro, com cerca de 15 km e 37 km² de bacia, e o único curso de água que nasce e desagua no concelho de Vila Nova de Gaia. Nasce no Parque das Corgas (Seixezelo), a 170 m de altitude, atravessa Seixezelo, Olival, Pedroso, Vilar de Andorinho, Avintes e Oliveira do Douro, e desagua no Cais do Esteiro, a 10 km da foz do Douro, num vale granítico. O espaço tem cerca de 71,5 ha; foi diminuído pela construção da A32.

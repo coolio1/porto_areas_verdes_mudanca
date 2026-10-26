@@ -1,7 +1,7 @@
 ---
 slug: reserva-natural-local-do-estuario-do-douro-cabedelo
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Reserva Natural Local do Estuário do Douro, antes chamada Cabedelo, em Canidelo, tem cerca de 68 ha de estuário com restinga de areias, dunas, sapal na Baía de São Paio (a descoberto na baixa-mar) e lodos intertidais, elemento de ligação entre o rio e o mar. É local de invernada para muitas aves aquáticas, viveiro das zonas costeiras e passagem de peixes migradores, como a enguia e a solha. Estão inventariadas 221 espécies de aves selvagens, entre andorinhas-do-mar, pilritos, garças-reais, corvos-marinhos, guarda-rios, borrelhos, águia-pesqueira e gaivotas, que aqui se alimentam, descansam e, algumas, nidificam, como o peneireiro e o falcão-peregrino. Na flora há sapais de gramata, salicórnia e juncos, e plantas dunares como o cardo-das-dunas, o estorno e o lírio-das-praias.

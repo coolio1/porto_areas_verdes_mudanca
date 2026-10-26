@@ -1,7 +1,7 @@
 ---
 slug: monte-de-santo-antonio
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Monte de Santo António (156 m), no lugar da Cavadinha, em Silva Escura, ocupa cerca de 21 ha na linha de cumeada que separa as bacias da Ribeira do Arquinho e da Ribeira de Leandro e coincide com o limite entre a Maia e a Trofa. É muito arborizado, com predomínio do eucalipto e exemplares notáveis de sobreiros e carvalhos, que são a vegetação autóctone primitiva, além de mimosas, austrálias, robínias, choupos-negros e abrunheiros-dos-jardins. Do miradouro, a poente, vê-se o centro da Maia, cada vez mais urbanizado. Faz parte do mesmo ecossistema que Friães, Devesa, Taím e Frejufe, nas margens da Ribeira de Silva Escura.

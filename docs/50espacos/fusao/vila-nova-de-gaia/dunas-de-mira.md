@@ -1,7 +1,7 @@
 ---
 slug: dunas-de-mira
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 As Dunas de Mira, em Arcozelo, têm cerca de 57 ha e conservam partes das antigas dunas que deram o nome ao lugar e a algumas ruas. O seu valor está na dimensão e no mosaico de ecossistemas, agrícola, florestal e ripícola, num resquício de duna terciária ou castanha, único em Vila Nova de Gaia, em dunas quaternárias com vegetação dunar e pinheiros, em bosquetes de pinheiro, eucalipto, carvalho e sobreiro em solos abandonados, e na vegetação ripícola da Ribeira do Espírito Santo, que atravessa o lugar. Servem de descanso, alimentação e nidificação a aves migradoras e marinhas; predominam a pega-rabuda, o gaio, a rola-brava, a rola-turca, o guarda-rios, o melro-preto e o pintassilgo, com predadores como a águia-de-asa-redonda e o peneireiro, sinal de um ecossistema ainda equilibrado. É um corredor ecológico entre o litoral e o interior do concelho.

@@ -1,7 +1,7 @@
 ---
 slug: espaco-centoecatorze
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-cidadaos]
-revisto: false
+revisto: true
 ---
 
 O Espaço Centoecatorze, em Leça do Balio, é uma quinta de cerca de 2,3 ha que junta a criação artística à agricultura biológica. Tem uma área verde com um lago, que é uma piscina biológica, uma horta biológica e uma estação de tratamento de águas por plantas (ETAP), que recicla todas as águas usadas no atelier e nas residências ligadas ao espaço e as devolve ao meio sem comprometer outros usos, aproveitando-as para rega.

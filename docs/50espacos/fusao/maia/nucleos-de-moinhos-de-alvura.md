@@ -1,7 +1,7 @@
 ---
 slug: nucleos-de-moinhos-de-alvura
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 O núcleo de moinhos de Alvura, em Águas Santas, é uma zona verde de cerca de 10 a 14 ha nas margens do Rio Leça, com pontes, açudes e moinhos fluviais dos séculos XVIII e XIX. A galeria ripícola de amieiros, freixos, salgueiros e choupos, com carvalhos-alvarinhos, está relativamente bem representada, e nas encostas há eucalipto, mimosa e pinheiro-bravo. Aqui o rio corre com forte caudal, graças aos açudes. Junto fica a Ponte de Alvura, ou Ponte do Arco, de granito, com um único arco redondo. Os moinhos serviam para moer o milho e outros cereais dos campos vizinhos; alguns estão em ruína, outros foram restaurados e estão semi-ocupados ou servem de habitação. No tecido urbano em redor há casas unifamiliares, construções abandonadas, campos agrícolas e muros de granito. O núcleo integra a Rede Portuguesa de Moinhos.

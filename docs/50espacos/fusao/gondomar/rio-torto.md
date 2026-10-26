@@ -1,7 +1,7 @@
 ---
 slug: rio-torto
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, pdf-2014-2016-camada-cidadaos]
-revisto: false
+revisto: true
 ---
 
 O Rio Torto, afluente da margem direita do Douro, nasce em Baguim do Monte, passa por Fânzeres, São Cosme e Valbom e desagua no esteiro de Campanhã, no Freixo, onde também desagua o Rio Tinto. O espaço tem cerca de 16,5 ha, entre campos agrícolas, vale e área natural. O Monte de Azevedo separa as bacias do Torto e do Tinto.

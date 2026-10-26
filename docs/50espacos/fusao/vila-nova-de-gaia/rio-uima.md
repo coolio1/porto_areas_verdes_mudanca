@@ -1,7 +1,7 @@
 ---
 slug: rio-uima
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 O Rio Uíma é afluente da margem esquerda do Douro. Nasce em Duas Igrejas (Romariz, Santa Maria da Feira) e desagua em Crestuma, ligeiramente a jusante da barragem de Crestuma-Lever, depois de passar por Romariz, Pigeiros, Caldas de São Jorge, Lobão, Fiães e Vila Maior, e por Sandim, Lever e Crestuma, em Gaia. É o principal curso fluvial do concelho da Feira. O espaço em Gaia tem cerca de 22,3 ha (Sandim, Olival, Lever e Crestuma).

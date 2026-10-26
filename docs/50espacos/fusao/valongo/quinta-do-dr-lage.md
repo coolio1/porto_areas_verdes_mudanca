@@ -1,7 +1,7 @@
 ---
 slug: quinta-do-dr-lage
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 A Quinta do Dr. Lage, em Ermesinde, é um jardim privado de cerca de 1,3 ha, com uma grande diversidade de árvores e arbustos, mais de trinta espécies, que quase o transformam num pequeno jardim botânico. Há bidoeiro, castanheiro, carvalho-americano, cedro-do-líbano, cedro-do-atlântico, azevinho, loureiro, tília, magnólia, japoneira, rododendro e azálea, e destaca-se pelo porte e pelo diâmetro do tronco uma árvore-do-âmbar (Liquidambar styraciflua). Não há nenhuma espécie muito rara, mas o conjunto é rico e oferece boas condições de habitat à fauna urbana. Não tem valores arquitectónicos a destacar.

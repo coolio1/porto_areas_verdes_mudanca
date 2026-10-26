@@ -1,7 +1,7 @@
 ---
 slug: bicha-das-sete-cabecas
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Bicha das Sete Cabeças é uma quinta agrícola com bosque, de cerca de 20 ha, no vale da Ribeira de Silvalde. Na margem da ribeira ergue-se uma casa-moinho, com o moinho de água no rés-do-chão, e de um meandro parte uma levada que alimenta um açude anexo, que serviu de lavadouro. Em redor há um campo com pomar na parte alta e uma vegetação ribeirinha muito densa de choupos, plátanos, amieiros e salgueiros; a norte e a nascente há pinhais e eucaliptais. Moradores observam raposas, doninhas, milhafres, galinhas-d'água, patos-bravos, coelhos-bravos, rolas-bravas, pintassilgos, piscos e lugres. Há cerca de dez anos ainda se pescavam enguias na ribeira.

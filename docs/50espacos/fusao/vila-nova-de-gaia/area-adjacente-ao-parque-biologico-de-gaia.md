@@ -1,7 +1,7 @@
 ---
 slug: area-adjacente-ao-parque-biologico-de-gaia
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 A área adjacente ao Parque Biológico de Gaia, em Vilar de Andorinho, tem cerca de 20 ha de quinta, campos agrícolas e área natural, com vários terrenos agrícolas em actividade e um pequeno ribeiro. Vivem aqui coelho-bravo, ouriço-cacheiro, esquilo e raposa, aves de rapina diurnas e nocturnas, passeriformes, frangos-d'água, galeirões e patos, cobra-de-água, cobra-de-escada, rã-ibérica e sapo-comum. Crescem o carvalho-alvarinho, o castanheiro, o pinheiro-bravo, o sobreiro, o azevinho, a gilbardeira, o tojo, as giestas e a urze. O edifício principal tem eira e espigueiro e a quinta é habitável.

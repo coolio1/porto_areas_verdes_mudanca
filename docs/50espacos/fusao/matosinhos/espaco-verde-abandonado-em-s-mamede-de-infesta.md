@@ -1,7 +1,7 @@
 ---
 slug: espaco-verde-abandonado-em-s-mamede-de-infesta
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 Este espaço verde abandonado, em São Mamede de Infesta, tem cerca de 2,9 ha de campos agrícolas a nascente e a poente da Rua de Santo António, rodeados por um imenso dormitório. É dos poucos locais da zona onde ainda impera algum verde, ainda que ao abandono, numa área que até aos anos 70 e 80 viveu da agricultura, sobretudo da batata, e que ainda tem casas de lavoura. A noroeste há uma zona rural com casas, caminhos de terra e muros de pedra. A fauna e a flora não são significativas, mas a localização é privilegiada.

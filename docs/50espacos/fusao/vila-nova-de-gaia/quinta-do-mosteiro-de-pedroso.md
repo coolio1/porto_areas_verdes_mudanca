@@ -1,7 +1,7 @@
 ---
 slug: quinta-do-mosteiro-de-pedroso
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Quinta do Mosteiro de Pedroso, em Pedroso, tem cerca de 53 ha (a propriedade propriamente dita terá cerca de 18 ha) e fica ao lado do Mosteiro de Pedroso, hoje igreja paroquial. Os muros são altos e é difícil ver o interior. Tem a casa da quinta, com acesso por uma alameda de plátanos, grandes áreas agrícolas, um carvalhal a sudeste e linhas de água que nascem no Monte Murado e afluem ao Rio Febros. O adro e os jardins da entrada têm árvores e arbustos ornamentais, e há edifícios rurais, estábulos, eira e espigueiro de interesse etnográfico, com terra arável e zonas arborizadas favoráveis à agricultura biológica.

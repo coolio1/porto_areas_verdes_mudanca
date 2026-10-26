@@ -1,7 +1,7 @@
 ---
 slug: zona-agricola-em-s-mamede-de-infesta
 fontes_usadas: [pdf-2014-2016-camada-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, webnode]
-revisto: false
+revisto: true
 ---
 
 A zona agrícola de São Mamede de Infesta é uma extensa área de campos, com cerca de 64,5 ha, a nascente e a poente da Rua de Santo António do Telheiro, entre a linha de caminho de ferro e a Rua das Flores. É atravessada pela Ribeira de Picoutos e fica entre o Porto e Matosinhos, numa área de elevada densidade populacional, o que lhe dá potencial para se tornar um grande espaço verde e um corredor ecológico. Observa-se aqui um grande número de aves.

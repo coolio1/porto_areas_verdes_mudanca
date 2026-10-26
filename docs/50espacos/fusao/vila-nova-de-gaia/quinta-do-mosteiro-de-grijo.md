@@ -1,7 +1,7 @@
 ---
 slug: quinta-do-mosteiro-de-grijo
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Quinta do Mosteiro de Grijó, em Grijó, tem cerca de 104 ha de quinta agrícola e espaço verde ao lado do Mosteiro de São Salvador, numa elevação no lugar de Murracezes. O terreiro murado do mosteiro tem carvalhos-alvarinho, tílias, palmeiras, cedros-do-Líbano, bétulas e rododendros. A quinta, que outrora foi do clero, é hoje privada, e a área que se propõe para parque público é uma faixa encostada ao muro, junto à rotunda de Santo António, que se prolonga até depois da ponte do Cabouco, na Rua da Guarda, onde corre um pequeno ribeiro; é muito arborizada, com árvores de grande porte, sobretudo eucaliptos e algumas autóctones, e cercada por um muro alto.

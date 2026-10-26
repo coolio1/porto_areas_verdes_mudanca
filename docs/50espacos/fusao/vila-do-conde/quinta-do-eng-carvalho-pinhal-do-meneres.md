@@ -1,7 +1,7 @@
 ---
 slug: quinta-do-eng-carvalho-pinhal-do-meneres
 fontes_usadas: [pdf-2014-2016-camada-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, webnode]
-revisto: false
+revisto: true
 ---
 
 A Quinta do Engenheiro Carvalho, mais conhecida por Pinhal do Menéres, é uma propriedade privada de cerca de 16 a 18 ha na frente marítima de Vila do Conde, na direcção das Caxinas. Ocupa um quarteirão inteiro, rodeado a norte, nascente e sul por prédios de grande volumetria, e é o remanescente das dunas e do pinhal do litoral da cidade, em bom estado de conservação. É a única mancha verde que se abre para o mar e que ainda mantém características morfológicas e topográficas que mostram como a cidade se articulava com a marginal, como um pequeno parque natural na malha urbana. Um longo muro de granito protege a casa da quinta e o espaço é a maior área privada delimitada de toda a zona urbanizada da cidade.

@@ -1,7 +1,7 @@
 ---
 slug: paisagem-protegida-regional-do-litoral-de-vila-do-conde-e-reserva-ornitologica-do-mindelo
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Reserva Ornitológica do Mindelo, hoje Paisagem Protegida Regional do Litoral de Vila do Conde e Reserva Ornitológica de Mindelo, ocupa cerca de 600 ha entre Azurara, Árvore, Mindelo, Vila Chã e Labruge. O seu valor está no mosaico de dunas, zonas húmidas, extensa mata e campos agrícolas, que a torna um espaço único em Vila do Conde e na Área Metropolitana do Porto e um refúgio essencial para aves migratórias e anfíbios. Foram observadas cerca de 153 espécies de aves e 14 das 17 espécies de anfíbios de Portugal, entre elas o tritão-palmado, o mais raro do país, e as populações costeiras conhecidas mais a norte do sapinho-de-verrugas-verdes, do sapo-de-unha-negra e da salamandra-de-costelas-salientes. Há também esquilos, coelhos, raposas, ouriços-cacheiros, morcegos e o lagarto-de-água, matas ribeirinhas e sebes bem conservadas e flora dunar com endemismos do Noroeste Ibérico, dois deles exclusivamente portugueses.

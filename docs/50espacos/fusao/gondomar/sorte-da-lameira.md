@@ -1,7 +1,7 @@
 ---
 slug: sorte-da-lameira
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Sorte da Lameira, em Melres, na Serra de Açores, tem cerca de 212 ha de área florestal com carvalhos, medronheiros, azevinhos, pinheiro-bravo e a maior fracção de sobreiros da serra, com algumas invasoras, acácias e eucaliptos, em menor extensão. Parte é ainda agrícola, com uma mina de água desactivada e canais de rega dos antigos consortes. Foi zona de exploração de antimónio, hoje desactivada, e restam ruínas de habitações ligadas à mina.

@@ -1,7 +1,7 @@
 ---
 slug: ribeira-de-melres
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Ribeira de Melres, com cerca de 21,9 ha, é uma área ripícola relativamente extensa, de cariz agrícola, na margem direita do Douro, onde se cultivam sobretudo milho, vinha e hortícolas. Há guarda-rios, poupas, corvos, raposas, lontras e muitos passeriformes, e predominam os amieiros, choupos, salgueiros, nogueiras e castanheiros; existem vários ribeiros.

@@ -1,7 +1,7 @@
 ---
 slug: ribeira-de-longras-ou-campelos-a-designacao-e-controversa
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Ribeira de Longras (ou de Campelos, pois a designação é controversa) corre em Medas e tem cerca de 18 ha. É um curso de água permanente, com carvalhos, amieiros, salgueiros e eucaliptos que invadiram antigas zonas agrícolas. Localiza-se num vale agrícola abandonado pelos proprietários e não tem moinhos ao longo do percurso.

@@ -1,7 +1,7 @@
 ---
 slug: monte-grande-ou-de-santa-eufemia
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 O Monte Grande, ou Monte de Santa Eufémia, é uma grande área florestal, de cerca de 313 ha, na confluência dos concelhos de Vila do Conde, Trofa e Maia, em Guilhabreu, Canidelo e São Pedro de Avioso; a parte da Trofa é a mais extensa. Tem sobreiros, plátanos e eucaliptos, várias nascentes e minas de água, e a fauna mais frequente é a dos passeriformes.

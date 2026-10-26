@@ -1,7 +1,7 @@
 ---
 slug: parque-germano-vieira
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Parque Germano Vieira, em Gueifães, tem cerca de 8 ha e, apesar do nome, não está constituído como parque: o nome indica a intenção de o criar. Inclui terrenos com árvores, sobretudo pinhal, e alguns campos agrícolas, atravessados por uma linha de água que desagua no Ribeiro do Arquinho, com terrenos pantanosos na envolvente. Foram registadas muitas aves (melro-preto, pica-pau-malhado, gaio, poupa, coruja-do-mato, mocho-galego, cartaxo, toutinegras, andorinha-dos-beirais, garça-boieira), anfíbios (rã-verde, sapo-parteiro, rã-ibérica, salamandra-de-pintas-amarelas), répteis, raposa e insectos como o insecto-pau, e a flora inclui eucaliptos, pinheiros-bravos, fetos, carvalhos, tábuas, plátanos e choupos.

@@ -1,7 +1,7 @@
 ---
 slug: monte-murado
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 O Monte Murado, em Pedroso, tem cerca de 76 ha e eleva-se a 241 m, a sudeste da cidade, na bacia do Rio Febros. Inclui o sítio arqueológico, o Parque da Senhora da Saúde e o de São Bartolomeu, e faz parte da Estrutura Ecológica Municipal. Há árvores ornamentais de grande porte (plátanos, tílias, faias, cedros e ulmeiros), eucalipto e pinheiro-bravo, e regenera o carvalho-alvarinho a norte. Do alto avista-se o mar, de Leixões ao Furadouro, e o Douro e as suas encostas até Cinfães. Já houve muito coelho-bravo, e era local de caça.

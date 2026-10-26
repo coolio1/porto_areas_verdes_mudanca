@@ -1,7 +1,7 @@
 ---
 slug: futuro-parque-da-cidade-de-rio-tinto
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 O futuro Parque da Cidade de Rio Tinto, com cerca de 14 ha, envolveria a Quinta das Freiras, o leito do Rio Tinto (antigo e actual), a Ribeira da Castanheira e as áreas à volta, no espaço entre o troço entubado do Rio Tinto e a Rua da Ranha, junto ao mercado e feira. A Quinta das Freiras é um espaço público atravessado por um troço entubado do rio e funciona como parque desportivo, com campo de ténis, circuito de manutenção, espaço de lazer e parque de merendas. Nas margens do rio e da Ribeira da Castanheira há passeriformes, gaios e herpetofauna comum, penachos-brancos (Cortaderia selloana) ornamentais e salgueiros; depois do troço entubado ficam casas e moinhos abandonados.

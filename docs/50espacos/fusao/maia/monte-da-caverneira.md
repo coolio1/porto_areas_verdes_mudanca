@@ -1,7 +1,7 @@
 ---
 slug: monte-da-caverneira
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Monte da Caverneira, em Águas Santas, é uma área de cerca de 20 ha que inclui uma antiga pedreira de granito amarelo, conjuntos arbóreos e a Quinta da Caverneira, num afloramento granítico elevado de onde se vê a Serra da Agrela, a nascente, e o vale do Leça, a poente. Ainda há lebres. Na quinta crescem carvalhos, pinheiros-mansos, loureiros, choupos, eucaliptos de jardim, camélias, azáleas, giestas, ericas, alfazema, menta, rosmaninho, santolina, cidreira, camomila e salva.

@@ -1,7 +1,7 @@
 ---
 slug: monte-penedo
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Monte Penedo, em Milheirós, é uma área extensa, de cerca de 58,4 ha, degradada pela antiga exploração de pedreiras de granito, com zonas arborizadas de pinheiro e eucalipto junto à A3. Os pedreiros do Monte Penedo foram uma das profissões mais importantes e tradicionais da freguesia. O monte foi muito invadido por cães vadios, e um canil ilegal que ali existia, e que ameaçava a saúde pública, foi desmantelado em Maio de 2008 pela Câmara Municipal da Maia.

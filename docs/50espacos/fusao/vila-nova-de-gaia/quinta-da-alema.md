@@ -1,7 +1,7 @@
 ---
 slug: quinta-da-alema
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Quinta da Alemã, em Mafamude (Laborim de Baixo), é um pequeno espaço verde de cerca de 1,4 ha, antiga quinta agrícola hoje abandonada, rodeada de construção densa. Cresce aqui uma vegetação de choupos, castanheiros, carvalhos, loureiros, pessegueiro e figueira, com arbustos e subarbustos, e vivem chamarizes, pegas, rolas, pardais, piscos-de-peito-ruivo, pintassilgos, andorinhas-dos-beirais, alvéolas-brancas, milhafres-pretos, melros, gaios, raposas, coelhos-bravos, ouriços-cacheiros, esquilos e aves de rapina diurnas e nocturnas.

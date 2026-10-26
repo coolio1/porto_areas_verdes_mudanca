@@ -1,7 +1,7 @@
 ---
 slug: encostas-declivosas-do-rio-douro
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 As encostas declivosas do Rio Douro, em Crestuma, com cerca de 952 ha, fazem parte de um vale singular na Área Metropolitana do Porto, um canal navegável de encostas que se estendem por mais de 20 km em Gaia, Porto e Gondomar. Em Crestuma a encosta é uma floresta de eucalipto e pinheiro-bravo e manso, com acácia-mimosa, acácia-de-folhas-longas e sabugueiro; as espécies invasoras dominam e o interesse ambiental actual é baixo. No rio, escalo, enguia e truta foram dizimados pela pesca à rede e pela alteração das condições ambientais, depois da barragem de Crestuma-Lever vieram a carpa, o achigã, a perca, o lúcio e o lagostim-vermelho, e ainda há boga, barbo e mexilhão. Nas arribas nidificam aves, e nas ladeiras vivem a perdiz, a rola, o estorninho, o melro e o papa-figos.

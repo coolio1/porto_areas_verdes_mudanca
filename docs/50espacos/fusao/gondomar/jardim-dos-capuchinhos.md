@@ -1,7 +1,7 @@
 ---
 slug: jardim-dos-capuchinhos
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Jardim dos Capuchinhos, em São Cosme, é a Quinta dos Frades Menores Capuchinhos, ou Quinta da Bouça Cova, com cerca de 4,5 ha. Tem uma área agrícola de hortícolas e frutícolas e dois jardins: um de tipo francês e, a poente, um jardim romântico do século XIX, de tipo inglês, nas traseiras da antiga casa senhorial, dos primeiros do Norte do país. Crescem aqui azevinhos, ginkgos e um tulipeiro-da-virgínia com cerca de 300 anos, e há lagos e fontes; a fauna é de passeriformes comuns, algumas rapinas nocturnas e corvos.

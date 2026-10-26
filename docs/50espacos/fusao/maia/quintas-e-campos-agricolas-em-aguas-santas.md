@@ -1,7 +1,7 @@
 ---
 slug: quintas-e-campos-agricolas-em-aguas-santas
 fontes_usadas: [pdf-2014-2016-camada-2006-2008]
-revisto: false
+revisto: true
 ---
 
 As quintas e campos agrícolas de Águas Santas somam cerca de 19,4 ha: a Quinta da Granja, a norte da A4, e campos a sul da autoestrada, entre a Rua Manuel Francisco Araújo e a Rua dos Coriscos. São pequenos espaços agrícolas fragmentados por bouças, com manchas arborizadas, atravessados por vias importantes e inseridos numa densa malha urbana. As culturas principais são o milho e o trigo, que no passado fizeram a tradição e a riqueza agrícola de Águas Santas, e alguns campos têm ramadas de vinha. Os espaços florestais são pequenas manchas de eucalipto e pinheiro-bravo.

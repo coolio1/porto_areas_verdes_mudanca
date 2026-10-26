@@ -1,7 +1,7 @@
 ---
 slug: monte-da-virgem
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-cidadaos]
-revisto: false
+revisto: true
 ---
 
 O Monte da Virgem, a 223 m de altitude, entre Mafamude, Vilar de Andorinho e Oliveira do Douro, tem cerca de 65,5 ha e é um espaço verde consagrado do concelho, parte da Estrutura Ecológica Municipal. Restam poucos sobreiros, tílias, carvalhos, castanheiros e criptomérias, e abundam as invasoras (eucaliptos, austrálias e acácias); no parque de merendas e na alameda dominam os plátanos. Vivem aqui gaviões, águia-de-asa-redonda, corujas, noitibós, passeriformes, coelhos, raposas e esquilos, e hoje também javalis, comuns nas zonas rurais de Gaia. Fica na envolvente do Hospital Santos Silva, o que lhe dá fins terapêuticos.

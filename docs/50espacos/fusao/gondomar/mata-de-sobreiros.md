@@ -1,7 +1,7 @@
 ---
 slug: mata-de-sobreiros
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Mata de Sobreiros, em Fânzeres, é um espaço de mata de cerca de 2,1 ha, abandonado e degradado, onde abundam sobreiros, eucaliptos e acácias, com fauna de passeriformes comuns. O seu valor está na grande quantidade de sobreiros em área periurbana. Não tem espaços de lazer nem património construído.

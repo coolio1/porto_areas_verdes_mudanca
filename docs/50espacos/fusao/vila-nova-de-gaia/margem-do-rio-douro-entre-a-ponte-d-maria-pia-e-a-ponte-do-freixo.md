@@ -1,7 +1,7 @@
 ---
 slug: margem-do-rio-douro-entre-a-ponte-d-maria-pia-e-a-ponte-do-freixo
 fontes_usadas: [pdf-2014-2016-camada-2006-2008, pdf-2014-2016-camada-oficial, webnode]
-revisto: false
+revisto: true
 ---
 
 Esta margem do Rio Douro, em Oliveira do Douro, ocupa cerca de 58 ha entre a Ponte D. Maria Pia e a Ponte do Freixo, no Areinho de Oliveira do Douro. Do rio sobe-se até à curva de nível dos 15 m, com as encostas agrícolas e o leito de cheia até ao IC23; as altitudes vão de 5 a 60–70 m. Era o ponto de encontro entre a terra, com a agricultura e os moleiros de Quebrantões, e o rio, com a pesca e as lavadeiras. O crescimento rápido da construção na freguesia deixou uma diversidade ecológica em abandono.

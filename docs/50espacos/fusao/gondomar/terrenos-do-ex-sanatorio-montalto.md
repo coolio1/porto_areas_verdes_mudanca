@@ -1,7 +1,7 @@
 ---
 slug: terrenos-do-ex-sanatorio-montalto
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 Os terrenos do ex-Sanatório de Montalto, em São Pedro da Cova, têm cerca de 80 ha e ficam na cumeada da Serra de Santa Justa, a cerca de 300 m de altitude, no limite com Valongo. Nascem aqui linhas de água afluentes da Ribeira da Parada (Rio Ferreira) e do Rio Torto. Há uma clareira no topo, com vegetação rasteira e caminhos de terra, e encostas dominadas pelo eucalipto, muitas vezes devastadas por incêndios. Da cumeada vêem-se Valongo, Rio Tinto, Porto, Vila Nova de Gaia e o mar.

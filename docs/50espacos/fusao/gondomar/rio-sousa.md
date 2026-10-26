@@ -1,7 +1,7 @@
 ---
 slug: rio-sousa
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, pdf-2014-2016-camada-cidadaos, pdf-2014-2016-camada-ultima-hora]
-revisto: false
+revisto: true
 ---
 
 O Rio Sousa, afluente da margem direita do Douro, nasce em Friande (Felgueiras) e desagua em Foz do Sousa, em Gondomar, onde recebe o Rio Ferreira; no concelho, o espaço tem cerca de 60 ha, em Covelo e Foz do Sousa. Atravessa Felgueiras, Lousada, Penafiel, Paredes e Gondomar. Corre num vale circunscrito pelas Serras de Valongo e delimita a sul o Sítio Valongo da Rede Natura 2000.

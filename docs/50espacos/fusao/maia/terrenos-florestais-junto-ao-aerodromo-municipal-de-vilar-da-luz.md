@@ -1,7 +1,7 @@
 ---
 slug: terrenos-florestais-junto-ao-aerodromo-municipal-de-vilar-da-luz
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 Os terrenos florestais junto ao Aeródromo Municipal de Vilar da Luz, em Folgosa, ocupam cerca de 220 ha de grandes manchas florestais que contam na paisagem envolvente, sobretudo pelo relevo. Domina o eucalipto (90%), com algum pinheiro (10%), silvas e fetos, e há caminhos corta-fogo, pequenas linhas de água e alguns baldios sem qualquer uso. A área serve a produção florestal e o aeródromo e é usada para desportos motorizados (Moto4) e por ciclistas nos caminhos de terra batida.

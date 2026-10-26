@@ -1,7 +1,7 @@
 ---
 slug: parque-da-vessada
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Parque da Vessada, em Milheirós e Gueifães, é uma área natural de cerca de 60 ha atravessada pela Ribeira do Arquinho, de grande importância paisagística. Tem terrenos agrícolas, eucaliptais e baldios, a ribeira, limitada em partes por muros de granito, com uma frondosa galeria ripícola de amieiros, salgueiros, freixos e choupos-brancos, alguns carvalhos e um moinho antigo, em parte em ruínas; há outros moinhos abandonados. Uma pequena ponte de pedra permite passar da clareira agrícola para a zona florestada, e na envolvente destaca-se uma zona industrial.

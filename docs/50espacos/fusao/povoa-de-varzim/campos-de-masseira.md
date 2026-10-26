@@ -1,7 +1,7 @@
 ---
 slug: campos-de-masseira
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 Os campos de masseira, também chamados campos-gamela ou campos-tabuleiro, são uma forma de agricultura única no mundo, própria das freguesias de Estela e Aguçadoura, na Póvoa de Varzim, e da vizinha Apúlia, em Esposende. Estende-se por cerca de 450 ha de terrenos de areia de duna, na faixa litoral entre a foz do Neiva e as terras a norte da Póvoa.

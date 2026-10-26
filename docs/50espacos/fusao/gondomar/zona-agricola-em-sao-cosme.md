@@ -1,7 +1,7 @@
 ---
 slug: zona-agricola-em-sao-cosme
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A zona agrícola em São Cosme, com cerca de 4 ha, é uma faixa mais ou menos contínua ao lado do IC29, com campos agrícolas de hortícolas. A fauna é de passeriformes ubiquistas, herpetofauna comum e alguns micromamíferos. Alguns dos campos pertenceram à antiga Quinta de Gondomar.

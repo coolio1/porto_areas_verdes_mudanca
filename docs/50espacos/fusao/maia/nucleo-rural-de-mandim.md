@@ -1,7 +1,7 @@
 ---
 slug: nucleo-rural-de-mandim
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O núcleo rural de Mandim, em Barca, tem cerca de 53,2 ha e é um antigo núcleo rural que resistiu à expansão urbana, com casas de lavoura e campos agrícolas. Fica junto ao Ribeiro do Chiolo ou Ribeira de Mandim, que nasce em Gemunde e é, a par da Ribeira de Silva Escura, um dos principais afluentes do Rio Almorode, com alguma vegetação ripícola remanescente apesar das margens mal conservadas. Ainda há alguns caminhos rurais, mas as ramadas desapareceram.

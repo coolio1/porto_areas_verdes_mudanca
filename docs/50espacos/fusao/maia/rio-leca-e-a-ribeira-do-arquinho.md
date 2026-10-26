@@ -1,7 +1,7 @@
 ---
 slug: rio-leca-e-a-ribeira-do-arquinho
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 O Rio Leça e a Ribeira do Arquinho percorrem o concelho da Maia: o Leça atravessa Águas Santas, Milheirós, Gueifães, Maia e Moreira, e o Arquinho, seu maior afluente, nasce em São Pedro de Avioso e passa por Santa Maria de Avioso, Gondim, Barca, Vermoim, Nogueira, Gueifães e Milheirós antes de desaguar em Águas Santas. O Leça nasce no Monte de Santa Luzia, em Santo Tirso, tem cerca de 47 km e uma bacia de 190 km², e o Arquinho, que também se chama Ribeira de Avioso ou Rio Almorode, tem 11 km e uma bacia de 33 km².

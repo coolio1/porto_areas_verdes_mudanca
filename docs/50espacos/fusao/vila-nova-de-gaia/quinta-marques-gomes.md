@@ -1,7 +1,7 @@
 ---
 slug: quinta-marques-gomes
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Quinta Marques Gomes, ou Quinta do Montado, em Canidelo, tem cerca de 33 ha e é a extensão natural do estuário do Douro, abrigada dos ventos e das ondas pelas areias do Cabedelo. Integra a Baía de São Paio e alternava campos cultivados, pastagens e prados selvagens com uma vasta zona florestal, a emoldurar o cenário do estuário. Tinha metrosídeo-gigante com raízes aéreas, pinheiros, eucaliptos, castanheiros, carvalhos, tílias, amoreiras, camélias, palmeiras-das-Canárias, melaleuca e araucárias, e fauna de gaviões, águia-de-asa-redonda, corujas, noitibós, garça-real, passeriformes, coelhos, raposas e esquilos. Um caseiro mantinha os campos cultivados.

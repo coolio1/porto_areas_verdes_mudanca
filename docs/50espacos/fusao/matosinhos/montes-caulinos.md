@@ -1,7 +1,7 @@
 ---
 slug: montes-caulinos
 fontes_usadas: [pdf-2014-2016-camada-2006-2008]
-revisto: false
+revisto: true
 ---
 
 Os Montes Caulinos, na Senhora da Hora, ocupam cerca de 10,6 ha atrás das urbanizações vizinhas do Centro Comercial Londres, perto da estação de metro da Fonte do Cuco. São os resíduos da exploração de caulino do Monte de São Gens, um afloramento granítico de onde também se tirou cantaria para os molhes do porto de Leixões. Os resíduos acumulados junto à exploração formaram estes montes, visíveis de muitos pontos do Porto, e um grande lago artificial e perigoso, hoje urbanizado. É um espaço abandonado e degradado, onde dominam os matos e já se viram raposas.

@@ -1,7 +1,7 @@
 ---
 slug: quinta-da-fonte-formosa-ou-quinta-da-boucinha
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Quinta da Fonte Formosa, ou Quinta da Boucinha, em Oliveira do Douro e Mafamude, tem cerca de 15,1 ha de bosque e solos com aproveitamento agrícola. Duas pequenas ribeiras, que confluem, atravessam-na, vindas dos terrenos a nascente dos estúdios da RTP, no Monte da Virgem. Um inventário das associações Onda Verde e Quercus registou mais de 30 espécies de aves, entre águia-de-asa-redonda, peneireiro, gavião, corujas, noitibó-comum, poupa, pica-pau-verde, cuco e papa-moscas, que ali nidificam ou passam; mamíferos como o ouriço-cacheiro, a toupeira-cega, o coelho-bravo, a raposa e os morcegos de ferradura-grande e anão; anfíbios como o sapo-parteiro, os tritões, a salamandra-de-pintas-amarelas e as rãs; e répteis como o licranço, o lagarto-de-água e o cágado-de-carapaça-estriada. Entre as árvores contam-se o carvalho-alvarinho, o sobreiro, o castanheiro, o pinheiro-bravo, o teixo, o medronheiro, o amieiro e o azevinho, estando o sobreiro e o azevinho protegidos por lei; as monografias de Oliveira do Douro e Mafamude juntam a pega-comum, o pintassilgo, o milhafre-preto e o esquilo.

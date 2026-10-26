@@ -1,7 +1,7 @@
 ---
 slug: parque-dos-maninhos
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Parque dos Maninhos, em Gueifães, é uma zona ajardinada de cerca de 12,4 ha, com um conjunto arbóreo e uma linha de água afluente do Ribeiro do Arquinho, onde predominam os carvalhos e a vegetação ripícola. Tem dois cafés e um parque infantil e fica numa zona densamente urbanizada, com grande potencial de expansão. Em 2006 acolheu o Vermudi, festival cultural de Vermoim.

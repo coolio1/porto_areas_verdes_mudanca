@@ -1,7 +1,7 @@
 ---
 slug: ribeira-de-tabaos
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 A Ribeira de Tabãos, em Alfena, é afluente da margem esquerda do Rio Leça e tem uma beleza singular, com um corredor ripícola bem conservado de amieiros e salgueiros, algumas áreas de carvalhal, feto-real, azenhas, um moinho e locais propícios a percursos pedestres. Foi medida com 106 ha em 2006; na revisão do PDM a Câmara de Valongo delimitou uma área de salvaguarda de 78 ha, classificada como espaço florestal de conservação.

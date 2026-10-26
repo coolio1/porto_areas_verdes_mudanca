@@ -1,0 +1,25 @@
+---
+title: Serra de Santa Justa, Pias e Castiçal
+titulo: Serra de Santa Justa, Pias e Castiçal
+concelho: Valongo
+freguesia: Sobrado, São Martinho do Campo e Valongo (2); São Pedro da Cova, Foz do Sousa e Covelo (1); Aguiar de Sousa e Sobreira (3)
+seleccionado: true
+selecao: 2009-04
+area_ha: 1250.0
+n_ficha: 1669
+lat: 41.16
+lon: -8.48
+origem_coord: ficha 2006–2008 (WGS84, 2 casas decimais)
+estado_actual: por verificar
+fotos: [{"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/01.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/02.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/03.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/04.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/05.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/06.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/Cartaz_areas_protegidas.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/Cartaz_geral.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/Cartaz_parque_AMP.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/Cartaz_producao.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/Cartaz_rede_natura.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/Cartaz_turismo.jpg"}, {"src": "/50espacos/media/serra-de-santa-justa-pias-e-castical/delimitacao.jpg"}]
+fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Webnode da campanha", "Lista de Abril de 2009"]
+---
+As Serras de Santa Justa, Pias e Castiçal, com cerca de 1250 a 1416 ha, conforme a delimitação, são o «pulmão» da Área Metropolitana do Porto. Estendem-se por Valongo, Gondomar e Paredes, separadas pelo vale do Rio Ferreira, afluente do Sousa, onde há moinhos, a aldeia de Couce, vestígios de povoados ligados à mineração, fragas e nascentes. Pertencem a um anticlinal de xisto, uma «ilha de xisto» entre os maciços rochosos da região.
+
+Parte da serra integra a Rede Natura 2000, Sítio «Valongo» (PTCON0024), com 2553 ha, 824 deles em Valongo. É o único local de Portugal continental onde se observam os fetos relíquia Culcita macrocarpa e Trichomanes speciosum, tem o narciso Narcissus cyclamineus, endemismo ibérico em perigo, e o único local de ocorrência de Lycopodium cernuum na Europa continental. As minas e fojos são dos locais de reprodução mais importantes da salamandra-lusitânica e abrigam colónias de morcego-de-ferradura-grande e de morcego-de-peluche; há também lagarto-de-água, lontra, toupeira-de-água, bordalo, ruivaco e boga. A vegetação autóctone concentra-se sobretudo à volta do Fojo das Pombas e no vale do Ferreira, com carvalhais, sobreirais e galerias ripícolas. Os fojos resultam da exploração aurífera de vários povos, sobretudo dos romanos, no século I, e a mineração marcou o povoamento e a rede viária do território.
+
+O Parque Paleozóico de Valongo, inaugurado em 14 de Dezembro de 1998 por um projecto da Câmara Municipal de Valongo e da Faculdade de Ciências da Universidade do Porto, serve para conhecer e preservar as jazidas fossilíferas e a fauna e flora endémicas, e tem percursos pedestres pelos fojos, minas, moinhos, Fragas do Castelo e Couce. O Centro de Interpretação Ambiental, junto ao Fojo das Pombas, abre por marcação. Em 2008 abriu o percurso Corredor Ecológico, que liga o centro da cidade ao coração das serras, e a aldeia de Couce foi classificada como Aldeia de Portugal. Pratica-se pedestrianismo, escalada, espeleologia, BTT e corrida em montanha.
+
+Os terrenos são públicos (menos de 2% em Valongo) e sobretudo privados, e quase todos estão em Reserva Ecológica Nacional. No PDM de Valongo, revisto em 2015, cerca de 80% é espaço florestal de conservação, e o município classificou 1070,27 ha como Paisagem Protegida Local. Em Março de 2017 as serras de Santa Justa, Pias, Castiçal, Santa Iria, Flores e Banjas, com cerca de 6000 ha, passaram a Paisagem Protegida Regional, o Parque das Serras do Porto, gerido por uma associação dos municípios de Valongo, Gondomar e Paredes, com sede em Valongo.
+
+As ameaças são o abandono do pastoreio, a florestação com pinheiro-bravo e eucalipto por empresas de celulose, que empobrece a biodiversidade e aumenta o risco de incêndio e de erosão, as acácias, as motorizadas em locais não licenciados, a recolha de espécimes, os lixos, a poluição dos cursos de água e a pressão urbanística nas faldas. Desde 2007 a Câmara combate as espécies exóticas e refloresta com espécies autóctones, no projecto «100 000 árvores na AMP», com mais de oito mil árvores e arbustos plantados até à primavera de 2014, e mantém sapadores florestais. Sugere-se despoluir os rios Ferreira e Sousa, continuar a reflorestação com autóctones, prevenir incêndios, identificar e salvaguardar os habitats prioritários e preservar o património cultural das serras.

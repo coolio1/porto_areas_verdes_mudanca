@@ -1,7 +1,7 @@
 ---
 slug: quinta-do-mosteiro
 fontes_usadas: [pdf-2014-2016-camada-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Quinta do Mosteiro, em Moreira da Maia, tem cerca de 21,2 ha e está encostada ao Mosteiro de São Salvador de Moreira, no Alto do Padrão da Maia, a cerca de 100 m da EN13. É uma grande propriedade com tradição agrícola, aliada à religiosidade do mosteiro, e alberga relvados, japoneiras, buxos, laranjeiras, canteiros floridos, lagos e um grande tanque de pedra.

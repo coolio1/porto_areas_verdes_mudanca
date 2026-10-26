@@ -1,7 +1,7 @@
 ---
 slug: zona-verde-circundante-ao-rio-leca
 fontes_usadas: [pdf-2014-2016-camada-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-cidadaos]
-revisto: false
+revisto: true
 ---
 
 A zona verde circundante ao Rio Leça, em Águas Santas, tem cerca de 20 ha, contando a parte do concelho vizinho de Matosinhos, e inclui os lugares de Parada e Venal, a jusante da Ponte de Parada, Boi-Morto e o Parque de Infesta, junto à fábrica de massas. O Venal e o Monte de Infesta são terrenos de encosta atravessados pelo rio. O lugar de Parada tem terrenos marginais com bosque de carvalhos, sobreiros, eucaliptos e espécies ripícolas e uma rica avifauna, incluindo aquática. O Boi-Morto tem elevado valor patrimonial e paisagístico, com casas rurais, campos agrícolas e áreas florestais ao longo do Ribeiro do Boi-Morto, que desagua no Leça. Junto ao rio há campos cultivados e pequenas hortas de hortícolas para venda, com ramadas de videiras, árvores de fruto dispersas e milho; o património associado à agricultura é muito rico, com celeiros, espigueiros, muros e casas rurais.

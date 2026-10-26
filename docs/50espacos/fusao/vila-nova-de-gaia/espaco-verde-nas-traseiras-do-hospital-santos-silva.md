@@ -1,7 +1,7 @@
 ---
 slug: espaco-verde-nas-traseiras-do-hospital-santos-silva
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O espaço verde nas traseiras do Hospital Santos Silva, em Vilar de Andorinho, é uma pequena área florestal de cerca de 20,9 ha nos terrenos do hospital, junto à unidade de tratamento de resíduos hospitalares. Predominam sobreiros, carvalhos-comuns e pinheiros; há pombos-torcazes e pegas, e vestígios de esquilos, coelhos e passeriformes.

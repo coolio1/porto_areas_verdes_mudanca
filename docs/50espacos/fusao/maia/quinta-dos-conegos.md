@@ -1,7 +1,7 @@
 ---
 slug: quinta-dos-conegos
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Quinta dos Cónegos, na Maia, tem cerca de 22 ha e foi a quinta de recreio dos bispos do Porto. Tem um solar do século XVIII com jardins, fontes monumentais e ermidas, e é considerada uma das mais belas moradas dos arredores do Porto, integrada nos chamados Jardins da Maia. Os chafarizes e a estatuária são possivelmente de Nicolau Nasoni. Está envolvida por árvores, com tufos de tílias, pomares, relvados amplos e biombos de arvoredo, e tem hoje campos de ténis e piscina em declives relvados. A casa tem uma capela particular da Sagrada Família, de 1781, escadaria, varanda e uma fonte com um dragão, e guardou durante muito tempo uma colecção de mobiliário, pintura, tapeçarias e porcelanas; em 2004 foi restaurado o retábulo de talha dourada da capela.

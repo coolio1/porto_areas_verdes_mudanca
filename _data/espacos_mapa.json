@@ -18,6 +18,42 @@
   "concelho": "porto"
  },
  {
+  "slug": "arboreto-da-escola-eb2-de-canelas",
+  "titulo": "Arboreto da Escola EB2 de Canelas",
+  "lat": 41.08,
+  "lon": -8.6,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "area-adjacente-ao-parque-biologico-de-gaia",
+  "titulo": "Área adjacente ao Parque Biológico de Gaia",
+  "lat": 41.1,
+  "lon": -8.56,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "barrinha-de-esmoriz-e-lagoa-de-paramos-belp",
+  "titulo": "Barrinha de Esmoriz e Lagoa de Paramos (BELP)",
+  "lat": 40.96,
+  "lon": -8.65,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "espinho"
+ },
+ {
+  "slug": "bicha-das-sete-cabecas",
+  "titulo": "Bicha das Sete Cabeças",
+  "lat": 41.0,
+  "lon": -8.63,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "espinho"
+ },
+ {
   "slug": "caminhos-do-romantico",
   "titulo": "Caminhos do Romântico",
   "lat": 41.15,
@@ -25,6 +61,15 @@
   "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
   "seleccionado": true,
   "concelho": "porto"
+ },
+ {
+  "slug": "campos-de-masseira",
+  "titulo": "Campos de Masseira",
+  "lat": 41.45,
+  "lon": -8.77,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "povoa-de-varzim"
  },
  {
   "slug": "casa-da-familia-robinson",
@@ -36,6 +81,105 @@
   "concelho": "porto"
  },
  {
+  "slug": "castro-de-ovil",
+  "titulo": "Castro de Ovil",
+  "lat": 40.98,
+  "lon": -8.62,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "espinho"
+ },
+ {
+  "slug": "cavadas",
+  "titulo": "Cavadas",
+  "lat": 41.35,
+  "lon": -8.67,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-do-conde"
+ },
+ {
+  "slug": "dunas-de-mira",
+  "titulo": "Dunas de Mira",
+  "lat": 41.06,
+  "lon": -8.65,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "encostas-declivosas-do-rio-douro",
+  "titulo": "Encostas declivosas do rio Douro",
+  "lat": 41.07,
+  "lon": -8.51,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "envolvente-do-largo-da-ermida-em-s-mamede-de-infesta",
+  "titulo": "Envolvente do largo da Ermida em S. Mamede de Infesta",
+  "lat": 41.2,
+  "lon": -8.61,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "matosinhos"
+ },
+ {
+  "slug": "espaco-centoecatorze",
+  "titulo": "Espaço centoecatorze",
+  "lat": 41.21,
+  "lon": -8.63,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "matosinhos"
+ },
+ {
+  "slug": "espaco-verde-abandonado-em-s-mamede-de-infesta",
+  "titulo": "Espaço verde abandonado em S. Mamede de Infesta",
+  "lat": 41.19,
+  "lon": -8.63,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "matosinhos"
+ },
+ {
+  "slug": "espaco-verde-nas-traseiras-do-hospital-santos-silva",
+  "titulo": "Espaço verde nas traseiras do Hospital Santos Silva",
+  "lat": 41.1,
+  "lon": -8.59,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "estrada-da-circunvalacao",
+  "titulo": "Estrada da Circunvalação",
+  "lat": 41.18,
+  "lon": -8.63,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "matosinhos"
+ },
+ {
+  "slug": "futuro-parque-da-cidade-de-rio-tinto",
+  "titulo": "Futuro Parque da Cidade de Rio Tinto",
+  "lat": 41.17,
+  "lon": -8.56,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "gruta-da-lomba-e-picadela",
+  "titulo": "Gruta da Lomba e Picadela",
+  "lat": 41.01,
+  "lon": -8.61,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "espinho"
+ },
+ {
   "slug": "jardim-de-espaco-canal",
   "titulo": "Jardim de Espaço Canal",
   "lat": 41.16,
@@ -43,6 +187,15 @@
   "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
   "seleccionado": false,
   "concelho": "porto"
+ },
+ {
+  "slug": "jardim-dos-capuchinhos",
+  "titulo": "Jardim dos Capuchinhos",
+  "lat": 41.15,
+  "lon": -8.53,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "gondomar"
  },
  {
   "slug": "jardim-junto-a-vci",
@@ -63,6 +216,159 @@
   "concelho": "porto"
  },
  {
+  "slug": "lugar-de-taim",
+  "titulo": "Lugar de Taím",
+  "lat": 41.25,
+  "lon": -8.58,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "mae-de-agua",
+  "titulo": "Mãe de Água",
+  "lat": 41.29,
+  "lon": -8.62,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "margem-do-rio-douro-entre-a-ponte-d-maria-pia-e-a-ponte-do-freixo",
+  "titulo": "Margem do rio Douro entre a ponte D. Maria Pia e a Ponte do Freixo",
+  "lat": 41.14,
+  "lon": -8.59,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "margem-do-rio-douro-entre-o-parque-de-campismo-e-o-lugar-da-varziela",
+  "titulo": "Margem do rio Douro entre o Parque de Campismo e o lugar da Varziela",
+  "lat": 41.06,
+  "lon": -8.42,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "margens-do-rio-leca-em-alfena",
+  "titulo": "Margens do rio Leça em Alfena",
+  "lat": 41.23,
+  "lon": -8.53,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "valongo"
+ },
+ {
+  "slug": "mata-da-acheira",
+  "titulo": "Mata da Acheira",
+  "lat": 41.13,
+  "lon": -8.55,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "mata-de-sobreiros",
+  "titulo": "Mata de Sobreiros",
+  "lat": 41.16,
+  "lon": -8.52,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "matas-da-rua-de-friaes",
+  "titulo": "Matas da Rua de Friães",
+  "lat": 41.25,
+  "lon": -8.57,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "monte-crasto",
+  "titulo": "Monte Crasto",
+  "lat": 41.14,
+  "lon": -8.54,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "monte-da-caverneira",
+  "titulo": "Monte da Caverneira",
+  "lat": 41.2,
+  "lon": -8.58,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "monte-da-pinta",
+  "titulo": "Monte da Pinta",
+  "lat": 41.34,
+  "lon": -8.65,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-do-conde"
+ },
+ {
+  "slug": "monte-da-virgem",
+  "titulo": "Monte da Virgem",
+  "lat": 41.1,
+  "lon": -8.59,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "monte-de-s-felix",
+  "titulo": "Monte de S. Félix",
+  "lat": 41.43,
+  "lon": -8.71,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "povoa-de-varzim"
+ },
+ {
+  "slug": "monte-de-s-miguel-o-anjo",
+  "titulo": "Monte de S. Miguel-o-Anjo",
+  "lat": 41.25,
+  "lon": -8.53,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "maia"
+ },
+ {
+  "slug": "monte-de-santa-cruz",
+  "titulo": "Monte de Santa Cruz",
+  "lat": 41.25,
+  "lon": -8.6,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "monte-de-santo-antonio",
+  "titulo": "Monte de Santo António",
+  "lat": 41.26,
+  "lon": -8.58,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "monte-de-santo-ovideo",
+  "titulo": "Monte de Santo Ovídeo",
+  "lat": 41.32,
+  "lon": -8.68,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-do-conde"
+ },
+ {
   "slug": "monte-do-forte",
   "titulo": "Monte do Forte",
   "lat": 41.15,
@@ -70,6 +376,60 @@
   "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
   "seleccionado": false,
   "concelho": "porto"
+ },
+ {
+  "slug": "monte-goncalao",
+  "titulo": "Monte Gonçalão",
+  "lat": 41.27,
+  "lon": -8.54,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "monte-grande-ou-de-santa-eufemia",
+  "titulo": "Monte Grande ou de Santa Eufémia",
+  "lat": 41.29,
+  "lon": -8.62,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-do-conde"
+ },
+ {
+  "slug": "monte-murado",
+  "titulo": "Monte Murado",
+  "lat": 41.06,
+  "lon": -8.57,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "monte-penedo",
+  "titulo": "Monte Penedo",
+  "lat": 41.22,
+  "lon": -8.58,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "monte-senhora-da-hora",
+  "titulo": "Monte Senhora da Hora",
+  "lat": 41.24,
+  "lon": -8.58,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "montes-caulinos",
+  "titulo": "Montes Caulinos",
+  "lat": 41.19,
+  "lon": -8.65,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "matosinhos"
  },
  {
   "slug": "morro-das-mimosas",
@@ -81,6 +441,87 @@
   "concelho": "porto"
  },
  {
+  "slug": "nucleo-de-moinhos-da-varzea",
+  "titulo": "Núcleo de Moinhos da Várzea",
+  "lat": 41.24,
+  "lon": -8.6,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "nucleo-de-moinhos-do-arquinho",
+  "titulo": "Núcleo de Moinhos do Arquinho",
+  "lat": 41.21,
+  "lon": -8.6,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "nucleo-rural-de-cidadelha",
+  "titulo": "Núcleo rural de Cidadelha",
+  "lat": 41.27,
+  "lon": -8.59,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "nucleo-rural-de-frejufe",
+  "titulo": "Núcleo Rural de Frejufe",
+  "lat": 41.25,
+  "lon": -8.59,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "nucleo-rural-de-mandim",
+  "titulo": "Núcleo rural de Mandim",
+  "lat": 41.25,
+  "lon": -8.62,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "nucleos-de-moinhos-de-alvura",
+  "titulo": "Núcleos de Moinhos de Alvura",
+  "lat": 41.21,
+  "lon": -8.59,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "maia"
+ },
+ {
+  "slug": "paisagem-protegida-regional-do-litoral-de-vila-do-conde-e-reserva-ornitologica-do-mindelo",
+  "titulo": "Paisagem Protegida Regional do Litoral de Vila do Conde e Reserva Ornitológica do Mindelo",
+  "lat": 41.31,
+  "lon": -8.73,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-do-conde"
+ },
+ {
+  "slug": "parque-da-vessada",
+  "titulo": "Parque da Vessada",
+  "lat": 41.22,
+  "lon": -8.59,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "parque-dos-maninhos",
+  "titulo": "Parque dos Maninhos",
+  "lat": 41.23,
+  "lon": -8.61,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
   "slug": "parque-e-cemiterio-da-igreja-de-saint-james-cemiterio-ingles",
   "titulo": "Parque e cemitério da Igreja de Saint James (Cemitério Inglês)",
   "lat": 41.15,
@@ -88,6 +529,15 @@
   "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
   "seleccionado": false,
   "concelho": "porto"
+ },
+ {
+  "slug": "parque-germano-vieira",
+  "titulo": "Parque Germano Vieira",
+  "lat": 41.21,
+  "lon": -8.61,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
  },
  {
   "slug": "parque-oriental",
@@ -126,6 +576,15 @@
   "concelho": "porto"
  },
  {
+  "slug": "quinta-da-alema",
+  "titulo": "Quinta da Alemã",
+  "lat": 41.11,
+  "lon": -8.6,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
   "slug": "quinta-da-bouca",
   "titulo": "Quinta da Bouça",
   "lat": 41.16,
@@ -153,6 +612,24 @@
   "concelho": "porto"
  },
  {
+  "slug": "quinta-da-fonte-formosa-ou-quinta-da-boucinha",
+  "titulo": "Quinta da Fonte Formosa (ou Quinta da Boucinha)",
+  "lat": 41.11,
+  "lon": -8.6,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "quinta-da-formiga",
+  "titulo": "Quinta da Formiga",
+  "lat": 41.04,
+  "lon": -8.43,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "gondomar"
+ },
+ {
   "slug": "quinta-da-prelada",
   "titulo": "Quinta da Prelada",
   "lat": 41.17,
@@ -171,6 +648,42 @@
   "concelho": "porto"
  },
  {
+  "slug": "quinta-de-soeime",
+  "titulo": "Quinta de Soeime",
+  "lat": 41.1,
+  "lon": -8.58,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "quinta-do-carreiro",
+  "titulo": "Quinta do Carreiro",
+  "lat": 41.06,
+  "lon": -8.45,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "quinta-do-dr-lage",
+  "titulo": "Quinta do Dr. Lage",
+  "lat": 41.22,
+  "lon": -8.55,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "valongo"
+ },
+ {
+  "slug": "quinta-do-eng-carvalho-pinhal-do-meneres",
+  "titulo": "Quinta do Eng. Carvalho (Pinhal do Menéres)",
+  "lat": 41.36,
+  "lon": -8.75,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-do-conde"
+ },
+ {
   "slug": "quinta-do-monte",
   "titulo": "Quinta do Monte",
   "lat": 41.15,
@@ -178,6 +691,60 @@
   "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
   "seleccionado": false,
   "concelho": "porto"
+ },
+ {
+  "slug": "quinta-do-mosteiro",
+  "titulo": "Quinta do Mosteiro",
+  "lat": 41.24,
+  "lon": -8.65,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "quinta-do-mosteiro-de-grijo",
+  "titulo": "Quinta do Mosteiro de Grijó",
+  "lat": 41.03,
+  "lon": -8.58,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "quinta-do-mosteiro-de-pedroso",
+  "titulo": "Quinta do Mosteiro de Pedroso",
+  "lat": 41.06,
+  "lon": -8.56,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "quinta-dos-ananases",
+  "titulo": "Quinta dos Ananases",
+  "lat": 41.07,
+  "lon": -8.63,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "quinta-dos-condes-paco-vitorino-ou-quinta-de-baixo",
+  "titulo": "Quinta dos Condes Paço Vitorino (ou Quinta de Baixo)",
+  "lat": 41.11,
+  "lon": -8.58,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "quinta-dos-conegos",
+  "titulo": "Quinta dos Cónegos",
+  "lat": 41.23,
+  "lon": -8.63,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "maia"
  },
  {
   "slug": "quinta-dos-frades-menores-capuchinhos",
@@ -189,6 +756,42 @@
   "concelho": "porto"
  },
  {
+  "slug": "quinta-dos-passais-ou-quinta-do-paco",
+  "titulo": "Quinta dos Passais (ou Quinta do Paço)",
+  "lat": 41.13,
+  "lon": -8.65,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "quinta-marques-gomes",
+  "titulo": "Quinta Marques Gomes",
+  "lat": 41.14,
+  "lon": -8.65,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "quintas-e-campos-agricolas-em-aguas-santas",
+  "titulo": "Quintas e campos agrícolas em Águas Santas",
+  "lat": 41.2,
+  "lon": -8.57,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "reserva-natural-local-do-estuario-do-douro-cabedelo",
+  "titulo": "Reserva Natural Local do Estuário do Douro - Cabedelo",
+  "lat": 41.14,
+  "lon": -8.67,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
   "slug": "ribeira-da-granja",
   "titulo": "Ribeira da Granja",
   "lat": 41.16,
@@ -198,6 +801,159 @@
   "concelho": "porto"
  },
  {
+  "slug": "ribeira-de-longras-ou-campelos-a-designacao-e-controversa",
+  "titulo": "Ribeira de Longras (ou Campelos). A designação é controversa.",
+  "lat": 41.07,
+  "lon": -8.44,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "ribeira-de-melres",
+  "titulo": "Ribeira de Melres",
+  "lat": 41.07,
+  "lon": -8.4,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "ribeira-de-paincais",
+  "titulo": "Ribeira de Painçais",
+  "lat": 41.06,
+  "lon": -8.44,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "ribeira-de-tabaos",
+  "titulo": "Ribeira de Tabãos",
+  "lat": 41.23,
+  "lon": -8.51,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "valongo"
+ },
+ {
+  "slug": "ribeira-de-vila-cova-ou-de-rebentao",
+  "titulo": "Ribeira de Vila Cova (ou de Rebentão)",
+  "lat": 41.07,
+  "lon": -8.45,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "rio-febros",
+  "titulo": "Rio Febros",
+  "lat": 41.08,
+  "lon": -8.54,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "rio-ferreira",
+  "titulo": "Rio Ferreira",
+  "lat": 41.11,
+  "lon": -8.5,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "rio-leca-e-a-ribeira-do-arquinho",
+  "titulo": "Rio Leça e à Ribeira do Arquinho",
+  "lat": 41.21,
+  "lon": -8.6,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "maia"
+ },
+ {
+  "slug": "rio-sousa",
+  "titulo": "Rio Sousa",
+  "lat": 41.09,
+  "lon": -8.51,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "rio-torto",
+  "titulo": "Rio Torto",
+  "lat": 41.19,
+  "lon": -8.53,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "rio-uima",
+  "titulo": "Rio Uíma",
+  "lat": 41.06,
+  "lon": -8.49,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "serra-de-negrelos-ou-serra-de-canelas",
+  "titulo": "Serra de Negrelos (ou Serra de Canelas)",
+  "lat": 41.07,
+  "lon": -8.59,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
+  "slug": "serra-de-santa-justa-pias-e-castical",
+  "titulo": "Serra de Santa Justa, Pias e Castiçal",
+  "lat": 41.16,
+  "lon": -8.48,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "valongo"
+ },
+ {
+  "slug": "sorte-da-lameira",
+  "titulo": "Sorte da Lameira",
+  "lat": 41.05,
+  "lon": -8.38,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "terrenos-do-ex-sanatorio-montalto",
+  "titulo": "Terrenos do Ex-Sanatório Montalto",
+  "lat": 41.18,
+  "lon": -8.51,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "terrenos-florestais-junto-ao-aerodromo-municipal-de-vilar-da-luz",
+  "titulo": "Terrenos florestais junto ao Aeródromo Municipal de Vilar da Luz",
+  "lat": 41.27,
+  "lon": -8.52,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "maia"
+ },
+ {
+  "slug": "vale-das-devesas",
+  "titulo": "Vale das Devesas",
+  "lat": 41.13,
+  "lon": -8.61,
+  "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "vila-nova-de-gaia"
+ },
+ {
   "slug": "villa-monte-crasto",
   "titulo": "Villa Monte Crasto",
   "lat": 41.16,
@@ -205,5 +961,32 @@
   "origem_coord": "ficha 2006–2008 (WGS84, 2 casas decimais)",
   "seleccionado": false,
   "concelho": "porto"
+ },
+ {
+  "slug": "zona-agricola-em-s-mamede-de-infesta",
+  "titulo": "Zona agrícola em S. Mamede de Infesta",
+  "lat": 41.19,
+  "lon": -8.61,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": true,
+  "concelho": "matosinhos"
+ },
+ {
+  "slug": "zona-agricola-em-sao-cosme",
+  "titulo": "Zona agrícola em São Cosme",
+  "lat": 41.14,
+  "lon": -8.53,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "gondomar"
+ },
+ {
+  "slug": "zona-rural-do-monte-espinho",
+  "titulo": "Zona rural do Monte Espinho",
+  "lat": 41.21,
+  "lon": -8.69,
+  "origem_coord": "Webnode da campanha (WGS84, 2 casas decimais)",
+  "seleccionado": false,
+  "concelho": "matosinhos"
  }
 ]

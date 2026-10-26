@@ -1,7 +1,7 @@
 ---
 slug: cavadas
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-cidadaos]
-revisto: false
+revisto: true
 ---
 
 Cavadas é um troço do Rio Ave, em Macieira da Maia, com cerca de 1000 ha, onde se junta uma floresta ribeirinha bem conservada, de salgueiros e amieiros, com campos de milho, um açude, moinhos de água e uma ponte medieval. Nas vertentes, tanto do lado de Macieira como do de Bagunte, há floresta mista de eucalipto, pinheiro-bravo e alguns carvalhos, e campos agrícolas em socalcos do lado de Bagunte. Registaram-se cinco espécies de morcegos, entre elas o morcego-negro (Barbastella barbastellus), uma das mais raras da Europa, associada a bosques maduros autóctones, e várias aves.

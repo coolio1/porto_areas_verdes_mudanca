@@ -1,7 +1,7 @@
 ---
 slug: castro-de-ovil
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 O Castro de Ovil é um povoado da Idade do Ferro, em Paramos, no sopé de uma colina sobre a Ribeira de Rio Maior, que desagua na Barrinha de Esmoriz. O sítio arqueológico tem cerca de 2 ha e, com a área adjacente, chega aos 25 ha. É uma área de floresta e de vegetação ribeirinha, em terreno xistoso e argiloso, com choupos, amieiros, sobreiros, salgueiros, ulmeiros, carvalhos, pinheiro-bravo e eucalipto, onde crescem espontaneamente fetos e tojos. A mata protege as terras interiores dos ventos de Noroeste, e a fauna mais visível é a dos passeriformes comuns.

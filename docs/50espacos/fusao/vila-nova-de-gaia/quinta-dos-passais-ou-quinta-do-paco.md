@@ -1,7 +1,7 @@
 ---
 slug: quinta-dos-passais-ou-quinta-do-paco
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Quinta dos Passais, ou do Paço, em Canidelo, tem cerca de 11,7 ha e características eminentemente agrícolas. Parte está em exploração de agricultura biológica, como viveiro de plantas aromáticas. Há gaviões, águia-de-asa-redonda, corujas, noitibós, garça-real e passeriformes, coelhos, raposas e esquilos, e um pequeno ribeiro; crescem loureiros, choupos, pinheiros-mansos e carvalhos.

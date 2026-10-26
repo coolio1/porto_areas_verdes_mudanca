@@ -1,7 +1,7 @@
 ---
 slug: monte-de-santa-cruz
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Monte de Santa Cruz, em Barca, tem cerca de 25,5 ha e é um lugar de povoamento antigo, de culto e romaria, lazer e miradouro. Sobe-se do lado poente, da Capela do Calvário, até ao alto pela Avenida Senhor de Santa Cruz. A capela de Santa Cruz, de 1693, a meia encosta (110 m), tem fachada neoclássica com elementos tardo-barrocos revestida de azulejo, e o adro, em cubo de granito, tem plátanos, carvalhos e ácer, e um relvado com árvores de porte. Da zona nascente vê-se a paisagem agrícola, florestal e habitada. Na encosta íngreme dominam os eucaliptos e no sopé corre o Rio Almorode.

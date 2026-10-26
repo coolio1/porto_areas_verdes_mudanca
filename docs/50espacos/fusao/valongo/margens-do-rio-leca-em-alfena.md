@@ -1,7 +1,7 @@
 ---
 slug: margens-do-rio-leca-em-alfena
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 As margens do Rio Leça em Alfena são um vale agrícola de cerca de 57 ha, com campos cultivados, pequenas hortas, vinha em bardos, prados de Inverno e árvores de fruto dispersas, onde o rio entra no concelho de Valongo. A Câmara Municipal de Valongo sugeriu em 2014 prolongar o espaço até ao Parque Socer, em Ermesinde, chamar-lhe «Margens do Rio Leça em Alfena e Ermesinde, entre o Parque de São Lázaro e o Parque de Socer» e delimitá-lo com cerca de 90 ha de espaço agrícola e 7,3 ha de equipamentos.

@@ -1,7 +1,7 @@
 ---
 slug: quinta-dos-condes-paco-vitorino-ou-quinta-de-baixo
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 A Quinta dos Condes Paço Vitorino, ou Quinta de Baixo, em Vilar de Andorinho, tem cerca de 13,9 ha de quinta agrícola, hoje com um elevado grau de abandono. Tem araucária, loureiros, carvalhos, acácia, camélia e choupos, mas a imagem de satélite mostra que a vegetação arbórea se reduz a poucos exemplares; vivem aqui pegas, rolas, pardais, piscos-de-peito-ruivo, andorinhas-dos-beirais, milhafres-pretos, raposas, coelhos-bravos, ouriços-cacheiros, esquilos e aves de rapina.

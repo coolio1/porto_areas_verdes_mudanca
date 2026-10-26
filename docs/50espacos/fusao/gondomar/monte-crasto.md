@@ -1,7 +1,7 @@
 ---
 slug: monte-crasto
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 O Monte Crasto, em São Cosme, é um espaço verde de 6,6 ha numa elevação de 194 m no centro da cidade de Gondomar, com bela panorâmica sobre o Douro e o Porto. Geomorfologicamente é um inselberg, ou monte-ilha, testemunho de tempos geológicos de clima quente e seco. É um espaço de recreio com elementos românticos, grutas e canteiros, e árvores variadas, como carvalho-alvarinho, sobreiro, ciprestes e pinheiros; a fauna é de passeriformes comuns.

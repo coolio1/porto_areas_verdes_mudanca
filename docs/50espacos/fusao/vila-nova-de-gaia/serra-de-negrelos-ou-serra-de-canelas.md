@@ -1,7 +1,7 @@
 ---
 slug: serra-de-negrelos-ou-serra-de-canelas
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 A Serra de Negrelos, em Canelas e Perosinho, no centro do concelho, tem cerca de 200 ha e é uma formação granítica de declives acentuados que atinge cerca de 243 m, limitada a oeste pela A1. Com o Monte da Senhora da Saúde forma a linha de festo que separa o litoral do interior do concelho, e aqui nascem a Ribeira de Canelas e a Ribeira da Granja. Considerada por muitos o «pulmão de Gaia», protege as terras agrícolas dos ventos marítimos e é um miradouro sobre o Atlântico. O coberto é de pinheiros, eucaliptos e acácias, com castanheiros, sobreiros e carvalhos-alvarinho, e vivem aqui esquilos, doninhas, coelhos, raposas, gaviões, águia-de-asa-redonda, corujas, peto-verde e garça-real. Há uma rede de minas de água, presas e pequenos aquedutos, que poderia fazer da serra um museu natural da água.

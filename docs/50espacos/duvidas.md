@@ -39,3 +39,5 @@ Todos os textos novos estão em `docs/50espacos/fusao/<concelho>/` com `revisto:
 - [ ] **Gaia**: o Arboreto da EB2 de Canelas já não existe (obras da Parque Escolar); texto no passado. Decidir se mantém ficha.
 - [ ] **Media**: 119 MB para os 111 espaços (`50espacos/media/`); o repositório cresce. Avaliar se se reduz a resolução.
 - [ ] **Bug corrigido**: `copiar_media` duplicava fotos (`-2`) ao voltar a correr; agora é idempotente (teste novo).
+- [ ] **Zona verde circundante ao Rio Leça (Maia)**: sem coordenadas em nenhuma fonte; tem página mas não aparece no mapa. Indicar um ponto.
+- [ ] **Publicação sem revisão (2026-10-26)**: os 88 textos foram publicados com `revisto: true` por indicação do utilizador, sem revisão prévia. Rever no ar.

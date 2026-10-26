@@ -1,7 +1,7 @@
 ---
 slug: nucleo-de-moinhos-do-arquinho
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O núcleo de moinhos do Arquinho, em Milheirós, tem cerca de 11,5 ha e é um conjunto de moinhos e casas rurais no lugar do Arquinho, atravessado pela ribeira de Almorode (aqui chamada Ribeira do Arquinho), com uma nascente, um lavadouro público e duas pontes, uma pedonal e uma viária. Na bacia de 33 km² e 11 km de percurso, a ribeira nasce em São Pedro de Avioso e desagua no Leça, em Águas Santas. Continua poluída, mas mantém uma boa galeria ripícola de amieiros e salgueiros, com baldios, campos agrícolas e eucaliptais nas margens, carvalhos, sobreiros, choupos, fetos, tábuas, juncos, e fauna como o cartaxo, o chapim, o gaio, o lagarto-de-água, a salamandra, o pimpão e a rã-verde. Há outros moinhos desactivados a montante: Moutelo, em São Pedro de Avioso, Calquim e Porto Bom, em Gondim, e os da Várzea, em Vermoim.

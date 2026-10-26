@@ -1,7 +1,7 @@
 ---
 slug: quinta-de-soeime
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-cidadaos]
-revisto: false
+revisto: true
 ---
 
 A Quinta do Soeime, em Vilar de Andorinho, tem cerca de 32 ha de quinta agrícola e espaço verde, com um pequeno ribeiro afluente do Rio Febros. Tem camélias, palmeiras, castanheiros, pinheiros, carvalhos, cedros, azevinhos, faias, plátanos, medronheiros, árvores de fruto e uma bananeira, e fauna de chamariz, pega, rola, milhafre-preto, raposa, coelho-bravo, ouriço-cacheiro, esquilo e aves de rapina. Os caminhos rurais dão acesso a campos de grande potencial agrícola, com espigueiros.

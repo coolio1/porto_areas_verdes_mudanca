@@ -1,7 +1,7 @@
 ---
 slug: monte-de-s-felix
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial]
-revisto: false
+revisto: true
 ---
 
 O Monte de S. Félix, com 202 m, é o ponto mais alto da Serra de Rates e do concelho da Póvoa de Varzim. Ocupa cerca de 52 ha nas freguesias de Laúndos e Rates e destaca-se na paisagem como uma elevação sobre a planície litoral, com vista sobre a cidade e as praias.

@@ -1,7 +1,7 @@
 ---
 slug: monte-senhora-da-hora
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O Monte da Senhora da Hora, em Nogueira da Maia, tem cerca de 9,5 ha, a 100 m de altitude, sobranceiro à A42, e é miradouro e lugar de romaria a Nossa Senhora da Hora. Era uma extensa zona de mato, tojo e giestas e foi requalificado em 2005, com caminhos de pedra, vegetação escolhida para o terreno, bancos e pequenos jardins geométricos. Um escadório ladeado por uma alameda de choupos, com cruzeiros e uma capela alusivos à Via Sacra, termina no adro da igreja, em cubo de granito e rodeado de magnólias. Há ainda uma plataforma-miradouro virada ao mar, com bairros e restos de campos agrícolas em primeiro plano. O cimo do monte mantém o aspecto natural, com afloramentos rochosos cobertos de urzes e tojos e uma recente plantação de pinheiro-manso. Na encosta nascente, onde nasce o Regato da Pena, havia extensos campos agrícolas, entretanto destruídos por habitações.

@@ -1,7 +1,7 @@
 ---
 slug: lugar-de-taim
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O lugar de Taím, em Silva Escura, é um extenso vale de campos agrícolas de cerca de 75 ha, com prados de forragem para o gado no Inverno e milho no Verão. Nas cotas altas domina o eucaliptal; nos limites dos campos, em cota baixa, há pequenos bosques de carvalhos e raros castanheiros, e existe um pequeno moinho. A freguesia foi no passado uma densa zona florestal, de pinheiro e castanheiro, como mostram o brasão e o nome: «silva» tinha o sentido de bosque e «escura» alude à densidade do coberto. O Monte de Santo António e os lugares de Friães, Devesa, Taím e Frejufe formam um mesmo ecossistema nas margens da Ribeira de Silva Escura, hoje encanada, um dos principais afluentes da Ribeira do Arquinho.

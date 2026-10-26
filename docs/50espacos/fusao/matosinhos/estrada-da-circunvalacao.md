@@ -1,7 +1,7 @@
 ---
 slug: estrada-da-circunvalacao
 fontes_usadas: [pdf-2014-2016-camada-2006-2008, pdf-2014-2016-camada-campo-aberto]
-revisto: false
+revisto: true
 ---
 
 A Estrada da Circunvalação (EN12) percorre 16 km e é, na maior parte do trajecto, a fronteira entre o Porto e os concelhos de Matosinhos, Maia, Valongo e Gondomar, passando por Aldoar, Paranhos, Ramalde, Campanhã, Senhora da Hora, Custóias, São Mamede de Infesta, Águas Santas, Ermesinde e Rio Tinto. O espaço em causa são as árvores que existem entre as faixas de rodagem e os passeios, com cerca de 123 ha: servem de pulmão verde e de cortina arbórea a uma via de tráfego intenso, acima da capacidade para que foi projectada, e formam um corredor ecológico ao longo de toda a sua extensão. Há também matas de sobreiros na envolvência da estrada e do Parque da Cidade, junto ao limite com Matosinhos.

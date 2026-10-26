@@ -1,7 +1,7 @@
 ---
 slug: nucleo-rural-de-frejufe
 fontes_usadas: [ficha-2006-2008]
-revisto: false
+revisto: true
 ---
 
 O núcleo rural de Frejufe, em Silva Escura, é uma paisagem rural extensa, de cerca de 25 ha, desde sempre ligada à agricultura, com campos de milho e de forragem para o gado e algumas vacarias nas proximidades. Faz parte do mesmo ecossistema que o Monte de Santo António e os lugares de Friães, Devesa e Taím, nas margens da Ribeira de Silva Escura, hoje encanada, um dos principais afluentes do Rio Almorode.

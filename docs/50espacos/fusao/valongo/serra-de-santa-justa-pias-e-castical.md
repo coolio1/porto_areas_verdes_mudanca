@@ -1,7 +1,7 @@
 ---
 slug: serra-de-santa-justa-pias-e-castical
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, pdf-2014-2016-camada-ultima-hora]
-revisto: false
+revisto: true
 ---
 
 As Serras de Santa Justa, Pias e Castiçal, com cerca de 1250 a 1416 ha, conforme a delimitação, são o «pulmão» da Área Metropolitana do Porto. Estendem-se por Valongo, Gondomar e Paredes, separadas pelo vale do Rio Ferreira, afluente do Sousa, onde há moinhos, a aldeia de Couce, vestígios de povoados ligados à mineração, fragas e nascentes. Pertencem a um anticlinal de xisto, uma «ilha de xisto» entre os maciços rochosos da região.

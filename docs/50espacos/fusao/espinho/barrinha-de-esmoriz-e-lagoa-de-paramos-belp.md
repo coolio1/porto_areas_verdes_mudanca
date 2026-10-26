@@ -1,7 +1,7 @@
 ---
 slug: barrinha-de-esmoriz-e-lagoa-de-paramos-belp
 fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-camada-campo-aberto, pdf-2014-2016-camada-cidadaos]
-revisto: false
+revisto: true
 ---
 
 A Barrinha de Esmoriz, ou Lagoa de Paramos, é a zona húmida mais significativa do litoral Norte de Portugal, entre a ria de Aveiro e o estuário do Minho. É uma lagoa costeira de média dimensão, com uma cintura de vegetação ribeirinha bem desenvolvida e bancos de lodo, que comunica com o Atlântico por um canal e é alimentada por duas linhas de água: a Ribeira de Rio Maior ou vala de Paramos, a norte, e a vala de Maceda, a sul. Em redor há pinhal, bosques ribeirinhos, dunas e praia, campos agrícolas e construções. A área chega aos 173 ha, contando a parte do concelho de Ovar; a Câmara Municipal de Espinho propôs em 2014 uma delimitação de cerca de 154 ha.
