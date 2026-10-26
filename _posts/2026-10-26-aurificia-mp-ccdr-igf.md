@@ -20,6 +20,7 @@ Tudo o que se segue é o que esses textos sustentam, com base em documentos do p
 | [Ministério Público]({{ site.baseurl }}/assets/pdfs/aurificia-pronuncia-mp-2026-10-12.pdf) (Procuradoria junto do Tribunal Administrativo e Fiscal do Porto, processo 63/26.9BXPRT) | 12 de Outubro | Que proponha a declaração de nulidade da informação prévia e dos projectos aprovados e requeira, com urgência, uma providência cautelar que impeça trabalhos de escavação, demolição ou construção. |
 | [CCDR Norte (Unidade de Cultura) e Património Cultural, I.P.]({{ site.baseurl }}/assets/pdfs/aurificia-exposicao-ccdr-patrimonio-2026-10-14.pdf) | 14 de Outubro | Que reavaliem os pareceres de 2026, exijam garantias de reabilitação do conjunto classificado, apreciem a nova via no interior do quarteirão e iniciem a definição da zona especial de protecção. |
 | [Inspecção-Geral de Finanças]({{ site.baseurl }}/assets/pdfs/aurificia-participacao-igf-2026-10-23.pdf) | 23 de Outubro | Que promova um inquérito à actuação dos serviços do Município do Porto nos quatro processos da operação. |
+{: .tabela-texto}
 
 ## Um loteamento tramitado como duas edificações
 

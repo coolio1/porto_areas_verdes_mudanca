@@ -85,6 +85,9 @@ layout: default
     .post-title { font-size: 1.45rem; }
     .post-hero { max-height: 260px; }
   }
+  /* tabelas de texto: sem a linha final a negrito nem a última coluna à direita (regras globais pensadas para totais numéricos) */
+  article table.tabela-texto tbody tr:last-child { font-weight: 400; }
+  article table.tabela-texto thead th:last-child, article table.tabela-texto tbody td:last-child { text-align: left; }
 </style>
 
 <article>
