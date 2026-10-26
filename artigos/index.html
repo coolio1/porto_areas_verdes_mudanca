@@ -7,8 +7,26 @@ description: "Todos os artigos publicados no Porto Verde."
 <style>
   .post-list { list-style: none; margin: 0; padding: 0; }
   .post-list li {
+    display: flex;
+    gap: 1.1rem;
+    align-items: flex-start;
     border-bottom: 1px solid #eee;
     padding: 1.2rem 0;
+  }
+  .post-thumb {
+    flex: 0 0 9.5rem;
+    width: 9.5rem;
+    aspect-ratio: 16 / 10;
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+    background: linear-gradient(90deg, #1e3a5f, #2d6a9f);
+  }
+  .post-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 0; }
+  .post-text { flex: 1 1 auto; min-width: 0; }
+  @media (max-width: 520px) {
+    .post-list li { gap: 0.8rem; }
+    .post-thumb { flex-basis: 5.5rem; width: 5.5rem; aspect-ratio: 1 / 1; }
   }
   .post-list li:last-child { border-bottom: none; }
   .post-list time {
@@ -37,9 +55,12 @@ description: "Todos os artigos publicados no Porto Verde."
 <ul class="post-list">
   {% for post in site.posts %}
   <li>
-    <time>{{ post.date | date: "%d %b %Y" }}</time>
-    <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-    {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+    <a class="post-thumb" href="{{ post.url | prepend: site.baseurl }}" tabindex="-1" aria-hidden="true">{% if post.image %}<img src="{{ site.baseurl }}{{ post.image }}" alt="" loading="lazy">{% endif %}</a>
+    <div class="post-text">
+      <time>{{ post.date | date: "%d %b %Y" }}</time>
+      <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+    </div>
   </li>
   {% endfor %}
 </ul>
