@@ -8,15 +8,20 @@ wide: true
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <div class="e50">
   <div class="lista-pagina">
-    {% include topo_campanha.html %}
     <h1 class="so-leitor">Campanha «50 Espaços Verdes»: mapa e lista dos espaços</h1>
     {%- assign n_sel = site.espacos | where_exp: "e", "e.seleccionado == true" | size -%}
     {%- assign n_conc = site.espacos | map: "concelho" | uniq | size -%}
-    <dl class="faixa">
-      <div><dt>espaços</dt><dd>{{ site.espacos.size }}</dd></div>
-      <div><dt>seleccionados</dt><dd>{{ n_sel }}</dd></div>
-      <div><dt>concelhos</dt><dd>{{ n_conc }}</dd></div>
-    </dl>
+    <div class="cabeca-inicio">
+      {% include logos_campanha.html %}
+      <div class="cabeca-lado">
+        {% include ligacoes_campanha.html %}
+        <dl class="faixa">
+          <div><dt>espaços</dt><dd>{{ site.espacos.size }}</dd></div>
+          <div><dt>seleccionados</dt><dd>{{ n_sel }}</dd></div>
+          <div><dt>concelhos</dt><dd>{{ n_conc }}</dd></div>
+        </dl>
+      </div>
+    </div>
     <form class="filtros" aria-label="Filtros">
       <label class="filtro-select">Concelho
         <select id="f-concelho"><option value="">Todos</option>

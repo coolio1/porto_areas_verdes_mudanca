@@ -189,6 +189,21 @@
 .e50 .faixa > div:last-child { border-right: 0; }
 .e50 .faixa dd { order: -1; margin: 0; font: 800 clamp(1.5rem, 4vw, 2rem)/1 var(--sans); color: var(--floresta); }
 .e50 .faixa dt { font: 550 0.95rem/1.2 var(--sans); color: var(--grafite); }
+.e50 .logos { display: flex; align-items: center; gap: 0.8rem 1.4rem; min-width: 0; }
+.e50 .logo-ca { display: block; flex: 0 0 auto; }
+.e50 .ficha-topo { flex-wrap: wrap; }
+.e50 .logo-ca img { display: block; width: auto; height: 2.4rem; max-width: 100%; }
+.e50 .cabeca-inicio { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 1rem 2rem; align-items: center; padding: 1.1rem 0 1.4rem; margin-bottom: 1.6rem; border-bottom: 1.5px solid var(--grafite); }
+.e50 .cabeca-inicio .logo-topo img { width: auto; height: 7.5rem; max-width: 100%; }
+.e50 .cabeca-inicio .logo-ca img { height: 3.2rem; }
+.e50 .cabeca-lado { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+.e50 .cabeca-lado .faixa { margin: 0; }
+@media (max-width: 44rem) {
+  .e50 .cabeca-inicio { grid-template-columns: minmax(0, 1fr); }
+  .e50 .cabeca-inicio .logo-topo img { height: 5.5rem; }
+  .e50 .cabeca-inicio .logo-ca img { height: 2.6rem; }
+  .e50 .cabeca-lado .ligacoes { justify-content: flex-start; }
+}
 .e50 .rodape-campanha { display: flex; flex-wrap: wrap; gap: 0.4rem 2rem; margin-top: 2rem; padding: 1rem 0 2rem; border-top: 1.5px solid var(--grafite); font: 550 1rem/1.4 var(--sans); }
 @media (max-width: 30rem) {
   .e50 .faixa > div { flex-direction: column; align-items: center; gap: 0.15rem; }
