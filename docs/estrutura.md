@@ -46,3 +46,7 @@
 ├── layers_historico/       # Layers do mapa histórico (Landsat)
 └── docs/                   # Planos e specs (excluído do Jekyll)
 ```
+
+- **OBIA abandonada para 1947** — classificação pixel com Random Forest e texturas locais funciona melhor que OBIA para o ortofoto P&B (resolução insuficiente para segmentação).
+
+- **Overpass API instável** — dividir queries grandes em lotes e usar servidores alternativos; para adições individuais, preferir OSM API v0.6.

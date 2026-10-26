@@ -1,9 +1,8 @@
 # GEE Porto — Espaços Verdes e Uso do Solo
 
 ## Credenciais
-- **API keys** carregadas do ficheiro global `C:\Users\quent\OneDrive\Claude\.env` no topo de `GEE/server.py` (bloco manual sem python-dotenv); `.env` local no projecto pode sobrepor se existir.
-- `GEE_PROJECT` (ID do projecto Earth Engine) deve estar no `.env` local ou no `.env` global — não hardcodar.
-- Asset paths usam f-strings: `f'projects/{GEE_PROJECT}/assets/...'`
+- **API keys** do `.env` global (`C:\Users\quent\OneDrive\Claude\.env`), carregado no topo de `GEE/server.py`; um `.env` local pode sobrepor.
+- `GEE_PROJECT` no `.env` (local ou global), nunca hardcoded; asset paths em f-strings: `f'projects/{GEE_PROJECT}/assets/...'`
 - **`CARTO_BASEMAPS_KEY`** (`.env` local, gitignored): o CARTO exige chave nos mosaicos (sem ela, marca de água «API KEY REQUIRED»). `carto.py` (`aplicar_chave`/`com_chave`) acrescenta `?key=` aos URLs `basemaps.cartocdn.com`; **todo gerador de mapa chama `aplicar_chave(html)` antes de gravar** (também os novos).
 
 ## Estrutura do projecto
@@ -16,17 +15,13 @@ Detalhe completo em `docs/estrutura.md`. Resumo (raiz = site Jekyll/GitHub Pages
 
 ## Navegação entre páginas
 
-- **Todas as páginas HTML** (mapas, dashboards) devem ter a barra de navegação fixa no topo direito (`#nav`) com links para todas as outras páginas do site — **excepto o index**, que usa a nav do layout Jekyll.
-- Os links devem ser relativos e ajustados à profundidade da pasta (`../` para subpastas).
-- O link da página activa tem a classe `active`.
-- Os scripts Python que geram HTML devem incluir esta nav no template.
+Todas as páginas HTML, excepto o index, têm a barra fixa `#nav` com links relativos a todas as outras (detalhe: `docs/navegacao.md`); os scripts que geram HTML incluem-na no template.
 
 ## Regras de organização
 
 - **Cada script gera o seu HTML** — nunca editar HTMLs à mão
 - **Layers ficam na raiz do projecto, não na pasta do script**: `layers/` (partilhada entre `mapa/` e `interiores/` — o verde privado subtrai-se da mesma classificação Sentinel-2), `layers_historico/` (usada por `ndvi_historico/`), `1947/layers/` (usada só por `1947/`, essa sim dentro da própria pasta)
-- **Ficheiros de teste/debug** nunca ficam nas pastas de layers — apagar depois de usar
-- **Scripts obsoletos** apagam-se directamente (git e disco sincronizados)
+- **Ficheiros de teste/debug** nunca ficam nas pastas de layers; scripts obsoletos apagam-se (git e disco sincronizados)
 - **`_config.yml` exclude** deve incluir: `*.py`, docs, .claude, .superpowers, `__pycache__/`, `*.bak`, `*.npy`, `*.npz`
 - **Cada sub-projecto tem a sua pasta** — nunca espalhar ficheiros de dados pela raiz
 - **Links no `index.html`** devem apontar para o caminho correcto dentro da pasta (ex: `atropelamentos/dashboard_atropelamentos.html`)
@@ -86,12 +81,11 @@ Protocolos de thumbnails e de criação de artigos: skill `porto-verde-posts`. N
 ## Lições aprendidas
 
 - **Verificar consumidores antes de alterar dados** — ao editar `parques_porto.geojson` ou qualquer fonte partilhada, grep por todos os ficheiros que a referenciam e actualizar em cadeia.
-- **OBIA abandonada para 1947** — classificação pixel com Random Forest e texturas locais funciona melhor que OBIA para o ortofoto P&B (resolução insuficiente para segmentação).
-- **Overpass API instável** — dividir queries grandes em lotes e usar servidores alternativos; para adições individuais, preferir OSM API v0.6.
+- Lições técnicas antigas (OBIA 1947, Overpass): fim de `docs/estrutura.md`.
 - **Nunca inventar referências** — verificar sempre autores, anos e títulos online antes de citar.
 
 - **Menu:** `patch_nav.py` é bloqueado pelo hook; editar só `nav.py` e deixar o pre-commit propagar.
-- **Artigos com textos enviados a entidades (caso Aurifícia):** nunca publicar o original. Fora nome completo, morada, email, telefone, NIF, referências de notificações e nomes de terceiros (residente confinante: anónimo). PDFs anonimizados a partir de cópias do `.docx` (nunca editar o original), exportados com o Word (COM) e conferidos com `pdftotext | grep`, rodapés e metadados incluídos. Nunca mencionar a queixa à Polícia Municipal.
+- **Artigos com textos enviados a entidades (caso Aurifícia):** nunca publicar o original nem dados pessoais/referências de notificações; ver `docs/artigos-textos-entidades.md`.
 
 ## Higiene do repositório
 
@@ -111,11 +105,10 @@ Ver skill `/jekyll`. Config específica: `baseurl: /porto_areas_verdes_mudanca`;
 
 ## 50 Espaços (`/50espacos/`)
 
-Secção da campanha da Campo Aberto (111 espaços, 50 seleccionados). Spec e plano: `docs/superpowers/{specs,plans}/2026-10-25-50espacos-*.md`.
+Secção da campanha da Campo Aberto (111 espaços, 50 seleccionados). Regras completas, pipeline e fases: `docs/regras-50espacos.md`. Essenciais:
 
-- **Pipeline** em `espacos_pipeline/` (pytest): extractores → `docs/fonte_campanha/extraido/*.json` (gitignored) → `reconciliar.py` (regra: prevalece o valor que 2+ fontes concordam; decisões em `docs/fonte_campanha/reconciliacao.md`) → texto fundido em `docs/50espacos/fusao/<concelho>/<slug>.md` → `gerar.py` escreve `_espacos/**` e `_data/espacos_mapa.json`. Nunca editar `_espacos/**` à mão.
-- **Só se publica texto com `revisto: true`** no front matter; o utilizador revê antes.
-- **Sem dados pessoais**: nada de nomes de pessoas singulares (proponentes, contributos) nem contactos; instituições sim. `docs/50espacos/dossiers/` é gitignored (tem nomes das fontes).
-- **Não existe ranking** dos 50; `selecao` = `2009-04` ou `posterior`. Coordenadas aproximadas (2 casas decimais), sempre com `origem_coord`.
-- Fotos/PDFs de apoio em `50espacos/media/<slug>/`, imprensa em `50espacos/imprensa/` + `_data/imprensa.yml`. Contributos: email `contacto@campoaberto.pt` (sem formulário).
-- Fase 1 = Porto (23). Os outros concelhos reutilizam o mesmo pipeline.
+- Nunca editar `_espacos/**` à mão (gerado por `espacos_pipeline/gerar.py`).
+- Só se publica texto com `revisto: true`; o utilizador revê antes.
+- Sem dados pessoais: nada de nomes de pessoas singulares nem contactos; instituições sim. `docs/50espacos/dossiers/` é gitignored.
+- Não existe ranking dos 50.
+
