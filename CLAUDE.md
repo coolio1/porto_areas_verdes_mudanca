@@ -4,6 +4,7 @@
 - **API keys** carregadas do ficheiro global `C:\Users\quent\OneDrive\Claude\.env` no topo de `GEE/server.py` (bloco manual sem python-dotenv); `.env` local no projecto pode sobrepor se existir.
 - `GEE_PROJECT` (ID do projecto Earth Engine) deve estar no `.env` local ou no `.env` global — não hardcodar.
 - Asset paths usam f-strings: `f'projects/{GEE_PROJECT}/assets/...'`
+- **`CARTO_BASEMAPS_KEY`** (`.env` local, gitignored): o CARTO exige chave nos mosaicos (sem ela, marca de água «API KEY REQUIRED»). `carto.py` (`aplicar_chave`/`com_chave`) acrescenta `?key=` aos URLs `basemaps.cartocdn.com`; **todo gerador de mapa chama `aplicar_chave(html)` antes de gravar** (também os novos). A chave fica visível nos HTML publicados — é normal.
 
 ## Estrutura do projecto
 
@@ -88,6 +89,11 @@ Protocolos de thumbnails e de criação de artigos: skill `porto-verde-posts`. N
 - **OBIA abandonada para 1947** — classificação pixel com Random Forest e texturas locais funciona melhor que OBIA para o ortofoto P&B (resolução insuficiente para segmentação).
 - **Overpass API instável** — dividir queries grandes em lotes e usar servidores alternativos; para adições individuais, preferir OSM API v0.6.
 - **Nunca inventar referências** — verificar sempre autores, anos e títulos online antes de citar.
+
+- **Ficheiro estático sombreia plugin Jekyll** — um `sitemap.xml` manual (desactualizado, 7 URLs) anulou o `jekyll-sitemap` e deixou as 111 fichas fora do sitemap. Não manter `sitemap.xml`/`feed.xml` à mão; depois de publicar, ler `/sitemap.xml` no ar.
+- **Secção `/50espacos/`:** não usar `<nav>` para ligações da secção (o CSS global de `default.html` dá-lhe a barra escura) — usar `<div role="group">`; o título de página em Markdown leva `{: .titulo-pagina}` (senão o `h1` fica gigante); título público diferente do das fontes → `TITULO_PUBLICO` em `gerar.py` (o slug não muda).
+- **Menu:** `patch_nav.py` é bloqueado pelo hook; editar só `nav.py` e deixar o pre-commit propagar (confirmar `_includes/nav.html` no commit).
+- **Verificar no ar** depois de o utilizador fazer o push: ler o HTML publicado com `ctx_execute` (urllib, em ciclo até o Pages actualizar), não só em local.
 
 ## Higiene do repositório
 
