@@ -4,7 +4,7 @@ title: "Companhia Aurifícia: três textos, três entidades, uma mesma operaçã
 description: "Em Outubro de 2026 foram enviados ao Ministério Público, à CCDR Norte e ao Património Cultural e à Inspecção-Geral de Finanças textos sobre a operação urbanística da antiga Companhia Aurifícia, no Porto. Resumo do que sustentam e do que pedem."
 date: 2026-10-26
 tags: [urbanismo, porto, verde, património, Aurifícia]
-image: /assets/images/aurificia-denuncia-foto-aerea.jpg
+image: /assets/images/aurificia-denuncia-diagrama-volumes.jpg
 ---
 
 Em [Abril]({{ site.baseurl }}/posts/carta-aberta-aurificia/) foi enviada ao Presidente da Câmara Municipal do Porto uma carta aberta sobre a reconversão da antiga Companhia Aurifícia; em [Julho]({{ site.baseurl }}/posts/denuncia-ministerio-publico-aurificia/), uma denúncia ao Ministério Público, depois de começarem a ser arrancadas árvores no interior do quarteirão. Em Outubro seguiram mais três textos, dirigidos a três entidades diferentes. Sobrepõem-se em grande parte, porque a operação é a mesma, e por isso este artigo organiza-os por tema, e não por destinatário.
