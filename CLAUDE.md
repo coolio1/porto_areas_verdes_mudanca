@@ -64,12 +64,9 @@ Protocolos de thumbnails e de criação de artigos: skill `porto-verde-posts`. N
 
 ## Regras de código
 
-- Python com `ee` (Earth Engine API) e `geemap` quando aplicável
 - Grayscale: usar `np.mean(array[:,:,:3], axis=2)`, **nunca** `PIL .convert('L')`
 - Pontos de treino: usar APENAS coordenadas fornecidas pelo utilizador, nunca gerar automaticamente
-- Mapas e visualizações: cores fortes, basemaps visíveis, sem esbatidos
-- Vídeo em MP4 (não GIF); texto renderizado via PIL (não cv2) para suportar acentos
-- Proporções geográficas correctas são essenciais (cos(latitude) correction)
+- Mapas: cores fortes, basemaps visíveis; vídeo em MP4 (não GIF), texto via PIL (não cv2) para acentos; corrigir proporções com cos(latitude)
 - `.db` é gerado por `compilar_dados.py` e gitignored — não commitar
 
 ## Operações em dados geoespaciais
