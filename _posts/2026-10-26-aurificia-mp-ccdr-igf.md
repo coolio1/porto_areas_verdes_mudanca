@@ -7,7 +7,9 @@ tags: [urbanismo, porto, verde, património, Aurifícia]
 image: /assets/images/aurificia-denuncia-diagrama-volumes.jpg
 ---
 
-Em [Abril]({{ site.baseurl }}/posts/carta-aberta-aurificia/) foi enviada ao Presidente da Câmara Municipal do Porto uma carta aberta sobre a reconversão da antiga Companhia Aurifícia; em [Julho]({{ site.baseurl }}/posts/denuncia-ministerio-publico-aurificia/), uma denúncia ao Ministério Público, depois de começarem a ser arrancadas árvores no interior do quarteirão. Em Outubro seguiram mais três textos, dirigidos a três entidades diferentes. Sobrepõem-se em grande parte, porque a operação é a mesma, e por isso este artigo organiza-os por tema, e não por destinatário.
+Em [Abril]({{ site.baseurl }}/posts/carta-aberta-aurificia/) foi enviada ao Presidente da Câmara Municipal do Porto uma carta aberta sobre a reconversão da antiga Companhia Aurifícia; em [Julho]({{ site.baseurl }}/posts/denuncia-ministerio-publico-aurificia/), uma denúncia ao Ministério Público, depois de começarem a ser arrancadas árvores no interior do quarteirão. Em Outubro seguiram três novos textos, cada um para a sua entidade: o Ministério Público, a CCDR Norte e o Património Cultural, e a Inspecção-Geral de Finanças.
+
+Este artigo resume o que sustentam, tema a tema. Os textos completos, em PDF e sem dados pessoais, estão ligados no quadro seguinte e no fim do artigo.
 
 Tudo o que se segue é o que esses textos sustentam, com base em documentos do próprio Município e das entidades que tutelam o património. São posições de quem os subscreve, ainda sem decisão das entidades que os receberam.
 
@@ -15,9 +17,9 @@ Tudo o que se segue é o que esses textos sustentam, com base em documentos do p
 
 | Entidade | Data | O que pede |
 |---|---|---|
-| **Ministério Público** (Procuradoria junto do Tribunal Administrativo e Fiscal do Porto, processo 63/26.9BXPRT) | 12 de Outubro | Que proponha a declaração de nulidade da informação prévia e dos projectos aprovados e requeira, com urgência, uma providência cautelar que impeça trabalhos de escavação, demolição ou construção. |
-| **CCDR Norte (Unidade de Cultura) e Património Cultural, I.P.** | 14 de Outubro | Que reavaliem os pareceres de 2026, exijam garantias de reabilitação do conjunto classificado, apreciem a nova via no interior do quarteirão e iniciem a definição da zona especial de protecção. |
-| **Inspecção-Geral de Finanças** | 23 de Outubro | Que promova um inquérito à actuação dos serviços do Município do Porto nos quatro processos da operação. |
+| [Ministério Público]({{ site.baseurl }}/assets/pdfs/aurificia-pronuncia-mp-2026-10-12.pdf) (Procuradoria junto do Tribunal Administrativo e Fiscal do Porto, processo 63/26.9BXPRT) | 12 de Outubro | Que proponha a declaração de nulidade da informação prévia e dos projectos aprovados e requeira, com urgência, uma providência cautelar que impeça trabalhos de escavação, demolição ou construção. |
+| [CCDR Norte (Unidade de Cultura) e Património Cultural, I.P.]({{ site.baseurl }}/assets/pdfs/aurificia-exposicao-ccdr-patrimonio-2026-10-14.pdf) | 14 de Outubro | Que reavaliem os pareceres de 2026, exijam garantias de reabilitação do conjunto classificado, apreciem a nova via no interior do quarteirão e iniciem a definição da zona especial de protecção. |
+| [Inspecção-Geral de Finanças]({{ site.baseurl }}/assets/pdfs/aurificia-participacao-igf-2026-10-23.pdf) | 23 de Outubro | Que promova um inquérito à actuação dos serviços do Município do Porto nos quatro processos da operação. |
 
 ## Um loteamento tramitado como duas edificações
 
@@ -56,7 +58,7 @@ Os textos sublinham o risco de facto consumado. Antes da licença, a lei permite
 
 ## Os textos
 
-Os três textos estão disponíveis em PDF, sem os dados pessoais de quem os subscreveu. Citam peças dos processos municipais e remetem para anexos que aqui não se publicam.
+Os três textos completos, sem os dados pessoais de quem os subscreveu. Citam peças dos processos municipais e remetem para anexos que aqui não se publicam.
 
 - [Pronúncia ao Ministério Público, 12 de Outubro de 2026 (PDF, 25 páginas)]({{ site.baseurl }}/assets/pdfs/aurificia-pronuncia-mp-2026-10-12.pdf)
 - [Exposição à CCDR Norte e ao Património Cultural, 14 de Outubro de 2026 (PDF, 11 páginas)]({{ site.baseurl }}/assets/pdfs/aurificia-exposicao-ccdr-patrimonio-2026-10-14.pdf)
