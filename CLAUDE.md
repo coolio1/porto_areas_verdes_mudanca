@@ -93,6 +93,7 @@ Protocolos de thumbnails e de criação de artigos: skill `porto-verde-posts`. N
 - **Ficheiro estático sombreia plugin Jekyll** — um `sitemap.xml` manual (desactualizado, 7 URLs) anulou o `jekyll-sitemap` e deixou as 111 fichas fora do sitemap. Não manter `sitemap.xml`/`feed.xml` à mão; depois de publicar, ler `/sitemap.xml` no ar.
 - **Secção `/50espacos/`:** não usar `<nav>` para ligações da secção (o CSS global de `default.html` dá-lhe a barra escura) — usar `<div role="group">`; o título de página em Markdown leva `{: .titulo-pagina}` (senão o `h1` fica gigante); título público diferente do das fontes → `TITULO_PUBLICO` em `gerar.py` (o slug não muda).
 - **Menu:** `patch_nav.py` é bloqueado pelo hook; editar só `nav.py` e deixar o pre-commit propagar (confirmar `_includes/nav.html` no commit).
+- **Artigos com textos enviados a entidades (caso Aurifícia):** nunca publicar o original — nome completo, morada, email, telefone e NIF do requerente, nomes de terceiros (residente confinante: anónimo) e referências de notificações saem; PDFs anonimizados a partir de cópias do `.docx` (nunca editar o original), exportados com o Word (COM, `ExportAsFixedFormat`) e confirmados com `pdftotext | grep` (também rodapés e metadados) antes de ir para `assets/pdfs/`. Nunca mencionar a queixa à Polícia Municipal. Fonte: `NotebookLM\Companhia Aurificia\` (o `CLAUDE.md` do caso manda).
 - **Verificar no ar** depois de o utilizador fazer o push: ler o HTML publicado com `ctx_execute` (urllib, em ciclo até o Pages actualizar), não só em local.
 
 ## Higiene do repositório
