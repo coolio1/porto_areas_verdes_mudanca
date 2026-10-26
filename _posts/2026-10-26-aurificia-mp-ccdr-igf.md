@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Companhia Aurifícia: loteamento sem licença, árvores abatidas sem autorização conhecida"
-description: "Uma operação de 122 fogos que os serviços municipais qualificaram como loteamento foi tramitada como duas edificações, sem licença de loteamento nem consulta pública; árvores foram abatidas sem autorização conhecida. Em Outubro de 2026, três textos seguiram para o Ministério Público, a CCDR Norte e o Património Cultural e a Inspecção-Geral de Finanças."
+title: "Companhia Aurifícia: novas participações ao MP e entidades da tutela"
+description: "Em Outubro de 2026, três novos textos sobre a operação da antiga Companhia Aurifícia, no Porto, seguiram para o Ministério Público, a CCDR Norte e o Património Cultural e a Inspecção-Geral de Finanças: o que sustentam e o que pedem."
 date: 2026-10-26
 tags: [urbanismo, porto, verde, património, Aurifícia]
 image: /assets/images/aurificia-denuncia-diagrama-volumes.jpg
