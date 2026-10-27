@@ -11,8 +11,9 @@ from pathlib import Path
 
 import pymupdf
 
+from espacos_pipeline.fontes import PDF2016 as PDF
+
 RAIZ = Path(__file__).resolve().parents[1]
-PDF = RAIZ / "docs" / "fonte_campanha" / "pdf2016" / "111espacos-TOTAL.pdf"
 SAIDA = RAIZ / "docs" / "fonte_campanha" / "extraido" / "pdf2016.json"
 
 _CAMADAS = {

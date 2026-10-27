@@ -11,8 +11,9 @@ from pathlib import Path
 
 import openpyxl
 
+from espacos_pipeline.fontes import PROJECTO as PROJ
+
 RAIZ = Path(__file__).resolve().parents[1]
-PROJ = RAIZ / "docs" / "fonte_campanha" / "projecto"
 LISTA_FINAL = PROJ / "Espacos" / "Avaliacao" / "2009-04-02 - SeleccaoEV.xlsx"
 LIVRO = PROJ / "Mais recente" / "50espacos - livro.xlsx"
 SAIDA = RAIZ / "docs" / "fonte_campanha" / "extraido" / "selecao2009.json"

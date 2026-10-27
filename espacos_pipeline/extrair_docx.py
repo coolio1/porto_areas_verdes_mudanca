@@ -7,11 +7,11 @@ from pathlib import Path
 
 import docx
 
+from espacos_pipeline.fontes import PROJECTO, SITE_ZIP
 from espacos_pipeline.modelo import slugify
 
 RAIZ = Path(__file__).resolve().parents[1]
-FONTES = RAIZ / "docs" / "fonte_campanha"
-SAIDA = FONTES / "extraido"
+SAIDA = RAIZ / "docs" / "fonte_campanha" / "extraido"
 
 _EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 _TELEF = re.compile(
@@ -129,8 +129,8 @@ def extrair_pasta(pasta: Path, concelho_de: callable) -> dict:
 if __name__ == "__main__":
     SAIDA.mkdir(parents=True, exist_ok=True)
     alvos = {
-        "docx_projecto.json": (FONTES / "projecto" / "Espacos" / "Fichas", lambda p: p.parent.name),
-        "docx_zip.json": (FONTES / "site_zip" / "espacos" / "lista" / "fichas", lambda p: p.relative_to(FONTES / "site_zip" / "espacos" / "lista" / "fichas").parts[0]),
+        "docx_projecto.json": (PROJECTO / "Espacos" / "Fichas", lambda p: p.parent.name),
+        "docx_zip.json": (SITE_ZIP / "espacos" / "lista" / "fichas", lambda p: p.relative_to(SITE_ZIP / "espacos" / "lista" / "fichas").parts[0]),
     }
     for nome, (pasta, conc) in alvos.items():
         dados = extrair_pasta(pasta, conc)

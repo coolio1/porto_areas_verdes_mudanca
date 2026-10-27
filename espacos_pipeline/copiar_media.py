@@ -1,9 +1,11 @@
 """Cópia de fotos e anexos de um espaço para 50espacos/media/<slug>/."""
+
 import hashlib
 import shutil
 from pathlib import Path
 
 from PIL import Image
+
 
 FOTOS = {".jpg", ".jpeg", ".png", ".gif"}
 ANEXOS = {".pdf"}
@@ -15,8 +17,13 @@ def _ficheiros(origens):
     for o in map(Path, origens):
         if o.is_dir():
             for p in sorted(o.rglob("*")):
-                if p.is_file() and not (IGNORAR_PASTAS & set(x.name for x in p.relative_to(o).parents)) \
-                        and not (IGNORAR_PASTAS & {p.parent.name}):
+                if (
+                    p.is_file()
+                    and not (
+                        IGNORAR_PASTAS & set(x.name for x in p.relative_to(o).parents)
+                    )
+                    and not (IGNORAR_PASTAS & {p.parent.name})
+                ):
                     yield p
         elif o.is_file() and o.parent.name not in IGNORAR_PASTAS:
             yield o
@@ -44,7 +51,11 @@ def copiar_media(slug: str, origens: list, destino: Path, max_lado: int = 1400) 
     vistos, usados, saida = set(), set(), []
     for p in _ficheiros(origens):
         ext = p.suffix.lower()
-        if ext in IGNORADAS or p.name.lower() == "thumbs.db" or ext not in FOTOS | ANEXOS:
+        if (
+            ext in IGNORADAS
+            or p.name.lower() == "thumbs.db"
+            or ext not in FOTOS | ANEXOS
+        ):
             continue
         h = hashlib.sha256(p.read_bytes()).digest()
         if h in vistos:
@@ -71,8 +82,15 @@ def copiar_media(slug: str, origens: list, destino: Path, max_lado: int = 1400) 
 
 # Pasta de concelho do site original (lista/ e listaf/) -> slug canónico do concelho.
 PASTAS_CONCELHO = {
-    "espinho": "espinho", "gaia": "vila-nova-de-gaia", "gondomar": "gondomar", "maia": "maia", "matosinhos": "matosinhos",
-    "porto": "porto", "povoa": "povoa-de-varzim", "valongo": "valongo", "vila_conde": "vila-do-conde",
+    "espinho": "espinho",
+    "gaia": "vila-nova-de-gaia",
+    "gondomar": "gondomar",
+    "maia": "maia",
+    "matosinhos": "matosinhos",
+    "porto": "porto",
+    "povoa": "povoa-de-varzim",
+    "valongo": "valongo",
+    "vila_conde": "vila-do-conde",
 }
 
 
@@ -84,9 +102,16 @@ def atribuir_pastas(reivindicadas: dict, sem_pasta: dict, existentes: list) -> d
     res = dict(reivindicadas)
     livres = [x for x in existentes if x not in set(res.values())]
     for slug, (concelho, freguesia) in sem_pasta.items():
-        cand = [x for x in livres if PASTAS_CONCELHO.get(x[0]) == concelho and slugify(x[1].replace("_", " ")) in slugify(freguesia or "")]
+        cand = [
+            x
+            for x in livres
+            if PASTAS_CONCELHO.get(x[0]) == concelho
+            and slugify(x[1].replace("_", " ")) in slugify(freguesia or "")
+        ]
         if len(cand) != 1:
-            raise ValueError(f"{slug}: {len(cand)} pastas candidatas em {concelho}/{freguesia}")
+            raise ValueError(
+                f"{slug}: {len(cand)} pastas candidatas em {concelho}/{freguesia}"
+            )
         res[slug] = cand[0]
         livres.remove(cand[0])
     return res
@@ -106,44 +131,90 @@ def pastas_dos_espacos(raiz: Path) -> dict:
     import re
 
     from espacos_pipeline.modelo import slugify
-    from espacos_pipeline.reconciliar import _carregar, concelho_do_registo, reconciliar, resolver
+    from espacos_pipeline.reconciliar import (
+        _carregar,
+        concelho_do_registo,
+        reconciliar,
+        resolver,
+    )
 
     fontes = _carregar()
     rel = reconciliar(fontes)
     resolver(rel)
     reiv, sem = {}, {}
     for reg in rel.registos:
-        t = reg["titulo"].get("webnode") or reg["titulo"].get("pdf") or next(iter(reg["titulo"].values()))
+        t = (
+            reg["titulo"].get("webnode")
+            or reg["titulo"].get("pdf")
+            or next(iter(reg["titulo"].values()))
+        )
         pasta = None
         for fonte in ("zip", "projecto"):
-            ficha = next((x for k, x in fontes[fonte].items() if k != "_duplicados" and isinstance(x, dict) and x.get("titulo") == reg["titulo"].get(fonte)), None)
-            m = ficha and re.search(r"site_zip[\\/]espacos[\\/]lista[\\/]fichas[\\/]([^\\/]+)[\\/]([^\\/]+)[\\/]([^\\/]+)", ficha["origem_ficheiro"])
+            ficha = next(
+                (
+                    x
+                    for k, x in fontes[fonte].items()
+                    if k != "_duplicados"
+                    and isinstance(x, dict)
+                    and x.get("titulo") == reg["titulo"].get(fonte)
+                ),
+                None,
+            )
+            m = ficha and re.search(
+                r"(?:site_zip|Site Campanha 50 espacos verdes)[\\/]espacos[\\/]lista[\\/]fichas[\\/]([^\\/]+)[\\/]([^\\/]+)[\\/]([^\\/]+)",
+                ficha["origem_ficheiro"],
+            )
             if m:
                 pasta = m.groups()
                 break
         if pasta:
             reiv[slugify(t)] = pasta
         else:
-            sem[slugify(t)] = (concelho_do_registo(reg), reg["resolvido"].get("freguesia"))
-    base = raiz / "docs" / "fonte_campanha" / "site_zip" / "espacos" / "lista" / "fichas"
-    existentes = [(c.name, f.name, n.name) for c in base.iterdir() if c.name in PASTAS_CONCELHO for f in c.iterdir() if f.is_dir() for n in f.iterdir() if n.is_dir()]
+            sem[slugify(t)] = (
+                concelho_do_registo(reg),
+                reg["resolvido"].get("freguesia"),
+            )
+    base = SITE_ZIP / "espacos" / "lista" / "fichas"
+    existentes = [
+        (c.name, f.name, n.name)
+        for c in base.iterdir()
+        if c.name in PASTAS_CONCELHO
+        for f in c.iterdir()
+        if f.is_dir()
+        for n in f.iterdir()
+        if n.is_dir()
+    ]
     return atribuir_pastas(reiv, sem, existentes)
 
 
 def copiar_todos(raiz: Path) -> dict:
     """Copia as mídias de todos os espaços para <raiz>/50espacos/media/<slug>/. Devolve {slug: [caminhos]}."""
-    base = raiz / "docs" / "fonte_campanha" / "site_zip" / "espacos"
+    base = SITE_ZIP / "espacos"
     res = {}
     for slug, (concelho, freguesia, nn) in pastas_dos_espacos(raiz).items():
-        origens = [base / v / "fichas" / concelho / freguesia / nn for v in ("lista", "listaf")]
-        ficheiros = [f for o in origens if o.is_dir() for f in sorted(o.rglob("*"))
-                     if f.is_file() and f.name not in EXCLUIR_PESSOAIS
-                     and not (IGNORAR_PASTAS & set(x.name for x in f.relative_to(o).parents))]
+        origens = [
+            base / v / "fichas" / concelho / freguesia / nn for v in ("lista", "listaf")
+        ]
+        ficheiros = [
+            f
+            for o in origens
+            if o.is_dir()
+            for f in sorted(o.rglob("*"))
+            if f.is_file()
+            and f.name not in EXCLUIR_PESSOAIS
+            and not (IGNORAR_PASTAS & set(x.name for x in f.relative_to(o).parents))
+        ]
         res[slug] = copiar_media(slug, ficheiros, raiz / "50espacos" / "media" / slug)
     return res
 
 
 if __name__ == "__main__":
-    import json
     r = copiar_todos(Path(__file__).resolve().parent.parent)
-    print(len(r), "espaços;", sum(map(len, r.values())), "ficheiros;", "sem ficheiros:", [k for k, v in r.items() if not v])
+    print(
+        len(r),
+        "espaços;",
+        sum(map(len, r.values())),
+        "ficheiros;",
+        "sem ficheiros:",
+        [k for k, v in r.items() if not v],
+    )
