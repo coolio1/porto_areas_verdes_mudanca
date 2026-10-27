@@ -161,7 +161,7 @@ def pastas_dos_espacos(raiz: Path) -> dict:
                 None,
             )
             m = ficha and re.search(
-                r"(?:site_zip|Site Campanha 50 espacos verdes)[\\/]espacos[\\/]lista[\\/]fichas[\\/]([^\\/]+)[\\/]([^\\/]+)[\\/]([^\\/]+)",
+                r"(?:site_zip|Site Campanha 50 espacos verdes|50 Espacos Verdes)[\\/]espacos[\\/]lista[\\/]fichas[\\/]([^\\/]+)[\\/]([^\\/]+)[\\/]([^\\/]+)",
                 ficha["origem_ficheiro"],
             )
             if m:
