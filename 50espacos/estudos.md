@@ -84,6 +84,7 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - **Estado do «Parque Natural» de Santa Justa, Pias e Castiçal** (apresentação de 22 diapositivos, 2005; autoria não identificada, com cronologia das tentativas de protecção da serra): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/valongo-santa-justa-estado-2005.pdf)
 - **Paisagem Protegida do Litoral de Vila do Conde: proposta de criação** (CIBIO, 2007): [PDF, 11 MB]({{ site.baseurl }}/50espacos/estudos/vila-do-conde-paisagem-protegida-cibio-2007.pdf)
 - **Proposta da Área Metropolitana do Porto de criação da Paisagem Protegida do Litoral de Vila do Conde** (2009): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/vila-do-conde-paisagem-protegida-proposta-amp-2009.pdf)
+- [Parecer da PROMindelo sobre a Paisagem Protegida do Litoral de Vila do Conde](https://campoaberto.pt/wp-content/uploads/2009/05/parecerpromindelo.pdf)
 - **Propostas de intervenção para a Reserva Ornitológica de Mindelo** (Associação da Reserva Ornitológica de Mindelo, versão para discussão 3.0, Outubro de 1999; 29 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/mindelo-rom-propostas-intervencao-1999.pdf)
 - **Biodiversidade e fragmentação do habitat: répteis e anfíbios da Área Metropolitana do Porto** (CIBIO, relatório de progresso, 2008): [PDF, 9 MB]({{ site.baseurl }}/50espacos/estudos/amp-repteis-anfibios-2008.pdf)
 - [Espaços naturais e espaços verdes urbanos do Porto: orientações para a Estrutura Ecológica Municipal](https://repositorio-aberto.up.pt/bitstream/10216/152753/2/641314.pdf) (FCUP e CIBIO, 2023)
@@ -107,6 +108,8 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - **Plano de Pormenor do Parque Oriental, estudos de caracterização** (Câmara Municipal do Porto, Junho de 2005): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/porto-parque-oriental-plano-pormenor-caracterizacao-2005.pdf)
 - **Estudo de incidências ambientais do Programa Polis de Gondomar** (Câmara Municipal de Gondomar, 2004): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/gondomar-polis-incidencias-ambientais-2004.pdf)
 - **Agenda 21 Local para a freguesia de Mindelo: relatório de sustentabilidade** (2004): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/mindelo-agenda-21-relatorio-sustentabilidade-2004.pdf)
+- [Estrutura ecológica municipal da Póvoa de Varzim](https://www.campoaberto.pt/files_drupal/50espacos/documentos/Estrutura%20ecologica%20municipal%20da%20Povoa%20de%20Varzim.pdf)
+- [Plano Estratégico de Desenvolvimento Sustentável do concelho da Maia](https://www.campoaberto.pt/files_drupal/50espacos/documentos/Desenvolvimento%20sustentavel%20do%20concelho%20da%20Maia.pdf)
 - [Atlas da Área Metropolitana do Porto](https://repositorio-aberto.up.pt/bitstream/10216/67396/2/8854.pdf) (AMP e FEUP, 2002)
 - [Projecto de recuperação do Parque de Serralves](https://www.serralves.pt/en/institucional-serralves/parque-projeto-de-recuperacao) (página da Fundação de Serralves)
 
