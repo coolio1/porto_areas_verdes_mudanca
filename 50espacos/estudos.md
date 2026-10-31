@@ -145,12 +145,4 @@ Contexto regional; não tratam espaços concretos.
 
 ### Documentos da Campo Aberto
 
-- **Reflectir o Porto e a Região Metropolitana do Porto** (Campo Aberto, 2006; 160 pp.): [PDF, 9 MB]({{ site.baseurl }}/50espacos/estudos/campo-aberto-reflectir-o-porto-2006.pdf)
-- **Balanço da campanha «50 Espaços Verdes»** (Campo Aberto, 20 de Novembro de 2007): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/campo-aberto-balanco-campanha-2007.pdf)
-- **Apresentação da lista final da campanha** (Campo Aberto, 4 de Abril de 2009): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/campo-aberto-lista-final-2009.pdf)
-- [Parecer da Campo Aberto sobre o PDM do Porto](https://coolio1.github.io/pdfs/Voluntariado/Campo%20Aberto/2004-01-30%20-%20Parecer%20da%20Campo%20Aberto%20sobre%20o%20PDM%20do%20Porto.pdf) (2004), [propostas sobre urbanismo](https://www.campoaberto.pt/wp-content/uploads/2020/12/Parecer-urbanismo.pdf) (2020), [contributos para o novo PDM, encarte](https://coolio1.github.io/pdfs/Voluntariado/Campo%20Aberto/2021-03-20%20-%20Parecer%20Campo%20Aberto%20PDM%20-%20encarte%20final.pdf) (2021) e [Mapa Verde do Porto](https://www.campoaberto.pt/files_drupal/livros/mapa_verde.pdf)
-- [Compilação de fichas «50 Espaços Verdes em Perigo»](https://campoaberto.pt/wp-content/uploads/2014/03/espacos.pdf) e [compilação de 111 fichas de espaços verdes](https://campoaberto.pt/wp-content/uploads/2018/09/111espacosverdes.pdf)
-- [Documentos de apoio à campanha](https://campoaberto.pt/wp-content/uploads/2017/05/Compacto-Documentos-Campanha.pdf) (2017)
-- [Parecer da PROMindelo sobre a Paisagem Protegida do Litoral de Vila do Conde](https://campoaberto.pt/wp-content/uploads/2009/05/parecerpromindelo.pdf)
-- [Estrutura ecológica municipal da Póvoa de Varzim](https://www.campoaberto.pt/files_drupal/50espacos/documentos/Estrutura%20ecologica%20municipal%20da%20Povoa%20de%20Varzim.pdf) e [Plano Estratégico de Desenvolvimento Sustentável do concelho da Maia](https://www.campoaberto.pt/files_drupal/50espacos/documentos/Desenvolvimento%20sustentavel%20do%20concelho%20da%20Maia.pdf)
-- [Propostas da Campo Aberto sobre ambiente para o PDM do Porto](https://campoaberto.pt/wp-content/uploads/2020/12/Propostas_Ambiente_Final.pdf) (Dezembro de 2020)
+Os documentos da Campo Aberto (livro «Reflectir o Porto», balanço e lista final da campanha, fichas dos espaços, pareceres sobre o PDM do Porto, Mapa Verde e outros) estão reunidos na [página de activismo de Nuno Quental](https://coolio1.github.io/activismo.html#campo-aberto).
