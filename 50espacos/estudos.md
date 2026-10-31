@@ -155,4 +155,4 @@ Contexto regional; não tratam espaços concretos.
 
 ### Documentos da Campo Aberto
 
-Os documentos da Campo Aberto (livro «Reflectir o Porto», pareceres sobre o PDM do Porto, Mapa Verde e outros) estão reunidos na [página de activismo de Nuno Quental](https://coolio1.github.io/activismo.html#campo-aberto).
+Os documentos da Campo Aberto (livro «Reflectir o Porto», pareceres sobre o PDM do Porto, Mapa Verde e outros) estão reunidos numa [página de activismo](https://coolio1.github.io/activismo.html#campo-aberto).
