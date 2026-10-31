@@ -38,6 +38,12 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 - **PROF do Entre Douro e Minho** (DRAEDM, 2003; 353 pp.): [PDF, 13 MB]({{ site.baseurl }}/50espacos/estudos/prof-edm-2003.pdf)
 - **Cartografia de risco de incêndio florestal, distrito do Porto** (relatório provisório, 2007): [PDF, 6 MB]({{ site.baseurl }}/50espacos/estudos/risco-incendio-distrito-porto-2007.pdf)
 
+### Espaço rural e ocupação do solo
+
+- **Estratégia de Desenvolvimento Rural e programação 2007-2013 para a região de Entre Douro e Minho** (Direcção Regional de Agricultura de Entre Douro e Minho, proposta de Julho de 2006; 296 pp.): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/edm-estrategia-desenvolvimento-rural-2006.pdf)
+- **Estudo sobre o abandono em Portugal Continental: dinâmicas da ocupação do solo, do sector agrícola e da comunidade rural** (Universidade de Évora para o Ministério da Agricultura, Janeiro de 2006; 226 pp.): [PDF, 8 MB]({{ site.baseurl }}/50espacos/estudos/portugal-estudo-abandono-2006.pdf)
+- **Alterações da ocupação do solo em Portugal Continental, 1985-2000** (Instituto do Ambiente, c. 2005; 52 pp.): [PDF, 13 MB]({{ site.baseurl }}/50espacos/estudos/portugal-alteracoes-ocupacao-solo-1985-2000.pdf)
+
 ## Água e bacias hidrográficas
 
 - **Plano de Bacia Hidrográfica do Rio Leça, 1.ª fase, síntese** (INAG, Janeiro de 2001): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/plano-bacia-leca-1fase-2001.pdf)
@@ -50,6 +56,7 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 
 - **Paisagem Protegida do Litoral de Vila do Conde: proposta de criação** (CIBIO, 2007): [PDF, 11 MB]({{ site.baseurl }}/50espacos/estudos/vila-do-conde-paisagem-protegida-cibio-2007.pdf)
 - **Proposta da Área Metropolitana do Porto de criação da Paisagem Protegida do Litoral de Vila do Conde** (2009): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/vila-do-conde-paisagem-protegida-proposta-amp-2009.pdf)
+- **Propostas de intervenção para a Reserva Ornitológica de Mindelo** (Associação da Reserva Ornitológica de Mindelo, versão para discussão 3.0, Outubro de 1999; 29 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/mindelo-rom-propostas-intervencao-1999.pdf)
 - **Biodiversidade e fragmentação do habitat: répteis e anfíbios da Área Metropolitana do Porto** (CIBIO, relatório de progresso, 2008): [PDF, 9 MB]({{ site.baseurl }}/50espacos/estudos/amp-repteis-anfibios-2008.pdf)
 
 ## Território, ambiente urbano e sustentabilidade
@@ -61,6 +68,7 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 - **Dinâmica de construção na Grande Área Metropolitana do Porto, 1995-2003** (INE, 2007): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/gamp-dinamica-construcao-1995-2003.pdf)
 - **Primeiro relatório sobre a qualidade de vida urbana, Porto** (Câmara Municipal do Porto e FEP, 2003): [PDF, 13 MB]({{ site.baseurl }}/50espacos/estudos/porto-qualidade-vida-urbana-2003.pdf)
 - **Masterplan Estratégico da Zona Oriental do Porto, sumário executivo** (Câmara Municipal do Porto, Julho de 2019): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/porto-masterplan-zona-oriental-2019.pdf)
+- **Parecer da Campo Aberto sobre a Estratégia de Valorização do Vale da Ribeira da Granja** (Porto, 31 de Maio de 2002; 14 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/porto-ribeira-da-granja-parecer-2002.pdf)
 - **Plano de Pormenor do Parque Oriental, estudos de caracterização** (Câmara Municipal do Porto, Junho de 2005): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/porto-parque-oriental-plano-pormenor-caracterizacao-2005.pdf)
 - **Estudo de incidências ambientais do Programa Polis de Gondomar** (Câmara Municipal de Gondomar, 2004): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/gondomar-polis-incidencias-ambientais-2004.pdf)
 - **Agenda 21 Local para a freguesia de Mindelo: relatório de sustentabilidade** (2004): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/mindelo-agenda-21-relatorio-sustentabilidade-2004.pdf)
