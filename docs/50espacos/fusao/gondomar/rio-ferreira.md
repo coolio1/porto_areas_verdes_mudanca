@@ -4,7 +4,7 @@ fontes_usadas: [ficha-2006-2008, pdf-2014-2016-camada-oficial, pdf-2014-2016-cam
 revisto: true
 ---
 
-O Rio Ferreira, com cerca de 21 ha considerados no concelho, é o principal afluente do Rio Sousa. Nasce em Paços de Ferreira, atravessa Paredes, Valongo e Gondomar (Jovim, São Pedro da Cova e Foz do Sousa) e desagua no Sousa, em Foz do Sousa. É um rio de meandros, que corre num vale encaixado entre as Serras de Santa Justa, Pias e Castiçal, com gargantas apertadas e os «Saltos do Ferreira». A bacia tem 184 km² e cerca de 200 mil habitantes.
+O Rio Ferreira, com cerca de 21 ha segundo a ficha de candidatura, é o principal afluente do Rio Sousa. Nasce em Paços de Ferreira, atravessa Paredes, Valongo e Gondomar (Jovim, São Pedro da Cova e Foz do Sousa) e desagua no Sousa, em Foz do Sousa. É um rio de meandros, que corre num vale encaixado entre as Serras de Santa Justa, Pias e Castiçal, com gargantas apertadas e os «Saltos do Ferreira». A bacia tem 184 km² e cerca de 200 mil habitantes.
 
 Perto da foz as margens são pouco urbanizadas, com campos agrícolas e troços de galeria ripícola de amieiros, salgueiros e freixos, e nas margens mais escarpadas dominam pinheiros e eucaliptos. Neste vale, no Parque Paleozóico de Valongo, vivem fetos raros, como a Culcita macrocarpa, a Trichomanes speciosum e a Lycopodiella cernua; o Sítio Valongo da Rede Natura 2000 é dos mais importantes para a salamandra-lusitânica. Há plantas carnívoras, como as orvalhinhas e o pinheiro-baboso, lontras, texugos, morcegos nos fojos e 58 espécies de aves. Com o fecho de fábricas a montante voltaram os barbos e o guarda-rios.
 
