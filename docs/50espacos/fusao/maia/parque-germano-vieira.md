@@ -8,4 +8,6 @@ O Parque Germano Vieira, em Gueifães, tem cerca de 8 ha e, apesar do nome, não
 
 Pensa-se que é propriedade privada. Tem importante valor paisagístico e ambiental e está em Reserva Agrícola Nacional e Reserva Ecológica Nacional. As ameaças são a pressão urbanística, a poluição das águas e dos solos, os lixos ilegais e as espécies invasoras.
 
+Segundo o estudo da rede de parques metropolitanos (2009), o local fica junto ao lugar do Arco, num pequeno vale agrícola a 70 m de altitude, e o ribeiro afluente do Arquinho segue pela Quinta do Arco, contígua. O estudo refere a oeste um pinhal de cerca de 2 ha com algumas infestantes, e a sul uma galeria ripícola reduzida a um alinhamento de salgueiros muitas vezes podados para fins agrícolas, mais desenvolvida a norte. Na proposta de revisão do PDM a área é classificada como «Área Verde de Utilização Colectiva Prevista».
+
 Sugere-se valorizar o local, despoluir ribeiros e margens, criar um parque de lazer com percursos pedonais e cicláveis, parque de manutenção e quinta pedagógica com agricultura biológica, e usá-lo como parque verde de uso colectivo, com pista de bicicleta, parques infantis, polidesportivos de rua e mini-campo de futebol.
