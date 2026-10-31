@@ -30,6 +30,9 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 - **Espaços rurais, novos paradigmas** (CCDR-N e UTAD, Maio de 2007; 86 pp.): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-espacos-rurais-2007.pdf)
 - **Estruturação do litoral** (CCDR-N, Maio de 2007; 109 pp.): [PDF, 3 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-litoral-2007.pdf)
 - **Riscos extensivos** (CCDR-N, Junho de 2007; 89 pp.): [PDF, 10 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-riscos-2007.pdf)
+- **Sumário executivo** (CCDR-N, Julho de 2009): [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-sumario-executivo-2009.pdf) e **Programa de execução** (Julho de 2009): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-programa-execucao-2009.pdf)
+- **Ambiente urbano** (CCDR-N, Maio de 2007): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-ambiente-urbano-2007.pdf)
+- **Ordenamento florestal, agrícola e desenvolvimento rural** (CCDR-N, Abril de 2009): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-ordenamento-florestal-agricola-2009.pdf)
 - **PROT-Norte, versão actual**: [volume 1, estratégia e modelo territorial](https://www.ccdr-n.pt/storage/app/media/uploaded-files/PROT-NORTE_VOL_1_ESTRAT%C3%89GIA_E_MODELO_TERRITORIAL.pdf), [volume 2, agenda transformadora](https://www.ccdr-n.pt/storage/app/media/uploaded-files/PROT-NORTE_VOL_2_AGENDA_TRANSFORMADORA.pdf) e [relatório de diagnóstico](https://www.ccdr-n.pt/storage/app/media/uploaded-files/1_RELATORIO_DIAGNOSTICO_COMPONENTES_PROT-NORTE.pdf) (CCDR-N, 2024); [relatório ambiental](https://www.ccdr-n.pt/storage/app/media/uploaded-files/2_1_RELATORIO_AMBIENTAL_PROT-NORTE.pdf), [quadro de referência estratégico](https://www.ccdr-n.pt/storage/app/media/uploaded-files/3_QUADRO_REFERENCIA_ESTRATEGICO_PROT-NORTE.pdf) e [apresentação da sessão pública no Porto, «Água, Biodiversidade e Carbono»](https://www.ccdr-n.pt/storage/app/media/uploaded-files/PROT_NORTE_Apresenta%C3%A7%C3%A3o_Sess%C3%A3o_P%C3%BAblica_28_10_2024_Porto_Rui_Ribeiro.pdf) (CCDR-N, 2024); restantes peças em [ccdr-n.pt/pagina/prot-norte](https://www.ccdr-n.pt/pagina/prot-norte)
 - [PROT-Norte: estrutura regional de protecção e valorização ambiental](https://www.campoaberto.pt/wp-content/uploads/2009/09/Teresa-Andresen.pdf) (CCDR-N, 2009)
 
@@ -38,7 +41,7 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 - **Estrutura ecológica: ambiente e ordenamento e os instrumentos de gestão do território** (CCDR-N, 2005): [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/ccdrn-estrutura-ecologica-2005.pdf)
 - **Norte 2015: património natural e paisagístico** (CCDR-N, Maio de 2005): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/norte-2015-patrimonio-natural-paisagistico-2005.pdf)
 - **Norte 2015: sistemas ambientais** (CCDR-N, Maio de 2005): [PDF, 6 MB]({{ site.baseurl }}/50espacos/estudos/norte-2015-sistemas-ambientais-2005.pdf)
-- **Plano de Acção da Agenda do Ambiente da Região Norte** (CCDR-N, Julho de 2008; apresentação): [PDF, 3 MB]({{ site.baseurl }}/50espacos/estudos/norte-2015-agenda-ambiente-2008.pdf)
+- **Plano de Acção da Agenda do Ambiente da Região Norte** (CCDR-N, Julho de 2008; apresentação): [PDF, 3 MB]({{ site.baseurl }}/50espacos/estudos/norte-2015-agenda-ambiente-2008.pdf) e [relatório pré-final]({{ site.baseurl }}/50espacos/estudos/norte-2015-plano-accao-agenda-ambiente-prefinal-2008.pdf) (IDAD para a CCDR-N, Junho de 2008; PDF, 1 MB)
 
 
 ### Floresta e incêndios
@@ -86,6 +89,8 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - **Proposta da Área Metropolitana do Porto de criação da Paisagem Protegida do Litoral de Vila do Conde** (2009): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/vila-do-conde-paisagem-protegida-proposta-amp-2009.pdf)
 - [Parecer da PROMindelo sobre a Paisagem Protegida do Litoral de Vila do Conde](https://campoaberto.pt/wp-content/uploads/2009/05/parecerpromindelo.pdf)
 - **Propostas de intervenção para a Reserva Ornitológica de Mindelo** (Associação da Reserva Ornitológica de Mindelo, versão para discussão 3.0, Outubro de 1999; 29 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/mindelo-rom-propostas-intervencao-1999.pdf)
+- **Propostas de intervenção para a Reserva Ornitológica de Mindelo** (Movimento PROMindelo, versão para discussão 5.0, Outubro de 2004): [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/mindelo-rom-propostas-promindelo-2004.pdf)
+- **Barrinha de Esmoriz, Lagoa de Paramos: por uma boa causa** (Quercus, Núcleo Regional do Porto): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/espinho-barrinha-esmoriz-quercus.pdf)
 - **Biodiversidade e fragmentação do habitat: répteis e anfíbios da Área Metropolitana do Porto** (CIBIO, relatório de progresso, 2008): [PDF, 9 MB]({{ site.baseurl }}/50espacos/estudos/amp-repteis-anfibios-2008.pdf)
 - [Espaços naturais e espaços verdes urbanos do Porto: orientações para a Estrutura Ecológica Municipal](https://repositorio-aberto.up.pt/bitstream/10216/152753/2/641314.pdf) (FCUP e CIBIO, 2023)
 - [Morfologia e biodiversidade nos espaços verdes da cidade do Porto, livro 1](https://arqpais.fc.up.pt/wp-content/uploads/2022/12/ebook1a.pdf) e [livro 2](https://arqpais.fc.up.pt/wp-content/uploads/2022/12/ebook2.pdf) (CIBIO, 2014-2015)
@@ -100,6 +105,8 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 
 ## Território, ambiente urbano e sustentabilidade
 
+- **Rede de Parques Metropolitanos na Grande Área Metropolitana do Porto, relatório final** (coordenação de Teresa Andresen, Fevereiro de 2009; inclui o atlas dos parques, os sistemas estruturantes por bacia, as fichas dos sítios e os cadernos de boas práticas): [PDF, 82 MB]({{ site.baseurl }}/50espacos/estudos/gamp-rede-parques-relatorio-final-2009.pdf)
+- **Estrutura Ecológica da Área Metropolitana do Porto** (ICETA, coordenação de Teresa Andresen, 2004): [PDF, 11 MB]({{ site.baseurl }}/50espacos/estudos/amp-estrutura-ecologica-2004.pdf)
 - **Futuro Sustentável, diagnóstico de ambiente do Grande Porto: ordenamento do território, espaços verdes e áreas naturais** (ESB e UCP, 2005; 152 pp.): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-diagnostico-ordenamento-2005.pdf)
 - **Futuro Sustentável, plano de acção: ordenamento do território, espaços verdes e áreas naturais** (ESB e UCP, Abril de 2008; 109 pp.): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-plano-accao-ordenamento-2008.pdf)
 - **Carta de solos e carta de aptidão da terra para a agricultura do Entre Douro e Minho, 1:25 000, memória descritiva** (Agroconsultores e DRAEDM, 2000): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/carta-solos-entre-douro-minho-memoria-2000.pdf)
@@ -109,6 +116,8 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - **Masterplan Estratégico da Zona Oriental do Porto, sumário executivo** (Câmara Municipal do Porto, Julho de 2019): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/porto-masterplan-zona-oriental-2019.pdf)
 - **Parecer da Campo Aberto sobre a Estratégia de Valorização do Vale da Ribeira da Granja** (Porto, 31 de Maio de 2002; 14 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/porto-ribeira-da-granja-parecer-2002.pdf)
 - **Plano de Pormenor do Parque Oriental, estudos de caracterização** (Câmara Municipal do Porto, Junho de 2005): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/porto-parque-oriental-plano-pormenor-caracterizacao-2005.pdf)
+- **Parque Oriental: planta da proposta de plano de pormenor** (Câmara Municipal do Porto, 2005): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/porto-parque-oriental-planta-pp-2005.pdf)
+- **Projectos para o Parque da Cidade** (plano da zona desportiva do Castelo do Queijo de 1948 e plano Auzelle de 1961): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/porto-parque-cidade-projectos.pdf)
 - **Estudo de incidências ambientais do Programa Polis de Gondomar** (Câmara Municipal de Gondomar, 2004): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/gondomar-polis-incidencias-ambientais-2004.pdf)
 - **Agenda 21 Local para a freguesia de Mindelo: relatório de sustentabilidade** (2004): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/mindelo-agenda-21-relatorio-sustentabilidade-2004.pdf)
 - [Estrutura ecológica municipal da Póvoa de Varzim](https://www.campoaberto.pt/files_drupal/50espacos/documentos/Estrutura%20ecologica%20municipal%20da%20Povoa%20de%20Varzim.pdf)
