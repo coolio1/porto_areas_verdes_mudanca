@@ -73,6 +73,41 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 - **Estudo de incidências ambientais do Programa Polis de Gondomar** (Câmara Municipal de Gondomar, 2004): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/gondomar-polis-incidencias-ambientais-2004.pdf)
 - **Agenda 21 Local para a freguesia de Mindelo: relatório de sustentabilidade** (2004): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/mindelo-agenda-21-relatorio-sustentabilidade-2004.pdf)
 
+### Futuro Sustentável e diagnósticos municipais
+
+- **Futuro Sustentável, diagnóstico de ambiente do Grande Porto: água** (ESB e UCP, Janeiro de 2006; 114 pp.): [PDF, 3 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-diagnostico-agua-2006.pdf)
+- **Futuro Sustentável, plano de acção: água** (ESB e UCP, versão para consulta, Abril de 2008): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-plano-accao-agua-2008.pdf)
+- **Futuro Sustentável, relatório do questionário «Sinal Verde» à população do Grande Porto** (2005; 79 pp.): [PDF, 8 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-questionario-sinal-verde-2005.pdf)
+- **Futuro Sustentável, relatório global da participação pública** (2008; 19 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-participacao-publica-2008.pdf)
+- **Síntese do diagnóstico de sustentabilidade do concelho de Vila Nova de Gaia** (Eixo Atlântico, projecto Agenda 21, versão preliminar, Abril de 2006; 56 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-sintese-gaia-2006.pdf)
+- **Síntese do diagnóstico de sustentabilidade do concelho do Porto** (Eixo Atlântico, projecto Agenda 21, versão preliminar, Abril de 2006; 55 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-sintese-porto-2006.pdf)
+- **Diagnóstico de São João da Madeira** (relatório final, Março de 2003; 79 pp.): [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/sao-joao-da-madeira-diagnostico-2003.pdf)
+- **Plano Estratégico do Município da Trofa, diagnóstico de situação** (relatório intercalar, Outubro de 2000; 73 pp.): [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/trofa-plano-estrategico-diagnostico-2000.pdf)
+- **Agenda 21 Local de Santo Tirso** (documento de candidatura, 43 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/santo-tirso-agenda-21-local.pdf)
+
+### Estatística, ambiente urbano e território
+
+- **Dinâmicas de transformação e qualidade do ambiente urbano: o caso da Área Metropolitana do Porto** (INE, *Estatísticas e Estudos Regionais* n.º 14, 1998): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/ine-dinamicas-ambiente-urbano-amp-1998.pdf)
+- **Pressão construtiva na Área Metropolitana do Porto** (INE, *Estatísticas e Estudos Regionais* n.º 19, 1999): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/ine-pressao-construtiva-amp-1999.pdf)
+- **Padrões habitacionais na Área Metropolitana do Porto** (INE, *Estatísticas e Estudos Regionais*, 1999): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/ine-padroes-habitacionais-amp-1999.pdf)
+- **Grande Área Metropolitana do Porto: apresentação institucional** (GAMP, 2006): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/gamp-apresentacao-institucional-2006.pdf)
+- **Portugal rural: territórios e dinâmicas**, fichas dos territórios da Área Metropolitana do Porto (Gabinete de Planeamento e Políticas, 2001-2002), que cobrem freguesias de [Esposende e Póvoa de Varzim]({{ site.baseurl }}/50espacos/estudos/gpp-portugal-rural-b1-1.pdf), de [Gondomar e Gaia]({{ site.baseurl }}/50espacos/estudos/gpp-portugal-rural-b1-2.pdf) e de [Espinho e Gaia]({{ site.baseurl }}/50espacos/estudos/gpp-portugal-rural-b10-1.pdf) (PDF, 1 MB cada)
+
+### Qualidade do ar e clima na Região Norte
+
+Contexto regional; não tratam espaços concretos.
+
+- **Plano de melhoria da qualidade do ar da Região Norte** (CCDR-N e Universidade de Aveiro, 2007; 100 pp.): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/norte-plano-melhoria-qualidade-ar-2007.pdf)
+- **Inventariação das emissões de poluentes atmosféricos da Região Norte** (Universidade de Aveiro para a CCDR-N, 2004): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/norte-inventario-emissoes-2004.pdf)
+- **As alterações climáticas e a Região Norte** (apresentação, Porto, 9 de Dezembro de 2009): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/norte-alteracoes-climaticas-2009.pdf)
+- **Alterações climáticas, variabilidade climática e zonas costeiras** (apresentação, Porto, 9 de Dezembro de 2009): [PDF, 8 MB]({{ site.baseurl }}/50espacos/estudos/norte-zonas-costeiras-2009.pdf)
+
+### Documentos da Campo Aberto
+
+- **Reflectir o Porto e a Região Metropolitana do Porto** (Campo Aberto, 2006; 160 pp.): [PDF, 9 MB]({{ site.baseurl }}/50espacos/estudos/campo-aberto-reflectir-o-porto-2006.pdf)
+- **Balanço da campanha «50 Espaços Verdes»** (Campo Aberto, 20 de Novembro de 2007): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/campo-aberto-balanco-campanha-2007.pdf)
+- **Apresentação da lista final da campanha** (Campo Aberto, 4 de Abril de 2009): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/campo-aberto-lista-final-2009.pdf)
+
 ## Documentos disponíveis online
 
 Estes documentos existem nos sítios das entidades que os publicaram, por isso ligamos à fonte em vez de os alojar.
@@ -109,8 +144,21 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - [POOC Caminha-Espinho](https://diariodarepublica.pt/dr/detalhe/resolucao-conselho-ministros/25-1999-549058) (Resolução do Conselho de Ministros n.º 25/99)
 - [Plano Sectorial da Rede Natura 2000](https://www.cm-coimbra.pt/wp-content/uploads/2019/04/03-RCM_115A_2008.pdf) (Resolução do Conselho de Ministros n.º 115-A/2008)
 
+### Estatística, território e teses
+
+- [Sistema Urbano: áreas de influência e marginalidade funcional, Região Norte](https://www.ine.pt/xurl/pub/8291984) (INE, 2004), [Carta de Equipamentos e Serviços de Apoio à População 2002, Norte](https://www.ine.pt/xurl/pub/140881) (INE, 2003) e [Os Municípios da Região Norte, 2001](https://www.ine.pt/xurl/pub/5593500) (INE, 2002)
+- [Dinâmicas de expansão da habitação na região Norte](https://www.ine.pt/ngt_server/attachfileu.jsp?look_parentBoui=107095&att_display=n&att_download=y) (INE, 2003) e [Povoamento disperso e qualidade ambiental: uma abordagem relacional](https://www.ine.pt/ngt_server/attachfileu.jsp?look_parentBoui=106754&att_display=n&att_download=y) (INE, 1998)
+- [Tipos de Agricultura em Portugal](https://www.gpp.pt/images/GPP/O_que_disponibilizamos/Publicacoes/Tipos_Agricultura_Doc9.pdf) (Gabinete de Planeamento e Políticas, 2004) e [apresentação do projecto «Portugal rural»](https://www.gpp.pt/images/GPP/O_que_disponibilizamos/Publicacoes/Portugal_Rural_Apresentao.pdf)
+- [6.º Inventário Florestal Nacional, relatório final](https://www.icnf.pt/api/file/doc/c8cc40b3b7ec8541) (ICNF, 2015) e [Mapa Agrícola e Florestal de Portugal Continental 1951-1980](https://www.dgterritorio.gov.pt/dados-abertos) (dados abertos da DGT)
+- [The study of urban growth through multi-temporal cartography and spatial indicators: the case of Porto region](https://repositorio-aberto.up.pt/handle/10216/26592) (comunicação ao 17.º seminário da ISUF, 2010)
+- Teses em repositório: [O processo de suburbanização no Grande Porto](https://repositorio-aberto.up.pt/handle/10216/12012) (1992), [A habitação no Grande Porto](https://repositorio-aberto.up.pt/handle/10216/14995) (2001) e [Os movimentos e a luta pelo espaço verde na cidade do Porto](https://hdl.handle.net/1822/96173) (Universidade do Minho, 2024)
+- [Assessment of land cover trajectories as an indicator of urban habitat temporal continuity](https://doi.org/10.1016/j.landurbplan.2023.104932) (*Landscape and Urban Planning*, 2024; acesso pago)
+- [Plano Estratégico de Ambiente de Oliveira de Azeméis](https://coolio1.github.io/pdfs/2001%20-%20Plano%20Estrategico%20de%20Ambiente.pdf) (2001) e [Indicadores de sustentabilidade para o Grande Porto](https://coolio1.github.io/pdfs/2005%20-%20Indicadores%20de%20sustentabilidade%20para%20o%20Grande%20Porto.pdf) (ESB, 2005)
+- [Projecto de recuperação do Parque de Serralves](https://www.serralves.pt/en/institucional-serralves/parque-projeto-de-recuperacao) (página da Fundação de Serralves) e [POOC Caminha-Espinho, regulamento](https://faolex.fao.org/docs/pdf/por22550.pdf) (Resolução do Conselho de Ministros n.º 25/99)
+
 ### Documentos da Campo Aberto
 
+- [Parecer da Campo Aberto sobre o PDM do Porto](https://coolio1.github.io/pdfs/Voluntariado/Campo%20Aberto/2004-01-30%20-%20Parecer%20da%20Campo%20Aberto%20sobre%20o%20PDM%20do%20Porto.pdf) (2004), [propostas sobre urbanismo](https://www.campoaberto.pt/wp-content/uploads/2020/12/Parecer-urbanismo.pdf) (2020), [contributos para o novo PDM, encarte](https://coolio1.github.io/pdfs/Voluntariado/Campo%20Aberto/2021-03-20%20-%20Parecer%20Campo%20Aberto%20PDM%20-%20encarte%20final.pdf) (2021) e [Mapa Verde do Porto](https://www.campoaberto.pt/files_drupal/livros/mapa_verde.pdf)
 - [Compilação de fichas «50 Espaços Verdes em Perigo»](https://campoaberto.pt/wp-content/uploads/2014/03/espacos.pdf) e [compilação de 111 fichas de espaços verdes](https://campoaberto.pt/wp-content/uploads/2018/09/111espacosverdes.pdf)
 - [Documentos de apoio à campanha](https://campoaberto.pt/wp-content/uploads/2017/05/Compacto-Documentos-Campanha.pdf) (2017)
 - [Parecer da PROMindelo sobre a Paisagem Protegida do Litoral de Vila do Conde](https://campoaberto.pt/wp-content/uploads/2009/05/parecerpromindelo.pdf)
