@@ -109,6 +109,7 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - **Estrutura Ecológica da Área Metropolitana do Porto** (ICETA, coordenação de Teresa Andresen, 2004): [PDF, 11 MB]({{ site.baseurl }}/50espacos/estudos/amp-estrutura-ecologica-2004.pdf)
 - **Futuro Sustentável, diagnóstico de ambiente do Grande Porto: ordenamento do território, espaços verdes e áreas naturais** (ESB e UCP, 2005; 152 pp.): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-diagnostico-ordenamento-2005.pdf)
 - **Futuro Sustentável, plano de acção: ordenamento do território, espaços verdes e áreas naturais** (ESB e UCP, Abril de 2008; 109 pp.): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-plano-accao-ordenamento-2008.pdf)
+- Outros relatórios do Futuro Sustentável (água, indicadores) estão mais abaixo, e os restantes, como o de mobilidade e qualidade do ar, numa [página de relatórios técnicos](https://coolio1.github.io/escritos.html#trabalhos).
 - **Carta de solos e carta de aptidão da terra para a agricultura do Entre Douro e Minho, 1:25 000, memória descritiva** (Agroconsultores e DRAEDM, 2000): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/carta-solos-entre-douro-minho-memoria-2000.pdf)
 - **Retrato da Área Metropolitana do Porto** (INE, 2004): [PDF, 12 MB]({{ site.baseurl }}/50espacos/estudos/ine-retrato-amp-2004.pdf)
 - **Dinâmica de construção na Grande Área Metropolitana do Porto, 1995-2003** (INE, 2007): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/gamp-dinamica-construcao-1995-2003.pdf)
@@ -127,6 +128,8 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - [Projecto de recuperação do Parque de Serralves](https://www.serralves.pt/en/institucional-serralves/parque-projeto-de-recuperacao) (página da Fundação de Serralves)
 
 ### Futuro Sustentável e diagnósticos municipais
+
+O projecto Futuro Sustentável (Escola Superior de Biotecnologia da Universidade Católica Portuguesa, 2005-2008) produziu diagnósticos e planos de acção para o Grande Porto em vários temas. Os restantes relatórios técnicos da Escola Superior de Biotecnologia estão reunidos numa [página de relatórios técnicos](https://coolio1.github.io/escritos.html#trabalhos).
 
 - **Futuro Sustentável, diagnóstico de ambiente do Grande Porto: água** (ESB e UCP, Janeiro de 2006; 114 pp.): [PDF, 3 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-diagnostico-agua-2006.pdf)
 - **Futuro Sustentável, plano de acção: água** (ESB e UCP, versão para consulta, Abril de 2008): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-plano-accao-agua-2008.pdf)
