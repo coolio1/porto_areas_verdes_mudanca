@@ -11,7 +11,7 @@ lat: 41.23
 lon: -8.63
 origem_coord: ficha 2006–2008 (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/quinta-dos-conegos/delimitacao.jpg"}, {"src": "/50espacos/media/quinta-dos-conegos/delimitacao2.jpg"}]
+fotos: [{"src": "/50espacos/media/quinta-dos-conegos/campo-01.jpg"}, {"src": "/50espacos/media/quinta-dos-conegos/campo-02.jpg"}, {"src": "/50espacos/media/quinta-dos-conegos/campo-03.jpg"}, {"src": "/50espacos/media/quinta-dos-conegos/delimitacao.jpg"}, {"src": "/50espacos/media/quinta-dos-conegos/delimitacao2.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Webnode da campanha", "Lista de Abril de 2009"]
 ---
 A Quinta dos Cónegos, na Maia, tem cerca de 22 ha e foi a quinta de recreio dos bispos do Porto. Tem um solar do século XVIII com jardins, fontes monumentais e ermidas, e é considerada uma das mais belas moradas dos arredores do Porto, integrada nos chamados Jardins da Maia. Os chafarizes e a estatuária são possivelmente de Nicolau Nasoni. Está envolvida por árvores, com tufos de tílias, pomares, relvados amplos e biombos de arvoredo, e tem hoje campos de ténis e piscina em declives relvados. A casa tem uma capela particular da Sagrada Família, de 1781, escadaria, varanda e uma fonte com um dragão, e guardou durante muito tempo uma colecção de mobiliário, pintura, tapeçarias e porcelanas; em 2004 foi restaurado o retábulo de talha dourada da capela.

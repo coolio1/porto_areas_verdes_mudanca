@@ -11,7 +11,7 @@ lat: 41.45
 lon: -8.77
 origem_coord: ficha 2006–2008 (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/campos-de-masseira/01.jpg"}, {"src": "/50espacos/media/campos-de-masseira/02.jpg"}, {"src": "/50espacos/media/campos-de-masseira/03.jpg"}, {"src": "/50espacos/media/campos-de-masseira/04.jpg"}, {"src": "/50espacos/media/campos-de-masseira/05.jpg"}, {"src": "/50espacos/media/campos-de-masseira/06.jpg"}, {"src": "/50espacos/media/campos-de-masseira/delimitacao.jpg"}]
+fotos: [{"src": "/50espacos/media/campos-de-masseira/01.jpg"}, {"src": "/50espacos/media/campos-de-masseira/02.jpg"}, {"src": "/50espacos/media/campos-de-masseira/03.jpg"}, {"src": "/50espacos/media/campos-de-masseira/04.jpg"}, {"src": "/50espacos/media/campos-de-masseira/05.jpg"}, {"src": "/50espacos/media/campos-de-masseira/06.jpg"}, {"src": "/50espacos/media/campos-de-masseira/campo-01.jpg"}, {"src": "/50espacos/media/campos-de-masseira/campo-02.jpg"}, {"src": "/50espacos/media/campos-de-masseira/campo-03.jpg"}, {"src": "/50espacos/media/campos-de-masseira/campo-04.jpg"}, {"src": "/50espacos/media/campos-de-masseira/campo-05.jpg"}, {"src": "/50espacos/media/campos-de-masseira/delimitacao.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Lista de Abril de 2009"]
 ---
 Os campos de masseira, também chamados campos-gamela ou campos-tabuleiro, são uma forma de agricultura única no mundo, própria das freguesias de Estela e Aguçadoura, na Póvoa de Varzim, e da vizinha Apúlia, em Esposende. Estende-se por cerca de 450 ha de terrenos de areia de duna, na faixa litoral entre a foz do Neiva e as terras a norte da Póvoa.

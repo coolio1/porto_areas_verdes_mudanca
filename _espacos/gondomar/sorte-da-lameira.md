@@ -11,7 +11,7 @@ lat: 41.05
 lon: -8.38
 origem_coord: ficha 2006–2008 (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/sorte-da-lameira/01.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/02.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/03.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/04.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/05.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/delimitacao.jpg"}]
+fotos: [{"src": "/50espacos/media/sorte-da-lameira/01.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/02.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/03.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/04.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/05.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/campo-01.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/campo-02.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/campo-03.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/campo-04.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/campo-05.jpg"}, {"src": "/50espacos/media/sorte-da-lameira/delimitacao.jpg"}]
 anexos: [{"src": "/50espacos/media/sorte-da-lameira/Sorte_da_Lameira.pdf", "titulo": "Sorte da Lameira"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Webnode da campanha", "Lista de Abril de 2009"]
 ---

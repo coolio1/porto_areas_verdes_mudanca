@@ -11,7 +11,7 @@ lat: 41.08
 lon: -8.54
 origem_coord: ficha 2006–2008 (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/rio-febros/01.jpg"}, {"src": "/50espacos/media/rio-febros/02.jpg"}, {"src": "/50espacos/media/rio-febros/03.jpg"}, {"src": "/50espacos/media/rio-febros/04.jpg"}, {"src": "/50espacos/media/rio-febros/05.jpg"}, {"src": "/50espacos/media/rio-febros/06.jpg"}, {"src": "/50espacos/media/rio-febros/delimitacao.jpg"}, {"src": "/50espacos/media/rio-febros/trilho1_rio_febros.jpg"}, {"src": "/50espacos/media/rio-febros/trilho2_rio_febros.jpg"}]
+fotos: [{"src": "/50espacos/media/rio-febros/01.jpg"}, {"src": "/50espacos/media/rio-febros/02.jpg"}, {"src": "/50espacos/media/rio-febros/03.jpg"}, {"src": "/50espacos/media/rio-febros/04.jpg"}, {"src": "/50espacos/media/rio-febros/05.jpg"}, {"src": "/50espacos/media/rio-febros/06.jpg"}, {"src": "/50espacos/media/rio-febros/campo-01.jpg"}, {"src": "/50espacos/media/rio-febros/campo-02.jpg"}, {"src": "/50espacos/media/rio-febros/delimitacao.jpg"}, {"src": "/50espacos/media/rio-febros/trilho1_rio_febros.jpg"}, {"src": "/50espacos/media/rio-febros/trilho2_rio_febros.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Webnode da campanha", "Lista de Abril de 2009"]
 ---
 O Rio Febros é o último afluente da margem esquerda do Douro, com cerca de 15 km e 37 km² de bacia, e o único curso de água que nasce e desagua no concelho de Vila Nova de Gaia. Nasce no Parque das Corgas (Seixezelo), a 170 m de altitude, atravessa Seixezelo, Olival, Pedroso, Vilar de Andorinho, Avintes e Oliveira do Douro, e desagua no Cais do Esteiro, a 10 km da foz do Douro, num vale granítico. O espaço tem cerca de 71,5 ha; foi diminuído pela construção da A32.

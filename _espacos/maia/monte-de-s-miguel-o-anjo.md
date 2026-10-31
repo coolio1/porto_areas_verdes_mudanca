@@ -11,7 +11,7 @@ lat: 41.25
 lon: -8.53
 origem_coord: ficha 2006–2008 (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/monte-de-s-miguel-o-anjo/01.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/02.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/delimitacao.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/mapa01.jpg"}]
+fotos: [{"src": "/50espacos/media/monte-de-s-miguel-o-anjo/01.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/02.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/campo-01.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/campo-02.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/campo-03.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/campo-04.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/campo-05.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/delimitacao.jpg"}, {"src": "/50espacos/media/monte-de-s-miguel-o-anjo/mapa01.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Webnode da campanha", "Lista de Abril de 2009"]
 ---
 O Monte de São Miguel-o-Anjo, em São Pedro de Fins, é o ponto mais alto do concelho da Maia, a 255 m, numa elevação xistosa. Mede entre 10 e 31 ha, conforme a delimitação. É floresta de eucalipto e pinheiro-bravo, com mimosas e austrálias, mas também sobreiros, carvalho-alvarinho em regeneração, padreiro, loureiro e azevinho. No topo há uma clareira com a capela de São Miguel-o-Anjo e um adro que serve de miradouro, rodeado de muitas plantas ornamentais, como plátano, tília, liquidâmbar, palmeira-das-canárias, teixo e cedro-branco.

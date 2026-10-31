@@ -10,7 +10,7 @@ lat: 41.2
 lon: -8.61
 origem_coord: Webnode da campanha (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/envolvente-do-largo-da-ermida-em-s-mamede-de-infesta/delimitacao.jpg"}]
+fotos: [{"src": "/50espacos/media/envolvente-do-largo-da-ermida-em-s-mamede-de-infesta/campo-01.jpg"}, {"src": "/50espacos/media/envolvente-do-largo-da-ermida-em-s-mamede-de-infesta/campo-02.jpg"}, {"src": "/50espacos/media/envolvente-do-largo-da-ermida-em-s-mamede-de-infesta/campo-03.jpg"}, {"src": "/50espacos/media/envolvente-do-largo-da-ermida-em-s-mamede-de-infesta/campo-04.jpg"}, {"src": "/50espacos/media/envolvente-do-largo-da-ermida-em-s-mamede-de-infesta/campo-05.jpg"}, {"src": "/50espacos/media/envolvente-do-largo-da-ermida-em-s-mamede-de-infesta/delimitacao.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Webnode da campanha", "Lista de Abril de 2009"]
 ---
 A envolvente do Largo da Ermida, em São Mamede de Infesta, é um mosaico de arvoredos, quintais e quintas, com cerca de 2,2 ha, que conserva um carácter rural e agrícola no meio de uma zona de expansão urbana crescente. Reúne antigas quintas e jardins dos séculos XVIII e XIX: um jardim e uma capela, de origem presumivelmente seiscentista; um palacete do início do século XX, onde funciona hoje um externato, com o respectivo jardim; a Quinta do Marques Pinto, a norte do largo, com um palacete de finais do século XIX ou início do XX; e a Quinta do Eduardinho, a sul.
