@@ -54,6 +54,7 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 
 ## Biodiversidade e áreas protegidas
 
+- **Estado do «Parque Natural» de Santa Justa, Pias e Castiçal** (apresentação de 22 diapositivos, 2005; autoria não identificada, com cronologia das tentativas de protecção da serra): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/valongo-santa-justa-estado-2005.pdf)
 - **Paisagem Protegida do Litoral de Vila do Conde: proposta de criação** (CIBIO, 2007): [PDF, 11 MB]({{ site.baseurl }}/50espacos/estudos/vila-do-conde-paisagem-protegida-cibio-2007.pdf)
 - **Proposta da Área Metropolitana do Porto de criação da Paisagem Protegida do Litoral de Vila do Conde** (2009): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/vila-do-conde-paisagem-protegida-proposta-amp-2009.pdf)
 - **Propostas de intervenção para a Reserva Ornitológica de Mindelo** (Associação da Reserva Ornitológica de Mindelo, versão para discussão 3.0, Outubro de 1999; 29 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/mindelo-rom-propostas-intervencao-1999.pdf)
@@ -81,12 +82,15 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 - **Futuro Sustentável, relatório global da participação pública** (2008; 19 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-participacao-publica-2008.pdf)
 - **Síntese do diagnóstico de sustentabilidade do concelho de Vila Nova de Gaia** (Eixo Atlântico, projecto Agenda 21, versão preliminar, Abril de 2006; 56 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-sintese-gaia-2006.pdf)
 - **Síntese do diagnóstico de sustentabilidade do concelho do Porto** (Eixo Atlântico, projecto Agenda 21, versão preliminar, Abril de 2006; 55 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-sintese-porto-2006.pdf)
+- **Biodiversidade, Vila Nova de Gaia** (capítulo do diagnóstico de sustentabilidade, Eixo Atlântico, 2005; 23 pp.): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-biodiversidade-gaia.pdf)
 - **Diagnóstico de São João da Madeira** (relatório final, Março de 2003; 79 pp.): [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/sao-joao-da-madeira-diagnostico-2003.pdf)
 - **Plano Estratégico do Município da Trofa, diagnóstico de situação** (relatório intercalar, Outubro de 2000; 73 pp.): [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/trofa-plano-estrategico-diagnostico-2000.pdf)
 - **Agenda 21 Local de Santo Tirso** (documento de candidatura, 43 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/santo-tirso-agenda-21-local.pdf)
 
 ### Estatística, ambiente urbano e território
 
+- **Indicadores de qualidade do ambiente urbano da Área Metropolitana do Porto** (relatório anual de 1997, versão provisória para discussão, Comissão de Coordenação da Região do Norte, Fevereiro de 1998; 253 pp., digitalização sem texto pesquisável): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/amp-indicadores-ambiente-urbano.pdf)
+- **Fragmentos utópicos na cidade caótica: os condomínios fechados no Grande Porto** (tese, Universidade do Porto; 654 pp., digitalização sem texto pesquisável): [PDF, 61 MB]({{ site.baseurl }}/50espacos/estudos/grande-porto-condominios-fechados-tese.pdf)
 - **Dinâmicas de transformação e qualidade do ambiente urbano: o caso da Área Metropolitana do Porto** (INE, *Estatísticas e Estudos Regionais* n.º 14, 1998): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/ine-dinamicas-ambiente-urbano-amp-1998.pdf)
 - **Pressão construtiva na Área Metropolitana do Porto** (INE, *Estatísticas e Estudos Regionais* n.º 19, 1999): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/ine-pressao-construtiva-amp-1999.pdf)
 - **Padrões habitacionais na Área Metropolitana do Porto** (INE, *Estatísticas e Estudos Regionais*, 1999): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/ine-padroes-habitacionais-amp-1999.pdf)
