@@ -18,3 +18,5 @@ O Monte de Santo António (156 m), no lugar da Cavadinha, em Silva Escura, ocupa
 Na envolvente há um cruzeiro, a capela de Santo António, a que se sobe por uma escadaria e que foi restaurada depois de um incêndio, um campo de jogos, um parque de merendas, um miradouro e estacionamento. O adro é um amplo espaço de romaria e as festas realizam-se a 13 de Junho. Junto fica um hipódromo.
 
 É uma mata pública, área florestal na carta florestal da Maia, com uma parte ínfima em Reserva Ecológica Nacional. A pressão urbanística nas encostas é significativa, e há abate de árvores e invasão por eucalipto e acácias. A Câmara Municipal da Maia previa plantar muitas espécies autóctones, converter o campo de futebol em campos de ténis, polidesportivo e espaço radical, com um talude relvado como bancada, e instalar um parque infantil a poente.
+
+Segundo o estudo da rede de parques metropolitanos (2009), no Verão de 2008 decorria a construção das infra-estruturas do projecto de requalificação, com campos desportivos e parque infantil, e o sítio continuava «bastante desqualificado». O estudo indica como acesso a Rua João Paulo II.
