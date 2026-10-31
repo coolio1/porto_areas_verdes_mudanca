@@ -116,6 +116,7 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - **Masterplan Estratégico da Zona Oriental do Porto, sumário executivo** (Câmara Municipal do Porto, Julho de 2019): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/porto-masterplan-zona-oriental-2019.pdf)
 - **Parecer da Campo Aberto sobre a Estratégia de Valorização do Vale da Ribeira da Granja** (Porto, 31 de Maio de 2002; 14 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/porto-ribeira-da-granja-parecer-2002.pdf)
 - **Plano de Pormenor do Parque Oriental, estudos de caracterização** (Câmara Municipal do Porto, Junho de 2005): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/porto-parque-oriental-plano-pormenor-caracterizacao-2005.pdf)
+- **Proposta para a elaboração do Plano de Pormenor do Parque Oriental** (Câmara Municipal do Porto, 17 de Fevereiro de 2005): [PDF, 0,1 MB]({{ site.baseurl }}/50espacos/estudos/porto-parque-oriental-proposta-pp-2005.pdf)
 - **Parque Oriental: planta da proposta de plano de pormenor** (Câmara Municipal do Porto, 2005): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/porto-parque-oriental-planta-pp-2005.pdf)
 - **Projectos para o Parque da Cidade** (plano da zona desportiva do Castelo do Queijo de 1948 e plano Auzelle de 1961): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/porto-parque-cidade-projectos.pdf)
 - **Estudo de incidências ambientais do Programa Polis de Gondomar** (Câmara Municipal de Gondomar, 2004): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/gondomar-polis-incidencias-ambientais-2004.pdf)
