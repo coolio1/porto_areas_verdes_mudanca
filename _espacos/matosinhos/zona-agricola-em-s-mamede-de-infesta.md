@@ -10,7 +10,7 @@ lat: 41.19
 lon: -8.61
 origem_coord: Webnode da campanha (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/zona-agricola-em-s-mamede-de-infesta/delimitacao.jpg"}, {"src": "/50espacos/media/zona-agricola-em-s-mamede-de-infesta/delimitacao2.jpg"}]
+fotos: [{"src": "/50espacos/media/zona-agricola-em-s-mamede-de-infesta/campo-01.jpg"}, {"src": "/50espacos/media/zona-agricola-em-s-mamede-de-infesta/campo-02.jpg"}, {"src": "/50espacos/media/zona-agricola-em-s-mamede-de-infesta/campo-03.jpg"}, {"src": "/50espacos/media/zona-agricola-em-s-mamede-de-infesta/campo-04.jpg"}, {"src": "/50espacos/media/zona-agricola-em-s-mamede-de-infesta/campo-05.jpg"}, {"src": "/50espacos/media/zona-agricola-em-s-mamede-de-infesta/delimitacao.jpg"}, {"src": "/50espacos/media/zona-agricola-em-s-mamede-de-infesta/delimitacao2.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Webnode da campanha", "Lista de Abril de 2009"]
 ---
 A zona agrícola de São Mamede de Infesta é uma extensa área de campos, com cerca de 64,5 ha, a nascente e a poente da Rua de Santo António do Telheiro, entre a linha de caminho de ferro e a Rua das Flores. É atravessada pela Ribeira de Picoutos e fica entre o Porto e Matosinhos, numa área de elevada densidade populacional, o que lhe dá potencial para se tornar um grande espaço verde e um corredor ecológico. Observa-se aqui um grande número de aves.

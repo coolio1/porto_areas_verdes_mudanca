@@ -11,7 +11,7 @@ lat: 41.43
 lon: -8.71
 origem_coord: ficha 2006–2008 (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/monte-de-s-felix/delimitacao.jpg"}, {"src": "/50espacos/media/monte-de-s-felix/delimitacao2.jpg"}]
+fotos: [{"src": "/50espacos/media/monte-de-s-felix/campo-01.jpg"}, {"src": "/50espacos/media/monte-de-s-felix/campo-02.jpg"}, {"src": "/50espacos/media/monte-de-s-felix/campo-03.jpg"}, {"src": "/50espacos/media/monte-de-s-felix/campo-04.jpg"}, {"src": "/50espacos/media/monte-de-s-felix/campo-05.jpg"}, {"src": "/50espacos/media/monte-de-s-felix/delimitacao.jpg"}, {"src": "/50espacos/media/monte-de-s-felix/delimitacao2.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Lista de Abril de 2009"]
 ---
 O Monte de S. Félix, com 202 m, é o ponto mais alto da Serra de Rates e do concelho da Póvoa de Varzim. Ocupa cerca de 52 ha nas freguesias de Laúndos e Rates e destaca-se na paisagem como uma elevação sobre a planície litoral, com vista sobre a cidade e as praias.

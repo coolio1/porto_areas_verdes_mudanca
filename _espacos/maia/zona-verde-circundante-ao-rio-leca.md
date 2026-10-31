@@ -6,7 +6,7 @@ seleccionado: true
 selecao: 2009-04
 n_ficha: 1893
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/01.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/02.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/03.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/delimitacao.jpg"}]
+fotos: [{"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/01.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/02.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/03.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/campo-01.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/campo-02.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/campo-03.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/campo-04.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/campo-05.jpg"}, {"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/delimitacao.jpg"}]
 anexos: [{"src": "/50espacos/media/zona-verde-circundante-ao-rio-leca/Lugar_de_Parada.pdf", "titulo": "Lugar de Parada"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Lista de Abril de 2009"]
 ---

@@ -11,7 +11,7 @@ lat: 41.21
 lon: -8.63
 origem_coord: ficha 2006–2008 (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/espaco-centoecatorze/01.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/02.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/03.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/delimitacao.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/folheto1.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/folheto2.jpg"}]
+fotos: [{"src": "/50espacos/media/espaco-centoecatorze/01.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/02.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/03.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/campo-01.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/campo-02.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/delimitacao.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/folheto1.jpg"}, {"src": "/50espacos/media/espaco-centoecatorze/folheto2.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Lista de Abril de 2009"]
 ---
 O Espaço Centoecatorze, em Leça do Balio, é uma quinta de cerca de 2,3 ha que junta a criação artística à agricultura biológica. Tem uma área verde com um lago, que é uma piscina biológica, uma horta biológica e uma estação de tratamento de águas por plantas (ETAP), que recicla todas as águas usadas no atelier e nas residências ligadas ao espaço e as devolve ao meio sem comprometer outros usos, aproveitando-as para rega.
