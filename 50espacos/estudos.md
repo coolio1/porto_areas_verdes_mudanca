@@ -107,9 +107,6 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 
 - **Rede de Parques Metropolitanos na Grande Área Metropolitana do Porto, relatório final** (coordenação de Teresa Andresen, Fevereiro de 2009; inclui o atlas dos parques, os sistemas estruturantes por bacia, as fichas dos sítios e os cadernos de boas práticas): [PDF, 82 MB]({{ site.baseurl }}/50espacos/estudos/gamp-rede-parques-relatorio-final-2009.pdf)
 - **Estrutura Ecológica da Área Metropolitana do Porto** (ICETA, coordenação de Teresa Andresen, 2004): [PDF, 11 MB]({{ site.baseurl }}/50espacos/estudos/amp-estrutura-ecologica-2004.pdf)
-- **Futuro Sustentável, diagnóstico de ambiente do Grande Porto: ordenamento do território, espaços verdes e áreas naturais** (ESB e UCP, 2005; 152 pp.): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-diagnostico-ordenamento-2005.pdf)
-- **Futuro Sustentável, plano de acção: ordenamento do território, espaços verdes e áreas naturais** (ESB e UCP, Abril de 2008; 109 pp.): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-plano-accao-ordenamento-2008.pdf)
-- Outros relatórios do Futuro Sustentável (água, indicadores) estão mais abaixo, e os restantes, como o de mobilidade e qualidade do ar, numa [página de relatórios técnicos](https://coolio1.github.io/escritos.html#trabalhos).
 - **Carta de solos e carta de aptidão da terra para a agricultura do Entre Douro e Minho, 1:25 000, memória descritiva** (Agroconsultores e DRAEDM, 2000): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/carta-solos-entre-douro-minho-memoria-2000.pdf)
 - **Retrato da Área Metropolitana do Porto** (INE, 2004): [PDF, 12 MB]({{ site.baseurl }}/50espacos/estudos/ine-retrato-amp-2004.pdf)
 - **Dinâmica de construção na Grande Área Metropolitana do Porto, 1995-2003** (INE, 2007): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/gamp-dinamica-construcao-1995-2003.pdf)
@@ -127,22 +124,16 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - **[Atlas da Área Metropolitana do Porto](https://repositorio-aberto.up.pt/bitstream/10216/67396/2/8854.pdf)** (AMP e FEUP, 2002)
 - **[Projecto de recuperação do Parque de Serralves](https://www.serralves.pt/en/institucional-serralves/parque-projeto-de-recuperacao)** (página da Fundação de Serralves)
 
-### Futuro Sustentável e diagnósticos municipais
+### Diagnósticos municipais
 
-O projecto Futuro Sustentável (Escola Superior de Biotecnologia da Universidade Católica Portuguesa, 2005-2008) produziu diagnósticos e planos de acção para o Grande Porto em vários temas. Os restantes relatórios técnicos da Escola Superior de Biotecnologia estão reunidos numa [página de relatórios técnicos](https://coolio1.github.io/escritos.html#trabalhos).
+Os relatórios do projecto Futuro Sustentável (diagnósticos e planos de acção para o Grande Porto, da Escola Superior de Biotecnologia da Universidade Católica Portuguesa) e outros relatórios técnicos da mesma escola estão numa [página de relatórios técnicos](https://coolio1.github.io/escritos.html#trabalhos).
 
-- **Futuro Sustentável, diagnóstico de ambiente do Grande Porto: água** (ESB e UCP, Janeiro de 2006; 114 pp.): [PDF, 3 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-diagnostico-agua-2006.pdf)
-- **Futuro Sustentável, plano de acção: água** (ESB e UCP, versão para consulta, Abril de 2008): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-plano-accao-agua-2008.pdf)
-- **Futuro Sustentável, relatório do questionário «Sinal Verde» à população do Grande Porto** (2005; 79 pp.): [PDF, 8 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-questionario-sinal-verde-2005.pdf)
-- **Futuro Sustentável, relatório global da participação pública** (2008; 19 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-participacao-publica-2008.pdf)
 - **Síntese do diagnóstico de sustentabilidade do concelho de Vila Nova de Gaia** (Eixo Atlântico, projecto Agenda 21, versão preliminar, Abril de 2006; 56 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-sintese-gaia-2006.pdf)
 - **Síntese do diagnóstico de sustentabilidade do concelho do Porto** (Eixo Atlântico, projecto Agenda 21, versão preliminar, Abril de 2006; 55 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-sintese-porto-2006.pdf)
 - **Biodiversidade, Vila Nova de Gaia** (capítulo do diagnóstico de sustentabilidade, Eixo Atlântico, 2005; 23 pp.): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-biodiversidade-gaia.pdf)
 - **Diagnóstico de São João da Madeira** (relatório final, Março de 2003; 79 pp.): [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/sao-joao-da-madeira-diagnostico-2003.pdf)
 - **Plano Estratégico do Município da Trofa, diagnóstico de situação** (relatório intercalar, Outubro de 2000; 73 pp.): [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/trofa-plano-estrategico-diagnostico-2000.pdf)
 - **Agenda 21 Local de Santo Tirso** (documento de candidatura, 43 pp.): [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/santo-tirso-agenda-21-local.pdf)
-- **[Indicadores de sustentabilidade para o Grande Porto](https://coolio1.github.io/pdfs/2005%20-%20Indicadores%20de%20sustentabilidade%20para%20o%20Grande%20Porto.pdf)** (ESB e UCP, 2005)
-- **[Plano Estratégico de Ambiente de Oliveira de Azeméis](https://coolio1.github.io/pdfs/2001%20-%20Plano%20Estrategico%20de%20Ambiente.pdf)** (2001)
 
 ### Estatística, ambiente urbano e território
 
