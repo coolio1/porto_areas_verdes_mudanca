@@ -38,7 +38,7 @@ O parecer sobre a Estratégia de Valorização do Vale da Ribeira da Granja (200
 
 ### PROT-Norte (versões de 2007 a 2009, não aprovadas)
 
-Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte, da CCDR-N, e a versão actual.
+Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte, da CCDR-N, e a proposta de 2024. O plano foi entretanto aprovado em 2026 (Resolução do Conselho de Ministros n.º 56/2026, de 23 de Março; [texto no *Diário da República*](https://files.diariodarepublica.pt/1s/2026/03/05700/0000200186.pdf)).
 
 - Comissão de Coordenação e Desenvolvimento Regional do Norte (2009). **Plano Regional de Ordenamento do Território da Região do Norte (PROT-Norte): proposta de plano** (248 pp.). CCDR-N. [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-proposta-plano-2009.pdf)
 - Comissão de Coordenação e Desenvolvimento Regional do Norte (2009). **Plano Regional de Ordenamento do Território do Norte (PROT-Norte): relatório** (288 pp.). CCDR-N. [PDF, 14 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-relatorio-2009.pdf)
@@ -51,7 +51,7 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 - Comissão de Coordenação e Desenvolvimento Regional do Norte (2009). **PROT-Norte: sumário executivo** (Julho de 2009). CCDR-N. [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-sumario-executivo-2009.pdf) e **PROT-Norte: programa de execução** (Julho de 2009). CCDR-N. [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-programa-execucao-2009.pdf)
 - Mendes, J. F. G. (coord.), Silva, L. T., & Ribeiro, L. A. (2007). **PROT-Norte, fase I, temática «Ambiente urbano»: relatório final**. Universidade do Minho, para a Comissão de Coordenação e Desenvolvimento Regional do Norte. [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-ambiente-urbano-2007.pdf)
 - Comissão de Coordenação e Desenvolvimento Regional do Norte (2009). **PROT-Norte, fase III: ordenamento florestal e agrícola e desenvolvimento rural** (Abril de 2009). CCDR-N. [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/prot-norte-ordenamento-florestal-agricola-2009.pdf)
-- Comissão de Coordenação e Desenvolvimento Regional do Norte (2024). **PROT-Norte, versão actual**: [volume 1, estratégia e modelo territorial](https://www.ccdr-n.pt/storage/app/media/uploaded-files/PROT-NORTE_VOL_1_ESTRAT%C3%89GIA_E_MODELO_TERRITORIAL.pdf), [volume 2, agenda transformadora](https://www.ccdr-n.pt/storage/app/media/uploaded-files/PROT-NORTE_VOL_2_AGENDA_TRANSFORMADORA.pdf) e [relatório de diagnóstico](https://www.ccdr-n.pt/storage/app/media/uploaded-files/1_RELATORIO_DIAGNOSTICO_COMPONENTES_PROT-NORTE.pdf); [relatório ambiental](https://www.ccdr-n.pt/storage/app/media/uploaded-files/2_1_RELATORIO_AMBIENTAL_PROT-NORTE.pdf), [quadro de referência estratégico](https://www.ccdr-n.pt/storage/app/media/uploaded-files/3_QUADRO_REFERENCIA_ESTRATEGICO_PROT-NORTE.pdf) e Ribeiro, R. (2024), [apresentação da sessão pública no Porto, «Água, Biodiversidade e Carbono»](https://www.ccdr-n.pt/storage/app/media/uploaded-files/PROT_NORTE_Apresenta%C3%A7%C3%A3o_Sess%C3%A3o_P%C3%BAblica_28_10_2024_Porto_Rui_Ribeiro.pdf) (28 de Outubro de 2024); restantes peças em [ccdr-n.pt/pagina/prot-norte](https://www.ccdr-n.pt/pagina/prot-norte)
+- Comissão de Coordenação e Desenvolvimento Regional do Norte (2024). **PROT-Norte, proposta de 2024 (anterior à aprovação)**: [volume 1, estratégia e modelo territorial](https://www.ccdr-n.pt/storage/app/media/uploaded-files/PROT-NORTE_VOL_1_ESTRAT%C3%89GIA_E_MODELO_TERRITORIAL.pdf), [volume 2, agenda transformadora](https://www.ccdr-n.pt/storage/app/media/uploaded-files/PROT-NORTE_VOL_2_AGENDA_TRANSFORMADORA.pdf) e [relatório de diagnóstico](https://www.ccdr-n.pt/storage/app/media/uploaded-files/1_RELATORIO_DIAGNOSTICO_COMPONENTES_PROT-NORTE.pdf); [relatório ambiental](https://www.ccdr-n.pt/storage/app/media/uploaded-files/2_1_RELATORIO_AMBIENTAL_PROT-NORTE.pdf), [quadro de referência estratégico](https://www.ccdr-n.pt/storage/app/media/uploaded-files/3_QUADRO_REFERENCIA_ESTRATEGICO_PROT-NORTE.pdf) e Ribeiro, R. (2024), [apresentação da sessão pública no Porto, «Água, Biodiversidade e Carbono»](https://www.ccdr-n.pt/storage/app/media/uploaded-files/PROT_NORTE_Apresenta%C3%A7%C3%A3o_Sess%C3%A3o_P%C3%BAblica_28_10_2024_Porto_Rui_Ribeiro.pdf) (28 de Outubro de 2024); restantes peças em [ccdr-n.pt/pagina/prot-norte](https://www.ccdr-n.pt/pagina/prot-norte)
 - Andresen, T. (2009). **[PROT-Norte: estrutura regional de protecção e valorização ambiental](https://www.campoaberto.pt/wp-content/uploads/2009/09/Teresa-Andresen.pdf)** (apresentação, PROT-Norte). Comissão de Coordenação e Desenvolvimento Regional do Norte.
 
 ### Norte 2015 e estrutura ecológica (CCDR-N)
@@ -63,6 +63,8 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 
 
 ### Floresta e incêndios
+
+Os planos de 2003 e 2006 abaixo estão superados: o Programa Regional de Ordenamento Florestal de Entre Douro e Vouga (Portaria n.º 58/2019) substitui o de 2006.
 
 - Direcção Regional de Agricultura de Entre Douro e Minho, Direcção-Geral dos Recursos Florestais, & Universidade de Trás-os-Montes e Alto Douro (2006). **Plano Regional de Ordenamento Florestal da Área Metropolitana do Porto e Entre Douro e Vouga, fase 1: bases de ordenamento** (153 pp.). [PDF, 34 MB]({{ site.baseurl }}/50espacos/estudos/prof-amp-edv-bases-2006.pdf)
 - Direcção Regional de Agricultura de Entre Douro e Minho, Direcção-Geral dos Recursos Florestais, & Universidade de Trás-os-Montes e Alto Douro (2006). **Plano Regional de Ordenamento Florestal da Área Metropolitana do Porto e Entre Douro e Vouga, fase 2: proposta de plano** (230 pp.). [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/prof-amp-edv-plano.pdf)
@@ -80,7 +82,7 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 
 ### Litoral e Rede Natura 2000
 
-- Conselho de Ministros (1999). **[POOC Caminha-Espinho](https://diariodarepublica.pt/dr/detalhe/resolucao-conselho-ministros/25-1999-549058)**, Resolução do Conselho de Ministros n.º 25/99 ([regulamento em PDF](https://faolex.fao.org/docs/pdf/por22550.pdf)). *Diário da República*.
+- Conselho de Ministros (1999). **[POOC Caminha-Espinho](https://diariodarepublica.pt/dr/detalhe/resolucao-conselho-ministros/25-1999-549058)**, Resolução do Conselho de Ministros n.º 25/99 ([regulamento em PDF](https://faolex.fao.org/docs/pdf/por22550.pdf)). *Diário da República*. Superado: substituído pelo Programa da Orla Costeira Caminha–Espinho (Resolução do Conselho de Ministros n.º 111/2021, de 11 de Agosto).
 - Conselho de Ministros (2008). **[Plano Sectorial da Rede Natura 2000](https://www.cm-coimbra.pt/wp-content/uploads/2019/04/03-RCM_115A_2008.pdf)** (Resolução do Conselho de Ministros n.º 115-A/2008). *Diário da República*.
 
 ### PDM do Porto
@@ -92,6 +94,8 @@ Todas as peças estão em [pdm.cm-porto.pt/documentacao](https://pdm.cm-porto.pt
 - Câmara Municipal do Porto (2020). **[Relatório do PDM](https://pdm.cm-porto.pt/documents/26/Anexo12__Relatorio.pdf)** e **[Relatório Ambiental da AAE](https://pdm.cm-porto.pt/documents/18/Anexo10_RelAamb_RA-RNT.pdf)** (discussão pública, Setembro de 2020). Câmara Municipal do Porto.
 
 ## Água e bacias hidrográficas
+
+Os planos de gestão de região hidrográfica de 2011 são do 1.º ciclo (versões de consulta pública). O plano em vigor é o do 3.º ciclo (2022–2027), aprovado pela Resolução do Conselho de Ministros n.º 62/2024.
 
 - Instituto da Água (2001). **Plano de Bacia Hidrográfica do Rio Leça, 1.ª fase, síntese** (Volume I, Janeiro de 2001). INAG. [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/plano-bacia-leca-1fase-2001.pdf)
 - Instituto da Água (2001). **Plano de Bacia Hidrográfica do Rio Ave, 1.ª fase, síntese** (Volume I, Janeiro de 2001). INAG. [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/plano-bacia-ave-1fase-2001.pdf)
