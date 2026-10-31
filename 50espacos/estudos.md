@@ -56,6 +56,7 @@ Estudos preparatórios do Plano Regional de Ordenamento do Território do Norte,
 
 - **Futuro Sustentável, diagnóstico de ambiente do Grande Porto: ordenamento do território, espaços verdes e áreas naturais** (ESB e UCP, 2005; 152 pp.): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-diagnostico-ordenamento-2005.pdf)
 - **Futuro Sustentável, plano de acção: ordenamento do território, espaços verdes e áreas naturais** (ESB e UCP, Abril de 2008; 109 pp.): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/futuro-sustentavel-plano-accao-ordenamento-2008.pdf)
+- **Carta de solos e carta de aptidão da terra para a agricultura do Entre Douro e Minho, 1:25 000, memória descritiva** (Agroconsultores e DRAEDM, 2000): [PDF, 4 MB]({{ site.baseurl }}/50espacos/estudos/carta-solos-entre-douro-minho-memoria-2000.pdf)
 - **Retrato da Área Metropolitana do Porto** (INE, 2004): [PDF, 12 MB]({{ site.baseurl }}/50espacos/estudos/ine-retrato-amp-2004.pdf)
 - **Dinâmica de construção na Grande Área Metropolitana do Porto, 1995-2003** (INE, 2007): [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/gamp-dinamica-construcao-1995-2003.pdf)
 - **Primeiro relatório sobre a qualidade de vida urbana, Porto** (Câmara Municipal do Porto e FEP, 2003): [PDF, 13 MB]({{ site.baseurl }}/50espacos/estudos/porto-qualidade-vida-urbana-2003.pdf)
