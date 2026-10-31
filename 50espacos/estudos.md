@@ -135,7 +135,7 @@ Os relatórios do projecto Futuro Sustentável (diagnósticos e planos de acçã
 - Ferreira, H. (direcção técnica), Fernandes, A., Teixeira, C., Brás, L., & Matos, P. (2006). **Síntese do diagnóstico de sustentabilidade do concelho do Porto** (Eixo Atlântico, projecto Agenda 21, versão preliminar, 3 de Abril de 2006; 55 pp.). Eixo Atlântico. [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-sintese-porto-2006.pdf)
 - [Autoria não identificada] (2005). **Biodiversidade, Vila Nova de Gaia** (capítulo do diagnóstico de sustentabilidade, Eixo Atlântico; 23 pp.). Eixo Atlântico. [PDF, 5 MB]({{ site.baseurl }}/50espacos/estudos/eixo-atlantico-biodiversidade-gaia.pdf)
 - crfm consultores (2000). **Plano Estratégico do Município da Trofa, diagnóstico de situação** (relatório intercalar, Outubro de 2000; 73 pp.). crfm consultores, Lda. [PDF, 2 MB]({{ site.baseurl }}/50espacos/estudos/trofa-plano-estrategico-diagnostico-2000.pdf)
-- Quental, N. (2003). **Agenda 21 Local de Santo Tirso** (documento de candidatura; 43 pp.). Câmara Municipal de Santo Tirso e Escola Superior de Biotecnologia, Universidade Católica Portuguesa. [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/santo-tirso-agenda-21-local.pdf)
+- Câmara Municipal de Santo Tirso e Escola Superior de Biotecnologia, Universidade Católica Portuguesa (2003). **Agenda 21 Local de Santo Tirso** (documento de candidatura; 43 pp.). [PDF, 1 MB]({{ site.baseurl }}/50espacos/estudos/santo-tirso-agenda-21-local.pdf)
 
 ### Estatística, ambiente urbano e território
 
