@@ -31,8 +31,7 @@ Documentos da Campo Aberto relacionados com os espaços verdes do Porto e da Ár
 - Campo Aberto (2002). **Bases de reflexão sobre o novo PDM para o Porto** (10 de Outubro de 2002). Campo Aberto. [PDF, 0,2 MB](https://coolio1.github.io/pdfs/Voluntariado/Campo%20Aberto/2002-10-10%20-%20Bases%20de%20reflexao%20sobre%20o%20novo%20PDM%20para%20o%20Porto.pdf); [notícia](https://www.campoaberto.pt/2002/10/06/ambientalistas-tomam-posicao-acerca-da-revisao-do-plano-director-municipal-do-porto/)
 - Campo Aberto (2002). **Contributo para a discussão pública do Plano de Pormenor das Antas** (28 de Janeiro de 2002). Campo Aberto. [PDF, 0,1 MB](https://coolio1.github.io/pdfs/Voluntariado/Campo%20Aberto/2002-01-28%20-%20Contributo%20para%20o%20Plano%20de%20Pormenor%20das%20Antas.pdf); [notícia](https://www.campoaberto.pt/2002/01/28/antas-e-preciso-corrigir-profundamente-o-plano-de-pormenor/)
 - Campo Aberto (s.d.). **[Mapa Verde do Porto](https://www.campoaberto.pt/files_drupal/livros/mapa_verde.pdf)**. Campo Aberto.
-
-O parecer sobre a Estratégia de Valorização do Vale da Ribeira da Granja (2002) e a proposta para o plano de pormenor do Parque Oriental (2005) estão nas fichas respectivas.
+- O parecer sobre a Estratégia de Valorização do Vale da Ribeira da Granja (2002) e a proposta para o plano de pormenor do Parque Oriental (2005) estão nas fichas respectivas.
 
 ## Planos regionais e ordenamento do território
 
