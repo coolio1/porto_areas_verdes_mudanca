@@ -9,6 +9,13 @@ permalink: /50espacos/estudos/
 
 Estudos, planos e relatórios de âmbito alargado que abrangem concelhos da Área Metropolitana do Porto e ajudam a situar os espaços da campanha, organizados por tema. Alguns estão alojados aqui em PDF e outros ligam à fonte original; os documentos são de entidades públicas ou institucionais e reproduzem-se para consulta. Quando existe uma versão mais recente ou final, deve prevalecer.
 
+## A campanha «50 Espaços Verdes»
+
+- **Balanço da campanha «50 Espaços Verdes»** (Campo Aberto, 20 de Novembro de 2007): [PDF, 6 MB]({{ site.baseurl }}/50espacos/estudos/campo-aberto-balanco-campanha-2007.pdf)
+- **Apresentação da lista final da campanha** (Campo Aberto, 4 de Abril de 2009): [PDF, 7 MB]({{ site.baseurl }}/50espacos/estudos/campo-aberto-lista-final-2009.pdf)
+- [Compilação de fichas «50 Espaços Verdes em Perigo»](https://campoaberto.pt/wp-content/uploads/2014/03/espacos.pdf) (Campo Aberto)
+- [Documentos de apoio à campanha](https://campoaberto.pt/wp-content/uploads/2017/05/Compacto-Documentos-Campanha.pdf) (Campo Aberto, 2017)
+
 ## Planos regionais e ordenamento do território
 
 ### PROT-Norte (versões de 2007 a 2009, não aprovadas)
@@ -145,4 +152,4 @@ Contexto regional; não tratam espaços concretos.
 
 ### Documentos da Campo Aberto
 
-Os documentos da Campo Aberto (livro «Reflectir o Porto», balanço e lista final da campanha, fichas dos espaços, pareceres sobre o PDM do Porto, Mapa Verde e outros) estão reunidos na [página de activismo de Nuno Quental](https://coolio1.github.io/activismo.html#campo-aberto).
+Os documentos da Campo Aberto (livro «Reflectir o Porto», pareceres sobre o PDM do Porto, Mapa Verde e outros) estão reunidos na [página de activismo de Nuno Quental](https://coolio1.github.io/activismo.html#campo-aberto).
