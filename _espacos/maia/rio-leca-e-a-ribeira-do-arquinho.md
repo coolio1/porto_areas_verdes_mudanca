@@ -11,7 +11,7 @@ lat: 41.21
 lon: -8.6
 origem_coord: ficha 2006–2008 (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/rio-leca-e-a-ribeira-do-arquinho/delimitacao.jpg"}]
+fotos: [{"src": "/50espacos/media/rio-leca-e-a-ribeira-do-arquinho/01.jpg", "credito": {"fonte": "VisitMaia / Câmara Municipal da Maia (Parque Fluvial de Alvura, rio Leça)", "url": "https://visitmaia.pt/produtos-turisticos/parque-fluvial-de-alvura"}}, {"src": "/50espacos/media/rio-leca-e-a-ribeira-do-arquinho/02.jpg", "credito": {"fonte": "Pedro from Maia, Wikimedia Commons (CC BY 2.0), moinhos no rio Leça, Milheirós", "url": "https://commons.wikimedia.org/wiki/File:DSC_0001_(52770143873).jpg"}}, {"src": "/50espacos/media/rio-leca-e-a-ribeira-do-arquinho/03.jpg", "credito": {"fonte": "VisitMaia / Câmara Municipal da Maia (ponte de Alvura, rio Leça)", "url": "https://visitmaia.pt/produtos-turisticos/parque-fluvial-de-alvura"}}, {"src": "/50espacos/media/rio-leca-e-a-ribeira-do-arquinho/delimitacao.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Webnode da campanha", "Lista de Abril de 2009"]
 ---
 O Rio Leça e a Ribeira do Arquinho percorrem o concelho da Maia: o Leça atravessa Águas Santas, Milheirós, Gueifães, Maia e Moreira, e o Arquinho, seu maior afluente, nasce em São Pedro de Avioso e passa por Santa Maria de Avioso, Gondim, Barca, Vermoim, Nogueira, Gueifães e Milheirós antes de desaguar em Águas Santas. O Leça nasce no Monte de Santa Luzia, em Santo Tirso, tem cerca de 47 km e uma bacia de 190 km², e o Arquinho, que também se chama Ribeira de Avioso ou Rio Almorode, tem 11 km e uma bacia de 33 km².

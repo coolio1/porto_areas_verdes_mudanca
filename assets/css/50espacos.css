@@ -122,6 +122,8 @@
 .e50 .galeria a { display: block; cursor: zoom-in; }
 .e50 .galeria img { display: block; width: 100%; height: auto; border: 1.5px solid var(--grafite); }
 .e50 .titulo-plantas { font-size: 1.15rem; margin: 2.4rem 0 0; padding-top: 1rem; border-top: 1.5px solid var(--traco); }
+.e50 figcaption.credito { margin-top: 0.3rem; font-size: 0.78rem; color: var(--grafite); opacity: 0.75; }
+.e50 figcaption.credito a { color: inherit; }
 .e50 .galeria.plantas { margin-top: 1rem; }
 .e50 .galeria.plantas img { background: #fff; }
 .e50-ampliada { max-width: 96vw; max-height: 96vh; padding: 0; border: 0; background: transparent; }

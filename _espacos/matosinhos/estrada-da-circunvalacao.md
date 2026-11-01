@@ -9,7 +9,7 @@ lat: 41.18
 lon: -8.63
 origem_coord: Webnode da campanha (WGS84, 2 casas decimais)
 estado_actual: por verificar
-fotos: [{"src": "/50espacos/media/estrada-da-circunvalacao/01.jpg"}, {"src": "/50espacos/media/estrada-da-circunvalacao/delimitacao.jpg"}]
+fotos: [{"src": "/50espacos/media/estrada-da-circunvalacao/01.jpg", "credito": {"fonte": "Manuel de Sousa, Wikimedia Commons (domínio público)", "url": "https://commons.wikimedia.org/wiki/File:Circunvalacao_(Porto).JPG"}}, {"src": "/50espacos/media/estrada-da-circunvalacao/delimitacao.jpg"}]
 fontes: ["Ficha de 2006–2008", "Compilação 2014–2016 (PDF de 2018)", "Webnode da campanha", "Lista de Abril de 2009"]
 ---
 A Estrada da Circunvalação (EN12) percorre 16 km e é, na maior parte do trajecto, a fronteira entre o Porto e os concelhos de Matosinhos, Maia, Valongo e Gondomar, passando por Aldoar, Paranhos, Ramalde, Campanhã, Senhora da Hora, Custóias, São Mamede de Infesta, Águas Santas, Ermesinde e Rio Tinto. O espaço em causa são as árvores que existem entre as faixas de rodagem e os passeios, com cerca de 123 ha: servem de pulmão verde e de cortina arbórea a uma via de tráfego intenso, acima da capacidade para que foi projectada, e formam um corredor ecológico ao longo de toda a sua extensão. Há também matas de sobreiros na envolvência da estrada e do Parque da Cidade, junto ao limite com Matosinhos.
