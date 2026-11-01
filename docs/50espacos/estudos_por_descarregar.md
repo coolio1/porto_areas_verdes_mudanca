@@ -1,12 +1,12 @@
 # Estudos novos por descarregar
 
-Estado a 2026-11-01 após o retry: 59 de 73 PDFs obtidos e completos (alguns recuperados do Wayback Machine). Faltam os 14 abaixo: 404 no original e no Wayback, ou cópia do Wayback truncada.
+Estado a 2026-11-01: 73 de 73 PDFs obtidos e completos, nada por descarregar. Os últimos 4 (Maia ×2, Santo Tirso, Valongo) só descarregaram com IP em Portugal: estes servidores bloqueiam IPs de fora (a máquina estava em Taiwan). Os PDFs estão em `estudos_descargas/` (gitignored).
 
-- [ ] wayback: HTTP Error 404: NOT FOUND — https://www.cm-maia.pt/cmmaia/uploads/writer_file/document/12501/doc_rel_pdm_maia.pdf
-- [ ] wayback: HTTP Error 404: NOT FOUND — https://apambiente.pt/sites/default/files/_Avaliacao_Gestao_Ambiental/AAE/aae62_rev-pdm-maia_rac2024_nov2025.pdf
-- [ ] wayback: HTTP Error 404: NOT FOUND — https://www.cm-stirso.pt/cmsantotirso/uploads/writer_file/document/9184/pma.pdf
+- [x] wayback: HTTP Error 404: NOT FOUND — https://www.cm-maia.pt/cmmaia/uploads/writer_file/document/12501/doc_rel_pdm_maia.pdf
+- [x] wayback: HTTP Error 404: NOT FOUND — https://apambiente.pt/sites/default/files/_Avaliacao_Gestao_Ambiental/AAE/aae62_rev-pdm-maia_rac2024_nov2025.pdf
+- [x] wayback: HTTP Error 404: NOT FOUND — https://www.cm-stirso.pt/cmsantotirso/uploads/writer_file/document/9184/pma.pdf
 - [x] truncado (Wayback) — https://www.cm-valedecambra.pt/cmvalecambra/uploads/writer_file/document/1853/estudos_de_caracterizacao_e_diagnostico.pdf
-- [ ] wayback: HTTP Error 404: NOT FOUND — https://www.cm-valongo.pt/cmvalongo/uploads/document/file/10094/02_e__relatamb.pdf
+- [x] wayback: HTTP Error 404: NOT FOUND — https://www.cm-valongo.pt/cmvalongo/uploads/document/file/10094/02_e__relatamb.pdf
 - [x] truncado (Wayback) — https://apambiente.pt/sites/default/files/_Agua/DRH/ParticipacaoPublica/PGRH/2022-2027/3_Fase/PGRH_3_RH3_ResumoNaoTecnico.pdf
 - [x] truncado (Wayback) — https://apambiente.pt/sites/default/files/_SNIAMB_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/3_fase/RH3/PGRI_RH3.pdf
 - [x] truncado (Wayback) — https://apambiente.pt/sites/default/files/_SNIAMB_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/3_fase/RH2/PGRI_RH2.pdf
