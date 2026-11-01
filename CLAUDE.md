@@ -81,6 +81,7 @@ Protocolos de thumbnails e de criação de artigos: skill `porto-verde-posts`. N
 - Lições técnicas antigas (OBIA 1947, Overpass): fim de `docs/estrutura.md`.
 - **Nunca inventar referências** — verificar sempre autores, anos e títulos online antes de citar.
 
+- **Estudos e fichas (2026-11-01):** o permalink das fichas é `/50espacos/espacos/<concelho>/<slug>/`; documentos que já têm ficha vão para `50espacos/media/<slug>/`, não para Estudos (comparar md5 antes de alojar). Em descargas em lote, validar `%%EOF` no fim do PDF: cópias do Wayback truncam em múltiplos de 1 MiB e um limite de leitura próprio também trunca. O hook proíbe escrever em «Para arquivar»: preparar a pasta na scratchpad e o utilizador copia com `! cp -rn`. Pendentes de descarga: `docs/50espacos/estudos_por_descarregar.md`. Verificar o ciclo dos PGRH (as versões de 2011 são do 1.º ciclo; os agentes contaram-nas como 2.º).
 - **Menu:** `patch_nav.py` é bloqueado pelo hook; editar só `nav.py` e deixar o pre-commit propagar.
 - **Artigos com textos enviados a entidades (caso Aurifícia):** nunca publicar o original nem dados pessoais/referências de notificações; ver `docs/artigos-textos-entidades.md`.
 
