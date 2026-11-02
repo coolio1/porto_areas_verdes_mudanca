@@ -13,8 +13,8 @@ Para páginas Jekyll (_layouts/default.html):
 
 PAGES = [
     ("index.html", "Início"),
-    ("mapa_unico/mapa_unico.html", "Mapas"),
-    ("50espacos/", "50 Espaços"),
+    ("mapa_unico/mapa_unico.html", "Mapas e uso do solo"),
+    ("50espacos/", "50 Espaços Verdes"),
     ("atropelamentos/dashboard_atropelamentos.html", "Atropelamentos"),
 ]
 
