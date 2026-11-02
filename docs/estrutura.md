@@ -7,7 +7,9 @@
 ├── capture_cards.py        # Thumbnails dos cards do index (Playwright)
 ├── check_leaflet_init.py   # Validação Leaflet (pre-commit hook)
 ├── test_area.py            # Calibração (área teste Serralves)
-├── mapa/                   # Mapa actual (Sentinel-2 2016-2025)
+├── mapa_unico/             # PÁGINA ÚNICA dos mapas (4 temas em separadores) — ver «Mapa único» abaixo
+├── mapa/                   # Mapa actual (Sentinel-2 2016-2025); o .html é agora um redirect
+
 │   ├── porto_publish.py    # Pipeline → mapa.html
 │   ├── porto_stats.py      # Estatísticas de uso do solo
 │   └── mapa.html
@@ -50,3 +52,24 @@
 - **OBIA abandonada para 1947** — classificação pixel com Random Forest e texturas locais funciona melhor que OBIA para o ortofoto P&B (resolução insuficiente para segmentação).
 
 - **Overpass API instável** — dividir queries grandes em lotes e usar servidores alternativos; para adições individuais, preferir OSM API v0.6.
+
+
+## Mapa único (`mapa_unico/`)
+
+Uma só página, `mapa_unico/mapa_unico.html`, com 4 temas: `#tema=hoje` (Mapa 2016-2025), `#tema=acessibilidade`
+(+ `&vista=propostas`), `#tema=historico` (+ `&vista=1947` abre com a ortofoto), `#tema=privado`.
+
+- `mapa_unico.py` gera o HTML (nunca editar à mão) e `dados/<tema>.js` (imagens base64 e GeoJSON, carregados só ao
+  abrir o separador). `--html` regenera só o HTML. Os dados do Histórico demoram ~1 min (máscaras de 1947 a 1 bit).
+- `src/`: `core.js` (núcleo: fundos, contexto comum, hash, temas), `tema_<id>.js` (um por tema, regista-se com
+  `MU.registarTema`), `estilo.css`, `template.html`. Novo tema = novo `tema_<id>.js` + entrada em `TEMAS` e dados em `mapa_unico.py`.
+- `cobertura_1979.py`: converte o shapefile Land cover 1979 (Filipa Guilherme; pasta no `.gitignore`, só o GeoJSON
+  convertido entra no repositório) para GeoJSON simplificado (8 m) e máscaras raster.
+- `gerar_stubs.py` escreve nas páginas antigas (`mapa/mapa.html`, `acessibilidade/*.html`, `ndvi_historico/*.html`,
+  `1947/orto_1947.html`, `interiores/*.html`) redirecções para o tema certo. Os geradores antigos escrevem nesses
+  ficheiros: se algum for corrido, correr `gerar_stubs.py` a seguir.
+- A página 1947 mostrava a classificação em bruto; o Histórico usa a **limpa** (`1947/clean_1947.py`).
+- Os PNG do tema Privado vêm de `layers/` (`interior_subsistente_corrigido.png` = versão corrigida; a da
+  Acessibilidade, «todas as áreas», é `layers/interior_subsistente_colored.png`).
+- Ficheiros `layers/` e `acessibilidade/layers/` continuam a ser a fonte dos PNG; o mapa único não os lê em
+  tempo de execução (tudo embutido em `dados/`), por isso `file://` funciona.

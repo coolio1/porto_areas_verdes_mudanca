@@ -20,35 +20,18 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 MAPS = [
     {
-        "slug": "conversao",
-        "url": f"{BASE_URL}/acessibilidade/conversao_verde.html",
+        "slug": slug,
+        "url": f"{BASE_URL}/mapa_unico/mapa_unico.html#{hash_}",
         "wait_for": ".leaflet-tile-loaded",
-        "extra_wait": 5,
-    },
-    {
-        "slug": "acessibilidade",
-        "url": f"{BASE_URL}/acessibilidade/acessibilidade_verde.html",
-        "wait_for": ".leaflet-tile-loaded",
-        "extra_wait": 5,
-    },
-    {
-        "slug": "mudancas",
-        "url": f"{BASE_URL}/mapa/mapa.html",
-        "wait_for": ".leaflet-tile-loaded",
-        "extra_wait": 5,
-    },
-    {
-        "slug": "historico",
-        "url": f"{BASE_URL}/ndvi_historico/ndvi_historico.html",
-        "wait_for": ".leaflet-tile-loaded",
-        "extra_wait": 5,
-    },
-    {
-        "slug": "verde_privado",
-        "url": f"{BASE_URL}/interiores/interiores_quarteiroes.html",
-        "wait_for": ".leaflet-tile-loaded",
-        "extra_wait": 5,
-    },
+        "extra_wait": 6,
+    }
+    for slug, hash_ in (
+        ("acessibilidade", "tema=acessibilidade"),
+        ("mudancas", "tema=hoje"),
+        ("historico", "tema=historico"),
+        ("verde_privado", "tema=privado"),
+    )
+] + [
     {
         "slug": "atropelamentos",
         "url": f"{BASE_URL}/atropelamentos/dashboard_atropelamentos.html",

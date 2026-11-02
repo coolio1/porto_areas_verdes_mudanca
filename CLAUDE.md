@@ -9,7 +9,7 @@
 
 Detalhe completo em `docs/estrutura.md`. Resumo (raiz = site Jekyll/GitHub Pages):
 
-- `mapa/` (Sentinel-2 2016-2025), `ndvi_historico/` (Landsat 1947-2024), `interiores/` (verde privado), `1947/` (classificação ortofoto), `animacao/`, `atropelamentos/` (dashboard + DB), `acessibilidade/` (pipeline 2SFCA + conversão)
+- **`mapa_unico/` = página única dos mapas (4 temas em separadores; detalhe em `docs/estrutura.md`); as páginas antigas abaixo são redirects (`mapa_unico/gerar_stubs.py`)**; `mapa/` (Sentinel-2 2016-2025), `ndvi_historico/` (Landsat 1947-2024), `interiores/` (verde privado), `1947/` (classificação ortofoto), `animacao/`, `atropelamentos/` (dashboard + DB), `acessibilidade/` (pipeline 2SFCA + conversão)
 - `layers/`, `layers_historico/` — layers partilhados na raiz; `docs/` — planos e specs (excluído do Jekyll)
 - `nav.py` + `patch_nav.py` (nav única, pre-commit), `capture_cards.py`, `check_leaflet_init.py`
 

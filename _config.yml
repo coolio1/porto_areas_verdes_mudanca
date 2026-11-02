@@ -51,6 +51,8 @@ exclude:
   - .superpowers
   - docs
   - espacos_pipeline
+  - mapa_unico/src
+  - "Land_cover_1979*"
   - archive
   - "*.gpkg"
   - CLC

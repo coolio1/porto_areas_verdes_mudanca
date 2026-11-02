@@ -221,7 +221,7 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 
 ## Mapas interativos
 
-- **[Mapa histórico (1985–2024)]({{ site.baseurl }}/ndvi_historico.html)** — alternância entre épocas, máscaras de vegetação, zonas de perda e ganho
+- **[Mapa histórico (1985–2024)]({{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=historico)** — alternância entre épocas, máscaras de vegetação, zonas de perda e ganho
 - **[Mapa detalhado (2016–2025)]({{ site.baseurl }}/mapa.html)** — classificação árvores/solo/edificado a 10 m
 
 ---

@@ -12,14 +12,10 @@ Para páginas Jekyll (_layouts/default.html):
 """
 
 PAGES = [
-    ("index.html",                                    "Início"),
-    ("mapa/mapa.html",                                "Mapa 2016-2025"),
-    ("acessibilidade/acessibilidade_verde.html",      "Acessibilidade"),
-    ("acessibilidade/conversao_verde.html",           "Propostas"),
-    ("ndvi_historico/ndvi_historico.html",            "Histórico 1947-2024"),
-    ("interiores/interiores_quarteiroes.html",        "Verde Privado"),
-    ("50espacos/",                                    "50 Espaços"),
-    ("atropelamentos/dashboard_atropelamentos.html",  "Atropelamentos"),
+    ("index.html", "Início"),
+    ("mapa_unico/mapa_unico.html", "Mapas"),
+    ("50espacos/", "50 Espaços"),
+    ("atropelamentos/dashboard_atropelamentos.html", "Atropelamentos"),
 ]
 
 # Páginas Jekyll-only (não entram em PAGES nem em TARGETS mas aparecem em AMBOS os navs)
@@ -59,7 +55,11 @@ def get_nav(active_canonical, depth=0):
     for canonical, label in PAGES:
         if depth > 0:
             target_dir = "/".join(canonical.split("/")[:-1])
-            href = canonical.split("/")[-1] if current_dir == target_dir else prefix + canonical
+            href = (
+                canonical.split("/")[-1]
+                if current_dir == target_dir
+                else prefix + canonical
+            )
         else:
             href = canonical
 
@@ -70,7 +70,7 @@ def get_nav(active_canonical, depth=0):
         href = prefix + path if depth > 0 else path
         lines.append(f'  <a href="{href}">{label}</a>')
 
-    return "<div id=\"nav\">\n" + "\n".join(lines) + "\n</div>"
+    return '<div id="nav">\n' + "\n".join(lines) + "\n</div>"
 
 
 def get_footer_logo(depth=0):
@@ -83,14 +83,14 @@ def get_footer_logo(depth=0):
     return (
         '<div id="footer-logo" style="position:fixed;bottom:28px;right:10px;'
         'z-index:1000;text-align:center;pointer-events:none;">\n'
-        '  <style>#credit{display:none!important}'
-        '@media(max-width:768px){#footer-logo{display:none!important}}</style>\n'
+        "  <style>#credit{display:none!important}"
+        "@media(max-width:768px){#footer-logo{display:none!important}}</style>\n"
         f'  <a href="{prefix}index.html" style="display:inline-block;pointer-events:auto;">'
         f'<img src="{prefix}assets/images/logo-porto-verde.png" alt="Porto Verde"'
         ' style="height:52px;width:auto;border-radius:0;display:block;margin:0 auto;'
         'filter:drop-shadow(0 1px 3px rgba(0,0,0,0.2));"></a>\n'
         '  <a href="https://coolio1.github.io/" target="_blank"'
-        ' style="display:block;margin-top:3px;font:10px \'Segoe UI\',Arial,sans-serif;'
+        " style=\"display:block;margin-top:3px;font:10px 'Segoe UI',Arial,sans-serif;"
         'color:#888;text-decoration:none;pointer-events:auto;">Nuno Quental</a>\n'
-        '</div>'
+        "</div>"
     )

@@ -6,11 +6,11 @@ Projecto de detecção remota e análise geoespacial sobre a evolução dos espa
 
 ## Mapas interactivos
 
-- [Mapa actual](https://portoverde.pt/mapa.html) — classificação Sentinel-2 (2016–2025): verde público, verde pago, verde privado
-- [Mapa histórico](https://portoverde.pt/ndvi_historico.html) — evolução NDVI via Landsat (1984–2024)
-- [Verde privado](https://portoverde.pt/interiores_quarteiroes.html) — logradouros e quintais detectados por satélite
-- [Acessibilidade](https://portoverde.pt/acessibilidade/acessibilidade_verde.html) — acessibilidade pedonal aos espaços verdes (2SFCA)
-- [Conversão urbanística](https://portoverde.pt/acessibilidade/conversao_verde.html) — áreas verdes perdidas para construção
+- [Mapas (página única, quatro temas)](https://portoverde.pt/mapa_unico/mapa_unico.html):
+  - [Mapa 2016–2025](https://portoverde.pt/mapa_unico/mapa_unico.html#tema=hoje) — classificação Sentinel-2: árvores, solo, edificado e transições
+  - [Acessibilidade e propostas](https://portoverde.pt/mapa_unico/mapa_unico.html#tema=acessibilidade) — acessibilidade pedonal aos espaços verdes (2SFCA) e 46 propostas de conversão
+  - [Histórico 1947–2024](https://portoverde.pt/mapa_unico/mapa_unico.html#tema=historico) — ortofoto de 1947, ocupação do solo de 1979 e vegetação Landsat
+  - [Verde privado](https://portoverde.pt/mapa_unico/mapa_unico.html#tema=privado) — logradouros e quintais detectados por satélite
 - [Sinistralidade rodoviária](https://portoverde.pt/atropelamentos/dashboard_atropelamentos.html) — dashboard de atropelamentos no Grande Porto
 
 ## Fontes de dados

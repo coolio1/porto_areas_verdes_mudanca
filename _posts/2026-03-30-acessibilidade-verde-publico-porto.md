@@ -237,7 +237,7 @@ A população em défice crítico reduziria de **49,4% para 18,2%** (−31,2 p.p
 
 A simulação assume conversão simultânea e integral de todos os candidatos — cenário improvável num horizonte realista de planeamento. Todos os espaços são tratados como verde público equivalente aos parques existentes, sem considerar qualidade, arborização, equipamento ou resistências fundiárias. O efeito sobre o centro histórico permanece limitado pela escassez de terrenos disponíveis: os 15,7% que persistiriam fora do raio de 300 m — concentrados principalmente na Baixa e Sé — dificilmente serão servidos sem intervenções de maior envergadura (desafectação de espaços actualmente vedados, cobertura de infraestruturas, micro-jardins de bolso em praças existentes).
 
-O mapa interactivo das propostas, com comparação A/B antes/depois e detalhe por espaço candidato, está disponível em **[Propostas de Conversão a Verde]({{ site.baseurl }}/acessibilidade/conversao_verde.html)**.
+O mapa interactivo das propostas, com comparação A/B antes/depois e detalhe por espaço candidato, está disponível em **[Propostas de Conversão a Verde]({{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=acessibilidade&vista=propostas)**.
 
 ---
 
@@ -343,6 +343,6 @@ Processamento em Python com *Google Earth Engine*, *scipy*, *NumPy* e *Shapely*.
 
 ## Mapas interactivos
 
-**[Acessibilidade a Verde Público — Porto]({{ site.baseurl }}/acessibilidade/acessibilidade_verde.html)** — mapa com camadas de acessibilidade 2SFCA, parques e jardins (77 espaços com popups), verde pago/não usufruível e verde privado
+**[Acessibilidade a Verde Público — Porto]({{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=acessibilidade)** — mapa com camadas de acessibilidade 2SFCA, parques e jardins (77 espaços com popups), verde pago/não usufruível e verde privado
 
-**[Propostas de Conversão a Verde]({{ site.baseurl }}/acessibilidade/conversao_verde.html)** — 46 candidatos a parque público com comparação A/B antes/depois e detalhe por espaço candidato
+**[Propostas de Conversão a Verde]({{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=acessibilidade&vista=propostas)** — 46 candidatos a parque público com comparação A/B antes/depois e detalhe por espaço candidato
