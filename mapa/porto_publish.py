@@ -1,5 +1,6 @@
 import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from carto import aplicar_chave
+from nav import get_nav
 import ee
 import requests
 import os
@@ -271,16 +272,7 @@ html = f'''<!DOCTYPE html>
 </style>
 </head>
 <body>
-<div id="nav">
-  <a href="index.html">Início</a>
-  <a href="mapa.html" class="active">Mapa 2016-2025</a>
-  <a href="ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
-  <a href="interiores_quarteiroes.html">Verde Privado</a>
-  <a href="acessibilidade/acessibilidade_verde.html">Acessibilidade</a>
-  <a href="acessibilidade/conversao_verde.html">Convers&atilde;o</a>
-  <a href="atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
-  <a href="1947/orto_1947.html">Porto 1947</a>
-</div>
+<!--NAV-->
 <div id="map"></div>
 <div id="panel">
   <b style="font-size:14px;">Espaco verde do Porto</b><br>
@@ -411,7 +403,7 @@ init();
 
 output = os.path.join(SCRIPT_DIR, 'mapa.html')
 with open(output, 'w', encoding='utf-8') as f:
-    f.write(aplicar_chave(html))
+    f.write(aplicar_chave(html.replace('<!--NAV-->', get_nav('mapa/mapa.html', depth=1))))
 print(f'\nMapa guardado em {output} ({os.path.getsize(output)//1024} KB)')
 
 import webbrowser

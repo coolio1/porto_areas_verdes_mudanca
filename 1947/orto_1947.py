@@ -7,6 +7,7 @@ Fonte WMS: CIIMAR/FCUP. Mascara municipio via GEE (CAOP2025).
 """
 import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from carto import aplicar_chave
+from nav import get_nav
 import ee
 import requests
 import numpy as np
@@ -559,16 +560,7 @@ def build_html(layer_paths, stats):
 </style>
 </head>
 <body>
-<div id="nav">
-  <a href="../index.html">In&iacute;cio</a>
-  <a href="../mapa.html">Mapa 2016-2025</a>
-  <a href="../ndvi_historico.html">Hist&oacute;rico 1947-2024</a>
-  <a href="../interiores_quarteiroes.html">Verde Privado</a>
-  <a href="../acessibilidade/acessibilidade_verde.html">Acessibilidade</a>
-  <a href="../acessibilidade/conversao_verde.html">Convers&atilde;o</a>
-  <a href="../atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
-  <a href="orto_1947.html" class="active">Porto 1947</a>
-</div>
+<!--NAV-->
 <div id="map"></div>
 <div id="panel">
   <b style="font-size:14px;">Porto 1947</b><br>
@@ -715,7 +707,7 @@ init();
 
     output = 'orto_1947.html'
     with open(output, 'w', encoding='utf-8') as f:
-        f.write(aplicar_chave(html))
+        f.write(aplicar_chave(html.replace('<!--NAV-->', get_nav('1947/orto_1947.html', depth=1))))
     print(f'\nMapa: {output} ({os.path.getsize(output)//1024} KB)')
     return output
 
