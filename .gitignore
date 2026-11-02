@@ -24,3 +24,6 @@ GEE/
 docs/fonte_campanha/
 docs/50espacos/dossiers/
 docs/50espacos/estudos_descargas/
+
+# Dados de terceiros por autorizar (Land cover 1979): so o GeoJSON convertido se commita, depois de a autora autorizar
+Land_cover_1979 - dados de Filipa Guilherme/
