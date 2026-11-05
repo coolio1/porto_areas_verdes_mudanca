@@ -3,10 +3,14 @@ layout: post
 title: "Casas em Lisboa e Porto: ninguém tem a culpa toda, e é isso que torna o problema difícil"
 description: "Lemos a literatura científica sobre a subida da habitação em Portugal e testámos as soluções que já foram experimentadas noutros países. A conclusão: falta oferta acessível onde ela é precisa, e nenhuma medida isolada resolve."
 date: 2026-11-05
+image: /assets/images/habitacao-precos-rendimento.jpg
 tags: [habitação, porto, lisboa, política urbana, alojamento local, imigração, rendas, urbanismo]
 ---
 
 Em 2025, os preços das casas em Portugal subiram 17,6 %. O rendimento disponível das famílias subiu 5,7 %. Qualquer pessoa que tenha procurado casa em Lisboa ou no Porto nos últimos anos não precisa de gráficos para saber o que isto quer dizer. A pergunta que interessa é outra: **de quem é a culpa, e o que é que, de facto, funciona?**
+
+![Preços das casas +17,6 % e rendimento disponível +5,7 % em Portugal em 2025]({{ site.baseurl }}/assets/images/habitacao-precos-rendimento.jpg)
+*Variação anual em 2025: os preços subiram quase o triplo dos rendimentos.*
 
 Fizemos o que se faz antes de ter opinião: ler. Reunimos mais de cem fontes (estudos científicos, relatórios do Banco de Portugal, da OCDE e da Comissão Europeia, avaliações de políticas de vários países) e lemos em texto integral 20 dos estudos mais relevantes, com cada citação conferida contra o texto original. O resultado é menos confortável do que um slogan, e muito mais útil.
 
