@@ -57,11 +57,15 @@ Esta é a parte em que a ciência ajuda mais, porque várias medidas foram exper
 Nenhuma medida isolada tem efeito de dois dígitos nos preços. A tese central é que o problema é de **escassez de oferta acessível numa economia que recebeu choques de procura simultâneos**. Daí um pacote, com ordem:
 
 1. **Já:** parar de piorar. Não alargar garantias públicas nem isenções fiscais à procura enquanto a oferta não responder; não criar novos tectos de renda de primeira geração; fiscalizar de facto os rácios de alojamento local já aprovados.
-2. **Em um a três anos:** desbloquear a oferta. Prazos de licenciamento medidos e públicos, solo público e municipal mobilizado, reabilitação do devoluto e mão-de-obra para construir. A imigração qualificada é, neste sentido, política de habitação.
+2. **Em um a três anos:** desbloquear a oferta. Prazos de licenciamento medidos e públicos, solo público e municipal mobilizado, reabilitação e mobilização do parque vazio e devoluto (com IMI agravado fiscalizado e apoio à reabilitação) e mão-de-obra para construir. A imigração qualificada é, neste sentido, política de habitação.
 3. **Em três a dez anos:** construir um sector de habitação a custo controlado com dimensão real, com operadores sem fins lucrativos, solo público e financiamento estável para vários anos.
 4. **Em paralelo:** deslocar a fiscalidade dos impostos sobre a compra para os impostos recorrentes e avaliar com dados as novas medidas de 2026 antes de as alargar.
 
 A nossa confiança é **moderada quanto à direcção** destas medidas e **baixa quanto à dimensão** exacta dos efeitos em Portugal. O terceiro pilar, o do custo controlado, é uma aposta normativa baseada em experiência estrangeira, não uma conclusão causal.
+
+## O artigo completo
+
+A síntese de toda a evidência, com métodos, certeza da evidência, limitações e mais de 160 referências, está disponível em [PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (22 páginas).
 
 ## Porque é que isto interessa ao Porto Verde
 
