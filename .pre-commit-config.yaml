@@ -1,4 +1,14 @@
 repos:
+  # patch_nav.py reescreve a nav e faz git add; corre primeiro para os restantes hooks verem o resultado
+  - repo: local
+    hooks:
+      - id: patch-nav
+        name: Nav canonica (patch_nav.py)
+        entry: python patch_nav.py
+        language: system
+        pass_filenames: false
+        files: (^nav\.py$|\.html$)
+
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.5.0
     hooks:
