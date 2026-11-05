@@ -12,7 +12,7 @@ Em 2025, os preços das casas em Portugal subiram 17,6 %. O rendimento disponív
 ![Preços das casas +17,6 % e rendimento disponível +5,7 % em Portugal em 2025]({{ site.baseurl }}/assets/images/habitacao-precos-rendimento.jpg)
 *Variação anual em 2025: os preços subiram quase o triplo dos rendimentos.*
 
-Fizemos o que se faz antes de ter opinião: ler. Reunimos mais de cem fontes (estudos científicos, relatórios do Banco de Portugal, da OCDE e da Comissão Europeia, avaliações de políticas de vários países) e lemos em texto integral 20 dos estudos mais relevantes, com cada citação conferida contra o texto original. O resultado é menos confortável do que um slogan, e muito mais útil.
+Fizemos o que se faz antes de ter opinião: ler. Reunimos mais de cem fontes (estudos científicos, relatórios do Banco de Portugal, da OCDE e da Comissão Europeia, avaliações de políticas de vários países), lemos em texto integral os estudos mais relevantes e conferimos as citações literais contra o texto original. O resultado é menos confortável do que um slogan, e muito mais útil.
 
 ## O primeiro resultado é uma ausência
 
@@ -52,12 +52,20 @@ Esta é a parte em que a ciência ajuda mais, porque várias medidas foram exper
 
 **Habitação a custo controlado só funciona em escala.** Em Portugal, o parque social é inferior a 2 % do total. Em Viena, 23 % do parque é municipal e mais 21,2 % pertence a associações sem fins lucrativos, tudo construído ao longo de décadas, com rendas ligadas ao custo e restrições permanentes. A média da OCDE ronda os 6-7 %. Não há estimativa causal do efeito de Viena nas rendas do mercado, mas é o único modelo de longo prazo que parece escalar.
 
+## Casas vazias: muitas, mas poucas recuperáveis
+
+Em 2021, Lisboa tinha 47 748 alojamentos vagos e o Porto 20 270, cerca de 15 % do parque em cada cidade. Parece uma reserva enorme, mas quase metade já estava à venda ou para arrendar, e é aí que está a oferta corrente do mercado. Os que estavam fora do mercado e em edifícios em bom estado, o alvo realista de uma política de mobilização, eram 21 801 em Lisboa e 7 799 no Porto, cerca de 7 % do parque. E «vago» não é «devoluto»: em Lisboa, os 6 444 devolutos com IMI agravado em 2022 equivalem a 13,5 % dos vagos de 2021; no Porto, os 531 prédios abrangidos em 2023 equivalem a 2,6 %.
+
+Porque ficam casas vazias? Heranças por partilhar, obras caras, receio de arrendar e expectativa de valorização. O imposto agravado (IMI) já existe, mas o seu problema em Portugal é de aplicação: sem identificar sistematicamente os fogos, não se pode tributá-los.
+
+Lá fora, os impostos sobre casas vazias têm resultados modestos e difíceis de medir. A taxa francesa sobre logements vacants reduziu os vagos cerca de 8,6 % em termos relativos, em parte por reclassificação administrativa. Em Vancouver, a vacância declarada desceu de 0,90 % para 0,49 % entre 2017 e 2024, segundo o próprio município, mas sem estimativa causal e com problemas de cobrança. Transpostos para Lisboa e Porto, estes efeitos dão uma ordem de grandeza de **centenas a poucos milhares de fogos por ano**, não de dezenas de milhares (cálculo nosso, ilustrativo). Mobilizar o parque vazio ajuda, mas como complemento da oferta nova, não como substituto. O que se pode fazer já é criar um registo municipal de fogos vagos, cruzando consumos de água e electricidade com as moradas, e publicá-lo todos os anos: sem saber onde estão, nenhuma medida funciona nem se consegue avaliar.
+
 ## O que recomendamos
 
 Nenhuma medida isolada tem efeito de dois dígitos nos preços. A tese central é que o problema é de **escassez de oferta acessível numa economia que recebeu choques de procura simultâneos**. Daí um pacote, com ordem:
 
-1. **Já:** parar de piorar. Não alargar garantias públicas nem isenções fiscais à procura enquanto a oferta não responder; não criar novos tectos de renda de primeira geração; fiscalizar de facto os rácios de alojamento local já aprovados.
-2. **Em um a três anos:** desbloquear a oferta. Prazos de licenciamento medidos e públicos, solo público e municipal mobilizado, reabilitação e mobilização do parque vazio e devoluto (com IMI agravado fiscalizado e apoio à reabilitação) e mão-de-obra para construir. A imigração qualificada é, neste sentido, política de habitação.
+1. **Já:** parar de piorar e saber o que há. Criar o registo de fogos vagos. Não alargar garantias públicas nem isenções fiscais à procura enquanto a oferta não responder; não criar novos tectos de renda de primeira geração; fiscalizar de facto os rácios de alojamento local já aprovados.
+2. **Em um a três anos:** desbloquear a oferta. Prazos de licenciamento medidos e públicos, solo público e municipal mobilizado, mão-de-obra para construir e IMI agravado aplicado de forma sistemática aos vagos fora do mercado em bom estado, com apoio financeiro à reabilitação dos que precisam de obras e via jurídica para as heranças indivisas. Instrumentos coercivos como o arrendamento forçado são de risco constitucional elevado e nunca foram aplicados. A imigração qualificada é, neste sentido, política de habitação.
 3. **Em três a dez anos:** construir um sector de habitação a custo controlado com dimensão real, com operadores sem fins lucrativos, solo público e financiamento estável para vários anos.
 4. **Em paralelo:** deslocar a fiscalidade dos impostos sobre a compra para os impostos recorrentes e avaliar com dados as novas medidas de 2026 antes de as alargar.
 
