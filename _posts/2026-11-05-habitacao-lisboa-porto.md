@@ -66,7 +66,3 @@ A nossa confiança é **moderada quanto à direcção** destas medidas e **baixa
 ## Porque é que isto interessa ao Porto Verde
 
 Uma cidade onde não se constrói onde já há infra-estruturas empurra a construção para onde ainda há solo livre, e é aí que se perdem os espaços verdes que este projecto mapeia. Habitação acessível, reabilitação do que está devoluto e densificação onde faz sentido não são o contrário de uma cidade verde: são, em boa parte, a condição para a ter. Esta é a nossa leitura, não uma conclusão dos estudos.
-
-## A nota completa
-
-Quem quiser ver as fontes, as tabelas, o grau de certeza de cada conclusão, as divergências entre estudos e o que ficou por ler, tem a [nota completa em PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (21 páginas). Está lá tudo, incluindo os limites: o que não conseguimos obter e o que ainda não foi revisto por um segundo leitor.
