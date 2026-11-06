@@ -11,7 +11,7 @@ tags: [habitação, porto, lisboa, política urbana, alojamento local, imigraç�
 
 Em 2025, os preços das casas em Portugal subiram 17,6 %. O rendimento disponível das famílias subiu 5,7 %. Qualquer pessoa que tenha procurado casa em Lisboa ou no Porto nos últimos anos não precisa de gráficos para saber o que isto quer dizer. A pergunta que interessa é outra: **de quem é a culpa, e o que é que, de facto, funciona?**
 
-![Desde 2008, os preços das casas em Portugal subiram 145 % e o rendimento disponível das famílias 69 %]({{ site.baseurl }}/assets/images/habitacao-fig1-precos-rendimento.png)
+![Desde 2008, os preços das casas em Portugal subiram 145 % e o rendimento disponível das famílias 69 %]({{ site.baseurl }}/assets/images/habitacao-fig1-serie-2008-2025.png)
 *Preços das casas e rendimento das famílias em Portugal, 2008–2025 (índice, 2008 = 100, valores correntes). Em 2025 os preços subiram 17,6 % e o rendimento 5,7 %. Fonte: Eurostat.*
 
 Fizemos o que se faz antes de ter opinião: ler. Reunimos mais de cem fontes (estudos científicos, relatórios do Banco de Portugal, da OCDE e da Comissão Europeia, avaliações de políticas de vários países), lemos em texto integral os estudos mais relevantes e conferimos as citações literais contra o texto original. O resultado é menos confortável do que um slogan, e muito mais útil.
