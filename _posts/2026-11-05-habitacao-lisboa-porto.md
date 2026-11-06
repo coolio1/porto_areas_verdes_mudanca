@@ -112,7 +112,7 @@ A nossa confiança é **moderada quanto à direcção** destas medidas e **baixa
 
 ## O artigo completo
 
-A síntese de toda a evidência, com métodos, certeza da evidência, limitações e mais de 220 referências, está disponível em [PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (30 páginas, com 7 figuras). Inclui também o regime do arrendamento (a revisão prevista para 2026 ainda não está em vigor), os apoios à renda, o papel dos juros e a fiscalidade do arrendamento.
+A síntese de toda a evidência, com métodos, certeza da evidência, limitações e mais de 220 referências, está disponível em [PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (68 páginas, com 7 figuras). Inclui também o regime do arrendamento (a revisão prevista para 2026 ainda não está em vigor), os apoios à renda, o papel dos juros e a fiscalidade do arrendamento.
 
 ## Porque é que isto interessa ao Porto Verde
 
