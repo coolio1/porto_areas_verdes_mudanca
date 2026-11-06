@@ -37,11 +37,11 @@ Sobre esta oferta apertada caíram, em simultâneo, cinco empurrões na procura:
 
 - **Famílias mais pequenas.** Mais de 70 % do aumento do número de famílias entre 1981 e 2011 veio daí.
 - **Imigração.** A população cresceu 825 mil pessoas entre 2021 e 2025, quase toda por migração.
-- **Turismo e alojamento local.** Em Lisboa, a proibição de novos registos em 2018 baixou os preços cerca de 8 % nas zonas abrangidas, um efeito real, mas que os próprios autores dizem não explicar toda a subida.
+- **Turismo e alojamento local.** Em Lisboa, os alojamentos locais passaram de cerca de 900 para mais de 19 000 entre 2012 e 2019. No Porto, havia 8 082 em 2019, 93 % apartamentos, com cerca de 3 000 registos só em 2018. Em 2026, o Porto voltou a registar mais novos AL do que Lisboa (583 contra 124, até Outubro). São contagens de registos, não de casas retiradas ao mercado residencial.
 - **Compradores com residência fiscal no estrangeiro.** Cerca de 5 % das transacções e 8 % do valor em 2025 (os estrangeiros residentes em Portugal elevam o total para 28 % das transacções).
 - **Crédito com garantia pública.** Já vale 26,8 % do montante dos novos empréstimos.
 
-![Os cinco choques na procura: famílias mais pequenas, imigração, turismo e alojamento local, compradores estrangeiros e crédito com garantia pública]({{ site.baseurl }}/assets/images/habitacao-fig3-choques.png)
+![Os cinco choques na procura: famílias mais pequenas, imigração, turismo e alojamento local, compradores estrangeiros e crédito com garantia pública]({{ site.baseurl }}/assets/images/habitacao-fig3-choques-v2.png)
 *Números-chave de cada choque, com datas e âmbito próprios.*
 
 Nenhum destes factores, sozinho, explica o que se passou. A imigração é o melhor exemplo: os estudos feitos noutros países dão resultados que vão de quase nulos (Canadá, Inglaterra e País de Gales) a grandes (Suíça), conforme a oferta de casas consegue ou não acompanhar. Em Portugal, essa medição simplesmente ainda não existe.
@@ -59,7 +59,7 @@ Esta é a parte em que a ciência ajuda mais, porque várias medidas foram exper
 
 **Ajudar quem compra, sem mais casas, faz subir os preços.** Quando a isenção de imposto para jovens foi anunciada em Portugal, os preços pedidos subiram cerca de 0,26 % ao mês, aproximadamente 3,2 % num ano, e a poupança fiscal ficou anulada em poucos meses. Em Londres, o *Help to Buy* subiu os preços cerca de 8 % sem se ver mais construção. Em França, um incentivo fiscal ao investimento em arrendamento (o Pinel) também não aumentou de forma significativa o licenciamento.
 
-**Regular o alojamento local funciona se for fiscalizado.** Os efeitos nas rendas são reais mas moderados, e variam muito de cidade para cidade. A regulação mais branda, sem fiscalização, é o ponto fraco quase em toda a parte.
+**Regular o alojamento local funciona se for fiscalizado.** Em Lisboa, a proibição de novos registos em 2018 baixou os preços cerca de 8 % nas zonas abrangidas, um efeito real, mas que os próprios autores dizem não explicar toda a subida. Os efeitos nas rendas são reais mas moderados, e variam muito de cidade para cidade. A regulação mais branda, sem fiscalização, é o ponto fraco quase em toda a parte.
 
 **Habitação a custo controlado só funciona em escala.** Em Portugal, o parque social é inferior a 2 % do total. Em Viena, 23 % do parque é municipal e mais 21,2 % pertence a associações sem fins lucrativos, tudo construído ao longo de décadas, com rendas ligadas ao custo e restrições permanentes. A média da OCDE ronda os 6-7 %. Não há estimativa causal do efeito de Viena nas rendas do mercado, mas é o único modelo de longo prazo que parece escalar.
 
@@ -112,8 +112,8 @@ A nossa confiança é **moderada quanto à direcção** destas medidas e **baixa
 
 ## O artigo completo
 
-A síntese de toda a evidência, com métodos, certeza da evidência, limitações e mais de 220 referências, está disponível em [PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (29 páginas, com 7 figuras). Inclui também o regime do arrendamento (a revisão prevista para 2026 ainda não está em vigor), os apoios à renda, o papel dos juros e a fiscalidade do arrendamento.
+A síntese de toda a evidência, com métodos, certeza da evidência, limitações e mais de 220 referências, está disponível em [PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (30 páginas, com 7 figuras). Inclui também o regime do arrendamento (a revisão prevista para 2026 ainda não está em vigor), os apoios à renda, o papel dos juros e a fiscalidade do arrendamento.
 
 ## Porque é que isto interessa ao Porto Verde
 
-Uma cidade onde não se constrói onde já há infra-estruturas empurra a construção para onde ainda há solo livre, e é aí que se perdem os espaços verdes que este projecto mapeia. Habitação acessível, reabilitação do que está devoluto e densificação onde faz sentido não são o contrário de uma cidade verde: são, em boa parte, a condição para a ter. Esta é a nossa leitura, não uma conclusão dos estudos.
+O Porto Verde mapeia e defende os espaços verdes do Porto. A falta de habitação ameaça-os de duas maneiras: empurra a construção para o solo que ainda está livre e fornece argumentos para dispensar as regras de ordenamento. Por isso defendemos as duas coisas em conjunto: mais casas, primeiro nas que já existem (vagas ou devolutas), depois em solo já urbanizado e bem servido por transporte público, e nunca na estrutura ecológica nem em espaços verdes protegidos. Esta é a posição do Porto Verde, assente nos estudos citados, e não uma conclusão deles: nenhum estudo mede, para Portugal, quanto espaço verde se poupa ou quantas casas se perdem por esta via.
