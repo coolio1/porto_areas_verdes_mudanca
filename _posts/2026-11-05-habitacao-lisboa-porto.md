@@ -60,6 +60,12 @@ Porque ficam casas vazias? Heranças por partilhar, obras caras, receio de arren
 
 Lá fora, os impostos sobre casas vazias têm resultados modestos e difíceis de medir. A taxa francesa sobre logements vacants reduziu os vagos cerca de 8,6 % em termos relativos, em parte por reclassificação administrativa. Em Vancouver, a vacância declarada desceu de 0,90 % para 0,49 % entre 2017 e 2024, segundo o próprio município, mas sem estimativa causal e com problemas de cobrança. Transpostos para Lisboa e Porto, estes efeitos dão uma ordem de grandeza de **centenas a poucos milhares de fogos por ano**, não de dezenas de milhares (cálculo nosso, ilustrativo). Mobilizar o parque vazio ajuda, mas como complemento da oferta nova, não como substituto. O que se pode fazer já é criar um registo municipal de fogos vagos, cruzando consumos de água e electricidade com as moradas, e publicá-lo todos os anos: sem saber onde estão, nenhuma medida funciona nem se consegue avaliar.
 
+## E os juros, os senhorios e as rendas?
+
+Há quem defenda que o problema não é a falta de casas mas o custo do dinheiro. A literatura dá-lhe uma parte da razão: juros baixos fazem subir os preços, mas menos do que a teoria sugere, e em Portugal o FMI e a Comissão Europeia não lhes atribuem o papel principal. Juros e oferta reforçam-se: quando a oferta é rígida, o efeito dos juros nos preços é maior.
+
+Do lado do arrendamento, duas notas. A revisão do regime anunciada para 2026 (fim dos limites à actualização das rendas, despejo mais rápido) ainda **não está em vigor**: foi aprovada só na generalidade, e não há estudo que permita dizer se aumentaria a oferta. E não existe, para Portugal, avaliação do que as novas isenções fiscais aos senhorios e os apoios à renda fazem às rendas: é por aí que devem ser avaliados antes de serem alargados.
+
 ## O que recomendamos
 
 Nenhuma medida isolada tem efeito de dois dígitos nos preços. A tese central é que o problema é de **escassez de oferta acessível numa economia que recebeu choques de procura simultâneos**. Daí um pacote, com ordem:
@@ -73,7 +79,7 @@ A nossa confiança é **moderada quanto à direcção** destas medidas e **baixa
 
 ## O artigo completo
 
-A síntese de toda a evidência, com métodos, certeza da evidência, limitações e mais de 160 referências, está disponível em [PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (22 páginas).
+A síntese de toda a evidência, com métodos, certeza da evidência, limitações e mais de 220 referências, está disponível em [PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (26 páginas). Inclui também o regime do arrendamento (a revisão prevista para 2026 ainda não está em vigor), os apoios à renda, o papel dos juros e a fiscalidade do arrendamento.
 
 ## Porque é que isto interessa ao Porto Verde
 
