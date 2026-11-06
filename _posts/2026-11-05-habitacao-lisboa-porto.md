@@ -7,10 +7,12 @@ image: /assets/images/habitacao-ilustracao-casas.jpg
 tags: [habitação, porto, lisboa, política urbana, alojamento local, imigração, rendas, urbanismo]
 ---
 
+> **Aviso:** Este artigo foi gerado com recurso a inteligência artificial e não reflecte necessariamente a opinião do autor.
+
 Em 2025, os preços das casas em Portugal subiram 17,6 %. O rendimento disponível das famílias subiu 5,7 %. Qualquer pessoa que tenha procurado casa em Lisboa ou no Porto nos últimos anos não precisa de gráficos para saber o que isto quer dizer. A pergunta que interessa é outra: **de quem é a culpa, e o que é que, de facto, funciona?**
 
-![Em 2025 os preços das casas subiram 17,6 % e o rendimento disponível das famílias 5,7 %]({{ site.baseurl }}/assets/images/habitacao-fig1-precos-rendimento.png)
-*Variação em 2025, em Portugal: os preços subiram cerca de três vezes mais do que os rendimentos.*
+![Desde 2008, os preços das casas em Portugal subiram 145 % e o rendimento disponível das famílias 69 %]({{ site.baseurl }}/assets/images/habitacao-fig1-precos-rendimento.png)
+*Preços das casas e rendimento das famílias em Portugal, 2008–2025 (índice, 2008 = 100, valores correntes). Em 2025 os preços subiram 17,6 % e o rendimento 5,7 %. Fonte: Eurostat.*
 
 Fizemos o que se faz antes de ter opinião: ler. Reunimos mais de cem fontes (estudos científicos, relatórios do Banco de Portugal, da OCDE e da Comissão Europeia, avaliações de políticas de vários países), lemos em texto integral os estudos mais relevantes e conferimos as citações literais contra o texto original. O resultado é menos confortável do que um slogan, e muito mais útil.
 
@@ -81,13 +83,26 @@ Há quem defenda que o problema não é a falta de casas mas o custo do dinheiro
 
 Do lado do arrendamento, duas notas. A revisão do regime anunciada para 2026 (fim dos limites à actualização das rendas, despejo mais rápido) ainda **não está em vigor**: foi aprovada só na generalidade, e não há estudo que permita dizer se aumentaria a oferta. E não existe, para Portugal, avaliação do que as novas isenções fiscais aos senhorios e os apoios à renda fazem às rendas: é por aí que devem ser avaliados antes de serem alargados.
 
+## Construir mais, sem destruir o que protege a cidade
+
+Pedir mais casas só é coerente se a oferta nova respeitar o ordenamento do território. Construir não pode querer dizer ocupar a estrutura ecológica, as linhas de água, as áreas inundáveis ou os espaços verdes que o plano municipal protege. As propostas da Associação Campo Aberto ao PDM do Porto (2020) mostram o tipo de regras em causa: áreas verdes protegidas onde não se constrói, limites à impermeabilização das quintas e jardins privados, e um parque ou jardim público a menos de 800 m de cada casa. São propostas de uma associação, não limiares validados por estudos, e foram escritas antes do aumento da imigração de 2021–2025, que muda a premissa demográfica mas não os critérios.
+
+Conciliar as duas coisas tem uma ordem, da menos para a mais custosa em termos ambientais:
+
+1. **Oferta que não consome solo:** os cerca de 29 600 alojamentos vagos fora do mercado e em bom estado em Lisboa e no Porto, e a reabilitação.
+2. **Solo já urbanizado e com infra-estruturas:** terrenos públicos vagos, edifícios obsoletos e terrenos já impermeabilizados, de preferência bem servidos por transporte público.
+3. **Densificar onde já há cidade**, com quarteirões, espaço verde e limites de impermeabilização.
+4. **Só por último, expansão em solo livre**, fora da estrutura ecológica.
+
+Esta ordem tem custos: em Inglaterra, um planeamento local mais restritivo teve efeitos indesejados, como mais casas vazias e deslocações mais longas. Não sabemos, para Portugal, quantos fogos se ganham ou perdem por esta via; é uma leitura nossa, não uma conclusão dos estudos.
+
 ## O que recomendamos
 
-Nenhuma medida isolada tem efeito de dois dígitos nos preços. A tese central é que o problema é de **escassez de oferta acessível numa economia que recebeu choques de procura simultâneos**. Daí um pacote, com ordem:
+Nenhuma medida isolada tem efeito de dois dígitos nos preços, e todas as de oferta ficam sujeitas ao ordenamento do território. A tese central é que o problema é de **escassez de oferta acessível numa economia que recebeu choques de procura simultâneos**. Daí um pacote, com ordem:
 
 1. **Já:** parar de piorar e saber o que há. Criar o registo de fogos vagos. Não alargar garantias públicas nem isenções fiscais à procura enquanto a oferta não responder; não criar novos tectos de renda de primeira geração; fiscalizar de facto os rácios de alojamento local já aprovados.
-2. **Em um a três anos:** desbloquear a oferta. Prazos de licenciamento medidos e públicos, solo público e municipal mobilizado, mão-de-obra para construir e IMI agravado aplicado de forma sistemática aos vagos fora do mercado em bom estado, com apoio financeiro à reabilitação dos que precisam de obras e via jurídica para as heranças indivisas. Instrumentos coercivos como o arrendamento forçado são de risco constitucional elevado e nunca foram aplicados. A imigração qualificada é, neste sentido, política de habitação.
-3. **Em três a dez anos:** construir um sector de habitação a custo controlado com dimensão real, com operadores sem fins lucrativos, solo público e financiamento estável para vários anos.
+2. **Em um a três anos:** desbloquear a oferta. Prazos de licenciamento medidos e públicos, solo público e municipal já urbanizado e fora da estrutura ecológica, mão-de-obra para construir e IMI agravado aplicado de forma sistemática aos vagos fora do mercado em bom estado, com apoio financeiro à reabilitação dos que precisam de obras e via jurídica para as heranças indivisas. Instrumentos coercivos como o arrendamento forçado são de risco constitucional elevado e nunca foram aplicados. A imigração qualificada é, neste sentido, política de habitação.
+3. **Em três a dez anos:** construir um sector de habitação a custo controlado com dimensão real, com operadores sem fins lucrativos, solo público já urbanizado e financiamento estável para vários anos.
 4. **Em paralelo:** deslocar a fiscalidade dos impostos sobre a compra para os impostos recorrentes e avaliar com dados as novas medidas de 2026 antes de as alargar.
 
 ![Roteiro das recomendações: já, em um a três anos, em três a dez anos e em paralelo]({{ site.baseurl }}/assets/images/habitacao-fig7-roteiro.png)
