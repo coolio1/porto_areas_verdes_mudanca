@@ -87,6 +87,13 @@ Protocolos de thumbnails e de criação de artigos: skill `porto-verde-posts`. N
 - **Menu:** `patch_nav.py` é bloqueado pelo hook; editar só `nav.py` e deixar o pre-commit propagar.
 - **Artigos com textos enviados a entidades (caso Aurifícia):** nunca publicar o original nem dados pessoais/referências de notificações; ver `docs/artigos-textos-entidades.md`.
 
+## Modelo dos subagentes (2026-11-06, pedido do utilizador: poupar custo)
+
+Medido em 7 dias: 2 555 turnos de subagentes `general-purpose` neste projecto, todos em Sonnet por herança. Ao despachar, **especificar `model` em cada chamada**:
+- `haiku`: inventariar ficheiros ou estudos, verificar online se um documento existe ou está acessível, triar pastas («online ou não»), explorar páginas, localizar fotos candidatas, contar ou comparar listas.
+- `sonnet`: pesquisa com raciocínio (ordenamento, PDM, biodiversidade, fichas GAMP), síntese e redacção, qualquer decisão de classificação com critério (ex.: ciclo dos PGRH).
+- Nunca Haiku para citar autores, anos ou referências (ver «Nunca inventar referências»). Se um lote de Haiku sair com erros, repetir esse lote em `sonnet` e anotar aqui o tipo de tarefa.
+
 ## Higiene do repositório
 
 - Regras base (`.gitignore`, scripts one-off, binários, `.bak`): ver global.
