@@ -31,7 +31,7 @@ Como se viu, o peso de cada causa não foi medido; o que os dados melhor sustent
 
 Ao mesmo tempo, a construção licenciada encolheu. Em Portugal, o número de casas novas licenciadas caiu de 95,7 mil em 2002 para 7,5 mil em 2013 e depois só recuperou até 42 mil em 2025, cerca de 44 % do nível de 2002. Em 2023, obter uma licença de construção demorava 545 dias em Lisboa e 453 no Porto (Banco Mundial, citado pela OCDE).
 
-![Licenciamentos caíram 92 % entre 2002 e 2013 e estão a 44 % do nível de 2002; as famílias cresceram acima dos alojamentos (2021–2024); o licenciamento demora 545 dias em Lisboa e 453 no Porto]({{ site.baseurl }}/assets/images/habitacao-fig2-oferta.png)
+![Licenciamentos caíram 92 % entre 2002 e 2013 e estão a 44 % do nível de 2002; em 49 % dos municípios as famílias cresceram acima dos alojamentos em 2021–2024, contra 34 % em 2011–2021; o licenciamento demora 545 dias em Lisboa e 453 no Porto]({{ site.baseurl }}/assets/images/habitacao-fig2-oferta.png)
 *Três sinais do lado da construção de casas em Portugal.*
 
 ## Olhar para o bairro, não só para a cidade

@@ -59,7 +59,7 @@ FIGS = [
     (
         "### 3.6 ",
         "fig2-oferta",
-        "Figura 3. Três sinais do lado da oferta em Portugal: licenciamentos, famílias a mais do que alojamentos e prazos de licenciamento.",
+        "Figura 3. Três sinais do lado da oferta em Portugal: licenciamentos, municípios em que as famílias cresceram mais do que os alojamentos (2011–2021 e 2021–2024) e prazos de licenciamento.",
     ),
     (
         "### 3.9 ",
