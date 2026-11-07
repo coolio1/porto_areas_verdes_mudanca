@@ -106,7 +106,7 @@ MEDIDAS = [
         "Limitado",
         "peq",
         "Impostos sobre compradores estrangeiros",
-        "preços 5 a 9 % mais baixos nos tipos de casa abrangidos, sem melhoria detectada nas rendas",
+        "preços cerca de 5 % mais baixos em Vancouver e 7 a 9 % em Toronto, sem melhoria detectada nas rendas",
         "Colúmbia Britânica e Ontário (Canadá). Rótulo «limitado»: sem melhoria nas rendas e pouco peso em Portugal, onde os não residentes (por residência fiscal, não nacionalidade) são 5,0 % das transacções e 8,3 % do valor (2025). Certeza baixa (só vimos o resumo dos estudos)",
     ),
 ]
