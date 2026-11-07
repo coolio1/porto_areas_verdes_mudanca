@@ -259,7 +259,7 @@ def download_layer(image, color_hex, filename):
     vis = image.visualize(palette=[color_hex], min=0, max=1)
     url = vis.getThumbURL({'region': area, 'dimensions': DIM, 'format': 'png'})
     print(f'  A descarregar {filename}...')
-    r = requests.get(url)
+    r = requests.get(url, timeout=30)
     img = Image.open(io.BytesIO(r.content)).convert('RGBA')
     pixels = list(img.getdata())
     new_data = [(0,0,0,0) if (p[0]<10 and p[1]<10 and p[2]<10) else p for p in pixels]
@@ -279,7 +279,7 @@ def download_rgb(composite, filename):
     vis = s2_rgb.visualize(bands=['B4', 'B3', 'B2'], min=0, max=3000)
     url = vis.getThumbURL({'region': area, 'dimensions': DIM, 'format': 'png'})
     print(f'  A descarregar {filename}...')
-    r = requests.get(url)
+    r = requests.get(url, timeout=30)
     img = Image.open(io.BytesIO(r.content)).convert('RGBA')
     img.save(filepath)
     return filepath

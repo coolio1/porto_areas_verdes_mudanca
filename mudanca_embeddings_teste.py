@@ -106,7 +106,7 @@ def download_change_layer(threshold, label):
     vis = img.visualize(min=0, max=8, palette=PALETTE)
     url = vis.getThumbURL({'region': area, 'dimensions': DIM, 'format': 'png'})
     print(f'  A descarregar mudanca_{label}...')
-    r = requests.get(url)
+    r = requests.get(url, timeout=30)
     r.raise_for_status()
     os.makedirs('layers/test', exist_ok=True)
     filepath = f'layers/test/mudanca_{label}.png'

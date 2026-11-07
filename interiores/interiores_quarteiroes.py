@@ -172,7 +172,7 @@ def download_layer(image, color_hex, filename):
     for attempt in range(3):
         url = vis.getThumbURL({"region": porto, "dimensions": DIM, "format": "png"})
         print(f"  A descarregar {filename}...")
-        r = requests.get(url)
+        r = requests.get(url, timeout=30)
         try:
             img = Image.open(io.BytesIO(r.content)).convert("RGBA")
             break
@@ -200,7 +200,7 @@ def download_rgb_layer(image, filename):
     for attempt in range(3):
         url = image.getThumbURL({"region": porto, "dimensions": DIM, "format": "png"})
         print(f"  A descarregar {filename}...")
-        r = requests.get(url)
+        r = requests.get(url, timeout=30)
         try:
             img = Image.open(io.BytesIO(r.content)).convert("RGBA")
             break

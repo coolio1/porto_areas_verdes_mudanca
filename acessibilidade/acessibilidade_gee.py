@@ -91,7 +91,7 @@ def download_mono_layer(image, color_hex, filename, porto, dim, layers_dir):
     for attempt in range(3):
         url = vis.getThumbURL({"region": porto, "dimensions": dim, "format": "png"})
         print(f"  A descarregar {filename}...")
-        r = requests.get(url)
+        r = requests.get(url, timeout=30)
         try:
             img = Image.open(io.BytesIO(r.content)).convert("RGBA")
             break
@@ -117,7 +117,7 @@ def download_greyscale(image, dim, min_val, max_val, label, porto):
     for attempt in range(3):
         url = vis.getThumbURL({"region": porto, "dimensions": dim, "format": "png"})
         print(f"  A descarregar {label} ({dim}px)...")
-        r = requests.get(url)
+        r = requests.get(url, timeout=30)
         try:
             img = Image.open(io.BytesIO(r.content)).convert("L")
             arr = np.array(img).astype(np.float64) / 255.0 * max_val
