@@ -1,0 +1,11 @@
+/* Componentes (iguais no site e no PDF; o layout de página é que muda) */
+.kicker{font:700 8.5pt var(--f-ui);letter-spacing:.2em;text-transform:uppercase;color:var(--folha)}
+.destaque{font:600 19pt/1.25 var(--f-display);color:var(--verde);border-top:3px solid var(--terra);padding-top:10px;margin:14px 0}
+.destaque small{display:block;font:400 8.5pt var(--f-ui);color:var(--cinza);margin-top:8px;letter-spacing:.04em}
+.numero{font:700 40pt/1 var(--f-display);color:var(--verde)}
+.numero.t{color:var(--terra)} .numero.c{color:var(--ceu)}
+.numero-leg{font:400 10pt/1.35 var(--f-ui);color:var(--tinta);margin-top:6px}
+.figura{margin:12px 0}.figura img{width:100%;display:block}
+.figura figcaption{font:400 8pt/1.35 var(--f-ui);color:var(--cinza);margin-top:5px}
+.credito{font:italic 7.5pt var(--f-ui);color:var(--cinza)}
+.aviso{font:400 8.5pt/1.4 var(--f-ui);border-left:3px solid var(--musgo);background:var(--bruma);padding:7px 10px;color:#35403a}

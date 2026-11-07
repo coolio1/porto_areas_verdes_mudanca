@@ -1,0 +1,9 @@
+/* Porto Verde — tokens de design (partilhados pelo site e pelo PDF) */
+:root{
+  --verde:#1B4D20; --folha:#2E7D32; --musgo:#A5C79A; --bruma:#E9F0E4;
+  --papel:#FBF9F4; --tinta:#1F2420; --cinza:#6B726C;
+  --terra:#D9642B; --ceu:#2A78D6;
+  --f-display:"Sitka Display","Sitka Heading",Georgia,serif;
+  --f-texto:"Sitka Text","Sitka Small",Georgia,serif;
+  --f-ui:"Segoe UI",Calibri,Arial,sans-serif;
+}

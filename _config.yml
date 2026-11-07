@@ -56,6 +56,7 @@ exclude:
   - archive
   - "*.gpkg"
   - CLC
+  - "AI Habitacao"
   - CLAUDE.md
   - "atropelamentos/Porto_2019_24h.pdf"
   - googlec78d03be03954350.html
