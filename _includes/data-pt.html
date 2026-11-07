@@ -1,0 +1,6 @@
+{%- comment -%}Data em PT-PT com o mês em maiúscula inicial. Uso: {% include data-pt.html d=page.date %} ou, abreviado, {% include data-pt.html d=post.date abrev=true %}{%- endcomment -%}
+{%- assign meses = "Janeiro,Fevereiro,Março,Abril,Maio,Junho,Julho,Agosto,Setembro,Outubro,Novembro,Dezembro" | split: "," -%}
+{%- assign mi = include.d | date: "%-m" | minus: 1 -%}
+{%- assign mes = meses[mi] -%}
+{%- if include.abrev -%}{%- assign mes = mes | slice: 0, 3 -%}{%- endif -%}
+{{ include.d | date: "%d" }} {{ mes }} {{ include.d | date: "%Y" }}

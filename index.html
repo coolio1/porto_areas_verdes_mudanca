@@ -190,7 +190,7 @@ description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas
       {% endif %}
       <div class="card-body">
         <h3>{{ post.title }}</h3>
-        <time>{{ post.date | date: "%d %b %Y" }}</time>
+        <time>{% include data-pt.html d=post.date abrev=true %}</time>
         <p>{{ post.description | default: post.excerpt | strip_html | truncatewords: 22 }}</p>
       </div>
     </a>

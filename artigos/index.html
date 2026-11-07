@@ -57,7 +57,7 @@ description: "Todos os artigos publicados no Porto Verde."
   <li>
     <a class="post-thumb" href="{{ post.url | prepend: site.baseurl }}" tabindex="-1" aria-hidden="true">{% if post.image %}<img src="{{ site.baseurl }}{{ post.image }}" alt="" loading="lazy">{% endif %}</a>
     <div class="post-text">
-      <time>{{ post.date | date: "%d %b %Y" }}</time>
+      <time>{% include data-pt.html d=post.date abrev=true %}</time>
       <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
       {% if post.description %}<p>{{ post.description }}</p>{% endif %}
     </div>

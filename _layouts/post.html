@@ -117,7 +117,7 @@ layout: default
 <article{% if page.article_class %} class="{{ page.article_class }}"{% endif %}>
   <h1 class="post-title">{{ page.title }}</h1>
   <div class="post-meta">
-    <time>{{ page.date | date: "%d %B %Y" }}</time>
+    <time>{% include data-pt.html d=page.date %}</time>
     {% if page.tags %}
       &middot;
       {% for tag in page.tags %}<span class="post-tag">{{ tag }}</span>{% endfor %}
