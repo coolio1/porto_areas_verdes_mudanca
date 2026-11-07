@@ -34,3 +34,9 @@ AI Habitacao/
 
 # PDFs de terceiros usados como fonte do chat/nota de habitacao: nunca no remoto publico
 _build/pdf-habitacao/fontes_pdf/
+# Texto extraido dos PDFs de terceiros (corpus do factos.md): nunca no remoto publico
+_build/pdf-habitacao/corpus/
+# factos.md traz excertos de terceiros; fica local (OneDrive), nunca no remoto publico
+_build/pdf-habitacao/nota.factos.md
+_build/pdf-habitacao/nota.factos.pendentes.md
+_build/pdf-habitacao/nota.gate.out
