@@ -43,7 +43,7 @@ CHOQUES = [
     (
         "Imigração",
         "+825 mil",
-        "habitantes em Portugal, 2021–2025 (e mais 849 mil residentes estrangeiros)",
+        "habitantes em Portugal, 2021–2025 (o número de residentes estrangeiros subiu 849 mil: medidas diferentes, que não se somam)",
     ),
     (
         "Alojamento local (AL)",
@@ -92,7 +92,7 @@ MEDIDAS = [
         "Efeitos adversos",
         "nao",
         "Apoios a quem compra casa",
-        "isenção do IMT a jovens até 35 anos: preços de anúncio cerca de 3,2 % acima do que se estima que teriam sido sem a isenção, 12 meses após o anúncio (Maio de 2024); <em>Help to Buy</em> (crédito público britânico): preços cerca de 7,9 % mais altos em Londres do que fora",
+        "isenção do IMT a jovens até 35 anos: preços de anúncio cerca de 3,2 % acima do que se estima que teriam sido sem a isenção, 12 meses após o anúncio (Maio de 2024); <em>Help to Buy</em> (crédito público britânico): em Londres, preços cerca de 7,9 % mais altos do que fora de Londres",
         "Quando não se constroem mais casas, o apoio a quem compra vai parar ao preço (diferente de trocar imposto na compra por imposto anual). Certeza moderada",
     ),
     (
@@ -142,7 +142,7 @@ PASSOS = [
 ]
 
 TERRITORIO = (
-    "Em 2021 havia 29 600 casas vagas (sem ocupante no Censo) fora do mercado e em bom estado "
+    "Em 2021, Lisboa e Porto tinham 29 600 casas vagas (sem ocupante no Censo) fora do mercado e em bom estado "
     "(21 801 em Lisboa; 7 799 no Porto); mobilizá-las é complemento: poucos milhares de casas de uma só vez, "
     "por cálculo ilustrativo. A nova oferta deve ficar fora da estrutura ecológica "
     "(onde o plano municipal protege espaços verdes e linhas de água)."

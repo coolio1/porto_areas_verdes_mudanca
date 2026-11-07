@@ -90,12 +90,12 @@ def build():
     )
     body = f"""<section class="cx" aria-label="Conclusões">
 <div class="topo"><img class="im" src="{{{{ site.baseurl }}}}/assets/images/habitacao-ilustracao-casas.jpg" alt=""><div class="veu"></div>
- <div class="kick">Síntese do artigo completo</div><div class="tit" role="heading" aria-level="2">Conclusões</div>
+ <div class="kick">Síntese deste artigo</div><div class="tit" role="heading" aria-level="2">Conclusões</div>
  <p class="tese">{c.TESE}</p></div>
 <div class="nums">{nums}</div>
 <div class="choques"><p class="sec">Cinco choques na procura (aumentos súbitos e fortes do número de pessoas ou do dinheiro à procura de casa)</p><div class="cs">{chq}</div></div>
 <div class="ver"><p class="sec">O que a evidência diz de cada medida</p>{ver}</div>
-<div class="pacote"><div class="k">O que a evidência sugere</div><div class="h4 sr" role="heading" aria-level="3" style="display:none">Pacote</div><h4>Um pacote com ordem, em quatro tempos</h4>
+<div class="pacote"><div class="k">O que a evidência sugere</div><div class="h4 sr" role="heading" aria-level="3" style="display:none">Pacote</div><h4>Um pacote em três etapas, mais medidas em paralelo</h4>
  <div class="passos">{pas}</div>
  <p class="terr"><b>Casas vazias e espaços verdes.</b> {c.TERRITORIO}</p>
  <p class="terr nic"><b>Ideias menos conhecidas.</b> {c.NICHO}</p>
