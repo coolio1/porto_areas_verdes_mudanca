@@ -62,3 +62,19 @@ python capture_cards.py
 - Emails como `[addr](mailto:addr)`; URLs externas como `[texto](url)`.
 - Referências bibliográficas no final, ordenadas alfabeticamente (em artigos científicos).
 - Acentuação PT-PT correcta em todo o texto.
+
+## Artigos científicos com «nota completa» em PDF (aprendido em 2026-11-07, post habitação)
+
+### Texto e fontes
+- **Resultado de /research que alimenta um artigo:** propor logo a integração substantiva (secção nova por conclusão principal, incluindo o que falhou e o que é só promessa), não só correcções e uma linha; mostrar o texto ao utilizador antes de gravar. O utilizador reagiu a uma 1.ª proposta curta («depois de tanta investigação só mudas isso?»).
+- **Cada número do texto novo** tem de ter fonte lida (excerto confirmado) ou levar a ressalva no texto («segundo a imprensa», «só vista em resumo», «working paper sem revisão por pares»). Conferir **o que a medida é** antes de a nomear (o «zonamento de 2018» que baixou 8 % era a restrição ao AL por bairro, não zonamento de construção).
+- **Texto-fonte da nota sem instruções soltas:** procurar «a acrescentar», «a substituir», «TODO» antes de construir o PDF (a tabela 4.1 e a página 41 saíram partidas por isto).
+- **Título, descrição (front matter) e capa do PDF** dizem o mesmo; mudar o título não muda o nome do ficheiro do post (o endereço mantém-se).
+
+### Construção do PDF (pandoc + Chromium, `mkpdf.py`)
+- Versão nova = nome novo (`nota_vNN.pdf`); copiar para `assets/pdfs/<slug>-nota-completa-<ano>.pdf`. **Nunca correr o script de publicação (`publicar`)**: dar ao utilizador o comando `! python ~/.claude/scripts/publicar.py porto-verde --permitir <pdf>` e confirmar depois o hash no site.
+- Ao acrescentar secções, actualizar o número de páginas da capa (`NPAG`, escrito à mão).
+- **Não substituir os ids automáticos dos títulos** (`{#id}`): o CSS usa-os (`#referências`, `#recomendações`) e o PDF encolheu de 57 para 32 páginas. Para âncoras do índice usar `<span id="secN"></span>` dentro do título.
+- Índice clicável (`<a href="#secN">` por entrada), número numa coluna própria (`.tn`) e título com recuo; títulos de nível 2 numerados levam ponto («1. Introdução»).
+- Referências em 2 colunas: o recuo da lista tem de caber números de 3 algarismos (`padding-left:2.7em`); com menos, o 1.º dígito fica cortado («33.» em vez de «233.»).
+- **Verificar sempre, renderizando as páginas** (`pymupdf` → PNG, ver capa, índice, páginas com tabelas e a última das referências): n.º de páginas, nenhuma quase vazia, nenhuma linha a acabar em hífen fora de URLs, nenhum `%` separado do número, sequência das referências sem cortes.

@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Casas em Lisboa e Porto: ninguém tem a culpa toda, e é isso que torna o problema difícil"
-description: "Lemos a literatura científica sobre a subida da habitação em Portugal e testámos as soluções que já foram experimentadas noutros países. A conclusão: falta oferta acessível onde ela é precisa, e nenhuma medida isolada resolve."
+title: "Casas em Lisboa e Porto: o que causou a subida, o que funciona e o que ainda é só promessa"
+description: "Lemos a literatura científica sobre a subida da habitação em Portugal, testámos as soluções experimentadas noutros países e procurámos ideias de nicho com resultado medido. A conclusão: falta oferta acessível onde ela é precisa, e nenhuma medida isolada resolve."
 date: 2026-11-05
 image: /assets/images/habitacao-ilustracao-casas.jpg
 tags: [habitação, porto, lisboa, política urbana, alojamento local, imigração, rendas, urbanismo]
