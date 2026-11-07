@@ -95,8 +95,8 @@ def build():
 <div class="nums">{nums}</div>
 <div class="choques"><p class="sec">Cinco choques na procura (aumentos súbitos e fortes do número de pessoas ou do dinheiro à procura de casa)</p><div class="cs">{chq}</div></div>
 <div class="ver"><p class="sec">O que a evidência diz de cada medida</p>{ver}</div>
-<div class="pacote"><div class="k">O que a evidência sugere</div><div class="h4 sr" role="heading" aria-level="3" style="display:none">Pacote</div><h4>Um pacote em três etapas, mais medidas em paralelo</h4>
- <div class="passos">{pas}</div>
+<div class="pacote"><div class="k">Para ler com cuidado</div>
+ <p class="terr"><b>Recomendações.</b> O pacote em três etapas, mais medidas em paralelo, está no fim do artigo.</p>
  <p class="terr"><b>Casas vazias e espaços verdes.</b> {c.TERRITORIO}</p>
  <p class="terr nic"><b>Ideias menos conhecidas.</b> {c.NICHO}</p>
  <div class="rod"><span><b>Leia por zona, não por cidade:</b> as médias escondem diferenças entre bairros; os efeitos valem para as zonas estudadas. Certeza global: moderada quanto à direcção dos efeitos, baixa quanto à sua dimensão em Portugal.</span></div></div>
