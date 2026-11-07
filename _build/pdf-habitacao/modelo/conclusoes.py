@@ -43,7 +43,7 @@ CHOQUES = [
     (
         "Imigração",
         "+825 mil",
-        "habitantes em Portugal, 2021–2025, quase só por entrada de pessoas (saldo migratório)",
+        "habitantes em Portugal, 2021–2025 (e mais 849 mil residentes estrangeiros)",
     ),
     (
         "Alojamento local (AL)",
@@ -54,7 +54,7 @@ CHOQUES = [
     (
         "Crédito com garantia pública",
         "26,8 %",
-        "do valor dos novos empréstimos para compra de casa (2025; garantia desde Janeiro de 2025)",
+        "do valor dos novos empréstimos para compra de casa (2025)",
     ),
 ]
 
@@ -107,7 +107,7 @@ MEDIDAS = [
         "peq",
         "Impostos sobre compradores estrangeiros",
         "preços 5 a 9 % mais baixos nos tipos de casa abrangidos, sem melhoria detectada nas rendas",
-        "Colúmbia Britânica e Ontário (Canadá). Rótulo «limitado»: sem melhoria nas rendas e pouco peso em Portugal, onde os não residentes (por residência fiscal, não nacionalidade) são 5,0 % das transacções e 8,3 % do valor (2025). Certeza moderada",
+        "Colúmbia Britânica e Ontário (Canadá). Rótulo «limitado»: sem melhoria nas rendas e pouco peso em Portugal, onde os não residentes (por residência fiscal, não nacionalidade) são 5,0 % das transacções e 8,3 % do valor (2025). Certeza baixa (só vimos o resumo dos estudos)",
     ),
 ]
 

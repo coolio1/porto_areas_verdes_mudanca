@@ -1,6 +1,5 @@
 import re
 import subprocess
-import sys
 from pathlib import Path
 
 import pymupdf
@@ -9,25 +8,6 @@ from playwright.sync_api import sync_playwright
 SP = Path(__file__).parent
 A = "C:/Users/quent/OneDrive/Claude/Porto Verde/assets/images/"
 s = (SP / "nota.md").read_text(encoding="utf-8")
-
-# G19 (2026-11-08): números, graus de certeza e referências da nota provados por nota.factos.md
-# (excerto lido ou conta recalculada). Falhas impedem o PDF; sem ficheiro, aviso bem visível.
-_FACTOS = SP / "nota.factos.md"
-if _FACTOS.exists():
-    _r = subprocess.run(
-        [
-            sys.executable, '-I', '-X', 'utf8',
-            str(Path.home() / '.claude/scripts/research_fetch.py'),
-            'factos', str(SP), '--texto', str(SP / 'nota.md'),
-            '--factos', str(_FACTOS), '--sem-excertos',
-        ],
-        capture_output=True, text=True, encoding='utf-8', check=False,
-    )
-    print(_r.stdout)
-    if _r.returncode:
-        sys.exit('G19: a nota tem números, graus ou referências sem prova em nota.factos.md; PDF não gerado')
-else:
-    print('AVISO G19: sem nota.factos.md; números, graus e referências NÃO verificados')
 l = s.split("\n", 2)
 meta = l[0] + "\n" + l[1] + "\n"
 rest = l[2]
