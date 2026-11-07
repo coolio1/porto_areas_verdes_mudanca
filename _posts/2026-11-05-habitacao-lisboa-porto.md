@@ -12,10 +12,10 @@ tags: [habitação, porto, lisboa, política urbana, alojamento local, imigraç�
 
 {% include conclusoes-habitacao.html %}
 
-Em 2025, os preços das casas em Portugal subiram 17,6 %. O rendimento disponível das famílias subiu 5,7 %. Qualquer pessoa que tenha procurado casa em Lisboa ou no Porto nos últimos anos não precisa de gráficos para saber o que isto quer dizer. A pergunta que interessa é outra: **de quem é a culpa, e o que é que, de facto, funciona?**
+Em 2025, os preços das casas em Portugal subiram 17,6 %. O rendimento disponível das famílias subiu 5,7 %. Qualquer pessoa que tenha procurado casa em Lisboa ou no Porto nos últimos anos não precisa de gráficos para saber o que isto quer dizer. A pergunta que interessa é outra: **de quem é a culpa, e o que é que, de facto, funciona?**
 
-![Desde 2008, os preços das casas em Portugal subiram 145 % e o rendimento disponível das famílias 69 %]({{ site.baseurl }}/assets/images/habitacao-fig1-serie-2008-2025.png)
-*Preços das casas e rendimento das famílias em Portugal, 2008–2025 (índice, 2008 = 100, valores correntes). Em 2025 os preços subiram 17,6 % e o rendimento 5,7 %. Fonte: Eurostat.*
+![Desde 2008, os preços das casas em Portugal subiram 145 % e o rendimento disponível das famílias 69 %]({{ site.baseurl }}/assets/images/habitacao-fig1-serie-2008-2025.png)
+*Preços das casas e rendimento das famílias em Portugal, 2008–2025 (índice, 2008 = 100, valores correntes). Em 2025 os preços subiram 17,6 % e o rendimento 5,7 %. Fonte: Eurostat.*
 
 Fizemos o que se faz antes de ter opinião: ler. Reunimos mais de cem fontes (estudos científicos, relatórios do Banco de Portugal, da OCDE e da Comissão Europeia, avaliações de políticas de vários países), lemos em texto integral os estudos mais relevantes e conferimos as citações literais contra o texto original. O resultado é menos confortável do que um slogan, e muito mais útil.
 
@@ -27,26 +27,26 @@ O que a literatura permite dizer é mais modesto, e mais firme.
 
 ## A raiz: uma falta de casas num sítio muito concreto
 
-A imagem de um país com poucas casas é enganadora. A nível nacional, desde 2011 as famílias cresceram mais do que os alojamentos, mas por pouco: cerca de 4 mil por ano até 2021 e 14 mil por ano entre 2021 e 2024. O problema está concentrado em metade dos municípios, sobretudo nas áreas de Lisboa e do Porto, onde os fogos vagos não chegam para a procura. Em muitos outros concelhos há casas sobrando.
+A imagem de um país com poucas casas é enganadora. A nível nacional, desde 2011 as famílias cresceram mais do que os alojamentos, mas por pouco: cerca de 4 mil por ano até 2021 e 14 mil por ano entre 2021 e 2024. O problema está concentrado em metade dos municípios, sobretudo nas áreas de Lisboa e do Porto, onde os fogos vagos não chegam para a procura. Em muitos outros concelhos há casas sobrando.
 
-Ao mesmo tempo, a capacidade de construir encolheu. Os licenciamentos caíram cerca de 92 % entre 2002 e 2013 e, em 2025, estavam ainda a 44 % do nível de 2002. Um licenciamento demora, em média, 545 dias em Lisboa e 453 no Porto.
+Ao mesmo tempo, a capacidade de construir encolheu. Os licenciamentos caíram cerca de 92 % entre 2002 e 2013 e, em 2025, estavam ainda a 44 % do nível de 2002. Um licenciamento demora, em média, 545 dias em Lisboa e 453 no Porto.
 
-![Licenciamentos caíram 92 % entre 2002 e 2013 e estão a 44 % do nível de 2002; as famílias crescem acima dos alojamentos; o licenciamento demora 545 dias em Lisboa e 453 no Porto]({{ site.baseurl }}/assets/images/habitacao-fig2-oferta.png)
+![Licenciamentos caíram 92 % entre 2002 e 2013 e estão a 44 % do nível de 2002; as famílias crescem acima dos alojamentos; o licenciamento demora 545 dias em Lisboa e 453 no Porto]({{ site.baseurl }}/assets/images/habitacao-fig2-oferta.png)
 *Três sinais do lado da oferta em Portugal.*
 
 ## Olhar para o bairro, não só para a cidade
 
-A subida de 68,2 % em Lisboa e de 61,9 % no Porto (2016–2019) é uma média, e o pico concentrou-se no centro histórico. Por isso, cada efeito deve ler-se na unidade em que foi medido. A restrição ao alojamento local por zonas, em Lisboa, baixou os preços 8 % (20 % nos T2), mas só nos nove bairros tratados e sem transbordar para os de controlo. Um efeito local não é um efeito na cidade, e só se distingue com zonas de controlo e dados desagregados.
+Entre 2016 e 2019, os preços das casas subiram 68,2 % em Lisboa e 61,9 % no Porto, mas são médias, e o pico concentrou-se no centro histórico. Por isso, cada efeito deve ler-se na unidade em que foi medido. A restrição ao alojamento local por zonas, em Lisboa, baixou os preços 8 % (20 % nos T2), mas só nos nove bairros tratados e sem transbordar para os de controlo. Um efeito local não é um efeito na cidade, e só se distingue com zonas de controlo e dados desagregados.
 
 ## Cinco choques ao mesmo tempo
 
 Sobre esta oferta apertada caíram, em simultâneo, cinco empurrões na procura:
 
-- **Famílias mais pequenas.** Mais de 70 % do aumento do número de famílias entre 1981 e 2011 veio daí.
-- **Imigração.** A população cresceu 825 mil pessoas entre 2021 e 2025, quase toda por migração.
-- **Turismo e alojamento local.** Em Lisboa, os alojamentos locais passaram de cerca de 900 para mais de 19 000 entre 2012 e 2019. No Porto, havia 8 082 em 2019, 93 % apartamentos, com cerca de 3 000 registos só em 2018. Em 2026, o Porto voltou a registar mais novos AL do que Lisboa (583 contra 124, até Outubro). São contagens de registos, não de casas retiradas ao mercado residencial.
-- **Compradores com residência fiscal no estrangeiro.** Cerca de 5 % das transacções e 8 % do valor em 2025 (os estrangeiros residentes em Portugal elevam o total para 28 % das transacções).
-- **Crédito com garantia pública.** Já vale 26,8 % do montante dos novos empréstimos.
+- **Famílias mais pequenas.** Mais de 70 % do aumento do número de famílias entre 1981 e 2011 veio daí.
+- **Imigração.** A população cresceu 825 mil pessoas entre 2021 e 2025, quase toda por migração.
+- **Turismo e alojamento local.** Em Lisboa, os alojamentos locais passaram de cerca de 900 para mais de 19 000 entre 2012 e 2019. No Porto, havia 8 082 em 2019, 93 % apartamentos, com cerca de 3 000 registos só em 2018. Em 2026, o Porto voltou a registar mais novos AL do que Lisboa (583 contra 124, até Outubro). São contagens de registos, não de casas retiradas ao mercado residencial.
+- **Compradores com residência fiscal no estrangeiro.** Cerca de 5 % das transacções e 8 % do valor em 2025 (os estrangeiros residentes em Portugal elevam o total para 28 % das transacções).
+- **Crédito com garantia pública.** Já vale 26,8 % do montante dos novos empréstimos.
 
 ![Os cinco choques na procura: famílias mais pequenas, imigração, turismo e alojamento local, compradores estrangeiros e crédito com garantia pública]({{ site.baseurl }}/assets/images/habitacao-fig3-choques-v2.png)
 *Números-chave de cada choque, com datas e âmbito próprios.*
@@ -60,39 +60,39 @@ Esta é a parte em que a ciência ajuda mais, porque várias medidas foram exper
 ![Efeito estimado de várias medidas nos preços: construir e regular o alojamento local baixam-nos; apoios à compra sem mais casas sobem-nos]({{ site.baseurl }}/assets/images/habitacao-fig4-efeitos-precos.png)
 *Estudos e contextos diferentes: ordens de grandeza, não valores comparáveis ao ponto.*
 
-**Construir mais baixa os preços, mas devagar.** Uma estimativa para Portugal sugere que, por cada 1 % a mais de parque habitacional, os preços descem 0,6 %. Voltar ao ritmo de construção dos anos 2000 baixaria os preços só uns 3 %; duplicá-lo, uns 6 %. A oferta é condição necessária, não varinha de condão. Em Auckland, onde se liberalizou o zonamento em três quartos do solo residencial, foram precisos cerca de cinco anos para o parque crescer 4 % e as rendas cederem.
+**Construir mais baixa os preços, mas devagar.** Uma estimativa para Portugal sugere que, por cada 1 % a mais de parque habitacional, os preços descem 0,6 %. Voltar ao ritmo de construção dos anos 2000 baixaria os preços só uns 3 %; duplicá-lo, uns 6 %. A oferta é condição necessária, não varinha de condão. Em Auckland, onde se liberalizou o zonamento em três quartos do solo residencial, foram precisos cerca de cinco anos para o parque crescer 4 % e as rendas cederem.
 
 **Tectos de renda ajudam quem já está dentro e prejudicam quem procura.** Os controlos de «primeira geração» protegem os inquilinos instalados, mas reduzem a mobilidade, empurram para cima as rendas do mercado livre e podem reduzir a oferta. Uma revisão de 92 estudos de 36 países conclui que o efeito no bem-estar da sociedade «não é claro». As versões mais recentes, segmentadas por zona, são mais brandas, mas ainda sem avaliação em Portugal.
 
-**Ajudar quem compra, sem mais casas, faz subir os preços.** Quando a isenção de imposto para jovens foi anunciada em Portugal, os preços pedidos subiram cerca de 0,26 % ao mês, aproximadamente 3,2 % num ano, e a poupança fiscal ficou anulada em poucos meses. Em Londres, o *Help to Buy* subiu os preços cerca de 8 % sem se ver mais construção. Em França, um incentivo fiscal ao investimento em arrendamento (o Pinel) também não aumentou de forma significativa o licenciamento.
+**Ajudar quem compra, sem mais casas, faz subir os preços.** Quando a isenção de imposto para jovens foi anunciada em Portugal, os preços pedidos subiram cerca de 0,26 % ao mês, aproximadamente 3,2 % num ano, e a poupança fiscal ficou anulada em poucos meses. Em Londres, o *Help to Buy* subiu os preços cerca de 8 % sem se ver mais construção. Em França, um incentivo fiscal ao investimento em arrendamento (o Pinel) também não aumentou de forma significativa o licenciamento.
 
-**Regular o alojamento local funciona se for fiscalizado.** Em Lisboa, a proibição de novos registos em 2018 baixou os preços cerca de 8 % nas zonas abrangidas, um efeito real, mas que os próprios autores dizem não explicar toda a subida. Os efeitos nas rendas são reais mas moderados, e variam muito de cidade para cidade. A regulação mais branda, sem fiscalização, é o ponto fraco quase em toda a parte.
+**Regular o alojamento local funciona se for fiscalizado.** Em Lisboa, a proibição de novos registos em 2018 baixou os preços cerca de 8 % nas zonas abrangidas, um efeito real, mas que os próprios autores dizem não explicar toda a subida. Os efeitos nas rendas são reais mas moderados, e variam muito de cidade para cidade. A regulação mais branda, sem fiscalização, é o ponto fraco quase em toda a parte.
 
-**Habitação a custo controlado só funciona em escala.** Em Portugal, o parque social é inferior a 2 % do total. Em Viena, 23 % do parque é municipal e mais 21,2 % pertence a associações sem fins lucrativos, tudo construído ao longo de décadas, com rendas ligadas ao custo e restrições permanentes. A média da OCDE ronda os 6-7 %. Não há estimativa causal do efeito de Viena nas rendas do mercado, mas é o único modelo de longo prazo que parece escalar.
+**Habitação a custo controlado só funciona em escala.** Em Portugal, o parque social é inferior a 2 % do total. Em Viena, 23 % do parque é municipal e mais 21,2 % pertence a associações sem fins lucrativos, tudo construído ao longo de décadas, com rendas ligadas ao custo e restrições permanentes. A média da OCDE ronda os 6-7 %. Não há estimativa causal do efeito de Viena nas rendas do mercado, mas é o único modelo de longo prazo que parece escalar.
 
-![Peso do parque social: Portugal menos de 2 %, média da OCDE 6 a 7 %, Viena cerca de 44 %]({{ site.baseurl }}/assets/images/habitacao-fig5-habitacao-publica.png)
+![Peso do parque social: Portugal menos de 2 %, média da OCDE 6 a 7 %, Viena cerca de 44 %]({{ site.baseurl }}/assets/images/habitacao-fig5-habitacao-publica.png)
 *Parque social ou a custo controlado no total de habitações.*
 
 ## Ideias novas e de nicho: o que já tem resultado medido
 
 Procurámos, em qualquer país, ideias menos conhecidas com resultado já medido. A conclusão é sóbria: **nenhuma baixou os preços ou as rendas de uma cidade inteira.** O que há é efeito local, por fogo, por projecto ou por bairro.
 
-**O que tem medição.** O *cost rental* irlandês (renda de custo) dá um desconto de 29,9 % face ao mercado, mas cobre cerca de 3 600 fogos, 1 % do arrendamento. Em Zurique, as cooperativas de custo têm rendas medianas de 1 149 CHF contra 1 987 CHF, mas a comparação não controla a qualidade e resulta de cerca de um século de acumulação. A garantia federal suíça às obrigações das cooperativas poupa 1 a 1,5 pontos percentuais de juro em cerca de 38 000 fogos. Em Seattle, um ensaio aleatório mostrou que o acompanhamento às famílias subiu de 15,4 % para 53,2 % as mudanças para bairros com mais oportunidades, a 4 997 USD por mudança. E no Grande Boston, relaxar o zonamento baixou as rendas 2,6 a 12,6 % por fogo adicionado, num estudo ainda preliminar e sem revisão por pares.
+**O que tem medição.** O *cost rental* irlandês (renda de custo) dá um desconto de 29,9 % face ao mercado, mas cobre cerca de 3 600 fogos, 1 % do arrendamento. Em Zurique, as cooperativas de custo têm rendas medianas de 1 149 CHF contra 1 987 CHF, mas a comparação não controla a qualidade e resulta de cerca de um século de acumulação. A garantia federal suíça às obrigações das cooperativas poupa 1 a 1,5 pontos percentuais de juro em cerca de 38 000 fogos. Em Seattle, um ensaio aleatório mostrou que o acompanhamento às famílias subiu de 15,4 % para 53,2 % as mudanças para bairros com mais oportunidades, a 4 997 USD por mudança. E no Grande Boston, relaxar o zonamento baixou as rendas 2,6 a 12,6 % por fogo adicionado, num estudo ainda preliminar e sem revisão por pares.
 
-**O que falhou, e interessa a Portugal.** A Renda Segura de Lisboa fez 235 contratos em 1 000 previstos (dados do município, noticiados em 2023). O Arrendamento Acessível tem menos de 1 000 contratos activos para cerca de 35 000 candidatos. O NRAS australiano perdeu mais de 22 000 fogos à saída do regime. No Porto, o Zonamento Inclusivo recebeu cerca de 33 M€ em compensações e, segundo a imprensa, a Câmara recuou, passando a exigir 3 323 m² de habitação acessível a projectos turísticos. Em Berlim, o direito de preferência terá assegurado mais de 2 000 fogos entre 2015 e 2020 (número de um parecer partidário), mas o Tribunal Administrativo Federal anulou a prática em 2021.
+**O que falhou, e interessa a Portugal.** A Renda Segura de Lisboa fez 235 contratos em 1 000 previstos (dados do município, noticiados em 2023). O Arrendamento Acessível tem menos de 1 000 contratos activos para cerca de 35 000 candidatos. O NRAS australiano perdeu mais de 22 000 fogos à saída do regime. No Porto, o Zonamento Inclusivo recebeu cerca de 33 M€ em compensações e, segundo a imprensa, a Câmara recuou, passando a exigir 3 323 m² de habitação acessível a projectos turísticos. Em Berlim, o direito de preferência terá assegurado mais de 2 000 fogos entre 2015 e 2020 (número de um parecer partidário), mas o Tribunal Administrativo Federal anulou a prática em 2021.
 
 **O que é só promessa.** Modular, conversão de escritórios, partilha de casa, La Borda, Mietshäuser Syndikat e concursos de solo por conceito (Hamburgo, Tübingen) não têm avaliação com contrafactual: há alegações do operador e casos únicos.
 
 ## Casas vazias: muitas, mas poucas recuperáveis
 
-Em 2021, Lisboa tinha 47 748 alojamentos vagos e o Porto 20 270, cerca de 15 % do parque em cada cidade. Parece uma reserva enorme, mas quase metade já estava à venda ou para arrendar, e é aí que está a oferta corrente do mercado. Os que estavam fora do mercado e em edifícios em bom estado, o alvo realista de uma política de mobilização, eram 21 801 em Lisboa e 7 799 no Porto, cerca de 7 % do parque. E «vago» não é «devoluto»: em Lisboa, os 6 444 devolutos com IMI agravado em 2022 equivalem a 13,5 % dos vagos de 2021; no Porto, os 531 prédios abrangidos em 2023 equivalem a 2,6 %.
+Em 2021, Lisboa tinha 47 748 alojamentos vagos e o Porto 20 270, cerca de 15 % do parque em cada cidade. Parece uma reserva enorme, mas quase metade já estava à venda ou para arrendar, e é aí que está a oferta corrente do mercado. Os que estavam fora do mercado e em edifícios em bom estado, o alvo realista de uma política de mobilização, eram 21 801 em Lisboa e 7 799 no Porto, cerca de 7 % do parque. E «vago» não é «devoluto»: em Lisboa, os 6 444 devolutos com IMI agravado em 2022 equivalem a 13,5 % dos vagos de 2021; no Porto, os 531 prédios abrangidos em 2023 equivalem a 2,6 %.
 
 ![Alojamentos vagos em 2021, fora do mercado e em bom estado, e devolutos com IMI agravado, em Lisboa e no Porto]({{ site.baseurl }}/assets/images/habitacao-fig6-vazios.png)
 *Das casas vagas, poucas são recuperáveis ou devolutas.*
 
 Porque ficam casas vazias? Heranças por partilhar, obras caras, receio de arrendar e expectativa de valorização. O imposto agravado (IMI) já existe, mas o seu problema em Portugal é de aplicação: sem identificar sistematicamente os fogos, não se pode tributá-los.
 
-Lá fora, os impostos sobre casas vazias têm resultados modestos e difíceis de medir. A taxa francesa sobre logements vacants reduziu os vagos cerca de 8,6 % em termos relativos, em parte por reclassificação administrativa. Em Vancouver, a vacância declarada desceu de 0,90 % para 0,49 % entre 2017 e 2024, segundo o próprio município, mas sem estimativa causal e com problemas de cobrança. Transpostos para Lisboa e Porto, estes efeitos dão uma ordem de grandeza de **centenas a poucos milhares de fogos por ano**, não de dezenas de milhares (cálculo nosso, ilustrativo). Mobilizar o parque vazio ajuda, mas como complemento da oferta nova, não como substituto. O que se pode fazer já é criar um registo municipal de fogos vagos, cruzando consumos de água e electricidade com as moradas, e publicá-lo todos os anos: sem saber onde estão, nenhuma medida funciona nem se consegue avaliar.
+Lá fora, os impostos sobre casas vazias têm resultados modestos e difíceis de medir. A taxa francesa sobre logements vacants reduziu os vagos cerca de 8,6 % em termos relativos, em parte por reclassificação administrativa. Em Vancouver, a vacância declarada desceu de 0,90 % para 0,49 % entre 2017 e 2024, segundo o próprio município, mas sem estimativa causal e com problemas de cobrança. Transpostos para Lisboa e Porto, estes efeitos dão uma ordem de grandeza de **centenas a poucos milhares de fogos por ano**, não de dezenas de milhares (cálculo nosso, ilustrativo). Mobilizar o parque vazio ajuda, mas como complemento da oferta nova, não como substituto. O que se pode fazer já é criar um registo municipal de fogos vagos, cruzando consumos de água e electricidade com as moradas, e publicá-lo todos os anos: sem saber onde estão, nenhuma medida funciona nem se consegue avaliar.
 
 ## E os juros, os senhorios e as rendas?
 
