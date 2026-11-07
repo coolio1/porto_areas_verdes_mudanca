@@ -4,10 +4,13 @@ title: "Casas em Lisboa e Porto: o que causou a subida, o que funciona e o que a
 description: "Lemos a literatura científica sobre a subida da habitação em Portugal, testámos as soluções experimentadas noutros países e procurámos ideias de nicho com resultado medido. A conclusão: falta oferta acessível onde ela é precisa, e nenhuma medida isolada resolve."
 date: 2026-11-05
 image: /assets/images/habitacao-ilustracao-casas.jpg
+article_class: nota
 tags: [habitação, porto, lisboa, política urbana, alojamento local, imigração, rendas, urbanismo]
 ---
 
 > **Aviso:** Este artigo foi gerado com recurso a inteligência artificial e não reflecte necessariamente a opinião do autor.
+
+{% include conclusoes-habitacao.html %}
 
 Em 2025, os preços das casas em Portugal subiram 17,6 %. O rendimento disponível das famílias subiu 5,7 %. Qualquer pessoa que tenha procurado casa em Lisboa ou no Porto nos últimos anos não precisa de gráficos para saber o que isto quer dizer. A pergunta que interessa é outra: **de quem é a culpa, e o que é que, de facto, funciona?**
 

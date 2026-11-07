@@ -1,0 +1,69 @@
+<style>
+.cx{--verde:#1B4D20;--folha:#2E7D32;--musgo:#A5C79A;--papel:#FBF9F4;--terra:#D9642B;--ceu:#2A78D6;--cinza:#6B726C;--tinta:#1F2420;
+ --fd:"Sitka Display","Sitka Heading",Georgia,serif;margin:2rem 0 2.6rem;border-radius:10px;overflow:hidden;background:var(--papel);border:1px solid #dfe6da;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--tinta)}
+.cx *{box-sizing:border-box}
+.cx .topo{position:relative;background:var(--verde);color:#fff;padding:1.6rem 1.6rem 5.4rem}
+.cx .topo .im{position:absolute;right:0;top:0;width:44%;height:100%;object-fit:cover;object-position:60% 40%;margin:0;border-radius:0;max-width:none}
+.cx .topo .veu{position:absolute;right:0;top:0;width:44%;height:100%;background:linear-gradient(90deg,var(--verde) 0%,rgba(27,77,32,.55) 45%,rgba(27,77,32,0) 100%)}
+.cx .kick{position:relative;font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--musgo)}
+.cx .tit{position:relative;font:700 2.3rem/1.05 var(--fd);color:#fff;margin:.3rem 0 .7rem}
+.cx .tese{position:relative;font:400 1.02rem/1.45 var(--fd);color:#e6f0e1;max-width:34rem;margin:0}
+.cx .nums{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:-4.2rem 1.2rem 0;z-index:2}
+.cx .nums div{background:#fff;border-top:3px solid var(--cor);border-radius:3px;padding:.6rem .7rem .7rem;box-shadow:0 2px 8px rgba(0,0,0,.10)}
+.cx .nums b{display:block;font:700 1.55rem/1 var(--fd);color:var(--cor);white-space:nowrap}
+.cx .nums span{display:block;font-size:.72rem;line-height:1.3;color:#2b322c;margin-top:.35rem}
+.cx .ceu{--cor:var(--ceu)}.cx .terra{--cor:var(--terra)}.cx .folha{--cor:var(--folha)}
+.cx .sec{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--folha);margin:0 0 .7rem}
+.cx .choques{padding:1.5rem 1.6rem 0}
+.cx .cs{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem}
+.cx .cs div{border-left:3px solid var(--terra);padding-left:.6rem}
+.cx .cs i{display:block;font-style:normal;font-size:.62rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--cinza)}
+.cx .cs b{display:block;font:700 1.2rem/1.1 var(--fd);color:var(--verde);margin:.15rem 0;white-space:nowrap}
+.cx .cs span{display:block;font-size:.72rem;line-height:1.3}
+.cx .ver{padding:1.6rem 1.6rem .4rem}
+.cx .ln{display:grid;grid-template-columns:3rem 1fr 6.2rem;gap:.9rem;align-items:center;padding:.7rem 0;border-top:1px solid #dfe6da}
+.cx .ln:first-of-type{border-top:none}
+.cx .ic{display:flex;align-items:center;justify-content:center;width:2.8rem;height:2.8rem;border-radius:50%;background:color-mix(in srgb,var(--c) 13%,white)}
+.cx .ic svg{width:1.75rem;height:1.75rem;fill:none;stroke:var(--c);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.cx .ok{--c:var(--folha)}.cx .dep{--c:var(--ceu)}.cx .nao{--c:var(--terra)}.cx .peq{--c:#6f776f}
+.cx .selo{text-align:center;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;padding:.32rem 0;border-radius:3px;white-space:nowrap;background:var(--c)}
+.cx .peq .selo{background:#8a918a}
+.cx .ln h3{font:700 1rem/1.2 var(--fd);color:var(--verde);margin:0}
+.cx .ln .ef{font-size:.84rem;font-weight:600;line-height:1.35;margin:.15rem 0 0;color:#1e2620}
+.cx .ln .ev{font-size:.76rem;line-height:1.35;margin:.15rem 0 0;color:var(--cinza)}
+.cx .pacote{background:var(--verde);color:#fff;padding:1.4rem 1.6rem 1.2rem;margin-top:1rem}
+.cx .pacote .k{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--musgo)}
+.cx .pacote h4{font:700 1.3rem/1.15 var(--fd);color:#fff;margin:.3rem 0 .9rem}
+.cx .passos{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+.cx .passo{background:#255a2a;padding:.7rem 1.1rem .8rem .8rem;clip-path:polygon(0 0,calc(100% - .8rem) 0,100% 50%,calc(100% - .8rem) 100%,0 100%)}
+.cx .passo:last-child{clip-path:none;padding-right:.8rem}
+.cx .passo .h{font:700 1.05rem/1 var(--fd);color:#ffa77a}
+.cx .passo .d{font-size:.76rem;line-height:1.35;color:#dcead6;margin-top:.35rem}
+.cx .terr{margin:1rem 0 0;font-size:.8rem;line-height:1.45;color:#dcead6;border-top:1px solid #3f7344;padding-top:.8rem}
+.cx .terr b,.cx .rod b{color:#ffa77a}
+.cx .rod{margin:.8rem 0 0;font-size:.72rem;line-height:1.4;color:#9fbf9e;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+@media (max-width:700px){
+ .cx .topo{padding:1.2rem 1.1rem 5rem}.cx .topo .im,.cx .topo .veu{display:none}
+ .cx .tit{font-size:1.9rem}
+ .cx .nums{grid-template-columns:repeat(2,1fr);margin:-3.6rem .8rem 0}
+ .cx .choques,.cx .ver{padding-left:1.1rem;padding-right:1.1rem}
+ .cx .cs{grid-template-columns:repeat(2,1fr)}
+ .cx .ln{grid-template-columns:2.8rem 1fr;gap:.7rem}
+ .cx .ln .selo{grid-column:2;justify-self:start;padding:.28rem .7rem}
+ .cx .pacote{padding:1.2rem 1.1rem}
+ .cx .passos{grid-template-columns:1fr}
+ .cx .passo,.cx .passo:last-child{clip-path:none;padding:.7rem .9rem}
+}
+</style>
+<section class="cx" aria-label="Conclusões">
+<div class="topo"><img class="im" src="{{ site.baseurl }}/assets/images/habitacao-ilustracao-casas.jpg" alt=""><div class="veu"></div>
+ <div class="kick">Síntese do estudo</div><div class="tit" role="heading" aria-level="2">Conclusões</div>
+ <p class="tese">A habitação em Lisboa e no Porto ficou cara porque cinco choques empurraram a procura ao mesmo tempo e a oferta acessível não respondeu. Só mais oferta baixaria os preços 3 % a 6 % (exercício de modelo para Portugal): o remédio é um pacote, não uma medida.</p></div>
+<div class="nums"><div class="terra"><b>+145 %</b><span>preços das casas em Portugal, 2008–2025</span></div><div class="ceu"><b>+69 %</b><span>rendimento disponível das famílias em Portugal, 2008–2025 (valores correntes)</span></div><div class="terra"><b>+10,2 %</b><span>renda mediana dos novos contratos, 2.º trimestre de 2026 (variação homóloga)</span></div><div class="folha"><b>−3 a −6 %</b><span>descida dos preços das casas com mais oferta (exercício de modelo)</span></div></div>
+<div class="choques"><p class="sec">Cinco choques na procura, um número cada</p><div class="cs"><div><i>Famílias mais pequenas</i><b>> 70 %</b><span>do aumento do número de famílias, 1981–2011</span></div><div><i>Imigração</i><b>+825 mil</b><span>residentes, 2021–2025, quase só por migração</span></div><div><i>Alojamento local</i><b>19 mil</b><span>registos em Lisboa em 2019 (≈ 900 em 2012)</span></div><div><i>Compradores estrangeiros</i><b>5,0 %</b><span>das transacções, 8,3 % do valor (2025)</span></div><div><i>Crédito</i><b>26,8 %</b><span>dos novos empréstimos com garantia pública</span></div></div></div>
+<div class="ver"><p class="sec">O que a evidência diz de cada medida</p><div class="ln ok"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 11.5 9.5 5l7 6.5V19h-14z"/><circle cx="19" cy="7.5" r="2.2"/><path d="M19 9.7V19M19 14h2.5M19 17h2"/></svg></span><div><h3>Regular o alojamento local</h3><p class="ef">preços −8 % nas zonas abrangidas</p><p class="ev">Lisboa, 2018; rendas −1 a −2 % em Berlim. Certeza moderada</p></div><span class="selo">Funciona</span></div><div class="ln ok"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v9H4z"/><path d="M12 12v5M9.5 14.5h5"/></svg></span><div><h3>Mais oferta, em solo já urbanizado</h3><p class="ef">preços −3 a −6 % (modelo); rendas locais mais baixas</p><p class="ev">Forte evidência internacional. Licenciar demora 545 dias em Lisboa e 453 no Porto</p></div><span class="selo">Funciona</span></div><div class="ln dep"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V6.5L12 4l7 2.5V20z"/><path d="M8.5 9.5h2M13.5 9.5h2M8.5 13h2M13.5 13h2M10.5 20v-3.5h3V20"/></svg></span><div><h3>Habitação a custo controlado em escala</h3><p class="ef">7,9 a 13,5 mil M€ por 100 mil fogos</p><p class="ev">Evidência só descritiva (Viena), sem estimativa causal para Portugal</p></div><span class="selo">Depende</span></div><div class="ln dep"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v9H4z"/><circle cx="12" cy="14.5" r="3"/><path d="M12 13.2v2.6"/></svg></span><div><h3>Fiscalidade recorrente sobre o imobiliário</h3><p class="ef">recomendação da OCDE; menos fricção que os impostos de transacção</p><p class="ev">Desenhos causais no Reino Unido e no Canadá; pouco estudada em Portugal</p></div><span class="selo">Depende</span></div><div class="ln nao"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14l8-6 8 6v6H4z"/><path d="M12 2v4.5M9.8 4.2 12 2l2.2 2.2"/></svg></span><div><h3>Subsídios e garantias à procura</h3><p class="ef">IMT Jovem: preços ≈ +3,2 % em 12 meses; Help to Buy: +7,9 %</p><p class="ev">Com a oferta inelástica sobem os preços. Certeza moderada</p></div><span class="selo">Não funciona</span></div><div class="ln nao"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h18"/><path d="M5 12l7-5 7 5v8H5z"/><path d="M7.5 2.5v3M6 4l1.5 1.5L9 4M16.5 2.5v3M15 4l1.5 1.5L18 4"/></svg></span><div><h3>Tectos de rendas de 1.ª geração</h3><p class="ef">encolhem ou segmentam a oferta</p><p class="ev">Forte evidência internacional</p></div><span class="selo">Não funciona</span></div><div class="ln peq"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="5.5" r="2"/><path d="M8.5 8v6.5M5.5 11h6M8.5 14.5l-2 5M8.5 14.5l2 5"/><path d="M14.5 13h5.5v6h-5.5zM16 13v-1.6h2.5V13"/></svg></span><div><h3>Restringir compradores não residentes</h3><p class="ef">preços −5 a −9 % nos segmentos visados, sem melhoria nas rendas</p><p class="ev">Evidência do Canadá. Em Portugal são 5,0 % das transacções e 8,3 % do valor (2025)</p></div><span class="selo">Limitado</span></div></div>
+<div class="pacote"><div class="k">Resposta recomendada</div><div class="h4 sr" role="heading" aria-level="3" style="display:none">Pacote</div><h4>Um pacote sequenciado, em quatro tempos</h4>
+ <div class="passos"><div class="passo"><div class="h">0–12 meses</div><div class="d">Parar de piorar: não alargar apoios à procura; registo de fogos vagos.</div></div><div class="passo"><div class="h">1–3 anos</div><div class="d">Desbloquear a oferta: prazos de licenciamento previsíveis, sem reduzir salvaguardas, e solo público urbanizado.</div></div><div class="passo"><div class="h">3–10 anos</div><div class="d">Construir um sector de habitação a custo controlado, com operadores sem fins lucrativos.</div></div><div class="passo"><div class="h">Em paralelo</div><div class="d">Fiscalidade recorrente e avaliação das medidas com contrafactual.</div></div></div>
+ <p class="terr"><b>Território.</b> Mobilizar fogos vagos é complemento: centenas a poucos milhares de fogos por ano, entre 29 600 vagos fora do mercado e em bom estado. A nova oferta exclui a estrutura ecológica e os espaços verdes.</p>
+ <div class="rod"><span><b>Leia por zona, não por cidade:</b> as médias escondem diferenças entre freguesias; os efeitos valem para as zonas estudadas. Certeza global: moderada quanto à direcção dos efeitos, baixa quanto à sua dimensão em Portugal.</span></div></div>
+</section>
