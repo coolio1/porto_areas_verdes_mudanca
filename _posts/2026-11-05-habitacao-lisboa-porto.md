@@ -31,6 +31,10 @@ Ao mesmo tempo, a capacidade de construir encolheu. Os licenciamentos caíram ce
 ![Licenciamentos caíram 92 % entre 2002 e 2013 e estão a 44 % do nível de 2002; as famílias crescem acima dos alojamentos; o licenciamento demora 545 dias em Lisboa e 453 no Porto]({{ site.baseurl }}/assets/images/habitacao-fig2-oferta.png)
 *Três sinais do lado da oferta em Portugal.*
 
+## Olhar para o bairro, não só para a cidade
+
+A subida de 68,2 % em Lisboa e de 61,9 % no Porto (2016–2019) é uma média, e o pico concentrou-se no centro histórico. Por isso, cada efeito deve ler-se na unidade em que foi medido. A restrição ao alojamento local por zonas, em Lisboa, baixou os preços 8 % (20 % nos T2), mas só nos nove bairros tratados e sem transbordar para os de controlo. Um efeito local não é um efeito na cidade, e só se distingue com zonas de controlo e dados desagregados.
+
 ## Cinco choques ao mesmo tempo
 
 Sobre esta oferta apertada caíram, em simultâneo, cinco empurrões na procura:
@@ -65,6 +69,16 @@ Esta é a parte em que a ciência ajuda mais, porque várias medidas foram exper
 
 ![Peso do parque social: Portugal menos de 2 %, média da OCDE 6 a 7 %, Viena cerca de 44 %]({{ site.baseurl }}/assets/images/habitacao-fig5-habitacao-publica.png)
 *Parque social ou a custo controlado no total de habitações.*
+
+## Ideias novas e de nicho: o que já tem resultado medido
+
+Procurámos, em qualquer país, ideias menos conhecidas com resultado já medido. A conclusão é sóbria: **nenhuma baixou os preços ou as rendas de uma cidade inteira.** O que há é efeito local, por fogo, por projecto ou por bairro.
+
+**O que tem medição.** O *cost rental* irlandês (renda de custo) dá um desconto de 29,9 % face ao mercado, mas cobre cerca de 3 600 fogos, 1 % do arrendamento. Em Zurique, as cooperativas de custo têm rendas medianas de 1 149 CHF contra 1 987 CHF, mas a comparação não controla a qualidade e resulta de cerca de um século de acumulação. A garantia federal suíça às obrigações das cooperativas poupa 1 a 1,5 pontos percentuais de juro em cerca de 38 000 fogos. Em Seattle, um ensaio aleatório mostrou que o acompanhamento às famílias subiu de 15,4 % para 53,2 % as mudanças para bairros com mais oportunidades, a 4 997 USD por mudança. E no Grande Boston, relaxar o zonamento baixou as rendas 2,6 a 12,6 % por fogo adicionado, num estudo ainda preliminar e sem revisão por pares.
+
+**O que falhou, e interessa a Portugal.** A Renda Segura de Lisboa fez 235 contratos em 1 000 previstos (dados do município, noticiados em 2023). O Arrendamento Acessível tem menos de 1 000 contratos activos para cerca de 35 000 candidatos. O NRAS australiano perdeu mais de 22 000 fogos à saída do regime. No Porto, o Zonamento Inclusivo recebeu cerca de 33 M€ em compensações e, segundo a imprensa, a Câmara recuou, passando a exigir 3 323 m² de habitação acessível a projectos turísticos. Em Berlim, o direito de preferência terá assegurado mais de 2 000 fogos entre 2015 e 2020 (número de um parecer partidário), mas o Tribunal Administrativo Federal anulou a prática em 2021.
+
+**O que é só promessa.** Modular, conversão de escritórios, partilha de casa, La Borda, Mietshäuser Syndikat e concursos de solo por conceito (Hamburgo, Tübingen) não têm avaliação com contrafactual: há alegações do operador e casos únicos.
 
 ## Casas vazias: muitas, mas poucas recuperáveis
 
@@ -103,7 +117,7 @@ Nenhuma medida isolada tem efeito de dois dígitos nos preços, e todas as de of
 1. **Já:** parar de piorar e saber o que há. Criar o registo de fogos vagos. Não alargar garantias públicas nem isenções fiscais à procura enquanto a oferta não responder; não criar novos tectos de renda de primeira geração; fiscalizar de facto os rácios de alojamento local já aprovados.
 2. **Em um a três anos:** desbloquear a oferta. Prazos de licenciamento medidos e públicos, solo público e municipal já urbanizado e fora da estrutura ecológica, mão-de-obra para construir e IMI agravado aplicado de forma sistemática aos vagos fora do mercado em bom estado, com apoio financeiro à reabilitação dos que precisam de obras e via jurídica para as heranças indivisas. Instrumentos coercivos como o arrendamento forçado são de risco constitucional elevado e nunca foram aplicados. A imigração qualificada é, neste sentido, política de habitação.
 3. **Em três a dez anos:** construir um sector de habitação a custo controlado com dimensão real, com operadores sem fins lucrativos, solo público já urbanizado e financiamento estável para vários anos.
-4. **Em paralelo:** deslocar a fiscalidade dos impostos sobre a compra para os impostos recorrentes e avaliar com dados as novas medidas de 2026 antes de as alargar.
+4. **Em paralelo:** deslocar a fiscalidade dos impostos sobre a compra para os impostos recorrentes e avaliar com dados as novas medidas de 2026 antes de as alargar. Publicar microdados anonimizados de preços e rendas por zona e avaliar cada medida com zonas de controlo, como Lisboa já fez com o alojamento local.
 
 ![Roteiro das recomendações: já, em um a três anos, em três a dez anos e em paralelo]({{ site.baseurl }}/assets/images/habitacao-fig7-roteiro.png)
 *Um pacote com ordem: primeiro saber e travar, depois construir.*
