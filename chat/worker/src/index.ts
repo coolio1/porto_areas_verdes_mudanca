@@ -70,7 +70,7 @@ export default {
 
     let origem: ReadableStream;
     try {
-      origem = await env.AI.run(MODELO, { messages: montarMensagens(pergunta, chunks), stream: true, max_tokens: 700, temperature: 0.1 });
+      origem = await env.AI.run(MODELO, { messages: montarMensagens(pergunta, chunks), stream: true, max_tokens: 900, temperature: 0.1 });
     } catch (e) {
       // neurónios do dia esgotados: só repõem às 00:00 UTC, não vale "tente daqui a pouco"
       return erro(env, /allocation|neurons/i.test(String((e as Error)?.message)) ? "limite_servico" : "indisponivel", 503);
