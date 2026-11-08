@@ -1,6 +1,6 @@
 (function () {
-  var API = window.CHAT_API || "https://portoverde-chat.workers.dev/api/chat"; // ajustar ao URL do deploy
-  var SITEKEY = window.CHAT_SITEKEY || ""; // chave pública do Turnstile (preencher no deploy)
+  var API = window.CHAT_API || "https://portoverde-chat.portoverde.workers.dev/api/chat";
+  var SITEKEY = window.CHAT_SITEKEY || "0x4AAAAAAF4wz2mk_g-mGarz"; // chave pública do Turnstile (pode estar na página)
   var ERROS = {
     vazia: "Escreva uma pergunta.",
     longa: "A pergunta tem mais de 500 caracteres. Encurte-a.",
