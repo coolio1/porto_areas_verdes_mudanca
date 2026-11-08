@@ -1,0 +1,1 @@
+# recolher_autocarros.py usa só a biblioteca padrão (Python 3.9+)
