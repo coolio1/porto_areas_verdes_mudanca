@@ -21,7 +21,16 @@
   });
 
   if (SITEKEY) {
-    window.__tsPronto = function () { tokenWidget = turnstile.render("#turnstile", { sitekey: SITEKEY, size: "flexible" }); };
+    btn.disabled = true; btn.textContent = "A verificar…";
+    var pronto = function () { btn.disabled = false; btn.textContent = "Perguntar"; };
+    var espera = function () { btn.disabled = true; btn.textContent = "A verificar…"; };
+    window.__tsPronto = function () {
+      tokenWidget = turnstile.render("#turnstile", {
+        sitekey: SITEKEY, size: "flexible",
+        callback: pronto, "expired-callback": espera, "timeout-callback": espera,
+        "error-callback": function () { btn.textContent = "Verificação falhou: recarregue"; }
+      });
+    };
     var s = document.createElement("script");
     s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__tsPronto";
     s.async = true; document.head.appendChild(s);
@@ -101,7 +110,7 @@
       .catch(function () { mostrarErro("rede"); })
       .then(function () {
         btn.disabled = false; btn.textContent = "Perguntar"; $("saida").removeAttribute("aria-busy");
-        if (tokenWidget !== null && window.turnstile) turnstile.reset(tokenWidget);
+        if (tokenWidget !== null && window.turnstile) { turnstile.reset(tokenWidget); espera(); }
       });
   });
 })();
