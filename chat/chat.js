@@ -26,7 +26,7 @@
     var espera = function () { btn.disabled = true; btn.textContent = "A verificar…"; };
     window.__tsPronto = function () {
       tokenWidget = turnstile.render("#turnstile", {
-        sitekey: SITEKEY, size: "flexible",
+        sitekey: SITEKEY, size: "flexible", appearance: "interaction-only", // só aparece se for preciso um clique
         callback: pronto, "expired-callback": espera, "timeout-callback": espera,
         "error-callback": function () { btn.textContent = "Verificação falhou: recarregue"; }
       });
