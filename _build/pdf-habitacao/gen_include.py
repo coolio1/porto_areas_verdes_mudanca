@@ -33,12 +33,12 @@ CSS = """
 .cx .cs b{display:block;font:700 1.2rem/1.1 var(--fd);color:var(--verde);margin:.15rem 0;white-space:nowrap}
 .cx .cs span{display:block;font-size:.72rem;line-height:1.3}
 .cx .ver{padding:1.6rem 1.6rem .4rem}
-.cx .ln{display:grid;grid-template-columns:3rem 1fr 6.2rem;gap:.9rem;align-items:center;padding:.7rem 0;border-top:1px solid #dfe6da}
+.cx .ln{display:grid;grid-template-columns:3rem 1fr 8.6rem;gap:.9rem;align-items:center;padding:.7rem 0;border-top:1px solid #dfe6da}
 .cx .ln:first-of-type{border-top:none}
 .cx .ic{display:flex;align-items:center;justify-content:center;width:2.8rem;height:2.8rem;border-radius:50%;background:color-mix(in srgb,var(--c) 13%,white)}
 .cx .ic svg{width:1.75rem;height:1.75rem;fill:none;stroke:var(--c);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .cx .ok{--c:var(--folha)}.cx .dep{--c:var(--ceu)}.cx .nao{--c:var(--terra)}.cx .peq{--c:#6f776f}
-.cx .selo{text-align:center;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;padding:.32rem 0;border-radius:3px;white-space:nowrap;background:var(--c)}
+.cx .selo{text-align:center;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;padding:.32rem .4rem;border-radius:3px;white-space:nowrap;background:var(--c)}
 .cx .peq .selo{background:#8a918a}
 .cx .ln h3{font:700 1rem/1.2 var(--fd);color:var(--verde);margin:0}
 .cx .ln .ef{font-size:.84rem;font-weight:600;line-height:1.35;margin:.15rem 0 0;color:#1e2620}
