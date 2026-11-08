@@ -24,7 +24,7 @@ NUMEROS = [
     ),
     (
         "+10,2 %",
-        "renda mediana dos novos contratos de arrendamento em Portugal, 2.º trimestre de 2026, face ao mesmo trimestre do ano anterior",
+        "renda mediana por m² dos novos contratos de arrendamento em Portugal, 2.º trimestre de 2026, face a um ano antes",
         "terra",
     ),
     (
@@ -42,19 +42,23 @@ CHOQUES = [
     ),
     (
         "Imigração",
-        "+825 mil",
-        "habitantes em Portugal, 2021–2025 (o número de residentes estrangeiros subiu 849 mil: medidas diferentes, que não se somam)",
+        "+849 mil",
+        "residentes estrangeiros em Portugal, 2021–2025 (população total: +825 mil; medidas diferentes, que não se somam)",
     ),
     (
         "Alojamento local (AL)",
         "> 19 000",
         "registos em Lisboa, 2019 (≈ 900 em 2012): casas ou quartos arrendados a turistas por curtos períodos",
     ),
-    ("Compradores não residentes", "5,0 %", "das transacções de casas em Portugal, 8,3 % do valor (2025)"),
     (
-        "Crédito com garantia pública",
+        "Compradores não residentes",
+        "5,0 %",
+        "das transacções de casas em Portugal, 8,3 % do valor (2025)",
+    ),
+    (
+        "Garantia pública a jovens",
         "26,8 %",
-        "do valor dos novos empréstimos para compra de casa (2025)",
+        "do valor dos novos empréstimos para compra de casa em Portugal (2025)",
     ),
 ]
 
@@ -65,14 +69,14 @@ MEDIDAS = [
         "ok",
         "Regular e fiscalizar o alojamento local",
         "preços de venda cerca de 8 % abaixo dos de zonas semelhantes sem a medida, só nos bairros abrangidos (Lisboa, suspensão de 2018)",
-        "Rendas: efeitos do AL da ordem de 1 a 2 % (até 2,4 %: Berlim 1,3–2,4 %; Los Angeles cerca de 2 %); em Sydney, rendas mais altas (2,7–3,6 %). Certeza moderada",
+        "Rendas (estudos não comparáveis): Berlim até +2,4 % por anúncio comercial a mais; Los Angeles cerca de −2 % ao restringir o AL; Sydney +2,7–3,6 %. Certeza moderada",
     ),
     (
         "Funciona",
         "ok",
         "Construir mais",
         "baixa os preços, mas só 3 a 6 % (modelo sobre o passado, estudo português); rendas locais mais baixas (Auckland)",
-        "Estudos internacionais. Em 2023, licenciar demorava 545 dias em Lisboa e 453 no Porto. Certeza moderada a alta",
+        "Rendas: estudos internacionais; preços: simulação portuguesa. Certeza moderada a alta na direcção, baixa na dimensão",
     ),
     (
         "Depende",
@@ -100,7 +104,7 @@ MEDIDAS = [
         "nao",
         "Tectos de renda de primeira geração (limite rígido à renda)",
         "protegem quem tem contrato; reduzem as mudanças de casa e podem reduzir a oferta; efeito global incerto",
-        "Síntese de 92 estudos de 36 países. Certeza moderada a alta",
+        "92 estudos (36 países), dos dois tipos. Certeza moderada a alta; nos de 2.ª geração (Portugal), moderada",
     ),
     (
         "Limitado",
@@ -125,7 +129,7 @@ ICONOS = [
 PASSOS = [
     (
         "Já",
-        "Parar de piorar: criar o registo de casas vagas; não alargar apoios à compra; não criar novos tectos rígidos de renda; fazer cumprir os limites de AL por zona.",
+        "Parar de piorar: criar o registo de casas vagas; não alargar apoios à compra; não criar novos tectos rígidos de renda; fazer cumprir as zonas de contenção do AL.",
     ),
     (
         "Em um a três anos",
