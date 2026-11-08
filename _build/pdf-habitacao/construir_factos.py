@@ -69,7 +69,7 @@ def janela(txt, ini, fim):
     return None
 
 
-def melhor_excerto(valores, frase_nota, fontes, unidade=''):
+def melhor_excerto(valores, frase_nota, fontes, unidade='', valor_txt=''):
     """(pontuação, ficheiro, excerto) com mais palavras em comum com a frase da nota."""
     alvo = palavras(frase_nota)
     melhor = None
@@ -82,6 +82,8 @@ def melhor_excerto(valores, frase_nota, fontes, unidade=''):
                     continue
                 if not any(rf._igual(a, b) for t2 in rf._tokens(ex) for a in rf._vals(t2) for b in valores):
                     continue
+                if valor_txt and not rf._unidade_ok(valor_txt, ex):
+                    continue  # unidade ou escala diferentes («7,9 M€» não prova «7,9 mil M€»)
                 pal = palavras(ex)
                 pont = len(alvo & pal) / max(1, min(len(alvo), 12))
                 if unidade and re.search(r"[\d.,]\s?" + unidade, ex):
@@ -128,7 +130,12 @@ def main():
             unidade = "(?:%|per ?cent|percent)" if apos.startswith("%") else (
                 "(?:p\\.p\\.|percentage points?|pontos? percentuais?)" if apos.startswith(("p.p", "pontos")) else ""
             )
-            m = melhor_excerto(vs, frase, list(fontes.values()), unidade)
+            um = re.match(
+                r"^\s?(?:mil milhões de euros|milhões de euros|mil milhões|milhões|mil M€|M€|pontos percentuais|p\.p\.|%|€|euros)",
+                ln[ln.find(tok) + len(tok) :],
+            )
+            valor_txt = tok + (um.group(0) if um else "")
+            m = melhor_excerto(vs, frase, list(fontes.values()), unidade, valor_txt)
             if not m:
                 pend.append((n, tok, f"valor ausente do texto de [{', '.join(map(str, sorted(fontes)))}]", frase))
                 continue
@@ -139,7 +146,7 @@ def main():
             grandeza = grandeza.replace("|", "/")
             marca = "(auto)" if pont >= 0.5 else "(auto, REVISAR: unidade ou contexto fracos)"
             factos.append(
-                f'{fid} | {marca} {grandeza} | {tok} | — | — | — | [{c}] | excerto: "{ex}" [corpus:{f.lower()}]'
+                f'{fid} | {marca} {grandeza} | {valor_txt} | — | — | — | [{c}] | excerto: "{ex}" [corpus:{f.lower()}]'
             )
             for v in vs:
                 chave[(c, round(v, 6))] = fid
