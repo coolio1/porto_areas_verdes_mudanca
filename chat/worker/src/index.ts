@@ -8,6 +8,8 @@ import { deltaDe, ValidadorFluxo } from "./stream.ts";
 const MODELO = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 const MAX_PERGUNTA = 500;
 const LIMIAR = 0.4;
+const MAX_EXCERTOS = 12;
+const MAX_CARACTERES = 36000; // ~10 mil tokens de excertos, deixa folga para prompt e resposta
 
 type Env = any; // sem @cloudflare/workers-types (node_modules fora do OneDrive)
 
@@ -53,9 +55,12 @@ export default {
     try {
       const r = await env.AI_SEARCH.get("nota-habitacao").search({
         query: pergunta,
-        ai_search_options: { retrieval: { max_num_results: 6, match_threshold: LIMIAR } },
+        ai_search_options: { retrieval: { max_num_results: MAX_EXCERTOS, match_threshold: LIMIAR } },
       });
-      chunks = (r.chunks ?? []).filter((x: Chunk) => x.score >= LIMIAR);
+      let total = 0;
+      chunks = (r.chunks ?? [])
+        .filter((x: Chunk) => x.score >= LIMIAR)
+        .filter((x: Chunk) => (total += x.text.length) <= MAX_CARACTERES); // o contexto do modelo tem 24 mil tokens
     } catch {
       return erro(env, "indisponivel", 503);
     }
