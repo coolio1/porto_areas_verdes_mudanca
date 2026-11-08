@@ -1,4 +1,5 @@
 import { consumir } from "./limites.ts";
+export { Contador } from "./contador.ts";
 import { verificarTurnstile } from "./turnstile.ts";
 import { montarMensagens, type Chunk } from "./prompt.ts";
 import { keyParaFonte } from "./fontes.ts";
@@ -11,7 +12,7 @@ const LIMIAR = 0.4;
 type Env = any; // sem @cloudflare/workers-types (node_modules fora do OneDrive)
 
 function cors(env: Env): Record<string, string> {
-  return { "access-control-allow-origin": env.ORIGEM_PERMITIDA, "access-control-allow-methods": "POST, OPTIONS", "access-control-allow-headers": "content-type", vary: "origin" };
+  return { "access-control-allow-origin": env.ORIGEM_PERMITIDA, "access-control-allow-methods": "POST, OPTIONS", "access-control-allow-headers": "content-type", "access-control-max-age": "86400", vary: "origin" };
 }
 function erro(env: Env, codigo: string, status: number): Response {
   return new Response(JSON.stringify({ erro: codigo }), { status, headers: { "content-type": "application/json", ...cors(env) } });
@@ -23,20 +24,29 @@ export default {
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env) });
     if (req.method !== "POST") return erro(env, "metodo", 405);
 
+    if (!env.SALT) return erro(env, "indisponivel", 503); // sem sal o hash do IP seria reversível
     let corpo: { pergunta?: unknown; token?: unknown };
     try {
       corpo = await req.json();
     } catch {
       return erro(env, "vazia", 400);
     }
+    if (!corpo || typeof corpo !== "object") return erro(env, "vazia", 400);
     const pergunta = typeof corpo.pergunta === "string" ? corpo.pergunta.trim() : "";
     if (!pergunta) return erro(env, "vazia", 400);
     if (pergunta.length > MAX_PERGUNTA) return erro(env, "longa", 400);
 
     const ip = req.headers.get("cf-connecting-ip") ?? "0.0.0.0";
-    if (!(await verificarTurnstile(String(corpo.token ?? ""), ip, env.TURNSTILE_SECRET))) return erro(env, "turnstile", 400);
+    const ts = await verificarTurnstile(String(corpo.token ?? ""), ip, env.TURNSTILE_SECRET);
+    if (ts === "erro") return erro(env, "indisponivel", 503);
+    if (!ts) return erro(env, "turnstile", 400);
 
-    const c = await consumir(env, ip);
+    let c: "ok" | "limite_dia" | "tecto_mes";
+    try {
+      c = await consumir(env, ip);
+    } catch {
+      return erro(env, "indisponivel", 503);
+    }
     if (c !== "ok") return erro(env, c, c === "limite_dia" ? 429 : 503);
 
     let chunks: Chunk[];
@@ -56,13 +66,15 @@ export default {
     let origem: ReadableStream;
     try {
       origem = await env.AI.run(MODELO, { messages: montarMensagens(pergunta, chunks), stream: true, max_tokens: 700 });
-    } catch {
-      return erro(env, "indisponivel", 503);
+    } catch (e) {
+      // neurónios do dia esgotados: só repõem às 00:00 UTC, não vale "tente daqui a pouco"
+      return erro(env, /allocation|neurons/i.test(String((e as Error)?.message)) ? "limite_servico" : "indisponivel", 503);
     }
 
     const fontes = chunks.map((ch, i) => {
-      const f = keyParaFonte(ch.item.key);
-      return { n: i + 1, titulo: f?.titulo ?? ch.item.key, url: f?.url ?? null };
+      const chave = ch.item?.key ?? "";
+      const f = keyParaFonte(chave);
+      return { n: i + 1, titulo: f?.titulo ?? chave, url: f?.url ?? null };
     });
     const validos = new Set(fontes.map((f) => f.n));
     const val = new ValidadorFluxo(validos);
@@ -70,10 +82,13 @@ export default {
     const dec = new TextDecoder();
     const emitir = (t: string) => (t ? enc.encode(`data: ${JSON.stringify({ t })}\n\n`) : null);
 
+    const leitor = origem.getReader();
     const saida = new ReadableStream({
+      cancel() {
+        return leitor.cancel();
+      },
       async start(ctrl) {
         ctrl.enqueue(enc.encode(`event: fontes\ndata: ${JSON.stringify(fontes)}\n\n`));
-        const leitor = origem.getReader();
         let resto = "";
         try {
           for (;;) {
@@ -90,13 +105,25 @@ export default {
               if (e) ctrl.enqueue(e);
             }
           }
+          resto += dec.decode();
+          for (const l of resto.split("\n")) {
+            if (!l.startsWith("data:")) continue;
+            const d = l.slice(5).trim();
+            if (d === "[DONE]") continue;
+            const e2 = emitir(val.push(deltaDe(d)));
+            if (e2) ctrl.enqueue(e2);
+          }
           const e = emitir(val.fim());
           if (e) ctrl.enqueue(e);
           ctrl.enqueue(enc.encode("data: [FIM]\n\n"));
         } catch {
           ctrl.enqueue(enc.encode(`event: erro\ndata: {"erro":"indisponivel"}\n\n`));
         }
-        ctrl.close();
+        try {
+          ctrl.close();
+        } catch {
+          /* já cancelado pelo cliente */
+        }
       },
     });
     return new Response(saida, { headers: { "content-type": "text/event-stream", "cache-control": "no-cache", ...cors(env) } });

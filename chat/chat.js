@@ -8,6 +8,7 @@
     limite_dia: "Já fez 10 perguntas hoje. Volte amanhã.",
     tecto_mes: "O limite de perguntas deste mês foi atingido. O chat volta no dia 1.",
     sem_fontes: "Não encontrei isto nas fontes da nota. Tente reformular a pergunta.",
+    limite_servico: "O limite diário do serviço foi atingido. Volte amanhã.",
     indisponivel: "O serviço está indisponível neste momento. Tente daqui a pouco.",
     rede: "Não foi possível ligar ao serviço. Verifique a ligação e tente de novo."
   };
@@ -80,13 +81,13 @@
     var pergunta = ta.value.trim(); if (!pergunta) return mostrarErro("vazia");
     limpar(); $("exemplos").hidden = true;
     $("feita").textContent = pergunta; $("feita").hidden = false;
-    btn.disabled = true; btn.textContent = "A procurar…";
+    btn.disabled = true; btn.textContent = "A procurar…"; $("saida").setAttribute("aria-busy", "true");
     var token = (tokenWidget !== null && window.turnstile) ? turnstile.getResponse(tokenWidget) : "";
     var texto = "", fontes = [], terminou = false;
     fetch(API, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ pergunta: pergunta, token: token }) })
       .then(function (r) {
         var tipo = r.headers.get("content-type") || "";
-        if (tipo.indexOf("event-stream") === -1) return r.json().then(function (j) { mostrarErro(j.erro); });
+        if (tipo.indexOf("event-stream") === -1) return r.json().then(function (j) { mostrarErro(j.erro); }, function () { mostrarErro("indisponivel"); });
         return ler(r.body, function (ev, d) {
           if (ev === "fontes") fontes = JSON.parse(d);
           else if (ev === "erro") mostrarErro(JSON.parse(d).erro);
@@ -99,7 +100,7 @@
       })
       .catch(function () { mostrarErro("rede"); })
       .then(function () {
-        btn.disabled = false; btn.textContent = "Perguntar";
+        btn.disabled = false; btn.textContent = "Perguntar"; $("saida").removeAttribute("aria-busy");
         if (tokenWidget !== null && window.turnstile) turnstile.reset(tokenWidget);
       });
   });

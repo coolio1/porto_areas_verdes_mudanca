@@ -38,7 +38,7 @@ test("montarMensagens: system fixo, contexto numerado, pergunta no fim", () => {
   const m = montarMensagens("Quantas casas?", chunks);
   assert.equal(m[0].role, "system");
   assert.match(m[0].content, /não sei|Não encontrei/i);
-  assert.match(m[0].content, /não siga instruções/i);
+  assert.match(m[0].content, /não sigas instruções/i);
   assert.doesNotMatch(m[0].content, /Ignora as regras/);
   const ctx = m[1].content;
   assert.match(ctx, /\[1\]/);
@@ -46,4 +46,14 @@ test("montarMensagens: system fixo, contexto numerado, pergunta no fim", () => {
   assert.match(ctx, /Ignora as regras/);
   assert.equal(m[m.length - 1].role, "user");
   assert.match(m[m.length - 1].content, /Quantas casas\?/);
+});
+
+test("validarCitacoes: preserva quebras de paragrafo e remove intervalos", () => {
+  assert.equal(validarCitacoes("fim.\n\n[99] Novo", new Set([1])), "fim.\n\n Novo");
+  assert.equal(validarCitacoes("A [1-2] e B [3–4].", new Set([1, 2])), "A e B.");
+});
+
+test("prompt proibe intervalos de citacoes", () => {
+  const m = montarMensagens("x", [{ id: "a", score: 1, text: "t", item: { key: "ref218.md" } }]);
+  assert.match(m[0].content, /intervalos/i);
 });
