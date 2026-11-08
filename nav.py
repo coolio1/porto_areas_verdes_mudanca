@@ -21,7 +21,6 @@ PAGES = [
 # Páginas Jekyll-only (não entram em PAGES nem em TARGETS mas aparecem em AMBOS os navs)
 _JEKYLL_EXTRA = [
     ("artigos/", "Artigos"),
-    ("chat/", "Perguntar"),
     ("sobre/", "Sobre"),
 ]
 
