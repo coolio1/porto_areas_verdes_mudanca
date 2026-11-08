@@ -110,6 +110,10 @@ Ver skill `/jekyll`. Config específica: `baseurl: /porto_areas_verdes_mudanca`;
 
 **Dados inline, nunca `fetch()`:** os GeoJSON são embutidos nos HTML gerados (`fetch()` falha em `file://`, onde os mapas são abertos). Ao alterar uma fonte partilhada, regenerar todos os HTML que a consomem.
 
+## Chat «Perguntar» (descontinuado 2026-11-09)
+
+Página `chat/index.html` com `published: false` e sem link no menu (`nav.py`); código do Worker em `chat/worker/` (mantido). Estado, motivo e como retomar ou apagar: `AI Habitacao\CLAUDE.md`. Não voltar a pôr o link sem decisão do utilizador.
+
 ## 50 Espaços (`/50espacos/`)
 
 Secção da campanha da Campo Aberto (111 espaços, 50 seleccionados). Regras completas, pipeline e fases: `docs/regras-50espacos.md`. Essenciais:
