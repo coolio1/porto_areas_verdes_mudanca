@@ -5,9 +5,7 @@ import re
 TESE = (
     "A habitação terá encarecido porque vários aumentos da procura "
     "coincidiram com uma oferta que não acompanhou; o peso de cada um não foi medido. "
-    "Se entre 2012 e 2022 se tivesse construído ao ritmo dos anos 2000, os preços de 2022 "
-    "seriam só cerca de 3 % mais baixos; ao dobro desse ritmo, cerca de 6 % (conta de um "
-    "modelo económico sobre o passado, não previsão). Os estudos apontam para um pacote, "
+    "Os estudos apontam para um pacote, "
     "não para uma medida isolada."
 )
 
@@ -38,7 +36,7 @@ CHOQUES = [
     (
         "Famílias mais pequenas",
         "> 70 %",
-        "do aumento do número de famílias em Portugal, 1981–2011",
+        "do aumento do número de famílias em Portugal, 1981–2011, explicado por serem mais pequenas",
     ),
     (
         "Imigração",
@@ -48,7 +46,7 @@ CHOQUES = [
     (
         "Alojamento local (AL)",
         "> 19 000",
-        "registos em Lisboa, 2019 (≈ 900 em 2012): casas ou quartos arrendados a turistas por curtos períodos",
+        "registos (não casas) em Lisboa, 2019 (≈ 900 em 2012): casas ou quartos arrendados a turistas",
     ),
     (
         "Compradores não residentes",
@@ -75,11 +73,11 @@ MEDIDAS = [
         "Funciona, pouco",
         "ok",
         "Construir mais",
-        "baixa os preços, mas só 3 a 6 % (modelo sobre o passado, estudo português); rendas locais mais baixas (Auckland)",
+        "baixa os preços, mas só 3 a 6 % (simulação); rendas dos T3 17 a 26 % mais baixas (Auckland)",
         "Rendas: estudos internacionais; preços: simulação portuguesa. Certeza moderada a alta na direcção, baixa na dimensão",
     ),
     (
-        "Depende",
+        "Sem medição",
         "dep",
         "Habitação a custo controlado em grande escala",
         "habitação com custos e rendas ou preços limitados, pública ou de entidades sem fins lucrativos",
