@@ -6,7 +6,9 @@ export async function verificarTurnstile(token: string, ip: string, secret: stri
     f.append("response", token);
     f.append("remoteip", ip);
     const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: f });
-    return ((await r.json()) as { success?: boolean }).success === true;
+    const j = (await r.json()) as { success?: boolean; "error-codes"?: string[]; hostname?: string };
+    if (j.success !== true) console.log("turnstile recusado", JSON.stringify({ codigos: j["error-codes"], hostname: j.hostname, tokenLen: token.length, segredoLen: (secret ?? "").length }));
+    return j.success === true;
   } catch {
     return "erro";
   }
