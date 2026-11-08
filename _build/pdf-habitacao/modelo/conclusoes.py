@@ -7,7 +7,7 @@ TESE = (
     "coincidiram com uma oferta que não acompanhou; o peso de cada um não foi medido. "
     "Se entre 2012 e 2022 se tivesse construído ao ritmo dos anos 2000, os preços de 2022 "
     "seriam só cerca de 3 % mais baixos; ao dobro desse ritmo, cerca de 6 % (conta de um "
-    "modelo económico sobre o passado, não previsão). A evidência aponta para um pacote, "
+    "modelo económico sobre o passado, não previsão). Os estudos apontam para um pacote, "
     "não para uma medida isolada."
 )
 
@@ -19,7 +19,7 @@ NUMEROS = [
     ),
     (
         "+69 %",
-        "rendimento disponível das famílias (depois de impostos) em Portugal, 2008–2025; ambos nominais, sem descontar a inflação",
+        "rendimento disponível total das famílias (depois de impostos) em Portugal, 2008–2025; ambos nominais, sem descontar a inflação",
         "ceu",
     ),
     (
@@ -71,7 +71,7 @@ MEDIDAS = [
         "Funciona",
         "ok",
         "Construir mais",
-        "baixa os preços, mas só 3 a 6 % (modelo sobre o passado); rendas locais mais baixas",
+        "baixa os preços, mas só 3 a 6 % (modelo sobre o passado, estudo português); rendas locais mais baixas (Auckland)",
         "Estudos internacionais. Em 2023, licenciar demorava 545 dias em Lisboa e 453 no Porto. Certeza moderada a alta",
     ),
     (
@@ -79,7 +79,7 @@ MEDIDAS = [
         "dep",
         "Habitação a custo controlado em grande escala",
         "habitação com custos e rendas ou preços limitados, pública ou de entidades sem fins lucrativos",
-        "Evidência apenas descritiva (Viena); nenhum estudo isolou o efeito nas rendas, nem lá nem em Portugal. Certeza baixa",
+        "Só há descrição, sem medição (Viena); nenhum estudo isolou o efeito nas rendas, nem lá nem em Portugal. Certeza baixa",
     ),
     (
         "Depende",
@@ -92,7 +92,7 @@ MEDIDAS = [
         "Efeitos adversos",
         "nao",
         "Apoios a quem compra casa",
-        "isenção do IMT a jovens até 35 anos: preços de anúncio cerca de 3,2 % acima do que se estima que teriam sido sem a isenção, 12 meses após o anúncio (Maio de 2024); <em>Help to Buy</em> (crédito público britânico): em Londres, preços cerca de 7,9 % mais altos do que fora de Londres",
+        "isenção do IMT a jovens até 35 anos: preços pedidos nos anúncios cerca de 3,2 % acima do que se estima que teriam sido sem a isenção, 12 meses depois de a medida ser anunciada (Maio de 2024); <em>Help to Buy</em> (crédito público britânico): fez subir os preços em Londres cerca de 7,9 % mais do que fora de Londres",
         "Quando não se constroem mais casas, o apoio a quem compra vai parar ao preço (diferente de trocar imposto na compra por imposto anual). Certeza moderada",
     ),
     (
@@ -107,7 +107,7 @@ MEDIDAS = [
         "peq",
         "Impostos sobre compradores estrangeiros",
         "preços cerca de 5 % mais baixos em Vancouver e 7 a 9 % em Toronto, sem melhoria detectada nas rendas",
-        "Colúmbia Britânica e Ontário (Canadá). Rótulo «limitado»: sem melhoria nas rendas e pouco peso em Portugal, onde os não residentes (por residência fiscal, não nacionalidade) são 5,0 % das transacções e 8,3 % do valor (2025). Certeza baixa (só vimos o resumo dos estudos)",
+        "Colúmbia Britânica e Ontário (Canadá). Efeito limitado: sem melhoria nas rendas e pouco peso em Portugal, onde os não residentes (por residência fiscal, não nacionalidade) são 5,0 % das transacções e 8,3 % do valor (2025). Certeza baixa (só vimos o resumo dos estudos)",
     ),
 ]
 
@@ -238,8 +238,8 @@ def html(img="img/hero.png"):
  <p class="tese">{TESE}</p>
  <div class="nums">{nums}</div></div>
 <div class="choques"><p class="sec">Cinco choques na procura (aumentos súbitos e fortes do número de pessoas ou do dinheiro à procura de casa)</p><div class="cs">{chq}</div></div>
-<div class="ver"><p class="sec">O que a evidência diz de cada medida <span style="text-transform:none;letter-spacing:0;font-weight:400">(selo: o que os estudos mostram; certeza: solidez e coerência dos estudos)</span></p>{ver}</div>
-<div class="pacote"><div class="k">O que a evidência sugere</div><h4>Um pacote em três etapas, mais medidas em paralelo</h4>
+<div class="ver"><p class="sec">O que dizem os estudos sobre cada medida <span style="text-transform:none;letter-spacing:0;font-weight:400">(selo: o que os estudos mostram; certeza: solidez e coerência dos estudos)</span></p>{ver}</div>
+<div class="pacote"><div class="k">O que os estudos sugerem</div><h4>Um pacote em três etapas, mais medidas em paralelo</h4>
  <div class="passos">{pas}</div>
  <p class="terr"><b>Casas vazias e espaços verdes.</b> {TERRITORIO}</p>
  <p class="terr nic"><b>Ideias menos conhecidas.</b> {NICHO}</p>

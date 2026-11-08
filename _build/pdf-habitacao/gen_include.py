@@ -3,9 +3,7 @@
 import sys
 from pathlib import Path
 
-SP = Path(
-    r"C:\Users\quent\AppData\Local\Temp\claude\cee5f6266c952fe1\b6201198-90d4-4f99-be7e-7658479a7d9b\scratchpad"
-)
+SP = Path(__file__).resolve().parent  # a cópia do repo é a fonte (não o scratchpad)
 sys.path.insert(0, str(SP / "modelo"))
 import conclusoes as c
 
@@ -94,7 +92,7 @@ def build():
  <p class="tese">{c.TESE}</p></div>
 <div class="nums">{nums}</div>
 <div class="choques"><p class="sec">Cinco choques na procura (aumentos súbitos e fortes do número de pessoas ou do dinheiro à procura de casa)</p><div class="cs">{chq}</div></div>
-<div class="ver"><p class="sec">O que a evidência diz de cada medida</p>{ver}</div>
+<div class="ver"><p class="sec">O que dizem os estudos sobre cada medida</p>{ver}</div>
 </section>
 """
     return CSS.strip("\n") + "\n" + c._nb(body)
