@@ -72,7 +72,7 @@ MEDIDAS = [
         "Rendas (estudos não comparáveis): Berlim até +2,4 % por anúncio comercial a mais; Los Angeles cerca de −2 % ao restringir o AL; Sydney +2,7–3,6 %. Certeza moderada",
     ),
     (
-        "Funciona",
+        "Funciona, pouco",
         "ok",
         "Construir mais",
         "baixa os preços, mas só 3 a 6 % (modelo sobre o passado, estudo português); rendas locais mais baixas (Auckland)",
