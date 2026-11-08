@@ -1,0 +1,10 @@
+{
+  "name": "portoverde-chat",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-03-27",
+  "ai_search_namespaces": [{ "binding": "AI_SEARCH", "namespace": "habitacao-pt" }],
+  "ai": { "binding": "AI" },
+  "kv_namespaces": [{ "binding": "LIMITES", "id": "PREENCHER_NO_DEPLOY" }],
+  "vars": { "ORIGEM_PERMITIDA": "https://portoverde.pt" }
+  // Segredos (wrangler secret put): TURNSTILE_SECRET, SALT
+}
