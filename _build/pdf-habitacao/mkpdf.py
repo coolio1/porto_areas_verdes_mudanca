@@ -19,7 +19,7 @@ if _FACTOS.exists():
             sys.executable, '-I', '-X', 'utf8',
             str(Path.home() / '.claude/scripts/research_fetch.py'),
             'factos', str(SP), '--texto', str(SP / 'nota.md'),
-            '--factos', str(_FACTOS), '--sem-excertos',
+            '--factos', str(_FACTOS),
         ],
         capture_output=True, text=True, encoding='utf-8', check=False,
     )
