@@ -819,7 +819,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 139. Instituto Nacional de Estatística. Estimativas de População Residente: população residente atinge 11,4 milhões – 2025 [Destaque]. Lisboa: INE; 2026 Jun 22. Disponível em: https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_destaques&DESTAQUESdest_boui=770295679&DESTAQUESmodo=2&xlang=pt
 
-140. Instituto Nacional de Estatística. Fogos licenciados em construções novas para habitação familiar (N.º) [série]. Lisboa: INE; [data de consulta].; Instituto Nacional de Estatística. Estatísticas do Turismo 2025. Lisboa: INE; 2026.
+140. Instituto Nacional de Estatística. Fogos licenciados em construções novas para habitação familiar (N.º) [série]. Lisboa: INE; [data de consulta].; Instituto Nacional de Estatística. Estatísticas do Turismo 2025. Lisboa: INE; 2026. https://www.ine.pt/ngt_server/attachfileu.jsp?look_parentBoui=802833046&att_display=n&att_download=y
 
 141. Instituto Nacional de Estatística. Índice de Preços da Habitação – 4.º trimestre de 2025 [Destaque]. Lisboa: INE; 2026 Mar 23. Disponível em: https://www.ine.pt/ngt_server/attachfileu.jsp?look_parentBoui=782896328&att_display=n&att_download=y
 
@@ -1071,4 +1071,4 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 265. Vrantsis N. Financialization, possessive familialism, and the politics of vacancy: how vacancy became Greece's most lucrative housing strategy. Radic Hous J. 2025;7(1):73-93. doi:10.54825/TSUQ7519
 
-266. Zore M. Essays in housing supply and affordability [tese de doutoramento]. Dijon: Université Bourgogne Europe; 2025. HAL tel-05458597. doi:10.70675/324c7ebb-ze2f-bz4e-6eza-e1az2423dd2fc21a
+266. Zore M. Essays in housing supply and affordability [tese de doutoramento]. Dijon: Université Bourgogne Europe; 2025. HAL tel-05458597. https://theses.hal.science/tel-05458597
