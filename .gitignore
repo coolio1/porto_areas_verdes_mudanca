@@ -54,3 +54,4 @@ Mobilidade/
 
 # Tiny verde: dados brutos reprodutíveis (OSM, 27 MB; python tiny/obter_edificios.py)
 tiny/dados/
+_build/pdf-habitacao/nota.factos.*.md

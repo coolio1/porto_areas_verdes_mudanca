@@ -1,9 +1,10 @@
-"""Gera nota.factos.md (propostas com excerto literal do corpus local) e nota.factos.pendentes.md.
+r"""Gera nota.factos.propostas.md (propostas com excerto literal do armazém Fontes) e nota.factos.pendentes.md.
 
 Uso: python -I -X utf8 construir_factos.py          (a partir de qualquer pasta)
-Entradas: nota.md; corpus/<ficheiro>.txt (texto dos PDFs, fora do remoto); mapa [n] -> ficheiro de corpus em
-          nota.mapa_refs.tsv (n<TAB>ficheiro; gerado por mapa_refs.py ou à mão).
-Saídas:   nota.factos.md  (uma linha por valor e [n]: excerto literal com o valor; marcada «(auto)» até alguém ler)
+Entradas: nota.md; texto das obras no armazém Fontes\AI habitacao\<slug(chave)>\texto.txt. A chave de cada [n] é o
+          DOI ou o URL (web_xxx) da própria entrada [n] das Fontes (sem mapa à parte).
+Saídas:   nota.factos.propostas.md  (uma linha por valor e [n]: excerto literal com o valor; marcada «(auto)» até alguém
+          ler; NUNCA sobrepõe nota.factos.md, que tem linhas revistas à mão: copiar daqui só o que se aprova)
           nota.factos.pendentes.md (números sem [n], com [n] sem texto local, ou com o valor ausente do texto citado)
 Uma linha (auto) prova que o valor está no texto da fonte; que a frase APOIA a afirmação da nota é leitura humana
 ou da revisão independente (research.md Passo 3.7), não deste script.
@@ -15,7 +16,8 @@ import unicodedata
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
-sp = importlib.util.spec_from_file_location("rf", Path.home() / ".claude" / "scripts" / "research_fetch.py")
+ARM = Path(r"C:\Users\quent\OneDrive\Claude\Fontes\AI habitacao")
+sp =importlib.util.spec_from_file_location("rf", Path.home() / ".claude" / "scripts" / "research_fetch.py")
 rf = importlib.util.module_from_spec(sp)
 sp.loader.exec_module(rf)
 
@@ -35,7 +37,7 @@ _cache = {}
 def corpus(f):
     """(texto com espaços colapsados, {valor arredondado: [posições]})."""
     if f not in _cache:
-        bruto = (BASE / "corpus" / (f + ".txt")).read_text(encoding="utf-8", errors="replace")
+        bruto = (ARM / rf.slug(f) / "texto.txt").read_text(encoding="utf-8", errors="replace")
         txt = re.sub(r"\s+", " ", re.sub(r"-\s*\n\s*", "", bruto))
         idx = {}
         for m in rf._NUM.finditer(txt):
@@ -102,10 +104,16 @@ def frase_da_nota(linha, tok):
 
 def main():
     nota = (BASE / "nota.md").read_text(encoding="utf-8")
-    mapa = {}
-    for ln in (BASE / "nota.mapa_refs.tsv").read_text(encoding="utf-8").splitlines():
-        n, f = ln.split("\t")[:2]
-        mapa[int(n)] = f
+    mapa = {}  # [n] -> chave (DOI ou web_xxx da entrada) com texto no armazém
+    for n, entrada in rf._entradas_fontes(nota)[1].items():
+        chaves = [d.lower().rstrip(".,;") for d in rf._dois(entrada)] + [
+            rf.chave_web(u.rstrip(".,;"))
+            for u in re.findall(r"https?://[^\s)>\]]+", entrada)
+            if not rf.DOI_RE.search(u)
+        ]
+        ok = next((k for k in chaves if (ARM / rf.slug(k) / "texto.txt").exists()), None)
+        if ok:
+            mapa[n] = ok
     cit = rf._citacoes_por_linha(nota)
     linhas = rf._linhas_de_corpo(nota)
     factos, chave, pend = [], {}, []
@@ -146,12 +154,12 @@ def main():
             grandeza = grandeza.replace("|", "/")
             marca = "(auto)" if pont >= 0.5 else "(auto, REVISAR: unidade ou contexto fracos)"
             factos.append(
-                f'{fid} | {marca} {grandeza} | {valor_txt} | — | — | — | [{c}] | excerto: "{ex}" [corpus:{f.lower()}]'
+                f'{fid} | {marca} {grandeza} | {valor_txt} | — | — | — | [{c}] | excerto: "{ex}" [{f}]'
             )
             for v in vs:
                 chave[(c, round(v, 6))] = fid
     cab = "# factos (G19) — gerado por construir_factos.py; linhas (auto) = valor presente na fonte, apoio por confirmar\n"
-    (BASE / "nota.factos.md").write_text(cab + "\n".join(factos) + "\n", encoding="utf-8")
+    (BASE / "nota.factos.propostas.md").write_text(cab + "\n".join(factos) + "\n", encoding="utf-8")
     pt = "# pendentes do factos.md\n\nn.º da linha | número | motivo | frase\n" + "\n".join(
         f"{n} | {tok} | {mot} | {fr[:140]}" for n, tok, mot, fr in pend
     )
