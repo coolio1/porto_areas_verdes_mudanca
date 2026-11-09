@@ -300,7 +300,7 @@ def find_pages():
     return res, d
 
 
-NPAG = "77"
+NPAG = "80"
 render(None)
 pages, d = find_pages()
 d.close()
