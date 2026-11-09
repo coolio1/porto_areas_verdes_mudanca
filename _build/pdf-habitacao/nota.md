@@ -799,7 +799,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 129. Instituto da Habitação e da Reabilitação Urbana. Nota à comunicação social: Programa Apoio Extraordinário à Renda (PAER) e Porta 65 Jovem. Lisboa: IHRU; 27 de Outubro de 2025. https://www.ihru.pt/documents/20126/72407/20251027_+CI+IIHRU+Programa+Apoio+Extraordin%C3%A1rio+%C3%A0+Renda+(PAER)+e+Porta+65+Jovem.pdf/6fbf960c-5782-4608-192b-be98b07c7b2c?t=1761587434990
 
-130. Instituto da Habitação e da Reabilitação Urbana. Porta 65 Jovem: apuramento de resultados, 3 de Abril de 2025. Portal da Habitação. Disponível em: https://www.portaldahabitacao.pt
+130. Instituto da Habitação e da Reabilitação Urbana. Porta 65 Jovem: apuramento de resultados, 3 de Abril de 2025. Portal da Habitação. Disponível em: https://www.portaldahabitacao.pt/pt/porta65j/concursos/apuramentoResultados_P65J_cv_20250403145432_1.html
 
 131. Instituto Nacional de Estatística. Alojamentos familiares clássicos (N.º) por localização geográfica à data dos Censos [2021], forma de ocupação e dimensão da necessidade de reparação do edifício [indicador 0013316]. Lisboa: INE; 2024 [actualizado 2024 Jul 17]. Disponível em: https://www.ine.pt/ine/json_indicador/pindica.jsp?op=2&varcd=0013316&Dim1=T&lang=PT
 
