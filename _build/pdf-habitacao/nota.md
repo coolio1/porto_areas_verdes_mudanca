@@ -775,7 +775,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 117. Han L, Ngai LR, Sheedy KD. To Own or to Rent? The Effects of Transaction Taxes on Housing Markets. Review of Economic Studies. 2026;93(4):2605-2645. doi:10.1093/restud/rdaf092
 
-118. Helfer F, Grossmann V, Osikominu A. How does immigration affect housing costs in Switzerland? IZA Discussion Paper No. 15958. Bonn: IZA; 2023. Disponível em: https://ideas.repec.org/p/iza/izadps/dp15958.html
+118. Helfer F, Grossmann V, Osikominu A. How does immigration affect housing costs in Switzerland? IZA Discussion Paper No. 15958. Bonn: IZA; 2023. Disponível em: https://docs.iza.org/dp15958.pdf
 
 119. Hilber CAL, Lyytikäinen T. Transfer taxes and household mobility: Distortion on the housing or labor market?. Journal of Urban Economics. 2017;101:57-73. doi:10.1016/j.jue.2017.06.002
 
