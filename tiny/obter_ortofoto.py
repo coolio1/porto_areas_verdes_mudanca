@@ -12,6 +12,7 @@ Idempotente (salta o que já existe) e só grava respostas HTTP 200 que sejam JP
 
 Uso:  python tiny/obter_ortofoto.py --teste   (só a 1.ª célula, para medir o tamanho)
       python tiny/obter_ortofoto.py           (todas as células)
+      Com --irg, pede a camada Ortos2025-IRG (infravermelho) para ortofoto_irg\ (mesma grelha).
 """
 import json
 import math
@@ -24,9 +25,10 @@ from pyproj import Transformer
 
 RAIZ = Path(__file__).parent
 EDIFICIOS = RAIZ / "dados" / "edificios_osm.json"
-DESTINO = Path(os.environ["LOCALAPPDATA"]) / "PortoVerdeTiny" / "ortofoto"
+IRG = "--irg" in sys.argv  # falsa cor com infravermelho (separa a vegetação sem erro)
+DESTINO = Path(os.environ["LOCALAPPDATA"]) / "PortoVerdeTiny" / ("ortofoto_irg" if IRG else "ortofoto")
 URL = "https://geo.dgterritorio.gov.pt/wms/ortos2025/service"
-CAMADA = "Ortos2025-RGB"
+CAMADA = "Ortos2025-IRG" if IRG else "Ortos2025-RGB"
 CELULA = 1000  # m
 PIXEIS = 4000  # = CELULA / 0,25 m
 
