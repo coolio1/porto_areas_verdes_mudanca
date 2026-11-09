@@ -663,7 +663,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 61. Damm AP, Hassani A, Kumar A, Parra-Alvarez JC. Medium-run impacts of immigration on the housing market: evidence from a quasi-experimental shift-share instrument. RFBerlin Discussion Paper 78/25. Berlin: ROCKWOOL Foundation Berlin; 2025. Disponível em: https://www.rfberlin.com/wp-content/uploads/2025/09/25078.pdf
 
-62. Decreto-Lei n.º 20-B/2023, de 22 de Março (apoio extraordinário à renda). Diário da República, 1.º Suplemento, Série I, n.º 58. Cópia do texto publicado: https://bancoinvest.pt/docs/default-source/documentosgerais/decreto-lei-n-20-b2023.pdf
+62. Decreto-Lei n.º 20-B/2023, de 22 de Março (apoio extraordinário à renda). Diário da República, 1.º Suplemento, Série I, n.º 58. https://files.dre.pt/1s/2023/03/05801/0003200040.pdf
 
 63. Degen K, Fischer AM. Immigration and Swiss House Prices. Swiss J Economics Statistics. 2017;153(1):15-36. doi:10.1007/BF03399433
 
