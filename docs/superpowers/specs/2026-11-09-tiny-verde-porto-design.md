@@ -2,6 +2,10 @@
 
 *Estado: rascunho para revisão do utilizador (2026-11-09). Nada foi construído.*
 
+## Resultado dos testes (2026-11-09) — parado
+
+Quatro testes descartáveis (v2 a v5) com ortofoto 25 cm, infravermelho para a vegetação, máscaras das 3 categorias, edifícios OSM e árvores desenhadas, mais um teste com IA (`google/gemini-3.1-flash-image`, 0,068 US$, imagem para imagem). **Nenhum chega ao aspecto do tiny.london.** O procedural dá uma maquete cartográfica (foto estilizada, bolas por copas, contornos grosseiros: as máscaras têm ~7 m/px). A IA genérica quase não repinta e **inventa** (legendas com erros, figuras), o que o projecto proíbe. O tiny.london depende de um modelo treinado com pares «vista 3D ↔ pixel-art» (dados da Google, não utilizáveis aqui) e de GPU. Utilizador: «muito fraco». Sem aprovação da especificação; gerador por construir. Dados obtidos ficam em `%LOCALAPPDATA%\PortoVerdeTiny\` (ortofoto RGB e infravermelho) e `tiny/dados/`. Erro encontrado: `verde_pago.png` tem a forma no alfa (RGB preto), ler pelo alfa.
+
 ## Intenção
 
 Um mapa isométrico em pixel-art do município do Porto, no espírito de [tiny.london](https://tiny.london/) (Boris Starkov, Outubro 2026, assente no isometric.nyc de Andy Coenen), em que **o verde é a estrela** e a cidade construída é contexto discreto. O utilizador quer o verde «bonito, como uma foto aérea em pixel-art». O mapa mostra as três categorias de verde do projecto, bem distintas à vista.
