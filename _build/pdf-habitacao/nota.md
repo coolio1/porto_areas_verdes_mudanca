@@ -559,9 +559,9 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 9. Assembleia da República. Proposta de Lei 103/XVII/1 (Governo): autoriza o Governo a alterar o Novo Regime do Arrendamento Urbano, o Código Civil, o Código de Processo Civil, o Decreto-Lei n.º 157/2006 e legislação conexa. Lisboa: Assembleia da República; 2026 Ago 12. Disponível em: https://www.parlamento.pt/ActividadeParlamentar/Paginas/DetalheIniciativa.aspx?BID=377135
 
-10. Associação Campo Aberto. Propostas sobre ambiente: contributo para a discussão pública do PDM 2020. Porto: Associação Campo Aberto; 2020 Dez 6. Contributo à discussão pública da revisão do PDM do Porto; sem endereço estável identificado.
+10. Associação Campo Aberto. Propostas sobre ambiente: contributo para a discussão pública do PDM 2020. Porto: Associação Campo Aberto; 2020 Dez 6. Contributo à discussão pública da revisão do PDM do Porto; texto no encarte «Contributos da Campo Aberto para o novo PDM do Porto» (2021 Mar 20): https://coolio1.github.io/pdfs/Voluntariado/Campo%20Aberto/2021-03-20%20-%20Parecer%20Campo%20Aberto%20PDM%20-%20encarte%20final.pdf
 
-11. Associação Campo Aberto. Propostas sobre urbanismo: contributo para a discussão pública do PDM 2020. Porto: Associação Campo Aberto; 2020 Dez 6. Contributo à discussão pública da revisão do PDM do Porto; sem endereço estável identificado.
+11. Associação Campo Aberto. Propostas sobre urbanismo: contributo para a discussão pública do PDM 2020. Porto: Associação Campo Aberto; 2020 Dez 6. Contributo à discussão pública da revisão do PDM do Porto; texto no encarte «Contributos da Campo Aberto para o novo PDM do Porto» (2021 Mar 20): https://coolio1.github.io/pdfs/Voluntariado/Campo%20Aberto/2021-03-20%20-%20Parecer%20Campo%20Aberto%20PDM%20-%20encarte%20final.pdf
 
 12. Autor D, Palmer C, Pathak PA. Housing market spillovers: evidence from the end of rent control in Cambridge, Massachusetts. NBER Working Paper No. 18125. Cambridge, MA: National Bureau of Economic Research; 2012. doi:10.3386/w18125. (Versão publicada: J Polit Econ. 2014;122(3).)
 
@@ -611,7 +611,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 35. Câmara Municipal de Lisboa. Deliberação n.º 758/CM/2024: aprovar a submissão do projeto de alteração ao Regulamento Municipal do Alojamento Local a consulta pública (versão consolidada das Propostas n.os 758/2024, <span class="nq">758-A/2024</span>, <span class="nq">758-B/2024</span>, <span class="nq">758-C/2024</span> e <span class="nq">758-D/2024</span>). Boletim Municipal de Lisboa. 2025 Fev 27;(1619):196-228. Disponível em: https://informacao.lisboa.pt/fileadmin/user_upload/AL_Deliberacao_e_Projeto_de_Regulamento.pdf
 
-36. Câmara Municipal de Lisboa. Plano Director Municipal de Lisboa. Aviso n.º 11622/2012. Diário da República, 2.ª série. 2012 (disposições citadas não verificadas na versão em vigor do regulamento).
+36. Câmara Municipal de Lisboa. Plano Director Municipal de Lisboa. Aviso n.º 11622/2012. Diário da República, 2.ª série. 2012 (disposições citadas não verificadas na versão em vigor do regulamento). https://diariodarepublica.pt/dr/detalhe/aviso/11622-2012-1787349
 
 37. Câmara Municipal do Porto. Carta Municipal de Habitação. Porto: Câmara Municipal do Porto; 2025 Jul. Disponível em: https://portaldomunicipe.cm-porto.pt/documents/20122/1630945/02_Carta_Municipal_de_Habitacao.pdf/943a9a80-3104-b157-8138-aed700cb293d?t=1755098341588
 
@@ -663,7 +663,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 61. Damm AP, Hassani A, Kumar A, Parra-Alvarez JC. Medium-run impacts of immigration on the housing market: evidence from a quasi-experimental shift-share instrument. RFBerlin Discussion Paper 78/25. Berlin: ROCKWOOL Foundation Berlin; 2025. Disponível em: https://www.rfberlin.com/wp-content/uploads/2025/09/25078.pdf
 
-62. Decreto-Lei n.º 20-B/2023, de 22 de Março (apoio extraordinário à renda). Diário da República.
+62. Decreto-Lei n.º 20-B/2023, de 22 de Março (apoio extraordinário à renda). Diário da República, 1.º Suplemento, Série I, n.º 58. Cópia do texto publicado: https://bancoinvest.pt/docs/default-source/documentosgerais/decreto-lei-n-20-b2023.pdf
 
 63. Degen K, Fischer AM. Immigration and Swiss House Prices. Swiss J Economics Statistics. 2017;153(1):15-36. doi:10.1007/BF03399433
 
@@ -797,7 +797,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 128. Institute on Taxation and Economic Policy. Vacancy taxes, blight taxes and other property tax tools. Washington (DC): ITEP; 2025. Disponível em: https://itep.org/vacancy-tax-blight-tax-property-tax-tools/
 
-129. Instituto da Habitação e da Reabilitação Urbana. Nota à comunicação social: Programa Apoio Extraordinário à Renda (PAER) e Porta 65 Jovem. Lisboa: IHRU; 27 de Outubro de 2025.
+129. Instituto da Habitação e da Reabilitação Urbana. Nota à comunicação social: Programa Apoio Extraordinário à Renda (PAER) e Porta 65 Jovem. Lisboa: IHRU; 27 de Outubro de 2025. https://www.ihru.pt/documents/20126/72407/20251027_+CI+IIHRU+Programa+Apoio+Extraordin%C3%A1rio+%C3%A0+Renda+(PAER)+e+Porta+65+Jovem.pdf/6fbf960c-5782-4608-192b-be98b07c7b2c?t=1761587434990
 
 130. Instituto da Habitação e da Reabilitação Urbana. Porta 65 Jovem: apuramento de resultados, 3 de Abril de 2025. Portal da Habitação. Disponível em: https://www.portaldahabitacao.pt
 
@@ -911,7 +911,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 185. Lyu M. Crowding in: how China's Affordable Rental Housing program affected private rents [pré-publicação, v1]. Research Square; 2026 Out 13. doi:10.21203/rs.3.rs-11340204/v1
 
-186. Madden D, Marcuse P. In defense of housing: the politics of crisis. London: Verso; 2016.
+186. Madden D, Marcuse P. In defense of housing: the politics of crisis. London: Verso; 2016. Registo: https://eprints.lse.ac.uk/84410
 
 187. Marques Pereira S. Portuguese Reactions to the Housing Crisis: Is It Possible to Move from the Residualisation to Post-neoliberalisation of Housing Policies?. CHA. 2024;11(2):204-215. doi:10.13060/23362839.2024.11.2.578
 
