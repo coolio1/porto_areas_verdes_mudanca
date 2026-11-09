@@ -715,7 +715,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 87. European Commission. 2026 Country Report – Portugal. SWD(2026) 222 final (Anexos 3 e 16 e secção 1). Brussels: European Commission; 2026 Jun 3. Disponível em: https://data.consilium.europa.eu/doc/document/ST-10139-2026-ADD-1/en/pdf
 
-88. European Commission. Understanding the housing crisis. Commission Staff Working Document accompanying the European Affordable Housing Plan. SWD(2025) 1053 final. Brussels: European Commission; 2025 Dec 16.
+88. European Commission. Understanding the housing crisis. Commission Staff Working Document accompanying the European Affordable Housing Plan. SWD(2025) 1053 final. Brussels: European Commission; 2025 Dec 16. https://build-up.ec.europa.eu/system/files/2025-12/767LZTn5Oc_29_12_2025_111836.pdf
 
 89. Eurostat. Distribution of income, saving and investment of households – annual data (nasa_10_nf_tr; rendimento disponível bruto, B6G). Base de dados em linha. Luxemburgo: Eurostat. Disponível em: https://ec.europa.eu/eurostat/databrowser/view/nasa_10_nf_tr
 
