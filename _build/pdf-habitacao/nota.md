@@ -645,7 +645,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 52. Collinson R, Humphries JE, Mader N, Reed D, Tannenbaum DI, van Dijk W. Eviction and poverty in American cities. Q J Econ. 2023. doi:10.1093/qje/qjad042
 
-53. Companen, Thésor. Effecten van de verhuurderheffing op het wonen in Nederland: een evaluatie 2013 tot 2020. Study commissioned by Aedes, VNG and Woonbond. 2020.
+53. Companen, Thésor. Effecten van de verhuurderheffing op het wonen in Nederland: een evaluatie 2013 tot 2020. Study commissioned by Aedes, VNG and Woonbond. 2020. https://dkvwg750av2j6.cloudfront.net/m/43457758778a4b27/original/Effecten-van-de-verhuurderheffing-op-het-wonen-in-Nederlandluatie-Verhuurderheffing-iov-Aedes-VNG-en-Woonbond-mei-2020.pdf
 
 54. Corrigan E, Watson D. Social housing in the Irish housing market. ESRI Working Paper No. 594. Dublin: Economic and Social Research Institute; 2018. Disponível em: https://ideas.repec.org/p/esr/wpaper/wp594.html
 
@@ -741,7 +741,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 100. Gete P, Reher M. Mortgage Supply and Housing Rents. The Review of Financial Studies. 2018;31(12):4884-4911. doi:10.1093/rfs/hhx145
 
-101. Gibbons S, Manning A. The incidence of UK Housing Benefit: evidence from the 1990s reforms. Discussion paper. London: Centre for Economic Performance; December 2003.
+101. Gibbons S, Manning A. The incidence of UK Housing Benefit: evidence from the 1990s reforms. Discussion paper. London: Centre for Economic Performance; December 2003. https://researchonline.lse.ac.uk/id/eprint/20011
 
 102. Glaeser EL, Gottlieb JD, Gyourko J. Can cheap credit explain the housing boom? NBER Working Paper 16230. Cambridge (MA): National Bureau of Economic Research; 2010 Jul. doi:10.3386/w16230
 
