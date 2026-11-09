@@ -51,3 +51,6 @@ chat/worker/.wrangler/
 
 # Mobilidade: só no disco por enquanto (decisão 2026-11-09)
 Mobilidade/
+
+# Tiny verde: dados brutos reprodutíveis (OSM, 27 MB; python tiny/obter_edificios.py)
+tiny/dados/
