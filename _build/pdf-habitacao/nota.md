@@ -703,9 +703,9 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 81. Economic and Social Research Institute. Pricing and affordability of Ireland's new cost rental housing tenure (Working Paper 826). Dublin: ESRI; 2025. Disponível em: https://www.esri.ie/publications/pricing-and-affordability-of-irelands-new-cost-rental-housing-tenure-a-microdata
 
-82. Eerola E, Lyytikäinen T. Housing allowance and rents: evidence from a stepwise subsidy scheme. SERC Discussion Paper 220. London: Spatial Economics Research Centre, London School of Economics; 2017.
+82. Eerola E, Lyytikäinen T. Housing allowance and rents: evidence from a stepwise subsidy scheme. SERC Discussion Paper 220. London: Spatial Economics Research Centre, London School of Economics; 2017. https://researchonline.lse.ac.uk/id/eprint/86568
 
-83. Eerola E, Lyytikäinen T, Saarimaa T, Vanhapelto T. The incidence of rent subsidies: evidence on rents, housing choices and supply. CESifo Working Paper No. 11478. Munich: CESifo; 2024.
+83. Eerola E, Lyytikäinen T, Saarimaa T, Vanhapelto T. The incidence of rent subsidies: evidence on rents, housing choices and supply. CESifo Working Paper No. 11478. Munich: CESifo; 2024. https://www.ifo.de/DocDL/cesifo1_wp11478.pdf
 
 84. Elfert M, Thomsen SL. The impact of the Chainsaw-Liberation on the rental housing market in Buenos Aires. Bonn: IZA Institute of Labor Economics; 2025 Set. IZA Discussion Paper 18107. Disponível em: https://docs.iza.org/dp18107.pdf
 
@@ -771,7 +771,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 115. Haaland C, van den Bosch CK. Challenges and strategies for urban green-space planning in cities undergoing densification: a review. Urban For Urban Green. 2015;14(4):760-771. doi:10.1016/j.ufug.2015.07.009
 
-116. Hahn AM, Kholodilin KA, Waltl S. Forward to the past: short-term effects of the rent freeze in Berlin. DIW Berlin Discussion Paper 1928. Berlin: DIW Berlin; 2021.
+116. Hahn AM, Kholodilin KA, Waltl S. Forward to the past: short-term effects of the rent freeze in Berlin. DIW Berlin Discussion Paper 1928. Berlin: DIW Berlin; 2021. https://www.diw.de/de/diw_01.c.808954.de/publikationen/diskussionspapiere/2021_1928/forward_to_the_past__short-term_effects_of_the_rent_freeze_in_berlin.html
 
 117. Han L, Ngai LR, Sheedy KD. To Own or to Rent? The Effects of Transaction Taxes on Housing Markets. Review of Economic Studies. 2026;93(4):2605-2645. doi:10.1093/restud/rdaf092
 
@@ -789,7 +789,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 124. Hsieh C-T, Moretti E. Housing constraints and spatial misallocation. Am Econ J Macroecon. 2019;11(2):1-39. doi:10.1257/mac.20170388
 
-125. Hyslop DR, Rea D. Do housing allowances increase rents? Evidence from a discrete policy change. Motu Working Paper 18-10. Wellington: Motu Economic and Public Policy Research; 2018.
+125. Hyslop DR, Rea D. Do housing allowances increase rents? Evidence from a discrete policy change. Motu Working Paper 18-10. Wellington: Motu Economic and Public Policy Research; 2018. https://motu-www.motu.org.nz/wpapers/18_10.pdf
 
 126. idealista. Metodologia de relatórios de preços. Madrid: idealista; 2026. Disponível em: https://st3.idealista.pt/cms/arquivos/static/price-indicator/pt-metodologia-relatorio-de-precos-habitacao-2026.pdf
 
