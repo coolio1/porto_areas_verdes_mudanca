@@ -3,3 +3,4 @@ ad560771cc | ok: o objecto é o número de fogos vagos e a sua proporção no pa
 64d1cddf3d | ok: o objecto é o número de agregados familiares clássicos no Porto, entre 2021 e 2035, no cenário optimista
 577150cd3f | ok: o objecto é o nível das rendas (efeito do controlo do alojamento local nas rendas, na própria célula)
 d24e5931ab | ok: o objecto é o número médio mensal de habitações cuja construção começou (obras iniciadas), na Catalunha e no país
+f95ac9136f | ok: o objecto é a variação, entre 2021 e 2035, do número de agregados no cenário demográfico optimista da Carta Municipal de Habitação do Porto
