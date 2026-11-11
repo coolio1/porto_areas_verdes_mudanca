@@ -114,6 +114,16 @@ Ver skill `/jekyll`. Config específica: `baseurl: /porto_areas_verdes_mudanca`;
 
 Página `chat/index.html` com `published: false` e sem link no menu (`nav.py`); código do Worker em `chat/worker/` (mantido). Estado, motivo e como retomar ou apagar: `AI Habitacao\CLAUDE.md`. Não voltar a pôr o link sem decisão do utilizador.
 
+## Mobilidade — velocidade dos autocarros (`Mobilidade/`, 2026-11-11)
+
+Página `Mobilidade/autocarros.html` (menu «Mobilidade»; os atropelamentos entrarão aqui mais tarde, não já). Spec e plano: `docs/superpowers/specs|plans/2026-11-11-mapa-velocidades-autocarros*`.
+
+- **Gera:** `uv run --no-project --with-requirements Mobilidade/requirements.txt python Mobilidade/gerar_autocarros.py` (≈ 2,5 min). Lê os CSV da recolha em `C:\Users\quent\Dados\autocarros\` (fora do OneDrive; descarregar do VPS com `descarregar_recolha.py <IP>`, ver memória `reference_vps_recolha_autocarros`) e as rotas/paragens STCP do OSM (cache em `Dados\autocarros\osm\`). Melhora sozinho com mais dados: basta voltar a gerar; o push é do utilizador (repo público). Se a escrita directa em `Mobilidade/` falhar, gerar com `--saida` para a scratchpad e `cp`.
+- **Método:** leituras coladas aos troços (~200 m) da própria linha (OSM, ≤ 30 m, direcção); média por (troço, sentido, período, dia útil/fim-de-semana) com mínimo 20 leituras, 3 veículos, 2 dias; crítico = < 14 km/h; tamanho = minutos perdidos por hora face a 25 km/h.
+- **Esperas descontadas** (≤ 2 km/h a < 40 m de paragem, salvo se os outros autocarros ali também andam < 8 km/h; paradas ≥ 15 leituras seguidas); **os zeros do trânsito contam sempre**.
+- **No git:** só `gerar_autocarros.py`, `velocidade/`, `tests/`, `requirements.txt` e `autocarros.html` (`.gitignore` `Mobilidade/*` + excepções). **Fora:** `recolher_autocarros.py`, `verificar_recolha.py`, `descarregar_recolha.py`, `deploy/` e dados brutos (IP do VPS e posições nunca no repo). Só se publicam agregados por troço, sem identificadores de veículo.
+- Fim-de-semana fica desactivado até haver 2 dias (a partir de 16 de Novembro).
+
 ## 50 Espaços (`/50espacos/`)
 
 Secção da campanha da Campo Aberto (111 espaços, 50 seleccionados). Regras completas, pipeline e fases: `docs/regras-50espacos.md`. Essenciais:

@@ -77,6 +77,11 @@ def test_fim_de_semana_desactivado_sem_dados():
     assert "disabled" in botao and "16 de Novembro" in botao
 
 
+def test_fim_de_semana_com_um_so_dia_continua_desactivado():
+    botao = re.search(r"<button[^>]*data-dia=\"fds\"[^>]*>.*?</button>", html(fds=1), re.S).group(0)
+    assert "disabled" in botao and "16 de Novembro" in botao      # o mínimo de amostra exige 2 dias
+
+
 def test_fim_de_semana_activo_com_dados():
     botao = re.search(r"<button[^>]*data-dia=\"fds\"[^>]*>.*?</button>", html(fds=2), re.S).group(0)
     assert "disabled" not in botao

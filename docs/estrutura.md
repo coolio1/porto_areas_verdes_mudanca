@@ -44,6 +44,10 @@
 │   ├── analise_conversao_verde.py  # Candidatos a conversão → conversao_verde.html
 │   ├── conversao_html.py         # Módulo HTML da conversão (build_html)
 │   └── layers/                   # Layers em cache (PNGs, .npy, .npz)
+├── Mobilidade/             # Velocidade dos autocarros STCP (só gerador, testes e página no git)
+│   ├── gerar_autocarros.py # Gerador → autocarros.html (`--dados`, `--saida`)
+│   ├── velocidade/         # Módulos: dados, esperas, osm, linhas, trocos, pagina, template.html
+│   └── tests/              # pytest (sintético; `uv run --with-requirements Mobilidade/requirements.txt`)
 ├── layers/                 # Layers do mapa actual (Sentinel-2)
 ├── layers_historico/       # Layers do mapa histórico (Landsat)
 └── docs/                   # Planos e specs (excluído do Jekyll)

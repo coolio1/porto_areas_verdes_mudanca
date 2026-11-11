@@ -16,6 +16,7 @@ PAGES = [
     ("mapa_unico/mapa_unico.html", "Mapas e uso do solo"),
     ("50espacos/", "50 Espaços Verdes"),
     ("atropelamentos/dashboard_atropelamentos.html", "Atropelamentos"),
+    ("Mobilidade/autocarros.html", "Mobilidade"),
 ]
 
 # Páginas Jekyll-only (não entram em PAGES nem em TARGETS mas aparecem em AMBOS os navs)

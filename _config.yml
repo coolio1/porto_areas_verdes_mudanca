@@ -59,6 +59,8 @@ exclude:
   - "AI Habitacao"
   - chat/worker
   - chat/refs.json
+  - Mobilidade/velocidade
+  - Mobilidade/tests
   - CLAUDE.md
   - "atropelamentos/Porto_2019_24h.pdf"
   - googlec78d03be03954350.html

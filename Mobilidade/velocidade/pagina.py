@@ -49,8 +49,9 @@ def dados_json(resultado: dict) -> dict:
 def renderizar(resultado: dict, template: Path) -> str:
     d = dados_json(resultado)
     fds = d["dias"]["fds"]
-    botao_fds = ('disabled title="Ainda sem um fim-de-semana completo de dados"' if fds == 0 else "")
-    texto_fds = "a partir de 16 de Novembro" if fds == 0 else _dias_txt(fds)
+    sem_amostra = fds < 2                      # o mínimo de amostra exige 2 dias (um fim-de-semana completo)
+    botao_fds = ('disabled title="Ainda sem um fim-de-semana completo de dados"' if sem_amostra else "")
+    texto_fds = "a partir de 16 de Novembro" if sem_amostra else _dias_txt(fds)
     corpo = (Path(template).read_text(encoding="utf-8")
              .replace("__NAV__", nav.get_nav("Mobilidade/autocarros.html", depth=1))
              .replace("__DIAS_UTIL__", _dias_txt(d["dias"]["util"]))

@@ -33,6 +33,7 @@
   @media(max-width:700px){
     #painel{top:auto;bottom:0;left:0;right:0;width:auto;max-height:46%;border-radius:10px 10px 0 0}
     #nav{max-width:100vw;left:8px;right:8px;top:6px}
+    .leaflet-control-zoom{display:none}
   }
 </style>
 </head>
@@ -64,7 +65,8 @@ __NAV__
 <script>
 const D = __DADOS__;
 const estado = {dia: 'util', per: 'pm'};
-const mapa = L.map('mapa', {preferCanvas: true}).setView([41.16, -8.62], 12);
+const mapa = L.map('mapa', {preferCanvas: true, zoomControl: false}).setView([41.16, -8.62], 12);
+L.control.zoom({position: 'bottomright'}).addTo(mapa);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
   {subdomains: 'abcd', maxZoom: 19, attribution: '&copy; OpenStreetMap &copy; CARTO'}).addTo(mapa);
 const camada = L.layerGroup().addTo(mapa);
