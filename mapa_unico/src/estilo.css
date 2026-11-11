@@ -73,3 +73,18 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
   .leaflet-top { top:50px; }
   #credit { display:none; }
 }
+.h-tempo { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin:6px 0 4px; }
+.h-tempo .ab-btn { padding:4px 1px; font-size:11px; }
+.h-fonte { font-size:10px; color:#555; line-height:1.4; margin:2px 0 4px; }
+.h-fonte i { color:#a15c00; }
+.h-graf { display:flex; gap:2px; margin:2px 0 2px; }
+.h-col { flex:1; border:1px solid transparent; background:transparent; border-radius:4px; padding:2px 0 0; cursor:pointer; display:flex; flex-direction:column; align-items:center; font:inherit; }
+.h-col:hover { background:#f0f0f0; }
+.h-col.active { background:#e8f5e9; border-color:#2E7D32; }
+.h-barras { display:flex; align-items:flex-end; gap:1px; height:60px; }
+.h-b { display:block; width:7px; border-radius:1px 1px 0 0; }
+.h-bv { background:#00FF00; border:1px solid #00b300; box-sizing:border-box; }
+.h-be { background:#C4A882; }
+.h-ano { font-size:9px; color:#555; line-height:1.6; }
+.h-nums { font-size:11px; color:#333; margin:2px 0; }
+.h-leg2 { margin:0 0 2px; }
