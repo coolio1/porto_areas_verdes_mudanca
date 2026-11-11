@@ -95,7 +95,7 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
 .h-col.active { background:#e8f5e9; border-color:#2E7D32; }
 .h-barras { display:flex; align-items:flex-end; gap:1px; height:60px; }
 .h-b { display:block; width:7px; border-radius:1px 1px 0 0; }
-.h-bv { background:#00FF00; border:1px solid #00b300; box-sizing:border-box; }
+.h-bv { background:#4E9F5D; border:1px solid #357A47; box-sizing:border-box; }
 .h-be { background:#C4A882; }
 .h-ano { font-size:9px; color:#555; line-height:1.6; }
 .h-nums { font-size:11px; color:#333; margin:2px 0; }
@@ -721,13 +721,13 @@ MU.registarTema({
   ];
   var RESSALVA = 'Fonte diferente das outras &eacute;pocas: n&atilde;o compar&aacute;vel em rigor.';
   var BOUNDS_1947 = [[41.12912995365261, -8.700884213830351], [41.189999037480554, -8.539187462666328]];
-  var COR = { veg: '#00FF00', edif: '#C4A882', veg47: '#228B22', edif47: '#888888', perda: '#FF4444', ganho: '#44FF44' };
+  var COR = { veg: '#4E9F5D', edif: '#C4A882', perda: '#D64545', ganho: '#1F9D55' };  /* paleta única: todas as épocas (incl. 1947) são tingidas por filtro SVG */
   var CLASSES_1979 = [
-    ['ABE', 'Elementos artificiais (constru&iacute;do)', '#888888'],
-    ['TRS', '&Aacute;rvores e arbustos', '#1B5E20'],
-    ['HER', 'Herb&aacute;ceas', '#9CCC65'],
-    ['SPV', 'Vegeta&ccedil;&atilde;o esparsa (terrestre)', '#E0C080'],
-    ['AQU', 'Vegeta&ccedil;&atilde;o esparsa (aqu&aacute;tica)', '#4FC3F7']
+    ['ABE', 'Elementos artificiais (constru&iacute;do)', '#C4A882'],
+    ['TRS', '&Aacute;rvores e arbustos', '#357A47'],
+    ['HER', 'Herb&aacute;ceas', '#8DBF7E'],
+    ['SPV', 'Vegeta&ccedil;&atilde;o esparsa (terrestre)', '#D9CBA0'],
+    ['AQU', 'Vegeta&ccedil;&atilde;o esparsa (aqu&aacute;tica)', '#86BCD6']
   ];
 
   /* fundo «Ortofoto 1947» (WMS do CIIMAR/FCUP); só faz sentido neste tema */
@@ -808,22 +808,24 @@ MU.registarTema({
           '<input type="range" id="h-op" min="10" max="100" step="5" value="100" style="flex:1;">' +
           '<span id="h-op-v" class="tema-sub" style="width:30px;">100%</span></div>';
 
-      /* filtro SVG para tingir a 1947 (imagens a 1 bit; sem canvas de 170 Mpx) */
+      /* filtro SVG que tinge as máscaras (alfa) com a paleta única; sem canvas de 170 Mpx */
       var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('width', '0'); svg.setAttribute('height', '0'); svg.style.position = 'absolute';
       var matriz = function (hex) {
         var c = MU.hexToRgb(hex).map(function (v) { return (v / 255).toFixed(4); });
         return '0 0 0 0 ' + c[0] + '  0 0 0 0 ' + c[1] + '  0 0 0 0 ' + c[2] + '  0 0 0 1 0';
       };
-      svg.innerHTML = [['veg', COR.veg47], ['edif', COR.edif47]].map(function (k) {
+      svg.innerHTML = [['veg', COR.veg], ['edif', COR.edif], ['perda', COR.perda], ['ganho', COR.ganho]].map(function (k) {
         return '<filter id="h-tint-' + k[0] + '" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="' +
                matriz(k[1]) + '"/></filter>';
       }).join('');
       painel.appendChild(svg);
 
       /* ---- camadas de cada época (criadas à primeira utilização) ---- */
-      var imagem = function (url, bounds, pane) {
-        return L.imageOverlay(url, bounds, { pane: pane, opacity: opac });
+      var imagem = function (url, bounds, pane, tom) {
+        var ov = L.imageOverlay(url, bounds, { pane: pane, opacity: opac });
+        ov.on('add', function () { ov.getElement().style.filter = 'url(#h-tint-' + tom + ')'; });
+        return ov;
       };
       function camadas(id, panes) {
         var k = id + '|' + panes.masc;
@@ -831,18 +833,16 @@ MU.registarTema({
         var ls;
         if (id === '1947') {
           ls = [['uso_1947_vegetacao', 'veg'], ['uso_1947_edificado', 'edif']].map(function (d) {
-            var ov = imagem(D[d[0]], BOUNDS_1947, panes.o47);
-            ov.on('add', function () { ov.getElement().style.filter = 'url(#h-tint-' + d[1] + ')'; });
-            return ov;
+            return imagem(D[d[0]], BOUNDS_1947, panes.o47, d[1]);
           });
         } else {
-          ls = ['veg', 'edif'].map(function (p) { return imagem(D[p + '_' + id], MU.BOUNDS, panes.masc); });
+          ls = ['veg', 'edif'].map(function (p) { return imagem(D[p + '_' + id], MU.BOUNDS, panes.masc, p); });
         }
         return (cache[k] = ls);
       }
       function perdaGanho() {
-        return mud || (mud = [['veg_perda'], ['veg_ganho']].map(function (d) {
-          return imagem(D[d[0]], MU.BOUNDS, 'hMudPane');
+        return mud || (mud = [['veg_perda', 'perda'], ['veg_ganho', 'ganho']].map(function (d) {
+          return imagem(D[d[0]], MU.BOUNDS, 'hMudPane', d[1]);
         }));
       }
       function detalhe79() {
@@ -902,8 +902,7 @@ MU.registarTema({
       /* ---- estado → mapa e painel ---- */
       var leg = function (cor, txt) { return '<div><i style="background:' + cor + '"></i><span>' + txt + '</span></div>'; };
       var legVegEdif = function (id) {
-        return id === '1947' ? leg(COR.veg47, 'Vegeta&ccedil;&atilde;o 1947') + leg(COR.edif47, 'Edificado 1947')
-                             : leg(COR.veg, 'Vegeta&ccedil;&atilde;o') + leg(COR.edif, 'Edificado');
+        return leg(COR.veg, 'Vegeta&ccedil;&atilde;o') + leg(COR.edif, 'Edificado');
       };
       var q = function (s) { return painel.querySelector(s); };
       function mostrar() {
@@ -932,7 +931,7 @@ MU.registarTema({
             d.nome + ': veg. <b>' + pc(nd.veg) + '</b>, edif. <b>' + pc(nd.edif) + '</b>';
           b79.style.display = 'none';
           q('#h-leg').innerHTML = (est.esq === '1947' || est.dir === '1947')
-            ? leg(COR.veg, 'Vegeta&ccedil;&atilde;o') + leg(COR.edif, 'Edificado') + leg(COR.veg47, 'Vegeta&ccedil;&atilde;o 1947') + leg(COR.edif47, 'Edificado 1947')
+            ? legVegEdif()
             : legVegEdif(est.esq);
           sep.querySelector('.h-etq-e').textContent = a.nome;
           sep.querySelector('.h-etq-d').textContent = d.nome;

@@ -83,7 +83,7 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
 .h-col.active { background:#e8f5e9; border-color:#2E7D32; }
 .h-barras { display:flex; align-items:flex-end; gap:1px; height:60px; }
 .h-b { display:block; width:7px; border-radius:1px 1px 0 0; }
-.h-bv { background:#00FF00; border:1px solid #00b300; box-sizing:border-box; }
+.h-bv { background:#4E9F5D; border:1px solid #357A47; box-sizing:border-box; }
 .h-be { background:#C4A882; }
 .h-ano { font-size:9px; color:#555; line-height:1.6; }
 .h-nums { font-size:11px; color:#333; margin:2px 0; }
