@@ -102,7 +102,7 @@ MEDIDAS = [
         "nao",
         "Tectos de renda de primeira geração (limite rígido à renda)",
         "protegem quem tem contrato; reduzem as mudanças de casa e podem reduzir a oferta; efeito global incerto",
-        "92 estudos (36 países), dos dois tipos. Certeza moderada a alta; nos de 2.ª geração (Portugal), moderada",
+        "112 estudos publicados, dos dois tipos. Certeza moderada a alta; nos de 2.ª geração (Portugal), moderada",
     ),
     (
         "Limitado",
