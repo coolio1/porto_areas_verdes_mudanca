@@ -162,7 +162,7 @@
       var sep = document.createElement('div');
       sep.id = 'h-cortina'; sep.style.display = 'none';
       sep.innerHTML = '<span class="h-etq h-etq-e"></span><span class="h-linha"></span>' +
-                      '<span class="h-asa" title="Arrasta">&#8596;</span><span class="h-etq h-etq-d"></span>';
+                      '<span class="h-asa" tabindex="0" role="slider" aria-label="Posição da comparação" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" title="Arrasta ou usa as setas">&#8596;</span><span class="h-etq h-etq-d"></span>';
       map.getContainer().appendChild(sep);
       L.DomEvent.disableClickPropagation(sep);
       function recorte() {
@@ -174,7 +174,14 @@
         sep.style.left = x + 'px';
       }
       map.on('move zoom resize', recorte);
-      function cortina(p) { pos = Math.max(0.02, Math.min(0.98, p)); recorte(); }
+      function cortina(p) {
+        pos = Math.max(0.02, Math.min(0.98, p)); recorte();
+        sep.querySelector('.h-asa').setAttribute('aria-valuenow', Math.round(pos * 100));
+      }
+      sep.addEventListener('keydown', function (ev) {
+        var d = ev.key === 'ArrowLeft' ? -0.05 : ev.key === 'ArrowRight' ? 0.05 : 0;
+        if (d) { cortina(pos + d); ev.preventDefault(); ev.stopPropagation(); }
+      });
       var arrasto = false;
       sep.addEventListener('pointerdown', function (ev) {
         if (!ev.target.closest('.h-asa, .h-linha')) return;
@@ -296,11 +303,11 @@
 
     activar() {
       var h = MU.historico;
-      h._ligar(true);
+      h._ligar(true);   // mantém o estado (época, cortina, perda/ganho) ao voltar ao separador
       if (MU.param('vista') === '1947') {
         h.seleccionar('1947');
         if (!MU.fundoManual) MU.setFundo('orto1947');
-      } else h.seleccionar(h.estado().epoca || '2023-24');
+      }
     },
     desactivar() { MU.historico._ligar(false); }
   });

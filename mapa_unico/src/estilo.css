@@ -97,3 +97,5 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
 .h-etq { position:absolute; top:56px; background:rgba(255,255,255,.92); color:#222; font:bold 11px 'Segoe UI',Arial,sans-serif; padding:2px 8px; border-radius:4px; box-shadow:0 1px 3px rgba(0,0,0,.25); white-space:nowrap; }
 .h-etq-e { right:10px; }
 .h-etq-d { left:10px; }
+#panel .h-tempo .ab-btn { min-height:28px; }
+.h-asa:focus-visible { outline:3px solid #2E7D32; outline-offset:2px; }
