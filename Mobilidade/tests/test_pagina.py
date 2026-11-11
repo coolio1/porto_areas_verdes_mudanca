@@ -107,6 +107,12 @@ def test_popups_dizem_que_o_tempo_perdido_e_o_total_dos_autocarros():
     assert "no total" in h and "cada um" in h
 
 
+def test_selector_mostrar_por_velocidade_autocarros_e_tempo_perdido():
+    h = html()
+    for modo in ("vel", "ph", "perdido"):
+        assert f'data-modo="{modo}"' in h
+
+
 def test_variante_sem_amostra_diz_sem_dados():
     h = html()
     assert "Sem dados suficientes" in h
