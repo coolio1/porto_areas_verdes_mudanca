@@ -309,6 +309,12 @@
         if (!MU.fundoManual) MU.setFundo('orto1947');
       }
     },
+    aoHash() {   // só mudou um parâmetro do hash com o separador aberto
+      if (MU.param('vista') === '1947') {
+        MU.historico.seleccionar('1947');
+        if (!MU.fundoManual) MU.setFundo('orto1947');
+      }
+    },
     desactivar() { MU.historico._ligar(false); }
   });
 })();
