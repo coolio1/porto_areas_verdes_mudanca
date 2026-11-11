@@ -61,7 +61,8 @@ portoMuniGeom = portoMuni.geometry()
 # Epocas: janelas de 5-6 anos para maximizar cenas disponiveis
 # ============================================================
 EPOCHS = [
-    ('1972-76',  'MSS',        [1972, 1973, 1974, 1975, 1976]),
+    # 1972-76 (MSS) retirado em 2026-11-11: o limiar de NDVI não é transferível entre sensores/bandas MSS
+    # (29-69 % de vegetação conforme a banda), logo não é comparável com o TM. As funções *_mss ficam abaixo, sem uso.
     ('1985-90',  'Landsat 5',  [1985, 1986, 1987, 1988, 1989, 1990]),
     ('1995-00',  'Landsat 5',  [1995, 1996, 1997, 1998, 1999, 2000]),
     ('2001-05',  'Landsat 5',  [2001, 2002, 2003, 2004, 2005]),
