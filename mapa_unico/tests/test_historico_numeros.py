@@ -59,3 +59,24 @@ def test_1979_confere_com_as_areas_vectoriais(nums):
     total = float(ha.sum())
     assert abs(nums["1979"]["veg"] - 100 * (ha["TRS"] + ha["HER"]) / total) < 0.1
     assert abs(nums["1979"]["edif"] - 100 * ha["ABE"] / total) < 0.1
+
+
+def test_mascara_visual_1979_confere_com_as_areas_vectoriais():
+    """O que se vê no mapa (máscara rasterizada) tem de bater com os números (áreas vectoriais)."""
+    import io
+
+    import cobertura_1979 as c79
+
+    g = c79.carregar()
+    ha = g.groupby("LC_1979_ab")["ha"].sum()
+    total = float(ha.sum())
+    mask = np.array(Image.open(RAIZ / "layers_historico" / "porto_mask.png"))[..., 3] > 0
+
+    def pct(png):
+        a = np.array(Image.open(io.BytesIO(png)))[..., 3] > 0
+        return 100 * (a & mask).sum() / mask.sum()
+
+    veg = pct(c79.mascara_png(g, ["TRS", "HER"], c79.COR_VEG))
+    edif = pct(c79.mascara_png(g, ["ABE"], c79.COR_EDIF))
+    assert abs(veg - 100 * (ha["TRS"] + ha["HER"]) / total) < 1.0, veg
+    assert abs(edif - 100 * ha["ABE"] / total) < 1.0, edif

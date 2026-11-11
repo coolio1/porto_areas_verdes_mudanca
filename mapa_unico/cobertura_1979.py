@@ -11,7 +11,7 @@ from pathlib import Path
 
 import geopandas as gpd
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image
 from shapely.validation import make_valid
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -80,21 +80,20 @@ def mascara_png(g: gpd.GeoDataFrame, siglas, cor) -> bytes:
     """Rasteriza as classes `siglas` na grelha das épocas (alfa 255 onde há classe)."""
     lat_s, lon_o, lat_n, lon_e = GRELHA_BOUNDS
     w, h = GRELHA_WH
-    img = Image.new("L", (w, h), 0)
-    d = ImageDraw.Draw(img)
-
-    def px(x, y):
-        return ((x - lon_o) / (lon_e - lon_o) * w, (lat_n - y) / (lat_n - lat_s) * h)
+    # rasterio.rasterize (all_touched=False): sem o contorno que o contorno do polígono que o PIL acrescenta e com
+    # os buracos de cada polígono tratados na própria geometria (sem apagar polígonos vizinhos)
+    from rasterio.features import rasterize
+    from rasterio.transform import from_bounds
 
     w84 = g[g["LC_1979_ab"].isin(siglas)].to_crs(4326)
-    for geom in w84.geometry:
-        for p in _poligonos(geom):
-            if p.geom_type != "Polygon":
-                continue
-            d.polygon([px(x, y) for x, y in p.exterior.coords], fill=255)
-            for i in p.interiors:
-                d.polygon([px(x, y) for x, y in i.coords], fill=0)
-    a = np.array(img)
+    a = rasterize(
+        [(geom, 255) for geom in w84.geometry if not geom.is_empty],
+        out_shape=(h, w),
+        transform=from_bounds(lon_o, lat_s, lon_e, lat_n, w, h),
+        fill=0,
+        all_touched=False,
+        dtype="uint8",
+    )
     rgba = np.zeros((h, w, 4), dtype=np.uint8)
     rgba[a > 0] = cor
     buf = io.BytesIO()
