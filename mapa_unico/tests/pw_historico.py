@@ -1,5 +1,7 @@
 """Verificação do tema Histórico em file:// com Edge (Playwright). Uso: python mapa_unico/tests/pw_historico.py"""
+import os
 import sys
+import tempfile
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -171,9 +173,9 @@ with sync_playwright() as p:
     pt.evaluate("location.hash = 'tema=historico'")
     pt.wait_for_timeout(1500)
     ok("estado) voltar ao separador mantém a comparação", pt.evaluate("MU.historico.estado().comparar") is True and pt.is_visible("#h-cortina .h-asa") and pt.evaluate("getComputedStyle(document.getElementById('h-cortina')).display") == "block")
-    pt.screenshot(path=(sys.argv[1].replace(".png", "_mv.png") if len(sys.argv) > 1 else "hist_mv.png"))
+    pt.screenshot(path=(sys.argv[1].replace(".png", "_mv.png") if len(sys.argv) > 1 else os.path.join(tempfile.gettempdir(), "hist_mv.png")))
     ctx.close()
-    pg.screenshot(path=sys.argv[1] if len(sys.argv) > 1 else "hist_pc.png")
+    pg.screenshot(path=sys.argv[1] if len(sys.argv) > 1 else os.path.join(tempfile.gettempdir(), "hist_pc.png"))
     ok("j) sem erros na consola", not erros, str(erros[:3]))
     b.close()
 
