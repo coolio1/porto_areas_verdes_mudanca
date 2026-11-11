@@ -1009,7 +1009,7 @@ Nota: a ilustração que acompanha este artigo foi gerada por inteligência arti
 
 220. Phang SY, Helble M. Housing policies in Singapore. ADBI Working Paper 559. Tokyo: Asian Development Bank Institute; 2016 Mar. https://www.adb.org/publications/housing-policies-singapore
 
-221. Portaria n.º 238/2024/1, de 2 de Outubro (terceira alteração da Portaria n.º 277-A/2010, Porta 65 Jovem). Diário da República. Disponível em: https://www.ihru.pt ; https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/legislacao/diplomas_legislativos/Documents/Portaria_238_2024_1.pdf
+221. Portaria n.º 238/2024/1, de 2 de Outubro (terceira alteração da Portaria n.º 277-A/2010, Porta 65 Jovem). Diário da República. Disponível em: https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/legislacao/diplomas_legislativos/Documents/Portaria_238_2024_1.pdf ; https://www.ihru.pt
 
 222. Portugal. Código do Imposto Municipal sobre Imóveis, arts. 112.º e 112.º-B. Versão consolidada (última alteração: Decreto-Lei n.º 49/2025, de 27 de Março). Lisboa: Portal das Finanças. Disponível em: https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cod_download/documents/cimi.pdf ; https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cimi/Pages/cimi112.aspx
 
