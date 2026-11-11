@@ -7,8 +7,6 @@ from shapely.ops import substring
 
 from . import geo
 
-PARADO_KMH = 2.0
-
 
 def dividir(rotas: list, alvo_m: float = 200.0) -> pd.DataFrame:
     """Um troço por pedaço de ~`alvo_m` de cada via; índice `troco_id` = "<way_id>:<n>"."""
@@ -40,7 +38,7 @@ def dividir(rotas: list, alvo_m: float = 200.0) -> pd.DataFrame:
 
 
 def colar(df: pd.DataFrame, trocos: pd.DataFrame, max_dist_m: float = 30.0) -> pd.DataFrame:
-    """Acrescenta `troco_id` (None se não colou) e `dir` (+1/−1 pelo sentido da via, 0 se parado ou sem direcção).
+    """Acrescenta `troco_id` (None se não colou) e `dir` (+1/−1 pelo sentido da via, 0 se a leitura não tem direcção).
 
     Só entram troços de vias da própria `linha`, a ≤ `max_dist_m`. Entre os candidatos, os alinhados com
     o movimento (heading dentro de ±90° da tangente) têm preferência; dentro de cada classe, o mais próximo.
@@ -49,7 +47,6 @@ def colar(df: pd.DataFrame, trocos: pd.DataFrame, max_dist_m: float = 30.0) -> p
     out_id = np.full(n, None, dtype=object)
     out_dir = np.zeros(n, dtype=int)
     pts = shapely.points(geo.xy(df.lon, df.lat))
-    kmh = df.kmh.to_numpy(float)
     head = df.direccao.to_numpy(float)
     linha = df.linha.astype(str).to_numpy()
     ids = trocos.index.to_numpy()
@@ -72,7 +69,7 @@ def colar(df: pd.DataFrame, trocos: pd.DataFrame, max_dist_m: float = 30.0) -> p
         p1 = shapely.line_interpolate_point(g, np.clip(s + 1.0, 0, comp))
         tang = np.degrees(np.arctan2(shapely.get_x(p1) - shapely.get_x(p0), shapely.get_y(p1) - shapely.get_y(p0))) % 360
         h = head[sel][a]
-        mov = (kmh[sel][a] > PARADO_KMH) & ~np.isnan(h)
+        mov = ~np.isnan(h)  # o heading do GPS mantém-se com o autocarro parado; só a falta dele dá dir = 0
         alinhado = np.cos(np.radians(np.nan_to_num(h) - tang)) >= 0
         cand = pd.DataFrame({"a": a, "b": b, "classe": np.where(mov & ~alinhado, 1, 0), "d": d,
                              "dir": np.where(mov, np.where(alinhado, 1, -1), 0)})

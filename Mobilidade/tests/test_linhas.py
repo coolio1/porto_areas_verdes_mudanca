@@ -68,6 +68,13 @@ def test_parado_sem_direccao_cola_com_dir_zero():
     assert list(r.dir) == [0, 0]
 
 
+def test_parado_com_direccao_usa_a_direccao():
+    # o heading do GPS nunca vem nulo e mantém-se com o autocarro parado: decide o sentido (±90°)
+    t = linhas.dividir(ROTAS)
+    r = linhas.colar(leituras(("A", 300, 3, 0, 90), ("A", 300, 3, 0, 270)), t)
+    assert list(r.dir) == [1, -1]
+
+
 def test_longe_de_tudo_nao_cola():
     t = linhas.dividir(ROTAS)
     r = linhas.colar(leituras(("A", 300, 50, 20, 90)), t)
