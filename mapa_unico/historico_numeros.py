@@ -4,7 +4,6 @@ Denominador: o concelho do Porto (alfa de layers_historico/porto_mask.png, grelh
 A grelha de 1947 é outra (BOUNDS_1947, 18432x9216): o concelho é reamostrado para ela.
 """
 
-import io
 from pathlib import Path
 
 import numpy as np
@@ -57,10 +56,15 @@ def percentagens(raiz: Path) -> dict:
     out = {}
     for e in EPOCAS:
         if e == "1979":
-            g = c79.carregar()
-            veg = _alfa(io.BytesIO(c79.mascara_png(g, ["TRS", "HER"], c79.COR_VEG)))
-            edif = _alfa(io.BytesIO(c79.mascara_png(g, ["ABE"], c79.COR_EDIF)))
-            out[e] = {"veg": r(contar(veg, concelho)), "edif": r(contar(edif, concelho)), "cobertura": 100.0}
+            # áreas vectoriais (as ha da legenda das 5 classes); a rasterização por PIL incha o contorno.
+            # Denominador: soma das 5 classes (partição do território, ~0,7 % acima do concelho).
+            ha = c79.carregar().groupby("LC_1979_ab")["ha"].sum()
+            total = float(ha.sum())
+            out[e] = {
+                "veg": r(100 * float(ha["TRS"] + ha["HER"]) / total),
+                "edif": r(100 * float(ha["ABE"]) / total),
+                "cobertura": 100.0,
+            }
         elif e == "1947":
             veg = _alfa(raiz / "1947" / "layers" / "uso_1947_vegetacao.png")
             h, w = veg.shape

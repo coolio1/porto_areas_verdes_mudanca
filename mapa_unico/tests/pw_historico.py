@@ -65,6 +65,12 @@ with sync_playwright() as p:
     pg.click("#h-tempo button[data-epoca='1985-90']")
     ok("h) escolher época desliga perda/ganho", not pg.evaluate("MU.historico.estado().perdaGanho") and imgs(pg, "hMudPane") == 0 and imgs(pg, "hMascPane") == 2)
     ok("h) o interruptor fica desmarcado", not pg.is_checked("#h-mud input[type=checkbox]"))
+    pg.click("#h-tempo button[data-epoca='1947']")
+    pg.check("#h-mud input[type=checkbox]")
+    f = pg.inner_text("#h-fonte")
+    ok("h) com perda/ganho a fonte descreve a diferença Landsat, não a época escolhida", "Perda e ganho" in f and "1947" not in f and "Landsat" in f and pg.inner_text("#h-nums").strip() == "", f)
+    pg.click("#h-tempo button[data-epoca='1985-90']")
+    ok("fonte) 2023-24 cita Landsat 8/9 e não atribui Roy et al. ao Landsat 5", "8/9" in (pg.click("#h-tempo button[data-epoca='2023-24']") or pg.inner_text("#h-fonte")) and "Roy" not in (pg.click("#h-tempo button[data-epoca='2001-05']") or pg.inner_text("#h-fonte")))
     # i) opacidade global
     pg.fill("#h-op", "50")
     pg.dispatch_event("#h-op", "input")

@@ -49,3 +49,13 @@ def test_valores_plausiveis(nums):
 def test_cobertura_minima_95(nums):
     for e, v in nums.items():
         assert v["cobertura"] >= 95, f"{e}: cobertura {v['cobertura']} %"
+
+
+def test_1979_confere_com_as_areas_vectoriais(nums):
+    """1979 vem das áreas vectoriais (as mesmas ha da legenda das 5 classes), não de píxeis rasterizados."""
+    import cobertura_1979 as c79
+
+    ha = c79.carregar().groupby("LC_1979_ab")["ha"].sum()
+    total = float(ha.sum())
+    assert abs(nums["1979"]["veg"] - 100 * (ha["TRS"] + ha["HER"]) / total) < 0.1
+    assert abs(nums["1979"]["edif"] - 100 * ha["ABE"] / total) < 0.1

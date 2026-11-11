@@ -3,8 +3,8 @@
    (antes: ~30 caixas por camada; sem NDVI — a página ndvi_historico/ continua à parte). */
 (function () {
   /* id, rótulo, fonte/resolução, fonte diferente das restantes (ressalva) */
-  var L30 = 'Landsat 5 TM, 30 m; NDVI &ge; 0,25 (Roy et al. 2016)';
-  var L8 = 'Landsat 8 OLI, 30 m; NDVI &ge; 0,25 (Roy et al. 2016)';
+  var L30 = 'Landsat 5 TM, 30 m; NDVI &ge; 0,25';
+  var L8 = 'Landsat 8/9 OLI (harmonizado para TM, Roy et al. 2016), 30 m; NDVI &ge; 0,25';
   var EPOCAS = [
     { id: '2023-24', nome: '2023-2024', fonte: L8 },
     { id: '2016-17', nome: '2016-2017', fonte: L8 },
@@ -232,8 +232,13 @@
           return;
         }
         var e = por(est.epoca), n = num[est.epoca];
-        q('#h-fonte').innerHTML = '<b>' + e.nome + '</b>: ' + e.fonte + (e.dif ? '<br><i>' + RESSALVA + '</i>' : '');
-        q('#h-nums').innerHTML = e.nome + ': vegeta&ccedil;&atilde;o <b>' + pc(n.veg) + '</b> &bull; edificado <b>' + pc(n.edif) + '</b>';
+        if (est.perdaGanho) {
+          q('#h-fonte').innerHTML = '<b>Perda e ganho</b>: diferen&ccedil;a entre 1985-90 e 2023-24. ' + por('1985-90').fonte + ' / ' + por('2023-24').fonte;
+          q('#h-nums').innerHTML = '';
+        } else {
+          q('#h-fonte').innerHTML = '<b>' + e.nome + '</b>: ' + e.fonte + (e.dif ? '<br><i>' + RESSALVA + '</i>' : '');
+          q('#h-nums').innerHTML = e.nome + ': vegeta&ccedil;&atilde;o <b>' + pc(n.veg) + '</b> &bull; edificado <b>' + pc(n.edif) + '</b>';
+        }
         b79.style.display = (est.epoca === '1979' && !est.perdaGanho) ? 'block' : 'none';
         b79.textContent = est.det79 ? 'Voltar às 2 classes' : 'Ver as 5 classes de 1979';
         q('#h-leg').innerHTML = est.perdaGanho
