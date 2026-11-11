@@ -196,7 +196,7 @@ def nohyphen(path):
         t1 = re.sub(r"(?<=\d)\s(?=(?:p\.p\.|km|m²|kg|dias|anos|meses)\b)", nb, t1)
         if t1 != t0:
             node.replace_with(NavigableString(t1))
-    pat0 = re.compile(r"(?<![\w/.:@])[^\W_]+(?:-[^\W_]+)+(?![\w/@])")
+    pat0 = re.compile(r"(?<![\w/.:@])[^\W_]+(?:-[^\W_]+)+(?:/\d+)?(?![\w/@])")
     # referências: só palavras soltas (nomes, termos); nunca pedaços de URL
     pat1 = re.compile(r"(?<!\S)[^\W_]+(?:-[^\W_]+)+(?=[\s,;:)]|$)")
     for node in list(soup.find_all(string=True)):
