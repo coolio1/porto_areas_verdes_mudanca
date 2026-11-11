@@ -58,10 +58,11 @@
 
     async montar(painel) {
       var D = MU.DADOS.historico, map = MU.map;
-      var est = { epoca: null, perdaGanho: false, det79: false };
-      var activo = false, visiveis = [], cache = {}, opac = 1, mud = null, det = null;
+      var est = { epoca: null, perdaGanho: false, det79: false, comparar: false, esq: '2023-24', dir: '1947' };
+      var activo = false, visiveis = [], cache = {}, opac = 1, mud = null, det = null, pos = 0.5;
       var PANES = { masc: 'hMascPane', o47: 'h1947Pane' };
-      [['h1947Pane', 405], ['hCobPane', 408], ['hMascPane', 415], ['hMudPane', 420]]
+      var PANES_ESQ = { masc: 'hEsqPane', o47: 'hEsqPane' }, PANES_DIR = { masc: 'hDirPane', o47: 'hDirPane' };
+      [['h1947Pane', 405], ['hCobPane', 408], ['hMascPane', 415], ['hEsqPane', 416], ['hDirPane', 417], ['hMudPane', 420]]
         .forEach(function (p) { map.createPane(p[0]); map.getPane(p[0]).style.zIndex = p[1]; });
 
       /* ---- painel ---- */
@@ -75,6 +76,7 @@
           '<i class="h-b h-be" style="height:' + (n.edif * 0.6).toFixed(1) + 'px"></i></span>' +
           '<span class="h-ano">' + e.id.slice(0, 4) + (e.dif ? '*' : '') + '</span></button>';
       }).join('');
+      var opcoes = EPOCAS.map(function (e) { return '<option value="' + e.id + '">' + e.nome + '</option>'; }).join('');
       var cobBaixa = EPOCAS.filter(function (e) { return num[e.id].cobertura < 100; }).map(function (e) {
         return e.nome + ': cobertura ' + pc(num[e.id].cobertura) + ' do concelho';
       });
@@ -84,6 +86,10 @@
         '<div class="h-tempo" id="h-tempo">' + EPOCAS.map(function (e) {
           return '<button type="button" class="ab-btn" data-epoca="' + e.id + '">' + e.id + '</button>';
         }).join('') + '</div>' +
+        '<div class="h-comp" id="h-comp" style="display:none">' +
+          '<label>Esquerda <select id="h-esq">' + opcoes + '</select></label>' +
+          '<label>Direita <select id="h-dir">' + opcoes + '</select></label>' +
+          '<span class="tema-sub">Arrasta a barra no mapa.</span></div>' +
         '<div class="h-fonte" id="h-fonte"></div>' +
         '<div class="section">% do concelho em cada &eacute;poca</div>' +
         '<div class="h-graf" id="h-graf">' + grafico + '</div>' +
@@ -94,6 +100,7 @@
           (cobBaixa.length ? '<br>' + cobBaixa.join('<br>') : '') + '</div>' +
         '<div class="section">Vista</div>' +
         '<div id="h-mud"></div>' +
+        '<button type="button" id="h-cmp" class="ab-btn" style="margin:4px 0;width:100%">Comparar duas &eacute;pocas</button>' +
         '<button type="button" id="h-79" class="ab-btn" style="display:none;margin:4px 0;width:100%">Ver as 5 classes de 1979</button>' +
         '<div class="leg" id="h-leg"></div>' +
         '<div class="row" style="margin-top:4px;"><label style="font-size:11px;color:#666;" for="h-op">Opacidade</label>' +
@@ -151,51 +158,122 @@
         }));
       }
 
+      /* ---- cortina: dois conjuntos de overlays, cada um num pane recortado ---- */
+      var sep = document.createElement('div');
+      sep.id = 'h-cortina'; sep.style.display = 'none';
+      sep.innerHTML = '<span class="h-etq h-etq-e"></span><span class="h-linha"></span>' +
+                      '<span class="h-asa" title="Arrasta">&#8596;</span><span class="h-etq h-etq-d"></span>';
+      map.getContainer().appendChild(sep);
+      L.DomEvent.disableClickPropagation(sep);
+      function recorte() {
+        if (!activo || !est.comparar) return;
+        var tam = map.getSize(), x = pos * tam.x;
+        var nw = map.containerPointToLayerPoint([0, 0]), se = map.containerPointToLayerPoint(tam), cx = nw.x + x;
+        map.getPane('hEsqPane').style.clip = 'rect(' + nw.y + 'px,' + cx + 'px,' + se.y + 'px,' + nw.x + 'px)';
+        map.getPane('hDirPane').style.clip = 'rect(' + nw.y + 'px,' + se.x + 'px,' + se.y + 'px,' + cx + 'px)';
+        sep.style.left = x + 'px';
+      }
+      map.on('move zoom resize', recorte);
+      function cortina(p) { pos = Math.max(0.02, Math.min(0.98, p)); recorte(); }
+      var arrasto = false;
+      sep.addEventListener('pointerdown', function (ev) {
+        if (!ev.target.closest('.h-asa, .h-linha')) return;
+        arrasto = true;
+        try { ev.target.setPointerCapture(ev.pointerId); } catch (x) { /* sem captura */ }
+        ev.preventDefault(); ev.stopPropagation();
+      });
+      sep.addEventListener('pointermove', function (ev) {
+        if (!arrasto) return;
+        var r = map.getContainer().getBoundingClientRect();
+        cortina((ev.clientX - r.left) / r.width);
+      });
+      var fimArrasto = function () { arrasto = false; };
+      sep.addEventListener('pointerup', fimArrasto);
+      sep.addEventListener('pointercancel', fimArrasto);
+
       /* ---- estado → mapa e painel ---- */
       var leg = function (cor, txt) { return '<div><i style="background:' + cor + '"></i><span>' + txt + '</span></div>'; };
+      var legVegEdif = function (id) {
+        return id === '1947' ? leg(COR.veg47, 'Vegeta&ccedil;&atilde;o 1947') + leg(COR.edif47, 'Edificado 1947')
+                             : leg(COR.veg, 'Vegeta&ccedil;&atilde;o') + leg(COR.edif, 'Edificado');
+      };
+      var q = function (s) { return painel.querySelector(s); };
       function mostrar() {
         visiveis.forEach(function (l) { map.removeLayer(l); });
         visiveis = [];
+        sep.style.display = (activo && est.comparar) ? 'block' : 'none';
         if (!activo) return;
-        var ls = est.perdaGanho ? perdaGanho()
+        var ls = est.comparar ? camadas(est.esq, PANES_ESQ).concat(camadas(est.dir, PANES_DIR))
+               : est.perdaGanho ? perdaGanho()
                : (est.epoca === '1979' && est.det79) ? detalhe79() : camadas(est.epoca, PANES);
         ls.forEach(function (l) { l.addTo(map); visiveis.push(l); });
-        var e = por(est.epoca), n = num[est.epoca];
+        q('#h-tempo').style.display = est.comparar ? 'none' : 'grid';
+        q('#h-comp').style.display = est.comparar ? 'block' : 'none';
+        q('#h-cmp').textContent = est.comparar ? 'Sair da comparação' : 'Comparar duas épocas';
+        boxMud.cb.disabled = est.comparar;
         painel.querySelectorAll('[data-epoca]').forEach(function (b) {
-          b.classList.toggle('active', !est.perdaGanho && b.dataset.epoca === est.epoca);
+          b.classList.toggle('active', !est.comparar && !est.perdaGanho && b.dataset.epoca === est.epoca);
         });
-        painel.querySelector('#h-fonte').innerHTML = '<b>' + e.nome + '</b>: ' + e.fonte + (e.dif ? '<br><i>' + RESSALVA + '</i>' : '');
-        painel.querySelector('#h-nums').innerHTML = e.nome + ': vegeta&ccedil;&atilde;o <b>' + pc(n.veg) + '</b> &bull; edificado <b>' + pc(n.edif) + '</b>';
-        var b79 = painel.querySelector('#h-79');
+        var b79 = q('#h-79');
+        if (est.comparar) {
+          var a = por(est.esq), d = por(est.dir), na = num[est.esq], nd = num[est.dir];
+          q('#h-esq').value = est.esq; q('#h-dir').value = est.dir;
+          q('#h-fonte').innerHTML = '<b>Esq. ' + a.nome + '</b>: ' + a.fonte + '<br><b>Dir. ' + d.nome + '</b>: ' + d.fonte +
+            ((a.dif || d.dif) ? '<br><i>' + RESSALVA + '</i>' : '');
+          q('#h-nums').innerHTML = a.nome + ': veg. <b>' + pc(na.veg) + '</b>, edif. <b>' + pc(na.edif) + '</b><br>' +
+            d.nome + ': veg. <b>' + pc(nd.veg) + '</b>, edif. <b>' + pc(nd.edif) + '</b>';
+          b79.style.display = 'none';
+          q('#h-leg').innerHTML = (est.esq === '1947' || est.dir === '1947')
+            ? leg(COR.veg, 'Vegeta&ccedil;&atilde;o') + leg(COR.edif, 'Edificado') + leg(COR.veg47, 'Vegeta&ccedil;&atilde;o 1947') + leg(COR.edif47, 'Edificado 1947')
+            : legVegEdif(est.esq);
+          sep.querySelector('.h-etq-e').textContent = a.nome;
+          sep.querySelector('.h-etq-d').textContent = d.nome;
+          recorte();
+          return;
+        }
+        var e = por(est.epoca), n = num[est.epoca];
+        q('#h-fonte').innerHTML = '<b>' + e.nome + '</b>: ' + e.fonte + (e.dif ? '<br><i>' + RESSALVA + '</i>' : '');
+        q('#h-nums').innerHTML = e.nome + ': vegeta&ccedil;&atilde;o <b>' + pc(n.veg) + '</b> &bull; edificado <b>' + pc(n.edif) + '</b>';
         b79.style.display = (est.epoca === '1979' && !est.perdaGanho) ? 'block' : 'none';
         b79.textContent = est.det79 ? 'Voltar às 2 classes' : 'Ver as 5 classes de 1979';
-        painel.querySelector('#h-leg').innerHTML = est.perdaGanho
+        q('#h-leg').innerHTML = est.perdaGanho
           ? leg(COR.perda, 'Perda de vegeta&ccedil;&atilde;o (1985-90 &rarr; 2023-24)') + leg(COR.ganho, 'Ganho de vegeta&ccedil;&atilde;o')
           : (est.epoca === '1979' && est.det79)
             ? CLASSES_1979.map(function (c) { return leg(c[2], c[1] + ' (' + ha(D.cobertura_1979_ha[c[0]]) + ')'); }).join('')
-            : est.epoca === '1947' ? leg(COR.veg47, 'Vegeta&ccedil;&atilde;o 1947') + leg(COR.edif47, 'Edificado 1947')
-            : leg(COR.veg, 'Vegeta&ccedil;&atilde;o') + leg(COR.edif, 'Edificado');
+            : legVegEdif(est.epoca);
       }
       function seleccionar(id) {
         if (!por(id)) return;
         if (id !== '1979') est.det79 = false;
-        est.epoca = id; est.perdaGanho = false;
+        est.epoca = id; est.perdaGanho = false; est.comparar = false;
         if (boxMud) boxMud.cb.checked = false;
         mostrar();
       }
+      function comparar(on, esq, dir) {
+        if (on) {
+          if (esq && por(esq)) est.esq = esq;
+          if (dir && por(dir)) est.dir = dir;
+          est.perdaGanho = false; est.det79 = false; boxMud.cb.checked = false;
+        } else if (est.comparar) est.epoca = est.esq;
+        est.comparar = !!on;
+        mostrar();
+      }
 
-      var boxMud = MU.linha(painel.querySelector('#h-mud'), {
+      var boxMud = MU.linha(q('#h-mud'), {
         label: 'Perda e ganho de vegetação (1985-90 → 2023-24)', checked: false,
         onToggle: function (on) { est.perdaGanho = on; mostrar(); }
       });
-      painel.querySelector('#h-79').addEventListener('click', function () { est.det79 = !est.det79; mostrar(); });
+      q('#h-79').addEventListener('click', function () { est.det79 = !est.det79; mostrar(); });
+      q('#h-cmp').addEventListener('click', function () { comparar(!est.comparar); });
+      q('#h-esq').addEventListener('change', function () { est.esq = this.value; mostrar(); });
+      q('#h-dir').addEventListener('change', function () { est.dir = this.value; mostrar(); });
       painel.addEventListener('click', function (ev) {
         var b = ev.target.closest && ev.target.closest('#h-tempo [data-epoca], #h-graf [data-epoca]');
         if (b) seleccionar(b.dataset.epoca);
       });
-      painel.querySelector('#h-op').addEventListener('input', function () {
+      q('#h-op').addEventListener('input', function () {
         opac = +this.value / 100;
-        painel.querySelector('#h-op-v').textContent = this.value + '%';
+        q('#h-op-v').textContent = this.value + '%';
         Object.keys(cache).forEach(function (k) { cache[k].forEach(function (o) { o.setOpacity(opac); }); });
         if (mud) mud.forEach(function (o) { o.setOpacity(opac); });
       });
@@ -203,9 +281,11 @@
       MU.historico = {
         epocas: EPOCAS.map(function (e) { return e.id; }),
         seleccionar: seleccionar,
-        estado: function () { return { epoca: est.epoca, perdaGanho: est.perdaGanho, comparar: false }; },
+        comparar: comparar,
+        cortina: cortina,
+        estado: function () { return { epoca: est.epoca, perdaGanho: est.perdaGanho, comparar: est.comparar }; },
         ligar1979Detalhe: function (on) { est.det79 = !!on; mostrar(); },
-        _ligar: function (on) { activo = on; if (on) { if (!est.epoca) est.epoca = '2023-24'; } mostrar(); }
+        _ligar: function (on) { activo = on; if (on && !est.epoca) est.epoca = '2023-24'; mostrar(); }
       };
     },
 
