@@ -73,6 +73,12 @@ Uma só página, `mapa_unico/mapa_unico.html`, com 4 temas: `#tema=hoje` (Mapa 2
   `1947/orto_1947.html`, `interiores/*.html`) redirecções para o tema certo. Os geradores antigos escrevem nesses
   ficheiros: se algum for corrido, correr `gerar_stubs.py` a seguir.
 - A página 1947 mostrava a classificação em bruto; o Histórico usa a **limpa** (`1947/clean_1947.py`).
+- **Histórico (2026-11-11):** linha do tempo 2023-24 → 1947 (uma época de cada vez, vegetação + edificado), cortina
+  para comparar duas épocas, minigráfico de percentagens por época, perda/ganho como vista, 1979 com 2 classes
+  (e botão para as 5). **Sem NDVI no mapa único** (`ndvi_historico/` e `layers_historico/ndvi_*.png` ficam).
+  `historico_numeros.py` calcula as percentagens (denominador = concelho, `porto_mask.png`; 1947 reamostrada para
+  a sua grelha) e `dados_historico()` grava-as em `numeros`. Testes: `mapa_unico/tests/` (pytest + `pw_historico.py`,
+  Playwright com Edge em `file://`). Desenho e plano: `docs/superpowers/specs|plans/2026-11-11-historico-linha-do-tempo*`.
 - Os PNG do tema Privado vêm de `layers/` (`interior_subsistente_corrigido.png` = versão corrigida; a da
   Acessibilidade, «todas as áreas», é `layers/interior_subsistente_colored.png`).
 - Ficheiros `layers/` e `acessibilidade/layers/` continuam a ser a fonte dos PNG; o mapa único não os lê em
