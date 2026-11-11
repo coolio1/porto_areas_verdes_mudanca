@@ -15,9 +15,16 @@ PAGES = [
     ("index.html", "Início"),
     ("mapa_unico/mapa_unico.html", "Mapas e uso do solo"),
     ("50espacos/", "50 Espaços Verdes"),
-    ("atropelamentos/dashboard_atropelamentos.html", "Atropelamentos"),
     ("Mobilidade/autocarros.html", "Mobilidade"),
 ]
+
+# «Mobilidade» é um só item de menu com dois separadores (barra por baixo do menu, só nestas páginas).
+# A página dos atropelamentos acende «Mobilidade» no menu (alias) e não tem item próprio.
+ABAS_MOBILIDADE = [
+    ("Mobilidade/autocarros.html", "Autocarros"),
+    ("atropelamentos/dashboard_atropelamentos.html", "Atropelamentos"),
+]
+_ALIAS_ACTIVO = {"atropelamentos/dashboard_atropelamentos.html": "Mobilidade/autocarros.html"}
 
 # Páginas Jekyll-only (não entram em PAGES nem em TARGETS mas aparecem em AMBOS os navs)
 _JEKYLL_EXTRA = [
@@ -64,7 +71,7 @@ def get_nav(active_canonical, depth=0):
         else:
             href = canonical
 
-        cls = ' class="active"' if canonical == active_canonical else ""
+        cls = ' class="active"' if canonical == _ALIAS_ACTIVO.get(active_canonical, active_canonical) else ""
         lines.append(f'  <a href="{href}"{cls}>{label}</a>')
 
     for path, label in _JEKYLL_EXTRA:
@@ -72,6 +79,34 @@ def get_nav(active_canonical, depth=0):
         lines.append(f'  <a href="{href}">{label}</a>')
 
     return '<div id="nav">\n' + "\n".join(lines) + "\n</div>"
+
+
+def get_abas_mobilidade(active_canonical, depth=1, fundo_no_telemovel=False):
+    """Barra de separadores Autocarros | Atropelamentos, fixa por baixo do menu (páginas em subpasta).
+
+    `fundo_no_telemovel`: em ecrãs estreitos fica junto ao fundo (páginas com título por baixo do menu).
+    """
+    movel = ("bottom:10px;left:8px;right:8px;top:auto;justify-content:center" if fundo_no_telemovel
+             else "top:70px;right:8px")
+    prefix = "../" * depth
+    current_dir = "/".join(active_canonical.split("/")[:-1])
+    links = []
+    for canonical, label in ABAS_MOBILIDADE:
+        mesma_pasta = "/".join(canonical.split("/")[:-1]) == current_dir
+        href = canonical.split("/")[-1] if mesma_pasta else prefix + canonical
+        cls = ' class="on"' if canonical == active_canonical else ""
+        links.append(f'<a href="{href}"{cls}>{label}</a>')
+    return (
+        '<div id="abas-mobilidade">\n'
+        "<style>#abas-mobilidade{position:fixed;top:40px;right:10px;z-index:1000;display:flex;gap:2px;"
+        "font:12px 'Segoe UI',Arial,sans-serif;background:rgba(255,255,255,.92);border-radius:6px;padding:2px;"
+        "box-shadow:0 1px 4px rgba(0,0,0,.15)}"
+        "#abas-mobilidade a{color:#444;text-decoration:none;padding:4px 12px;border-radius:5px}"
+        "#abas-mobilidade a.on{background:#7a0019;color:#fff}"
+        f"@media(max-width:700px){{#abas-mobilidade{{{movel}}}}}</style>\n  "
+        + "\n  ".join(links)
+        + "\n</div>"
+    )
 
 
 def get_footer_logo(depth=0):

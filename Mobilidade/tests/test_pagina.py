@@ -120,6 +120,17 @@ def test_cada_vista_tem_definicao_e_paleta_propria():
     assert "const PERDIDO = [[0, [242, 224, 247]]" in h
 
 
+def test_menu_so_tem_mobilidade_e_separadores_autocarros_atropelamentos():
+    import nav
+    ativo = nav.get_nav("atropelamentos/dashboard_atropelamentos.html", depth=1)
+    assert 'class="active">Mobilidade<' in ativo and ">Atropelamentos<" not in ativo     # a página dos atropelamentos acende «Mobilidade»
+    abas = nav.get_abas_mobilidade("atropelamentos/dashboard_atropelamentos.html", depth=1)
+    assert 'href="autocarros.html"' not in abas and 'href="../Mobilidade/autocarros.html"' in abas
+    assert 'class="on">Atropelamentos<' in abas
+    h = html()
+    assert 'id="abas-mobilidade"' in h and 'class="on">Autocarros<' in h and 'href="../atropelamentos/dashboard_atropelamentos.html"' in h
+
+
 def test_variante_sem_amostra_diz_sem_dados():
     h = html()
     assert "Sem dados suficientes" in h

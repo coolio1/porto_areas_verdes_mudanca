@@ -5,7 +5,7 @@ Gera um ficheiro HTML com mapa Leaflet + gráficos integrados
 
 import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from carto import aplicar_chave
-from nav import get_nav
+from nav import get_abas_mobilidade, get_nav
 import sqlite3
 import json
 import csv
@@ -421,7 +421,9 @@ def main():
     html = gerar_html(casos, agregados)
 
     with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
-        f.write(aplicar_chave(html.replace('<!--NAV-->', get_nav('atropelamentos/dashboard_atropelamentos.html', depth=1))))
+        f.write(aplicar_chave(html.replace('<!--NAV-->', get_nav('atropelamentos/dashboard_atropelamentos.html', depth=1)
+                                      + get_abas_mobilidade('atropelamentos/dashboard_atropelamentos.html', depth=1,
+                                                                         fundo_no_telemovel=True))))
 
     print(f"Dashboard gerado: {OUTPUT_HTML}")
     print(f"  {len(casos)} casos no mapa")
