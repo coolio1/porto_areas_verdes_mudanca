@@ -45,7 +45,7 @@ def criticos(agg: pd.DataFrame, limiar: float = LIMIAR_KMH) -> pd.DataFrame:
 
 
 def marcadores(crit: pd.DataFrame, trocos: pd.DataFrame, maximo: int = 15) -> list:
-    """Funde troços críticos contíguos (mesma via, índices seguidos, ou a < 100 m) num ponto e nomeia-o.
+    """Agrupa os troços críticos à volta do pior (os que ficam a < 100 m dele, sem encadear) e nomeia cada ponto.
 
     O marcador fica a meio do pior troço do grupo; `perdido` é a soma do grupo; `cruzamento` é o nome da
     via de outra rota que partilha um nó com o pior troço (ou com os vizinhos, até 3 troços de distância).
@@ -53,30 +53,19 @@ def marcadores(crit: pd.DataFrame, trocos: pd.DataFrame, maximo: int = 15) -> li
     if crit.empty:
         return []
     ids = list(dict.fromkeys(crit.troco_id))
-    pai = {i: i for i in ids}
-
-    def raiz(i):
-        while pai[i] != i:
-            pai[i] = pai[pai[i]]
-            i = pai[i]
-        return i
-
-    def unir(a, b):
-        pai[raiz(a)] = raiz(b)
-
-    por_via: dict = {}
-    for i in ids:
-        via, n = i.split(":")
-        por_via.setdefault(via, {})[int(n)] = i
-    for d in por_via.values():
-        for n, i in d.items():
-            if n + 1 in d:
-                unir(i, d[n + 1])
     geoms = trocos.geom.reindex(ids).to_numpy()
-    a, b = shapely.STRtree(geoms).query(geoms, predicate="dwithin", distance=FUNDIR_M)
-    for p, q in zip(a, b):
-        if p < q:
-            unir(ids[p], ids[q])
+    arvore = shapely.STRtree(geoms)
+    posicao = {i: k for k, i in enumerate(ids)}
+    perdido_troco = crit.groupby("troco_id").perdido.sum()
+    livres = set(ids)
+    grupos_ids = []
+    for semente in sorted(ids, key=lambda i: -perdido_troco[i]):  # do pior para o menos mau, sem encadear
+        if semente not in livres:
+            continue
+        membros = [ids[k] for k in arvore.query(geoms[posicao[semente]], predicate="dwithin", distance=FUNDIR_M)
+                   if ids[k] in livres]
+        livres -= set(membros)
+        grupos_ids.append(membros)
 
     nos: dict = {}
     for tid, row in trocos[["way_id", "nome", "nos"]].iterrows():
@@ -95,11 +84,12 @@ def marcadores(crit: pd.DataFrame, trocos: pd.DataFrame, maximo: int = 15) -> li
                         return nome2
         return ""
 
-    grupos: dict = {}
+    por_troco: dict = {}
     for r in crit.itertuples():
-        grupos.setdefault(raiz(r.troco_id), []).append(r)
+        por_troco.setdefault(r.troco_id, []).append(r)
     resultado = []
-    for rows in grupos.values():
+    for membros in grupos_ids:
+        rows = [r for i in membros for r in por_troco[i]]
         pior = max(rows, key=lambda r: r.perdido)
         nome = trocos.nome[pior.troco_id] or next((trocos.nome[r.troco_id] for r in sorted(rows, key=lambda r: -r.perdido)
                                                    if trocos.nome[r.troco_id]), "")

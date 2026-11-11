@@ -93,6 +93,18 @@ def test_marcadores_fundem_trocos_contiguos_e_nomeiam():
     assert m[0]["lat"] == pytest.approx(41.15, abs=1e-5)
 
 
+def test_marcadores_nao_encadeiam_corredores_longos():
+    from velocidade.osm import Rota
+    x = via(1, "Rua X", (0, 0), (1600, 0), list(range(10, 25)))               # 8 troços seguidos
+    t = linhas.dividir([Rota(1, "A", [x])])
+    ids = [f"1:{i}" for i in range(8)]
+    crit = pd.DataFrame({"troco_id": ids, "dir": 1, "v": 5.0, "perdido": [float(i + 1) for i in range(8)]})
+    m = trocos.marcadores(crit, t)
+    assert len(m) >= 3                                       # um corredor de 1,6 km não é um só ponto
+    assert all(len(k["troco_ids"]) <= 3 for k in m)
+    assert sorted(i for k in m for i in k["troco_ids"]) == sorted(ids)   # nenhum troço perdido nem repetido
+
+
 def test_marcadores_sem_cruzamento_nao_rebenta():
     from velocidade.osm import Rota
     x = via(1, "Rua X", (0, 0), (150, 0), [10, 11, 12])
