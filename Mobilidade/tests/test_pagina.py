@@ -113,6 +113,13 @@ def test_selector_mostrar_por_velocidade_autocarros_e_tempo_perdido():
         assert f'data-modo="{modo}"' in h
 
 
+def test_cada_vista_tem_definicao_e_paleta_propria():
+    h = html()
+    assert 'id="definicao"' in h and "Não diz se andam depressa" in h and "somando todos os autocarros" in h
+    # vistas distintas não partilham cores: vermelho/amarelo = velocidade, azul = volume, roxo = tempo perdido
+    assert "const PERDIDO = [[0, [242, 224, 247]]" in h
+
+
 def test_variante_sem_amostra_diz_sem_dados():
     h = html()
     assert "Sem dados suficientes" in h

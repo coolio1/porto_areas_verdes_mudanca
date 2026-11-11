@@ -21,6 +21,7 @@
   .grupo button.on{background:#7a0019;border-color:#7a0019;color:#fff}
   .grupo button.on small{color:#f0c9cf}
   .grupo button:disabled{background:#f3f3f3;color:#aaa;cursor:not-allowed}
+  .definicao{margin:8px 0 0;font-size:12px;line-height:1.4;color:#444;background:#f6f6f6;border-radius:5px;padding:6px 8px}
   .legenda{margin:10px 0 2px}
   .barra{height:10px;border-radius:5px;background:linear-gradient(90deg,#5c0011,#c1272d 35%,#f08a4b 70%,#f7d774)}
   .escala{display:flex;justify-content:space-between;color:#666;font-size:11px;margin-top:2px}
@@ -57,6 +58,7 @@ __NAV__
     <button data-modo="ph">Autocarros por hora</button>
     <button data-modo="perdido">Tempo perdido</button>
   </div>
+  <p id="definicao" class="definicao"></p>
   <div class="legenda"><div class="barra" id="barra"></div>
     <div class="escala"><span id="esc-a"></span><span id="esc-b"></span></div></div>
   <div id="estado"></div>
@@ -81,7 +83,13 @@ const camada = L.layerGroup().addTo(mapa);
 const PARAGENS = [[0, [92, 0, 17]], [.35, [193, 39, 45]], [.7, [240, 138, 75]], [1, [247, 215, 116]]];
 
 const VOLUME = [[0, [198, 219, 239]], [.5, [66, 146, 198]], [1, [8, 48, 107]]];       // poucos -> muitos autocarros
-const PERDIDO = [[0, [247, 215, 116]], [.5, [240, 138, 75]], [.8, [193, 39, 45]], [1, [92, 0, 17]]];  // pouco -> muito tempo perdido
+const PERDIDO = [[0, [242, 224, 247]], [.5, [177, 103, 196]], [1, [64, 10, 98]]];     // pouco -> muito tempo perdido (roxo, para não se confundir com a velocidade)
+const DEFINICAO = {
+  vel: '<b>Velocidade:</b> média a que os autocarros andam em cada troço de rua, sem contar as esperas nas paragens. Quanto mais escuro, mais lento.',
+  ph: '<b>Autocarros por hora:</b> quantos autocarros passam por hora, num sentido (estimativa). Quanto mais escuro, mais autocarros. Não diz se andam depressa ou devagar.',
+  perdido: '<b>Tempo perdido:</b> minutos de autocarro perdidos por hora, somando todos os autocarros, face a andar a 25 km/h. Mostra onde o atraso pesa mais: ruas lentas e muito usadas. Quanto mais escuro, mais tempo perdido.',
+};
+const COR_PONTO = {vel: '#7a0019', perdido: '#400a62'};
 
 function rampa(paragens, t) {
   t = Math.min(1, Math.max(0, t));
@@ -124,6 +132,7 @@ function desenhar() {
     ph: [css(VOLUME), 'poucos autocarros', refPh >= 10 ? Math.round(refPh) + ' ou mais por hora' : f1(refPh) + ' ou mais por hora'],
     perdido: [css(PERDIDO), 'pouco tempo perdido', Math.round(ref) + ' min/h ou mais'],
   }[modo];
+  document.getElementById('definicao').innerHTML = DEFINICAO[modo];
   document.getElementById('barra').style.background = legenda[0];
   document.getElementById('esc-a').textContent = legenda[1];
   document.getElementById('esc-b').textContent = legenda[2];
@@ -156,13 +165,13 @@ function desenhar() {
   const maxM = Math.max(1, ...marcadores.map(m => m.perdido));
   (modo === 'ph' ? [] : marcadores).forEach((m, k) => {      // no volume os pontos críticos só confundiam
     const nome = esc(m.rua || 'Rua sem nome') + (m.cruzamento ? ' &middot; ' + esc(m.cruzamento) : '');
-    const c = L.circleMarker([m.lat, m.lon], {radius: 9 + 15 * Math.sqrt(m.perdido / maxM), color: '#7a0019', weight: 2,
-      fillColor: '#7a0019', fillOpacity: .1}).addTo(camada);
+    const c = L.circleMarker([m.lat, m.lon], {radius: 9 + 15 * Math.sqrt(m.perdido / maxM), color: COR_PONTO[modo], weight: 2,
+      fillColor: COR_PONTO[modo], fillOpacity: .1}).addTo(camada);
     c.bindPopup('<b>' + nome + '</b><br>' + f1(m.v) + ' km/h no troço mais penalizado<br>Neste ponto, no total, os autocarros perdem ' + f1(m.perdido)
       + ' min por hora face a 25 km/h (soma dos troços à volta, nos dois sentidos)');
     if (k < 10) {
       const li = document.createElement('li');
-      li.innerHTML = nome + ' <small>' + f1(m.v) + ' km/h</small>';
+      li.innerHTML = nome + ' <small>' + (modo === 'perdido' ? f1(m.perdido) + ' min/h perdidos' : f1(m.v) + ' km/h') + '</small>';
       li.onclick = () => { mapa.setView([m.lat, m.lon], 16); c.openPopup(); };
       lista.appendChild(li);
     }
