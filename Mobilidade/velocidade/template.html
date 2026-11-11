@@ -58,8 +58,10 @@ __NAV__
   <div id="lista-titulo" style="font-weight:600">Pontos com mais tempo perdido</div>
   <ol id="lista"></ol>
   <p class="aviso">Só autocarros STCP. Média das posições registadas entre __INTERVALO__, com as esperas em paragens e terminais descontadas;
-  o trânsito parado conta. Espessura da linha e tamanho do círculo: minutos de autocarro perdidos por hora face a 25 km/h
-  (mais autocarros e mais lentos, maior).</p>
+  o trânsito parado conta. Espessura da linha e tamanho do círculo: minutos de autocarro perdidos por hora face a 25 km/h,
+  somados para todos os autocarros que passam (mais autocarros e mais lentos, maior).
+  Entram __COLADAS__ % das posições registadas; as linhas sem rota no OpenStreetMap (como a 107 e 605) ficam de fora.
+  Os feriados contam como dias úteis.</p>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -112,8 +114,9 @@ function desenhar() {
     const linha = L.polyline(D.trocos[i], crit
       ? {color: cor(p[2]), weight: 3 + 7 * Math.sqrt(Math.min(1, p[4] / ref)), opacity: .92, lineCap: 'round'}
       : {color: '#b5b5b5', weight: 2, opacity: .45}).addTo(camada);
-    linha.bindPopup(() => '<b>' + f1(p[2]) + ' km/h</b> de média<br>' + f1(p[3]) + ' autocarros por hora<br>'
-      + 'perdem ' + f1(p[4]) + ' min por hora face a 25 km/h'
+    linha.bindPopup(() => '<b>' + f1(p[2]) + ' km/h</b> de média neste sentido<br>'
+      + 'Passam cerca de ' + f1(p[3]) + ' autocarros por hora; no total perdem ' + f1(p[4])
+      + ' min por hora face a 25 km/h (cerca de ' + Math.round(p[4] * 60 / p[3]) + ' s cada um)'
       + (rs.length > 1 ? '<br><span style="color:#777">Outro sentido: ' + f1(rs[1][2]) + ' km/h</span>' : ''));
   }
   const maxM = Math.max(1, ...marcadores.map(m => m.perdido));
@@ -121,7 +124,8 @@ function desenhar() {
     const nome = esc(m.rua || 'Rua sem nome') + (m.cruzamento ? ' &middot; ' + esc(m.cruzamento) : '');
     const c = L.circleMarker([m.lat, m.lon], {radius: 9 + 15 * Math.sqrt(m.perdido / maxM), color: '#7a0019', weight: 2,
       fillColor: '#7a0019', fillOpacity: .1}).addTo(camada);
-    c.bindPopup('<b>' + nome + '</b><br>' + f1(m.v) + ' km/h no pior troço<br>' + f1(m.perdido) + ' min de autocarro perdidos por hora');
+    c.bindPopup('<b>' + nome + '</b><br>' + f1(m.v) + ' km/h no troço mais penalizado<br>Neste ponto, no total, os autocarros perdem ' + f1(m.perdido)
+      + ' min por hora face a 25 km/h (soma dos troços à volta, nos dois sentidos)');
     if (k < 10) {
       const li = document.createElement('li');
       li.innerHTML = nome + ' <small>' + f1(m.v) + ' km/h</small>';

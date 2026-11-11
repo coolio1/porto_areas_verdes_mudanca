@@ -97,6 +97,16 @@ def test_dados_json_estrutura_compacta():
     assert d["dias"] == {"util": 2, "fds": 0} and d["intervalo"] == "9 a 10 de Novembro de 2026"
 
 
+def test_aviso_diz_leituras_coladas_linhas_sem_rota_e_feriados():
+    h = html()
+    assert "94,7 %" in h and "107 e 605" in h and "feriados" in h.lower()
+
+
+def test_popups_dizem_que_o_tempo_perdido_e_o_total_dos_autocarros():
+    h = html()
+    assert "no total" in h and "cada um" in h
+
+
 def test_variante_sem_amostra_diz_sem_dados():
     h = html()
     assert "Sem dados suficientes" in h

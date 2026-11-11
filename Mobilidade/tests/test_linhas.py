@@ -75,6 +75,16 @@ def test_parado_com_direccao_usa_a_direccao():
     assert list(r.dir) == [1, -1]
 
 
+def test_parado_com_direccao_desactualizada_usa_a_ultima_em_movimento():
+    # o GPS parado pode trazer o heading invertido; o sentido é o da última leitura em movimento do mesmo veículo
+    t = linhas.dividir(ROTAS)
+    df = leituras(("A", 100, 3, 20, 90), ("A", 300, 3, 0, 270), ("A", 320, 3, 0, 270))
+    df["veiculo"] = "v"
+    df["obs"] = pd.Timestamp("2026-11-09T10:00:00Z") + pd.to_timedelta([0, 60, 120], unit="s")
+    r = linhas.colar(df, t)
+    assert list(r.dir) == [1, 1, 1]
+
+
 def test_longe_de_tudo_nao_cola():
     t = linhas.dividir(ROTAS)
     r = linhas.colar(leituras(("A", 300, 50, 20, 90)), t)

@@ -7,6 +7,8 @@ from shapely.ops import substring
 
 from . import geo
 
+PARADO_KMH = 2.0
+
 
 def dividir(rotas: list, alvo_m: float = 200.0) -> pd.DataFrame:
     """Um troço por pedaço de ~`alvo_m` de cada via; índice `troco_id` = "<way_id>:<n>"."""
@@ -48,6 +50,13 @@ def colar(df: pd.DataFrame, trocos: pd.DataFrame, max_dist_m: float = 30.0) -> p
     out_dir = np.zeros(n, dtype=int)
     pts = shapely.points(geo.xy(df.lon, df.lat))
     head = df.direccao.to_numpy(float)
+    if {"veiculo", "obs"} <= set(df.columns):
+        # parado, o GPS pode trazer o heading invertido: vale o da última leitura em movimento do mesmo veículo
+        o = df.assign(_p=np.arange(n)).sort_values(["veiculo", "obs"])
+        ult = o.direccao.where(o.kmh > PARADO_KMH).groupby(o.veiculo.to_numpy()).ffill().to_numpy(float)
+        ffill = np.empty(n)
+        ffill[o._p.to_numpy()] = ult
+        head = np.where((df.kmh.to_numpy() <= PARADO_KMH) & ~np.isnan(ffill), ffill, head)
     linha = df.linha.astype(str).to_numpy()
     ids = trocos.index.to_numpy()
     geoms = trocos.geom.to_numpy()

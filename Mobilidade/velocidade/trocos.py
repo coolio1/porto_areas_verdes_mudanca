@@ -10,6 +10,8 @@ V_MIN_KMH = 2.0
 LIMIAR_KMH = 14.0
 MIN_LEITURAS, MIN_VEICULOS, MIN_DIAS = 20, 3, 2
 FUNDIR_M = 100.0
+CADENCIA_S = 60.0
+P_MIN = 0.1
 COLUNAS = ["troco_id", "dir", "n", "veic", "dias", "v", "ph", "perdido"]
 
 
@@ -32,9 +34,11 @@ def agregar(df: pd.DataFrame, trocos: pd.DataFrame, periodo: str, tipo_dia: str)
         n=("kmh", "size"), veic=("veiculo", "nunique"), dias=("dia", "nunique"), v=("kmh", "mean"))
     g = k.join(pas).reset_index()
     g = g[(g.n >= MIN_LEITURAS) & (g.veic >= MIN_VEICULOS) & (g.dias >= MIN_DIAS)].copy()
-    g["ph"] = g.passagens / (dias * (h1 - h0 + 1))
     comp = trocos.comprimento_m.reindex(g.troco_id).to_numpy()
     v = np.maximum(g.v.to_numpy(), V_MIN_KMH)
+    # com 1 leitura por minuto, uma passagem só deixa leitura num troço curto com probabilidade ≈ duração/60 s
+    captura = np.clip(comp / (v / 3.6) / CADENCIA_S, P_MIN, 1.0)
+    g["ph"] = g.passagens / captura / (dias * (h1 - h0 + 1))
     atraso_s = np.maximum(0.0, comp / (v / 3.6) - comp / (V_REF_KMH / 3.6))
     g["perdido"] = g.ph * atraso_s / 60
     return g[COLUNAS].reset_index(drop=True)

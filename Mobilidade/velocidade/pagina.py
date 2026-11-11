@@ -58,5 +58,6 @@ def renderizar(resultado: dict, template: Path) -> str:
              .replace("__FDS_ATRIBUTOS__", botao_fds)
              .replace("__FDS_TEXTO__", texto_fds)
              .replace("__INTERVALO__", d["intervalo"])
+             .replace("__COLADAS__", f"{d['coladas_pct']:.1f}".replace(".", ","))
              .replace("__DADOS__", json.dumps(d, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")))
     return carto.aplicar_chave(corpo)

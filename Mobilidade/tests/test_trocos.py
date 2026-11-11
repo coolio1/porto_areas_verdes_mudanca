@@ -29,14 +29,14 @@ def test_velocidade_ignora_esperas_mas_mantem_zeros_de_transito():
 
 
 def test_passagens_contam_todas_as_leituras_e_so_dias_com_periodo():
-    pm = leit(24, kmh=20.0)                                         # 2 dias, 24 passagens distintas na ponta da tarde
+    pm = leit(24, kmh=10.0)                                         # 2 dias, 24 passagens distintas na ponta da tarde
     manha = leit(4, dias=("2026-11-11",), hora=8, troco="T9")       # 3.º dia só de manhã
     r = agg(pd.concat([pm, manha], ignore_index=True))
     assert r.ph.iloc[0] == pytest.approx(24 / (2 * 3))              # 2 dias × 3 horas, não 3 dias
 
 
 def test_passagens_incluem_as_leituras_de_espera():
-    df = pd.concat([leit(24, kmh=20.0), leit(6, kmh=0.0, espera=True).assign(viagem=lambda d: "e" + d.viagem)], ignore_index=True)
+    df = pd.concat([leit(24, kmh=10.0), leit(6, kmh=0.0, espera=True).assign(viagem=lambda d: "e" + d.viagem)], ignore_index=True)
     assert agg(df).ph.iloc[0] == pytest.approx(30 / 6)
 
 
@@ -55,6 +55,13 @@ def test_tempo_perdido_valor_exacto():
     df = leit(180, veics=("a", "b", "c"), kmh=10.0)               # 180 passagens / (2 dias × 3 h) = 30/h
     r = agg(df)
     assert r.ph.iloc[0] == pytest.approx(30.0) and r.perdido.iloc[0] == pytest.approx(21.6)
+
+
+def test_troco_curto_corrige_passagens_pela_cadencia_de_1_leitura_por_minuto():
+    # 60 m a 10 km/h: a passagem dura 21,6 s e só em 36 % dos casos apanha uma leitura -> ph = 30 / 0,36
+    curto = pd.DataFrame({"comprimento_m": [60.0]}, index=pd.Index(["T1"], name="troco_id"))
+    r = trocos.agregar(leit(180, kmh=10.0), curto, "pm", "util")
+    assert r.ph.iloc[0] == pytest.approx(30 / 0.36)
 
 
 def test_leitura_com_dir_zero_conta_nas_duas_direccoes():

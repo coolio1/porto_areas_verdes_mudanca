@@ -16,6 +16,7 @@ RAIO_VIZINHOS_M = 300.0
 JANELA_S = 180.0
 MIN_VIZINHOS = 2
 LENTO_KMH = 8.0
+ZONA_PARAGEM_M = 100.0
 _EPOCH = pd.Timestamp("1970-01-01", tz="UTC")
 
 
@@ -26,11 +27,14 @@ def _segundos(obs: pd.Series) -> np.ndarray:
 def marcar_esperas(df: pd.DataFrame, paragens: pd.DataFrame, raio_m: float = 40.0) -> pd.Series:
     """True nas leituras que são espera: ≤ 2 km/h a < `raio_m` de uma paragem, sem trânsito lento à volta."""
     p = geo.xy(df.lon, df.lat)
-    perto = cKDTree(geo.xy(paragens.lon, paragens.lat)).query(p)[0] < raio_m
+    dist_paragem = cKDTree(geo.xy(paragens.lon, paragens.lat)).query(p)[0]
+    perto = dist_paragem < raio_m
     t = _segundos(df.obs)
     kmh = df.kmh.to_numpy()
     veic = df.veiculo.to_numpy()
-    fora = np.where(~perto)[0]
+    # prova de trânsito: fora da paragem e, se parados, também fora da zona da paragem (senão uma fila de
+    # regulação a 50 m provava-se a si própria)
+    fora = np.where(~perto & ~((kmh <= PARADO_KMH) & (dist_paragem < ZONA_PARAGEM_M)))[0]
     # eixo do tempo em metros (1 s = 1,67 m) só para a procura; o filtro final é exacto (300 m e ± 180 s)
     esc = RAIO_VIZINHOS_M / JANELA_S
     arvore = cKDTree(np.c_[p[fora], t[fora] * esc])

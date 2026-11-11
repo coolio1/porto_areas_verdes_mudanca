@@ -39,6 +39,11 @@ def test_zero_em_paragem_com_transito_fluido_e_espera():
     assert espera_do_primeiro(("a", 0, 10, 0, 0), ("b", 0, 150, 0, 25), ("c", 60, 0, 200, 25)) is True
 
 
+def test_autocarros_parados_junto_da_paragem_nao_provam_transito():
+    # b e c também estão parados, a 60-70 m da mesma paragem (regulação/fila da paragem): não são prova de trânsito lento
+    assert espera_do_primeiro(("a", 0, 10, 0, 0), ("b", 0, 60, 0, 0), ("c", 30, 70, 0, 0)) is True
+
+
 def test_leitura_em_movimento_junto_a_paragem_nunca_e_espera():
     assert espera_do_primeiro(("a", 0, 10, 0, 30)) is False
 
