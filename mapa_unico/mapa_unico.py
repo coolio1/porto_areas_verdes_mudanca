@@ -114,8 +114,9 @@ def _png_1bit(p: Path) -> bytes:
 
 
 def dados_historico() -> dict:
-    """1947 (limpa, 1 bit), épocas Landsat, perda/ganho e Land cover 1979 (Filipa Guilherme)."""
+    """1947 (limpa, 1 bit), épocas Landsat (sem NDVI), perda/ganho, Land cover 1979 (Filipa Guilherme) e percentagens por época."""
     import cobertura_1979 as c79
+    from historico_numeros import percentagens
 
     hist = RAIZ / "layers_historico"
     d: dict = {}
@@ -127,7 +128,7 @@ def dados_historico() -> dict:
             ).decode()
         )
     for e in EPOCAS:
-        for pre in ("ndvi", "veg", "edif"):
+        for pre in ("veg", "edif"):
             d[f"{pre}_{e}"] = _b64(hist / f"{pre}_{e}.png")
     for k in ("veg_perda", "veg_ganho"):
         d[k] = _b64(hist / f"{k}.png")
@@ -140,6 +141,7 @@ def dados_historico() -> dict:
     d["cobertura_1979_ha"] = {
         k: round(float(v), 1) for k, v in g.groupby("LC_1979_ab")["ha"].sum().items()
     }
+    d["numeros"] = percentagens(RAIZ)
     return d
 
 
