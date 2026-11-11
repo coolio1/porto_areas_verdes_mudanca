@@ -13,8 +13,6 @@
     { id: '1985-90', nome: '1985-1990', fonte: L30 },
     { id: '1979', nome: '1979', dif: true,
       fonte: 'Ocupa&ccedil;&atilde;o do solo 1979 (Filipa Guilherme), vectorial; vegeta&ccedil;&atilde;o = &aacute;rvores, arbustos e herb&aacute;ceas, edificado = elementos artificiais' },
-    { id: '1972-76', nome: '1972-1976', dif: true,
-      fonte: 'Landsat MSS, 60 m (resolu&ccedil;&atilde;o mais grosseira); NDVI &ge; 0,25' },
     { id: '1947', nome: '1947', dif: true,
       fonte: 'Ortofotomapa 1947 (CIIMAR/FCUP); Pixel RF (textura local), limpo com Sentinel-2 e Landsat 1985' }
   ];

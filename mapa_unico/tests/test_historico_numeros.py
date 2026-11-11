@@ -11,7 +11,7 @@ sys.path.insert(0, str(RAIZ))
 
 from historico_numeros import contar, percentagens  # noqa: E402
 
-ORDEM = ["2023-24", "2016-17", "2001-05", "1995-00", "1985-90", "1979", "1972-76", "1947"]
+ORDEM = ["2023-24", "2016-17", "2001-05", "1995-00", "1985-90", "1979", "1947"]
 
 
 @pytest.fixture(scope="module")
@@ -28,7 +28,7 @@ def test_contar_conta_so_dentro_do_concelho():
     assert contar(m, concelho) == 25.0
 
 
-def test_oito_epocas_do_mais_recente_ao_mais_antigo(nums):
+def test_sete_epocas_do_mais_recente_ao_mais_antigo(nums):
     assert list(nums) == ORDEM
 
 

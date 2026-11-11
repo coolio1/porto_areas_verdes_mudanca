@@ -9,7 +9,7 @@ sys.path.insert(0, str(RAIZ))
 
 import mapa_unico  # noqa: E402
 
-LANDSAT = ["1972-76", "1985-90", "1995-00", "2001-05", "2016-17", "2023-24"]
+LANDSAT = ["1985-90", "1995-00", "2001-05", "2016-17", "2023-24"]
 
 
 @pytest.fixture(scope="module")
@@ -22,7 +22,7 @@ def test_sem_ndvi(d):
 
 
 def test_numeros_presente(d):
-    assert list(d["numeros"]) == ["2023-24", "2016-17", "2001-05", "1995-00", "1985-90", "1979", "1972-76", "1947"]
+    assert list(d["numeros"]) == ["2023-24", "2016-17", "2001-05", "1995-00", "1985-90", "1979", "1947"]
 
 
 def test_chaves_mantidas(d):

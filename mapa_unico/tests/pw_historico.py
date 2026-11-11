@@ -6,7 +6,7 @@ from playwright.sync_api import sync_playwright
 
 RAIZ = Path(__file__).resolve().parents[2]
 URL = (RAIZ / "mapa_unico" / "mapa_unico.html").as_uri()
-ORDEM = ["2023-24", "2016-17", "2001-05", "1995-00", "1985-90", "1979", "1972-76", "1947"]
+ORDEM = ["2023-24", "2016-17", "2001-05", "1995-00", "1985-90", "1979", "1947"]
 falhas = []
 
 
@@ -37,7 +37,7 @@ with sync_playwright() as p:
     ok("c) sem camadas NDVI (só o interruptor perda/ganho; o método NDVI pode ser citado na fonte)", pg.eval_on_selector_all("#tema-historico input[type=checkbox]", "e => e.length") == 1 and not pg.evaluate("Object.keys(MU.DADOS.historico).some(k => k.startsWith('ndvi_'))"))
     ok("d) um par de overlays de época", imgs(pg, "hMascPane") == 2, str(imgs(pg, "hMascPane")))
     cols = pg.eval_on_selector_all("#h-graf button", "b => b.map(x => x.dataset.epoca)")
-    ok("e) minigráfico com 8 colunas na mesma ordem", cols == ORDEM, str(cols))
+    ok("e) minigráfico com 7 colunas na mesma ordem", cols == ORDEM, str(cols))
     pg.click("#h-graf button[data-epoca='1947']")
     pg.wait_for_timeout(500)
     ok("e) clicar na barra selecciona a época", pg.evaluate("MU.historico.estado().epoca") == "1947")
@@ -46,7 +46,7 @@ with sync_playwright() as p:
     ok("f) fonte de 1947 com ressalva", "ortofoto" in fonte.lower() and "não comparável" in fonte.lower(), fonte)
     pg.click("#h-tempo button[data-epoca='2016-17']")
     ok("f) fonte de 2016-17 sem ressalva", "não comparável" not in pg.inner_text("#h-fonte").lower())
-    for e in ("1979", "1972-76"):
+    for e in ("1979",):
         pg.click(f"#h-tempo button[data-epoca='{e}']")
         ok(f"f) fonte de {e} com ressalva", "não comparável" in pg.inner_text("#h-fonte").lower())
     # g) vista=1947
@@ -124,7 +124,7 @@ with sync_playwright() as p:
     esq = cores(img, (int(x) - 220, cy - 120, int(x) - 10, cy + 120))
     dire = cores(img, (int(x) + 10, cy - 120, int(x) + 220, cy + 120))
     ok("cortina b) trocar as épocas troca os lados", dire > 1000 and esq < 50, f"esq={esq} dir={dire}")
-    for a, c in (("1979", "2023-24"), ("1947", "1972-76"), ("1972-76", "1979")):
+    for a, c in (("1979", "2023-24"), ("1947", "1979"), ("1985-90", "1979")):
         pg.select_option("#h-esq", a)
         pg.select_option("#h-dir", c)
         pg.wait_for_timeout(300)
@@ -137,7 +137,7 @@ with sync_playwright() as p:
     ok("cortina e) arrastar com o rato move o separador", abs(nx - bx[0] - 120) < 25, f"antes={bx[0]:.0f} depois={nx:.0f}")
     pg.evaluate("MU.historico.comparar(false)")
     est = pg.evaluate("MU.historico.estado()")
-    ok("cortina d) sair repõe a época da esquerda", (not est["comparar"]) and est["epoca"] == "1972-76", str(est))
+    ok("cortina d) sair repõe a época da esquerda", (not est["comparar"]) and est["epoca"] == "1985-90", str(est))
     ok("cortina d) sem separador depois de sair", pg.evaluate("getComputedStyle(document.getElementById('h-cortina')).display") == "none")
     # e) toque a 375 px
     ctx = b.new_context(viewport={"width": 375, "height": 700}, has_touch=True, is_mobile=True)
