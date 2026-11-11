@@ -1,0 +1,8 @@
+# Gerador do mapa de velocidades (Mobilidade/gerar_autocarros.py e Mobilidade/velocidade/).
+# recolher_autocarros.py usa só a biblioteca padrão (Python 3.9+).
+# Correr com: uv run --no-project --with-requirements Mobilidade/requirements.txt --with pytest python -m pytest Mobilidade/tests -q
+pandas
+numpy
+scipy
+shapely
+truststore

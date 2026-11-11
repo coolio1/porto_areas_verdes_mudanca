@@ -49,8 +49,15 @@ _build/pdf-habitacao/.mapa_kb_nota.json
 
 chat/worker/.wrangler/
 
-# Mobilidade: só no disco por enquanto (decisão 2026-11-09)
-Mobilidade/
+# Mobilidade: só no disco por enquanto (decisão 2026-11-09); recolhedor, deploy/ e dados brutos continuam fora.
+# Excepção (decisão 2026-11-11): gerador do mapa de velocidades, testes e página.
+Mobilidade/*
+!Mobilidade/gerar_autocarros.py
+!Mobilidade/autocarros.html
+!Mobilidade/requirements.txt
+!Mobilidade/velocidade/
+!Mobilidade/tests/
+Mobilidade/velocidade/__pycache__/
 
 # Tiny verde: dados brutos reprodutíveis (OSM, 27 MB; python tiny/obter_edificios.py)
 tiny/dados/
