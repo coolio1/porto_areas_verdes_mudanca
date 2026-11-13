@@ -62,3 +62,9 @@ Mobilidade/velocidade/__pycache__/
 # Tiny verde: dados brutos reprodutíveis (OSM, 27 MB; python tiny/obter_edificios.py)
 tiny/dados/
 _build/pdf-habitacao/nota.factos.*.md
+# PDF de habitacao: ficheiros gerados por mkpdf.py
+_build/pdf-habitacao/nota.html
+_build/pdf-habitacao/nota2.md
+_build/pdf-habitacao/nota_raw.pdf
+_build/pdf-habitacao/nota_v26.pdf
+_build/pdf-habitacao/pv/
