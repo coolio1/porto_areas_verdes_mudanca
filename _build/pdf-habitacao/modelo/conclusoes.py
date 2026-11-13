@@ -88,7 +88,7 @@ MEDIDAS = [
         "dep",
         "Menos imposto na compra de casa, mais no imposto anual",
         "recomendação da Organização para a Cooperação e Desenvolvimento Económico (OCDE): o Imposto Municipal sobre as Transmissões Onerosas de Imóveis (IMT) trava mais a mudança de casa do que o Imposto Municipal sobre Imóveis (IMI), o imposto anual",
-        "Estudos no Reino Unido e no Canadá que isolam o efeito dos impostos sobre a compra; pouco estudada em Portugal. Certeza moderada",
+        "Reino Unido e Canadá: mais imposto na compra baixa a mobilidade (−35 a −42 % por +2 p.p.); nos preços, cerca de 60 % de um corte ficou com os compradores. Sem estudo em Portugal. Certeza moderada",
     ),
     (
         "Efeitos adversos",
