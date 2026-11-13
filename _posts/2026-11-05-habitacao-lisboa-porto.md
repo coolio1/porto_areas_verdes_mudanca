@@ -8,7 +8,7 @@ article_class: nota
 tags: [habitação, porto, lisboa, política urbana, alojamento local, imigração, rendas, urbanismo]
 ---
 
-> **Aviso:** Este artigo foi gerado com recurso a inteligência artificial e não reflecte necessariamente a opinião do Porto Verde.
+> **Aviso:** Este artigo foi gerado com recurso a inteligência artificial e não reflecte necessariamente a opinião do Porto Verde, com a excepção da última secção, que expõe a posição do Porto Verde.
 
 {% include conclusoes-habitacao.html %}
 
