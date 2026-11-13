@@ -14,3 +14,5 @@ c34183bdd7 | ok: o objecto é o preço das casas no código postal mediano (cres
 
 161f3ead7e | ok: o objecto é o aumento do número de agregados previsto no cenário demográfico da Carta Municipal de Habitação do Porto (2021–2035) face aos vagos existentes em 2021
 118d648594 | ok: o objecto é a renda mediana por metro quadrado dos contratos novos nas freguesias do Porto
+018baf58f3 | ok: o objecto é o preço das casas no código postal mediano (variação de 8,6 % face a mais 32 % de capital estrangeiro, face ao crescimento de 42 % de 2011–2018)
+5e76fb432e | ok: o objecto é o aumento do número de agregados previsto no cenário demográfico da Carta Municipal de Habitação do Porto (2021–2035) face aos vagos existentes em 2021
