@@ -91,7 +91,7 @@ def build():
  <div class="kick">Síntese deste artigo</div><div class="tit" role="heading" aria-level="2">Conclusões</div>
  <p class="tese">{c.TESE}</p></div>
 <div class="nums">{nums}</div>
-<div class="choques"><p class="sec">Cinco choques na procura (aumentos súbitos e fortes do número de pessoas ou do dinheiro à procura de casa)</p><div class="cs">{chq}</div></div>
+<div class="choques"><p class="sec">Cinco choques na procura (aumentos fortes de pessoas ou de dinheiro à procura de casa; o 1.º, uma tendência longa)</p><div class="cs">{chq}</div></div>
 <div class="ver"><p class="sec">O que dizem os estudos sobre cada medida</p>{ver}</div>
 </section>
 """
