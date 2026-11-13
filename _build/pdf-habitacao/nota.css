@@ -156,11 +156,11 @@ section#recomendações>h2,section#referências>h2{break-before:auto;margin-top:
 .conc .ver{padding:2.4mm 15mm 0}
 .conc .ln{display:grid;grid-template-columns:23mm 1fr;gap:3mm;align-items:start;padding:1.9mm 0;border-top:.5pt solid #dfe6da}
 .conc .ln:first-of-type{border-top:none}
-.conc .ln{grid-template-columns:11mm 1fr 23mm;align-items:center;padding:.5mm 0}
+.conc .ln{grid-template-columns:11mm 1fr 28mm;align-items:center;padding:.7mm 0}
 .conc .ic{display:flex;align-items:center;justify-content:center;width:8.6mm;height:8.6mm;border-radius:50%;background:color-mix(in srgb,var(--c) 13%,white)}
 .conc .ic svg{width:6.6mm;height:6.6mm;fill:none;stroke:var(--c);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .conc .ok{--c:var(--folha)}.conc .dep{--c:var(--ceu)}.conc .nao{--c:var(--terra)}.conc .peq{--c:#6f776f}
-.conc .selo{display:block;text-align:center;font:700 6.2pt var(--fu);letter-spacing:.08em;text-transform:uppercase;color:#fff;padding:1.2mm 0;border-radius:2px;white-space:nowrap}
+.conc .selo{display:block;text-align:center;font:700 5.9pt var(--fu);letter-spacing:.05em;text-transform:uppercase;color:#fff;padding:1.3mm 0;border-radius:2px;white-space:nowrap}
 .conc .ok .selo{background:var(--folha)}.conc .dep .selo{background:var(--ceu)}.conc .nao .selo{background:var(--terra)}.conc .peq .selo{background:#8a918a}
 .conc .ln h3{font:700 9.2pt/1.12 var(--fd);color:var(--verde);margin:0 0 .4mm;break-after:auto}
 .conc .ln .ef{font:600 7.5pt/1.25 var(--fu);color:#1e2620;margin:.5mm 0 0}

@@ -67,7 +67,7 @@ MEDIDAS = [
         "ok",
         "Regular e fiscalizar o alojamento local",
         "preços de venda cerca de 8 % abaixo dos de zonas semelhantes sem a medida, só nos bairros abrangidos (Lisboa, suspensão de 2018)",
-        "Rendas (estudos não comparáveis): mais AL sobe-as em Berlim (até +2,4 % por anúncio comercial a mais); restringir o AL baixou-as em Los Angeles (cerca de −2 %); em Sydney subiram 2,7–3,6 % depois das regras. Certeza moderada",
+        "Rendas (estudos não comparáveis): mais AL sobe-as em Berlim (até +2,4 % por anúncio comercial a mais); restringir o AL baixou-as em Los Angeles (cerca de −2 %); em Sydney subiram 2,7–3,6 %. Certeza moderada",
     ),
     (
         "Funciona, pouco",
@@ -87,29 +87,29 @@ MEDIDAS = [
         "Depende",
         "dep",
         "Menos imposto na compra de casa, mais no imposto anual",
-        "recomendação da Organização para a Cooperação e Desenvolvimento Económico (OCDE): o Imposto Municipal sobre as Transmissões Onerosas de Imóveis (IMT) trava mais a mudança de casa do que o Imposto Municipal sobre Imóveis (IMI), o imposto anual",
+        "recomendação da Organização para a Cooperação e Desenvolvimento Económico (OCDE): o imposto sobre a compra (IMT) trava mais a mudança de casa do que o imposto anual (IMI)",
         "Reino Unido e Canadá: mais imposto na compra baixa a mobilidade (−35 a −42 % por +2 p.p.); nos preços, cerca de 60 % de um corte ficou com os compradores. Sem estudo em Portugal. Certeza moderada",
     ),
     (
         "Efeitos adversos",
         "nao",
         "Apoios a quem compra casa",
-        "isenção do IMT a jovens até 35 anos: preços pedidos nos anúncios cerca de 3,2 % acima do que se estima que teriam sido sem a isenção, 12 meses depois de a medida ser anunciada (Maio de 2024); <em>Help to Buy</em> (crédito em Inglaterra): fez subir os preços em Londres cerca de 7,9 % mais do que logo fora da Grande Londres",
-        "Quando não se constroem mais casas, o apoio a quem compra vai parar ao preço (diferente de trocar imposto na compra por imposto anual). Certeza moderada",
+        "isenção do IMT a jovens até 35 anos: preços pedidos cerca de 3,2 % acima do estimado sem a isenção, 12 meses depois de anunciada (Maio de 2024); <em>Help to Buy</em> (crédito em Inglaterra): fez subir os preços em Londres cerca de 7,9 % mais do que logo fora da Grande Londres",
+        "Sem mais casas, o apoio a quem compra vai parar ao preço (não é trocar imposto na compra pelo anual). Certeza moderada",
     ),
     (
         "Efeitos adversos",
         "nao",
         "Tectos de renda de primeira geração (limite rígido à renda)",
         "protegem quem tem contrato; reduzem as mudanças de casa e podem reduzir a oferta; efeito global incerto",
-        "112 estudos publicados, dos dois tipos. Certeza moderada a alta; nos de 2.ª geração (os de Portugal não foram avaliados), moderada",
+        "112 estudos, dos dois tipos. Certeza moderada a alta; nos de 2.ª geração (Portugal não avaliado), moderada",
     ),
     (
         "Limitado",
         "peq",
         "Impostos sobre compradores estrangeiros",
         "preços cerca de 5 % mais baixos em Vancouver e 7 a 9 % em Toronto, sem melhoria detectada nas rendas",
-        "Colúmbia Britânica e Ontário (Canadá). Efeito limitado: sem melhoria nas rendas e pouco peso em Portugal, onde os não residentes (por residência fiscal, não nacionalidade) são 5,0 % das transacções (2025). Certeza baixa (resultados tirados dos resumos publicados)",
+        "Colúmbia Britânica e Ontário. Sem melhoria nas rendas; pouco peso em Portugal (não residentes fiscais: 5,0 % das transacções, 2025). Certeza baixa (resultados tirados dos resumos publicados)",
     ),
 ]
 
