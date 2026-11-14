@@ -73,8 +73,8 @@ MEDIDAS = [
         "Funciona, pouco",
         "ok",
         "Construir mais",
-        "preços 3 a 6 % mais baixos (simulação); rendas dos T3 17 a 26 % mais baixas (Auckland, reforma do zonamento)",
-        "Valores não comparáveis; T3 = três quartos. Certeza moderada a alta na direcção, baixa na dimensão",
+        "preços 3 a 6 % mais baixos (simulação); rendas cerca de 23 % mais baixas oito anos depois (Auckland, reforma do zonamento)",
+        "Valores não comparáveis. Certeza moderada na direcção, baixa na dimensão",
     ),
     (
         "Sem medição",
@@ -94,7 +94,7 @@ MEDIDAS = [
         "Efeitos adversos",
         "nao",
         "Apoios a quem compra casa",
-        "isenção do IMT a jovens até 35 anos: preços pedidos cerca de 3,2 % acima do estimado sem a isenção, 12 meses depois de anunciada (Maio de 2024); <em>Help to Buy</em> (crédito em Inglaterra): fez subir os preços em Londres cerca de 7,9 % mais do que logo fora da Grande Londres",
+        "isenção do IMT a jovens até 35 anos: preços pedidos cerca de 3,2 % acima do estimado sem a isenção, 12 meses depois de anunciada (Maio de 2024); <em>Help to Buy</em> (crédito em Inglaterra): fez subir os preços das casas novas em Londres entre 4,5 % e 6,4 % mais do que logo fora da Grande Londres",
         "Sem mais casas, o apoio a quem compra vai parar ao preço (não é trocar imposto na compra pelo anual). Certeza moderada",
     ),
     (
