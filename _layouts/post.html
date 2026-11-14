@@ -74,6 +74,10 @@ layout: default
     margin: 2.5rem 0;
   }
   article strong { color: var(--text); }
+  /* modo Leitura: serifa no texto e nos títulos; sans nos metadados, tabelas e rodapé do artigo */
+  article { font-family: var(--pv-serif); font-size: 1.06rem; }
+  .post-title, article h2, article h3 { font-family: var(--pv-serif); font-weight: 800; letter-spacing: -0.01em; }
+  .post-meta, .post-tag, .post-footer, article table, article figcaption { font-family: var(--pv-sans); }
   .post-footer {
     margin-top: 3rem;
     padding-top: 1.5rem;
@@ -90,7 +94,7 @@ layout: default
   article table.tabela-texto thead th:last-child, article table.tabela-texto tbody td:last-child { text-align: left; }
   /* artigos com identidade da nota PDF (article_class: nota) */
   article.nota h2 {
-    font-family: "Sitka Display", "Sitka Heading", Georgia, serif;
+    font-family: var(--pv-serif);
     font-size: 1.55rem;
     line-height: 1.2;
     color: #1B4D20;
@@ -98,7 +102,7 @@ layout: default
     padding-top: 0.7rem;
     margin-top: 3rem;
   }
-  article.nota h3 { font-family: "Sitka Display", "Sitka Heading", Georgia, serif; color: #2E7D32; }
+  article.nota h3 { font-family: var(--pv-serif); color: var(--pv-verde); }
   article.nota blockquote {
     background: #f1f6ee;
     border-left: 4px solid #2E7D32;

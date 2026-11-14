@@ -28,3 +28,4 @@ repos:
         entry: python check_leaflet_init.py
         language: system
         files: \.html$
+        exclude: ^mapa_unico/src/  # fragmentos: o L.map está em core.js

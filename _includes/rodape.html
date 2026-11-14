@@ -1,0 +1,5 @@
+<footer class="pv-rodape pv-rodape--leitura">
+  {% unless page.url == "/" %}<a class="pv-rodape__logo" href="{{ site.baseurl }}/"><img src="{{ site.baseurl }}/favicon.png" alt="Porto Verde"></a>{% endunless %}
+  <p><a href="https://coolio1.github.io/" target="_blank" rel="noopener">Nuno Quental</a><br>
+  Dados abertos: {{ page.fontes | default: "Sentinel-2, Landsat, OSM, PDM Porto" }}</p>
+</footer>

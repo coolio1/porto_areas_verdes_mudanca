@@ -35,19 +35,75 @@ _JEKYLL_EXTRA = [
 ]
 
 
+# Condição Liquid que acende cada item no menu Jekyll (o mapa único e a Mobilidade não são páginas Jekyll)
+_ACTIVO_JEKYLL = {
+    "index.html": 'page.url == "/"',
+    "50espacos/": 'page.url contains "/50espacos"',
+    "artigos/": 'page.url contains "/artigos" or page.layout == "post"',
+    "sobre/": 'page.url contains "/sobre"',
+}
+
+
 def get_jekyll_nav():
     """
     Devolve o bloco <nav>...</nav> para Jekyll (_includes/nav.html).
     Usa {{ site.baseurl }} — processado pelo Liquid em build time.
+    O item da página actual leva class="active" (condições em _ACTIVO_JEKYLL).
     """
     base = "{{ site.baseurl }}"
     lines = []
-    for canonical, label in PAGES:
+    for canonical, label in PAGES + _JEKYLL_EXTRA:
         href = base + "/" if canonical == "index.html" else base + "/" + canonical
-        lines.append(f'  <a href="{href}">{label}</a>')
-    for path, label in _JEKYLL_EXTRA:
-        lines.append(f'  <a href="{base}/{path}">{label}</a>')
+        cond = _ACTIVO_JEKYLL.get(canonical)
+        activo = f'{{% if {cond} %}} class="active"{{% endif %}}' if cond else ""
+        lines.append(f'  <a href="{href}"{activo}>{label}</a>')
     return "<nav>\n" + "\n".join(lines) + "\n</nav>"
+
+
+# ---------- Moldura comum: CSS e rodapé (porto-verde.css) ----------
+CSS_COMUM = "assets/css/porto-verde.css"
+FONTES_PADRAO = "Sentinel-2, Landsat, OSM, PDM Porto"
+# Fontes de dados por página (canonical -> texto). Sem entrada: FONTES_PADRAO.
+FONTES = {
+    "Mobilidade/analise.html": (
+        "Associação Porto Digital (posições dos autocarros), STCP (horários), "
+        "Câmara Municipal do Porto (corredores BUS e semáforos), OSM"
+    ),
+}
+
+
+def get_css_link(depth=0):
+    """<link> para o CSS comum; vai no início do bloco do menu (válido no <body>)."""
+    return f'<link rel="stylesheet" href="{"../" * depth}{CSS_COMUM}">\n'
+
+
+def _rodape(modo, href_indice, href_logo, fontes, sem_logo_na_inicial=False):
+    logo = f'<a class="pv-rodape__logo" href="{href_indice}"><img src="{href_logo}" alt="Porto Verde"></a>'
+    if sem_logo_na_inicial:  # a página inicial já tem o logótipo grande no cabeçalho
+        logo = '{% unless page.url == "/" %}' + logo + "{% endunless %}"
+    return (
+        f'<footer class="pv-rodape pv-rodape--{modo}">\n'
+        f"  {logo}\n"
+        f'  <p><a href="https://coolio1.github.io/" target="_blank" rel="noopener">Nuno Quental</a><br>\n'
+        f"  Dados abertos: {fontes}</p>\n"
+        "</footer>"
+    )
+
+
+def get_rodape(active_canonical, depth=0, modo="leitura"):
+    """Rodapé para páginas geradas. modo: 'leitura' (fim da página) ou 'mapa' (etiqueta fixa em baixo)."""
+    prefix = "../" * depth
+    fontes = FONTES.get(active_canonical, FONTES_PADRAO)
+    return _rodape(modo, prefix + "index.html", prefix + "favicon.png", fontes)
+
+
+def get_rodape_jekyll():
+    """Rodapé para Jekyll (_includes/rodape.html); fontes por página via front matter `fontes:`."""
+    return _rodape(
+        "leitura", "{{ site.baseurl }}/", "{{ site.baseurl }}/favicon.png",
+        '{{ page.fontes | default: "' + FONTES_PADRAO + '" }}',
+        sem_logo_na_inicial=True,
+    )
 
 
 def get_nav(active_canonical, depth=0):
@@ -104,7 +160,7 @@ def get_abas_mobilidade(active_canonical, depth=1, fundo_no_telemovel=False):
         "font:12px 'Segoe UI',Arial,sans-serif;background:rgba(255,255,255,.92);border-radius:6px;padding:2px;"
         "box-shadow:0 1px 4px rgba(0,0,0,.15)}"
         "#abas-mobilidade a{color:#444;text-decoration:none;padding:4px 12px;border-radius:5px}"
-        "#abas-mobilidade a.on{background:#7a0019;color:#fff}"
+        "#abas-mobilidade a.on{background:var(--pv-verde,#0B5232);color:#fff}"
         f"@media(max-width:700px){{#abas-mobilidade{{{movel}}}}}</style>\n  "
         + "\n  ".join(links)
         + "\n</div>"
