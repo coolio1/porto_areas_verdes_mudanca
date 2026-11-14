@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Casas em Lisboa e Porto: o que causou a subida, o que funciona e o que ainda é só promessa"
-description: "O que diz a literatura científica sobre a subida da habitação em Portugal, o que deu resultado noutros países e que ideias menos conhecidas têm resultado medido. A leitura mais provável: faltam casas a preços que as famílias consigam pagar onde elas são precisas, e nenhuma medida isolada resolve."
+title: "Casas em Lisboa e Porto: o que causou a subida de preços, o que funciona e o que ainda é só promessa"
+description: "O que diz a literatura científica sobre a subida dos preços da habitação em Portugal, o que deu resultado noutros países e que ideias menos conhecidas têm resultado medido. A leitura mais provável: faltam casas a preços que as famílias consigam pagar onde elas são precisas, e nenhuma medida isolada resolve."
 date: 2026-11-05
 image: /assets/images/habitacao-ilustracao-casas.jpg
 article_class: nota
@@ -12,25 +12,29 @@ tags: [habitação, porto, lisboa, política urbana, alojamento local, imigraç�
 
 {% include conclusoes-habitacao.html %}
 
+## Síntese científica
+
+### Enquadramento
+
 Entre 2008 e 2025, o índice de preços da habitação em Portugal subiu 145 %; o rendimento disponível total das famílias, 69 % (Eurostat, gabinete de estatística da União Europeia). Ambos em valores nominais, sem descontar a inflação. Só em 2025, os preços subiram 17,6 % (Instituto Nacional de Estatística, INE). Nas rendas, a mediana dos novos contratos foi de 10,17 € por m² por mês no 2.º trimestre de 2026, mais 10,2 % do que um ano antes (INE). São números nacionais, porque nem sempre há dados por cidade.
 
 ![Desde 2008, os preços das casas em Portugal subiram 145 % e o rendimento disponível das famílias 69 %]({{ site.baseurl }}/assets/images/habitacao-fig1-serie-2008-2025.png)
 *Preços das casas e rendimento disponível total das famílias em Portugal, 2008–2025 (índice: 2008 = 100; 200 é o dobro). Valores nominais, sem descontar a inflação. Fonte: Eurostat.*
 
-## Ninguém mediu quanto pesa cada causa
+### 1. Causas: o que está medido e o que não está
 
-Não há, em Portugal, nenhum estudo publicado que diga «tantos por cento da subida deve-se ao turismo, tantos à imigração, tantos ao crédito». «A culpa é do alojamento local» ou «dos estrangeiros» é, hoje, um **juízo**, não uma medição. A hipótese que os dados melhor sustentam é mais modesta, e mais firme: **falta de casas em sítios concretos**, sobre a qual caíram, ao mesmo tempo, cinco choques de procura (quadro acima).
+Não há, em Portugal, nenhum estudo publicado que diga «tantos por cento da subida deve-se ao turismo, tantos à imigração, tantos ao crédito». Atribuir a subida ao alojamento local ou à imigração é, hoje, uma **hipótese não quantificada** para Portugal, não um resultado medido. A hipótese mais bem sustentada pelos dados é mais modesta e mais robusta: **falta de casas em sítios concretos**, sobre a qual caíram, ao mesmo tempo, cinco choques de procura (quadro acima).
 
 Entre 2021 e 2024, o número de famílias cresceu cerca de 14 mil por ano mais do que o de alojamentos (Banco de Portugal), e em 49 % dos municípios, onde vivem 69 % das famílias, cresceu mais do que a oferta. As casas novas licenciadas caíram de 95,7 mil em 2002 para 7,5 mil em 2013 e só recuperaram até 42 mil em 2025, cerca de 44 % do nível de 2002; em 2023, uma licença demorava 545 dias em Lisboa e 453 no Porto (Banco Mundial, citado pela Organização para a Cooperação e Desenvolvimento Económico, OCDE).
 
-## O que se mediu noutros países
+### 2. Evidência por medida
 
-Estudos e contextos diferentes: são ordens de grandeza, não valores directamente comparáveis. Onde a análise assenta só no resumo publicado, está dito. O artigo assenta em mais de 300 referências, e o detalhe de cada caso está na nota completa (PDF, no fim).
+Os estudos diferem em país, período, método e variável medida (preços, rendas ou oferta): os valores são ordens de grandeza, não valores directamente comparáveis. Onde a análise assenta só no resumo publicado, a coluna «Limitações» indica-o. O artigo assenta em mais de 300 referências, e o detalhe de cada caso está na nota completa (PDF, no fim).
 
 ![Efeito estimado de várias medidas nos preços: construir e regular o alojamento local baixam-nos; apoios à compra sem mais casas sobem-nos]({{ site.baseurl }}/assets/images/habitacao-fig4-efeitos-precos.png)
 *Estudos e contextos diferentes: ordens de grandeza, não valores directamente comparáveis.*
 
-| Onde e quando | O que se mediu | Ressalva |
+| Contexto | Efeito estimado | Limitações |
 |---|---|---|
 | Portugal, municípios (*Regional Studies*, 2025) | Parque habitacional 1 % maior, preços 0,6 % mais baixos. Simulação: com o ritmo de construção dos anos 2000 em 2012–2022, preços só cerca de 3 % mais baixos; ao dobro do ritmo, 6 % | Simulação, não medição |
 | Auckland, Nova Zelândia (zonamento liberalizado em 2016) | Rendas dos T3 17 a 26 % abaixo do que teriam sido em 2022 (Greenaway-McGrevy e So) | Estimativa sobre rendas; não se compara com a simulação portuguesa, que é sobre preços |
@@ -48,27 +52,27 @@ Estudos e contextos diferentes: são ordens de grandeza, não valores directamen
 | Lisboa (Renda Segura), Portugal (Arrendamento Acessível), Austrália (NRAS) | Renda Segura: cerca de mil contratos previstos, 235 imóveis com contrato. Arrendamento Acessível: menos de 1 000 contratos para cerca de 35 000 famílias com candidatura válida (2,7 %). NRAS: mais de 22 000 casas saíram do programa em 2022–2024 | Programas que ficaram aquém do previsto (dados do município, imprensa, avaliação externa) |
 {: .tabela-texto}
 
-**Só promessa**, porque ninguém comparou o que aconteceu com o que teria acontecido sem a medida: construção modular, conversão de escritórios em casas, partilha de casa, cooperativas como La Borda (Barcelona) e concursos de terreno público pelo melhor projecto. Nos estudos citados, nenhuma medida aplicada sozinha baixou os preços de venda de uma cidade inteira 10 % ou mais; os maiores efeitos nas rendas são os de Auckland e o do congelamento de Berlim (à custa de metade das casas anunciadas).
+**Sem avaliação causal (só promessa):** ninguém comparou o que aconteceu com o que teria acontecido sem a medida: construção modular, conversão de escritórios em casas, partilha de casa, cooperativas como La Borda (Barcelona) e concursos de terreno público pelo melhor projecto. Nos estudos citados, nenhuma medida aplicada sozinha baixou os preços de venda de uma cidade inteira 10 % ou mais; os maiores efeitos nas rendas são os de Auckland e o do congelamento de Berlim (à custa de metade das casas anunciadas).
 
-## Casas vagas: muitas, mas pouco mobilizáveis de cada vez
+### 3. Casas vagas: stock elevado, potencial de mobilização limitado
 
 Nos Censos de 2021 (INE), Lisboa tinha 47 748 alojamentos vagos e o Porto 20 270, cerca de 15 % do parque em cada cidade. Os que uma política de mobilização pode alcançar são os que estão fora do mercado e em bom estado: 21 801 em Lisboa e 7 799 no Porto. Lá fora, os impostos sobre casas vagas dão resultados modestos (em França, cerca de 8,6 % menos casas vagas, em termos relativos, onde a taxa passou a aplicar-se em 2013, mas parte da descida pode ser só actualização de registos). Um cálculo ilustrativo deste artigo dá **poucos milhares de fogos, de uma só vez**, não dezenas de milhares: mobilizar vagas complementa a oferta nova, não a substitui.
 
-## Construir mais, sem destruir o que protege a cidade
+### 4. Restrição territorial: construir sem comprometer a estrutura ecológica
 
 A oferta nova tem de respeitar o ordenamento do território: não pode ocupar a estrutura ecológica (as áreas que o Plano Director Municipal protege, como espaços verdes e linhas de água) nem as áreas inundáveis. Há uma ordem de preferência, e as vias avançam ao mesmo tempo: primeiro as casas que já existem e a reabilitação, depois o solo já urbanizado, depois construir mais onde já há cidade, e só por fim solo livre, fora da estrutura ecológica. É uma leitura feita a partir dos estudos, não uma conclusão deles. As propostas da Associação Campo Aberto ao Plano Director Municipal do Porto (2020) mostram o tipo de regras em causa; um membro da equipa do Porto Verde participou na sua elaboração, e este artigo não adopta as que limitavam a urbanização dos terrenos livres, porque partiam de uma premissa de população que o crescimento desde 2021 desmentiu.
 
-## O pacote: três etapas, mais medidas em paralelo
+### 5. Implicações para a política: sequência e grau de certeza
 
-A leitura mais provável: há **escassez de casas a preço ou renda que as famílias de rendimento médio conseguem pagar, numa economia que recebeu vários choques de procura ao mesmo tempo**. Daí:
+A hipótese mais provável, dada a evidência reunida: há **escassez de casas a preço ou renda que as famílias de rendimento médio conseguem pagar, numa economia que recebeu vários choques de procura ao mesmo tempo**. Daí a sequência proposta:
 
 1. **Já: parar de piorar e saber o que há.** Registo municipal de fogos vagos; não alargar garantias públicas nem isenções a quem compra enquanto a oferta não responder; não criar novos tectos de renda de primeira geração; fazer cumprir as zonas de contenção do AL.
-2. **Em um a três anos: desbloquear a oferta.** Licenciamento com prazos previsíveis, sem dispensar pareceres; solo público já urbanizado; IMI agravado aplicado de forma sistemática aos prédios devolutos; reabilitação e partilha de heranças; mão-de-obra da construção. Evitar instrumentos coercivos de risco constitucional elevado (o arrendamento forçado foi previsto em 2023 e revogado em 2024).
+2. **Em um a três anos: desbloquear a oferta.** Licenciamento com prazos previsíveis, sem dispensar pareceres; solo público já urbanizado; imposto anual sobre a casa (IMI) agravado, aplicado de forma sistemática aos prédios devolutos; reabilitação e partilha de heranças; mão-de-obra da construção. Evitar instrumentos coercivos de risco constitucional elevado (o arrendamento forçado foi previsto em 2023 e revogado em 2024).
 3. **Em três a dez anos: um sector de habitação a custo controlado com dimensão real**, com operadores sem fins lucrativos. Inspira-se em Viena, cujo efeito nas rendas nenhum estudo mediu.
 
-**Em paralelo:** menos imposto na compra e mais no imposto anual sobre a casa (IMI), como recomenda a OCDE, e avaliar com dados, antes de as alargar, os apoios à renda e as medidas fiscais de 2026 para o arrendamento.
+**Em paralelo:** menos imposto na compra e mais no imposto anual sobre a casa, como recomenda a OCDE, e avaliar com dados, antes de as alargar, os apoios à renda e as medidas fiscais de 2026 para o arrendamento.
 
-A certeza é **moderada quanto à direcção** destas medidas e **baixa quanto à dimensão** exacta dos efeitos em Portugal.
+Grau de certeza: **moderado quanto à direcção** destas medidas e **baixo quanto à dimensão** dos efeitos em Portugal.
 
 ## A nota completa (PDF)
 

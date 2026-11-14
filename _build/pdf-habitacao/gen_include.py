@@ -86,9 +86,9 @@ def build():
         f'<div class="passo"><div class="h">{h}</div><div class="d">{d}</div></div>'
         for h, d in c.PASSOS
     )
-    body = f"""<section class="cx" aria-label="Conclusões">
+    body = f"""<section class="cx" aria-label="Síntese">
 <div class="topo"><img class="im" src="{{{{ site.baseurl }}}}/assets/images/habitacao-ilustracao-casas.jpg" alt=""><div class="veu"></div>
- <div class="kick">Síntese deste artigo</div><div class="tit" role="heading" aria-level="2">Conclusões</div>
+ <div class="kick">Ler primeiro</div><div class="tit" role="heading" aria-level="2">Síntese</div>
  <p class="tese">{c.TESE}</p></div>
 <div class="nums">{nums}</div>
 <div class="choques"><p class="sec">Cinco choques na procura (aumentos fortes de pessoas ou de dinheiro à procura de casa; o 1.º, uma tendência longa)</p><div class="cs">{chq}</div></div>
