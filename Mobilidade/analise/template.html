@@ -54,6 +54,17 @@
   .nota{font-size:14.5px;color:var(--ink2);max-width:72ch;margin:14px 0 0}
   .nota b{color:var(--ink)}
   .limite{font-size:13.5px;color:var(--ink3);max-width:72ch;margin:6px 0 0;padding-left:12px;border-left:3px solid var(--grid)}
+  .aviso{background:var(--panel);border:1px solid var(--grid);border-left:4px solid var(--p4);border-radius:10px;padding:12px 14px;font-size:14.5px;color:var(--ink2);max-width:76ch;margin:0 0 18px}
+  .aviso b{color:var(--ink)}
+  .zl{max-height:560px;overflow:auto;padding:0 2px 6px}
+  .zr{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:10px 6px;border-bottom:1px solid var(--grid);cursor:default;border-radius:8px}
+  .zr:last-child{border-bottom:0}
+  .zr.on{background:rgba(96,68,181,.09)}
+  .zr .nr{width:26px;height:26px;border-radius:50%;color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+  .zr h4{margin:0 0 2px;font-size:15px;line-height:1.3;color:var(--ink)}
+  .zr p{margin:2px 0;font-size:13.5px;line-height:1.4;color:var(--ink2)}
+  .zr .ms{color:var(--ink);font-weight:600}
+  .zr .peq{color:var(--ink3);font-size:12.5px}
   .tip{position:fixed;pointer-events:none;background:#14171c;color:#f0efec;font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;opacity:0;transition:opacity .08s;z-index:2000;max-width:260px}
   .tip b{color:#fff}
   .botoes{display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap;align-items:center}
@@ -221,12 +232,27 @@ __NAV__
     </figure>
   </section>
 
+  <section id="propostas" hidden>
+    <h2><small>VI</small>Propostas: onde poderia ajudar uma medida</h2>
+    <p class="sub" id="s14"></p>
+    <div class="aviso" id="av14"></div>
+    <figure>
+      <h3 id="t14"></h3>
+      <div class="leg" id="l14leg"></div>
+      <div class="duo b"><div class="cartao"><div id="g14a"></div></div><div class="cartao"><div class="zl" id="g14b"></div></div></div>
+      <p class="nota" id="n14"></p>
+      <p class="limite" id="m14"></p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb14"></div></details>
+    </figure>
+  </section>
+
   <section id="limites">
     <div class="final">
       <h2 style="font-size:26px">O que esta análise não permite concluir</h2>
       <ul>
         <li><b>Poucos dias.</b> 4 dias úteis normais, 1 dia atípico e 1 domingo parcial medidos; 18 dias úteis do pacote, só em 3 períodos do dia. Só Novembro: não sabemos como é no Verão ou com chuva.</li>
         <li><b>Causas.</b> Vemos onde e quando os autocarros são lentos, não porquê. Não temos dados de trânsito, semáforos, lotação, passageiros nem obras.</li>
+        <li><b>Propostas de medidas.</b> São hipóteses nossas, a partir de poucos dias de GPS: não há contagens de carros, passageiros, largura das ruas nem estacionamento, e não são uma proposta da Câmara do Porto ou da STCP.</li>
         <li><b>Viagens suprimidas.</b> «Não vista no GPS» não é «não feita».</li>
         <li><b>Espera dos passageiros.</b> Os pelotões mostram irregularidade; sem dados de passageiros não calculamos quanto esperam.</li>
         <li><b>Definições nossas.</b> «Pontual» (−1 a +3 min), «crítico» (menos de 14 km/h) e a referência de 25 km/h são critérios deste projecto, não metas oficiais.</li>
@@ -484,6 +510,62 @@ function g13() {
   tabela('#tb13', ['Distância ao centro', 'Com corredor km/h', 'Troços-sentido', 'Sem corredor km/h', 'Troços-sentido'], an.map(a => [rotulo(a), a.com ? nf(a.com[0]) : null, a.com ? a.com[1] : null, a.sem ? nf(a.sem[0]) : null, a.sem ? a.sem[1] : null]));
 }
 
+/* ---------- G14 propostas de medidas ---------- */
+const TIPOS = { transito: 'Trânsito na ponta', paragem: 'Tempo na paragem', rotunda: 'Rotunda', semaforo: 'Semáforo ou cruzamento', fixo: 'Atraso o dia todo, sem causa visível' };
+function g14() {
+  const sec = document.getElementById('propostas'), K = D.propostas;
+  if (!K || !K.zonas.length) { sec.hidden = true; return; }
+  sec.hidden = false;
+  const Z = K.zonas, R = K.resumo, nCor = R.corredor + R.corredor_verificar, per = p => p === 'am' ? 'manhã' : 'tarde';
+  const cor = t => ({ transito: C.p[4], paragem: C.o[0], rotunda: C.o[1], semaforo: C.o[2], fixo: C.gris })[t];
+  const nome = z => z.rua + (z.cruzamento ? ' × ' + z.cruzamento : '');
+  document.getElementById('s14').textContent = `Hipóteses a validar, calculadas com ${K.dias_uteis} dias úteis normais de GPS dos autocarros.`;
+  document.getElementById('av14').innerHTML = `<b>Isto não é um estudo de tráfego, nem uma proposta da Câmara do Porto ou da STCP.</b> São hipóteses do projecto Porto Verde. Não temos dados de carros, de passageiros nem da largura real das ruas. Servem para decidir onde vale a pena olhar primeiro, nunca para dizer que uma medida resolve o problema.`;
+  document.getElementById('t14').textContent = `Das ${Z.length} zonas mais lentas, ${nCor === 0 ? 'nenhuma pede' : nCor === 1 ? 'só 1 pede' : 'só ' + nCor + ' pedem'} um corredor BUS; as outras pedem outra medida`;
+  const usados = [...new Set(Z.map(z => z.tipo))];
+  document.getElementById('l14leg').innerHTML = usados.map(t => `<span><i style="background:${cor(t)}"></i>${TIPOS[t]}</span>`).join('') + `<span><i style="background:${C.s1}"></i>corredor BUS que já existe</span>`;
+  const el = document.getElementById('g14a'), w = Math.max(300, Math.floor(el.clientWidth));
+  el.innerHTML = '';
+  const feats = Z.map(z => ({ type: 'Feature', properties: { r: z.rank }, geometry: { type: 'MultiLineString', coordinates: z.tracado.map(l => l.map(([la, lo]) => [lo, la])) } }));
+  const fc = { type: 'FeatureCollection', features: feats };
+  const bb = d3.geoBounds(fc), asp = ((bb[1][1] - bb[0][1]) || .01) / (((bb[1][0] - bb[0][0]) || .01) * Math.cos(41.15 * Math.PI / 180));
+  const h = Math.round(Math.min(560, Math.max(330, (w - 52) * asp + 56)));
+  const svg = d3.select(el).append('svg').attr('width', w).attr('height', h).attr('viewBox', `0 0 ${w} ${h}`);
+  const proj = d3.geoMercator().fitExtent([[26, 26], [w - 26, h - 30]], fc), path = d3.geoPath(proj);
+  const cors = { type: 'Feature', geometry: { type: 'MultiLineString', coordinates: (K.corredores || []).flat().map(l => l.map(([la, lo]) => [lo, la])) } };
+  svg.append('path').attr('d', path(cors)).attr('fill', 'none').attr('stroke', C.s1).attr('stroke-width', 2.4).attr('opacity', .6).attr('stroke-linecap', 'round');
+  const linhas = [], rotulos = [];
+  Z.forEach((z, i) => {
+    const f = feats[i];
+    linhas.push(svg.append('path').attr('d', path(f)).attr('fill', 'none').attr('stroke', cor(z.tipo)).attr('stroke-width', 5).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round'));
+    const [cx, cy] = path.centroid(f);
+    const g = svg.append('g').attr('transform', `translate(${cx},${cy})`).style('cursor', 'default');
+    g.append('circle').attr('r', 11).attr('fill', cor(z.tipo)).attr('stroke', C.surface).attr('stroke-width', 2);
+    g.append('text').attr('text-anchor', 'middle').attr('dy', '.35em').style('fill', onC(cor(z.tipo))).style('font-weight', 700).style('font-size', '11.5px').text(z.rank);
+    rotulos.push(g);
+    g.on('pointermove', e => { foco(i); showTip(`<b>${z.rank}. ${nome(z)}</b><br>${TIPOS[z.tipo]}<br>${z.medida_txt}`, e); }).on('pointerleave', () => { foco(-1); hideTip(); });
+  });
+  svg.append('text').attr('class', 'fraco').attr('x', 8).attr('y', h - 8).text('sem mapa de fundo; dados dos corredores: Câmara Municipal do Porto');
+  const lista = document.getElementById('g14b');
+  lista.innerHTML = Z.map(z => `<div class="zr" data-i="${z.rank - 1}"><div class="nr" style="background:${cor(z.tipo)};color:${onC(cor(z.tipo))}">${z.rank}</div><div>
+    <h4>${nome(z)}</h4>
+    <p>${TIPOS[z.tipo]} · ${z.ext_m} m · ${z.n_linhas} linhas${z.linhas.length ? ' (' + z.linhas.slice(0, 5).join(', ') + (z.n_linhas > 5 ? '…' : '') + ')' : ''}</p>
+    <p class="ms">${z.medida_txt}</p>
+    <p>Na ponta da ${per(z.per)}: ${nf(z.v)} km/h${z.v_resto ? ` (entre pontas: ${nf(z.v_resto)} km/h)` : ''}.${z.tipo === 'paragem' && z.pct_paragem != null ? ` ${z.pct_paragem} % dos autocarros parados estão junto a uma paragem.` : ''}</p>
+    ${z.ganho ? `<p>Se for corredor: poupa entre ${nf(z.ganho.lo, 0)} e ${nf(z.ganho.hi, 0)} min de autocarro por hora de ponta (valor central ${nf(z.ganho.c, 0)}).</p>` : ''}
+    <p class="peq">Lenta em ${z.dias_crit} de ${z.dias_obs} dias · confiança ${z.conf}</p></div></div>`).join('');
+  function foco(i) {
+    linhas.forEach((l, k) => l.attr('stroke-width', k === i ? 9 : 5).attr('opacity', i < 0 || k === i ? 1 : .35));
+    rotulos.forEach((r, k) => r.attr('opacity', i < 0 || k === i ? 1 : .45));
+    lista.querySelectorAll('.zr').forEach((d, k) => d.classList.toggle('on', k === i));
+  }
+  lista.querySelectorAll('.zr').forEach(d => { d.addEventListener('pointerenter', () => foco(+d.dataset.i)); d.addEventListener('pointerleave', () => foco(-1)); });
+  document.getElementById('n14').innerHTML = `<b>Como se chegou aqui.</b> Ficam só os troços de 200 m que andam a menos de 14 km/h em pelo menos 3 de cada 4 dias e em 2 ou mais linhas (${K.n_robustos} troços-sentido). Os troços ligados juntam-se em zonas de pelo menos 300 m; estas ${Z.length} somam ${nf(K.perdido_zonas, 0)} min/h de tempo perdido (${pc(100 * K.perdido_zonas / K.perdido_total)} do total da rede). O tipo de cada zona é uma hipótese tirada de quatro sinais: se é lenta só na ponta (trânsito) ou também entre pontas; se os autocarros parados estão junto a uma paragem; se há semáforos a menos de 30 m (dados da Câmara do Porto); e se o OpenStreetMap marca uma rotunda. <b>Só se propõe corredor quando o problema é trânsito na ponta e o OpenStreetMap indica 2 ou mais faixas por sentido.</b> O ganho estima-se com a velocidade dos troços que já têm corredor à mesma distância do centro, sem passar a velocidade da própria zona entre pontas; o intervalo vem dessa variação e de deixar de fora um dia de cada vez. São minutos de autocarro, somados de todos os autocarros, não minutos por passageiro.`;
+  document.getElementById('m14').textContent = `Não sabemos o custo para o resto do trânsito (sem dados de carros). Com só ${K.dias_uteis} dias úteis, a lista pode mudar quando houver mais dados. As faixas vêm do OpenStreetMap: em ruas de dois sentidos sem indicação por sentido, dividimos o total por 2 (aproximação), e a largura e o estacionamento não constam. Os corredores que já existem foram feitos onde já era lento, o que pode enviesar o ganho estimado. Dados: Câmara Municipal do Porto (corredores e semáforos, CC0) e © OpenStreetMap contributors.`;
+  tabela('#tb14', ['#', 'Zona', 'Tipo', 'Medida', 'Extensão m', 'Ponta km/h', 'Entre pontas km/h', '% parados junto a paragem', 'Semáforos ≤ 30 m', 'Faixas/sentido (OSM)', 'Tempo perdido min/h', 'Ganho de corredor min/h'],
+    Z.map(z => [z.rank, nome(z), TIPOS[z.tipo], z.medida_txt, z.ext_m, nf(z.v), z.v_resto ? nf(z.v_resto) : null, z.pct_paragem, z.semaforos, z.faixas != null ? nf(z.faixas) : null, nf(z.perdido), z.ganho ? `${nf(z.ganho.lo, 0)} a ${nf(z.ganho.hi, 0)}` : null]));
+}
+
 /* ---------- G6 slope chart ---------- */
 function g6() {
   const L = D.linhas_dados.filter(d => d.am != null && d.pm != null);
@@ -731,7 +813,7 @@ function g12() {
 
 /* ---------- arranque ---------- */
 function desenhar() {
-  cores(); numeros(); g1(); g2(); g4(); g5(); g13(); g6(); g7(); g8(); g9(); g10(); g11(); g12();
+  cores(); numeros(); g1(); g2(); g4(); g5(); g13(); g14(); g6(); g7(); g8(); g9(); g10(); g11(); g12();
   document.getElementById('t1').textContent = `À hora de ponta, o autocarro perde tempo no trânsito, não nas paragens`;
   const o = D.orcamento.horas, vs = o.map((x, h) => x && h >= 7 && h <= 18 ? { ...x, h } : null).filter(Boolean), tot = d3.sum(vs, d => d.n), av = k => d3.sum(vs, d => d[k] * d.n) / tot;
   document.getElementById('n1').innerHTML = `<b>Das 7 às 19 h</b>, o tempo divide-se assim: ${pc(av('andar'))} a andar, ${pc(av('devagar'))} devagar, ${pc(av('transito'))} parado no trânsito e ${pc(av('paragem'))} parado em paragens e terminais. O tempo parado no trânsito passa para o dobro entre o almoço (${pc(o[12].transito)} às 12 h) e o fim da tarde (${pc(o[18].transito)} às 18 h). O tempo parado nas paragens quase não muda (entre ${pc(Math.min(...vs.map(d => d.paragem)), 0)} e ${pc(Math.max(...vs.map(d => d.paragem)), 0)} ao longo do dia). Média de ${D.orcamento.dias} dias úteis normais.`;

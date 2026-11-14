@@ -37,4 +37,4 @@ def test_menu_tem_separador_analise():
 
 def test_corredores_sem_ficheiro_devolve_none(tmp_path):
     from analise import agregar
-    assert agregar._corredores(None, None, tmp_path / "nao_existe.geojson") is None
+    assert agregar._classificar_corredores(None, tmp_path / "nao_existe.geojson") is None

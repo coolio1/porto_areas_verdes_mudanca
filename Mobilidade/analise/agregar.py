@@ -15,6 +15,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from velocidade import dados, esperas, geo, linhas, osm, trocos  # noqa: E402
+from analise import propostas  # noqa: E402
 
 DIAS_SEM = ["seg", "ter", "qua", "qui", "sex", "sáb", "dom"]
 DIAS_ATIPICOS = {dt.date(2026, 11, 11)}
@@ -66,8 +67,8 @@ def _lidar(v: pd.Series) -> list:
     return [round(float(v.mean()), 2), int(n), round(float(v.std(ddof=1) / math.sqrt(n)), 2) if n > 1 else None]
 
 
-def _corredores(ub, t, caminho: Path):
-    """Velocidade dos troços com e sem corredor BUS (activos), por anel de distância ao centro e na mesma rua. None sem ficheiro."""
+def _classificar_corredores(t, caminho: Path):
+    """(info, activos): por troço, `f_com` (fracção a ≤ 15 m de corredor activo), `perto`, `km` ao centro, `grupo`; e os corredores activos. None sem ficheiro."""
     if not caminho.exists():
         return None
     import json
@@ -88,6 +89,14 @@ def _corredores(ub, t, caminho: Path):
                          "perto": [g.intersects(b_perto) for g in t.geom],
                          "km": [centro.distance(g) / 1000 for g in t.geom], "nome": t.nome.to_numpy()}, index=t.index)
     info["grupo"] = np.where(info.f_com >= COM_MIN, "com", np.where(~info.perto, "sem", "meio"))
+    return info, activos
+
+
+def _corredores(ub, t, classif):
+    """Velocidade dos troços com e sem corredor BUS (activos), por anel de distância ao centro e na mesma rua. None sem ficheiro."""
+    if classif is None:
+        return None
+    info, activos = classif
     linhas_ = []
     for per in ("am", "pm"):
         a = trocos.agregar(ub, t, per, "util")
@@ -222,7 +231,13 @@ def calcular(pasta_dados: Path, pasta_stcp: Path | None = None, com_pacote: bool
     top = sorted(por_rua.items(), key=lambda kv: -(kv[1]["am"] + kv[1]["pm"]))[:15]
     out["ruas"] = [{"rua": k, "am": round(v["am"], 1), "pm": round(v["pm"], 1), "n": v["n"], "pontos": pos_rua[k][:60]} for k, v in top]
 
-    out["corredores"] = _corredores(ub, t, pasta_dados / CORREDORES)
+    classif = _classificar_corredores(t, pasta_dados / CORREDORES)
+    out["corredores"] = _corredores(ub, t, classif)
+    if classif is not None:
+        out["propostas"] = propostas.calcular(ub, t, classif[0], pasta_dados, ANEIS_KM)
+        out["propostas"]["corredores"] = [[[[round(la, 5), round(lo, 5)] for lo, la in p] for p in
+                                           ([f["geometry"]["coordinates"]] if f["geometry"]["type"] == "LineString" else f["geometry"]["coordinates"])]
+                                          for f in classif[1]]
 
     # serviço: autocarros e viagens por hora (dias úteis típicos)
     g = ntip.groupby(["dia", "hora"]).agg(veic=("veiculo", "nunique"), viag=("viagem", "nunique"))
