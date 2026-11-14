@@ -128,7 +128,7 @@ def test_menu_so_tem_mobilidade_e_separadores_autocarros_atropelamentos():
     assert 'href="autocarros.html"' not in abas and 'href="../Mobilidade/autocarros.html"' in abas
     assert 'class="on">Atropelamentos<' in abas
     h = html()
-    assert 'id="abas-mobilidade"' in h and 'class="on">Autocarros<' in h and 'href="../atropelamentos/dashboard_atropelamentos.html"' in h
+    assert 'id="abas-mobilidade"' in h and 'class="on">Autocarros: mapa<' in h and 'href="../atropelamentos/dashboard_atropelamentos.html"' in h
 
 
 def test_agora_e_um_modo_do_seletor_com_habitual_e_paragens_embutidos():

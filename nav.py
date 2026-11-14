@@ -21,8 +21,8 @@ PAGES = [
 # «Mobilidade» é um só item de menu com dois separadores (barra por baixo do menu, só nestas páginas).
 # A página dos atropelamentos acende «Mobilidade» no menu (alias) e não tem item próprio.
 ABAS_MOBILIDADE = [
-    ("Mobilidade/autocarros.html", "Autocarros"),
-    ("Mobilidade/analise.html", "Análise"),
+    ("Mobilidade/autocarros.html", "Autocarros: mapa"),
+    ("Mobilidade/analise.html", "Autocarros: análise"),
     ("atropelamentos/dashboard_atropelamentos.html", "Atropelamentos"),
 ]
 _ALIAS_ACTIVO = {"atropelamentos/dashboard_atropelamentos.html": "Mobilidade/autocarros.html",
@@ -65,6 +65,8 @@ CSS_COMUM = "assets/css/porto-verde.css"
 FONTES_PADRAO = "Sentinel-2, Landsat, OSM, PDM Porto"
 # Fontes de dados por página (canonical -> texto). Sem entrada: FONTES_PADRAO.
 FONTES = {
+    "Mobilidade/autocarros.html": "Associação Porto Digital (posições dos autocarros), OSM",
+    "atropelamentos/dashboard_atropelamentos.html": "ANSR, INE",
     "Mobilidade/analise.html": (
         "Associação Porto Digital (posições dos autocarros), STCP (horários), "
         "Câmara Municipal do Porto (corredores BUS e semáforos), OSM"

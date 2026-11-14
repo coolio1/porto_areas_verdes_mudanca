@@ -62,6 +62,8 @@ def renderizar(resultado: dict, template: Path) -> str:
     botao_fds = ('disabled title="Ainda sem um fim-de-semana completo de dados"' if sem_amostra else "")
     texto_fds = "a partir de 16 de Novembro" if sem_amostra else _dias_txt(fds)
     corpo = (Path(template).read_text(encoding="utf-8")
+             .replace("__CSS__", nav.get_css_link(depth=1))
+             .replace("__RODAPE__", nav.get_rodape("Mobilidade/autocarros.html", depth=1, modo="mapa"))
              .replace("__NAV__", nav.get_nav("Mobilidade/autocarros.html", depth=1)
                       + nav.get_abas_mobilidade("Mobilidade/autocarros.html", depth=1))
              .replace("__DIAS_UTIL__", _dias_txt(d["dias"]["util"]))

@@ -32,7 +32,7 @@ def test_dados_embutidos_sao_json_valido():
 
 def test_menu_tem_separador_analise():
     html = _html()
-    assert 'href="analise.html"' in html and "Análise" in html
+    assert 'href="analise.html"' in html and "Autocarros: análise" in html
 
 
 def test_corredores_sem_ficheiro_devolve_none(tmp_path):

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Análise dos autocarros do Porto — Porto Verde</title>
+<title>Autocarros: análise — Porto Verde</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
   :root{--surface:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--ink3:#76746f;--grid:#e1e0d9;--panel:#ffffff;--marca:#ef4444;
@@ -26,6 +26,8 @@
   @media (max-width:760px){.nums{grid-template-columns:1fr 1fr}.nums b{font-size:28px}}
   .indice{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px;font-size:14px}
   .indice a{color:var(--ink2);text-decoration:none;border:1px solid var(--grid);padding:4px 12px;border-radius:999px}
+  .indice a.destaque{background:var(--pv-verde,#0B5232);border-color:var(--pv-verde,#0B5232);color:#fff;font-weight:600}
+  .indice a[hidden]{display:none}
   .indice a:hover{border-color:var(--ink3);color:var(--ink)}
   section{margin:84px 0 0}
   h2{font:600 clamp(26px,3.6vw,38px)/1.12 Georgia,"Iowan Old Style",serif;letter-spacing:-.015em;margin:0 0 8px}
@@ -116,8 +118,8 @@
   <a href="../sobre/">Sobre</a>
 </div><div id="abas-mobilidade">
 <style>#abas-mobilidade{position:fixed;top:40px;right:10px;z-index:1000;display:flex;gap:2px;font:12px 'Segoe UI',Arial,sans-serif;background:rgba(255,255,255,.92);border-radius:6px;padding:2px;box-shadow:0 1px 4px rgba(0,0,0,.15)}#abas-mobilidade a{color:#444;text-decoration:none;padding:4px 12px;border-radius:5px}#abas-mobilidade a.on{background:var(--pv-verde,#0B5232);color:#fff}@media(max-width:700px){#abas-mobilidade{top:70px;right:8px}}</style>
-  <a href="autocarros.html">Autocarros</a>
-  <a href="analise.html" class="on">Análise</a>
+  <a href="autocarros.html">Autocarros: mapa</a>
+  <a href="analise.html" class="on">Autocarros: análise</a>
   <a href="../atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
 </div>
 <main>
@@ -126,7 +128,7 @@
     <p class="lead">Seguimos, minuto a minuto, 434 autocarros da STCP em 71 linhas, de 8 a 13 de Novembro de 2026 (1 030 681 posições de GPS). Juntámos os horários e as horas de passagem estimadas pela STCP em 18 dias úteis de Outubro e Novembro (379 162 passagens).</p>
     <p class="meta">Como se calcula: a velocidade vem do próprio autocarro. Não contamos o tempo em que pára de propósito, numa paragem ou no fim da linha; contamos o tempo parado no trânsito. Só há 4 dias úteis normais medidos, por isso isto é um retrato destes dias, não a média do ano. A quarta-feira 11 de Novembro foi diferente e tem um capítulo próprio.</p>
     <div class="nums" id="nums"></div>
-    <nav class="indice" aria-label="Capítulos"><a href="#quando">Quando</a><a href="#onde">Onde</a><a href="#linhas">As linhas</a><a href="#horario">O horário</a><a href="#excepcao">A excepção</a><a href="#limites">O que não sabemos</a></nav>
+    <nav class="indice" aria-label="Capítulos"><a href="#propostas" id="ir-propostas" class="destaque" hidden>Propostas de medidas →</a><a href="#quando">Quando</a><a href="#onde">Onde</a><a href="#linhas">As linhas</a><a href="#horario">O horário</a><a href="#excepcao">A excepção</a><a href="#limites">O que não sabemos</a></nav>
   </header>
 
   <section id="quando">
@@ -550,6 +552,7 @@ function g14() {
   const sec = document.getElementById('propostas'), K = D.propostas;
   if (!K || !K.zonas.length) { sec.hidden = true; return; }
   sec.hidden = false;
+  document.getElementById('ir-propostas').hidden = false;
   const Z = K.zonas, R = K.resumo, nCor = R.corredor + R.corredor_verificar, per = p => p === 'am' ? 'manhã' : 'tarde';
   const cor = t => ({ transito: C.p[4], paragem: C.o[0], rotunda: C.o[1], semaforo: C.o[2], fixo: C.gris })[t];
   const nome = z => z.rua + (z.cruzamento ? ' × ' + z.cruzamento : '');
