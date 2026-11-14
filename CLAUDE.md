@@ -82,6 +82,7 @@ Ao despachar, **`model` explícito em cada chamada** (por herança, os `general-
 
 ## Jekyll — comandos essenciais
 Skill `/jekyll`. Config específica: `url: https://portoverde.pt`, `baseurl: ""`; imagens via `{{ site.baseurl }}/assets/...`.
+- **`exclude` do `_config.yml` casa por prefixo (2026-11-14):** `Mobilidade/analise` escondeu `Mobilidade/analise.html` (404 com o build «built»). Pasta com o mesmo começo que uma página → escrever `"pasta/*"`. Página nova → abrir o URL real, nunca dar por publicada só com o build verde.
 
 ## Fluxo rápido de regeneração
 `acessibilidade/regenerar_html.py` e `regenerar_conversao_html.py` regeneram os HTML em ~2 s a partir dos PNGs em cache; detalhe em `docs/fluxo-rapido-regeneracao.md`.
