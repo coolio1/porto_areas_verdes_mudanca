@@ -96,3 +96,20 @@
   .pv-rodape--mapa { left: 6px; right: 6px; bottom: 22px; max-width: none; font-size: 10px; padding: 2px 8px 2px 3px; }
   .pv-rodape--mapa .pv-rodape__logo img { width: 20px; height: 20px; }
 }
+
+/* ---------- Leitura: escala tipográfica única das páginas de texto ----------
+   Artigos, Sobre, listagem de artigos, títulos do índice. Não toca nos 50 Espaços (.e50, `article.ficha`). */
+main > h1, article:not(.ficha) > h1, .post-title {
+  font: 800 1.85rem/1.25 var(--pv-serif); letter-spacing: -0.01em; color: var(--pv-tinta); margin: 0 0 0.8rem;
+}
+main > h2, article:not(.ficha) h2 {
+  font: 800 1.3rem/1.3 var(--pv-serif); letter-spacing: -0.01em; color: var(--pv-tinta); margin: 2.6rem 0 0.6rem;
+}
+main > h3, article:not(.ficha) h3 {
+  font: 800 1.05rem/1.4 var(--pv-serif); color: var(--pv-verde); margin: 2rem 0 0.4rem;
+}
+main > p, main > ul, main > ol, article:not(.ficha) { font-family: var(--pv-serif); font-size: 1.06rem; }
+.post-meta, .post-tag, .post-footer, article:not(.ficha) table, article:not(.ficha) figcaption { font-family: var(--pv-sans); }
+@media (max-width: 600px) { main > h1, article:not(.ficha) > h1, .post-title { font-size: 1.45rem; } }
+/* etiquetas e cartões (índice, listagem): sans pequeno, tinta; sem cores próprias */
+.map-card .card-body h3, .section-title { font-family: var(--pv-sans); color: var(--pv-tinta); }
