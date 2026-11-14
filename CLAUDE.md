@@ -110,9 +110,9 @@ Ver skill `/jekyll`. Config específica: `baseurl: /porto_areas_verdes_mudanca`;
 
 **Dados inline, nunca `fetch()`:** os GeoJSON são embutidos nos HTML gerados (`fetch()` falha em `file://`, onde os mapas são abertos). Ao alterar uma fonte partilhada, regenerar todos os HTML que a consomem.
 
-## Chat «Perguntar» (descontinuado 2026-11-09)
+## Chat «Perguntar» (apagado 2026-11-14)
 
-Página `chat/index.html` com `published: false` e sem link no menu (`nav.py`); código do Worker em `chat/worker/` (mantido). Estado, motivo e como retomar ou apagar: `Fontes\Habitacao\CLAUDE.md`. Não voltar a pôr o link sem decisão do utilizador.
+Página `chat/`, código do Worker e a infra-estrutura na Cloudflare (Worker, AI Search, Turnstile) foram apagados; já não há `chat/` neste repo. Registo e motivo: `Fontes\Habitacao\CLAUDE.md`. Não voltar a propor um chat sem decisão do utilizador.
 
 ## Mobilidade — velocidade dos autocarros (`Mobilidade/`, 2026-11-11)
 

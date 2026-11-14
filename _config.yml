@@ -56,8 +56,6 @@ exclude:
   - archive
   - "*.gpkg"
   - CLC
-  - chat/worker
-  - chat/refs.json
   - Mobilidade/velocidade
   - Mobilidade/analise
   - Mobilidade/tests

@@ -47,7 +47,6 @@ _build/pdf-habitacao/nota.propostas_gate.md
 _build/pdf-habitacao/nota.factos.religar.md
 _build/pdf-habitacao/.mapa_kb_nota.json
 
-chat/worker/.wrangler/
 
 # Mobilidade: só no disco por enquanto (decisão 2026-11-09); recolhedor, deploy/ e dados brutos continuam fora.
 # Excepção (decisão 2026-11-11): gerador do mapa de velocidades, testes e página.
