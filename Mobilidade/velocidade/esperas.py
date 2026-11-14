@@ -48,6 +48,29 @@ def marcar_esperas(df: pd.DataFrame, paragens: pd.DataFrame, raio_m: float = 40.
     return pd.Series(espera, index=df.index)
 
 
+def marcar_paradas_em_terminal(df: pd.DataFrame, min_s: float = 300.0, raio_m: float = 25.0, zona_m: float = 100.0) -> pd.Series:
+    """True em paragens de ≥ `min_s` s (mesmo veículo, a < `raio_m` da primeira leitura) a < `zona_m` do início ou fim de
+    uma viagem (terminais, regulação). O terminal sai dos próprios dados (pontas das viagens), não do OSM; a regra das
+    15 leituras fica para o resto do percurso, onde um autocarro parado pode ser trânsito."""
+    ordem = df.sort_values(["veiculo", "obs"])
+    g = ordem.groupby(["veiculo", "viagem", "dia"])
+    pontas = pd.concat([g.head(1), g.tail(1)])
+    arvore = cKDTree(geo.xy(pontas.lon, pontas.lat))
+    p = geo.xy(ordem.lon, ordem.lat)
+    t = _segundos(ordem.obs)
+    veic = ordem.veiculo.to_numpy()
+    flags = np.zeros(len(ordem), bool)
+    i, n = 0, len(ordem)
+    while i < n:
+        j = i + 1
+        while j < n and veic[j] == veic[i] and math.hypot(*(p[j] - p[i])) < raio_m:
+            j += 1
+        if t[j - 1] - t[i] >= min_s and arvore.query(p[i])[0] < zona_m:
+            flags[i:j] = True
+        i = j
+    return pd.Series(flags, index=ordem.index).reindex(df.index)
+
+
 def marcar_paradas_longas(df: pd.DataFrame, min_leituras: int = 15, raio_m: float = 15.0) -> pd.Series:
     """True em sequências de ≥ `min_leituras` leituras seguidas do mesmo veículo a < `raio_m` da primeira."""
     ordem = df.sort_values(["veiculo", "obs"])

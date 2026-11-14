@@ -31,6 +31,18 @@
   ol li:hover{color:#7a0019}
   ol li small{color:#777}
   .aviso{color:#666;font-size:11.5px;line-height:1.4;margin-top:10px;border-top:1px solid #eee;padding-top:8px}
+  #rastos{position:absolute;inset:0;z-index:450;pointer-events:none;width:100%;height:100%;display:none}
+  .grande{font-size:38px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
+  .grande small{font-size:13px;font-weight:400;color:#666;margin-left:4px}
+  .comp{margin:6px 0 0;color:#555}
+  .par{display:flex;gap:18px;margin:10px 0 4px;padding-top:8px;border-top:1px solid #eee}
+  .par b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+  .par span{color:#666;font-size:11.5px}
+  #lentas{list-style:none;padding:0;margin:4px 0}
+  #lentas li{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid #eee;font-variant-numeric:tabular-nums}
+  #lentas li span{color:#666}
+  #estado-agora{color:#666;font-size:11.5px;line-height:1.4;margin:8px 0 0}
+  #estado-agora.erro{color:#b3261e}
   @media(max-width:700px){
     #painel{top:auto;bottom:0;left:0;right:0;width:auto;max-height:46%;border-radius:10px 10px 0 0}
     #nav{max-width:100vw;left:8px;right:8px;top:6px}
@@ -41,6 +53,7 @@
 <body>
 __NAV__
 <div id="mapa"></div>
+<canvas id="rastos" aria-hidden="true"></canvas>
 <div id="painel">
   <h1>Onde os autocarros andam mais devagar</h1>
   <p class="sub">Velocidade média nas ruas por onde passam os autocarros STCP, no Porto e concelhos vizinhos.</p>
@@ -57,10 +70,27 @@ __NAV__
     <button data-modo="vel" class="on">Velocidade</button>
     <button data-modo="ph">Autocarros por hora</button>
     <button data-modo="perdido">Tempo perdido</button>
+    <button data-modo="agora">Agora</button>
   </div>
   <p id="definicao" class="definicao"></p>
   <div class="legenda"><div class="barra" id="barra"></div>
     <div class="escala"><span id="esc-a"></span><span id="esc-b"></span></div></div>
+  <div id="bloco-agora" style="display:none">
+    <div class="grande"><span id="agora-media">–</span><small>km/h, média da rede</small></div>
+    <p class="comp" id="agora-comp"></p>
+    <div class="par">
+      <div><b id="agora-parados">–</b><span>% parados no trânsito</span></div>
+      <div><b id="agora-n">–</b><span>autocarros em serviço</span></div>
+    </div>
+    <div style="font-weight:600;margin-top:8px">Linhas mais lentas agora</div>
+    <ul id="lentas"></ul>
+    <p id="estado-agora" role="status" aria-live="polite">A obter as posições…</p>
+    <p class="aviso">Posições do broker de dados abertos da Porto Digital (licença CC0), actualizadas cerca de uma vez por minuto; só autocarros com posição
+    de há menos de 5 minutos. As esperas em paragens e terminais (≤ 2 km/h a menos de 40 m de uma paragem ou 100 m de um terminal) ficam de fora e o trânsito parado conta.
+    O habitual é a média da rede nessa hora nos dias úteis recolhidos (__DIAS_BASE__). As linhas só entram com pelo menos 3 autocarros, um terço deles
+    em andamento (para não contar autocarros parados fora de serviço). Nada é guardado: as posições vivem só no teu browser.</p>
+  </div>
+  <div id="bloco-estatico">
   <div id="estado"></div>
   <div id="lista-titulo" style="font-weight:600">Pontos com mais tempo perdido</div>
   <ol id="lista"></ol>
@@ -69,7 +99,8 @@ __NAV__
   autocarros que passam (mais autocarros e mais lentos, maior): é a espessura na vista Velocidade e o tamanho dos círculos.
   Os autocarros por hora são estimados a partir de uma posição por minuto.
   Entram __COLADAS__ % das posições registadas; as linhas sem rota no OpenStreetMap (como a 107 e 605) ficam de fora.
-  Os feriados contam como dias úteis.</p>
+  Os feriados contam como dias úteis.__DERIVADOS__</p>
+  </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -77,8 +108,10 @@ const D = __DADOS__;
 const estado = {dia: 'util', per: 'pm', modo: 'vel'};
 const mapa = L.map('mapa', {preferCanvas: true, zoomControl: false}).setView([41.16, -8.62], 12);
 L.control.zoom({position: 'bottomright'}).addTo(mapa);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+const baseClara = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
   {subdomains: 'abcd', maxZoom: 19, attribution: '&copy; OpenStreetMap &copy; CARTO'}).addTo(mapa);
+const baseEscura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
+  {subdomains: 'abcd', maxZoom: 19, attribution: '&copy; OpenStreetMap &copy; CARTO'});    // só na vista «Agora», onde os rastos brilham
 const camada = L.layerGroup().addTo(mapa);
 const PARAGENS = [[0, [92, 0, 17]], [.35, [193, 39, 45]], [.7, [240, 138, 75]], [1, [247, 215, 116]]];
 
@@ -88,7 +121,9 @@ const DEFINICAO = {
   vel: '<b>Velocidade:</b> média a que os autocarros andam em cada troço de rua, sem contar as esperas nas paragens. Quanto mais escuro, mais lento.',
   ph: '<b>Autocarros por hora:</b> quantos autocarros passam por hora, num sentido (estimativa). Quanto mais escuro, mais autocarros. Não diz se andam depressa ou devagar.',
   perdido: '<b>Tempo perdido:</b> minutos de autocarro perdidos por hora, somando todos os autocarros, face a andar a 25 km/h. Mostra onde o atraso pesa mais: ruas lentas e muito usadas. Quanto mais escuro, mais tempo perdido.',
+  agora: '<b>Agora:</b> a velocidade real dos autocarros neste momento. Cada rasto corre pela rua, no sentido dos autocarros, e cada ponto é um autocarro, da cor do rasto; vermelho é parado no trânsito, azul é fluido.',
 };
+const VEL_AGORA = [[0, [215, 25, 28]], [.25, [253, 174, 97]], [.5, [255, 255, 191]], [.75, [171, 217, 233]], [1, [44, 123, 182]]];
 const COR_PONTO = {vel: '#7a0019', perdido: '#400a62'};
 
 function rampa(paragens, t) {
@@ -107,6 +142,20 @@ const f1 = x => x.toFixed(1).replace('.', ',');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
 
 function desenhar() {
+  const ag = estado.modo === 'agora';
+  for (const id of ['g-dia', 'g-per']) document.getElementById(id).style.display = ag ? 'none' : '';
+  document.getElementById('bloco-agora').style.display = ag ? '' : 'none';
+  document.getElementById('bloco-estatico').style.display = ag ? 'none' : '';
+  if (ag) {
+    camada.clearLayers();
+    document.getElementById('definicao').innerHTML = DEFINICAO.agora;
+    document.getElementById('barra').style.background = css(VEL_AGORA);
+    document.getElementById('esc-a').textContent = '0 km/h';
+    document.getElementById('esc-b').textContent = '40 km/h ou mais';
+    AGORA.ligar();
+    return;
+  }
+  AGORA.desligar();
   camada.clearLayers();
   const chave = estado.dia + '|' + estado.per;
   const linhas = D.variantes[chave], marcadores = D.marcadores[chave];
@@ -178,6 +227,250 @@ function desenhar() {
   });
   estadoEl.textContent = itens.length + ' troços medidos, ' + criticos + ' abaixo de 14 km/h.';
 }
+
+// ---- vista «Agora»: posições em tempo real (broker da Porto Digital) + rastos ----
+const AGORA = (() => {
+  const URL_FEED = 'https://broker.fiware.urbanplatform.portodigital.pt/v2/entities?q=vehicleType==bus&limit=1000';
+  const INTERVALO_MS = 20000, IDADE_MAX_S = 300, KMH_MAX = 90, PARADO = 2, RAIO_ESPERA = 40, RAIO_TERMINAL = 100;
+  const ESCALA = 120, RAIO = 700, LIM = .9;      // LIM: ±52° de diferença de sentido
+  const KX = 111320 * Math.cos(41.15 * Math.PI / 180), KY = 111320;
+  const cv = document.getElementById('rastos'), reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const H_ = D.habitual, el = id => document.getElementById(id);
+  let rendPontos = null, ativo = false, P = [], parts = [], W = 0, H = 0, ctx = null, tIntervalo = null, tEstado = null, raf = null;
+  let ultimaLeitura = 0, ultimaOk = 0, ult = 0;
+
+  // paragens em grelha, para descontar esperas
+  // (paragens a < 40 m; terminais, tirados das pontas das viagens, a < 100 m: células maiores para o raio caber em ±1)
+  function grelhar(pontos, cel) {
+    const g = new Map();
+    for (const [la, lo] of pontos) {
+      const k = Math.round(la * cel) + ',' + Math.round(lo * cel);
+      if (!g.has(k)) g.set(k, []);
+      g.get(k).push([lo * KX, la * KY]);
+    }
+    return (la, lo, raio) => {
+      const x = lo * KX, y = la * KY, a = Math.round(la * cel), b = Math.round(lo * cel);
+      for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++)
+        for (const [px, py] of g.get((a + i) + ',' + (b + j)) || []) if ((px - x) ** 2 + (py - y) ** 2 < raio ** 2) return true;
+      return false;
+    };
+  }
+  const nearParagem = grelhar(H_.paragens, 2500), nearTerminal = grelhar(H_.terminais || [], 800);
+  const pertoDeParagem = (la, lo) => nearParagem(la, lo, RAIO_ESPERA) || nearTerminal(la, lo, RAIO_TERMINAL);
+
+  const valor = x => (x && typeof x === 'object' && 'value' in x) ? x.value : x;
+  function lerEntidades(ents) {
+    const agora = Date.now(), v = [];
+    let maisRecente = 0;
+    for (const e of ents) {
+      try {
+        const c = (e.location.coordinates || e.location.value.coordinates), lo = c[0], la = c[1];
+        const obs = Date.parse(valor(e.observationDateTime)), kmh = Number(valor(e.speed)) * 3.6, b = Number(valor(e.bearing)) || 0;
+        const idade = (agora - obs) / 1000;
+        if (!(idade >= -30 && idade <= IDADE_MAX_S) || !(kmh >= 0 && kmh <= KMH_MAX) || !(la > 40.9 && la < 41.4 && lo > -9 && lo < -8.2)) continue;
+        maisRecente = Math.max(maisRecente, obs);
+        if (kmh <= PARADO && pertoDeParagem(la, lo)) continue;
+        const rota = ((valor(e.annotations) || []).find(a => a.startsWith('stcp:route:')) || '').split(':').pop();
+        v.push({x: lo * KX, y: la * KY, kmh, b: b * Math.PI / 180, rota});
+      } catch (_) { /* entidade sem os campos esperados: ignora-se, nunca conta como 0 */ }
+    }
+    return {v, maisRecente};
+  }
+  const mediana = xs => { const s = [...xs].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+  function horaLisboa() {
+    const p = new Intl.DateTimeFormat('en-GB', {timeZone: 'Europe/Lisbon', hour: 'numeric', hour12: false, weekday: 'short'}).formatToParts(new Date());
+    return {h: Number(p.find(q => q.type === 'hour').value) % 24, dia: p.find(q => q.type === 'weekday').value};
+  }
+  function mostrar(v) {
+    const media = v.reduce((s, p) => s + p.kmh, 0) / v.length;
+    el('agora-media').textContent = f1(media);
+    el('agora-parados').textContent = Math.round(100 * v.filter(p => p.kmh < PARADO).length / v.length);
+    el('agora-n').textContent = v.length;
+    const {h, dia} = horaLisboa(), hab = H_.horas[h], fds = dia === 'Sat' || dia === 'Sun';
+    el('agora-comp').innerHTML = fds ? 'O habitual só existe para dias úteis (por enquanto).'
+      : hab == null ? 'Sem habitual para as ' + h + ' h.'
+      : 'Habitual às ' + h + ' h: <b>' + f1(hab) + ' km/h</b> (' + (Math.abs(media - hab) < .05 ? 'igual'
+        : f1(Math.abs(media - hab)) + ' km/h ' + (media < hab ? 'abaixo' : 'acima')) + ')';
+    const porRota = new Map();
+    for (const p of v) if (p.rota) { if (!porRota.has(p.rota)) porRota.set(p.rota, []); porRota.get(p.rota).push(p.kmh); }
+    const lentas = [...porRota.entries()].filter(([, a]) => a.length >= 3 && a.filter(k => k >= PARADO).length * 3 >= a.length)
+      .map(([r, a]) => [r, mediana(a), a.length]).sort((a, b) => a[1] - b[1]).slice(0, 5);
+    el('lentas').innerHTML = lentas.length ? lentas.map(([r, m, n]) => '<li><b>' + r + '</b><span>' + f1(m) + ' km/h · ' + n + ' autocarros</span></li>').join('')
+      : '<li><span>Sem linhas com 3 autocarros ou mais.</span></li>';
+  }
+  function textoEstado() {
+    const e = el('estado-agora');
+    if (!ultimaOk) return;
+    if (Date.now() - ultimaOk > 3 * INTERVALO_MS) {
+      e.className = 'erro'; e.textContent = 'Sem ligação ao feed da Porto Digital. A mostrar a última leitura (há ' + Math.round((Date.now() - ultimaOk) / 1000) + ' s); a tentar de novo.';
+    } else { e.className = ''; e.textContent = 'Posição mais recente há ' + Math.round((Date.now() - ultimaLeitura) / 1000) + ' s. Actualiza de ' + INTERVALO_MS / 1000 + ' em ' + INTERVALO_MS / 1000 + ' s.'; }
+  }
+  async function obter() {
+    if (document.hidden || !ativo) return;
+    try {
+      const r = await fetch(URL_FEED, {cache: 'no-store'});
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const ents = await r.json();
+      if (!Array.isArray(ents)) throw new Error('formato inesperado');
+      const {v, maisRecente} = lerEntidades(ents);
+      if (!v.length) throw new Error('sem posições recentes');
+      P = v; ultimaLeitura = maisRecente; ultimaOk = Date.now();
+      Q = v.map(colar).filter(Boolean);
+      desenharPontos();
+      mostrar(v);
+      if (reduzido) redesenharParado();
+    } catch (err) {
+      if (!ultimaOk) { const e = el('estado-agora'); e.className = 'erro'; e.textContent = 'Sem ligação ao feed da Porto Digital (' + err.message + '). A tentar de novo.'; }
+    }
+    textoEstado();
+  }
+
+  // ---- rede de ruas: os troços da página. Autocarros e rastos colam-se a ela (só aparece o que está numa rua de uma linha)
+  const SNAP_M = 30, SNAP_RAD = 1.05, GR = 100;
+  let rede = null, Q = [], ruas = null, pontos = null;
+  const dif = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+  function construirRede() {
+    const tr = D.trocos.map(ll => {
+      const pts = ll.map(([la, lo]) => [lo * KX, la * KY]), cum = [0];
+      for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+      return {pts, cum, len: cum[cum.length - 1]};
+    });
+    const grade = new Map(), pontas = new Map();
+    const juntar = (m, k, v) => { if (!m.has(k)) m.set(k, []); m.get(k).push(v); };
+    tr.forEach((t, k) => {
+      for (let i = 1; i < t.pts.length; i++) {
+        const [x0, y0] = t.pts[i - 1], [x1, y1] = t.pts[i];
+        for (let gx = Math.floor((Math.min(x0, x1) - SNAP_M) / GR); gx <= Math.floor((Math.max(x0, x1) + SNAP_M) / GR); gx++)
+          for (let gy = Math.floor((Math.min(y0, y1) - SNAP_M) / GR); gy <= Math.floor((Math.max(y0, y1) + SNAP_M) / GR); gy++)
+            juntar(grade, gx + ',' + gy, [k, i]);
+      }
+      [0, 1].forEach(fim => { const [x, y] = t.pts[fim ? t.pts.length - 1 : 0]; juntar(pontas, Math.round(x / 6) + ',' + Math.round(y / 6), [k, fim]); });
+    });
+    return {tr, grade, pontas};
+  }
+  function colar(p) {            // autocarro -> {k, s, d, x, y} na rua da sua direcção, a ≤ 30 m; senão null
+    let melhor = null;
+    for (const [k, i] of rede.grade.get(Math.floor(p.x / GR) + ',' + Math.floor(p.y / GR)) || []) {
+      const t = rede.tr[k], [x0, y0] = t.pts[i - 1], [x1, y1] = t.pts[i], dx = x1 - x0, dy = y1 - y0, l2 = dx * dx + dy * dy || 1;
+      const f = Math.min(1, Math.max(0, ((p.x - x0) * dx + (p.y - y0) * dy) / l2)), qx = x0 + dx * f, qy = y0 + dy * f;
+      const dist = Math.hypot(p.x - qx, p.y - qy);
+      if (dist > SNAP_M || (melhor && dist >= melhor.dist)) continue;
+      const h = Math.atan2(dx, dy), sentido = dif(h, p.b) <= dif(h + Math.PI, p.b) ? 1 : -1;
+      if (dif(sentido > 0 ? h : h + Math.PI, p.b) > SNAP_RAD) continue;
+      melhor = {dist, k, s: t.cum[i - 1] + f * Math.sqrt(l2), d: sentido, x: qx, y: qy};
+    }
+    return melhor && {k: melhor.k, s: melhor.s, d: melhor.d, x: melhor.x, y: melhor.y, kmh: p.kmh, b: p.b};
+  }
+  function posicao(k, s, d) {
+    const t = rede.tr[k];
+    let i = 1; while (i < t.cum.length - 1 && t.cum[i] < s) i++;
+    const [x0, y0] = t.pts[i - 1], [x1, y1] = t.pts[i], l = t.cum[i] - t.cum[i - 1] || 1, f = Math.min(1, Math.max(0, (s - t.cum[i - 1]) / l)), h = Math.atan2(x1 - x0, y1 - y0);
+    return {x: x0 + (x1 - x0) * f, y: y0 + (y1 - y0) * f, h: d > 0 ? h : h + Math.PI};
+  }
+  function seguinte(k, d, h) {     // no fim do troço, continua por um troço ligado e sem inversão de marcha
+    const t = rede.tr[k], [x, y] = t.pts[d > 0 ? t.pts.length - 1 : 0], cand = [];
+    for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++)
+      for (const [k2, fim] of rede.pontas.get((Math.round(x / 6) + i) + ',' + (Math.round(y / 6) + j)) || []) {
+        if (k2 === k) continue;
+        const d2 = fim ? -1 : 1, s2 = fim ? rede.tr[k2].len : 0;
+        if (dif(posicao(k2, fim ? Math.max(0, s2 - .5) : .5, d2).h, h) < 1.1) cand.push({k: k2, d: d2, s: s2});
+      }
+    return cand.length ? cand[Math.floor(Math.random() * cand.length)] : null;
+  }
+
+  // rastos: cada partícula corre numa rua e só segue os autocarros que vão no seu sentido (uma corrente por sentido)
+  function campo(x, y, h) {
+    let sw = 0, sv = 0, n = 0;
+    for (const p of Q) {
+      const d2 = (p.x - x) ** 2 + (p.y - y) ** 2;
+      if (d2 > RAIO * RAIO || dif(p.b, h) > LIM) continue;
+      const w = 1 / (d2 + 2500);
+      sw += w; sv += w * p.kmh; n++;
+    }
+    return n < 1 ? null : {kmh: sv / sw};
+  }
+  function semear() {
+    const q = Q[Math.floor(Math.random() * Q.length)], t = rede.tr[q.k];
+    return {k: q.k, d: q.d, s: Math.min(t.len, Math.max(0, q.s + (Math.random() - .5) * 300)), vida: 90 + Math.random() * 140};
+  }
+  function ajustar() { const r = document.getElementById('mapa').getBoundingClientRect(); W = cv.width = r.width; H = cv.height = r.height; ctx = cv.getContext('2d'); }
+  const px = (x, y) => mapa.latLngToContainerPoint([y / KY, x / KX]);
+  function mover(p, dt) {          // false = a partícula acabou (sem autocarros à volta ou sem saída)
+    const a0 = posicao(p.k, p.s, p.d), c = campo(a0.x, a0.y, a0.h);
+    if (!c) return false;
+    p.s += p.d * c.kmh / 3.6 * dt * ESCALA;
+    if (p.s < 0 || p.s > rede.tr[p.k].len) {
+      const nx = seguinte(p.k, p.d, a0.h);
+      if (!nx) return false;
+      p.k = nx.k; p.d = nx.d; p.s = nx.s;
+    }
+    const a = px(a0.x, a0.y), b0 = posicao(p.k, p.s, p.d), b = px(b0.x, b0.y);
+    ctx.strokeStyle = rampa(VEL_AGORA, c.kmh / 40);
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x + .01, b.y); ctx.stroke();      // parado: fica um ponto
+    return true;
+  }
+  function passo(t) {
+    if (!ativo) return;
+    const dt = Math.min(.05, (t - ult) / 1000); ult = t;
+    if (Q.length) {
+      if (parts.length < 1800) parts = Array.from({length: 1800}, semear);
+      ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = 'rgba(0,0,0,.03)'; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'source-over'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.globalAlpha = .9;
+      for (let i = 0; i < parts.length; i++) if (--parts[i].vida < 0 || !mover(parts[i], dt)) parts[i] = semear();
+      ctx.globalAlpha = 1;
+    }
+    raf = requestAnimationFrame(passo);
+  }
+  function redesenharParado() {      // movimento reduzido: cada partícula desenha o seu caminho de uma vez
+    if (!ativo || !Q.length) return;
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = 4; ctx.lineCap = 'round';
+    for (let i = 0; i < 1800; i++) {
+      const p = semear();
+      for (let k = 0; k < 45; k++) {
+        ctx.globalAlpha = .9 * (1 - k / 54);
+        if (!mover(p, .05)) break;
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+  function desenharPontos() {        // um ponto por autocarro colado a uma rua, da cor do rasto
+    pontos.clearLayers();
+    for (const q of Q) L.circleMarker([q.y / KY, q.x / KX], {pane: 'pontosAgora', renderer: rendPontos, radius: 7, weight: 2, color: '#10141c',
+      fillColor: rampa(VEL_AGORA, q.kmh / 40), fillOpacity: 1, opacity: .9, interactive: false}).addTo(pontos);
+  }
+  function ligar() {
+    if (ativo) return;
+    ativo = true;
+    mapa.removeLayer(baseClara); baseEscura.addTo(mapa);
+    if (!rede) {
+      rede = construirRede();
+      mapa.createPane('pontosAgora').style.zIndex = 460;
+      rendPontos = L.canvas({pane: 'pontosAgora'});
+      ruas = L.layerGroup(D.trocos.map(ll => L.polyline(ll, {color: '#4a5263', weight: 2, opacity: .75, interactive: false})));
+      pontos = L.layerGroup();
+    }
+    ruas.addTo(mapa); pontos.addTo(mapa);
+    cv.style.display = 'block'; ajustar();
+    obter();
+    tIntervalo = setInterval(obter, INTERVALO_MS); tEstado = setInterval(textoEstado, 5000);
+    if (!reduzido) { ult = performance.now(); raf = requestAnimationFrame(passo); }
+  }
+  function desligar() {
+    if (!ativo) return;
+    ativo = false;
+    clearInterval(tIntervalo); clearInterval(tEstado); cancelAnimationFrame(raf);
+    if (ctx) ctx.clearRect(0, 0, W, H);
+    cv.style.display = 'none';
+    mapa.removeLayer(ruas); mapa.removeLayer(pontos); pontos.clearLayers();
+    mapa.removeLayer(baseEscura); baseClara.addTo(mapa);
+  }
+  addEventListener('resize', () => { if (ativo) { ajustar(); if (reduzido) redesenharParado(); } });
+  mapa.on('movestart zoomstart', () => { if (ativo && ctx) ctx.clearRect(0, 0, W, H); });
+  mapa.on('moveend zoomend', () => { if (reduzido) redesenharParado(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) obter(); });
+  return {ligar, desligar};
+})();
 
 document.querySelectorAll('#g-dia button, #g-per button, #g-modo button').forEach(b => b.addEventListener('click', () => {
   if (b.disabled) return;

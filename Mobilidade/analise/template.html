@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análise dos autocarros do Porto — Porto Verde</title>
+<style>
+  :root{--surface:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--ink3:#76746f;--grid:#e1e0d9;--panel:#ffffff;--marca:#ef4444;
+    --v0:#971b1a;--v1:#c44039;--v2:#e27368;--v3:#f2988e;--v4:#efeeeb;--v5:#8bb7f0;--v6:#639be1;--v7:#2d74ca;--v8:#07519d;
+    --o1:#2d74ca;--o2:#f2988e;--o3:#971b1a;--o4:#8a8882;
+    --p1:#b6aeee;--p2:#9889e3;--p3:#7b65d1;--p4:#6044b5;--p5:#452b8a;--p6:#2e1961;
+    --s1:#1baf7a;--s2:#6250d6;--gris:#898781}
+  #nav{position:fixed;top:10px;right:10px;z-index:1000;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;font:11px 'Segoe UI',Arial,sans-serif;max-width:60vw}
+  #nav a{background:rgba(255,255,255,.92);color:#444;text-decoration:none;padding:4px 10px;border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+  #nav a:hover{background:#fff;color:#222}
+  #nav a.active{background:#ef4444;color:#fff}
+  @media (max-width:700px){#nav{max-width:100vw;left:8px;right:8px;top:6px}body{padding-top:116px}}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--surface);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;padding-top:64px;hyphens:none}
+  main{max-width:1080px;margin:0 auto;padding:0 16px 80px}
+  h1{font:600 clamp(32px,5.4vw,56px)/1.06 Georgia,"Iowan Old Style",serif;letter-spacing:-.02em;margin:28px 0 14px;max-width:17ch}
+  .lead{font-size:19px;color:var(--ink2);max-width:64ch;margin:0 0 8px}
+  .meta{font-size:14px;color:var(--ink3);max-width:72ch;margin:0 0 28px}
+  .nums{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 20px}
+  .nums div{background:var(--panel);border:1px solid var(--grid);border-radius:12px;padding:14px 16px}
+  .nums b{display:block;font:600 34px/1.05 Georgia,serif;letter-spacing:-.02em}
+  .nums span{font-size:13.5px;color:var(--ink2);line-height:1.35;display:block;margin-top:6px}
+  @media (max-width:760px){.nums{grid-template-columns:1fr 1fr}.nums b{font-size:28px}}
+  .indice{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px;font-size:14px}
+  .indice a{color:var(--ink2);text-decoration:none;border:1px solid var(--grid);padding:4px 12px;border-radius:999px}
+  .indice a:hover{border-color:var(--ink3);color:var(--ink)}
+  section{margin:84px 0 0}
+  h2{font:600 clamp(26px,3.6vw,38px)/1.12 Georgia,"Iowan Old Style",serif;letter-spacing:-.015em;margin:0 0 8px}
+  h2 small{font:500 15px system-ui,sans-serif;color:var(--ink3);letter-spacing:0;display:block;margin-bottom:6px}
+  .sub{color:var(--ink2);max-width:66ch;margin:0 0 26px}
+  h3{font:600 clamp(19px,2.4vw,24px)/1.22 Georgia,serif;margin:0 0 6px;max-width:34ch}
+  figure{margin:0 0 56px}
+  .leg{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:13px;color:var(--ink2);margin:6px 0 10px}
+  .leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .cartao{background:var(--panel);border:1px solid var(--grid);border-radius:14px;padding:16px 14px 10px;position:relative}
+  .cartao svg{display:block;width:100%;height:auto;overflow:visible}
+  .cartao svg text{font:12px system-ui,sans-serif;fill:var(--ink2)}
+  .cartao svg .fraco{fill:var(--ink3)}
+  .cartao svg .forte{fill:var(--ink);font-weight:600}
+  .cartao svg .grelha{stroke:var(--grid);stroke-width:1}
+  .cartao svg .eixo path{display:none}
+  .cartao svg .eixo line{stroke:var(--grid)}
+  .cartao svg .eixo text{fill:var(--ink3)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .duo.a{grid-template-columns:1.1fr .9fr}
+  .duo.b{grid-template-columns:.8fr 1.2fr}
+  @media (max-width:820px){.duo,.duo.a,.duo.b{grid-template-columns:1fr}}
+  .nota{font-size:14.5px;color:var(--ink2);max-width:72ch;margin:14px 0 0}
+  .nota b{color:var(--ink)}
+  .limite{font-size:13.5px;color:var(--ink3);max-width:72ch;margin:6px 0 0;padding-left:12px;border-left:3px solid var(--grid)}
+  .tip{position:fixed;pointer-events:none;background:#14171c;color:#f0efec;font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;opacity:0;transition:opacity .08s;z-index:2000;max-width:260px}
+  .tip b{color:#fff}
+  .botoes{display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap;align-items:center}
+  .botoes button{font:inherit;font-size:14px;padding:5px 14px;border:1px solid var(--grid);background:var(--surface);color:var(--ink);border-radius:999px;cursor:pointer}
+  .botoes button.on{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+  .botoes button:focus-visible,.botoes input:focus-visible,summary:focus-visible{outline:2px solid var(--s2);outline-offset:2px}
+  .botoes input{font:inherit;font-size:14px;padding:5px 14px;border:1px solid var(--grid);background:var(--surface);color:var(--ink);border-radius:999px;width:230px;max-width:100%}
+  details{margin-top:8px;font-size:13.5px;color:var(--ink2)}
+  summary{cursor:pointer;width:max-content;color:var(--ink3);padding:2px 0}
+  details .tb{max-height:300px;overflow:auto;margin-top:8px}
+  table{border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  th,td{padding:3px 10px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  th{position:sticky;top:0;background:var(--surface);color:var(--ink);font-weight:600}
+  .med{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13.5px;margin:5px 0}
+  .med i{display:block;height:9px;border-radius:5px;background:var(--p4)}
+  .med em{font-style:normal;text-align:right;color:var(--ink2);font-variant-numeric:tabular-nums}
+  .indicios{max-width:72ch;margin:14px 0 0;padding-left:20px;color:var(--ink2);font-size:15px}
+  .indicios li{margin:6px 0}
+  .final{background:var(--panel);border:1px solid var(--grid);border-radius:14px;padding:22px 24px;max-width:78ch}
+  .final ul{margin:8px 0 0;padding-left:20px;color:var(--ink2)}
+  .final li{margin:6px 0}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tip{transition:none}}
+</style>
+</head>
+<body>
+__NAV__
+<main>
+  <header>
+    <h1>Os autocarros do Porto: quando e onde ficam parados</h1>
+    <p class="lead">Seguimos, minuto a minuto, __VEICULOS__ autocarros da STCP em __LINHAS__ linhas, de __INTERVALO__ (__LEITURAS__ posições de GPS). Juntámos os horários e as horas de passagem estimadas pela STCP em __DIASPACOTE__ dias úteis de Outubro e Novembro (__PASSAGENS__ passagens).</p>
+    <p class="meta">Como se calcula: a velocidade vem do próprio autocarro. Não contamos o tempo em que pára de propósito, numa paragem ou no fim da linha; contamos o tempo parado no trânsito. Só há 4 dias úteis normais medidos, por isso isto é um retrato destes dias, não a média do ano. A quarta-feira 11 de Novembro foi diferente e tem um capítulo próprio.</p>
+    <div class="nums" id="nums"></div>
+    <nav class="indice" aria-label="Capítulos"><a href="#quando">Quando</a><a href="#onde">Onde</a><a href="#linhas">As linhas</a><a href="#horario">O horário</a><a href="#excepcao">A excepção</a><a href="#limites">O que não sabemos</a></nav>
+  </header>
+
+  <section id="quando">
+    <h2><small>I</small>Quando: em que gasta o tempo um autocarro</h2>
+    <p class="sub">Cada ponto de GPS vale cerca de 1 minuto. Somando todos, vê-se em que gasta o tempo um autocarro: a andar, parado numa paragem ou parado no trânsito.</p>
+    <figure>
+      <h3 id="t1"></h3>
+      <div class="leg" id="l1"></div>
+      <div class="cartao"><div id="g1"></div></div>
+      <p class="nota" id="n1"></p>
+      <p class="limite">Não sabemos se o tempo «parado na paragem» é a entrada de passageiros ou um semáforo ao lado da paragem. Contamos como paragem o autocarro parado a menos de 40 m de uma paragem (ou a 100 m de um terminal).</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb1"></div></details>
+    </figure>
+    <figure>
+      <h3 id="t2"></h3>
+      <div class="cartao"><div id="g2"></div></div>
+      <p class="nota" id="n2"></p>
+      <p class="limite">Não sabemos porque pára cada autocarro (semáforo, fila, passadeira, avaria).</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb2"></div></details>
+    </figure>
+  </section>
+
+  <section id="onde">
+    <h2><small>II</small>Onde: o sentido do trânsito e as ruas mais lentas</h2>
+    <p class="sub">A cidade não abranda por igual: depende da hora, do sentido e da rua.</p>
+    <figure>
+      <h3>De manhã são mais lentos os autocarros que entram no centro; à tarde, os que saem</h3>
+      <div class="leg"><span><i style="background:var(--s1)"></i>a entrar para o centro</span><span><i style="background:var(--s2)"></i>a sair do centro</span></div>
+      <div class="duo a"><div class="cartao"><div id="g4a"></div></div><div class="cartao"><div id="g4b"></div></div></div>
+      <p class="nota" id="n4"></p>
+      <p class="limite">Não sabemos se a causa é o trânsito de quem vai e vem do trabalho: os autocarros que entram de manhã também levam mais gente, e não temos dados de lotação. Medido entre 1,5 e 8 km dos Aliados; «entrar» = ir em direcção ao centro (até 60° de desvio).</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb4"></div></details>
+    </figure>
+    <figure>
+      <h3 id="t5"></h3>
+      <div class="duo b"><div class="cartao"><div id="g5a"></div></div><div class="cartao"><div id="g5b"></div></div></div>
+      <div class="leg" style="margin-top:10px"><span><i style="background:var(--p2)"></i>manhã (7–9 h)</span><span><i style="background:var(--p5)"></i>tarde (17–19 h)</span></div>
+      <p class="nota" id="n5"></p>
+      <p class="limite">Uma rua com muitos autocarros aparece mesmo que não seja a mais lenta, porque contam os minutos de todos os autocarros. Não sabemos se uma faixa BUS resolveria.</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb5"></div></details>
+    </figure>
+    <figure id="f13" hidden>
+      <h3 id="t13"></h3>
+      <div class="leg"><span><i style="background:var(--s1)"></i>troço com corredor BUS</span><span><i style="background:var(--gris)"></i>troço sem corredor</span></div>
+      <div class="duo b"><div class="cartao"><div id="g13a"></div></div><div class="cartao"><div id="g13b"></div></div></div>
+      <p class="nota" id="n13"></p>
+      <p class="limite" id="l13"></p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb13"></div></details>
+    </figure>
+  </section>
+
+  <section id="linhas">
+    <h2><small>III</small>As linhas</h2>
+    <p class="sub">Umas linhas perdem muito à tarde; outras são lentas mas regulares.</p>
+    <figure>
+      <h3 id="t6"></h3>
+      <div class="botoes"><input id="q6" type="search" placeholder="procurar linha (ex. 603)" aria-label="Procurar linha"></div>
+      <div class="cartao"><div id="g6"></div></div>
+      <p class="nota" id="n6"></p>
+      <p class="limite">Velocidade só enquanto o autocarro anda (sem esperas), em 4 dias úteis normais. Linhas com poucas leituras não aparecem.</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb6"></div></details>
+    </figure>
+    <figure>
+      <h3>Uma linha lenta não é necessariamente irregular</h3>
+      <div class="cartao"><div id="g7"></div></div>
+      <p class="nota" id="n7"></p>
+      <p class="limite">Irregularidade = quanto variam as durações das viagens face ao horário (diferença entre o percentil 90 e o 10 de «duração real ÷ programada»). Não sabemos a causa (trânsito, obras, desvios, gestão da linha). Comparado com o horário de 26 de Outubro; 3 dias úteis normais.</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb7"></div></details>
+    </figure>
+  </section>
+
+  <section id="horario">
+    <h2><small>IV</small>O horário e a rua</h2>
+    <p class="sub">Aqui entram as horas de passagem estimadas pela STCP: quando cada autocarro devia passar e quando passou. Consideramos «pontual» chegar entre 1 minuto antes e 3 minutos depois da hora. É uma regra nossa; convém confirmar a da STCP antes de comparar com números oficiais.</p>
+    <figure>
+      <h3 id="t8"></h3>
+      <div class="cartao"><div id="g8"></div></div>
+      <p class="nota" id="n8"></p>
+      <p class="limite">Linha = atraso mediano; faixa escura = metade das passagens (percentis 25–75); faixa clara = 80 % (percentis 10–90). Atraso em minutos; 18 dias úteis entre 19 de Outubro e 12 de Novembro, sem o dia 11. «Início» e «fim» = primeiro e último décimo do percurso.</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb8"></div></details>
+    </figure>
+    <figure>
+      <h3>Cada linha: com quanto atraso parte e com quanto chega</h3>
+      <div class="botoes" id="b9" role="group" aria-label="Janela da chegada"><button data-j="todas" class="on">Todo o dia</button><button data-j="manha">Manhã</button><button data-j="entre_pontas">Entre pontas</button><button data-j="tarde">Tarde</button></div>
+      <div class="cartao"><div id="g9"></div></div>
+      <p class="nota" id="n9"></p>
+      <p class="limite">Ponto oco = atraso à partida (primeiros 15 % do percurso); ponto cheio = à chegada (últimos 15 %). 85 % dos tempos intermédios do horário foram reconstruídos pelo pacote: um troço «mau» pode ser um horário mal reconstruído.</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb9"></div></details>
+    </figure>
+    <figure>
+      <h3>Os autocarros da mesma linha aproximam-se uns dos outros durante o percurso</h3>
+      <div class="duo"><div class="cartao"><div id="g10a"></div></div><div class="cartao"><div id="g10b"></div></div></div>
+      <div id="m10" style="margin-top:14px"></div>
+      <p class="nota" id="n10"></p>
+      <p class="limite">Pares de autocarros seguidos da mesma linha, no mesmo sentido e paragem. Pelotão = chegam com menos de metade do intervalo previsto; buraco = com mais de uma vez e meia. Os buracos estão subestimados (pares com um autocarro intermédio não visto não contam).</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb10"></div></details>
+    </figure>
+    <figure>
+      <h3 id="t11"></h3>
+      <div class="leg"><span><i style="background:var(--p3)"></i>viagens programadas</span><span><i style="background:var(--p6)"></i>vistas no GPS</span></div>
+      <div class="cartao"><div id="g11"></div></div>
+      <p class="nota" id="n11"></p>
+      <p class="limite">Hipótese, não prova: se as viagens demoram 17 % mais e a frota é a mesma, algumas viagens da ponta da tarde podem não se fazer (ou mudar de identificador). Os dados não distinguem uma viagem suprimida de um GPS desligado: «não vista» não quer dizer «não feita».</p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb11"></div></details>
+    </figure>
+  </section>
+
+  <section id="excepcao">
+    <h2><small>V</small>A excepção: quarta-feira, 11 de Novembro</h2>
+    <p class="sub">Um dia útil em que os autocarros andaram muito mais depressa e chegaram adiantados. Não parece erro dos dados: foi feriado.</p>
+    <figure>
+      <h3>Quatro dias úteis seguem o mesmo padrão; a quarta-feira 11 é diferente</h3>
+      <div class="leg" id="l12"></div>
+      <div class="cartao"><div id="g12a"></div></div>
+      <p class="nota" id="n12a"></p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb12a"></div></details>
+    </figure>
+    <figure>
+      <h3>Atraso por dia: só o dia 11 fica abaixo de zero (autocarros adiantados)</h3>
+      <div class="leg"><span><i style="background:var(--s1)"></i>manhã</span><span><i style="background:var(--gris)"></i>entre pontas</span><span><i style="background:var(--s2)"></i>tarde</span><span style="color:var(--ink3)">pontos esbatidos = poucos dados</span></div>
+      <div class="cartao"><div id="g12b"></div></div>
+      <p class="nota" id="n12b"></p>
+      <details><summary>Ver os números</summary><div class="tb" id="tb12b"></div></details>
+    </figure>
+    <figure>
+      <h3>No dia 11 houve o dobro de paragens longas</h3>
+      <div id="m12"></div>
+      <p class="nota" id="n12c"></p>
+      <ul class="indicios" id="ind"></ul>
+      <p class="limite"><b>Causa provável, não provada: foi feriado.</b> O autor indica que o dia 11 foi feriado (dia de São Martinho); não conseguimos confirmá-lo em fontes oficiais, porque não é feriado nacional nem municipal do Porto. Um feriado explicaria menos trânsito e menos escolas, e portanto viagens cerca de 18 % mais curtas. O horário aplicado era de dia útil, e os dados não mostram quem circulou menos.</p>
+    </figure>
+  </section>
+
+  <section id="limites">
+    <div class="final">
+      <h2 style="font-size:26px">O que esta análise não permite concluir</h2>
+      <ul>
+        <li><b>Poucos dias.</b> 4 dias úteis normais, 1 dia atípico e 1 domingo parcial medidos; 18 dias úteis do pacote, só em 3 períodos do dia. Só Novembro: não sabemos como é no Verão ou com chuva.</li>
+        <li><b>Causas.</b> Vemos onde e quando os autocarros são lentos, não porquê. Não temos dados de trânsito, semáforos, lotação, passageiros nem obras.</li>
+        <li><b>Viagens suprimidas.</b> «Não vista no GPS» não é «não feita».</li>
+        <li><b>Espera dos passageiros.</b> Os pelotões mostram irregularidade; sem dados de passageiros não calculamos quanto esperam.</li>
+        <li><b>Definições nossas.</b> «Pontual» (−1 a +3 min), «crítico» (menos de 14 km/h) e a referência de 25 km/h são critérios deste projecto, não metas oficiais.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const D = __DADOS__;
+const S = D.stcp, RH = S.recolha_x_horario;
+const nf = (x, d = 1) => Number(x).toFixed(d).replace('.', ',');
+const sg = (x, d = 1) => (x > 0 ? '+' : x < 0 ? '−' : '') + nf(Math.abs(x), d);
+const pc = (x, d = 0) => nf(x, d) + ' %';
+const HORAS = d3.range(24);
+const DIASEM = {dom:'domingo', seg:'segunda', ter:'terça', qua:'quarta', qui:'quinta', sex:'sexta', 'sáb':'sábado'};
+const dataCurta = ds => { const [, m, d] = ds.split('-'); return `${+d}/${+m}`; };
+let C;
+
+function cores() {
+  const g = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  C = { surface: g('--surface'), ink: g('--ink'), ink2: g('--ink2'), ink3: g('--ink3'), grid: g('--grid'), gris: g('--gris'),
+        ramp: d3.range(9).map(i => g('--v' + i)), o: [1,2,3,4].map(i => g('--o' + i)), p: [1,2,3,4,5,6].map(i => g('--p' + i)), s1: g('--s1'), s2: g('--s2') };
+  C.spd = d3.scaleLinear().domain([3,6,9,12,14,17,21,25,30]).range(C.ramp).clamp(true).interpolate(d3.interpolateRgb);
+  C.dly = d3.scaleLinear().domain([-8,-5,-3,-1.5,0,1.5,3,6,10]).range(C.ramp.slice().reverse()).clamp(true).interpolate(d3.interpolateRgb);
+  C.cl = [0,3,5,6,7,8].map(i => C.ramp[i]);
+}
+const onC = c => d3.lab(c).l > 62 ? '#0b0b0b' : '#ffffff';
+
+const tip = document.createElement('div'); tip.className = 'tip'; document.body.append(tip);
+function showTip(html, ev) {
+  tip.innerHTML = html; tip.style.opacity = 1;
+  const r = tip.getBoundingClientRect(); let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - 14;
+  if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - 14;
+  tip.style.left = Math.max(4, x) + 'px'; tip.style.top = Math.max(4, y) + 'px';
+}
+const hideTip = () => { tip.style.opacity = 0; };
+
+function base(sel, hf) {
+  const el = document.querySelector(sel); el.innerHTML = '';
+  const w = Math.max(300, Math.floor(el.clientWidth)), h = typeof hf === 'function' ? hf(w) : hf;
+  const svg = d3.select(el).append('svg').attr('width', w).attr('height', h).attr('viewBox', `0 0 ${w} ${h}`);
+  return { svg, w, h, narrow: w < 560 };
+}
+function tabela(sel, cab, linhas) {
+  document.querySelector(sel).innerHTML = '<table><thead><tr>' + cab.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>' +
+    linhas.map(l => '<tr>' + l.map(c => `<td>${c ?? '—'}</td>`).join('') + '</tr>').join('') + '</tbody></table>';
+}
+function eixoX(g, x, y, ticks, fmt) {
+  g.append('g').attr('class', 'eixo').attr('transform', `translate(0,${y})`).call(d3.axisBottom(x).tickValues(ticks).tickFormat(fmt).tickSizeOuter(0));
+}
+function eixoY(g, y, xl, xr, ticks, fmt) {
+  const gg = g.append('g');
+  ticks.forEach(t => { gg.append('line').attr('class', 'grelha').attr('x1', xl).attr('x2', xr).attr('y1', y(t)).attr('y2', y(t));
+    gg.append('text').attr('class', 'fraco').attr('x', xl - 6).attr('y', y(t)).attr('dy', '.32em').attr('text-anchor', 'end').text(fmt ? fmt(t) : t); });
+}
+function sobrepor(svg, m, w, h, mov, sai) {
+  svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', w - m.l - m.r).attr('height', h - m.t - m.b).attr('fill', 'transparent').style('touch-action', 'pan-y')
+    .on('pointermove', e => mov(d3.pointer(e)[0], d3.pointer(e)[1], e)).on('pointerleave', () => { sai(); hideTip(); });
+}
+const corte = (s, n) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+
+/* ---------- números de abertura ---------- */
+function numeros() {
+  const o = D.orcamento.horas, vs = o.map((x, h) => x && h >= 7 && h <= 18 ? { ...x, h } : null).filter(Boolean);
+  const tot = d3.sum(vs, d => d.n), andar = d3.sum(vs, d => d.andar * d.n) / tot;
+  const t18 = o[18].transito, med = S.progresso.tarde.slice(-1)[0].med;
+  const v18 = RH.realizacao.por_hora.find(d => d.h === 18).vistas_pct;
+  document.getElementById('nums').innerHTML = [
+    [pc(andar), 'do tempo a andar, entre as 7 h e as 19 h'],
+    [pc(t18), 'do tempo parado no trânsito às 18 h: 1 minuto em cada 5'],
+    [sg(med) + ' min', 'de atraso mediano no fim da linha, à tarde'],
+    [pc(v18), 'das viagens que o horário prevê para as 18 h aparecem no GPS']].map(([a, b]) => `<div><b>${a}</b><span>${b}</span></div>`).join('');
+}
+
+/* ---------- G1 orçamento do tempo ---------- */
+function g1() {
+  const rows = D.orcamento.horas.map((o, h) => o ? { h, ...o } : null).filter(Boolean);
+  const K = ['andar', 'devagar', 'transito', 'paragem'], NM = ['a andar (10 km/h ou mais)', 'devagar (2–10 km/h)', 'parado no trânsito', 'parado na paragem ou terminal'];
+  const { svg, w, h, narrow } = base('#g1', w => w < 560 ? 300 : 380);
+  const m = { l: 40, r: narrow ? 10 : 140, t: 14, b: 28 }, ND = ['a andar', 'devagar', 'parado no trânsito', 'paragem ou terminal'];
+  const x = d3.scaleLinear().domain(d3.extent(rows, d => d.h)).range([m.l, w - m.r]), y = d3.scaleLinear().domain([0, 100]).range([h - m.b, m.t]);
+  eixoY(svg, y, m.l, w - m.r, [0, 25, 50, 75, 100], t => t + ' %');
+  eixoX(svg, x, h - m.b, d3.range(0, 24, 3), t => fmtH(t));
+  const st = d3.stack().keys(K)(rows), ar = d3.area().x(d => x(d.data.h)).y0(d => y(d[0])).y1(d => y(d[1])).curve(d3.curveMonotoneX);
+  st.forEach((s, i) => svg.append('path').attr('d', ar(s)).attr('fill', C.o[i]).attr('stroke', C.surface).attr('stroke-width', 2));
+  const xe = x.domain()[1];
+  if (!narrow) st.forEach((s, i) => { const d = s[s.length - 1]; svg.append('text').attr('x', w - m.r + 10).attr('y', y((d[0] + d[1]) / 2)).attr('dy', '.32em').text(ND[i]).style('fill', C.ink); });
+  [12, 18].forEach(hh => { const d = rows.find(r => r.h === hh); if (!d) return; const i = rows.indexOf(d), s = st[2][i];
+    svg.append('text').attr('x', x(hh)).attr('y', y((s[0] + s[1]) / 2)).attr('dy', '.32em').attr('text-anchor', 'middle').style('fill', onC(C.o[2])).style('font-weight', 700).text(nf(d.transito) + ' %'); });
+  const rule = svg.append('line').attr('y1', m.t).attr('y2', h - m.b).attr('stroke', C.ink).attr('stroke-width', 1.5).style('display', 'none');
+  sobrepor(svg, m, w, h, (px, py, e) => { const hh = Math.round(x.invert(px)), d = rows.find(r => r.h === hh); if (!d) return;
+    rule.style('display', null).attr('x1', x(hh)).attr('x2', x(hh));
+    showTip(`<b>${fmtH(hh)}</b><br>a andar ${pc(d.andar)}<br>devagar ${pc(d.devagar)}<br>parado no trânsito ${pc(d.transito)}<br>na paragem/terminal ${pc(d.paragem)}<br>${d.n.toLocaleString('pt-PT')} leituras`, e); }, () => rule.style('display', 'none'));
+  document.getElementById('l1').innerHTML = NM.map((n, i) => `<span><i style="background:${C.o[i]}"></i>${n}</span>`).join('');
+  tabela('#tb1', ['Hora', 'A andar %', 'Devagar %', 'Parado no trânsito %', 'Paragem/terminal %', 'Leituras'], rows.map(d => [fmtH(d.h), nf(d.andar), nf(d.devagar), nf(d.transito), nf(d.paragem), d.n]));
+}
+const fmtH = h => String(h).padStart(2, '0') + ' h';
+
+/* ---------- G2 ridgeline ---------- */
+function g2() {
+  const hs = D.dist.horas.map((d, h) => d ? { h, ...d } : null).filter(d => d && d.h >= 6);
+  const bins = D.dist.bins, step = bins[1] - bins[0];
+  const { svg, w, h } = base('#g2', w => 70 + hs.length * (w < 560 ? 24 : 30));
+  const m = { l: 44, r: 18, t: 30, b: 34 }, rh = (h - m.t - m.b) / hs.length;
+  const x = d3.scaleLinear().domain([0, 50]).range([m.l, w - m.r]);
+  const dmax = d3.max(hs, d => d3.max(d.c)), yy = d3.scaleLinear().domain([0, dmax]).range([0, rh * 2.4]);
+  const defs = svg.append('defs'), gr = defs.append('linearGradient').attr('id', 'gv').attr('gradientUnits', 'userSpaceOnUse').attr('x1', x(0)).attr('x2', x(50));
+  d3.range(0, 50.1, 2.5).forEach(v => gr.append('stop').attr('offset', v / 50).attr('stop-color', C.spd(v)));
+  eixoX(svg, x, h - m.b + 4, [0, 10, 20, 30, 40, 50], t => t + ' km/h');
+  svg.append('line').attr('x1', x(14)).attr('x2', x(14)).attr('y1', m.t - 6).attr('y2', h - m.b).attr('stroke', C.ink3).attr('stroke-dasharray', '3 3');
+  svg.append('text').attr('class', 'fraco').attr('x', x(14) + 5).attr('y', m.t - 12).text('14 km/h: crítico');
+  hs.forEach((d, i) => {
+    const base0 = m.t + rh * (i + 1);
+    const pts = [[0, 0], ...d.c.map((c, j) => [(j + .5) * step, c]), [50, 0]];
+    const ln = d3.line().x(p => x(p[0])).y(p => base0 - yy(p[1])).curve(d3.curveMonotoneX);
+    const g = svg.append('g');
+    g.append('path').attr('d', ln(pts) + `L${x(0)},${base0}Z`).attr('fill', 'url(#gv)');
+    g.append('path').attr('d', ln(pts)).attr('fill', 'none').attr('stroke', C.surface).attr('stroke-width', 1.6);
+    g.append('text').attr('class', 'fraco').attr('x', m.l - 8).attr('y', base0).attr('text-anchor', 'end').text(fmtH(d.h));
+    g.append('line').attr('x1', x(d.med)).attr('x2', x(d.med)).attr('y1', base0 - 9).attr('y2', base0).attr('stroke', C.ink).attr('stroke-width', 2);
+    if (d.h === 18) g.append('text').attr('x', x(15.5)).attr('y', base0 - 4).style('fill', C.ink).style('font-weight', 700).style('paint-order', 'stroke').style('stroke', C.surface).style('stroke-width', 4).text(`${nf(d.parados)} % parados`);
+    g.append('rect').attr('x', 0).attr('width', w).attr('y', base0 - rh).attr('height', rh).attr('fill', 'transparent')
+      .on('pointermove', e => showTip(`<b>${fmtH(d.h)}</b><br>mediana ${nf(d.med)} km/h<br>p10–p90: ${nf(d.p10)}–${nf(d.p90)} km/h<br>parados (&lt; 2 km/h): ${nf(d.parados)} %<br>${d.n.toLocaleString('pt-PT')} leituras`, e))
+      .on('pointerleave', hideTip);
+  });
+  tabela('#tb2', ['Hora', 'Mediana km/h', 'p10', 'p90', 'Parados %', 'Leituras'], hs.map(d => [fmtH(d.h), nf(d.med), nf(d.p10), nf(d.p90), nf(d.parados), d.n]));
+}
+
+/* ---------- G4 maré + perfil radial ---------- */
+function g4() {
+  const rows = D.mare.horas.map((d, h) => d && h >= 6 ? { h, e: d.entra[0], s: d.sai[0], ne: d.entra[1], ns: d.sai[1] } : null).filter(Boolean);
+  { const { svg, w, h, narrow } = base('#g4a', 340), m = { l: 38, r: narrow ? 56 : 84, t: 14, b: 40 };
+    const x = d3.scaleLinear().domain(d3.extent(rows, d => d.h)).range([m.l, w - m.r]);
+    const y = d3.scaleLinear().domain([10, d3.max(rows, d => Math.max(d.e, d.s)) + 1]).nice().range([h - m.b, m.t]);
+    eixoY(svg, y, m.l, w - m.r, y.ticks(5), t => t); svg.append('text').attr('class', 'fraco').attr('x', m.l - 6).attr('y', 8).attr('text-anchor', 'end').text('km/h');
+    eixoX(svg, x, h - m.b, d3.range(6, 24, 3).filter(t => t >= x.domain()[0] && t <= x.domain()[1]), fmtH);
+    svg.append('path').attr('d', d3.area().x(d => x(d.h)).y0(d => y(d.e)).y1(d => y(d.s)).curve(d3.curveMonotoneX)(rows)).attr('fill', C.ink).attr('opacity', .08);
+    [['e', C.s1, 'entra'], ['s', C.s2, 'sai']].forEach(([k, c, nm]) => {
+      svg.append('path').attr('d', d3.line().x(d => x(d.h)).y(d => y(d[k])).curve(d3.curveMonotoneX)(rows)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2.5);
+      const u = rows[rows.length - 1], sob = (u.e >= u.s) === (k === 'e') ? -7 : 7; svg.append('text').attr('x', x(u.h) + 6).attr('y', y(u[k]) + sob).attr('dy', '.32em').style('fill', C.ink).text(nm === 'entra' ? 'a entrar' : 'a sair'); });
+    Object.values(D.mare.dias).forEach(dd => [['am', 8], ['pm', 18]].forEach(([p, hh]) => { if (!dd[p] || !x.domain().length) return;
+      [[dd[p][0], C.s1], [dd[p][1], C.s2]].forEach(([v, c]) => svg.append('circle').attr('cx', x(hh)).attr('cy', y(v)).attr('r', 3.2).attr('fill', c).attr('opacity', .45).attr('stroke', C.surface)); }));
+    const rule = svg.append('line').attr('y1', m.t).attr('y2', h - m.b).attr('stroke', C.ink).attr('stroke-width', 1.5).style('display', 'none');
+    sobrepor(svg, m, w, h, (px, py, e) => { const hh = Math.round(x.invert(px)), d = rows.find(r => r.h === hh); if (!d) return; rule.style('display', null).attr('x1', x(hh)).attr('x2', x(hh));
+      showTip(`<b>${fmtH(hh)}</b><br>a entrar: ${nf(d.e)} km/h (${d.ne.toLocaleString('pt-PT')} leituras)<br>a sair: ${nf(d.s)} km/h (${d.ns.toLocaleString('pt-PT')})<br>diferença ${sg(d.e - d.s)} km/h`, e); }, () => rule.style('display', 'none'));
+    svg.append('text').attr('class', 'fraco').attr('x', m.l).attr('y', h - 4).text('pontos: cada dia útil, às 8 h e às 18 h');
+  }
+  { const { svg, w, h } = base('#g4b', 340), m = { l: 38, r: 14, t: 14, b: 40 }, km = D.radial.anel_m / 1000;
+    const per = [['am', C.p[1], '7–9 h'], ['pm', C.p[4], '17–19 h']];
+    const x = d3.scaleLinear().domain([0, 10]).range([m.l, w - m.r]), y = d3.scaleLinear().domain([6, 30]).clamp(true).range([h - m.b, m.t]);
+    eixoY(svg, y, m.l, w - m.r, [10, 15, 20, 25, 30], t => t); svg.append('text').attr('class', 'fraco').attr('x', m.l - 6).attr('y', 8).attr('text-anchor', 'end').text('km/h');
+    eixoX(svg, x, h - m.b, [0, 2, 4, 6, 8, 10], t => t + ' km');
+    per.forEach(([k, c, nm]) => { const a = D.radial.perfil[k].map(([i, v, n, q1, q3]) => ({ x: (i + .5) * km, v, q1, q3, n }));
+      svg.append('path').attr('d', d3.area().x(d => x(d.x)).y0(d => y(d.q1)).y1(d => y(d.q3)).curve(d3.curveMonotoneX)(a)).attr('fill', c).attr('opacity', .16);
+      svg.append('path').attr('d', d3.line().x(d => x(d.x)).y(d => y(d.v)).curve(d3.curveMonotoneX)(a)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2.5);
+      const u = a[a.length - 1]; svg.append('text').attr('x', x(u.x) - 4).attr('y', y(u.v) + (k === 'am' ? -9 : 15)).attr('text-anchor', 'end').style('fill', C.ink).text(nm); });
+    const p0 = D.radial.perfil.pm[0]; svg.append('text').attr('x', x(.25) + 6).attr('y', y(p0[1]) + 18).style('fill', C.ink).style('font-weight', 600).text(`${nf(p0[1])} km/h no 1.º meio km, à tarde`);
+    svg.append('text').attr('class', 'fraco').attr('x', m.l).attr('y', h - 4).text('distância aos Aliados · faixa: percentis 25–75');
+    const rule = svg.append('line').attr('y1', m.t).attr('y2', h - m.b).attr('stroke', C.ink).attr('stroke-width', 1.5).style('display', 'none');
+    sobrepor(svg, m, w, h, (px, py, e) => { const i = Math.floor(x.invert(px) / km); if (i < 0) return; const a = D.radial.perfil.am.find(d => d[0] === i), b = D.radial.perfil.pm.find(d => d[0] === i); if (!a && !b) return;
+      rule.style('display', null).attr('x1', x((i + .5) * km)).attr('x2', x((i + .5) * km));
+      showTip(`<b>${nf(i * km)}–${nf((i + 1) * km)} km dos Aliados</b><br>7–9 h: ${a ? nf(a[1]) + ' km/h' : '—'}<br>17–19 h: ${b ? nf(b[1]) + ' km/h' : '—'}`, e); }, () => rule.style('display', 'none'));
+  }
+  const m8 = D.mare.horas[8], m18 = D.mare.horas[18];
+  document.getElementById('n4').innerHTML = '<b>O sentido da lentidão muda ao longo do dia.</b> Às 8 h, os autocarros que vão para o centro andam a ' + nf(m8.entra[0]) + ' km/h e os que saem a ' + nf(m8.sai[0]) + '. Às 18 h inverte-se: os que saem andam a ' + nf(m18.sai[0]) + ' km/h e os que entram a ' + nf(m18.entra[0]) + '. Repete-se em todos os dias normais (pontos). À direita, a velocidade conforme a distância ao centro: à tarde, ' + nf(D.radial.perfil.pm[0][1]) + ' km/h no primeiro meio quilómetro à volta dos Aliados, a subir para cerca de 20 km/h a 5–6 km.';
+  const dias = Object.entries(D.mare.dias);
+  tabela('#tb4', ['Dia', 'Manhã: a entrar', 'Manhã: a sair', 'Tarde: a entrar', 'Tarde: a sair'], dias.map(([d, v]) => [dataCurta(d), v.am ? nf(v.am[0]) : null, v.am ? nf(v.am[1]) : null, v.pm ? nf(v.pm[0]) : null, v.pm ? nf(v.pm[1]) : null]));
+}
+
+/* ---------- G5 Lorenz + ruas ---------- */
+function g5() {
+  const cur = D.lorenz.curva, xs = cur.map(d => d[0]), ys = cur.map(d => d[1]);
+  const interp = p => { const i = d3.bisect(xs, p); if (i <= 0) return ys[0]; if (i >= xs.length) return ys[ys.length - 1]; const t = (p - xs[i - 1]) / (xs[i] - xs[i - 1]); return ys[i - 1] + t * (ys[i] - ys[i - 1]); };
+  let dest;
+  { const { svg, w, h } = base('#g5a', w => Math.min(w, 400) + 30), m = { l: 44, r: 14, t: 14, b: 38 };
+    const x = d3.scaleLinear().domain([0, 1]).range([m.l, w - m.r]), y = d3.scaleLinear().domain([0, 1]).range([h - m.b, m.t]);
+    eixoY(svg, y, m.l, w - m.r, [0, .25, .5, .75, 1], t => t * 100 + ' %'); eixoX(svg, x, h - m.b, [0, .25, .5, .75, 1], t => t * 100 + ' %');
+    svg.append('text').attr('class', 'fraco').attr('x', (m.l + w - m.r) / 2).attr('y', h - 4).attr('text-anchor', 'middle').text('% dos troços (do pior para o melhor)');
+    svg.append('text').attr('class', 'fraco').attr('x', m.l).attr('y', 6).text('% do tempo perdido');
+    svg.append('line').attr('x1', x(0)).attr('y1', y(0)).attr('x2', x(1)).attr('y2', y(1)).attr('stroke', C.ink3).attr('stroke-dasharray', '4 4');
+    const pts = [[0, 0], ...cur];
+    svg.append('path').attr('d', d3.area().x(d => x(d[0])).y0(d => y(d[0])).y1(d => y(d[1]))(pts)).attr('fill', C.p[2]).attr('opacity', .15);
+    svg.append('path').attr('d', d3.line().x(d => x(d[0])).y(d => y(d[1]))(pts)).attr('fill', 'none').attr('stroke', C.p[4]).attr('stroke-width', 2.8);
+    [.05, .1, .2].forEach((p, i) => { const v = interp(p); svg.append('circle').attr('cx', x(p)).attr('cy', y(v)).attr('r', 4.5).attr('fill', C.p[4]).attr('stroke', C.surface).attr('stroke-width', 2);
+      svg.append('text').attr('x', x(p) + 9).attr('y', y(v) + (i === 0 ? 14 : i === 1 ? 4 : -2)).style('fill', C.ink).style('font-weight', 600).text(`${p * 100} % → ${nf(v * 100, 0)} %`); });
+    dest = svg.append('g'); }
+  const ruas = D.ruas.slice(0, 15);
+  { const { svg, w, h, narrow } = base('#g5b', 15 * 27 + 40), m = { l: narrow ? 128 : 215, r: 44, t: 8, b: 30 }, nomeRua = n => n === '(sem nome)' ? 'troços sem nome (OSM)' : n;
+    const x = d3.scaleLinear().domain([0, d3.max(ruas, d => d.am + d.pm)]).nice().range([m.l, w - m.r]), y = d3.scaleBand().domain(ruas.map(d => d.rua)).range([m.t, h - m.b]).padding(.28);
+    eixoX(svg, x, h - m.b + 2, x.ticks(4), t => t);
+    svg.append('text').attr('class', 'fraco').attr('x', w - m.r).attr('y', h - 2).attr('text-anchor', 'end').text('minutos perdidos por hora');
+    ruas.forEach(d => { const g = svg.append('g');
+      g.append('text').attr('x', m.l - 8).attr('y', y(d.rua) + y.bandwidth() / 2).attr('dy', '.32em').attr('text-anchor', 'end').style('fill', C.ink).text(corte(nomeRua(d.rua), narrow ? 19 : 36));
+      g.append('rect').attr('x', x(0)).attr('y', y(d.rua)).attr('height', y.bandwidth()).attr('width', Math.max(0, x(d.am) - x(0) - 1)).attr('fill', C.p[1]).attr('rx', 3);
+      g.append('rect').attr('x', x(d.am)).attr('y', y(d.rua)).attr('height', y.bandwidth()).attr('width', Math.max(0, x(d.am + d.pm) - x(d.am))).attr('fill', C.p[4]).attr('rx', 3);
+      g.append('text').attr('x', x(d.am + d.pm) + 6).attr('y', y(d.rua) + y.bandwidth() / 2).attr('dy', '.32em').text(nf(d.am + d.pm, 0));
+      g.append('rect').attr('x', 0).attr('width', w).attr('y', y(d.rua) - 3).attr('height', y.bandwidth() + 6).attr('fill', 'transparent')
+        .on('pointermove', e => { dest.selectAll('*').remove(); const a = d3.select('#g5a svg');
+          const xa = d3.scaleLinear().domain([0, 1]).range([44, a.attr('width') - 14]), ya = d3.scaleLinear().domain([0, 1]).range([+a.attr('height') - 38, 14]);
+          d.pontos.forEach(p => dest.append('circle').attr('cx', xa(p[0])).attr('cy', ya(p[1])).attr('r', 3.6).attr('fill', C.ink).attr('stroke', C.surface));
+          showTip(`<b>${d.rua}</b><br>${nf(d.am + d.pm, 0)} min/h perdidos: manhã ${nf(d.am, 0)}, tarde ${nf(d.pm, 0)}<br>${d.n} troços-sentido`, e); })
+        .on('pointerleave', () => { dest.selectAll('*').remove(); hideTip(); }); });
+  }
+  tabela('#tb5', ['Rua', 'Manhã min/h', 'Tarde min/h', 'Total', 'Troços-sentido'], ruas.map(d => [d.rua, nf(d.am), nf(d.pm), nf(d.am + d.pm), d.n]));
+  const v10 = interp(.1) * 100, v5 = interp(.05) * 100, v20 = interp(.2) * 100;
+  document.getElementById('t5').textContent = `Perde-se ${nf(v10, 0)} % do tempo em apenas 1 de cada 10 troços de rua`;
+  document.getElementById('n5').innerHTML = `<b>Poucos troços concentram o problema.</b> Dividimos a rede em troços de cerca de 200 m, por sentido. «Tempo perdido» é o tempo que se perde face a uma velocidade de 25 km/h, somando todos os autocarros (minutos por hora, nas pontas da manhã e da tarde). 5 % dos troços dão ${nf(v5, 0)} % do tempo perdido; 10 % dão ${nf(v10, 0)} %; 20 % dão ${nf(v20, 0)} % (${D.lorenz.n.toLocaleString('pt-PT')} troços). À direita estão as 15 ruas onde mais se perde; passe o rato por uma barra para ver onde os troços dessa rua ficam na curva.`;
+}
+
+/* ---------- G13 corredores BUS ---------- */
+function g13() {
+  const K = D.corredores, fig = document.getElementById('f13');
+  if (!K) { fig.hidden = true; return; }
+  fig.hidden = false;
+  const rotulo = a => a.lo === 0 ? 'menos de 1 km' : `${nf(a.lo, a.lo % 1 ? 1 : 0)} a ${nf(a.hi, a.hi % 1 ? 1 : 0)} km`;
+  const an = K.aneis;
+  { const { svg, w, h, narrow } = base('#g13a', an.length * 56 + 66), m = { l: narrow ? 92 : 112, r: 56, t: 22, b: 44 };
+    const vmax = d3.max(an, a => Math.max(a.com ? a.com[0] : 0, a.sem ? a.sem[0] : 0));
+    const x = d3.scaleLinear().domain([0, Math.ceil(vmax / 5) * 5]).range([m.l, w - m.r]);
+    const y = d3.scaleBand().domain(an.map(rotulo)).range([m.t, h - m.b]).paddingInner(.3), y2 = d3.scaleBand().domain(['com', 'sem']).range([0, y.bandwidth()]).padding(.12);
+    eixoX(svg, x, h - m.b + 2, x.ticks(4), t => t);
+    svg.append('text').attr('class', 'fraco').attr('x', m.l).attr('y', 10).text('distância ao centro (Aliados)');
+    svg.append('text').attr('class', 'fraco').attr('x', w - m.r).attr('y', h - 2).attr('text-anchor', 'end').text('velocidade média (km/h)');
+    an.forEach(a => { const g = svg.append('g'), nm = rotulo(a);
+      g.append('text').attr('x', m.l - 8).attr('y', y(nm) + y.bandwidth() / 2).attr('dy', '.32em').attr('text-anchor', 'end').style('fill', C.ink).text(nm);
+      ['com', 'sem'].forEach(k => { const v = a[k];
+        if (!v) { g.append('text').attr('class', 'fraco').attr('x', x(0) + 6).attr('y', y(nm) + y2(k) + y2.bandwidth() / 2).attr('dy', '.32em').text('sem troços com corredor'); return; }
+        g.append('rect').attr('x', x(0)).attr('y', y(nm) + y2(k)).attr('height', y2.bandwidth()).attr('width', Math.max(0, x(v[0]) - x(0))).attr('fill', k === 'com' ? C.s1 : C.gris).attr('rx', 3);
+        g.append('text').attr('x', x(v[0]) + 6).attr('y', y(nm) + y2(k) + y2.bandwidth() / 2).attr('dy', '.32em').text(nf(v[0])); });
+      g.append('rect').attr('x', 0).attr('width', w).attr('y', y(nm) - 3).attr('height', y.bandwidth() + 6).attr('fill', 'transparent')
+        .on('pointermove', e => showTip(`<b>${nm} do centro</b><br>com corredor: ${a.com ? `${nf(a.com[0])} km/h (${a.com[1]} troços-sentido)` : '—'}<br>sem corredor: ${a.sem ? `${nf(a.sem[0])} km/h (${a.sem[1]} troços-sentido)` : '—'}`, e))
+        .on('pointerleave', hideTip); }); }
+  const rs = K.ruas;
+  { const { svg, w, h, narrow } = base('#g13b', rs.length * 30 + 66), m = { l: narrow ? 128 : 215, r: 20, t: 22, b: 44 };
+    const lo = Math.floor(d3.min(rs, d => Math.min(d.com, d.sem)) / 5) * 5, hi = Math.ceil(d3.max(rs, d => Math.max(d.com, d.sem)) / 5) * 5;
+    const x = d3.scaleLinear().domain([lo, hi]).range([m.l, w - m.r]), y = d3.scaleBand().domain(rs.map(d => d.rua)).range([m.t, h - m.b]).padding(.3);
+    eixoX(svg, x, h - m.b + 2, x.ticks(4), t => t);
+    svg.append('text').attr('class', 'fraco').attr('x', m.l).attr('y', 10).text('na mesma rua');
+    svg.append('text').attr('class', 'fraco').attr('x', w - m.r).attr('y', h - 2).attr('text-anchor', 'end').text('velocidade média (km/h)');
+    rs.forEach(d => { const g = svg.append('g'), cy = y(d.rua) + y.bandwidth() / 2;
+      g.append('text').attr('x', m.l - 8).attr('y', cy).attr('dy', '.32em').attr('text-anchor', 'end').style('fill', C.ink).text(corte(d.rua, narrow ? 19 : 36));
+      g.append('line').attr('x1', x(d.sem)).attr('x2', x(d.com)).attr('y1', cy).attr('y2', cy).attr('stroke', C.ink3).attr('stroke-width', 2);
+      g.append('circle').attr('cx', x(d.sem)).attr('cy', cy).attr('r', 5.5).attr('fill', C.gris).attr('stroke', C.surface).attr('stroke-width', 2);
+      g.append('circle').attr('cx', x(d.com)).attr('cy', cy).attr('r', 5.5).attr('fill', C.s1).attr('stroke', C.surface).attr('stroke-width', 2);
+      g.append('rect').attr('x', 0).attr('width', w).attr('y', y(d.rua) - 3).attr('height', y.bandwidth() + 6).attr('fill', 'transparent')
+        .on('pointermove', e => showTip(`<b>${d.rua}</b><br>com corredor: ${nf(d.com)} km/h (${d.n_com} troços-sentido)<br>sem corredor: ${nf(d.sem)} km/h (${d.n_sem})<br>diferença: ${sg(d.com - d.sem)} km/h`, e))
+        .on('pointerleave', hideTip); }); }
+  const mais = rs.filter(d => d.com > d.sem).length, b = K.bruto;
+  const sig = an.filter(a => a.com && a.sem && (a.com[0] - a.sem[0]) > 2 * Math.hypot(a.com[2] ?? 99, a.sem[2] ?? 99));
+  document.getElementById('t13').textContent = rs.length ? `Em ${mais} de ${rs.length} ruas, o troço com corredor BUS é mais rápido do que o troço sem corredor da mesma rua` : 'Troços com e sem corredor BUS';
+  document.getElementById('n13').innerHTML = `<b>Como se compara.</b> A Câmara do Porto identifica ${K.activos} corredores BUS activos, em ${K.ruas_com_corredor} ruas. Contámos como «com corredor» os ${K.troços_com.toLocaleString('pt-PT')} troços de 200 m que estão em pelo menos 60 % sobre um corredor, e como «sem corredor» os que não chegam a 30 m de nenhum. Nas pontas da manhã e da tarde, a média de todos os troços com corredor é ${nf(b.com[0])} km/h e a dos troços sem corredor é ${nf(b.sem[0])} km/h: <b>quase igual</b>. Mas os troços com corredor ficam sobretudo no centro e nas avenidas, que são mais lentas de qualquer maneira. Por isso o gráfico da esquerda compara troços à mesma distância do centro e o da direita compara a mesma rua. ${sig.length ? `Só há uma vantagem clara ${sig.length === 1 ? 'na faixa' : 'nas faixas'} ${sig.map(a => `${rotulo(a)} (${sg(a.com[0] - a.sem[0])} km/h)`).join(' e ')}.` : 'Nenhuma faixa de distância mostra uma vantagem clara.'} Os troços que ficam só em parte sobre um corredor andam a ${nf(b.meio[0])} km/h (${b.meio[1]} troços-sentido).`;
+  document.getElementById('l13').textContent = 'Isto não prova que o corredor acelera os autocarros. Com 4 dias úteis, a diferença pode vir de outras coisas: a largura da rua, os semáforos, ou o facto de os corredores terem sido feitos onde o trânsito era mais difícil (o que esconderia o efeito). Não distinguimos o sentido do corredor nem a hora em que está em vigor (a maioria funciona 24 h). Dados dos corredores: Câmara Municipal do Porto, dados abertos (CC0).';
+  tabela('#tb13', ['Distância ao centro', 'Com corredor km/h', 'Troços-sentido', 'Sem corredor km/h', 'Troços-sentido'], an.map(a => [rotulo(a), a.com ? nf(a.com[0]) : null, a.com ? a.com[1] : null, a.sem ? nf(a.sem[0]) : null, a.sem ? a.sem[1] : null]));
+}
+
+/* ---------- G6 slope chart ---------- */
+function g6() {
+  const L = D.linhas_dados.filter(d => d.am != null && d.pm != null);
+  const piores = L.filter(d => d.pm < d.am).length, dif = d3.median(L, d => d.pm - d.am);
+  document.getElementById('t6').textContent = `${piores} das ${L.length} linhas andam mais devagar à tarde do que de manhã`;
+  const qs = document.getElementById('q6'); const termo = qs.value.trim().toLowerCase();
+  const quedas = L.slice().sort((a, b) => (a.pm - a.am) - (b.pm - b.am)), top = new Set(quedas.slice(0, 5).map(d => d.l)), melhora = new Set(L.filter(d => d.pm > d.am).map(d => d.l));
+  const { svg, w, h, narrow } = base('#g6', w => w < 560 ? 520 : 560), m = { l: narrow ? 60 : 150, r: narrow ? 60 : 150, t: 40, b: 14 };
+  const y = d3.scaleLinear().domain([Math.floor(d3.min(L, d => Math.min(d.am, d.pm))) - 1, Math.ceil(d3.max(L, d => Math.max(d.am, d.pm))) + 1]).range([h - m.b, m.t]), xl = m.l, xr = w - m.r;
+  svg.append('text').attr('class', 'forte').attr('x', xl).attr('y', 16).attr('text-anchor', 'middle').text('manhã 7–9 h');
+  svg.append('text').attr('class', 'forte').attr('x', xr).attr('y', 16).attr('text-anchor', 'middle').text('tarde 17–19 h');
+  [xl, xr].forEach(xx => svg.append('line').attr('x1', xx).attr('x2', xx).attr('y1', m.t - 6).attr('y2', h - m.b).attr('stroke', C.grid));
+  svg.append('line').attr('x1', xl).attr('x2', xr).attr('y1', y(14)).attr('y2', y(14)).attr('stroke', C.ink3).attr('stroke-dasharray', '3 3');
+  svg.append('text').attr('class', 'fraco').attr('x', (xl + xr) / 2).attr('y', y(14) - 5).attr('text-anchor', 'middle').text('14 km/h');
+  const dest = d => termo ? d.l.toLowerCase().startsWith(termo) : (top.has(d.l) || melhora.has(d.l));
+  const cor = d => termo ? (dest(d) ? C.ink : C.gris) : top.has(d.l) ? C.ramp[1] : melhora.has(d.l) ? C.ramp[7] : C.gris;
+  const gl = svg.append('g'); const ord = L.slice().sort((a, b) => dest(a) - dest(b));
+  ord.forEach(d => gl.append('line').attr('x1', xl).attr('x2', xr).attr('y1', y(d.am)).attr('y2', y(d.pm)).attr('stroke', cor(d)).attr('stroke-width', dest(d) ? 2.6 : 1.2).attr('opacity', dest(d) ? 1 : .38).attr('class', 'ln').attr('data-l', d.l));
+  const lab = (side) => { const it = L.filter(dest).map(d => ({ d, y: y(side ? d.pm : d.am) })).sort((a, b) => a.y - b.y); for (let i = 1; i < it.length; i++) if (it[i].y - it[i - 1].y < 13) it[i].y = it[i - 1].y + 13;
+    it.forEach(o => svg.append('text').attr('x', side ? xr + 8 : xl - 8).attr('y', o.y).attr('dy', '.32em').attr('text-anchor', side ? 'start' : 'end').style('fill', C.ink).style('font-weight', 600).text(side ? `${nf(o.d.pm)}  ${o.d.l}` : `${o.d.l}  ${nf(o.d.am)}`)); };
+  lab(0); lab(1);
+  L.forEach(d => svg.append('line').attr('x1', xl).attr('x2', xr).attr('y1', y(d.am)).attr('y2', y(d.pm)).attr('stroke', 'transparent').attr('stroke-width', 11)
+    .on('pointermove', e => { gl.selectAll('line').attr('opacity', function () { return this.dataset.l === d.l ? 1 : .12; }).attr('stroke-width', function () { return this.dataset.l === d.l ? 4 : 1.2; });
+      showTip(`<b>Linha ${d.l}</b><br>manhã ${nf(d.am)} km/h → tarde ${nf(d.pm)} km/h (${sg(d.pm - d.am)})<br>${d.n.toLocaleString('pt-PT')} leituras · ${d.veic} veículos`, e); })
+    .on('pointerleave', () => { gl.selectAll('line').attr('opacity', function () { const dd = L.find(q => q.l === this.dataset.l); return dest(dd) ? 1 : .38; }).attr('stroke-width', function () { const dd = L.find(q => q.l === this.dataset.l); return dest(dd) ? 2.6 : 1.2; }); hideTip(); }));
+  const pior = quedas[0], mel = L.slice().sort((a, b) => (b.pm - b.am) - (a.pm - a.am))[0];
+  document.getElementById('n6').innerHTML = `<b>À tarde os autocarros andam mais devagar.</b> Em mediana, as linhas perdem ${nf(Math.abs(dif))} km/h. As maiores quedas, a vermelho: ${quedas.slice(0, 5).map(d => `${d.l} (${nf(d.am, 0)} → ${nf(d.pm, 0)})`).join(', ')}. A azul, as ${melhora.size} que melhoram${melhora.size ? ': ' + [...melhora].join(', ') : ''}.`;
+  tabela('#tb6', ['Linha', 'Manhã km/h', 'Tarde km/h', 'Diferença', 'Leituras', 'Veículos'], quedas.map(d => [d.l, nf(d.am), nf(d.pm), sg(d.pm - d.am), d.n, d.veic]));
+}
+
+/* ---------- G7 dispersão ---------- */
+function ranks(a) { const o = a.map((v, i) => [v, i]).sort((p, q) => p[0] - q[0]), r = Array(a.length); let i = 0; while (i < o.length) { let j = i; while (j + 1 < o.length && o[j + 1][0] === o[i][0]) j++; for (let k = i; k <= j; k++) r[o[k][1]] = (i + j) / 2 + 1; i = j + 1; } return r; }
+function g7() {
+  const L = RH.duracao.linhas.map(d => ({ ...d, amp: d.rz_p90 - d.rz_p10 }));
+  const rx = ranks(L.map(d => d.vc)), ry = ranks(L.map(d => d.amp)), mx = d3.mean(rx), my = d3.mean(ry);
+  const rho = d3.sum(rx.map((a, i) => (a - mx) * (ry[i] - my))) / Math.sqrt(d3.sum(rx.map(a => (a - mx) ** 2)) * d3.sum(ry.map(b => (b - my) ** 2)));
+  const { svg, w, h, narrow } = base('#g7', w => w < 560 ? 420 : 500), m = { l: 48, r: 16, t: 16, b: 44 };
+  const x = d3.scaleLinear().domain([d3.min(L, d => d.vc) - 1, d3.max(L, d => d.vc) + 1]).range([m.l, w - m.r]), y = d3.scaleLinear().domain([d3.min(L, d => d.amp) - .04, d3.max(L, d => d.amp) + .04]).range([h - m.b, m.t]);
+  eixoY(svg, y, m.l, w - m.r, y.ticks(5), t => nf(t, 1)); eixoX(svg, x, h - m.b, x.ticks(6), t => t);
+  svg.append('text').attr('class', 'fraco').attr('x', (m.l + w - m.r) / 2).attr('y', h - 6).attr('text-anchor', 'middle').text('velocidade comercial, paragens incluídas (km/h) →  mais rápida');
+  svg.append('text').attr('class', 'fraco').attr('transform', `translate(12,${(m.t + h - m.b) / 2}) rotate(-90)`).attr('text-anchor', 'middle').text('irregularidade das viagens (quanto variam face ao horário) →  mais irregular');
+  const mxm = d3.median(L, d => d.vc), mym = d3.median(L, d => d.amp);
+  svg.append('line').attr('x1', x(mxm)).attr('x2', x(mxm)).attr('y1', m.t).attr('y2', h - m.b).attr('stroke', C.ink3).attr('stroke-dasharray', '3 3');
+  svg.append('line').attr('x1', m.l).attr('x2', w - m.r).attr('y1', y(mym)).attr('y2', y(mym)).attr('stroke', C.ink3).attr('stroke-dasharray', '3 3');
+  [['lenta e previsível', m.l + 6, h - m.b - 8, 'start'], ['lenta e irregular', m.l + 6, m.t + 12, 'start'], ['rápida e previsível', w - m.r - 6, h - m.b - 8, 'end'], ['rápida e irregular', w - m.r - 6, m.t + 12, 'end']]
+    .forEach(([t, xx, yy, an]) => svg.append('text').attr('class', 'fraco').attr('x', xx).attr('y', yy).attr('text-anchor', an).style('font-style', 'italic').text(t));
+  const cz = d3.scaleLinear().domain([.8, .9, .97, 1, 1.03, 1.1, 1.2, 1.3, 1.45]).range(C.ramp.slice().reverse()).clamp(true).interpolate(d3.interpolateRgb);
+  L.forEach(d => svg.append('circle').attr('cx', x(d.vc)).attr('cy', y(d.amp)).attr('r', 6).attr('fill', cz(d.rz_med)).attr('stroke', C.ink2).attr('stroke-width', .8));
+  const nom = new Set(['402', '705', '701', '603', '902', '209']); L.filter(d => nom.has(d.l)).forEach(d => svg.append('text').attr('x', x(d.vc) + 9).attr('y', y(d.amp) - 7).style('fill', C.ink).style('font-weight', 600).text(d.l));
+  svg.append('text').attr('x', w - m.r).attr('y', h - m.b - 28).attr('text-anchor', 'end').style('fill', C.ink).style('font-weight', 600).text(`Spearman ${nf(rho, 2)}`);
+  const dl = d3.Delaunay.from(L, d => x(d.vc), d => y(d.amp));
+  sobrepor(svg, m, w, h, (px, py, e) => { const i = dl.find(px, py), d = L[i]; if (Math.hypot(x(d.vc) - px, y(d.amp) - py) > 28) { hideTip(); return; }
+    showTip(`<b>Linha ${d.l}</b><br>velocidade comercial ${nf(d.vc)} km/h<br>real ÷ programada: mediana ${nf(d.rz_med, 2)}, p10–p90 ${nf(d.rz_p10, 2)}–${nf(d.rz_p90, 2)}<br>${d.n} viagens, ${d.dias} dias`, e); }, () => {});
+  const mm = L.slice().sort((a, b) => a.amp - b.amp);
+  document.getElementById('n7').innerHTML = `<b>Não há relação clara.</b> Em ${L.length} linhas, a velocidade (${nf(d3.min(L, d => d.vc))}–${nf(d3.max(L, d => d.vc))} km/h, contando as paragens) quase não tem relação com a irregularidade das viagens (correlação de Spearman ${nf(rho, 2)}; perto de 0 = sem relação). As mais regulares: ${mm.slice(0, 4).map(d => d.l).join(', ')}. As mais irregulares: ${mm.slice(-5).reverse().map(d => d.l).join(', ')}. A cor do ponto compara a duração real com a do horário: vermelho = demora mais do que o horário prevê, azul = demora menos.`;
+  tabela('#tb7', ['Linha', 'Vel. comercial km/h', 'Real÷prog. mediana', 'p10', 'p90', 'Viagens', 'Dias'], mm.map(d => [d.l, nf(d.vc), nf(d.rz_med, 2), nf(d.rz_p10, 2), nf(d.rz_p90, 2), d.n, d.dias]));
+}
+
+/* ---------- G8 leque do atraso ---------- */
+function g8() {
+  const J = [['manha', 'Manhã'], ['entre_pontas', 'Entre pontas'], ['tarde', 'Tarde']];
+  const { svg, w, h, narrow } = base('#g8', w => w < 640 ? 3 * 210 + 20 : 330);
+  const gap = 18, m = { l: 36, r: 10, t: 34, b: 30 };
+  const pw = narrow ? w - m.l - m.r : (w - m.l - m.r - 2 * gap) / 3, ph = narrow ? 150 : h - m.t - m.b;
+  const y = d3.scaleLinear().domain([-3, 16]).clamp(true).range([ph, 0]);
+  const pan = [];
+  J.forEach(([k, nm], pi) => {
+    const x0 = narrow ? m.l : m.l + pi * (pw + gap), y0 = narrow ? m.t + pi * (ph + 58) : m.t, d = S.progresso[k];
+    const x = d3.scaleLinear().domain([0, 9]).range([x0, x0 + pw]), g = svg.append('g').attr('transform', `translate(0,${y0})`);
+    svg.append('text').attr('class', 'forte').attr('x', x0).attr('y', y0 - 12).text(nm + (k === 'tarde' ? ' (17–19 h)' : k === 'manha' ? ' (7–9 h)' : ''));
+    [0, 5, 10, 15].forEach(t => { g.append('line').attr('class', 'grelha').attr('x1', x0).attr('x2', x0 + pw).attr('y1', y(t)).attr('y2', y(t)); if (pi === 0 || narrow) g.append('text').attr('class', 'fraco').attr('x', x0 - 6).attr('y', y(t)).attr('dy', '.32em').attr('text-anchor', 'end').text(t === 15 ? '15 min' : t); });
+    g.append('line').attr('x1', x0).attr('x2', x0 + pw).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', C.ink3).attr('stroke-width', 1.2);
+    g.append('path').attr('d', d3.area().x(q => x(q.dec)).y0(q => y(q.p10)).y1(q => y(q.p90)).curve(d3.curveMonotoneX)(d)).attr('fill', C.p[2]).attr('opacity', .13);
+    g.append('path').attr('d', d3.area().x(q => x(q.dec)).y0(q => y(q.p25)).y1(q => y(q.p75)).curve(d3.curveMonotoneX)(d)).attr('fill', C.p[2]).attr('opacity', .28);
+    const gid = 'gd' + pi, gr = svg.append('defs').append('linearGradient').attr('id', gid).attr('gradientUnits', 'userSpaceOnUse').attr('x1', 0).attr('x2', 0).attr('y1', y0 + y(16)).attr('y2', y0 + y(-3));
+    const o = (y(0) - y(16)) / (y(-3) - y(16)); [[0, C.ramp[1]], [o, C.ramp[1]], [o, C.ramp[7]], [1, C.ramp[7]]].forEach(([of, c]) => gr.append('stop').attr('offset', of).attr('stop-color', c));
+    g.append('path').attr('d', d3.line().x(q => x(q.dec)).y(q => y(q.med)).curve(d3.curveMonotoneX)(d)).attr('fill', 'none').attr('stroke', `url(#${gid})`).attr('stroke-width', 3);
+    [d[0], d[d.length - 1]].forEach((q, i) => g.append('text').attr('x', x(q.dec) + (i ? -2 : 2)).attr('y', y(q.med) + (i ? -9 : -9)).attr('text-anchor', i ? 'end' : 'start').style('fill', C.ink).style('font-weight', 700).text(sg(q.med) + ' min'));
+    g.append('text').attr('class', 'fraco').attr('x', x0).attr('y', ph + 18).text('início'); g.append('text').attr('class', 'fraco').attr('x', x0 + pw).attr('y', ph + 18).attr('text-anchor', 'end').text('fim do percurso');
+    pan.push({ k, nm, x, x0, y0, d, g });
+  });
+  const regras = pan.map(p => svg.append('line').attr('y1', p.y0).attr('y2', p.y0 + ph).attr('stroke', C.ink).attr('stroke-width', 1.2).style('display', 'none'));
+  const f = pan[0]; svg.append('rect').attr('x', 0).attr('y', 0).attr('width', w).attr('height', h).attr('fill', 'transparent').style('touch-action', 'pan-y')
+    .on('pointermove', e => { const [px, py] = d3.pointer(e); let pi = 0; pan.forEach((p, i) => { if (px >= p.x0 - 4 && px <= p.x0 + pw + 4 && (!narrow || (py >= p.y0 - 20 && py <= p.y0 + ph + 30))) pi = i; });
+      const dec = Math.max(0, Math.min(9, Math.round(pan[pi].x.invert(px)))); regras.forEach((r, i) => r.style('display', null).attr('x1', pan[i].x(dec)).attr('x2', pan[i].x(dec)));
+      showTip(`<b>${dec * 10}–${dec * 10 + 10} % do percurso</b><br>` + pan.map(p => { const q = p.d.find(z => z.dec === dec); return `${p.nm}: <b>${sg(q.med)} min</b> (p25–p75: ${sg(q.p25)} a ${sg(q.p75)}); ${nf(q.a5, 0)} % &gt; 5 min; ${q.n.toLocaleString('pt-PT')} passagens`; }).join('<br>'), e); })
+    .on('pointerleave', () => { regras.forEach(r => r.style('display', 'none')); hideTip(); });
+  const tm = S.progresso.manha, tt = S.progresso.tarde, td = S.progresso.todas;
+  document.getElementById('t8').textContent = `O atraso cresce durante a viagem: ${sg(tm[0].med, 0)} min no início, ${sg(tm[tm.length - 1].med, 0)} min no fim (de manhã)`;
+  document.getElementById('n8').innerHTML = `<b>Os autocarros atrasam-se ao longo da viagem, a qualquer hora.</b> Entre o início e o fim da linha, o atraso mediano passa, de manhã, de ${sg(tm[0].med)} para ${sg(tm[tm.length - 1].med)} min; entre pontas de ${sg(S.progresso.entre_pontas[0].med)} para ${sg(S.progresso.entre_pontas.slice(-1)[0].med)}; à tarde de ${sg(tt[0].med)} para ${sg(tt[tt.length - 1].med)}. A parte das passagens com mais de 5 minutos de atraso sobe de ${nf(td[0].a5, 0)} % para ${nf(td[td.length - 1].a5, 0)} %. No conjunto, ${nf(S.classes_total.a5, 0)} % das passagens chegam com mais de 5 min de atraso (tarde: ${nf(S.classes_janela.tarde.a5, 0)} %) e só ${nf(S.classes_total.pontual, 0)} % são pontuais.`;
+  tabela('#tb8', ['Janela', 'Décimo', 'Mediana min', 'p25', 'p75', '&gt; 5 min %', 'Passagens'], J.flatMap(([k, nm]) => S.progresso[k].map(q => [nm, q.dec + 1, nf(q.med), nf(q.p25), nf(q.p75), nf(q.a5, 0), q.n])));
+}
+
+/* ---------- G9 dumbbell ---------- */
+let j9 = 'todas';
+function g9() {
+  const fim = d => j9 === 'todas' ? d.fim : d['fim_' + j9];
+  const L = S.linhas.filter(d => fim(d) != null).map(d => ({ ...d, f: fim(d), g: fim(d) - d.ini })).sort((a, b) => b.g - a.g);
+  const { svg, w, h, narrow } = base('#g9', w => L.length * 18 + 64), m = { l: 46, r: 16, t: 34, b: 24 };
+  const x = d3.scaleLinear().domain([-4, Math.max(20, d3.max(L, d => Math.max(d.ini, d.f)) + 1)]).range([m.l, w - m.r]), y = d3.scaleBand().domain(L.map(d => d.l)).range([m.t, h - m.b]).padding(.2);
+  svg.append('rect').attr('x', x(-1)).attr('width', x(3) - x(-1)).attr('y', m.t - 4).attr('height', h - m.t - m.b + 4).attr('fill', C.ink).attr('opacity', .06);
+  svg.append('text').attr('class', 'fraco').attr('x', (x(-1) + x(3)) / 2).attr('y', m.t - 10).attr('text-anchor', 'middle').text('pontual');
+  x.ticks(6).forEach(t => svg.append('line').attr('class', 'grelha').attr('x1', x(t)).attr('x2', x(t)).attr('y1', m.t - 4).attr('y2', h - m.b));
+  eixoX(svg, x, h - m.b, x.ticks(6), t => t + ' min');
+  svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', m.t - 4).attr('y2', h - m.b).attr('stroke', C.ink3);
+  L.forEach(d => { const cy = y(d.l) + y.bandwidth() / 2, g = svg.append('g');
+    g.append('text').attr('x', m.l - 8).attr('y', cy).attr('dy', '.32em').attr('text-anchor', 'end').style('fill', C.ink).text(d.l);
+    g.append('line').attr('x1', x(d.ini)).attr('x2', x(d.f)).attr('y1', cy).attr('y2', cy).attr('stroke', C.ink3).attr('stroke-width', 2);
+    g.append('circle').attr('cx', x(d.ini)).attr('cy', cy).attr('r', 5).attr('fill', C.surface).attr('stroke', C.dly(d.ini)).attr('stroke-width', 2.5);
+    g.append('circle').attr('cx', x(d.f)).attr('cy', cy).attr('r', 5.5).attr('fill', C.dly(d.f)).attr('stroke', C.surface).attr('stroke-width', 1.5);
+    g.append('rect').attr('x', 0).attr('width', w).attr('y', y(d.l) - 1).attr('height', y.bandwidth() + 2).attr('fill', 'transparent')
+      .on('pointermove', e => showTip(`<b>Linha ${d.l}</b><br>parte com ${sg(d.ini)} min · chega com ${sg(d.f)} min<br>ganho ${sg(d.g)} min (p25–p75: ${sg(d.ganho_p25)} a ${sg(d.ganho_p75)})<br>${nf(d.fim5, 0)} % das chegadas &gt; 5 min<br>${d.viag} viagens, ${d.dias} dias`, e)).on('pointerleave', hideTip); });
+  const sd = d => svg.append('text');
+  const nota = (l, t, esq) => { const d = L.find(q => q.l === l); if (d) svg.append('text').attr('x', esq ? x(Math.min(d.ini, d.f)) - 12 : x(Math.max(d.ini, d.f)) + 12).attr('text-anchor', esq ? 'end' : 'start').attr('y', y(l) + y.bandwidth() / 2).attr('dy', '.32em').style('fill', C.ink).style('font-weight', 600).text(t); };
+  nota('601', `já parte com ${nf(S.linhas.find(d => d.l === '601').ini, 0)} min`, true); const adiant = L.filter(d => d.f < 0).map(d => d.l);
+  adiant.slice(0, 2).forEach(l => nota(l, 'chega adiantada'));
+  const a = S.linhas.slice().sort((p, q) => q.ganho - p.ganho);
+  document.getElementById('n9').innerHTML = `<b>Quase todas as linhas atrasam-se pelo caminho.</b> A 601 já parte com ${sg(S.linhas.find(d => d.l === '601').ini)} min e chega com ${sg(S.linhas.find(d => d.l === '601').fim)}; a ${a.slice(1, 5).map(d => d.l).join(', ')} perdem cerca de ${nf(d3.mean(a.slice(1, 5), d => d.ganho), 0)} min no percurso. Há linhas que chegam adiantadas${adiant.length ? ' (' + adiant.join(', ') + ')' : ''}: quem chega à hora perde o autocarro, por isso adiantar-se também é uma falha.`;
+  tabela('#tb9', ['Linha', 'Início min', 'Fim min', 'Ganho', 'Ganho p25', 'Ganho p75', '&gt; 5 min % no fim', 'Viagens', 'Dias'], L.map(d => [d.l, nf(d.ini), nf(d.f), nf(d.g), nf(d.ganho_p25), nf(d.ganho_p75), nf(d.fim5, 0), d.viag, d.dias]));
+}
+
+/* ---------- G10 pelotões ---------- */
+function g10() {
+  const P = S.pelotoes, hb = P.hist_razao, bins = hb.bins;
+  { const { svg, w, h } = base('#g10a', 300), m = { l: 40, r: 10, t: 30, b: 40 };
+    const x = d3.scaleLinear().domain([0, 3]).range([m.l, w - m.r]), tot = d3.sum(hb.c), y = d3.scaleLinear().domain([0, d3.max(hb.c) / tot * 100]).nice().range([h - m.b, m.t]);
+    eixoY(svg, y, m.l, w - m.r, y.ticks(4), t => t + ' %'); eixoX(svg, x, h - m.b, [0, .5, 1, 1.5, 2, 3], t => '× ' + nf(t, 1).replace(',0', ''));
+    svg.append('text').attr('class', 'fraco').attr('x', (m.l + w - m.r) / 2).attr('y', h - 4).attr('text-anchor', 'middle').text('intervalo real ÷ intervalo programado');
+    const bw = x(.1) - x(0);
+    hb.c.forEach((c, i) => { const b0 = bins[i], v = c / tot * 100, col = b0 < .5 ? C.ramp[1] : b0 >= 1.5 ? C.ramp[7] : C.gris;
+      svg.append('rect').attr('x', x(b0) + 1).attr('width', bw - 2).attr('y', y(v)).attr('height', y(0) - y(v)).attr('fill', col).attr('opacity', b0 < .5 || b0 >= 1.5 ? .92 : .55).attr('rx', 2)
+        .on('pointermove', e => showTip(`<b>× ${nf(b0, 1)}–${nf(b0 + .1, 1)}</b><br>${nf(v, 1)} % dos pares`, e)).on('pointerleave', hideTip); });
+    svg.append('line').attr('x1', x(1)).attr('x2', x(1)).attr('y1', m.t - 4).attr('y2', h - m.b).attr('stroke', C.ink).attr('stroke-dasharray', '3 3');
+    svg.append('text').attr('x', x(.5) - 4).attr('y', m.t - 8).attr('text-anchor', 'end').style('fill', C.ink).style('font-weight', 600).text(`pelotão ${pc(P.total.pelotao, 1)}`);
+    svg.append('text').attr('x', x(1.5) + 4).attr('y', m.t - 8).style('fill', C.ink).style('font-weight', 600).text(`buraco ${pc(P.total.buraco, 1)}`); }
+  { const { svg, w, h } = base('#g10b', 300), m = { l: 40, r: 70, t: 30, b: 40 }, d = P.por_decil;
+    const x = d3.scaleLinear().domain([0, 9]).range([m.l, w - m.r]), y = d3.scaleLinear().domain([0, d3.max(d, q => Math.max(q.pelotao, q.buraco)) + 2]).nice().range([h - m.b, m.t]);
+    eixoY(svg, y, m.l, w - m.r, y.ticks(4), t => t + ' %'); svg.append('text').attr('class', 'fraco').attr('x', m.l).attr('y', h - 4).text('início'); svg.append('text').attr('class', 'fraco').attr('x', w - m.r).attr('y', h - 4).attr('text-anchor', 'end').text('fim do percurso');
+    [['pelotao', C.ramp[1], 'pelotão'], ['buraco', C.ramp[7], 'buraco']].forEach(([k, c, nm]) => { svg.append('path').attr('d', d3.line().x(q => x(q.dec)).y(q => y(q[k])).curve(d3.curveMonotoneX)(d)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 3);
+      [d[0], d[d.length - 1]].forEach((q, i) => svg.append('text').attr('x', x(q.dec) + (i ? 8 : 0)).attr('y', y(q[k]) + (i ? 4 : -9)).style('fill', C.ink).style('font-weight', 700).text(nf(q[k]) + ' %'));
+      svg.append('text').attr('x', x(9) + 8).attr('y', y(d[9][k]) + 18).style('fill', C.ink2).text(nm); });
+    const rule = svg.append('line').attr('y1', m.t).attr('y2', h - m.b).attr('stroke', C.ink).attr('stroke-width', 1.2).style('display', 'none');
+    sobrepor(svg, m, w, h, (px, py, e) => { const dec = Math.max(0, Math.min(9, Math.round(x.invert(px)))), q = d[dec]; rule.style('display', null).attr('x1', x(dec)).attr('x2', x(dec));
+      showTip(`<b>${dec * 10}–${dec * 10 + 10} % do percurso</b><br>pelotão ${nf(q.pelotao)} %<br>buraco ${nf(q.buraco)} %<br>${q.pares.toLocaleString('pt-PT')} pares`, e); }, () => rule.style('display', 'none')); }
+  const top = P.linhas.slice(0, 5), mx = d3.max(top, d => d.pelotao);
+  document.getElementById('m10').innerHTML = '<div style="font-size:13px;color:var(--ink3);margin-bottom:4px">Linhas com mais autocarros em pelotão</div>' + top.map(d => `<div class="med"><span>Linha ${d.l}</span><i style="width:${d.pelotao / mx * 100}%"></i><em>${nf(d.pelotao)} %</em></div>`).join('');
+  document.getElementById('n10').innerHTML = `<b>${nf(P.total.pelotao, 0)} % dos pares de autocarros seguidos chegam quase colados (pelotão) e ${nf(P.total.buraco, 0)} % deixam um intervalo grande (buraco)</b> (${P.total.pares.toLocaleString('pt-PT')} pares). Do início ao fim da linha, os pelotões passam de ${nf(P.por_decil[0].pelotao)} % para ${nf(P.por_decil[9].pelotao)} % e os buracos de ${nf(P.por_decil[0].buraco)} % para ${nf(P.por_decil[9].buraco)} %. À tarde há mais pelotões (${nf(P.por_janela.tarde.pelotao)} %) do que de manhã (${nf(P.por_janela.manha.pelotao)} %) ou entre pontas (${nf(P.por_janela.entre_pontas.pelotao)} %).`;
+  tabela('#tb10', ['Décimo do percurso', 'Pelotão %', 'Buraco %', 'Pares'], P.por_decil.map(q => [q.dec + 1, nf(q.pelotao), nf(q.buraco), q.pares]));
+}
+
+/* ---------- G11 horário × rua ---------- */
+function g11() {
+  const A = RH.duracao.por_hora, R = RH.realizacao.por_hora, n11 = RH.duracao.por_dia_hora['2026-11-11'] || {};
+  const { svg, w, h, narrow } = base('#g11', 580), m = { l: 46, r: narrow ? 14 : 70, t: 14, b: 28 };
+  const x = d3.scaleBand().domain(HORAS).range([m.l, w - m.r]).paddingInner(.2), cx = hh => x(hh) + x.bandwidth() / 2;
+  const hA = 190, hB = 150, hC = 120, gap = 30, yA0 = m.t, yB0 = yA0 + hA + gap, yC0 = yB0 + hB + gap;
+  const yA = d3.scaleLinear().domain([.8, 1.3]).clamp(true).range([yA0 + hA, yA0]), yB = d3.scaleLinear().domain([0, 400]).range([yB0 + hB, yB0]), yC = d3.scaleLinear().domain([0, 5200]).range([yC0 + hC, yC0]);
+  [[7, 9], [17, 19]].forEach(([a, b]) => svg.append('rect').attr('x', x(a)).attr('width', x(b) + x.bandwidth() - x(a)).attr('y', yA0).attr('height', yC0 + hC - yA0).attr('fill', C.ink).attr('opacity', .045));
+  svg.append('text').attr('class', 'forte').attr('x', 0).attr('y', yA0 + 2).text('real ÷ programado');
+  [.9, 1, 1.1, 1.2].forEach(t => { svg.append('line').attr('class', 'grelha').attr('x1', m.l).attr('x2', w - m.r).attr('y1', yA(t)).attr('y2', yA(t)); svg.append('text').attr('class', 'fraco').attr('x', m.l - 6).attr('y', yA(t)).attr('dy', '.32em').attr('text-anchor', 'end').text('× ' + nf(t, 1)); });
+  svg.append('line').attr('x1', m.l).attr('x2', w - m.r).attr('y1', yA(1)).attr('y2', yA(1)).attr('stroke', C.ink3).attr('stroke-width', 1.4); svg.append('text').attr('class', 'fraco').attr('x', w - m.r + 4).attr('y', yA(1)).attr('dy', '.32em').text(narrow ? '' : 'a horas');
+  const Ah = A.filter(d => d.h >= 5);
+  svg.append('path').attr('d', d3.area().x(d => cx(d.h)).y0(d => yA(d.p25)).y1(d => yA(d.p75)).curve(d3.curveMonotoneX)(Ah)).attr('fill', C.p[2]).attr('opacity', .28);
+  svg.append('path').attr('d', d3.line().x(d => cx(d.h)).y(d => yA(d.med)).curve(d3.curveMonotoneX)(Ah)).attr('fill', 'none').attr('stroke', C.p[4]).attr('stroke-width', 3);
+  const e11 = Object.entries(n11).map(([hh, v]) => ({ h: +hh, v })).filter(d => d.h >= 5).sort((a, b) => a.h - b.h);
+  if (e11.length) { svg.append('path').attr('d', d3.line().x(d => cx(d.h)).y(d => yA(d.v)).curve(d3.curveMonotoneX)(e11)).attr('fill', 'none').attr('stroke', C.ink2).attr('stroke-width', 1.6).attr('stroke-dasharray', '4 3');
+    const u = e11[e11.length - 1]; if (!narrow) svg.append('text').attr('x', cx(u.h) + 8).attr('y', yA(u.v) + 14).attr('class', 'fraco').text('quarta 11'); }
+  const a17 = A.find(d => d.h === 17); if (a17) svg.append('text').attr('x', cx(17)).attr('y', yA(a17.p75) - 8).attr('text-anchor', 'middle').style('fill', C.ink).style('font-weight', 700).text('× ' + nf(a17.med, 2));
+  svg.append('text').attr('class', 'forte').attr('x', 0).attr('y', yB0 - 12).text('viagens programadas por hora de partida');
+  [0, 200, 400].forEach(t => { svg.append('line').attr('class', 'grelha').attr('x1', m.l).attr('x2', w - m.r).attr('y1', yB(t)).attr('y2', yB(t)); svg.append('text').attr('class', 'fraco').attr('x', m.l - 6).attr('y', yB(t)).attr('dy', '.32em').attr('text-anchor', 'end').text(t); });
+  R.forEach(d => { svg.append('rect').attr('x', x(d.h)).attr('width', x.bandwidth()).attr('y', yB(d.prog)).attr('height', yB(0) - yB(d.prog)).attr('fill', C.p[2]).attr('rx', 2);
+    svg.append('rect').attr('x', x(d.h)).attr('width', x.bandwidth()).attr('y', yB(d.prog * d.vistas_pct / 100)).attr('height', yB(0) - yB(d.prog * d.vistas_pct / 100)).attr('fill', C.p[5]).attr('rx', 2); });
+  const r18 = R.find(d => d.h === 18); if (r18) svg.append('text').attr('x', cx(18)).attr('y', yB(r18.prog) - 7).attr('text-anchor', 'middle').style('fill', C.ink).style('font-weight', 700).text(`${nf(r18.vistas_pct, 0)} % vistas`);
+  svg.append('text').attr('class', 'forte').attr('x', 0).attr('y', yC0 - 12).text('oferta programada por tipo de dia (viagens por hora)');
+  [0, 200, 400].forEach(t => svg.append('line').attr('class', 'grelha').attr('x1', m.l).attr('x2', w - m.r).attr('y1', yC(t * 12)).attr('y2', yC(t * 12)));
+  const oc = { util: 'dia útil', sab: 'sábado', dom: 'domingo' };
+  // eixo de C em viagens/hora: escala própria
+  const yC2 = d3.scaleLinear().domain([0, 400]).range([yC0 + hC, yC0]);
+  [0, 200, 400].forEach(t => svg.append('text').attr('class', 'fraco').attr('x', m.l - 6).attr('y', yC2(t)).attr('dy', '.32em').attr('text-anchor', 'end').text(t));
+  [['util', C.ink, 2.6, null], ['sab', C.gris, 2, null], ['dom', C.gris, 2, '4 3']].forEach(([k, c, sw, da]) => { const v = S.oferta[k].por_hora;
+    svg.append('path').attr('d', d3.line().x((d, i) => i < 24 ? x(i) : x(23) + x.bandwidth()).y(d => yC2(d)).curve(d3.curveStepAfter)([...v, v[23]])).attr('fill', 'none').attr('stroke', c).attr('stroke-width', sw).attr('stroke-dasharray', da);
+    if (!narrow) svg.append('text').attr('x', w - m.r + 4).attr('y', yC2(v[16]) + (k === 'dom' ? 12 : k === 'sab' ? -2 : 0)).attr('class', 'fraco').text(oc[k]); });
+  eixoX(svg, x, yC0 + hC + 2, [0, 3, 6, 9, 12, 15, 18, 21], fmtH);
+  const rule = svg.append('line').attr('y1', yA0).attr('y2', yC0 + hC).attr('stroke', C.ink).attr('stroke-width', 1.2).style('display', 'none');
+  svg.append('rect').attr('x', m.l).attr('y', yA0).attr('width', w - m.l - m.r).attr('height', yC0 + hC - yA0).attr('fill', 'transparent').style('touch-action', 'pan-y')
+    .on('pointermove', e => { const [px] = d3.pointer(e), idx = Math.max(0, Math.min(23, Math.floor((px - m.l) / ((w - m.l - m.r) / 24)))), a = A.find(d => d.h === idx), r = R.find(d => d.h === idx);
+      rule.style('display', null).attr('x1', cx(idx)).attr('x2', cx(idx));
+      showTip(`<b>${fmtH(idx)}</b> (hora de partida)<br>${a ? `real ÷ programada: ${nf(a.med, 2)} (p25–p75 ${nf(a.p25, 2)}–${nf(a.p75, 2)}; ${a.n} viagens)` : 'sem dados suficientes'}<br>${n11[idx] ? `quarta 11: ${nf(n11[idx], 2)}<br>` : ''}${r ? `programadas ${r.prog}; vistas no GPS ${nf(r.vistas_pct, 0)} %` : ''}<br>oferta: útil ${S.oferta.util.por_hora[idx]} · sáb ${S.oferta.sab.por_hora[idx]} · dom ${S.oferta.dom.por_hora[idx]}`, e); })
+    .on('pointerleave', () => { rule.style('display', 'none'); hideTip(); });
+  const a7 = A.find(d => d.h === 7), a12 = A.find(d => d.h === 12), pr = S.oferta.dur_prog_rel_hora;
+  document.getElementById('t11').textContent = `Na ponta as viagens demoram mais do que o horário prevê; às 18 h só se vêem ${nf(r18.vistas_pct, 0)} % das viagens programadas`;
+  document.getElementById('n11').innerHTML = `<b>Duração real ÷ programada</b> (1,00 = demora o que o horário prevê), por hora de partida: ${nf(a7.med, 2)} às 7 h, cerca de ${nf(a12.med, 2)} a meio do dia e <b>${nf(a17.med, 2)} às 17 h</b>; depois das 19 h fica abaixo de 1. O horário já conta com alguma ponta (a duração programada às 17 h é ${nf(pr[17], 2)} × a do meio do dia), mas a rua pede mais. <b>Viagens programadas que aparecem no GPS:</b> ${nf(d3.min(Object.values(RH.realizacao.por_dia)), 0)}–${nf(d3.max(Object.values(RH.realizacao.por_dia)), 0)} % por dia, mas só ${nf(r18.vistas_pct, 0)} % das viagens das 18 h. A oferta de um dia útil é ${S.oferta.util.viagens.toLocaleString('pt-PT')} viagens; ao sábado ${nf(S.oferta.sab.viagens / S.oferta.util.viagens * 100, 0)} % e ao domingo ${nf(S.oferta.dom.viagens / S.oferta.util.viagens * 100, 0)} %.`;
+  tabela('#tb11', ['Hora de partida', 'Real÷prog. mediana', 'Viagens (amostra)', 'Programadas', 'Vistas no GPS %', 'Oferta útil', 'Oferta sábado', 'Oferta domingo'],
+    HORAS.map(hh => { const a = A.find(d => d.h === hh), r = R.find(d => d.h === hh); return [fmtH(hh), a ? nf(a.med, 3) : null, a ? a.n : null, r ? r.prog : null, r ? nf(r.vistas_pct, 1) : null, S.oferta.util.por_hora[hh], S.oferta.sab.por_hora[hh], S.oferta.dom.por_hora[hh]]; }));
+}
+
+/* ---------- G12 excepção ---------- */
+function g12() {
+  const cell = v => v < 10 ? 0 : v < 14 ? 1 : v < 17 ? 2 : v < 20 ? 3 : v < 24 ? 4 : 5;
+  const NC = ['menos de 10', '10–14', '14–17', '17–20', '20–24', '24 ou mais'];
+  const { svg, w, h, narrow } = base('#g12a', 40 + D.dias.length * 38), m = { l: narrow ? 74 : 118, r: 10, t: 24, b: 22 };
+  const x = d3.scaleBand().domain(HORAS).range([m.l, w - m.r]).padding(.08), y = d3.scaleBand().domain(D.dias.map((d, i) => i)).range([m.t, h - m.b]).padding(.1);
+  const df = svg.append('defs').append('pattern').attr('id', 'hat').attr('width', 6).attr('height', 6).attr('patternTransform', 'rotate(45)').attr('patternUnits', 'userSpaceOnUse');
+  df.append('line').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 6).attr('stroke', C.ink3).attr('stroke-width', 1).attr('opacity', .45);
+  D.dias.forEach((d, i) => { svg.append('text').attr('x', m.l - 8).attr('y', y(i) + y.bandwidth() / 2).attr('dy', '.32em').attr('text-anchor', 'end').style('fill', C.ink).style('font-weight', d.at ? 700 : 400).text(`${narrow ? d.w : DIASEM[d.w]} ${dataCurta(d.d)}`);
+    HORAS.forEach(hh => svg.append('rect').attr('x', x(hh)).attr('y', y(i)).attr('width', x.bandwidth()).attr('height', y.bandwidth()).attr('fill', 'url(#hat)').attr('rx', 3).attr('opacity', .7)); });
+  D.dh.forEach(([i, hh, v, n]) => { svg.append('rect').attr('x', x(hh)).attr('y', y(i)).attr('width', x.bandwidth()).attr('height', y.bandwidth()).attr('fill', C.cl[cell(v)]).attr('rx', 3)
+    .on('pointermove', e => showTip(`<b>${DIASEM[D.dias[i].w]} ${dataCurta(D.dias[i].d)}, ${fmtH(hh)}</b><br>${nf(v)} km/h<br>${n.toLocaleString('pt-PT')} leituras`, e)).on('pointerleave', hideTip); });
+  const i11 = D.dias.findIndex(d => d.at); if (i11 >= 0) { svg.append('rect').attr('x', m.l - 3).attr('y', y(i11) - 3).attr('width', w - m.l - m.r + 6).attr('height', y.bandwidth() + 6).attr('fill', 'none').attr('stroke', C.ink).attr('stroke-width', 2).attr('rx', 5); }
+  eixoX(svg, x, h - m.b + 2, [0, 3, 6, 9, 12, 15, 18, 21].map(t => t), fmtH);
+  document.getElementById('l12').innerHTML = NC.map((n, i) => `<span><i style="background:${C.cl[i]}"></i>${n} km/h</span>`).join('') + `<span><i style="background:none;border:1px dashed ${C.ink3}"></i>sem recolha</span>`;
+  const q = hh => { const g = k => { const d = D.dh.find(z => z[0] === i11 && z[1] === hh); return d ? d[2] : null; };  return g(); };
+  const mean = (idxs, hh) => d3.mean(D.dh.filter(z => idxs.includes(z[0]) && z[1] === hh), z => z[2]);
+  const norm = D.dias.map((d, i) => (!d.at && d.w !== 'dom' && d.w !== 'sáb') ? i : -1).filter(i => i >= 0);
+  document.getElementById('n12a').innerHTML = `<b>O padrão dos dias úteis repete-se</b>: madrugada rápida, afundamento nas pontas, sobretudo às 18 h (${nf(mean(norm, 18))} km/h em média nos dias úteis normais). O dia 11 (com contorno) foi diferente entre as 7 h e as 20 h: às 18 h andou a ${nf(q(18))} km/h. De madrugada, igual aos outros. A velocidade calculada pela distância entre posições também subiu, por isso não é um erro da velocidade registada pelo autocarro. O domingo (8) e a sexta (13) estão incompletos.`;
+  tabela('#tb12a', ['Dia', ...HORAS.map(fmtH)], D.dias.map((d, i) => [`${DIASEM[d.w]} ${dataCurta(d.d)}`, ...HORAS.map(hh => { const z = D.dh.find(t => t[0] === i && t[1] === hh); return z ? nf(z[2]) : null; })]));
+  // painel B
+  const J = [['manha', C.s1, 'manhã'], ['entre_pontas', C.gris, 'entre pontas'], ['tarde', C.s2, 'tarde']], P = S.por_dia, dsd = S.dias;
+  { const { svg, w, h, narrow } = base('#g12b', 340), m = { l: 40, r: narrow ? 10 : 70, t: 16, b: 34 };
+    const x = d3.scalePoint().domain(dsd).range([m.l + 8, w - m.r - 8]), y = d3.scaleLinear().domain([-4, d3.max(P, d => d.med) + 1]).nice().range([h - m.b, m.t]);
+    eixoY(svg, y, m.l, w - m.r, y.ticks(5), t => t); svg.append('text').attr('class', 'fraco').attr('x', m.l - 6).attr('y', 8).attr('text-anchor', 'end').text('min');
+    svg.append('line').attr('x1', m.l).attr('x2', w - m.r).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', C.ink3).attr('stroke-width', 1.4);
+    const at = S.atipicos[0]; if (at && x(at) != null) svg.append('rect').attr('x', x(at) - 12).attr('width', 24).attr('y', m.t).attr('height', h - m.b - m.t).attr('fill', C.ink).attr('opacity', .07);
+    dsd.forEach(d => svg.append('text').attr('class', d === at ? 'forte' : 'fraco').attr('x', x(d)).attr('y', h - m.b + 16).attr('text-anchor', 'middle').attr('transform', `rotate(-40 ${x(d)} ${h - m.b + 16})`).text(dataCurta(d)));
+    J.forEach(([k, c, nm]) => { const s = P.filter(d => d.j === k).sort((a, b) => a.d.localeCompare(b.d));
+      svg.append('path').attr('d', d3.line().x(d => x(d.d)).y(d => y(d.med))(s)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 1.3).attr('opacity', .6);
+      s.forEach(d => svg.append('circle').attr('cx', x(d.d)).attr('cy', y(d.med)).attr('r', 5).attr('fill', c).attr('stroke', C.surface).attr('stroke-width', 1.5).attr('opacity', d.n < 2000 ? .35 : 1)
+        .on('pointermove', e => showTip(`<b>${dataCurta(d.d)} · ${nm}</b><br>atraso mediano ${sg(d.med)} min<br>${nf(d.a5, 0)} % &gt; 5 min · ${d.n.toLocaleString('pt-PT')} passagens${d.n < 2000 ? '<br><i>poucos dados</i>' : ''}`, e)).on('pointerleave', hideTip));
+      const u = s[s.length - 1]; if (u && !narrow) svg.append('text').attr('x', x(u.d) + 10).attr('y', y(u.med)).attr('dy', '.32em').style('fill', C.ink).text(nm); }); }
+  const t11 = P.filter(d => d.d === S.atipicos[0]).map(d => `${d.j === 'manha' ? 'manhã' : d.j === 'tarde' ? 'tarde' : 'entre pontas'} ${sg(d.med)} min`);
+  const out = P.filter(d => d.d !== S.atipicos[0]); const mn = d3.min(out, d => d.med);
+  document.getElementById('n12b').innerHTML = `<b>Fonte independente:</b> o pacote da STCP (outro recolector, outro método) dá ao dia 11 um atraso mediano de ${t11.join(', ')}; nos outros dias, nunca abaixo de ${sg(mn)} min. Na tarde do dia 11, 64 % das passagens estavam adiantadas mais de 1 minuto e só 2 % chegaram com mais de 5 min de atraso. A tarde é também a janela mais variável de dia para dia (${nf(d3.min(P.filter(d => d.j === 'tarde' && d.d !== S.atipicos[0]), d => d.med))} a ${nf(d3.max(P.filter(d => d.j === 'tarde' && d.d !== S.atipicos[0]), d => d.med))} min).`;
+  tabela('#tb12b', ['Dia', 'Janela', 'Atraso mediano min', '&gt; 5 min %', 'Passagens'], P.slice().sort((a, b) => a.d.localeCompare(b.d) || a.j.localeCompare(b.j)).map(d => [dataCurta(d.d), d.j.replace('_', ' '), nf(d.med), nf(d.a5, 0), d.n]));
+  // paragens longas
+  const pl = Object.entries(D.paradas_longas_dia), mx = d3.max(pl, d => d[1]);
+  document.getElementById('m12').innerHTML = pl.map(([d, n]) => { const dd = D.dias.find(z => z.d === d); return `<div class="med"><span>${DIASEM[dd.w]} ${dataCurta(d)}</span><i style="width:${n / mx * 100}%;background:${dd.at ? 'var(--v1)' : 'var(--p4)'}"></i><em>${n}</em></div>`; }).join('');
+  document.getElementById('n12c').innerHTML = `Paragens de 5 minutos ou mais no mesmo sítio (sobretudo em terminais): ${D.paradas_longas_dur.n.toLocaleString('pt-PT')} nos 6 dias, mediana de ${nf(D.paradas_longas_dur.mediana_min)} min. O dia 11 teve ${D.paradas_longas_dia['2026-11-11']}, contra 249–274 nos outros dias úteis completos. Bate com autocarros adiantados à espera da hora nos terminais; é uma hipótese, não uma prova.`;
+  document.getElementById('ind').innerHTML = [
+    `<b>Mais depressa só durante o dia:</b> 22,8 km/h de média em movimento, contra 19,2–19,9 nos outros dias úteis; de madrugada, igual.`,
+    `<b>Viagens mais curtas:</b> comparando a mesma linha, sentido e hora, a duração mediana foi 0,82 da dos outros dias úteis (os outros: 1,02–1,09).`,
+    `<b>Horário igual:</b> todas as viagens do dia 11 têm o código de dia útil. Era o mesmo horário; o que mudou foi a rua.`,
+    `<b>Ganho maior fora do centro:</b> a 2–5 km dos Aliados, às 17–18 h, 21,5 km/h contra 13,3–14,6 (quase o nível do domingo); no centro, 16,6 contra 10,3–13,4.`,
+    `<b>Duas fontes concordam:</b> a recolha própria e o pacote da STCP mostram o mesmo dia fora do normal.`].map(t => `<li>${t}</li>`).join('');
+}
+
+/* ---------- arranque ---------- */
+function desenhar() {
+  cores(); numeros(); g1(); g2(); g4(); g5(); g13(); g6(); g7(); g8(); g9(); g10(); g11(); g12();
+  document.getElementById('t1').textContent = `À hora de ponta, o autocarro perde tempo no trânsito, não nas paragens`;
+  const o = D.orcamento.horas, vs = o.map((x, h) => x && h >= 7 && h <= 18 ? { ...x, h } : null).filter(Boolean), tot = d3.sum(vs, d => d.n), av = k => d3.sum(vs, d => d[k] * d.n) / tot;
+  document.getElementById('n1').innerHTML = `<b>Das 7 às 19 h</b>, o tempo divide-se assim: ${pc(av('andar'))} a andar, ${pc(av('devagar'))} devagar, ${pc(av('transito'))} parado no trânsito e ${pc(av('paragem'))} parado em paragens e terminais. O tempo parado no trânsito passa para o dobro entre o almoço (${pc(o[12].transito)} às 12 h) e o fim da tarde (${pc(o[18].transito)} às 18 h). O tempo parado nas paragens quase não muda (entre ${pc(Math.min(...vs.map(d => d.paragem)), 0)} e ${pc(Math.max(...vs.map(d => d.paragem)), 0)} ao longo do dia). Média de ${D.orcamento.dias} dias úteis normais.`;
+  const dd = D.dist.horas, d8 = dd[8], d12 = dd[12], d18 = dd[18];
+  document.getElementById('t2').textContent = `Às 18 h, ${nf(d18.parados, 0)} % dos autocarros estão parados fora das paragens`;
+  document.getElementById('n2').innerHTML = `<b>Como ler:</b> cada faixa é uma hora do dia; a altura mostra quantas leituras há a cada velocidade, e a cor é a velocidade (vermelho = abaixo de 14 km/h, lento; azul = mais rápido). O traço preto é a velocidade mediana dessa hora. O pico à esquerda são os autocarros parados (menos de 2 km/h, fora de paragens): ${pc(d12.parados)} às 12 h, ${pc(d8.parados)} às 8 h e ${pc(d18.parados)} às 18 h. A velocidade mediana desce de ${nf(d12.med)} para ${nf(d18.med)} km/h. O pico à direita (20–30 km/h) são os autocarros a circular.`;
+}
+let ult = 0;
+function redes() { const w = document.querySelector('main').clientWidth; if (Math.abs(w - ult) > 4) { ult = w; desenhar(); } }
+document.getElementById('b9').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; j9 = b.dataset.j; document.querySelectorAll('#b9 button').forEach(x => x.classList.toggle('on', x === b)); g9(); });
+document.getElementById('q6').addEventListener('input', g6);
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change', () => { ult = 0; redes(); });
+let tm; addEventListener('resize', () => { clearTimeout(tm); tm = setTimeout(redes, 150); });
+redes();
+</script>
+</body>
+</html>

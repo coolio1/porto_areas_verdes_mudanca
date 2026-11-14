@@ -56,3 +56,45 @@ def test_geo_xy_metros():
     p = geo.xy(np.array([-8.6, -8.6]), np.array([41.15, 41.151]))
     assert p.shape == (2, 2)
     assert (p[1, 1] - p[0, 1]) == pytest.approx(111.32, abs=0.01)
+
+
+# ---- pacote da STCP (sem velocidade): velocidade e rumo derivados das posições ----
+import csv  # noqa: E402
+
+CAMPOS_STCP = ["vehicle_id", "observed_at", "received_at", "trip_id", "route_id", "direction_id", "longitude", "latitude",
+               "window", "stored_quality", "schedule_matched"]
+
+
+def pacote(tmp_path, nome, linhas):
+    pasta = tmp_path / "stcp"
+    pasta.mkdir(exist_ok=True)
+    with open(pasta / nome, "w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=CAMPOS_STCP)
+        w.writeheader()
+        for veic, obs, dx_m in linhas:
+            w.writerow({"vehicle_id": veic, "observed_at": obs, "received_at": obs.replace(":00+", ":10+"), "trip_id": "t",
+                        "route_id": "205", "longitude": -8.6 + dx_m / geo.KX, "latitude": 41.15})
+    return pasta
+
+
+def test_stcp_deriva_velocidade_e_rumo_das_posicoes(tmp_path):
+    pasta = pacote(tmp_path, "2026-11-04.csv", [
+        ("a", "2026-11-04T12:00:00+00:00", 0.0),      # 1.ª leitura: sem velocidade, fica de fora
+        ("a", "2026-11-04T12:01:00+00:00", 100.0),    # 100 m para leste em 60 s = 6 km/h, rumo 90°
+        ("a", "2026-11-04T12:02:00+00:00", 100.0),    # parado: 0 km/h, mantém o rumo
+        ("a", "2026-11-04T12:05:30+00:00", 600.0),    # intervalo de 210 s: fora da janela, não se inventa velocidade
+    ])
+    df = dados.carregar_stcp(pasta)
+    assert list(df.kmh.round(1)) == [6.0, 0.0]
+    assert list(df.direccao.round(0)) == [90.0, 90.0]
+    assert df.derivada.all() and list(df.tipo_dia) == ["util", "util"]
+
+
+def test_stcp_so_junta_dias_que_a_recolha_propria_nao_tem(pasta_csv, tmp_path):
+    propria = pasta_csv("posicoes_2026-11-09.csv", [L("v", "2026-11-09T12:00:00Z", "2026-11-09T12:00:30Z")])
+    stcp = pacote(tmp_path, "2026-11-09.csv", [("a", "2026-11-09T12:00:00+00:00", 0.0), ("a", "2026-11-09T12:01:00+00:00", 80.0)])
+    pacote(tmp_path, "2026-11-04.csv", [("b", "2026-11-04T12:00:00+00:00", 0.0), ("b", "2026-11-04T12:01:00+00:00", 80.0)])
+    df = dados.carregar(propria, stcp)
+    assert sorted(df.veiculo) == ["b", "v"]                          # o dia 9 vem só da recolha própria
+    assert df.set_index("veiculo").derivada.to_dict() == {"b": True, "v": False}
+    assert len(dados.carregar(propria)) == 1                         # sem pacote, tudo como antes

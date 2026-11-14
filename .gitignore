@@ -57,7 +57,11 @@ Mobilidade/*
 !Mobilidade/requirements.txt
 !Mobilidade/velocidade/
 !Mobilidade/tests/
+!Mobilidade/analise.html
+!Mobilidade/gerar_analise.py
+!Mobilidade/analise/
 Mobilidade/velocidade/__pycache__/
+Mobilidade/analise/__pycache__/
 
 # Tiny verde: dados brutos reprodutíveis (OSM, 27 MB; python tiny/obter_edificios.py)
 tiny/dados/

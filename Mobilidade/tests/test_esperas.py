@@ -60,6 +60,27 @@ def test_paradas_longas():
     assert not esperas.marcar_paradas_longas(leituras(*catorze)).any()
 
 
+def _viagem(*rows, viagem="v1"):
+    df = leituras(*rows)
+    df["viagem"], df["dia"] = viagem, T0.date()
+    return df
+
+
+def test_paradas_em_terminal_5_min_junto_ao_fim_da_viagem():
+    # a fica parado 6 min no fim da viagem (última leitura = ponta da viagem) -> espera
+    fim = [("a", 0, 0, 0, 20), ("a", 60, 400, 0, 20)] + [("a", 120 + 60 * i, 800 + 2 * (i % 2), 0, 0) for i in range(7)]
+    assert esperas.marcar_paradas_em_terminal(_viagem(*fim)).iloc[2:].all()
+
+
+def test_paradas_em_terminal_menos_de_5_min_ou_a_meio_do_percurso_nao():
+    curta = [("a", 0, 0, 0, 20)] + [("a", 60 + 60 * i, 800, 0, 0) for i in range(4)]       # 3 min
+    assert not esperas.marcar_paradas_em_terminal(_viagem(*curta)).iloc[1:].any()
+    # 7 min parado a 1,5 km das pontas da viagem: trânsito, não terminal
+    meio = ([("a", 0, 0, 0, 20), ("a", 60, 700, 0, 20)] + [("a", 120 + 60 * i, 1500, 0, 0) for i in range(8)]
+            + [("a", 700, 3000, 0, 20)])
+    assert not esperas.marcar_paradas_em_terminal(_viagem(*meio)).iloc[2:10].any()
+
+
 def test_paradas_longas_nao_apanha_veiculo_em_movimento():
     mov = [("a", 60 * i, 235 * i, 0, 15) for i in range(20)]
     assert not esperas.marcar_paradas_longas(leituras(*mov)).any()

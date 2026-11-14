@@ -30,8 +30,10 @@ def test_calcular_sintetico(pasta_csv, tmp_path):
     linhas = []
     for dia in ("2026-11-09", "2026-11-10"):               # segunda e terça
         for i, veic in enumerate(("a", "b", "c") * 4):     # 12 leituras por dia, 3 veículos
+            lon, lat = ll(240 + 40 * (i // 3), 3)          # em marcha lenta (40 m cada 3 min), não parado no mesmo sítio
             linhas.append({"veiculo": veic, "observado_utc": f"{dia}T17:{i:02d}:00Z", "recebido_utc": f"{dia}T17:{i:02d}:30Z",
                            "velocidade": 1.4, "direccao": 90, "linha": "A", "viagem": f"v{i}", "lon": lon, "lat": lat})
+    lon, lat = ll(300, 3)
     linhas.append({"veiculo": "z", "observado_utc": "2026-11-09T17:30:00Z", "recebido_utc": "2026-11-09T17:30:30Z",
                    "velocidade": 5, "direccao": 90, "linha": "107", "viagem": "x", "lon": lon, "lat": lat})   # linha sem rota
     pasta_dados = pasta_csv("posicoes_2026-11-09.csv", linhas)

@@ -25,6 +25,14 @@ def _dias_txt(n: int) -> str:
     return f"{n} dia" + ("" if n == 1 else "s")
 
 
+def _derivados_txt(n: int) -> str:
+    if not n:
+        return ""
+    return (f" {_dias_txt(n)} vêm de um conjunto de posições da STCP sem velocidade: nesses dias a velocidade foi calculada pela "
+            "distância entre duas posições seguidas do mesmo autocarro (cerca de um minuto), que tende a dar valores mais baixos "
+            "do que a velocidade medida.")
+
+
 def dados_json(resultado: dict) -> dict:
     """Geometria dos troços usados (uma vez) + por variante `[idx, dir, v, ph, perdido, n]`."""
     t = resultado["trocos"]
@@ -42,6 +50,7 @@ def dados_json(resultado: dict) -> dict:
     return {
         "trocos": [[[round(la, 5), round(lo, 5)] for la, lo in t.latlon[tid]] for tid in usados],
         "variantes": variantes, "marcadores": marcadores, "dias": dict(resultado["dias"]),
+        "habitual": resultado.get("habitual") or {"horas": [None] * 24, "dias": 0, "paragens": [], "terminais": []},
         "intervalo": _intervalo_txt(*resultado["intervalo"]), "coladas_pct": round(resultado["coladas_pct"], 1),
     }
 
@@ -59,6 +68,8 @@ def renderizar(resultado: dict, template: Path) -> str:
              .replace("__FDS_ATRIBUTOS__", botao_fds)
              .replace("__FDS_TEXTO__", texto_fds)
              .replace("__INTERVALO__", d["intervalo"])
+             .replace("__DIAS_BASE__", _dias_txt(d["habitual"]["dias"]))
+             .replace("__DERIVADOS__", _derivados_txt(resultado.get("dias_derivados", 0)))
              .replace("__COLADAS__", f"{d['coladas_pct']:.1f}".replace(".", ","))
              .replace("__DADOS__", json.dumps(d, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")))
     return carto.aplicar_chave(corpo)

@@ -43,7 +43,7 @@ def html(**kw):
 
 def test_html_sem_fetch_e_com_chave_carto():
     h = html()
-    assert "fetch(" not in h
+    assert h.count("fetch(") == 1 and "fetch(URL_FEED" in h     # dados dos mapas inline; só o feed ao vivo («Agora») se pede
     urls = re.findall(r"https://[^\"'\s]*basemaps\.cartocdn\.com[^\"'\s]*", h)
     assert urls and all("?key=" in u for u in urls)
 
@@ -129,6 +129,27 @@ def test_menu_so_tem_mobilidade_e_separadores_autocarros_atropelamentos():
     assert 'class="on">Atropelamentos<' in abas
     h = html()
     assert 'id="abas-mobilidade"' in h and 'class="on">Autocarros<' in h and 'href="../atropelamentos/dashboard_atropelamentos.html"' in h
+
+
+def test_agora_e_um_modo_do_seletor_com_habitual_e_paragens_embutidos():
+    r = resultado()
+    r["habitual"] = {"horas": [16.5] * 24, "dias": 4, "paragens": [[41.15, -8.61]]}
+    h = pagina.renderizar(r, TEMPLATE)
+    assert 'data-modo="agora"' in h and 'id="bloco-agora"' in h and 'id="rastos"' in h
+    assert "__DIAS_BASE__" not in h and "4 dias" in h and '"paragens":[[41.15,-8.61]]' in h
+    assert "dark_nolabels" in h and all("?key=" in u for u in re.findall(r"https://[^\"'\s]*basemaps\.cartocdn\.com[^\"'\s]*", h))
+    assert 'id="abas-mobilidade"' in h and ">Agora<" not in h.split('id="abas-mobilidade"')[1].split("</div>")[0]   # não é separador
+
+
+def test_agora_sem_habitual_nao_parte_a_pagina():
+    h = html()                                                      # resultado sem «habitual»: página gera com 24 horas vazias
+    assert '"horas":[null,' in h
+
+
+def test_agora_nao_guarda_falhas_como_leituras():
+    h = html()
+    assert "if (!v.length) throw" in h and "catch (_)" in h         # sem posições ou entidade partida: ignora, nunca 0
+    assert "localStorage" not in h and "indexedDB" not in h        # nada ao vivo é gravado
 
 
 def test_variante_sem_amostra_diz_sem_dados():

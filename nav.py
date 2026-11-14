@@ -22,9 +22,11 @@ PAGES = [
 # A página dos atropelamentos acende «Mobilidade» no menu (alias) e não tem item próprio.
 ABAS_MOBILIDADE = [
     ("Mobilidade/autocarros.html", "Autocarros"),
+    ("Mobilidade/analise.html", "Análise"),
     ("atropelamentos/dashboard_atropelamentos.html", "Atropelamentos"),
 ]
-_ALIAS_ACTIVO = {"atropelamentos/dashboard_atropelamentos.html": "Mobilidade/autocarros.html"}
+_ALIAS_ACTIVO = {"atropelamentos/dashboard_atropelamentos.html": "Mobilidade/autocarros.html",
+                 "Mobilidade/analise.html": "Mobilidade/autocarros.html"}
 
 # Páginas Jekyll-only (não entram em PAGES nem em TARGETS mas aparecem em AMBOS os navs)
 _JEKYLL_EXTRA = [
