@@ -57,7 +57,7 @@ exclude:
   - "*.gpkg"
   - CLC
   - Mobilidade/velocidade
-  - Mobilidade/analise
+  - "Mobilidade/analise/*"
   - Mobilidade/tests
   - CLAUDE.md
   - "atropelamentos/Porto_2019_24h.pdf"
