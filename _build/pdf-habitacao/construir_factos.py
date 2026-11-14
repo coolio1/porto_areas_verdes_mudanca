@@ -37,7 +37,7 @@ _cache = {}
 def corpus(f):
     """(texto com espaços colapsados, {valor arredondado: [posições]})."""
     if f not in _cache:
-        bruto = (ARM / rf.slug(f) / "texto.txt").read_text(encoding="utf-8", errors="replace")
+        bruto = rf.caminho_texto(ARM, f).read_text(encoding="utf-8", errors="replace")
         txt = re.sub(r"\s+", " ", re.sub(r"-\s*\n\s*", "", bruto))
         idx = {}
         for m in rf._NUM.finditer(txt):
@@ -111,7 +111,7 @@ def main():
             for u in re.findall(r"https?://[^\s)>\]]+", entrada)
             if not rf.DOI_RE.search(u)
         ]
-        ok = next((k for k in chaves if (ARM / rf.slug(k) / "texto.txt").exists()), None)
+        ok = next((k for k in chaves if rf.caminho_texto(ARM, k)), None)
         if ok:
             mapa[n] = ok
     cit = rf._citacoes_por_linha(nota)

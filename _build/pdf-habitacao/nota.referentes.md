@@ -16,3 +16,9 @@ c34183bdd7 | ok: o objecto é o preço das casas no código postal mediano (cres
 118d648594 | ok: o objecto é a renda mediana por metro quadrado dos contratos novos nas freguesias do Porto
 018baf58f3 | ok: o objecto é o preço das casas no código postal mediano (variação de 8,6 % face a mais 32 % de capital estrangeiro, face ao crescimento de 42 % de 2011–2018)
 5e76fb432e | ok: o objecto é o aumento do número de agregados previsto no cenário demográfico da Carta Municipal de Habitação do Porto (2021–2035) face aos vagos existentes em 2021
+8fa6609e73 | ok: o objecto é o preço médio de venda por metro quadrado no Algarve e nos concelhos citados
+1db5063fd8 | ok: o objecto é o preço das casas no código postal mediano (variação de 8,6 % face a mais 32 % de capital estrangeiro, face ao crescimento de 42 % de 2011–2018)
+7143e6cfdf | ok: o objecto é o nível das rendas em Auckland (descida face ao contrafactual do controlo sintético)
+99d84e94fc | ok: o objecto é o número de fogos vagos e a sua proporção no parque habitacional (a frase anterior diz «o número de vagos desceu»)
+4d00059a13 | ok: o objecto é a renda mediana por metro quadrado dos contratos novos nas freguesias do Porto
+4579034950 | ok: o objecto é o aumento do PIB dos Estados Unidos de 2009 no exercício de desregulação (3,7 egundo Hsieh e Moretti; 0,02 o modelo corrigido por Greaney)
