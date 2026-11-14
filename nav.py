@@ -65,12 +65,9 @@ CSS_COMUM = "assets/css/porto-verde.css"
 FONTES_PADRAO = "Sentinel-2, Landsat, OSM, PDM Porto"
 # Fontes de dados por página (canonical -> texto). Sem entrada: FONTES_PADRAO.
 FONTES = {
-    "Mobilidade/autocarros.html": "Associação Porto Digital (posições dos autocarros), OSM",
+    "Mobilidade/autocarros.html": "Porto Digital, OSM",
     "atropelamentos/dashboard_atropelamentos.html": "ANSR, INE",
-    "Mobilidade/analise.html": (
-        "Associação Porto Digital (posições dos autocarros), STCP (horários), "
-        "Câmara Municipal do Porto (corredores BUS e semáforos), OSM"
-    ),
+    "Mobilidade/analise.html": "Porto Digital, STCP, CM Porto, OSM",
 }
 
 
@@ -86,7 +83,7 @@ def _rodape(modo, href_indice, href_logo, fontes, sem_logo_na_inicial=False):
     return (
         f'<footer class="pv-rodape pv-rodape--{modo}">\n'
         f"  {logo}\n"
-        f'  <p><a href="https://coolio1.github.io/" target="_blank" rel="noopener">Nuno Quental</a><br>\n'
+        f'  <p>Porto Verde<br>\n'
         f"  Dados abertos: {fontes}</p>\n"
         "</footer>"
     )

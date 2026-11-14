@@ -19,5 +19,5 @@ def test_include_rodape_coincide():
 
 
 def test_rodape_mapa_tem_fontes_por_pagina():
-    assert "corredores BUS" in nav.get_rodape("Mobilidade/analise.html", 1)
+    assert "STCP" in nav.get_rodape("Mobilidade/analise.html", 1)
     assert nav.FONTES_PADRAO in nav.get_rodape("mapa_unico/mapa_unico.html", 1, "mapa")
