@@ -56,7 +56,6 @@ exclude:
   - archive
   - "*.gpkg"
   - CLC
-  - "AI Habitacao"
   - chat/worker
   - chat/refs.json
   - Mobilidade/velocidade

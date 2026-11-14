@@ -112,7 +112,7 @@ Ver skill `/jekyll`. Config específica: `baseurl: /porto_areas_verdes_mudanca`;
 
 ## Chat «Perguntar» (descontinuado 2026-11-09)
 
-Página `chat/index.html` com `published: false` e sem link no menu (`nav.py`); código do Worker em `chat/worker/` (mantido). Estado, motivo e como retomar ou apagar: `AI Habitacao\CLAUDE.md`. Não voltar a pôr o link sem decisão do utilizador.
+Página `chat/index.html` com `published: false` e sem link no menu (`nav.py`); código do Worker em `chat/worker/` (mantido). Estado, motivo e como retomar ou apagar: `Fontes\Habitacao\CLAUDE.md`. Não voltar a pôr o link sem decisão do utilizador.
 
 ## Mobilidade — velocidade dos autocarros (`Mobilidade/`, 2026-11-11)
 

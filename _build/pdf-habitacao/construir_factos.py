@@ -1,7 +1,7 @@
 r"""Gera nota.factos.propostas.md (propostas com excerto literal do armazém Fontes) e nota.factos.pendentes.md.
 
 Uso: python -I -X utf8 construir_factos.py          (a partir de qualquer pasta)
-Entradas: nota.md; texto das obras no armazém Fontes\AI habitacao\<slug(chave)>\texto.txt. A chave de cada [n] é o
+Entradas: nota.md; texto das obras no armazém Fontes\Habitacao\<slug(chave)>\texto.txt. A chave de cada [n] é o
           DOI ou o URL (web_xxx) da própria entrada [n] das Fontes (sem mapa à parte).
 Saídas:   nota.factos.propostas.md  (uma linha por valor e [n]: excerto literal com o valor; marcada «(auto)» até alguém
           ler; NUNCA sobrepõe nota.factos.md, que tem linhas revistas à mão: copiar daqui só o que se aprova)
@@ -16,7 +16,7 @@ import unicodedata
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
-ARM = Path(r"C:\Users\quent\OneDrive\Claude\Fontes\AI habitacao")
+ARM = Path(r"C:\Users\quent\OneDrive\Claude\Fontes\Habitacao")
 sp =importlib.util.spec_from_file_location("rf", Path.home() / ".claude" / "scripts" / "research_fetch.py")
 rf = importlib.util.module_from_spec(sp)
 sp.loader.exec_module(rf)
