@@ -102,16 +102,7 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
 </style>
 </head>
 <body>
-<link rel="stylesheet" href="../assets/css/porto-verde.css">
-
-<div id="nav">
-  <a href="../index.html">Início</a>
-  <a href="mapa_unico.html" class="active">Mapas e uso do solo</a>
-  <a href="../50espacos/">50 Espaços Verdes</a>
-  <a href="../Mobilidade/autocarros.html">Mobilidade</a>
-  <a href="../artigos/">Artigos</a>
-  <a href="../sobre/">Sobre</a>
-</div>
+<script src="../assets/js/moldura.js" data-pagina="mapa_unico/mapa_unico.html"></script>
 <div id="map"></div>
 <div id="panel">
   <button id="panel-toggle" onclick="var p=document.getElementById('panel');p.classList.toggle('collapsed');this.textContent=p.classList.contains('collapsed')?'▲ Abrir legenda':'▼ Fechar';">▼ Fechar</button>
@@ -1036,10 +1027,5 @@ MU.registarTema({
 MU.iniciar();
 </script>
 <script>if(window.innerWidth<=768){var p=document.getElementById('panel'),b=document.getElementById('panel-toggle');p.classList.add('collapsed');b.textContent='▲ Abrir legenda';}</script>
-<footer class="pv-rodape pv-rodape--mapa">
-  <a class="pv-rodape__logo" href="../index.html"><img src="../favicon.png" alt="Porto Verde"></a>
-  <p>Porto Verde<br>
-  Dados abertos: Sentinel-2, Landsat, OSM, PDM Porto</p>
-</footer>
 </body>
 </html>

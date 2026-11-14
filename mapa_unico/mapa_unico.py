@@ -15,7 +15,7 @@ AQUI = Path(__file__).resolve().parent
 RAIZ = AQUI.parent
 sys.path.insert(0, str(RAIZ))
 from carto import aplicar_chave
-from nav import get_css_link, get_nav, get_rodape
+from nav import get_nav
 
 SRC = AQUI / "src"
 DADOS = AQUI / "dados"
@@ -160,9 +160,7 @@ def escrever_html() -> None:
     html = (SRC / "template.html").read_text(encoding="utf-8")
     html = (
         html.replace("/*CSS*/", (SRC / "estilo.css").read_text(encoding="utf-8"))
-        .replace("<!--CSS-->", get_css_link(depth=1))
         .replace("<!--NAV-->", get_nav(PAGINA, depth=1))
-        .replace("<!--RODAPE-->", get_rodape(PAGINA, depth=1, modo="mapa"))
         .replace("/*JS*/", js)
     )
     saida = AQUI / "mapa_unico.html"

@@ -55,6 +55,19 @@
   #nav a { font-size: 10px; padding: 4px 7px; }
 }
 
+/* ---------- Abas da Mobilidade (sob o menu; criadas por moldura.js) ---------- */
+#abas-mobilidade {
+  position: fixed; top: 40px; right: 10px; z-index: 1000; display: flex; gap: 2px;
+  font: 500 12px/1 var(--pv-sans); background: rgba(250, 250, 247, 0.95);
+  border: 1px solid var(--pv-filete); padding: 2px;
+}
+#abas-mobilidade a { color: var(--pv-tinta); text-decoration: none; padding: 5px 12px; }
+#abas-mobilidade a.on { background: var(--pv-verde); color: var(--pv-papel); }
+@media (max-width: 700px) {
+  #abas-mobilidade { top: 70px; right: 8px; }
+  #abas-mobilidade.no-fundo { top: auto; bottom: 10px; left: 8px; right: 8px; justify-content: center; }
+}
+
 /* ---------- Rodapé (o mesmo bloco em todas as páginas; só muda a disposição) ---------- */
 .pv-rodape { font: 400 12px/1.5 var(--pv-sans); color: var(--pv-suave); }
 .pv-rodape p { margin: 0; }

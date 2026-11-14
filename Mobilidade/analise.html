@@ -107,21 +107,7 @@
 </style>
 </head>
 <body>
-<link rel="stylesheet" href="../assets/css/porto-verde.css">
-
-<div id="nav">
-  <a href="../index.html">Início</a>
-  <a href="../mapa_unico/mapa_unico.html">Mapas e uso do solo</a>
-  <a href="../50espacos/">50 Espaços Verdes</a>
-  <a href="autocarros.html" class="active">Mobilidade</a>
-  <a href="../artigos/">Artigos</a>
-  <a href="../sobre/">Sobre</a>
-</div><div id="abas-mobilidade">
-<style>#abas-mobilidade{position:fixed;top:40px;right:10px;z-index:1000;display:flex;gap:2px;font:12px 'Segoe UI',Arial,sans-serif;background:rgba(255,255,255,.92);border-radius:6px;padding:2px;box-shadow:0 1px 4px rgba(0,0,0,.15)}#abas-mobilidade a{color:#444;text-decoration:none;padding:4px 12px;border-radius:5px}#abas-mobilidade a.on{background:var(--pv-verde,#0B5232);color:#fff}@media(max-width:700px){#abas-mobilidade{top:70px;right:8px}}</style>
-  <a href="autocarros.html">Autocarros: mapa</a>
-  <a href="analise.html" class="on">Autocarros: análise</a>
-  <a href="../atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
-</div>
+<script src="../assets/js/moldura.js" data-pagina="Mobilidade/analise.html" data-rodape="leitura"></script>
 <main>
   <header>
     <h1>Os autocarros do Porto: quando e onde ficam parados</h1>
@@ -290,11 +276,6 @@
     </div>
   </section>
 </main>
-<footer class="pv-rodape pv-rodape--leitura">
-  <a class="pv-rodape__logo" href="../index.html"><img src="../favicon.png" alt="Porto Verde"></a>
-  <p>Porto Verde<br>
-  Dados abertos: Porto Digital, STCP, CM Porto, OSM</p>
-</footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>

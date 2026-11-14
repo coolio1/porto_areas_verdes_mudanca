@@ -7,7 +7,7 @@
   <meta name="google-site-verification" content="AZ-lnZ4HS5XY0TqEfI3rY4zKi1QZz6Dc11gfhs9IqjA" /> <!-- pragma: allowlist secret (token público de verificação Google) -->
   <link rel="icon" type="image/png" href="{{ site.baseurl }}/favicon.png">
   <link rel="icon" type="image/x-icon" href="{{ site.baseurl }}/favicon.ico">
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/porto-verde.css">
+  <script src="{{ site.baseurl }}/assets/js/moldura.js" data-menu="barra" data-rodape="leitura" data-pagina="{% if page.layout == 'post' %}artigos/{% else %}{{ page.url }}{% endif %}"{% if page.fontes %} data-fontes="{{ page.fontes | escape }}"{% endif %}></script>
   <style>
     :root {
       --green: var(--pv-verde);
@@ -129,10 +129,8 @@
     </a>
     <p><em>Mapas interactivos de vegetação, uso do solo e mudanças urbanas no Porto</em></p>
   </header>
-  {% include nav.html %}
   <main{% if page.wide %} class="wide"{% endif %}>
     {{ content }}
   </main>
-  {% include rodape.html %}
 </body>
 </html>

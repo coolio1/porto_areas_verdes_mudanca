@@ -47,21 +47,7 @@
 </style>
 </head>
 <body>
-<link rel="stylesheet" href="../assets/css/porto-verde.css">
-
-<div id="nav">
-  <a href="../index.html">Início</a>
-  <a href="../mapa_unico/mapa_unico.html">Mapas e uso do solo</a>
-  <a href="../50espacos/">50 Espaços Verdes</a>
-  <a href="autocarros.html" class="active">Mobilidade</a>
-  <a href="../artigos/">Artigos</a>
-  <a href="../sobre/">Sobre</a>
-</div><div id="abas-mobilidade">
-<style>#abas-mobilidade{position:fixed;top:40px;right:10px;z-index:1000;display:flex;gap:2px;font:12px 'Segoe UI',Arial,sans-serif;background:rgba(255,255,255,.92);border-radius:6px;padding:2px;box-shadow:0 1px 4px rgba(0,0,0,.15)}#abas-mobilidade a{color:#444;text-decoration:none;padding:4px 12px;border-radius:5px}#abas-mobilidade a.on{background:var(--pv-verde,#0B5232);color:#fff}@media(max-width:700px){#abas-mobilidade{top:70px;right:8px}}</style>
-  <a href="autocarros.html" class="on">Autocarros: mapa</a>
-  <a href="analise.html">Autocarros: análise</a>
-  <a href="../atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a>
-</div>
+<script src="../assets/js/moldura.js" data-pagina="Mobilidade/autocarros.html"></script>
 <div id="mapa"></div>
 <canvas id="rastos" aria-hidden="true"></canvas>
 <div id="painel">
@@ -490,10 +476,5 @@ document.querySelectorAll('#g-dia button, #g-per button, #g-modo button').forEac
 }));
 desenhar();
 </script>
-<footer class="pv-rodape pv-rodape--mapa">
-  <a class="pv-rodape__logo" href="../index.html"><img src="../favicon.png" alt="Porto Verde"></a>
-  <p>Porto Verde<br>
-  Dados abertos: Porto Digital, OSM</p>
-</footer>
 </body>
 </html>

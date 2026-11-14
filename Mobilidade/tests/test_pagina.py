@@ -120,15 +120,10 @@ def test_cada_vista_tem_definicao_e_paleta_propria():
     assert "const PERDIDO = [[0, [242, 224, 247]]" in h
 
 
-def test_menu_so_tem_mobilidade_e_separadores_autocarros_atropelamentos():
-    import nav
-    ativo = nav.get_nav("atropelamentos/dashboard_atropelamentos.html", depth=1)
-    assert 'class="active">Mobilidade<' in ativo and ">Atropelamentos<" not in ativo     # a página dos atropelamentos acende «Mobilidade»
-    abas = nav.get_abas_mobilidade("atropelamentos/dashboard_atropelamentos.html", depth=1)
-    assert 'href="autocarros.html"' not in abas and 'href="../Mobilidade/autocarros.html"' in abas
-    assert 'class="on">Atropelamentos<' in abas
+def test_menu_e_abas_vem_da_moldura():
     h = html()
-    assert 'id="abas-mobilidade"' in h and 'class="on">Autocarros: mapa<' in h and 'href="../atropelamentos/dashboard_atropelamentos.html"' in h
+    assert 'moldura.js" data-pagina="Mobilidade/autocarros.html"' in h
+    assert 'id="nav"' not in h and 'id="abas-mobilidade"' not in h      # desenhados pelo JS, não pelo gerador
 
 
 def test_agora_e_um_modo_do_seletor_com_habitual_e_paragens_embutidos():
@@ -138,7 +133,7 @@ def test_agora_e_um_modo_do_seletor_com_habitual_e_paragens_embutidos():
     assert 'data-modo="agora"' in h and 'id="bloco-agora"' in h and 'id="rastos"' in h
     assert "__DIAS_BASE__" not in h and "4 dias" in h and '"paragens":[[41.15,-8.61]]' in h
     assert "dark_nolabels" in h and all("?key=" in u for u in re.findall(r"https://[^\"'\s]*basemaps\.cartocdn\.com[^\"'\s]*", h))
-    assert 'id="abas-mobilidade"' in h and ">Agora<" not in h.split('id="abas-mobilidade"')[1].split("</div>")[0]   # não é separador
+    assert ">Agora<" not in h.split("moldura.js")[1].split("</script>")[0]   # «Agora» é modo do seletor, não separador
 
 
 def test_agora_sem_habitual_nao_parte_a_pagina():
