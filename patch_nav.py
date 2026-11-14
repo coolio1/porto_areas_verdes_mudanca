@@ -11,7 +11,7 @@ import os, re, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ROOT)
-from nav import get_nav, get_jekyll_nav, get_footer_logo
+from nav import get_nav, get_jekyll_nav, get_rodape, get_css_link
 
 # (ficheiro relativo à raiz, canonical_path, depth)
 TARGETS = [
@@ -25,7 +25,9 @@ TARGETS = [
 ]
 
 NAV_RE    = re.compile(r'<div id="nav"[^>]*>.*?</div>', re.DOTALL)
-FOOTER_RE = re.compile(r'<div id="footer-logo"[^>]*>.*?</div>', re.DOTALL)
+FOOTER_RE = re.compile(r'<div id="footer-logo"[^>]*>.*?</div>\n?', re.DOTALL)
+CREDIT_RE = re.compile(r'<div id="credit"[^>]*>.*?</div>\n?', re.DOTALL)
+RODAPE_RE = re.compile(r'<footer class="pv-rodape.*?</footer>\n?', re.DOTALL)
 
 CHECK_ONLY = "--check" in sys.argv
 INSTALL    = "--install" in sys.argv
@@ -71,17 +73,19 @@ for rel_path, canonical, depth in TARGETS:
         new_content = NAV_RE.sub(expected_nav, new_content, count=1)
         changed = True
 
-    # --- footer-logo ---
-    expected_footer = get_footer_logo(depth)
+    # --- rodapé comum (substitui o antigo footer-logo e o crédito) + CSS comum ---
+    expected_footer = get_rodape(canonical, depth, "mapa")
     if expected_footer not in new_content:
         if CHECK_ONLY:
-            print(f"[divergência footer-logo] {rel_path}", file=sys.stderr)
+            print(f"[divergência rodapé] {rel_path}", file=sys.stderr)
             errors += 1
             continue
-        if FOOTER_RE.search(new_content):
-            new_content = FOOTER_RE.sub(expected_footer, new_content, count=1)
-        else:
-            new_content = new_content.replace('</body>', expected_footer + '\n</body>', 1)
+        new_content = FOOTER_RE.sub("", new_content)
+        new_content = CREDIT_RE.sub("", new_content)
+        new_content = RODAPE_RE.sub("", new_content)
+        new_content = new_content.replace('</body>', expected_footer + '\n</body>', 1)
+        if get_css_link(depth) not in new_content:
+            new_content = new_content.replace('</head>', get_css_link(depth) + '</head>', 1)
         changed = True
 
     if changed:
