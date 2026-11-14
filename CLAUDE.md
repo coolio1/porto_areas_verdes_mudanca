@@ -9,10 +9,10 @@
 Raiz = site Jekyll/GitHub Pages; detalhe em `docs/estrutura.md`.
 - **`mapa_unico/` = página única dos mapas (4 temas em separadores); as páginas antigas abaixo são redirects (`mapa_unico/gerar_stubs.py`)**: `mapa/` (Sentinel-2 2016-2025), `ndvi_historico/` (Landsat 1947-2024), `interiores/` (verde privado), `1947/` (classificação ortofoto), `animacao/`, `atropelamentos/` (dashboard + DB), `acessibilidade/` (pipeline 2SFCA + conversão).
 - `layers/`, `layers_historico/` — layers partilhados na raiz; `docs/` — planos e specs (fora do Jekyll).
-- `nav.py` + `patch_nav.py` (nav única, pre-commit), `capture_cards.py`, `check_leaflet_init.py`.
+- `assets/js/moldura.js` (menu, abas da Mobilidade e rodapé: única fonte), `nav.py` (atalho que devolve a etiqueta `<script>`), `assets/css/porto-verde.css`, `capture_cards.py`, `check_leaflet_init.py`.
 
 ## Navegação entre páginas
-Todas as páginas HTML menos o index têm a barra fixa `#nav` com links relativos a todas as outras (`docs/navegacao.md`); scripts que geram HTML incluem-na no template.
+Menu, abas e rodapé: `assets/js/moldura.js` em todas as páginas (`docs/navegacao.md`); os geradores só escrevem a etiqueta `<script>` (`nav.get_nav`). Rodapé: «Porto Verde» (nunca o nome pessoal do utilizador) e fontes curtas por página (`FONTES` no JS).
 
 ## Regras de organização
 - **Cada script gera o seu HTML** — nunca editar HTMLs à mão.
@@ -64,7 +64,8 @@ Thumbnails e criação de artigos: skill `porto-verde-posts`. Nunca editar `inde
 - **Estudos e fichas:** permalink das fichas `/50espacos/espacos/<concelho>/<slug>/`; documentos com ficha vão para `50espacos/media/<slug>/`, não para Estudos (comparar md5 antes de alojar). Descargas em lote: validar `%%EOF` no fim do PDF (cópias do Wayback truncam em múltiplos de 1 MiB; um limite de leitura próprio também trunca). O hook proíbe escrever em «Para arquivar»: preparar a pasta na scratchpad; o utilizador copia com `! cp -rn`. Pendentes: `docs/50espacos/estudos_por_descarregar.md`. Verificar o ciclo dos PGRH (as versões de 2011 são do 1.º ciclo, não do 2.º).
 - **Fotos das fichas:** `50espacos/media/<slug>/creditos.json` (`{"01.jpg": {"fonte", "url"}}`) mostra o crédito sob a foto; fontes com outros direitos aceites se creditadas. Nunca fotos de utilizadores do Google Maps. Street View não serve para os espaços sem foto (Vessada, Taím, Monte Penedo, Frejufe: coordenadas com 2 casas decimais, o Google só tem o topónimo). Sem foto: o utilizador fornece-a.
 - **Mapa único:** ao fundir páginas, medir a paridade contra o HTML **publicado**, não o gerador (divergem: o `interiores` publicado tem o «Subsistente» corrigido, 295 mil px; `layers/interior_subsistente.png` tem 450 mil); comparar PNG por alfa. O «mesmo» dado pode ter versões diferentes (1947: a página 1947 mostrava a classificação bruta, o Histórico a limpa por `clean_1947.py`) → verificar a origem antes de escolher. Testar em `file://` com Playwright (a extensão Chrome não abre `file://`). O hook bloqueia `sed -i` no OneDrive → Edit. Dados embutidos em `mapa_unico/dados/*.js`: `docs/estrutura.md`.
-- **Menu:** `patch_nav.py` é bloqueado pelo hook → editar só `nav.py`; o pre-commit propaga.
+- **Moldura (menu, abas, rodapé):** só `assets/js/moldura.js` (lista de páginas, abas, `FONTES` por página); mudar lá muda todas as páginas, sem regenerar. Página nova: adicionar a etiqueta `<script src="<raiz>/assets/js/moldura.js" data-pagina="<caminho>">` (gerador: `nav.get_nav(caminho, depth)`); `test_moldura.py` guarda isto. Cores e tipografia: `porto-verde.css`.
+- **Identidade visual (2026-11-14):** tokens e tipografia em `assets/css/porto-verde.css` (Literata nos títulos de texto, Schibsted nos rótulos; verde do logo, ouro só no logo; sem laranja nem azul de interface). Páginas de texto: escala única da secção «Leitura» do CSS, nada de h1/h2/h3 próprios por página. **Os 50 Espaços (`50espacos.css`) ficam como estão, a pedido do utilizador.** Camadas dos mapas (paleta C): parques `#0B5232`, verde pago `#D9642B`, verde privado `#D6C496` (geradores `acessibilidade_html.py`/`conversao_html.py` e `tema_acessibilidade.js`; mudar = regenerar PNG coloridos e `mapa_unico.py`).
 - **Artigos com textos enviados a entidades (caso Aurifícia):** nunca publicar o original nem dados pessoais/referências de notificações; `docs/artigos-textos-entidades.md`.
 
 ## Modelo dos subagentes (pedido do utilizador: poupar custo)
