@@ -40,11 +40,11 @@ def build_html(script_dir, layers_dir, parent_layers, bounds,
 
     # Gerar PNGs pré-coloridos (evita canvas CORS em file://)
     verde_pago_col = os.path.join(layers_dir, "verde_pago_colored.png")
-    _make_colored_png(verde_pago_path, verde_pago_col, "#8D6E63")
+    _make_colored_png(verde_pago_path, verde_pago_col, "#D9642B")
 
     verde_priv_src = os.path.join(parent_layers, "interior_subsistente.png")
     verde_priv_col = os.path.join(parent_layers, "interior_subsistente_colored.png")
-    _make_colored_png(verde_priv_src, verde_priv_col, "#1565C0")
+    _make_colored_png(verde_priv_src, verde_priv_col, "#D6C496")
 
     muni_col = os.path.join(parent_layers, "municipios_colored.png")
     _make_colored_png(muni_path, muni_col, "#444444")
@@ -267,7 +267,7 @@ var lowPopLayer = {{
 var greenPrivLayer = {{
   id: "verde_privado",
   label: "Verde privado",
-  color: "#1565C0",
+  color: "#D6C496",
   src: {verde_priv_js},
   show: false
 }};
@@ -275,7 +275,7 @@ var greenPrivLayer = {{
 var outroVerdeLayer = {{
   id: "verde_pago",
   label: "Verde em PDM / fechado ao p\\u00fablico",
-  color: "#8D6E63",
+  color: "#D9642B",
   src: {verde_pago_js},
   show: false
 }};

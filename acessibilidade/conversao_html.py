@@ -168,11 +168,11 @@ def build_html(script_dir, layers_dir, parent_layers_dir, geojson, pct_actual, p
         <span style="color:#666;">Estrat&eacute;gia de expans&atilde;o (CMP)</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
-        <span style="width:14px;height:12px;border-radius:2px;background:#8D6E63;display:inline-block;"></span>
+        <span style="width:14px;height:12px;border-radius:2px;background:#D9642B;display:inline-block;"></span>
         <span style="color:#666;">Verde em PDM / fechado ao p&uacute;blico</span>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
-        <span style="width:14px;height:12px;border-radius:2px;background:#1565C0;display:inline-block;"></span>
+        <span style="width:14px;height:12px;border-radius:2px;background:#D6C496;display:inline-block;"></span>
         <span style="color:#666;">Verde privado</span>
       </div>
     </div>
@@ -261,8 +261,8 @@ function init() {{
   if (candidatosData && candidatosData.features.length > 0) {{
     var tipoColors = {{
       'Estrategia de expansao (CMP)': '#00897B',
-      'Verde em PDM / fechado ao publico': '#8D6E63',
-      'Verde privado': '#1565C0'
+      'Verde em PDM / fechado ao publico': '#D9642B',
+      'Verde privado': '#D6C496'
     }};
     candGeoLayer = L.geoJson(candidatosData, {{
       pane: 'candGeoPane',

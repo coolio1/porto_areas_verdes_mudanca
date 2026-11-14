@@ -512,8 +512,8 @@ MU.registarTema({
         '<div class="section">Candidatos (por prioridade)</div>' +
         '<div class="leg">' +
           '<div><i style="background:#00897B"></i><span>Estrat&eacute;gia de expans&atilde;o (CMP)</span></div>' +
-          '<div><i style="background:#8D6E63"></i><span>Verde em PDM / fechado ao p&uacute;blico</span></div>' +
-          '<div><i style="background:#1565C0"></i><span>Verde privado</span></div></div></div>' +
+          '<div><i style="background:#D9642B"></i><span>Verde em PDM / fechado ao p&uacute;blico</span></div>' +
+          '<div><i style="background:#D6C496"></i><span>Verde privado</span></div></div></div>' +
 
       '<div class="section">Camadas</div><div id="ac-camadas"></div>';
 
@@ -522,7 +522,7 @@ MU.registarTema({
     // --- Parques e Jardins (GeoJSON, popups, rótulos a partir do zoom 14) ---
     this._parques = L.geoJson(D.parques, {
       pane: 'parquesPane',
-      style: function () { return { color: '#1B5E20', weight: 2.5, opacity: 0.9, fillColor: '#2E7D32', fillOpacity: 0.45 }; },
+      style: function () { return { color: '#0B5232', weight: 2.5, opacity: 0.9, fillColor: '#0B5232', fillOpacity: 0.45 }; },
       onEachFeature: function (f, layer) {
         var p = f.properties, area = p.area_calc_ha ? p.area_calc_ha + ' ha' : '';
         layer.bindPopup('<b style="font-size:13px;">' + p.nome + '</b><br><span style="color:#666;">' +
@@ -531,15 +531,15 @@ MU.registarTema({
       }
     });
     this._lParques = MU.linha(box, {
-      label: 'Parques e Jardins', checked: true, color: '#2E7D32', editavel: false,
+      label: 'Parques e Jardins', checked: true, color: '#0B5232', editavel: false,
       onToggle: function (on) { self._toggle(self._parques, on); }
     });
 
     // --- Candidatos a conversão (GeoJSON, popups, rótulos a partir do zoom 13) ---
     var TIPO = {
       'Estrategia de expansao (CMP)': { cor: '#00897B', rot: 'Estratégia de expansão (CMP)' },
-      'Verde em PDM / fechado ao publico': { cor: '#8D6E63', rot: 'Verde em PDM / fechado ao público' },
-      'Verde privado': { cor: '#1565C0', rot: 'Verde privado' }
+      'Verde em PDM / fechado ao publico': { cor: '#D9642B', rot: 'Verde em PDM / fechado ao público' },
+      'Verde privado': { cor: '#D6C496', rot: 'Verde privado' }
     };
     this._cand = L.geoJson(D.candidatos, {
       pane: 'candGeoPane',
@@ -576,8 +576,8 @@ MU.registarTema({
 
     // --- Verde privado (todas as áreas) e verde em PDM: só visualização, pré-coloridas em Python ---
     this._mono = [];
-    [['privado', 'Verde privado (todas as áreas)', '#1565C0'],
-     ['pago', 'Verde em PDM / fechado ao público', '#8D6E63']].forEach(function (d) {
+    [['privado', 'Verde privado (todas as áreas)', '#D6C496'],
+     ['pago', 'Verde em PDM / fechado ao público', '#D9642B']].forEach(function (d) {
       var ov = L.imageOverlay(D.imgs[d[0]], MU.BOUNDS);
       var l = MU.linha(box, {
         label: d[1], checked: false, color: d[2], editavel: false,
