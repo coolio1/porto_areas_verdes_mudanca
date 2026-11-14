@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Análise dos autocarros do Porto — Porto Verde</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
   :root{--surface:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--ink3:#76746f;--grid:#e1e0d9;--panel:#ffffff;--marca:#ef4444;
     --v0:#971b1a;--v1:#c44039;--v2:#e27368;--v3:#f2988e;--v4:#efeeeb;--v5:#8bb7f0;--v6:#639be1;--v7:#2d74ca;--v8:#07519d;
@@ -39,7 +40,9 @@
   .leg{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:13px;color:var(--ink2);margin:6px 0 10px}
   .leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
   .cartao{background:var(--panel);border:1px solid var(--grid);border-radius:14px;padding:16px 14px 10px;position:relative}
-  .cartao svg{display:block;width:100%;height:auto;overflow:visible}
+  .cartao svg:not(.leaflet-zoom-animated){display:block;width:100%;height:auto;overflow:visible}
+  .mapa14 .leaflet-marker-icon svg,.mapa14 .leaflet-control svg{width:auto;height:auto;display:inline}
+  .fundo14{margin:0 0 10px}
   .cartao svg text{font:12px system-ui,sans-serif;fill:var(--ink2)}
   .cartao svg .fraco{fill:var(--ink3)}
   .cartao svg .forte{fill:var(--ink);font-weight:600}
@@ -56,7 +59,11 @@
   .limite{font-size:13.5px;color:var(--ink3);max-width:72ch;margin:6px 0 0;padding-left:12px;border-left:3px solid var(--grid)}
   .aviso{background:var(--panel);border:1px solid var(--grid);border-left:4px solid var(--p4);border-radius:10px;padding:12px 14px;font-size:14.5px;color:var(--ink2);max-width:76ch;margin:0 0 18px}
   .aviso b{color:var(--ink)}
-  .zl{max-height:560px;overflow:auto;padding:0 2px 6px}
+  .mapa14{height:540px;border-radius:10px;background:#eceae6}
+  .mapa14 .num{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:700;font-size:12.5px;line-height:1;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+  .duo.c14{grid-template-columns:1.25fr .75fr}
+  @media (max-width:820px){.mapa14{height:400px}.duo.c14{grid-template-columns:1fr}}
+  .zl{max-height:540px;overflow:auto;padding:0 2px 6px}
   .zr{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:10px 6px;border-bottom:1px solid var(--grid);cursor:default;border-radius:8px}
   .zr:last-child{border-bottom:0}
   .zr.on{background:rgba(96,68,181,.09)}
@@ -239,7 +246,7 @@ __NAV__
     <figure>
       <h3 id="t14"></h3>
       <div class="leg" id="l14leg"></div>
-      <div class="duo b"><div class="cartao"><div id="g14a"></div></div><div class="cartao"><div class="zl" id="g14b"></div></div></div>
+      <div class="duo c14"><div class="cartao"><div id="g14a"></div></div><div class="cartao"><div class="zl" id="g14b"></div></div></div>
       <p class="nota" id="n14"></p>
       <p class="limite" id="m14"></p>
       <details><summary>Ver os números</summary><div class="tb" id="tb14"></div></details>
@@ -261,6 +268,7 @@ __NAV__
   </section>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 const D = __DADOS__;
 const S = D.stcp, RH = S.recolha_x_horario;
@@ -524,28 +532,33 @@ function g14() {
   document.getElementById('t14').textContent = `Das ${Z.length} zonas mais lentas, ${nCor === 0 ? 'nenhuma pede' : nCor === 1 ? 'só 1 pede' : 'só ' + nCor + ' pedem'} um corredor BUS; as outras pedem outra medida`;
   const usados = [...new Set(Z.map(z => z.tipo))];
   document.getElementById('l14leg').innerHTML = usados.map(t => `<span><i style="background:${cor(t)}"></i>${TIPOS[t]}</span>`).join('') + `<span><i style="background:${C.s1}"></i>corredor BUS que já existe</span>`;
-  const el = document.getElementById('g14a'), w = Math.max(300, Math.floor(el.clientWidth));
-  el.innerHTML = '';
-  const feats = Z.map(z => ({ type: 'Feature', properties: { r: z.rank }, geometry: { type: 'MultiLineString', coordinates: z.tracado.map(l => l.map(([la, lo]) => [lo, la])) } }));
-  const fc = { type: 'FeatureCollection', features: feats };
-  const bb = d3.geoBounds(fc), asp = ((bb[1][1] - bb[0][1]) || .01) / (((bb[1][0] - bb[0][0]) || .01) * Math.cos(41.15 * Math.PI / 180));
-  const h = Math.round(Math.min(560, Math.max(330, (w - 52) * asp + 56)));
-  const svg = d3.select(el).append('svg').attr('width', w).attr('height', h).attr('viewBox', `0 0 ${w} ${h}`);
-  const proj = d3.geoMercator().fitExtent([[26, 26], [w - 26, h - 30]], fc), path = d3.geoPath(proj);
-  const cors = { type: 'Feature', geometry: { type: 'MultiLineString', coordinates: (K.corredores || []).flat().map(l => l.map(([la, lo]) => [lo, la])) } };
-  svg.append('path').attr('d', path(cors)).attr('fill', 'none').attr('stroke', C.s1).attr('stroke-width', 2.4).attr('opacity', .6).attr('stroke-linecap', 'round');
-  const linhas = [], rotulos = [];
+  const el = document.getElementById('g14a');
+  if (window._mapa14) { window._mapa14.remove(); window._mapa14 = null; }
+  el.innerHTML = '<div class="botoes fundo14" id="b14" role="group" aria-label="Mapa de fundo"><button data-f="p" class="on">Mapa claro</button><button data-f="v">Mais detalhe das ruas</button></div><div class="mapa14" id="m14mapa"></div>';
+  const attr = '&copy; OpenStreetMap &copy; CARTO';
+  const positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19, attribution: attr });
+  const voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19, attribution: attr });
+  const mapa = L.map('m14mapa', { layers: [positron], scrollWheelZoom: false, zoomSnap: .5, attributionControl: false });
+  window._mapa14 = mapa;
+  L.control.attribution({ prefix: false }).addTo(mapa);
+  document.getElementById('b14').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+    document.querySelectorAll('#b14 button').forEach(x => x.classList.toggle('on', x === b));
+    if (b.dataset.f === 'v') { mapa.removeLayer(positron); voyager.addTo(mapa); } else { mapa.removeLayer(voyager); positron.addTo(mapa); } });
+  mapa.on('click', () => mapa.scrollWheelZoom.enable());
+  el.addEventListener('mouseleave', () => mapa.scrollWheelZoom.disable());
+  (K.corredores || []).flat().forEach(l => L.polyline(l, { color: C.s1, weight: 4, opacity: .75, interactive: false }).addTo(mapa));
+  const linhas = [], rotulos = [], todos = [];
   Z.forEach((z, i) => {
-    const f = feats[i];
-    linhas.push(svg.append('path').attr('d', path(f)).attr('fill', 'none').attr('stroke', cor(z.tipo)).attr('stroke-width', 5).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round'));
-    const [cx, cy] = path.centroid(f);
-    const g = svg.append('g').attr('transform', `translate(${cx},${cy})`).style('cursor', 'default');
-    g.append('circle').attr('r', 11).attr('fill', cor(z.tipo)).attr('stroke', C.surface).attr('stroke-width', 2);
-    g.append('text').attr('text-anchor', 'middle').attr('dy', '.35em').style('fill', onC(cor(z.tipo))).style('font-weight', 700).style('font-size', '11.5px').text(z.rank);
-    rotulos.push(g);
-    g.on('pointermove', e => { foco(i); showTip(`<b>${z.rank}. ${nome(z)}</b><br>${TIPOS[z.tipo]}<br>${z.medida_txt}`, e); }).on('pointerleave', () => { foco(-1); hideTip(); });
+    const grupo = z.tracado.map(l => { todos.push(...l); return L.polyline(l, { color: cor(z.tipo), weight: 7, opacity: .95, lineCap: 'round', lineJoin: 'round' }).addTo(mapa); });
+    linhas.push(grupo);
+    const meio = z.tracado[Math.floor(z.tracado.length / 2)], pm = meio[Math.floor(meio.length / 2)];
+    const mk = L.marker(pm, { icon: L.divIcon({ className: '', iconSize: [26, 26], iconAnchor: [13, 13], html: `<div class="num" style="background:${cor(z.tipo)};color:${onC(cor(z.tipo))}">${z.rank}</div>` }), keyboard: false }).addTo(mapa);
+    rotulos.push(mk);
+    const html = `<b>${z.rank}. ${nome(z)}</b><br>${TIPOS[z.tipo]}<br>${z.medida_txt}`;
+    [mk, ...grupo].forEach(o => o.on('mouseover', () => foco(i)).on('mousemove', e => showTip(html, e.originalEvent)).on('mouseout', () => { foco(-1); hideTip(); }));
   });
-  svg.append('text').attr('class', 'fraco').attr('x', 8).attr('y', h - 8).text('sem mapa de fundo; dados dos corredores: Câmara Municipal do Porto');
+  mapa.fitBounds(L.latLngBounds(todos), { padding: [30, 30] });
+  setTimeout(() => mapa.invalidateSize(), 50);
   const lista = document.getElementById('g14b');
   lista.innerHTML = Z.map(z => `<div class="zr" data-i="${z.rank - 1}"><div class="nr" style="background:${cor(z.tipo)};color:${onC(cor(z.tipo))}">${z.rank}</div><div>
     <h4>${nome(z)}</h4>
@@ -555,8 +568,8 @@ function g14() {
     ${z.ganho ? `<p>Se for corredor: poupa entre ${nf(z.ganho.lo, 0)} e ${nf(z.ganho.hi, 0)} min de autocarro por hora de ponta (valor central ${nf(z.ganho.c, 0)}).</p>` : ''}
     <p class="peq">Lenta em ${z.dias_crit} de ${z.dias_obs} dias · confiança ${z.conf}</p></div></div>`).join('');
   function foco(i) {
-    linhas.forEach((l, k) => l.attr('stroke-width', k === i ? 9 : 5).attr('opacity', i < 0 || k === i ? 1 : .35));
-    rotulos.forEach((r, k) => r.attr('opacity', i < 0 || k === i ? 1 : .45));
+    linhas.forEach((g, k) => g.forEach(l => l.setStyle({ weight: k === i ? 11 : 7, opacity: i < 0 || k === i ? .95 : .3 })));
+    rotulos.forEach((r, k) => r.setOpacity(i < 0 || k === i ? 1 : .45));
     lista.querySelectorAll('.zr').forEach((d, k) => d.classList.toggle('on', k === i));
   }
   lista.querySelectorAll('.zr').forEach(d => { d.addEventListener('pointerenter', () => foco(+d.dataset.i)); d.addEventListener('pointerleave', () => foco(-1)); });
