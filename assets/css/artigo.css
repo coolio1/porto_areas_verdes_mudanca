@@ -1,0 +1,127 @@
+/* artigo.css — página de artigo (direcção B «Carta», versão 1: «A margem é a legenda»).
+   Só os artigos (_layouts/post.html). Cromo: papel, tinta, verde, filetes de 1px; tipos: IBM Plex (plex.css).
+   Cores dos dados (mapas e gráficos) = paleta própria, separada do cromo: ver --d-* e a cor de capítulo (--cc/--ct). */
+:root {
+  --a-paper: #FAFAF7; --a-panel: #fff; --a-ink: #10212C; --a-ink2: #3E5260; --a-hair: rgba(16,33,44,.18);
+  --a-brand: #0B5232;
+  --a-sans: "IBM Plex Sans", system-ui, sans-serif; --a-serif: "IBM Plex Serif", Georgia, serif; --a-mono: "IBM Plex Mono", ui-monospace, monospace;
+  /* paleta de dados */
+  --d-crit: #E0A033; --d-ins: #3F9C80; --d-adq: #0B5232; --d-baixa: #D2D5D0;
+  --d-parque: #0B5232; --d-pago: #D9642B; --d-priv: #D6C496; --d-rio: #A9CADB; --d-edif: #D9DCE0; --d-cand: #9B3F8C;
+  --plate: #E6EDEB;
+}
+/* cor de capítulo: preenchimento (--cc) e versão legível como texto (--ct); atribuída por artigo.js (.cap-0 … .cap-5) */
+.cap-0 { --cc: #0B5232; --ct: #0B5232; }
+.cap-1 { --cc: #A9CADB; --ct: #2B6683; }
+.cap-2 { --cc: #D6C496; --ct: #6F5A14; }
+.cap-3 { --cc: #E0A033; --ct: #8A5600; }
+.cap-4 { --cc: #9B3F8C; --ct: #86327A; }
+.cap-5 { --cc: #3F9C80; --ct: #226F59; }
+
+body { background: var(--a-paper); }
+main:has(> article.post) { max-width: 1000px; margin: 0 auto; padding: 0 32px 0 116px; }
+article.post { font-family: var(--a-serif); color: var(--a-ink); hyphens: none; -webkit-hyphens: none; overflow-wrap: break-word; }
+article.post a { color: var(--a-brand); text-decoration-thickness: 1px; text-underline-offset: .18em; }
+article.post a:focus-visible { outline: 2px solid var(--a-brand); outline-offset: 3px; }
+
+/* bloco de título (folha de carta) */
+article.post .cart { display: grid; grid-template-columns: minmax(0, 1fr) 250px; border: 1px solid var(--a-ink); background: var(--a-panel);
+  margin: 40px 0 56px; max-width: 940px; padding: 0; text-align: left; }
+article.post .cart .tt { padding: 30px 34px 32px; border-right: 1px solid var(--a-ink); }
+article.post .cart h1.post-title { font: 700 clamp(28px, 3.4vw, 44px)/1.08 var(--a-sans); letter-spacing: -.02em; margin: 0 0 12px; color: var(--a-ink); text-wrap: balance; }
+article.post .cart .sub { font: italic 400 clamp(19px, 1.7vw, 23px)/1.3 var(--a-serif); margin: 0 0 18px; }
+article.post .cart .desc { font: 400 17px/1.55 var(--a-serif); color: var(--a-ink2); margin: 0; max-width: 56ch; }
+article.post .cart dl { margin: 0; display: flex; flex-direction: column; font-family: var(--a-sans); }
+article.post .cart dl div { padding: 12px 18px; border-bottom: 1px solid var(--a-hair); }
+article.post .cart dl div:last-child { border-bottom: 0; }
+article.post .cart dt { font: 400 12px var(--a-mono); color: var(--a-ink2); margin-bottom: 2px; }
+article.post .cart dd { margin: 0; font: 500 15px/1.35 var(--a-sans); }
+article.post .cart .ph { grid-column: 1 / -1; border-top: 1px solid var(--a-ink); position: relative; }
+article.post .cart .ph img { width: 100%; aspect-ratio: 1000 / 330; object-fit: cover; object-position: 50% 40%; border-radius: 0; display: block; }
+article.post .cart .ph span { position: absolute; left: 0; bottom: 0; background: var(--a-panel); border-top: 1px solid var(--a-ink); border-right: 1px solid var(--a-ink);
+  padding: 5px 10px; font: 400 12px var(--a-mono); color: var(--a-ink2); }
+/* índice de capítulos coloridos (artigo.js) */
+article.post .toc { grid-column: 1 / -1; display: flex; flex-wrap: wrap; border-top: 1px solid var(--a-ink); font: 500 13px/1.3 var(--a-sans); }
+article.post .toc a { flex: 1 1 auto; display: flex; gap: 8px; align-items: baseline; padding: 10px 14px; color: var(--a-ink); text-decoration: none;
+  border-right: 1px solid var(--a-hair); border-top: 4px solid var(--cc); }
+article.post .toc a:last-child { border-right: 0; }
+article.post .toc a b { font: 500 12px var(--a-mono); color: var(--ct); }
+article.post .toc a:hover span { text-decoration: underline; }
+
+/* texto: coluna serif de 40 rem */
+article.post .corpo > * { max-width: 40rem; }
+article.post .corpo p, article.post .corpo li { font: 400 19px/1.66 var(--a-serif); }
+article.post .corpo p { margin: 0 0 1.15em; }
+article.post .corpo ul, article.post .corpo ol { margin: 0 0 1.15em; padding-left: 1.4em; }
+article.post .corpo li { margin: .35em 0; }
+article.post .corpo li::marker { color: var(--ct, var(--a-ink2)); }
+article.post .corpo strong { font-weight: 600; color: var(--a-ink); }
+article.post .corpo h2 { font: 700 30px/1.15 var(--a-sans); letter-spacing: -.015em; margin: 64px 0 22px; padding-top: 16px; border-top: 1px solid var(--a-ink);
+  color: var(--a-ink); position: relative; text-wrap: balance; }
+article.post .corpo h2::before { content: ""; position: absolute; left: 0; top: -1px; width: 72px; height: 5px; background: var(--cc, var(--a-brand)); }
+article.post .corpo h2 .no { position: absolute; left: -3.25rem; top: 18px; font: 500 15px var(--a-mono); color: var(--ct, var(--a-ink2)); }
+article.post .corpo h3 { font: 600 21px/1.3 var(--a-sans); margin: 40px 0 14px; color: var(--a-ink); text-wrap: balance; }
+article.post .corpo h4, article.post .corpo h5 { font: 600 17px/1.35 var(--a-sans); margin: 30px 0 10px; color: var(--a-ink); }
+article.post .corpo hr { border: 0; border-top: 1px solid var(--a-hair); margin: 2.2rem 0; max-width: 40rem; }
+article.post .corpo code { font: 400 .88em var(--a-mono); background: var(--plate); padding: .1em .35em; border-radius: 0; }
+
+/* figuras e imagens do texto: placa com filete, sem sombra nem cantos redondos */
+article.post .corpo img { display: block; width: 100%; height: auto; border: 1px solid var(--a-ink); border-radius: 0; margin: 34px 0 0; box-shadow: none; }
+article.post .corpo p:has(> img) { margin: 0; max-width: 40rem; }
+article.post .corpo p:has(> img) + p > em:only-child { display: block; font: 400 14px/1.5 var(--a-sans); font-style: normal; color: var(--a-ink2); margin: 8px 0 34px; text-align: left; }
+article.post .corpo p:has(> img) + p:has(> em:only-child) { margin: 0; }
+
+/* tabelas */
+article.post .corpo table { border-collapse: collapse; width: 100%; max-width: 40rem; margin: 28px 0 32px; font: 400 15px/1.4 var(--a-sans); font-variant-numeric: tabular-nums; }
+article.post .corpo .tw { max-width: 40rem; overflow-x: auto; margin: 28px 0 32px; }
+article.post .corpo .tw table { margin: 0; }
+article.post .corpo table thead th { background: transparent; color: var(--a-ink2); font: 500 12.5px/1.3 var(--a-mono); text-align: left; border-bottom: 1px solid var(--a-ink); padding: 6px 10px 8px 0; vertical-align: bottom; letter-spacing: 0; }
+article.post .corpo table tbody td, article.post .corpo table tbody th { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--a-hair); text-align: left; font-weight: 400; vertical-align: middle; }
+article.post .corpo table thead th:last-child, article.post .corpo table tbody td:last-child { text-align: left; }
+article.post .corpo table tbody tr { background: transparent; }
+article.post .corpo table tbody tr:nth-child(even) { background: transparent; }
+article.post .corpo table tbody tr:hover { background: color-mix(in srgb, var(--cc, var(--a-brand)) 8%, var(--a-paper)); }
+article.post .corpo table tbody tr:last-child td, article.post .corpo table tbody tr:last-child th { border-bottom: 1px solid var(--a-ink); font-weight: 400; }
+article.post .corpo table tbody tr:last-child { font-weight: 400; }
+
+/* citação / nota */
+article.post .corpo blockquote { margin: 34px 0; max-width: 40rem; padding: 20px 28px; border-left: 6px solid var(--cc, var(--a-brand));
+  background: color-mix(in srgb, var(--cc, var(--a-brand)) 12%, var(--a-paper)); border-radius: 0; color: var(--a-ink); }
+article.post .corpo blockquote p { font: italic 400 20px/1.5 var(--a-serif); margin: 0 0 .7em; }
+article.post .corpo blockquote p:last-child { margin: 0; }
+article.post.nota .corpo blockquote p { font: 400 16px/1.55 var(--a-sans); font-style: normal; }
+article.post.nota .corpo p > strong:first-child { color: var(--ct, var(--a-brand)); }
+article.post .corpo .cx img { border: 0; margin: 0; }
+
+/* rodapé do artigo */
+article.post .post-footer { margin: 64px 0 72px; padding-top: 14px; border-top: 1px solid var(--a-ink); font: 500 15px var(--a-sans); }
+article.post .post-footer a { text-decoration: none; }
+article.post .post-footer a:hover { text-decoration: underline; }
+
+/* régua de leitura (artigo.js) */
+.ruler { position: fixed; left: 0; top: 56px; bottom: 0; width: 76px; border-right: 1px solid var(--a-ink); background: var(--a-paper); z-index: 5; }
+.ruler svg { position: absolute; inset: 16px 0 36px 0; width: 100%; height: calc(100% - 52px); overflow: visible; }
+.ruler a { text-decoration: none; }
+.ruler a text { font: 500 12px var(--a-mono); }
+.ruler a.on text { font-weight: 700; text-decoration: underline; }
+.ruler .fill { fill: var(--a-ink2); opacity: .55; }
+.ruler .lbl { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font: 400 11px var(--a-mono); color: var(--a-ink2); }
+.prog { display: none; }
+
+@media (max-width: 900px) {
+  .ruler { display: none; }
+  .prog { display: block; position: sticky; top: 56px; height: 4px; background: var(--a-hair); z-index: 6; }
+  .prog i { display: block; height: 100%; width: 0; background: var(--pc, var(--a-brand)); }
+  main:has(> article.post) { padding: 0 16px; }
+  article.post .cart { grid-template-columns: 1fr; margin-top: 20px; }
+  article.post .cart .tt { border-right: 0; border-bottom: 1px solid var(--a-ink); padding: 22px 18px; }
+  article.post .cart dl { display: grid; grid-template-columns: 1fr 1fr; }
+  article.post .cart dl div { border-right: 1px solid var(--a-hair); }
+  article.post .cart dl div.tg { grid-column: 1 / -1; }
+  article.post .toc a { flex: 1 1 45%; }
+  article.post .corpo h2 .no { position: static; display: block; margin-bottom: 4px; }
+  article.post .corpo p, article.post .corpo li { font-size: 17.5px; line-height: 1.62; }
+  article.post .corpo h2 { font-size: 25px; margin-top: 48px; }
+  article.post .corpo blockquote p { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }

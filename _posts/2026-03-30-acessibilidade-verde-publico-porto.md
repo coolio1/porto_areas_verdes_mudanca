@@ -4,6 +4,11 @@ title: "Acessibilidade a Espaços Verdes Públicos no Porto: Uma Análise Espaci
 description: "Mapa de acessibilidade da população do Porto a espaços verdes públicos (m²/hab, raio 500m), usando o método Two-Step Floating Catchment Area com dados GHS-POP e inventário de 78 parques e jardins."
 date: 2026-03-30
 image: /assets/images/artigo-acessibilidade-verde.jpg
+subtitulo: "Uma análise espacial pelo método 2SFCA"
+ficha:
+  - {k: Unidade, v: "m² de verde por habitante"}
+  - {k: Raio, v: "500 m, euclidiano"}
+  - {k: Extensão, v: "41,13–41,19°N · 8,70–8,54°O"}
 tags: [porto, acessibilidade, verde público, 2sfca, gee, ghs-pop, osm, sentinel-2]
 ---
 
@@ -24,6 +29,8 @@ Este trabalho aplica o método *Two-Step Floating Catchment Area* (2SFCA) ao mun
 ### 2.1. Verde público no Porto: a ilusão do agregado
 
 A tensão entre indicadores agregados favoráveis e realidades locais deficitárias é um tema recorrente na literatura sobre o Porto. Quental (2010), na sua tese sobre modelação de estrutura urbana sustentável na Área Metropolitana do Porto, já identificava a distribuição espacial assimétrica da infraestrutura verde como um dos principais desafios da sustentabilidade urbana na região. A análise GIS de Quental para as 130 freguesias da AMP revelou que a distância média ponderada pela população ao espaço verde mais próximo era de 1 110 m em 2006 (contra 1 403 m em 1991) — uma melhoria ao longo do tempo, mas ainda muito acima do limiar de 300 m recomendado pela OMS — e que "algumas áreas densas de Vila Nova de Gaia, Gondomar e Matosinhos estão bastante mal equipadas" em termos de verde acessível (Quental, 2010, p. 262). Quental & Macedo (2006), no diagnóstico de indicadores de desenvolvimento sustentável para o Grande Porto, quantificaram esta assimetria e alertaram para a insuficiência das métricas per capita como instrumento de planeamento.
+{% include acess-fig1.html %}
+
 
 Graça *et al.* (2018) mapearam 95 espaços verdes no Porto (~424 ha). A presente análise identifica **448 ha de verde público classificado** pelo PDM 2021 — valor coerente. Contudo, desta área, apenas ~252 ha correspondem a parques e jardins de acesso efectivamente livre. Hoffimann *et al.* (2017), usando análise de rede viária e o *Public Open Space Tool*, demonstraram que o acesso a verde no Porto varia com o estatuto socioeconómico: 90% da população nos bairros menos desfavorecidos vive a ≤800 m de um espaço verde, contra 75,8% nos mais desfavorecidos. Saraiva *et al.* (2025) confirmaram estas desigualdades com análise de correspondência múltipla aplicada a 89 espaços verdes públicos.
 
@@ -178,6 +185,8 @@ O inventário totaliza **78 parques e jardins** (~252 ha), inferior aos 448 ha d
 
 **77,2% da população do Porto** — ~187 mil pessoas — vive com acessibilidade inferior a 9 m²/hab num raio de 500 m. Quase metade (49,4%) está em défice crítico (<3 m²/hab). Apenas 22,8% tem acesso adequado.
 
+{% include acess-fig2.html %}
+
 ### 4.3. Padrão geográfico
 
 - **Centro histórico e Baixa** (Sé, Miragaia, Santo Ildefonso): défice crítico. Tecido urbano denso, espaços verdes diminutos (Cordoaria, S. Lázaro) insuficientes para a população. Zona com o défice mais severo do concelho.
@@ -198,6 +207,8 @@ A regra 3-30-300 (Konijnendijk, 2023) propõe que todos os residentes devem ter 
 
 **39,7% da população do Porto** — ~96 mil pessoas — não tem acesso a um parque de dimensão significativa a uma distância pedonal curta. Este resultado complementa o 2SFCA: parte da população na faixa "insuficiente" (3–9 m²/hab) pode estar a mais de 300 m do parque mais próximo — a acessibilidade 2SFCA reflecte parques distantes que "chegam" ao raio de 500 m mas não ao de 300 m.
 
+{% include acess-fig3.html %}
+
 ### 4.5. Verde privado: o paradoxo de equidade
 
 Os 1 678 ha de verde privado (quarteirões, logradouros, moradias) prestam serviços ecossistémicos locais — mas não são acessíveis ao público. As zonas com mais verde privado são as mesmas que já dispõem de mais verde público, enquanto as zonas densas carecem de ambos. Este verde privado é também o mais frágil: é maioritariamente de composição herbácea — o tipo de habitat que Guilherme *et al.* (2024) identificaram como o mais susceptível ao novo desenvolvimento urbano e que perdeu 32,8% da superfície municipal entre 1947 e 2019.
@@ -213,6 +224,8 @@ Os 46 espaços candidatos foram identificados a partir do cruzamento entre o map
 ### 5.2. Resultados da simulação
 
 A conversão simultânea dos 46 candidatos (~142,6 ha) representaria um acréscimo de 57% à área de verde público actualmente usufruível (~252,5 ha → ~395 ha), elevando a dotação per capita de ~10,4 para ~16,3 m²/hab.
+{% include acess-fig4.html %}
+
 
 **Proximidade 300m (critério Konijnendijk)**
 

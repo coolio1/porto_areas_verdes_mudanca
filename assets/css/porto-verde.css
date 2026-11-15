@@ -113,3 +113,23 @@ main > p, main > ul, main > ol, article:not(.ficha) { font-family: var(--pv-seri
 @media (max-width: 600px) { main > h1, article:not(.ficha) > h1, .post-title { font-size: 1.45rem; } }
 /* etiquetas e cartões (índice, listagem): sans pequeno, tinta; sem cores próprias */
 .map-card .card-body h3, .section-title { font-family: var(--pv-sans); color: var(--pv-tinta); }
+
+/* ---------- Barra de filete com o logo (páginas Jekyll; desenhada por moldura.js, data-menu="barra") ---------- */
+.pv-barra { display: flex; align-items: center; gap: 28px; height: 56px; padding: 0 20px; background: #fff;
+  border-bottom: 1px solid var(--pv-tinta); position: sticky; top: 0; z-index: 20; font-family: "IBM Plex Sans", var(--pv-sans); }
+.pv-barra__marca { display: flex; align-items: center; gap: 10px; flex: none; }
+.pv-barra__mini { width: 34px; height: 34px; border-radius: 0; }
+.pv-barra__nome { width: 150px; height: auto; border-radius: 0; mix-blend-mode: multiply; }
+.pv-barra__links { display: flex; gap: 4px; flex-wrap: nowrap; }
+.pv-barra a { color: var(--pv-tinta); text-decoration: none; font-size: 14px; font-weight: 500; padding: 6px 10px; white-space: nowrap; }
+.pv-barra__links a:hover, .pv-barra__menu a:hover { text-decoration: underline; }
+.pv-barra a.active { background: var(--pv-verde); color: #fff; }
+.pv-barra a:focus-visible, .pv-barra summary:focus-visible { outline: 3px solid var(--pv-verde); outline-offset: 2px; }
+.pv-barra__marca:hover { text-decoration: none; }
+.pv-barra__menu { display: none; margin-left: auto; position: relative; }
+.pv-barra__menu summary { list-style: none; cursor: pointer; font: 500 14px "IBM Plex Sans", var(--pv-sans); border: 1px solid var(--pv-tinta); padding: 6px 12px; }
+.pv-barra__menu summary::-webkit-details-marker { display: none; }
+.pv-barra__menu nav { position: absolute; right: 0; top: calc(100% + 8px); background: #fff; border: 1px solid var(--pv-tinta);
+  display: flex; flex-direction: column; min-width: 220px; padding: 6px; }
+.pv-barra__menu nav a { padding: 10px 12px; }
+@media (max-width: 1060px) { .pv-barra__links { display: none; } .pv-barra__menu { display: block; } }

@@ -24,46 +24,6 @@
       background: var(--light);
       line-height: 1.7;
     }
-    header {
-      background: #fafaf7;
-      padding: 1rem 1rem 0.4rem;
-      text-align: center;
-    }
-    .site-logo {
-      max-height: 160px;
-      width: auto;
-      max-width: 90%;
-      display: block;
-      margin: 0 auto;
-      border-radius: 0;
-    }
-    header p {
-      color: #888;
-      margin-top: 0.2rem;
-      font-size: 0.82rem;
-    }
-    nav {
-      background: var(--pv-papel);
-      border-top: 1px solid var(--pv-filete);
-      border-bottom: 1px solid var(--pv-filete);
-      padding: 0.5rem 1rem;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      gap: 0.25rem;
-      flex-wrap: wrap;
-    }
-    nav a {
-      color: var(--pv-tinta);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 0.4rem 0.9rem;
-      border: 1px solid transparent;
-    }
-    nav a:hover { border-color: var(--pv-filete); }
-    nav a:focus-visible { outline: 3px solid var(--pv-verde); outline-offset: 2px; }
-    nav a.active { background: var(--pv-verde); color: var(--pv-papel); }
     main.wide { max-width: none; margin: 0; padding: 0; }
     main {
       max-width: 780px;
@@ -114,21 +74,11 @@
     tbody tr:last-child td { border-bottom: 2px solid var(--dark); }
     tbody tr:last-child { font-weight: 600; }
     @media (max-width: 768px) {
-      header { padding: 0.7rem 0.8rem 0.3rem; }
-      .site-logo { max-height: 100px; }
-      nav { padding: 0.4rem 0.6rem; gap: 0.2rem; }
-      nav a { font-size: 0.78rem; padding: 0.3rem 0.6rem; }
       main { margin: 1rem auto; padding: 0 0.8rem; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <a href="{{ site.baseurl }}/">
-      <img src="{{ site.baseurl }}/assets/images/logo-porto-verde.png" alt="Porto Verde" class="site-logo">
-    </a>
-    <p><em>Mapas interactivos de vegetação, uso do solo e mudanças urbanas no Porto</em></p>
-  </header>
   <main{% if page.wide %} class="wide"{% endif %}>
     {{ content }}
   </main>

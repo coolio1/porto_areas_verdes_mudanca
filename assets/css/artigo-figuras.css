@@ -1,0 +1,99 @@
+/* artigo-figuras.css — figuras de dados do artigo da acessibilidade (placas, legenda-barra, rótulos, escala, halteres).
+   Paleta de dados --d-* em artigo.css; as placas ficam claras (papel de carta) porque as camadas têm cores fixas. */
+:root { --plate-ink: #10212C; --plate-ink2: #3E5260; --plate-rule: #10212C; }
+/* figuras */
+.fig{margin:36px 0 44px}
+.fig.wide{width:min(1120px,calc(100vw - max(116px,50vw - 500px + 116px) - 40px))}
+.plate{background:var(--plate);border:1px solid var(--plate-rule);color:var(--plate-ink);position:relative}
+.ph-head{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:baseline;padding:14px 20px 12px;border-bottom:1px solid var(--plate-rule)}
+.ph-head h4{margin:0;font:600 16px/1.3 var(--a-sans);color:var(--plate-ink)}
+.ph-head h4 b{font:500 13px var(--a-mono);margin-right:8px;color:var(--plate-ink2)}
+.ph-head .u{font:400 12px var(--a-mono);color:var(--plate-ink2)}
+.mapw{position:relative;margin:14px 26px 30px}
+.mapw>img{width:100%}
+/* graduação nas margens (coordenadas) */
+.grad{position:absolute;font:400 10.5px var(--a-mono);color:var(--plate-ink2);white-space:nowrap}
+.grad.gl{left:0;bottom:-20px}.grad.gr{right:0;top:-18px}
+/* norte */
+.north{position:absolute;right:1.5%;top:4%;width:26px;color:var(--plate-ink)}
+.north text{font:600 11px var(--a-mono);fill:currentColor}
+/* escala */
+.sb{position:absolute;right:3%;bottom:2%;height:6px;display:flex;border:1px solid var(--plate-ink)}
+.sb i{flex:1;background:var(--plate-ink)}.sb i+i{background:#fff}
+.sb b{position:absolute;top:9px;font:400 11px var(--a-mono);color:var(--plate-ink);transform:translateX(-50%)}
+.sb .s0{left:0}.sb .s1{left:50%}.sb .s2{left:100%;transform:none;margin-left:-14px;white-space:nowrap}
+/* rótulos de lugar */
+.pl{position:absolute;transform:translate(-50%,-4px);font:500 12px/1.2 var(--a-sans);color:var(--plate-ink);white-space:nowrap;pointer-events:none;display:flex;flex-direction:column;align-items:center}
+.pl::before{content:"";width:7px;height:7px;border:1.5px solid var(--plate-ink);background:#fff;border-radius:50%;margin-bottom:3px}
+.pl span{background:rgba(250,250,247,.88);padding:1px 5px}
+.wl{position:absolute;font:italic 500 13px var(--a-serif);color:#245C78;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 2px #fff;letter-spacing:.06em;white-space:nowrap;pointer-events:none}
+.wl.v{writing-mode:vertical-rl;transform:rotate(180deg)}
+/* rótulos de classe, colados à mancha */
+.cl{position:absolute;display:flex;align-items:center;gap:0;pointer-events:none;transform:translate(-5px,-50%)}
+.cl::before{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px #fff,0 0 0 3px var(--plate-ink)}
+.cl>span{margin-left:10px;display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--plate-ink);border-left:6px solid var(--c);padding:3px 8px 3px 6px;font:600 12.5px/1.2 var(--a-sans);color:var(--plate-ink);white-space:nowrap}
+.cl em{font:400 11px var(--a-mono);font-style:normal;color:var(--plate-ink2)}
+.cl.lf{flex-direction:row-reverse;transform:translate(calc(-100% + 5px),-50%)}
+.cl.lf>span{margin:0 10px 0 0}
+/* legenda-gráfico (barra 100 %) */
+.share{display:flex;height:40px;margin:16px 26px 4px;gap:2px}
+.share div{background:var(--c);display:flex;align-items:center;padding:0 10px;font:600 13px var(--a-sans);color:var(--t,#10212C);white-space:nowrap;overflow:hidden;min-width:0;position:relative;cursor:default}
+.share div em{font:400 12px var(--a-mono);font-style:normal;margin-left:8px;opacity:.9}
+.share div:hover{outline:2px solid var(--plate-ink);outline-offset:1px;z-index:1}
+.share-k{display:flex;margin:0 26px;gap:2px;font:400 11px var(--a-mono);color:var(--plate-ink2)}
+.share-k span{padding-top:4px;border-top:1px solid var(--plate-ink2);white-space:nowrap;overflow:hidden}
+.fig figcaption{display:grid;grid-template-columns:minmax(0,40rem) 1fr;column-gap:3.25rem;font:400 15px/1.5 var(--a-sans);padding-top:10px;color:var(--a-ink)}
+.fig figcaption .fn{font:500 12.5px var(--a-mono);color:var(--ct);margin-right:6px}
+.fig figcaption .src{font:400 12.5px/1.5 var(--a-mono);color:var(--a-ink2)}
+/* pequenos múltiplos */
+.pair{display:grid;grid-template-columns:1fr 1fr;border-top:0}
+.pair>div{position:relative}
+.pair>div+div{border-left:1px solid var(--plate-rule)}
+.pair .pt{font:500 12px var(--a-mono);color:var(--plate-ink2);padding:12px 20px 0}
+.pair .pt b{font:600 14px var(--a-sans);color:var(--plate-ink);margin-right:8px}
+.pair .mapw{margin:8px 16px 26px}
+/* faixa de chave partilhada */
+.key{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 20px;border-top:1px solid var(--plate-rule);font:400 12.5px var(--a-sans);color:var(--plate-ink)}
+.key span{display:inline-flex;align-items:center;gap:7px}
+.key i{width:14px;height:14px;background:var(--c);outline:1px solid rgba(16,33,44,.35);outline-offset:-1px}
+.key em{font:400 11px var(--a-mono);font-style:normal;color:var(--plate-ink2)}
+/* halteres */
+.db{padding:6px 20px 14px}
+.db svg{width:100%;height:auto;display:block;overflow:visible}
+.db text{font-family:var(--a-sans);fill:var(--plate-ink)}
+.db .ax{font:400 11px var(--a-mono);fill:var(--plate-ink2)}
+.db .lbl{font:600 13.5px var(--a-sans)}
+.db .val{font:500 12px var(--a-mono)}
+.db g.row:hover .hl{opacity:1}
+.db .hl{opacity:0;transition:opacity .15s}
+.db svg.dbm{display:none}
+
+
+@media (max-width:900px){
+ .fig,.fig.wide{width:auto;margin-left:-16px;margin-right:-16px}
+ .plate{border-left:0;border-right:0}
+ .fig figcaption{padding:10px 16px 0}
+ .mapw{margin:10px 8px 26px}
+ .pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--plate-rule)}
+ .sb{bottom:-4px}
+ .north{width:20px;top:0}
+ .pl{font-size:10.5px}.pl span{padding:0 3px}
+ .pl,.cl.x,.grad,.wl.v,.north{display:none}
+ .wl{font-size:11px}
+ .cl .lg{display:none}
+ .db svg.dbd{display:none}.db svg.dbm{display:block}.db{padding:4px 12px 10px}
+ .cl>span{font-size:11px;padding:2px 6px 2px 5px;border-left-width:5px}.cl em{display:none}
+ .share{margin:12px 12px 2px;height:34px}.share div{font-size:11.5px;padding:0 6px}.share div em{display:none}
+ .share-k{margin:0 12px}
+ .ph-head{padding:12px 14px 10px}
+}
+
+/* movimento: as barras-legenda crescem uma vez ao entrar no ecrã (artigo.js) */
+@media (prefers-reduced-motion: no-preference) {
+  .share.anim div { transition: flex-grow .9s cubic-bezier(.2,.7,.2,1); }
+  .share.anim:not(.in) div { flex-grow: 0 !important; }
+}
+
+/* as figuras largas passam a coluna de texto (a regra .corpo > * limita-as a 40 rem) */
+article.post .corpo > figure.fig { max-width: none; }
+article.post .corpo figure.fig img { margin: 0; border: 0; }

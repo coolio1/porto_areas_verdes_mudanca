@@ -3,7 +3,7 @@
    Uso, numa página:
      <script src="<raiz>/assets/js/moldura.js" data-pagina="Mobilidade/analise.html"></script>
    data-pagina  caminho da página a partir da raiz do site (nas páginas Jekyll: a URL, ou «artigos/» num artigo)
-   data-menu    «flutuante» (por defeito; botões fixos no canto) ou «barra» (Jekyll: <nav> sob o <header>)
+   data-menu    «flutuante» (por defeito; botões fixos no canto) ou «barra» (Jekyll: barra de filete com o logo, no topo)
    data-rodape  «mapa» (por defeito; etiqueta fixa em baixo) ou «leitura» (fim da página)
    data-fontes  fontes dos dados desta página (sobrepõe a tabela FONTES)
    A raiz do site deduz-se do próprio src do script; o CSS (porto-verde.css) é ligado aqui. */
@@ -68,15 +68,24 @@
   if (!document.querySelector('link[href="' + href + '"]')) {
     document.head.appendChild(el('link', { rel: 'stylesheet', href: href }));
   }
+  if (MENU === 'barra') { // IBM Plex (barra e artigos), alojada em assets/fonts
+    var plex = RAIZ + 'assets/css/plex.css';
+    document.head.appendChild(el('link', { rel: 'stylesheet', href: plex }));
+  }
 
   function montar() {
     // menu
     var menu;
     if (MENU === 'barra') {
-      menu = el('nav', { 'aria-label': 'Menu' }, ligacoes(PAGINAS, 'active'));
-      var cab = document.querySelector('header');
-      if (cab && cab.parentNode) cab.parentNode.insertBefore(menu, cab.nextSibling);
-      else document.body.insertBefore(menu, document.body.firstChild);
+      // barra de filete com o logo (páginas Jekyll); a mesma lista de PAGINAS, também no menu de telemóvel
+      var marca = '<a class="pv-barra__marca" href="' + RAIZ + 'index.html" aria-label="Porto Verde, início">' +
+        '<img class="pv-barra__mini" src="' + RAIZ + 'assets/images/mini-logo.png" alt="" width="34" height="34">' +
+        '<img class="pv-barra__nome" src="' + RAIZ + 'assets/images/wordmark.png" alt="Porto Verde" width="150" height="31"></a>';
+      menu = el('header', { 'class': 'pv-barra' },
+        marca + '<nav class="pv-barra__links" aria-label="Menu">' + ligacoes(PAGINAS, 'active') + '</nav>' +
+        '<details class="pv-barra__menu"><summary>Menu</summary><nav aria-label="Menu (telemóvel)">' +
+        ligacoes(PAGINAS, 'active') + '</nav></details>');
+      document.body.insertBefore(menu, document.body.firstChild);
     } else {
       menu = el('div', { id: 'nav' }, ligacoes(PAGINAS, 'active'));
       document.body.insertBefore(menu, document.body.firstChild);

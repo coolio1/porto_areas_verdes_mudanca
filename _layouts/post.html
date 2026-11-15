@@ -1,101 +1,32 @@
 ---
 layout: default
 ---
-<style>
-  .post-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    color: var(--muted);
-    font-size: 0.88rem;
-    margin-bottom: 1.8rem;
-  }
-  .post-tag {
-    background: #e8f0e8;
-    color: var(--green);
-    padding: 0.15em 0.6em;
-    border-radius: 3px;
-    font-size: 0.78rem;
-    font-weight: 500;
-  }
-  .post-hero {
-    display: block;
-    width: 100%;
-    max-height: 440px;
-    object-fit: cover;
-    object-position: center 30%;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-  }
-  article p { margin-bottom: 1.1rem; }
-  article ul, article ol { margin: 0.5rem 0 1.1rem 1.6rem; }
-  article li { margin-bottom: 0.4rem; }
-  article img {
-    display: block;
-    width: 100%;
-    border-radius: 6px;
-    margin: 1.8rem 0 0.3rem;
-  }
-  /* caption: *italic* alone on line after image */
-  article p:has(> img) + p > em:only-child {
-    display: block;
-    text-align: center;
-    font-size: 0.82rem;
-    color: var(--muted);
-    font-style: normal;
-    margin-bottom: 1.6rem;
-    margin-top: 0;
-  }
-  article hr {
-    border: none;
-    border-top: 2px solid #e8e8e0;
-    margin: 2.5rem 0;
-  }
-  article strong { color: var(--text); }
-  .post-footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #ddd;
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-  @media (max-width: 600px) {
-    .post-hero { max-height: 260px; }
-  }
-  /* tabelas de texto: sem a linha final a negrito nem a última coluna à direita (regras globais pensadas para totais numéricos) */
-  article table.tabela-texto tbody tr:last-child { font-weight: 400; }
-  article table.tabela-texto thead th:last-child, article table.tabela-texto tbody td:last-child { text-align: left; }
-  /* artigos com identidade da nota PDF (article_class: nota) */
-  article.nota blockquote {
-    background: #f1f6ee;
-    border-left: 4px solid var(--pv-verde);
-    border-radius: 0 6px 6px 0;
-    margin: 0 0 1.6rem;
-    padding: 0.7rem 1rem;
-    font-size: 0.88rem;
-    color: #2b322c;
-  }
-  article.nota blockquote p { margin: 0; }
-  article.nota p > strong:first-child { color: var(--pv-verde); }
-  article.nota img { box-shadow: 0 1px 6px rgba(0,0,0,.08); }
-  article.nota .cx img { box-shadow: none; }
-</style>
-
-<article{% if page.article_class %} class="{{ page.article_class }}"{% endif %}>
-  <h1 class="post-title">{{ page.title }}</h1>
-  <div class="post-meta">
-    <time>{% include data-pt.html d=page.date %}</time>
-    {% if page.tags %}
-      &middot;
-      {% for tag in page.tags %}<span class="post-tag">{{ tag }}</span>{% endfor %}
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/artigo.css">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/artigo-figuras.css">
+<script src="{{ site.baseurl }}/assets/js/artigo.js" defer></script>
+{%- assign palavras = content | strip_html | number_of_words -%}
+{%- assign minutos = palavras | divided_by: 190 | plus: 1 -%}
+<article class="post{% if page.article_class %} {{ page.article_class }}{% endif %}">
+  <header class="cart">
+    <div class="tt">
+      <h1 class="post-title">{{ page.title }}</h1>
+      {% if page.subtitulo %}<p class="sub">{{ page.subtitulo }}</p>{% endif %}
+      {% if page.description %}<p class="desc">{{ page.description }}</p>{% endif %}
+    </div>
+    <dl>
+      <div><dt>Publicado</dt><dd><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{% include data-pt.html d=page.date %}</time></dd></div>
+      <div><dt>Leitura</dt><dd>{{ minutos }} minutos</dd></div>
+      {% for f in page.ficha %}<div><dt>{{ f.k }}</dt><dd>{{ f.v }}</dd></div>{% endfor %}
+      {% if page.tags %}<div class="tg"><dt>Etiquetas</dt><dd>{{ page.tags | join: ', ' }}</dd></div>{% endif %}
+    </dl>
+    {% if page.image %}
+    <div class="ph"><img src="{{ site.baseurl }}{{ page.image }}" alt="{{ page.title }}"{% if page.image_credito %}><span>{{ page.image_credito }}</span>{% else %}>{% endif %}</div>
     {% endif %}
-  </div>
-  {% if page.image %}
-  <img src="{{ site.baseurl }}{{ page.image }}" alt="{{ page.title }}" class="post-hero">
-  {% endif %}
+  </header>
+  <div class="corpo">
   {{ content }}
+  </div>
   <div class="post-footer">
-    <a href="{{ site.baseurl }}/">&larr; Voltar ao índice</a>
+    <a href="{{ site.baseurl }}/artigos/">&larr; Todos os artigos</a>
   </div>
 </article>
