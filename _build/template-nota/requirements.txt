@@ -1,0 +1,5 @@
+pymupdf
+playwright
+beautifulsoup4
+fonttools
+brotli

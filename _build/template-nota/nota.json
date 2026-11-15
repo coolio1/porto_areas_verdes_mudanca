@@ -1,0 +1,20 @@
+{
+  "marca": "Porto Verde",
+  "etiqueta": "Nota 00",
+  "cabecalho": "Nota 00 · Exemplo · Novembro 2026",
+  "kicker": "Investigação · Tema · Lugar",
+  "titulo": "Título do documento em duas linhas",
+  "subtitulo": "Subtítulo em itálico",
+  "imagem": null,
+  "legenda_imagem": "Fig. 0 · Legenda da imagem de capa",
+  "numeros": [["+12 %", "Primeiro número-chave"], ["−5 %", "Segundo número-chave"]],
+  "aviso": "Aviso de capa (fontes, método, limites).",
+  "cores": ["E0A033", "3F9C80", "19A06B", "D9642B", "6F9BE0"],
+  "ler": {
+    "1": {
+      "resumo": "Frase-síntese da secção, com <b>o essencial a negrito</b>.",
+      "numeros": [["12 %", "o que este número mede"], ["3", "o que este mede"], ["2024", "e este"]]
+    }
+  },
+  "saida": "exemplo.pdf"
+}
