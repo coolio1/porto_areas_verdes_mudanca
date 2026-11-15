@@ -135,7 +135,7 @@ section#recomendações>h2,section#referências>h2{break-before:auto;margin-top:
 
 /* Conclusões v7 */
 .conc{page:cheia;position:relative;width:210mm;height:296.5mm;overflow:hidden;break-after:page;background:var(--papel);font-family:var(--fu)}
-.conc .topo{position:relative;background:var(--verde);color:#fff;padding:8mm 15mm 0;height:72mm}
+.conc .topo{position:relative;background:var(--verde);color:#fff;padding:8mm 15mm 0;height:67mm}
 .conc .topo .im{position:absolute;right:0;top:0;width:90mm;height:56mm;object-fit:cover}
 .conc .topo .veu{position:absolute;right:0;top:0;width:90mm;height:56mm;background:linear-gradient(90deg,var(--verde) 0%,rgba(27,77,32,.6) 45%,rgba(27,77,32,0) 100%)}
 .conc .kick{position:relative;font:700 7.6pt var(--fu);letter-spacing:.22em;text-transform:uppercase;color:var(--musgo)}
@@ -156,7 +156,7 @@ section#recomendações>h2,section#referências>h2{break-before:auto;margin-top:
 .conc .ver{padding:2.4mm 15mm 0}
 .conc .ln{display:grid;grid-template-columns:23mm 1fr;gap:3mm;align-items:start;padding:1.9mm 0;border-top:.5pt solid #dfe6da}
 .conc .ln:first-of-type{border-top:none}
-.conc .ln{grid-template-columns:11mm 1fr 28mm;align-items:center;padding:.7mm 0}
+.conc .ln{grid-template-columns:11mm 1fr 28mm;align-items:center;padding:.5mm 0}
 .conc .ic{display:flex;align-items:center;justify-content:center;width:8.6mm;height:8.6mm;border-radius:50%;background:color-mix(in srgb,var(--c) 13%,white)}
 .conc .ic svg{width:6.6mm;height:6.6mm;fill:none;stroke:var(--c);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .conc .ok{--c:var(--folha)}.conc .dep{--c:var(--ceu)}.conc .nao{--c:var(--terra)}.conc .peq{--c:#6f776f}
@@ -179,3 +179,6 @@ section#recomendações>h2,section#referências>h2{break-before:auto;margin-top:
 .conc .rod{position:absolute;left:15mm;right:15mm;bottom:3mm;font:400 6.6pt/1.35 var(--fu);color:#9fbf9e;display:flex;justify-content:space-between;align-items:flex-end;gap:6mm}
 .conc .rod b{color:#ffa77a}
 .conc .rod span:last-child{white-space:nowrap}
+
+/* páginas inteiras: o 0,5 mm que sobra em baixo e à direita ficava branco */
+.capa,.conc,.sintese{box-shadow:1.2mm 1.2mm 0 var(--verde)}
