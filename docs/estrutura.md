@@ -80,6 +80,7 @@ Uma só página, `mapa_unico/mapa_unico.html`, com 4 temas: `#tema=hoje` (Mapa 2
   `historico_numeros.py` calcula as percentagens (denominador = concelho, `porto_mask.png`; 1947 reamostrada para
   a sua grelha) e `dados_historico()` grava-as em `numeros`. Testes: `mapa_unico/tests/` (pytest + `pw_historico.py`,
   Playwright com Edge em `file://`). Desenho e plano: `docs/superpowers/specs|plans/2026-11-11-historico-linha-do-tempo*`.
+- **Água (2026-11-15):** o oceano vem de `layers_historico/rio.png`; o Douro e outras massas de água, de `layers/agua_osm.png`, gerada por `mapa_unico/agua_osm.py` (OSM via Overpass; se a gravação directa falhar, `AGUA_SAIDA=<scratchpad>` e `cp`). `dados_contexto()` junta as duas. A «placa» do fundo Carta vive em `placaPane` (z 205): o SVG do Leaflet tem z-index 200 e tapava a imagem da água na `cartaPane`.
 - Os PNG do tema Privado vêm de `layers/` (`interior_subsistente_corrigido.png` = versão corrigida; a da
   Acessibilidade, «todas as áreas», é `layers/interior_subsistente_colored.png`).
 - Ficheiros `layers/` e `acessibilidade/layers/` continuam a ser a fonte dos PNG; o mapa único não os lê em

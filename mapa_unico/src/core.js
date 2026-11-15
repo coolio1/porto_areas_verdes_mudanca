@@ -253,7 +253,7 @@
     MU.ctx.itens = { limites: lim, densidade: dens };
     /* fundo «Carta»: placa de papel, água (Landsat, layers_historico/rio.png) e véu sobre os concelhos vizinhos */
     var agua = await MU.extractMask(d.agua), fora = await MU.extractMask(d.fora);
-    var placa = L.rectangle(BOUNDS, { pane: 'cartaPane', stroke: false, fillColor: '#E6EDEB', fillOpacity: 1, interactive: false });
+    var placa = L.rectangle(BOUNDS, { pane: 'placaPane', stroke: false, fillColor: '#E6EDEB', fillOpacity: 1, interactive: false });
     var ovAgua = L.imageOverlay(MU.renderColored(agua, '#A9CADB'), BOUNDS, { pane: 'cartaPane' });
     var veu = L.imageOverlay(MU.renderColored(fora, '#E6EDEB'), BOUNDS, { pane: 'veuPane', opacity: 0.58 });
     MU.ctx.carta = function () { return L.featureGroup([placa, ovAgua, veu]); };
@@ -527,7 +527,7 @@
   MU.iniciar = async function () {
     var map = MU.map = L.map('map', { zoomControl: false, zoomSnap: 0.25, zoomDelta: 0.5, wheelPxPerZoomLevel: 120 });
     map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
-    [['cartaPane', 210], ['bgPane', 250], ['parquesPane', 540], ['veuPane', 560], ['limitesPane', 565], ['rotPane', 640]]
+    [['placaPane', 205], ['cartaPane', 210], ['bgPane', 250], ['parquesPane', 540], ['veuPane', 560], ['limitesPane', 565], ['rotPane', 640]]
       .forEach(function (p) { map.createPane(p[0]); map.getPane(p[0]).style.zIndex = p[1]; });
     ['veuPane', 'limitesPane', 'rotPane'].forEach(function (p) { map.getPane(p).style.pointerEvents = 'none'; });
     MU.verConcelho();

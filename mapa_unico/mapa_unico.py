@@ -235,6 +235,8 @@ def dados_contexto() -> dict:
     d = {k: _b64(p) for k, p in PNG_DADOS["contexto"].items()}
     hist = RAIZ / "layers_historico"
     agua = np.array(Image.open(hist / "rio.png").convert("RGBA"))[..., 3] > 0
+    # Douro e outras massas de água do OSM (mapa_unico/agua_osm.py); o oceano vem de rio.png
+    agua |= np.array(Image.open(LAYERS / "agua_osm.png").convert("RGBA"))[..., 3] > 0
     porto = np.array(Image.open(hist / "porto_mask.png").convert("RGBA"))[..., 3] > 0
     d["agua"] = _mascara_1bit(agua)
     d["fora"] = _mascara_1bit(~porto & ~agua)  # o véu poupa a água, que fica azul como na V2b
