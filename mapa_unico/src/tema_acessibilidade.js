@@ -1,238 +1,240 @@
 /* Tema «Acessibilidade e propostas» (antes acessibilidade/acessibilidade_verde.html e
    acessibilidade/conversao_verde.html). Duas vistas do mesmo mapa:
    «actual» = situação actual; «propostas» = simulação com os 46 candidatos a conversão. */
-MU.registarTema({
-  id: 'acessibilidade',
-  rotulo: 'Acessibilidade e propostas',
-  fundo: 'positron',
-  dados: 'acessibilidade',
-  ctx: { limites: { on: true, cor: '#444444' }, densidade: { on: false } },
-  fonte: 'Sentinel-2 10m (ESA) &bull; GHS-POP 100m (JRC)<br>78 parques e jardins (CMP + OSM)<br>' +
-         'M&eacute;todo: Two-Step Floating Catchment Area',
+(function () {
+  /* paleta das categorias (maquete V2b); as imagens chegam já recoloridas de mapa_unico.py (RECOLOR_ACC) */
+  var CAT = { crit: '#A23B86', insuf: '#E6A6CC', adeq: '#3E6AB3', baixa: '#C8C8C8' };
+  var TIPO = {
+    'Estrategia de expansao (CMP)': { cor: '#00A884', rot: 'Estratégia de expansão (CMP)' },
+    'Verde em PDM / fechado ao publico': { cor: '#D9642B', rot: 'Verde em PDM fechado ao público' },
+    'Verde privado': { cor: '#D6C496', rot: 'Verde privado' }
+  };
+  var orla = function (hex) {   // contorno tracejado: a própria cor escurecida para a tinta
+    var a = MU.hexToRgb(hex), b = MU.hexToRgb('#10212C');
+    return '#' + a.map(function (v, i) { return ('0' + Math.round(v + (b[i] - v) * 0.4).toString(16)).slice(-2); }).join('');
+  };
 
-  vista: 'actual',       // 'actual' | 'propostas'
-  ind: 'acc',            // 'acc' | 'prox' | null
-  _ov: {},               // cache de overlays: _ov[chave]
-  _nomesCand: true,
+  MU.registarTema({
+    id: 'acessibilidade',
+    rotulo: 'Acessibilidade e propostas',
+    fundo: 'carta',
+    dados: 'acessibilidade',
+    ctx: { limites: { on: true }, densidade: { on: false } },
+    fonte: 'Sentinel-2 10 m (ESA) &middot; GHS-POP 100 m (JRC) &middot; 78 parques e jardins (CMP, OSM) &middot; ' +
+           'm&eacute;todo Two-Step Floating Catchment Area (2SFCA). Hectares por contagem de p&iacute;xeis (&asymp; 57 m&sup2; cada) dentro do concelho.',
 
-  async montar(painel) {
-    var self = this, D = MU.DADOS.acessibilidade, map = MU.map;
-    map.createPane('accPane'); map.getPane('accPane').style.zIndex = 450;
-    map.createPane('lowPopPane'); map.getPane('lowPopPane').style.zIndex = 475;
-    map.createPane('parquesPane'); map.getPane('parquesPane').style.zIndex = 540;
-    map.createPane('candGeoPane'); map.getPane('candGeoPane').style.zIndex = 550;
+    vista: 'actual',       // 'actual' | 'propostas'
+    ind: null,             // 'acc' | 'prox' | null
+    _ov: {},               // cache de overlays: _ov[chave]
+    _nomesCand: true,
 
-    var P = D.meta;
-    var pct0 = function (x) { return Math.round(x) + '%'; };
-    var pct1 = function (x) { return x.toFixed(1).replace('.', ',') + '%'; };
-    this._pct = {
-      actual: { prox: pct0(P.pct_actual), acc: pct1(P.sfca_actual_pct) },
-      propostas: { prox: pct0(P.pct_simulado), acc: pct1(P.sfca_sim_pct) }
-    };
+    async montar(painel) {
+      var self = this, D = MU.DADOS.acessibilidade, C = MU.DADOS.contexto, S = C.stats, map = MU.map;
+      map.createPane('accPane'); map.getPane('accPane').style.zIndex = 450;
+      map.createPane('lowPopPane'); map.getPane('lowPopPane').style.zIndex = 475;
+      map.createPane('accMonoPane'); map.getPane('accMonoPane').style.zIndex = 480;
+      map.createPane('candGeoPane'); map.getPane('candGeoPane').style.zIndex = 550;
 
-    painel.innerHTML =
-      '<b style="font-size:14px;">Acessibilidade a Verde P&uacute;blico</b>' +
-      '<div class="ab-group" id="ac-vista" style="margin-top:6px;">' +
-        '<button class="ab-btn" data-v="actual">Situa&ccedil;&atilde;o actual</button>' +
-        '<button class="ab-btn" data-v="propostas">Com propostas</button></div>' +
-      '<div id="ac-intro" class="tema-sub" style="display:none;margin:-2px 0 6px;">Simula&ccedil;&atilde;o sequencial para atingir 80% de cobertura a &le;300m (Konijnendijk)</div>' +
-      '<div class="section">Indicador</div>' +
-      '<div class="ab-group" id="ac-ind">' +
-        '<button class="ab-btn" data-i="acc">Acessibilidade 500m<small></small></button>' +
-        '<button class="ab-btn" data-i="prox">Proximidade 300m<small></small></button></div>' +
+      var P = D.meta;
+      this._num = {
+        actual: { prox: P.pct_actual, acc: P.sfca_actual_pct },
+        propostas: { prox: P.pct_simulado, acc: P.sfca_sim_pct }
+      };
+      var esc = MU.escala([S.parques_ha, S.pago, S.privado]);
 
-      '<div id="acc-legend" style="display:none;">' +
-        '<div class="section">Acessibilidade 500m (m&sup2;/hab)</div>' +
-        '<div class="leg">' +
-          '<div><i style="background:#B71C1C"></i><span>0 &ndash; 3 (d&eacute;fice cr&iacute;tico)</span></div>' +
-          '<div><i style="background:#E8A838"></i><span>3 &ndash; 9 (insuficiente)</span></div>' +
-          '<div><i style="background:#2E7D32"></i><span>&gt;9 (adequado)</span></div>' +
-          '<div><i style="background:#C8C8C8"></i><span>Baixa densidade</span></div></div>' +
-        '<div class="nota">OMS recomenda &ge;9 m&sup2;/hab</div></div>' +
-      '<div id="prox-legend" style="display:none;">' +
-        '<div class="section">Proximidade 300m (Konijnendijk 3-30-300)</div>' +
-        '<div class="leg">' +
-          '<div><i style="background:#2E7D32"></i><span>&le;300m de parque &ge;0,4 ha (cumpre)</span></div>' +
-          '<div><i style="background:#B71C1C"></i><span>&gt;300m de parque &ge;0,4 ha (n&atilde;o cumpre)</span></div></div>' +
-        '<div class="nota">OMS: &ge;0,4 ha de verde a &lt;300m de casa</div></div>' +
-      '<div id="cand-legend" style="display:none;">' +
-        '<div class="section">Candidatos (por prioridade)</div>' +
-        '<div class="leg">' +
-          '<div><i style="background:#00897B"></i><span>Estrat&eacute;gia de expans&atilde;o (CMP)</span></div>' +
-          '<div><i style="background:#D9642B"></i><span>Verde em PDM / fechado ao p&uacute;blico</span></div>' +
-          '<div><i style="background:#D6C496"></i><span>Verde privado</span></div></div></div>' +
+      painel.innerHTML =
+        '<p class="desc">Quem vive a menos de 300 m de um parque com pelo menos 0,4 ha, e quanto verde p&uacute;blico cabe a cada habitante ' +
+        'num raio de 500 m. &laquo;Com propostas&raquo; junta 46 espa&ccedil;os candidatos a convers&atilde;o.</p>' +
+        '<div class="nums" id="ac-nums"></div>' +
+        '<div class="seg" id="ac-vista" role="group" aria-label="Vista">' +
+          '<button type="button" data-v="actual">Situa&ccedil;&atilde;o actual</button>' +
+          '<button type="button" data-v="propostas">Com 46 propostas</button></div>' +
+        '<div id="ac-intro" class="tema-sub" style="display:none;margin:6px 0 0;">Simula&ccedil;&atilde;o sequencial para atingir 80% de cobertura a &le; 300 m (Konijnendijk 3-30-300).</div>' +
+        MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div id="ac-camadas"></div>';
 
-      '<div class="section">Camadas</div><div id="ac-camadas"></div>';
+      var box = painel.querySelector('#ac-camadas');
 
-    var box = painel.querySelector('#ac-camadas');
+      // --- Parques e jardins (camada comum; clicar abre a ficha) ---
+      this._lParques = MU.linhaParques(this, box, { on: true, esc: esc });
 
-    // --- Parques e Jardins (GeoJSON, popups, rótulos a partir do zoom 14) ---
-    this._parques = L.geoJson(D.parques, {
-      pane: 'parquesPane',
-      style: function () { return { color: '#0B5232', weight: 2.5, opacity: 0.9, fillColor: '#0B5232', fillOpacity: 0.45 }; },
-      onEachFeature: function (f, layer) {
-        var p = f.properties, area = p.area_calc_ha ? p.area_calc_ha + ' ha' : '';
-        layer.bindPopup('<b style="font-size:13px;">' + p.nome + '</b><br><span style="color:#666;">' +
-          (p.tipo || '') + (area ? ' &mdash; ' + area : '') + '</span>');
-        layer.bindTooltip(p.nome, { permanent: true, direction: 'center', className: 'park-label', offset: [0, 0] });
-      }
-    });
-    this._lParques = MU.linha(box, {
-      label: 'Parques e Jardins', checked: true, color: '#0B5232', editavel: false,
-      onToggle: function (on) { self._toggle(self._parques, on); }
-    });
-
-    // --- Candidatos a conversão (GeoJSON, popups, rótulos a partir do zoom 13) ---
-    var TIPO = {
-      'Estrategia de expansao (CMP)': { cor: '#00897B', rot: 'Estratégia de expansão (CMP)' },
-      'Verde em PDM / fechado ao publico': { cor: '#D9642B', rot: 'Verde em PDM / fechado ao público' },
-      'Verde privado': { cor: '#D6C496', rot: 'Verde privado' }
-    };
-    this._cand = L.geoJson(D.candidatos, {
-      pane: 'candGeoPane',
-      filter: function (f) { return !/^Parques e Jardins j/.test(f.properties.tipo); },
-      style: function (f) {
-        var c = (TIPO[f.properties.tipo] || {}).cor || '#888';
-        return { color: c, weight: 2, opacity: 1, fillColor: c, fillOpacity: 0.45 };
-      },
-      onEachFeature: function (f, layer) {
-        var p = f.properties, t = TIPO[p.tipo] || { rot: p.tipo };
-        var h = '<b style="font-size:13px;">#' + p.rank + '</b>' + (p.nome ? ' &mdash; ' + p.nome : '');
-        h += '<br><span style="color:#666;">' + t.rot + '</span><br><span style="color:#666;">&Aacute;rea: ' + p.area_ha + ' ha</span>';
-        if (p.pop_delta != null) {
-          h += '<br><span style="color:#2E7D32;">+' + p.pop_delta.toLocaleString() + ' hab cobertos</span>';
-          h += '<br><span style="color:#444;">Cobertura: ' + p.pct_antes + '% &rarr; ' + p.pct_depois + '%</span>';
-        }
-        layer.bindPopup(h);
-        layer.bindTooltip('#' + p.rank + (p.nome ? ' — ' + p.nome : ''),
-          { permanent: true, direction: 'center', className: 'cand-label', offset: [0, 0] });
-        if (p.label_lat && p.label_lon) {
-          layer.on('tooltipopen', function () { layer.getTooltip().setLatLng([p.label_lat, p.label_lon]); });
-        }
-      }
-    });
-    this._lCand = MU.linha(box, {
-      label: 'Candidatos a conversão (46)', checked: false, color: '#00897B', editavel: false,
-      onToggle: function (on) { self._toggle(self._cand, on); self._legendas(); }
-    });
-    this._lNomes = MU.linha(box, {
-      label: 'Nomes dos candidatos', checked: true,
-      onToggle: function (on) { self._nomesCand = on; self._rotulos(); }
-    });
-    this._lNomes.row.style.marginLeft = '20px';
-
-    // --- Verde privado (todas as áreas) e verde em PDM: só visualização, pré-coloridas em Python ---
-    this._mono = [];
-    [['privado', 'Verde privado (todas as áreas)', '#D6C496'],
-     ['pago', 'Verde em PDM / fechado ao público', '#D9642B']].forEach(function (d) {
-      var ov = L.imageOverlay(D.imgs[d[0]], MU.BOUNDS);
-      var l = MU.linha(box, {
-        label: d[1], checked: false, color: d[2], editavel: false,
-        onToggle: function (on) { self._toggle(ov, on); }
+      // --- verde pago e verde privado (todas as áreas): pré-coloridos em Python, cores fixas das camadas ---
+      this._mono = [];
+      [[C.pago, 'Verde pago ou n&atilde;o usufru&iacute;vel', '#D9642B', S.pago],
+       [D.imgs.privado, 'Verde privado', '#D6C496', S.privado]].forEach(function (d) {
+        var ov = L.imageOverlay(d[0], MU.BOUNDS, { pane: 'accMonoPane' });
+        var l = MU.linha(box, {
+          label: d[1], checked: true, color: d[2], ha: d[3], esc: esc,
+          onToggle: function (on) { self._toggle(ov, on); },
+          opacidade: { v: 1, onInput: function (v) { ov.setOpacity(v); } }
+        });
+        self._mono.push({ ov: ov, linha: l });
       });
-      self._mono.push({ ov: ov, linha: l });
-    });
 
-    // --- botões: vista e indicador ---
-    painel.querySelector('#ac-vista').addEventListener('click', function (e) {
-      var b = e.target.closest('button'); if (b) self.setVista(b.dataset.v, true);
-    });
-    painel.querySelector('#ac-ind').addEventListener('click', function (e) {
-      var b = e.target.closest('button'); if (!b) return;
-      self.ind = (self.ind === b.dataset.i) ? null : b.dataset.i;   // clicar no activo desliga
-      self._render();
-    });
-    map.on('zoomend', function () { if (MU.tema === 'acessibilidade') self._rotulos(); });
-  },
+      // --- indicadores (um de cada vez): verde público a 500 m por habitante, parque a 300 m ---
+      this._opInd = 0.75;
+      var opInd = { v: 0.75, onInput: function (v) { self._opInd = v; Object.keys(self._ov).forEach(function (k) { self._ov[k].setOpacity(v); }); } };
+      this._lInd = {
+        acc: MU.linha(box, {
+          label: 'Verde p&uacute;blico a 500 m, por habitante', checked: false,
+          color: 'linear-gradient(90deg,' + CAT.crit + ' 0 33%,' + CAT.insuf + ' 33% 66%,' + CAT.adeq + ' 66%)',
+          leg: [[CAT.crit, '0 a 3 m&sup2;, d&eacute;fice cr&iacute;tico'], [CAT.insuf, '3 a 9 m&sup2;, insuficiente'],
+                [CAT.adeq, 'mais de 9 m&sup2;, adequado (OMS: &ge; 9 m&sup2;/hab)'], [CAT.baixa, 'baixa densidade']],
+          onToggle: function (on) { self._setInd(on ? 'acc' : null); }, opacidade: opInd
+        }),
+        prox: MU.linha(box, {
+          label: 'Parque a 300 m ou menos', checked: false,
+          color: 'linear-gradient(90deg,' + CAT.adeq + ' 0 50%,' + CAT.crit + ' 50%)',
+          leg: [[CAT.adeq, 'a 300 m ou menos de um parque &ge; 0,4 ha'], [CAT.crit, 'a mais de 300 m'], [CAT.baixa, 'baixa densidade']],
+          onToggle: function (on) { self._setInd(on ? 'prox' : null); }, opacidade: opInd
+        })
+      };
 
-  /* ---------- estado ---------- */
-  _toggle: function (layer, on) {
-    if (MU.tema !== 'acessibilidade') return;
-    on ? layer.addTo(MU.map) : MU.map.removeLayer(layer);
-    this._rotulos();
-  },
+      // --- Candidatos a conversão (GeoJSON tracejado; clicar abre a ficha; nomes a partir do zoom 14) ---
+      this._cand = L.geoJson(D.candidatos, {
+        pane: 'candGeoPane',
+        filter: function (f) { return !/^Parques e Jardins j/.test(f.properties.tipo); },
+        style: function (f) {
+          var c = (TIPO[f.properties.tipo] || {}).cor || '#888888';
+          return { color: orla(c), weight: 1.6, opacity: 1, dashArray: '5 3', fillColor: c, fillOpacity: 0.6 };
+        },
+        onEachFeature: function (f, layer) {
+          var p = f.properties, t = TIPO[p.tipo] || { rot: p.tipo, cor: '#888888' };
+          layer.on('click', function (e) {
+            L.DomEvent.stopPropagation(e);
+            MU.ficha({
+              titulo: p.nome || 'Candidato sem nome', sub: 'Candidato n.&ordm; ' + p.rank + ' &middot; ' + t.rot, cor: t.cor,
+              layer: layer, grupo: self._cand,
+              linhas: [['&Aacute;rea', MU.n(p.area_ha, 2) + ' ha']].concat(p.pop_delta != null ? [
+                ['Habitantes que passam a ter parque a &le; 300 m', '+' + MU.n(p.pop_delta)],
+                ['Cobertura do concelho', MU.n(p.pct_antes, 1) + ' % &rarr; ' + MU.n(p.pct_depois, 1) + ' %']] : [])
+            });
+          });
+          layer.bindTooltip('#' + p.rank + (p.nome ? ' — ' + p.nome : ''),
+            { permanent: true, direction: 'center', className: 'cand-label', offset: [0, 0] });
+          if (p.label_lat && p.label_lon) {
+            layer.on('tooltipopen', function () { layer.getTooltip().setLatLng([p.label_lat, p.label_lon]); });
+          }
+        }
+      });
+      this._lCand = MU.linha(box, {
+        label: 'Candidatos a convers&atilde;o (46)', checked: false,
+        color: 'linear-gradient(90deg,' + TIPO['Estrategia de expansao (CMP)'].cor + ' 0 33%,#D9642B 33% 66%,#D6C496 66%)',
+        leg: Object.keys(TIPO).map(function (k) { return [TIPO[k].cor, TIPO[k].rot, true]; }),
+        onToggle: function (on) { self._toggle(self._cand, on); },
+        opacidade: { v: 0.6, onInput: function (v) { self._cand.setStyle({ fillOpacity: v }); } }
+      });
+      this._lNomes = MU.linha(box, {
+        label: 'Nomes dos candidatos', checked: true, sub: true,
+        onToggle: function (on) { self._nomesCand = on; self._rotulos(); }
+      });
 
-  _rotulos: function () {
-    var z = MU.map.getZoom(), nomes = this._nomesCand;
-    document.querySelectorAll('.park-label').forEach(function (l) { l.style.display = z >= 14 ? '' : 'none'; });
-    document.querySelectorAll('.cand-label').forEach(function (l) { l.style.display = (nomes && z >= 13) ? '' : 'none'; });
-  },
+      painel.querySelector('#ac-vista').addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (b) self.setVista(b.dataset.v, true);
+      });
+      map.on('zoomend', function () { if (MU.tema === 'acessibilidade') self._rotulos(); });
+    },
 
-  _overlay: function () {
-    if (!this.ind) return null;
-    var D = MU.DADOS.acessibilidade.imgs, k = this.vista + '_' + this.ind;
-    var src = { actual_acc: D.acc, propostas_acc: D.acc_sim, actual_prox: D.prox, propostas_prox: D.prox_sim }[k];
-    if (!this._ov[k]) this._ov[k] = L.imageOverlay(src, MU.BOUNDS, { opacity: 0.7, pane: 'accPane' });
-    return this._ov[k];
-  },
+    /* ---------- estado ---------- */
+    _toggle: function (layer, on) {
+      if (MU.tema !== 'acessibilidade') return;
+      on ? layer.addTo(MU.map) : MU.map.removeLayer(layer);
+      this._rotulos();
+    },
 
-  _lowPop: function () {
-    if (!this._ovLow) this._ovLow = L.imageOverlay(MU.DADOS.acessibilidade.imgs.baixa, MU.BOUNDS, { pane: 'lowPopPane' });
-    return this._ovLow;
-  },
+    _setInd: function (ind) {
+      this.ind = ind;
+      var self = this;
+      ['acc', 'prox'].forEach(function (k) {
+        var l = self._lInd[k], on = k === ind;
+        if (l.cb.checked !== on) { l.cb.checked = on; l.row.classList.toggle('off', !on); }
+      });
+      this._render();
+    },
 
-  _legendas: function () {
-    var $ = function (id) { return document.getElementById(id); };
-    $('acc-legend').style.display = this.ind === 'acc' ? 'block' : 'none';
-    $('prox-legend').style.display = this.ind === 'prox' ? 'block' : 'none';
-    $('cand-legend').style.display = (this._lCand.cb.checked && this.vista === 'propostas') ? 'block' : 'none';
-  },
+    _rotulos: function () {
+      var z = MU.map.getZoom(), nomes = this._nomesCand;
+      document.querySelectorAll('.cand-label').forEach(function (l) { l.style.display = (nomes && z >= 14) ? '' : 'none'; });
+    },
 
-  _render: function () {
-    var map = MU.map, self = this;
-    Object.keys(this._ov).forEach(function (k) { map.removeLayer(self._ov[k]); });
-    map.removeLayer(this._lowPop());
-    var ov = this._overlay();
-    if (ov) { ov.addTo(map); this._lowPop().addTo(map); }
-    document.querySelectorAll('#ac-vista .ab-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.v === self.vista); });
-    document.querySelectorAll('#ac-ind .ab-btn').forEach(function (b) {
-      b.classList.toggle('active', b.dataset.i === self.ind);
-      b.querySelector('small').textContent = (self.vista === 'actual' ? 'Actual ' : 'Simulado ') + self._pct[self.vista][b.dataset.i];
-    });
-    document.getElementById('ac-intro').style.display = this.vista === 'propostas' ? 'block' : 'none';
-    this._legendas();
-  },
+    _overlay: function () {
+      if (!this.ind) return null;
+      var D = MU.DADOS.acessibilidade.imgs, k = this.vista + '_' + this.ind;
+      var src = { actual_acc: D.acc, propostas_acc: D.acc_sim, actual_prox: D.prox, propostas_prox: D.prox_sim }[k];
+      if (!this._ov[k]) this._ov[k] = L.imageOverlay(src, MU.BOUNDS, { opacity: this._opInd, pane: 'accPane' });
+      this._ov[k].setOpacity(this._opInd);
+      return this._ov[k];
+    },
 
-  /* alterna entre situação actual e propostas; o indicador mantém-se */
-  setVista: function (v, deUtilizador) {
-    if (v === this.vista && !deUtilizador) return;
-    this.vista = v;
-    var c = this._lCand.cb;
-    if (c.checked !== (v === 'propostas')) { c.checked = (v === 'propostas'); c.dispatchEvent(new Event('change')); }
-    MU.setHash({ tema: 'acessibilidade', vista: v });
-    this._render();
-  },
+    _lowPop: function () {
+      if (!this._ovLow) this._ovLow = L.imageOverlay(MU.DADOS.acessibilidade.imgs.baixa, MU.BOUNDS, { pane: 'lowPopPane' });
+      return this._ovLow;
+    },
 
-  /* primeira entrada: vista pedida no URL; «propostas» abre como a página original (proximidade, parques desligados) */
-  _inicial: function () {
-    var v = MU.param('vista') === 'propostas' ? 'propostas' : 'actual';
-    this.vista = v;
-    this.ind = v === 'propostas' ? 'prox' : 'acc';
-    var p = this._lParques.cb, c = this._lCand.cb;
-    p.checked = (v === 'actual'); c.checked = (v === 'propostas');
-  },
+    _render: function () {
+      var map = MU.map, self = this, S = MU.DADOS.contexto.stats, pr = this.vista === 'propostas', N = this._num[this.vista];
+      Object.keys(this._ov).forEach(function (k) { map.removeLayer(self._ov[k]); });
+      map.removeLayer(this._lowPop());
+      if (MU.tema === 'acessibilidade') {
+        var ov = this._overlay();
+        if (ov) { ov.addTo(map); this._lowPop().addTo(map); }
+      }
+      document.querySelectorAll('#ac-vista button').forEach(function (b) {
+        var on = b.dataset.v === self.vista;
+        b.classList.toggle('active', on); b.setAttribute('aria-pressed', on);
+      });
+      document.getElementById('ac-nums').innerHTML = MU.htmlNums([
+        { v: MU.n(S.m2hab, 1), u: 'm&sup2;', r: 'de parque por habitante: ' + MU.n(S.parques_ha) + ' ha para ' + MU.n(S.pop) + ' habitantes (GHS-POP)' },
+        { v: MU.n(N.prox), u: '%', r: 'da popula&ccedil;&atilde;o a &le; 300 m de um parque com &ge; 0,4 ha' + (pr ? ', com as propostas' : '') },
+        { v: MU.n(N.acc, 1), u: '%', r: 'da popula&ccedil;&atilde;o com &ge; 9 m&sup2; de verde p&uacute;blico a 500 m' + (pr ? ', com as propostas' : '') }
+      ]);
+      document.getElementById('ac-intro').style.display = pr ? 'block' : 'none';
+      this._lCand.row.style.display = pr ? '' : 'none';
+      this._lNomes.row.style.display = pr ? '' : 'none';
+    },
 
-  aoHash: function () {   // #tema=acessibilidade&vista=… alterado à mão com o separador já aberto
-    var v = MU.param('vista') === 'propostas' ? 'propostas' : 'actual';
-    if (v !== this.vista) this.setVista(v, false);
-  },
+    /* alterna entre situação actual e propostas; o indicador mantém-se */
+    setVista: function (v, deUtilizador) {
+      if (v === this.vista && !deUtilizador) return;
+      this.vista = v;
+      var c = this._lCand.cb;
+      if (c.checked !== (v === 'propostas')) { c.checked = (v === 'propostas'); c.dispatchEvent(new Event('change')); }
+      MU.setHash({ tema: 'acessibilidade', vista: v });
+      this._render();
+    },
 
-  activar: function () {
-    var map = MU.map, self = this;
-    if (!this._iniciado) { this._iniciado = true; this._inicial(); }
-    this._render();
-    var pares = [[this._lParques, this._parques], [this._lCand, this._cand]];
-    pares.forEach(function (p) { if (p[0].cb.checked) p[1].addTo(map); });
-    this._mono.forEach(function (m) { if (m.linha.cb.checked) m.ov.addTo(map); });
-    MU.setHash({ tema: 'acessibilidade', vista: this.vista });
-    this._rotulos();
-  },
+    /* primeira entrada: vista pedida no URL; «propostas» abre como a página original (proximidade, parques desligados) */
+    _inicial: function () {
+      var v = MU.param('vista') === 'propostas' ? 'propostas' : 'actual';
+      this.vista = v;
+      var p = this._lParques.cb, c = this._lCand.cb;
+      p.checked = (v === 'actual'); p.closest('.cam').classList.toggle('off', !p.checked);
+      c.checked = (v === 'propostas'); c.closest('.cam').classList.toggle('off', !c.checked);
+      if (v === 'propostas') this._setInd('prox');
+    },
 
-  desactivar: function () {
-    var map = MU.map, self = this;
-    Object.keys(this._ov).forEach(function (k) { map.removeLayer(self._ov[k]); });
-    map.removeLayer(this._lowPop());
-    map.removeLayer(this._parques); map.removeLayer(this._cand);
-    this._mono.forEach(function (m) { map.removeLayer(m.ov); });
-  }
-});
+    aoHash: function () {   // #tema=acessibilidade&vista=… alterado à mão com o tema já aberto
+      var v = MU.param('vista') === 'propostas' ? 'propostas' : 'actual';
+      if (v !== this.vista) this.setVista(v, false);
+    },
+
+    activar: function () {
+      var map = MU.map;
+      if (!this._iniciado) { this._iniciado = true; this._inicial(); }
+      this._render();
+      MU.activarParques(this);
+      if (this._lCand.cb.checked) this._cand.addTo(map);
+      this._mono.forEach(function (m) { if (m.linha.cb.checked) m.ov.addTo(map); });
+      MU.setHash({ tema: 'acessibilidade', vista: this.vista });
+      this._rotulos();
+    },
+
+    desactivar: function () {
+      var map = MU.map, self = this;
+      Object.keys(this._ov).forEach(function (k) { map.removeLayer(self._ov[k]); });
+      map.removeLayer(this._lowPop());
+      MU.desactivarParques(this);
+      map.removeLayer(this._cand);
+      this._mono.forEach(function (m) { map.removeLayer(m.ov); });
+    }
+  });
+})();

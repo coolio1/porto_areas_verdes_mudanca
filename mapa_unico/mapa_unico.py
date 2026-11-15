@@ -22,14 +22,19 @@ DADOS = AQUI / "dados"
 LAYERS = RAIZ / "layers"
 PAGINA = "mapa_unico/mapa_unico.html"
 
-# Temas na ordem dos separadores (um ficheiro src/tema_<id>.js cada)
-TEMAS = ["hoje", "acessibilidade", "historico", "privado"]
+# Temas na ordem do acordeão (um ficheiro src/tema_<id>.js cada); o primeiro abre sem hash
+TEMAS = ["acessibilidade", "hoje", "historico", "privado"]
+
+ACC_LAYERS = RAIZ / "acessibilidade" / "layers"
 
 # Ficheiros de dados: nome -> {chave JS: ficheiro PNG}
+# (contexto: comum a todos os temas; o resto do contexto — água, fora do concelho, parques,
+#  hectares — junta-se em dados_contexto())
 PNG_DADOS = {
     "contexto": {
         "municipios": LAYERS / "municipios.png",
         "ghspop": LAYERS / "ghspop.png",
+        "pago": ACC_LAYERS / "verde_pago_colored.png",
     },
     "hoje": {
         k: LAYERS / f"{k}.png"
@@ -62,24 +67,52 @@ def _escrever(nome: str, obj: dict) -> None:
     print(f"dados/{nome}.js  {len(js) // 1024} KB")
 
 
+# Paleta das categorias de acessibilidade no mapa (maquete «Carta» V2b, validada para daltónicos):
+# as imagens do pipeline (acessibilidade/layers/) saem com as cores antigas e são recoloridas
+# aqui, cor exacta por cor exacta, só no que vai para dados/ (os PNG de origem não mudam).
+RECOLOR_ACC = {
+    (0xB7, 0x1C, 0x1C): (0xA2, 0x3B, 0x86),  # 0-3 m²/hab · a mais de 300 m  -> défice
+    (0xE8, 0xA8, 0x38): (0xE6, 0xA6, 0xCC),  # 3-9 m²/hab                    -> insuficiente
+    (0x2E, 0x7D, 0x32): (0x3E, 0x6A, 0xB3),  # > 9 m²/hab · a 300 m ou menos -> adequado
+}
+
+
+def _recolorir(p: Path, mapa: dict) -> str:
+    """PNG com categorias de cor exacta -> data URI com as cores novas; falha se sobrar cor desconhecida."""
+    import io
+
+    import numpy as np
+    from PIL import Image
+
+    a = np.array(Image.open(p).convert("RGBA"))
+    vis = a[..., 3] > 0
+    feito = np.zeros(vis.shape, bool)
+    for de, para in mapa.items():
+        m = vis & (a[..., 0] == de[0]) & (a[..., 1] == de[1]) & (a[..., 2] == de[2])
+        a[m, :3] = para
+        feito |= m
+    assert (feito == vis).all(), f"{p.name}: cores fora da paleta conhecida"
+    buf = io.BytesIO()
+    Image.fromarray(a, "RGBA").save(buf, format="PNG", optimize=True)
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
 def dados_acessibilidade() -> dict:
-    """Imagens pré-coloridas, GeoJSON (parques e candidatos) e percentagens das Propostas."""
+    """Imagens das categorias (recoloridas), verde privado, candidatos e percentagens das Propostas.
+    Os parques e o verde pago estão no contexto (comuns a vários temas)."""
     acc = RAIZ / "acessibilidade"
-    imgs = {
-        "acc": acc / "layers" / "acessibilidade_2sfca.png",
-        "acc_sim": acc / "layers" / "acessibilidade_2sfca_sim.png",
-        "prox": acc / "layers" / "proximidade_300m.png",
-        "prox_sim": acc / "layers" / "proximidade_simulada.png",
-        "baixa": acc / "layers" / "baixa_densidade.png",
-        "pago": acc / "layers" / "verde_pago_colored.png",
-        "privado": LAYERS
-        / "interior_subsistente_colored.png",  # todas as áreas (antes da correcção)
+    cat = {
+        "acc": ACC_LAYERS / "acessibilidade_2sfca.png",
+        "acc_sim": ACC_LAYERS / "acessibilidade_2sfca_sim.png",
+        "prox": ACC_LAYERS / "proximidade_300m.png",
+        "prox_sim": ACC_LAYERS / "proximidade_simulada.png",
     }
+    imgs = {k: _recolorir(p, RECOLOR_ACC) for k, p in cat.items()}
+    imgs["baixa"] = _b64(ACC_LAYERS / "baixa_densidade.png")
+    # todas as áreas (antes da correcção)
+    imgs["privado"] = _b64(LAYERS / "interior_subsistente_colored.png")
     return {
-        "imgs": {k: _b64(p) for k, p in imgs.items()},
-        "parques": json.loads(
-            (acc / "parques_porto.geojson").read_text(encoding="utf-8")
-        ),
+        "imgs": imgs,
         "candidatos": json.loads(
             (acc / "candidatos_conversao.geojson").read_text(encoding="utf-8")
         ),
@@ -145,10 +178,77 @@ def dados_historico() -> dict:
     return d
 
 
+def _mascara_1bit(m) -> str:
+    """Máscara booleana -> PNG de paleta a 1 bit (preto opaco onde True), em data URI."""
+    import io
+
+    import numpy as np
+    from PIL import Image
+
+    out = Image.fromarray(m.astype(np.uint8), mode="P")
+    out.putpalette([0, 0, 0, 0, 0, 0])
+    buf = io.BytesIO()
+    out.save(buf, format="PNG", bits=1, optimize=True, transparency=bytes([0, 255]))
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+def estatisticas() -> dict:
+    """Hectares de cada camada dentro do concelho (contagem de píxeis da grelha da acessibilidade,
+    2048 x 769, ~57 m² cada, máscara porto_mask.npy), população GHS-POP e m² de parque por habitante."""
+    import numpy as np
+    from PIL import Image
+
+    mask = np.load(ACC_LAYERS / "porto_mask.npy")
+    px = float(np.load(ACC_LAYERS / "calc_params.npz")["pixel_area_m2"])
+    hist = RAIZ / "layers_historico"
+
+    def ha(p: Path) -> float:
+        a = np.array(Image.open(p).convert("RGBA"))[..., 3] > 0
+        assert a.shape == mask.shape, f"{p.name}: grelha {a.shape} != {mask.shape}"
+        return round(float((a & mask).sum()) * px / 1e4, 1)
+
+    fontes = {
+        "pago": ACC_LAYERS / "verde_pago_colored.png",
+        "privado": LAYERS / "interior_subsistente_colored.png",
+        "subsistente": LAYERS / "interior_subsistente_corrigido.png",
+        "perdido": LAYERS / "interior_perdido.png",
+        "centro_alargado": LAYERS / "centro_alargado.png",
+        "perda": hist / "veg_perda.png",
+        "ganho": hist / "veg_ganho.png",
+    }
+    fontes.update({k: LAYERS / f"{k}.png" for k in PNG_DADOS["hoje"]})
+    s = {k: ha(p) for k, p in fontes.items()}
+    parques = json.loads((RAIZ / "acessibilidade" / "parques_porto.geojson").read_text(encoding="utf-8"))
+    s["parques_ha"] = round(sum(f["properties"].get("area_calc_ha") or 0 for f in parques["features"]), 1)
+    s["pop"] = int(round(float(np.nansum(np.load(ACC_LAYERS / "pop_corrected.npy")[mask]))))
+    s["m2hab"] = round(s["parques_ha"] * 1e4 / s["pop"], 1)
+    s["concelho_ha"] = round(float(mask.sum()) * px / 1e4, 0)
+    return s
+
+
+def dados_contexto() -> dict:
+    """Comum a todos os temas: limites, densidade, verde pago, parques (GeoJSON), água e área
+    fora do concelho (fundo «Carta») e hectares por camada."""
+    import numpy as np
+    from PIL import Image
+
+    d = {k: _b64(p) for k, p in PNG_DADOS["contexto"].items()}
+    hist = RAIZ / "layers_historico"
+    agua = np.array(Image.open(hist / "rio.png").convert("RGBA"))[..., 3] > 0
+    porto = np.array(Image.open(hist / "porto_mask.png").convert("RGBA"))[..., 3] > 0
+    d["agua"] = _mascara_1bit(agua)
+    d["fora"] = _mascara_1bit(~porto & ~agua)  # o véu poupa a água, que fica azul como na V2b
+    d["parques"] = json.loads((RAIZ / "acessibilidade" / "parques_porto.geojson").read_text(encoding="utf-8"))
+    d["stats"] = estatisticas()
+    return d
+
+
 def escrever_dados() -> None:
     DADOS.mkdir(exist_ok=True)
     for nome, imgs in PNG_DADOS.items():
-        _escrever(nome, {k: _b64(p) for k, p in imgs.items()})
+        if nome != "contexto":
+            _escrever(nome, {k: _b64(p) for k, p in imgs.items()})
+    _escrever("contexto", dados_contexto())
     _escrever("acessibilidade", dados_acessibilidade())
     _escrever("historico", dados_historico())
 
@@ -160,7 +260,7 @@ def escrever_html() -> None:
     html = (SRC / "template.html").read_text(encoding="utf-8")
     html = (
         html.replace("/*CSS*/", (SRC / "estilo.css").read_text(encoding="utf-8"))
-        .replace("<!--NAV-->", get_nav(PAGINA, depth=1))
+        .replace("<!--NAV-->", get_nav(PAGINA, depth=1, menu="barra"))
         .replace("/*JS*/", js)
     )
     saida = AQUI / "mapa_unico.html"

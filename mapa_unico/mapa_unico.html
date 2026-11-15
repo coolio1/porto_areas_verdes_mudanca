@@ -1,144 +1,297 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" href="../favicon.png">
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
 <title>Mapa — Porto Verde</title>
-<meta name="description" content="Mapa interactivo do espaço verde do Porto: mudança 2016-2025, acessibilidade e propostas, histórico desde 1947 e verde privado.">
+<meta name="description" content="Mapa interactivo do espaço verde do Porto: acessibilidade e propostas, mudanças 2016-2025, histórico desde 1947 e verde privado.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-body { margin:0; }
-#map { position:absolute; top:0; bottom:0; width:100%; }
-#panel {
-  position:fixed; bottom:20px; left:20px; z-index:1000;
-  background:rgba(255,255,255,0.95); padding:14px 18px; border-radius:10px;
-  font:13px 'Segoe UI',Arial,sans-serif; color:#222;
-  box-shadow:0 2px 10px rgba(0,0,0,0.2); width:300px; box-sizing:border-box;
-  max-height:90vh; overflow-y:auto; line-height:1.8;
+/* Mapa único — gramática «Carta» (maquete V2b aprovada): folha de filete 1px de tinta, sem sombras nem
+   cantos redondos, etiquetas mono, IBM Plex. Só modo claro (escuro = fase 2: redefinir estes tokens sob
+   prefers-color-scheme e :root[data-theme="dark"], como na V2b). */
+:root{
+  --papel:#FAFAF7;--tinta:#10212C;--suave:#4B6270;--filete:#10212C;--fino:#C9D3D0;--painel:#FAFAF7;--realce:#EEF2EF;--marca:#0B5232;
+  /* placa do mapa (fundo «Carta») */
+  --map-papel:#E6EDEB;--map-agua:#A9CADB;--map-fora:#F3F4F0;--map-grade:rgba(16,33,44,.10);--map-rot-agua:#2F5A70;--map-halo:#E6EDEB;
+  /* cor-guia de cada tema (cromo, AA sobre o papel) */
+  --g-acessibilidade:#0B5232;--g-hoje:#B42F2F;--g-historico:#7A4E22;--g-privado:#7C6526;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'IBM Plex Sans',system-ui,sans-serif;--serif:'IBM Plex Serif',Georgia,serif;
+  color-scheme:light;
 }
-#panel-toggle {
-  display:none; width:100%; border:none; padding:6px 0;
-  background:transparent; color:#222; font-size:11px; cursor:pointer; text-align:right;
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body.mu{background:var(--papel);color:var(--tinta);font-family:var(--sans);hyphens:none;-webkit-hyphens:none;overflow:hidden;
+  height:100dvh;display:grid;grid-template-columns:384px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;
+  grid-template-areas:"cab mapa" "painel mapa" "rod rod"}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body.mu :focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+
+/* ===== cabeçalho: a barra do site (moldura.js, data-menu="barra") arrumada na coluna do painel ===== */
+body.mu .pv-barra{grid-area:cab;display:block;height:auto;padding:0;gap:0;position:static;background:var(--painel);
+  border-right:1px solid var(--filete);border-bottom:1px solid var(--filete);font-family:var(--sans)}
+body.mu .pv-barra__marca{padding:14px 20px 12px;gap:10px;text-decoration:none}
+body.mu .pv-barra__mini{width:38px;height:38px;border-radius:50%}
+body.mu .pv-barra__nome{width:160px}
+body.mu .pv-barra__links{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--filete)}
+body.mu .pv-barra__links a{display:block;padding:7px 10px;font-size:13px;font-weight:500;border-right:1px solid var(--filete);
+  border-bottom:1px solid var(--filete)}
+body.mu .pv-barra__links a:nth-child(3n){border-right:0}
+body.mu .pv-barra__links a:nth-child(n+4){border-bottom:0}
+body.mu .pv-barra__links a:hover{background:var(--realce);text-decoration:none}
+body.mu .pv-barra__links a.active{background:var(--tinta);color:var(--painel)}
+body.mu .pv-barra__links a:focus-visible{outline-offset:-3px}
+body.mu .pv-barra__menu{display:none}
+
+/* ===== rodapé (moldura.js): faixa de filete a toda a largura ===== */
+body.mu .pv-rodape--mapa{grid-area:rod;position:static;inset:auto;max-width:none;display:block;padding:7px 20px;border:0;
+  border-top:1px solid var(--filete);background:var(--painel);font:400 11.5px var(--mono);color:var(--suave)}
+body.mu .pv-rodape__logo{display:none}
+body.mu .pv-rodape p{display:flex;justify-content:space-between;gap:16px}
+body.mu .pv-rodape p br{display:none}
+body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
+
+/* ===== painel ===== */
+#panel{grid-area:painel;border-right:1px solid var(--filete);background:var(--painel);display:flex;flex-direction:column;min-height:0}
+.temas{flex:1;overflow-y:auto;min-height:0;scrollbar-width:thin}
+.alca{display:none}
+
+/* acordeão: cada tema com a sua cor-guia (fio, ícone, cabeçalho) */
+.tema{--guia:var(--g-acessibilidade);border-bottom:1px solid var(--filete);position:relative}
+.tema[data-t="hoje"]{--guia:var(--g-hoje)}.tema[data-t="historico"]{--guia:var(--g-historico)}.tema[data-t="privado"]{--guia:var(--g-privado)}
+.tema::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--guia);opacity:0}
+.tema.on::before{opacity:1}
+.tema>button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:10px;
+  padding:11px 20px;cursor:pointer;font:600 16px/1.2 var(--sans);color:var(--tinta)}
+.tema>button:hover{background:var(--realce)}
+.tema>button svg{width:22px;height:22px;color:var(--guia);display:block}
+.tema>button .q{font:400 11.5px var(--mono);color:var(--suave);white-space:nowrap}
+.tema>button:focus-visible{outline:2px solid var(--tinta);outline-offset:-4px}
+.tema.on>button{font-weight:700;font-size:21px;letter-spacing:-.015em;padding-top:16px;padding-bottom:8px;border-top:3px solid var(--guia);margin-top:-1px}
+.tema.on>button svg{width:24px;height:24px}
+.corpo{padding:0 20px 18px 24px;display:none}
+.tema.on .corpo{display:block}
+.desc{font:400 14px/1.55 var(--serif);margin:2px 0 14px;max-width:46ch}
+.tema-sub{font:400 12px var(--mono);color:var(--suave)}
+
+/* números-chave: um grande, dois de apoio, régua de cor-guia */
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin:0 0 4px;border-top:1px solid var(--guia);padding-top:12px}
+.num{margin:0;min-width:0}
+.num b{display:block;font:700 22px/1 var(--sans);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.num b small{font:500 12px var(--mono);letter-spacing:0;margin-left:3px;color:var(--suave)}
+.num p{margin:4px 0 0;font-size:12.5px;line-height:1.35;color:var(--suave)}
+.num.mor{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:end}
+.num.mor b{font-size:52px;letter-spacing:-.035em;color:var(--tinta)}
+.num.mor b small{font-size:15px}
+.num.mor p{margin:0 0 4px;font-size:13px;color:var(--tinta)}
+
+/* segmentado (vista) e botões de filete */
+.seg{display:flex;border:1px solid var(--filete);margin:14px 0 4px}
+.seg button{all:unset;flex:1;text-align:center;cursor:pointer;font:500 13px/1 var(--sans);padding:9px 6px;color:var(--tinta)}
+.seg button+button{border-left:1px solid var(--filete)}
+.seg button.active,.seg button[aria-pressed="true"]{background:var(--tinta);color:var(--painel)}
+.seg button:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+.btn{all:unset;box-sizing:border-box;display:block;width:100%;text-align:center;cursor:pointer;border:1px solid var(--filete);
+  font:500 13px/1 var(--sans);padding:9px 6px;margin:8px 0 0;color:var(--tinta)}
+.btn:hover{background:var(--realce)}
+.btn.active{background:var(--tinta);color:var(--painel)}
+.cab2{display:flex;justify-content:space-between;gap:8px;font:400 11px/1 var(--mono);color:var(--suave);margin:18px 0 6px;padding-bottom:6px;border-bottom:1px solid var(--fino)}
+
+/* camadas: amostra de cor = interruptor; barra de ha na cor da camada; opacidade quando ligada */
+.cam{--sw:var(--tinta);display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:6px 0}
+.cam input[type=checkbox]{appearance:none;-webkit-appearance:none;width:18px;height:18px;margin:0;border:1px solid var(--tinta);cursor:pointer;background:transparent;border-radius:0}
+.cam input[type=checkbox]:checked{background:var(--sw);box-shadow:inset 0 0 0 2px var(--painel)}
+.cam input[type=checkbox].contorno:checked{background:transparent;box-shadow:inset 0 0 0 2px var(--painel),inset 0 0 0 4px var(--sw)}
+.cam input[type=checkbox]:disabled{opacity:.35;cursor:not-allowed}
+.cam label{font-size:13.5px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cam .ha{font:500 12px var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+.cam .med{grid-column:2/3;height:8px;position:relative;background:repeating-linear-gradient(90deg,var(--fino) 0 1px,transparent 1px 25%)}
+.cam .med i{position:absolute;left:0;top:0;bottom:0;background:var(--sw);min-width:2px}
+.cam.off{color:var(--suave)}
+.cam.off .med i{opacity:.3}
+.cam .op{grid-column:3/4;display:none;align-items:center;width:64px}
+.cam:not(.off) .op{display:flex}
+.cam .op input{width:64px}
+.cam:not(:has(.med)) .op{grid-column:2/4;width:auto}.cam:not(:has(.med)) .op input{width:100%}
+.cam.sub{margin-left:28px}
+.catleg{grid-column:2/4;display:grid;gap:4px;margin:2px 0 2px;font:400 12px/1.3 var(--sans);color:var(--tinta)}
+.cam.off .catleg{display:none}
+.catleg span{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:center}
+.catleg i{display:block;width:22px;height:12px}
+.catleg i.trac{outline:1.5px dashed var(--tinta);outline-offset:-1.5px;opacity:.85}
+.catleg .n{font:500 11.5px var(--mono);color:var(--suave)}
+#panel input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:16px;margin:0;cursor:pointer}
+#panel input[type=range]::-webkit-slider-runnable-track{height:1px;background:var(--suave)}
+#panel input[type=range]::-moz-range-track{height:1px;background:var(--suave)}
+#panel input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:12px;background:var(--tinta);margin-top:-6px;border-radius:0}
+#panel input[type=range]::-moz-range-thumb{width:8px;height:12px;background:var(--tinta);border:0;border-radius:0}
+#panel select{font:400 13px var(--sans);border:1px solid var(--filete);background:var(--painel);color:var(--tinta);padding:6px 8px;border-radius:0;width:100%;height:34px}
+.fonte{font:400 11px/1.5 var(--mono);color:var(--suave);margin:16px 0 0}
+.fonte a{color:inherit}
+.pop-leg{display:flex;align-items:center;gap:6px;margin:0 0 4px 28px;font:400 10.5px var(--mono);color:var(--suave)}
+.pop-leg i{width:110px;height:8px;background:linear-gradient(to right,#f5e6d0,#d4b896,#b08a5e,#8b6934,#6b4a1e,#4a2f0a)}
+
+/* Histórico: escada das épocas (cada época com a sua cor; a escada é o seletor) */
+.escada{display:grid;gap:2px;margin:4px 0 0}
+.escada button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:6px 84px 1fr 54px;gap:8px;align-items:center;cursor:pointer;
+  padding:5px 6px 5px 0;min-height:30px;font:500 12.5px var(--mono);font-variant-numeric:tabular-nums;color:var(--tinta)}
+.escada button:hover{background:var(--realce)}
+.escada button::before{content:"";align-self:stretch;background:var(--ep);opacity:0}
+.escada .b{height:12px;background:repeating-linear-gradient(90deg,var(--fino) 0 1px,transparent 1px 10%)}
+.escada .b i{display:block;height:100%;background:var(--ep);opacity:.8}
+.escada button.active{background:var(--realce);font-weight:600}
+.escada button.active::before{opacity:1}
+.escada button.active .b i{opacity:1}
+.escada button:focus-visible{outline:2px solid var(--tinta);outline-offset:1px}
+.escada small{display:block;font-size:10px;font-weight:400;color:var(--suave)}
+.h-fonte{font:400 11.5px/1.45 var(--mono);color:var(--suave);margin:8px 0 0}
+.h-fonte b{color:var(--tinta);font-weight:500}
+.h-comp label{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:8px;font:400 12px var(--mono);color:var(--suave);margin:6px 0}
+.leg{display:grid;gap:4px;margin:6px 0 2px;font:400 12px/1.3 var(--sans)}
+.leg>div{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:center}
+.leg i{display:block;width:22px;height:12px}
+#h-cortina{position:absolute;top:0;bottom:0;width:0;z-index:801;pointer-events:none}
+.h-linha{position:absolute;top:0;bottom:0;left:-1px;width:3px;background:var(--tinta);pointer-events:auto;cursor:ew-resize;touch-action:none}
+.h-asa{position:absolute;top:50%;left:-18px;width:36px;height:36px;margin-top:-18px;background:var(--painel);border:1px solid var(--filete);color:var(--tinta);
+  font:500 18px/34px var(--mono);text-align:center;cursor:ew-resize;touch-action:none;pointer-events:auto;user-select:none}
+.h-etq{position:absolute;top:16px;background:var(--painel);border:1px solid var(--filete);color:var(--tinta);font:500 11.5px var(--mono);padding:4px 8px;white-space:nowrap}
+.h-etq-e{right:10px}.h-etq-d{left:10px}
+.h-asa:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+
+/* legenda fixa: os três verdes numa escala comum */
+.verdes{border-top:1px solid var(--filete);padding:12px 20px 14px;background:var(--painel)}
+.verdes h3{font:700 14px var(--sans);margin:0 0 9px;display:flex;justify-content:space-between;align-items:baseline}
+.verdes h3 span{font:400 11px var(--mono);color:var(--suave)}
+.vd{display:grid;grid-template-columns:14px minmax(0,1fr) 62px;gap:3px 8px;align-items:center;margin-bottom:6px;font-size:12.5px}
+.vd>i{width:14px;height:14px;display:block}
+.vd .med{grid-column:2/4;height:8px;position:relative;background:repeating-linear-gradient(90deg,var(--fino) 0 1px,transparent 1px 25%)}
+.vd .med i{position:absolute;inset:0 auto 0 0}
+.vd .ha{font:500 12px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.esc{display:flex;justify-content:space-between;font:400 10.5px var(--mono);color:var(--suave);margin-left:22px}
+
+/* ===== mapa ===== */
+#map{grid-area:mapa;position:relative;min-width:0;min-height:0;font-family:var(--sans)}
+#map.leaflet-container{background:var(--map-fora)}
+#map.fundo-carta{background:repeating-linear-gradient(-45deg,var(--map-grade) 0 1px,transparent 1px 7px),var(--map-fora)}
+.mu-carta-canvas{position:absolute;inset:0;z-index:650;pointer-events:none}
+.leaflet-zoom-anim .mu-carta-canvas{opacity:0}
+.cx{position:absolute;z-index:1000;background:var(--painel);border:1px solid var(--filete)}
+.zoom{right:16px;top:16px;display:flex;flex-direction:column}
+.zoom button{all:unset;cursor:pointer;width:34px;height:34px;text-align:center;font:500 17px/34px var(--mono);color:var(--tinta)}
+.zoom button:hover{background:var(--realce)}
+.zoom button+button{border-top:1px solid var(--filete)}
+.zoom button:focus-visible{outline:2px solid var(--tinta);outline-offset:-3px}
+.pe{left:16px;bottom:16px;display:flex;align-items:stretch;font:400 11.5px var(--mono);color:var(--tinta)}
+.pe>span{padding:6px 10px;display:flex;align-items:center;gap:8px}
+.pe>span+span{border-left:1px solid var(--filete)}
+.pe .bar{display:block;height:6px;border:1px solid var(--tinta);border-top:0;background:linear-gradient(90deg,var(--tinta) 0 50%,transparent 50%) bottom/100% 2px no-repeat}
+.pe .norte svg{width:14px;height:20px;display:block;color:var(--tinta)}
+.pe .xy{min-width:19ch}
+.ficha{left:16px;top:16px;width:300px;padding:14px 16px;display:none;border-top:4px solid var(--fc,var(--marca))}
+.ficha.on{display:block}
+.ficha h3{font:700 19px/1.15 var(--sans);margin:0 26px 3px 0;letter-spacing:-.01em}
+.ficha .sub{font-size:12.5px;color:var(--suave);margin:0 0 10px}
+.ficha dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0;font-size:12.5px}
+.ficha dt{color:var(--suave)}.ficha dd{margin:0;font:500 12px var(--mono);text-align:right}
+.ficha .cmp{margin-top:12px;font:400 11px var(--mono);color:var(--suave)}
+.ficha .cmp .med{height:8px;margin-top:4px;border:1px solid var(--filete)}
+.ficha .cmp .med i{display:block;height:100%;background:var(--marca)}
+.ficha .x{all:unset;position:absolute;right:8px;top:8px;width:26px;height:26px;text-align:center;line-height:26px;cursor:pointer;font-size:18px}
+.ficha .x:focus-visible{outline:2px solid var(--tinta)}
+.ir{position:absolute;z-index:1000;right:60px;top:16px;font:400 13px var(--sans);border:1px solid var(--filete);background:var(--painel);color:var(--tinta);
+  padding:6px 8px;border-radius:0;height:36px;max-width:230px}
+/* Leaflet à maneira da carta: sem sombras nem cantos redondos */
+#map .leaflet-popup-content-wrapper{border-radius:0;box-shadow:none;border:1px solid var(--filete);background:var(--painel);color:var(--tinta)}
+#map .leaflet-popup-tip{box-shadow:none;border:1px solid var(--filete);background:var(--painel)}
+#map .leaflet-popup-content{font:400 12.5px/1.4 var(--sans);margin:10px 14px}
+#map .leaflet-control-attribution{background:rgba(250,250,247,.85);font:400 10px var(--mono);color:var(--suave)}
+#map .leaflet-control-attribution a{color:inherit}
+.cand-label{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;font:600 11px var(--sans);color:#00563F;
+  text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 2px #fff}
+.cand-label::before{display:none}
+
+@media (max-width:760px){
+  body.mu{grid-template-columns:minmax(0,1fr);grid-template-areas:"cab" "mapa" "rod";position:relative}
+  body.mu .pv-barra{border-right:0}
+  body.mu .pv-barra__marca{padding:8px 16px 6px}
+  body.mu .pv-barra__mini{width:28px;height:28px}
+  body.mu .pv-barra__nome{width:112px}
+  body.mu .pv-barra__links{display:flex;overflow-x:auto;scrollbar-width:none}
+  body.mu .pv-barra__links a{flex:none;border-bottom:0!important;border-right:1px solid var(--filete)!important}
+  #panel{position:absolute;left:0;right:0;bottom:var(--rodh,52px);z-index:1100;border-right:0;border-top:1px solid var(--filete);
+    max-height:var(--espia,200px);overflow:hidden;transition:max-height .25s ease}
+  #panel.aberto{max-height:calc(100% - var(--rodh,52px) - 40px);overflow-y:auto}
+  .temas{flex:none;overflow:visible}
+  .alca{all:unset;display:block;box-sizing:border-box;width:100%;padding:8px 16px 6px;cursor:pointer;font:500 12px var(--mono);color:var(--suave);
+    text-align:center;border-bottom:1px solid var(--fino)}
+  .alca::before{content:"";display:block;width:36px;height:3px;background:var(--tinta);margin:0 auto 6px}
+  .alca:focus-visible{outline:2px solid var(--tinta);outline-offset:-3px}
+  .tema>button{padding:9px 16px}
+  .tema.on>button{font-size:18px;padding-top:10px}
+  .corpo{padding:0 16px 14px 20px}
+  .num.mor b{font-size:40px}
+  .verdes{padding:10px 16px 12px}
+  #map{margin-bottom:var(--espia,200px)}
+  #panel:not(.aberto) .desc{display:none}
+  .ficha{left:12px;right:12px;width:auto;top:12px}
+  .ir{left:12px;right:auto;top:auto;bottom:12px;max-width:170px}
+  .pe{left:auto;right:12px;bottom:12px}
+  .pe .xy{display:none}
+  .zoom{right:12px;top:12px}
+  .ficha.on~.zoom{display:none}
+  body.mu .pv-rodape--mapa{padding:8px 16px 10px;position:relative;z-index:1200}
+  body.mu .pv-rodape p{display:block}
+  body.mu .pv-rodape__nome{display:block}
 }
-.panel-body { display:block; }
-.tabs { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin:0 0 8px 0; }
-.tabs button {
-  border:1px solid #ccc; background:#f5f5f5; color:#444; border-radius:5px;
-  padding:3px 4px; font:12px 'Segoe UI',Arial,sans-serif; cursor:pointer; line-height:1.4;
-}
-.tabs button:hover { background:#fff; }
-.tabs button.active { background:#2E7D32; border-color:#2E7D32; color:#fff; }
-.row { display:flex; align-items:center; gap:6px; margin:2px 0; }
-.row input[type=checkbox] { width:15px; height:15px; cursor:pointer; margin:0; }
-.row input[type=color] { width:22px; height:18px; padding:0; border:1px solid #ccc; border-radius:3px; cursor:pointer; background:none; }
-.row label { cursor:pointer; font-size:12px; }
-.swatch { width:14px; height:14px; border-radius:3px; display:inline-block; }
-.section { font-size:11px; color:#888; font-weight:bold; margin:8px 0 4px 0; }
-.tema-sub { color:#888; font-size:10px; }
-.fonte { color:#aaa; font-size:10px; line-height:1.4; }
-.park-label { background:rgba(255,255,255,0.85)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#1B5E20; padding:1px 5px; border-radius:3px; }
-.cand-label { background:rgba(255,255,255,0.9)!important; border:none!important; box-shadow:0 1px 3px rgba(0,0,0,0.2); font:10px 'Segoe UI',Arial,sans-serif; color:#00695C; padding:1px 5px; border-radius:3px; font-weight:bold; }
-.ab-group { display:flex; gap:4px; margin:2px 0 6px; }
-.ab-btn {
-  flex:1; padding:5px 4px; border:1px solid #ccc; border-radius:5px;
-  background:#f5f5f5; color:#555; font-size:11px; cursor:pointer;
-  font-family:'Segoe UI',Arial,sans-serif; line-height:1.3; text-align:center;
-}
-.ab-btn:hover { background:#e0e0e0; }
-.ab-btn.active { background:#2E7D32; color:#fff; border-color:#2E7D32; font-weight:bold; }
-.ab-btn small { display:block; font-weight:normal; opacity:.85; font-size:10px; }
-.leg { display:flex; flex-direction:column; gap:2px; font-size:10px; margin:2px 0 6px; line-height:1.5; }
-.leg > div { display:flex; align-items:center; gap:4px; }
-.leg i { width:14px; height:12px; border-radius:2px; display:inline-block; flex:none; }
-.leg span { color:#666; }
-.nota { color:#aaa; font-size:9px; margin-top:4px; line-height:1.4; }
-select { background:#f5f5f5; color:#222; border:1px solid #ccc; border-radius:4px; padding:3px 6px; font-size:12px; width:100%; }
-hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
-@media (max-width: 768px) {
-  #panel {
-    left:6px; right:6px; bottom:6px; width:auto;
-    padding:8px 10px; font-size:11px; line-height:1.3;
-    max-height:35vh; overflow-y:auto;
-  }
-  #panel .row label { font-size:10px; }
-  #panel .swatch { width:10px; height:10px; }
-  #panel select { font-size:10px; padding:2px 4px; }
-  #panel hr { margin:4px 0; }
-  #panel .ab-btn { font-size:10px; padding:4px 2px; }
-  #panel.collapsed .panel-body { display:none; }
-  #panel-toggle { display:block; }
-  .leaflet-top { top:50px; }
-}
-.h-tempo { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin:6px 0 4px; }
-.h-tempo .ab-btn { padding:4px 1px; font-size:11px; }
-.h-fonte { font-size:10px; color:#555; line-height:1.4; margin:2px 0 4px; }
-.h-fonte i { color:#a15c00; }
-.h-graf { display:flex; gap:2px; margin:2px 0 2px; }
-.h-col { flex:1; border:1px solid transparent; background:transparent; border-radius:4px; padding:2px 0 0; cursor:pointer; display:flex; flex-direction:column; align-items:center; font:inherit; }
-.h-col:hover { background:#f0f0f0; }
-.h-col.active { background:#e8f5e9; border-color:#2E7D32; }
-.h-barras { display:flex; align-items:flex-end; gap:1px; height:60px; }
-.h-b { display:block; width:7px; border-radius:1px 1px 0 0; }
-.h-bv { background:#4E9F5D; border:1px solid #357A47; box-sizing:border-box; }
-.h-be { background:#C4A882; }
-.h-ano { font-size:9px; color:#555; line-height:1.6; }
-.h-nums { font-size:11px; color:#333; margin:2px 0; }
-.h-leg2 { margin:0 0 2px; }
-.h-comp label { display:flex; align-items:center; gap:6px; font-size:11px; color:#555; margin:2px 0; }
-.h-comp select { flex:1; }
-.h-comp { margin:4px 0; }
-#h-cortina { position:absolute; top:0; bottom:0; width:0; z-index:801; pointer-events:none; }
-.h-linha { position:absolute; top:0; bottom:0; left:-2px; width:4px; background:#fff; box-shadow:0 0 4px rgba(0,0,0,.55); pointer-events:auto; cursor:ew-resize; touch-action:none; }
-.h-asa { position:absolute; top:50%; left:-18px; width:36px; height:36px; margin-top:-18px; border-radius:50%; background:#fff; color:#2E7D32; font-size:20px; line-height:36px; text-align:center; box-shadow:0 1px 6px rgba(0,0,0,.45); cursor:ew-resize; touch-action:none; pointer-events:auto; user-select:none; }
-.h-etq { position:absolute; top:56px; background:rgba(255,255,255,.92); color:#222; font:bold 11px 'Segoe UI',Arial,sans-serif; padding:2px 8px; border-radius:4px; box-shadow:0 1px 3px rgba(0,0,0,.25); white-space:nowrap; }
-.h-etq-e { right:10px; }
-.h-etq-d { left:10px; }
-#panel .h-tempo .ab-btn { min-height:28px; }
-.h-asa:focus-visible { outline:3px solid #2E7D32; outline-offset:2px; }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 </style>
 </head>
-<body>
-<script src="../assets/js/moldura.js" data-pagina="mapa_unico/mapa_unico.html"></script>
-<div id="map"></div>
-<div id="panel">
-  <button id="panel-toggle" onclick="var p=document.getElementById('panel');p.classList.toggle('collapsed');this.textContent=p.classList.contains('collapsed')?'▲ Abrir legenda':'▼ Fechar';">▼ Fechar</button>
-  <div class="panel-body">
-    <div class="tabs" id="tabs"></div>
-    <div id="temas"></div>
-    <hr>
-    <div class="section">Contexto</div>
+<body class="mu">
+<script src="../assets/js/moldura.js" data-pagina="mapa_unico/mapa_unico.html" data-menu="barra"></script>
+<aside id="panel" aria-label="Temas, camadas e legenda">
+  <button type="button" class="alca" id="alca" aria-expanded="false">Mostrar camadas e números</button>
+  <div class="temas" id="temas"></div>
+  <div class="verdes" id="verdes"></div>
+  <div id="ctx-bloco">
+    <div class="cab2"><span>Contexto</span><span></span></div>
     <div id="ctx-rows"></div>
-    <div id="pop-legend" style="display:none;margin:4px 0 0 22px;">
-      <div style="font-size:10px;color:#888;margin-bottom:2px;">hab/pixel (100m)</div>
-      <div style="display:flex;align-items:center;gap:4px;">
-        <span style="font-size:9px;color:#888;">0</span>
-        <div style="width:120px;height:10px;border-radius:3px;background:linear-gradient(to right,#f5e6d0,#d4b896,#b08a5e,#8b6934,#6b4a1e,#4a2f0a);"></div>
-        <span style="font-size:9px;color:#888;">150+</span>
-      </div>
+    <div id="pop-legend" class="pop-leg" style="display:none;">
+      <span>0</span><i></i><span>150+ hab/píxel de 100 m</span>
     </div>
-    <hr>
-    <div class="section">Fundo</div>
-    <select id="fundo-select"></select>
-    <hr>
-    <div class="fonte" id="fonte"></div>
+    <div class="cab2"><span>Fundo</span><span></span></div>
+    <select id="fundo-select" aria-label="Fundo do mapa"></select>
+    <p class="fonte" id="fonte"></p>
   </div>
-</div>
+</aside>
+<main id="map" aria-label="Mapa do Porto">
+  <div class="cx ficha" id="ficha" role="region" aria-label="Ficha" aria-live="polite"></div>
+  <select class="ir" id="ir" aria-label="Ir para um parque"></select>
+  <div class="cx zoom" id="zoom"><button type="button" data-z="1" aria-label="Aproximar">+</button><button type="button" data-z="-1" aria-label="Afastar">−</button><button type="button" data-z="0" aria-label="Ver o concelho inteiro">⌂</button></div>
+  <div class="cx pe" id="pe"><span class="norte" title="Norte"><svg viewBox="0 0 14 20" aria-hidden="true"><path d="M7 1 12 15 7 12 2 15Z" fill="currentColor"/><path d="M7 1 7 12 2 15Z" fill="var(--painel)" stroke="currentColor" stroke-width=".8"/></svg><span class="sr">Norte para cima</span></span><span><span><span class="bar"></span><span class="esc-t"></span></span></span><span class="xy" aria-hidden="true">—</span></div>
+</main>
 <script>
 /* Núcleo do mapa único do Porto Verde. Tudo vive em window.MU (sem globais soltas):
-   cada tema regista-se com MU.registarTema() e só é montado quando é aberto. */
+   cada tema regista-se com MU.registarTema() e só é montado quando é aberto.
+   Gramática «Carta» (maquete V2b): acordeão de temas com cor-guia, números-chave, camadas com amostra
+   que é o interruptor e barra de hectares, «Os três verdes» fixos, ficha do parque, moldura de carta
+   (quadrícula, esquadria, área fora do estudo tracejada) e fundo «Carta» sem mosaicos. */
 (function () {
   var BOUNDS = [[41.13, -8.7], [41.19, -8.54]];
+  var B = { S: 41.13, N: 41.19, W: -8.7, E: -8.54 };
   var MU = window.MU = { TEMAS: {}, ORDEM: [], DADOS: {}, BOUNDS: BOUNDS, tema: null };
+  var TINTA = '#10212C', PARQUE = '#0B5232', PARQUE_ORLA = '#06301D';
 
-  /* ---------- utilitários partilhados (antes duplicados em cada página) ---------- */
+  /* ---------- utilitários partilhados ---------- */
   MU.hexToRgb = function (h) {
     h = h.replace('#', '');
     return [parseInt(h.substr(0, 2), 16), parseInt(h.substr(2, 2), 16), parseInt(h.substr(4, 2), 16)];
   };
+  MU.n = function (x, d) { return Number(x).toLocaleString('pt-PT', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); };
+  MU.ha = function (x) { return MU.n(x, x < 100 ? 1 : 0) + ' ha'; };
 
   MU.extractMask = function (src) {
     return new Promise(function (resolve) {
@@ -177,56 +330,76 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
   MU.camadaMascara = async function (o) {
     var m = await MU.extractMask(o.src);
     var cam = { mask: m, cor: o.color, overlay: null };
-    cam.overlay = L.imageOverlay(MU.renderColored(m, o.color), o.bounds || BOUNDS, o.pane ? { pane: o.pane } : {});
+    var opc = {}; if (o.pane) opc.pane = o.pane; if (o.op != null) opc.opacity = o.op;
+    cam.overlay = L.imageOverlay(MU.renderColored(m, o.color), o.bounds || BOUNDS, opc);
     cam.setColor = function (hex) { cam.cor = hex; cam.overlay.setUrl(MU.renderColored(m, hex)); };
     return cam;
   };
 
-  /* Linha do painel: checkbox + (cor editável | amostra) + etiqueta. */
-  MU.linha = function (container, o) {
-    var row = document.createElement('div');
-    row.className = 'row';
-    var cb = document.createElement('input');
-    cb.type = 'checkbox'; cb.checked = !!o.checked;
-    cb.addEventListener('change', function () { o.onToggle(this.checked); });
-    row.appendChild(cb);
-    var cor = null;
-    if (o.color) {
-      if (o.editavel) {
-        cor = document.createElement('input');
-        cor.type = 'color'; cor.value = o.color;
-        cor.addEventListener('input', function () { o.onColor(this.value); });
-      } else {
-        cor = document.createElement('span');
-        cor.className = 'swatch'; cor.style.backgroundColor = o.color;
-      }
-      row.appendChild(cor);
-    }
-    var lb = document.createElement('label');
-    lb.textContent = o.label;
-    lb.addEventListener('click', function () { cb.click(); });
-    row.appendChild(lb);
-    container.appendChild(row);
-    return { row: row, cb: cb, cor: cor };
+  /* ---------- peças do painel ---------- */
+  MU.cab2 = function (esq, dir) { return '<div class="cab2"><span>' + esq + '</span><span>' + (dir || '') + '</span></div>'; };
+  /* números-chave: [{v, u, r}] — o primeiro é o grande */
+  MU.htmlNums = function (N) {
+    return '<div class="num mor"><b>' + N[0].v + '<small>' + N[0].u + '</small></b><p>' + N[0].r + '</p></div>' +
+      N.slice(1).map(function (n) { return '<div class="num"><b>' + n.v + '<small>' + n.u + '</small></b><p>' + n.r + '</p></div>'; }).join('');
+  };
+  /* escala comum das barras de hectares de um tema: 400, 1000 ou 3000 ha */
+  MU.escala = function (has) {
+    var max = Math.max.apply(null, has.concat([1]));
+    return max > 1500 ? 3000 : max > 600 ? 1000 : 400;
   };
 
-  /* Cria camadas de máscara + linhas do painel para defs [{id,label,color,show}] (dados em
+  /* Linha de camada: amostra = interruptor (--sw), rótulo, hectares + barra, legenda de categorias, opacidade.
+     o: {label, checked, color, contorno, ha, esc, leg:[[cor, texto, tracejado?]], nota, sub, id,
+         onToggle(on), opacidade:{v, min, max, step, id, onInput(v)}} */
+  var nLinha = 0;
+  MU.linha = function (container, o) {
+    var id = o.id || ('mu-l' + (++nLinha));
+    var row = document.createElement('div');
+    row.className = 'cam' + (o.checked ? '' : ' off') + (o.sub ? ' sub' : '');
+    if (o.color) row.style.setProperty('--sw', o.color);
+    var h = '<input type="checkbox" id="' + id + '"' + (o.checked ? ' checked' : '') + (o.contorno ? ' class="contorno"' : '') + '>' +
+      '<label for="' + id + '">' + o.label + '</label><span class="ha">' + (o.ha ? MU.ha(o.ha) : '') + '</span>';
+    if (o.ha && o.esc && o.ha <= o.esc) h += '<div class="med" aria-hidden="true"><i style="width:' + Math.min(100, o.ha / o.esc * 100).toFixed(2) + '%"></i></div>';
+    if (o.leg) {
+      h += '<div class="catleg">' + o.leg.map(function (l) {
+        return '<span><i' + (l[2] ? ' class="trac"' : '') + ' style="background:' + l[0] + '"></i>' + l[1] + '</span>';
+      }).join('') + (o.nota ? '<span><i></i>' + o.nota + '</span>' : '') + '</div>';
+    }
+    if (o.opacidade) {
+      var p = o.opacidade;
+      h += '<div class="op"><input type="range"' + (p.id ? ' id="' + p.id + '"' : '') + ' min="' + (p.min || 0.1) + '" max="' + (p.max || 1) +
+        '" step="' + (p.step || 0.05) + '" value="' + p.v + '" aria-label="Opacidade: ' + o.label.replace(/<[^>]+>/g, '') + '"></div>';
+    }
+    row.innerHTML = h;
+    container.appendChild(row);
+    var cb = row.querySelector('input[type=checkbox]');
+    cb.addEventListener('change', function () {
+      row.classList.toggle('off', !cb.checked);
+      if (o.onToggle) o.onToggle(cb.checked);
+    });
+    var op = row.querySelector('.op input');
+    if (op) op.addEventListener('input', function () { o.opacidade.onInput(+op.value); });
+    return { row: row, cb: cb, op: op };
+  };
+
+  /* Cria camadas de máscara + linhas do painel para defs [{id,label,color,show,op,ha}] (dados em
      MU.DADOS[tema.dados][id]) e guarda-as em tema._camadas, para activar/desactivar em bloco. */
-  MU.addCamadas = async function (tema, box, defs, editavel) {
+  MU.addCamadas = async function (tema, box, defs, esc) {
     tema._camadas = tema._camadas || [];
     for (var i = 0; i < defs.length; i++) {
       var c = defs[i];
-      var cam = await MU.camadaMascara({ src: MU.DADOS[tema.dados][c.id], color: c.color });
+      var cam = await MU.camadaMascara({ src: MU.DADOS[tema.dados][c.id], color: c.color, op: c.op });
       var l = { cam: cam, linha: null };
       l.linha = MU.linha(box, {
-        label: c.label, checked: c.show !== false, color: c.color, editavel: editavel,
+        label: c.label, checked: c.show !== false, color: c.color, ha: c.ha, esc: esc,
         onToggle: (function (l) {
           return function (on) {
             if (MU.tema !== tema.id) return;
             on ? l.cam.overlay.addTo(MU.map) : MU.map.removeLayer(l.cam.overlay);
           };
         })(l),
-        onColor: (function (l) { return function (hex) { l.cam.setColor(hex); }; })(l)
+        opacidade: { v: c.op == null ? 1 : c.op, onInput: (function (l) { return function (v) { l.cam.overlay.setOpacity(v); }; })(l) }
       });
       tema._camadas.push(l);
     }
@@ -252,9 +425,79 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
     return MU._dadosP[nome];
   };
 
+  /* ---------- ficha (parque ou candidato), no canto do mapa ---------- */
+  MU.ficha = function (f) {
+    var box = document.getElementById('ficha');
+    if (MU._sel) { MU._sel.grupo.resetStyle(MU._sel.layer); MU._sel = null; }
+    if (!f) { box.classList.remove('on'); box.innerHTML = ''; return; }
+    if (f.layer && f.grupo) { MU._sel = { layer: f.layer, grupo: f.grupo }; f.layer.setStyle({ color: TINTA, weight: 2.6 }); }
+    box.style.setProperty('--fc', f.cor || PARQUE);
+    box.innerHTML = '<button type="button" class="x" aria-label="Fechar a ficha">×</button><h3>' + f.titulo + '</h3><p class="sub">' + f.sub + '</p><dl>' +
+      f.linhas.map(function (l) { return '<dt>' + l[0] + '</dt><dd>' + l[1] + '</dd>'; }).join('') + '</dl>' +
+      (f.rel != null ? '<div class="cmp">Área face ao Parque da Cidade (' + MU.n(MU._maiorParque, 2) + ' ha)<div class="med"><i style="width:' +
+        Math.max(1, f.rel * 100).toFixed(1) + '%"></i></div></div>' : '');
+    box.classList.add('on');
+    box.querySelector('.x').onclick = function () { MU.ficha(null); };
+  };
+
+  /* ---------- parques e jardins: camada comum (cheia ou só contorno), ficha, «Ir para um parque» ---------- */
+  var TIPO_P = { jardim: 'Jardim', parque: 'Parque', 'praça': 'Praça', quinta: 'Quinta' };
+  MU._parques = {};
+  MU.fichaParque = function (i, layer, grupo) {
+    var P = MU.PARQUES[i], g = P.f.properties, S = MU.DADOS.contexto.stats, c = P.centro;
+    MU.ficha({
+      titulo: g.nome, cor: PARQUE, layer: layer, grupo: grupo,
+      sub: (TIPO_P[g.tipo] || g.tipo || '') + ' · polígono ' + (g.fonte === 'osm' ? 'OpenStreetMap' : 'CMP'),
+      linhas: [['Área', MU.n(g.area_calc_ha || 0, 2) + ' ha'],
+               ['Dos parques do concelho', MU.n((g.area_calc_ha || 0) / S.parques_ha * 100, 1) + ' %'],
+               ['Centro', MU.n(c.lat, 4) + ' N, ' + MU.n(Math.abs(c.lng), 4) + ' O']],
+      rel: (g.area_calc_ha || 0) / MU._maiorParque
+    });
+  };
+  MU.parques = function (estilo) {   // 'cheio' | 'contorno'
+    if (MU._parques[estilo]) return MU._parques[estilo];
+    var cont = estilo === 'contorno';
+    var g = L.geoJson(MU.DADOS.contexto.parques, {
+      pane: 'parquesPane',
+      style: function () {
+        return cont ? { color: PARQUE, weight: 1.6, opacity: 1, fillColor: PARQUE, fillOpacity: 0 }
+                    : { color: PARQUE_ORLA, weight: 0.9, opacity: 1, fillColor: PARQUE, fillOpacity: 1 };
+      },
+      onEachFeature: function (f, layer) {
+        layer.on('click', function (e) {
+          L.DomEvent.stopPropagation(e);
+          MU.fichaParque(MU.DADOS.contexto.parques.features.indexOf(f), layer, g);
+        });
+      }
+    });
+    g.on('add remove', function () { MU.desenharCarta(); });
+    return (MU._parques[estilo] = g);
+  };
+  MU.parquesVisiveis = function () {
+    return Object.keys(MU._parques).some(function (k) { return MU.map.hasLayer(MU._parques[k]); });
+  };
+  /* linha «Parques e jardins» de um tema; tema.linhaParques serve ao «Ir para um parque» */
+  MU.linhaParques = function (tema, box, o) {
+    var camada = MU.parques(o.contorno ? 'contorno' : 'cheio');
+    tema._parquesCamada = camada;
+    tema.linhaParques = MU.linha(box, {
+      label: o.label || 'Parques e jardins', checked: o.on, color: PARQUE, contorno: o.contorno,
+      ha: o.ha === false ? null : MU.DADOS.contexto.stats.parques_ha, esc: o.esc,
+      onToggle: function (on) {
+        if (MU.tema !== tema.id) return;
+        on ? camada.addTo(MU.map) : MU.map.removeLayer(camada);
+      },
+      opacidade: { v: 1, onInput: function (v) { camada.setStyle(o.contorno ? { opacity: v } : { fillOpacity: v }); } }
+    });
+    return tema.linhaParques;
+  };
+  MU.activarParques = function (tema) { if (tema.linhaParques && tema.linhaParques.cb.checked) tema._parquesCamada.addTo(MU.map); };
+  MU.desactivarParques = function (tema) { if (tema._parquesCamada) MU.map.removeLayer(tema._parquesCamada); };
+
   /* ---------- fundos de mapa (lista única; temas podem acrescentar o seu) ---------- */
   var ATTR = '&copy; OpenStreetMap';
   MU.FUNDOS = [
+    { id: 'carta', nome: 'Carta (sem mosaicos)', criar: function () { return MU.ctx.carta(); } },
     { id: 'positron', nome: 'CartoDB Positron', url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_4uwz_1_ae45539b82f652a6fa47db0a' },
     { id: 'dark', nome: 'CartoDB Dark', url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_4uwz_1_ae45539b82f652a6fa47db0a' },
     { id: 'osm', nome: 'OpenStreetMap', url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_4uwz_1_ae45539b82f652a6fa47db0a' },
@@ -267,44 +510,75 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
     if (MU.baseTile) MU.map.removeLayer(MU.baseTile);
     MU.baseTile = f.criar ? f.criar() : L.tileLayer(f.url, { maxZoom: 19, attribution: ATTR });
     MU.baseTile.addTo(MU.map);
-    MU.baseTile.bringToBack();
+    if (MU.baseTile.bringToBack) MU.baseTile.bringToBack();
     MU.fundoActual = id;
+    MU.map.getContainer().classList.toggle('fundo-carta', id === 'carta');
     document.getElementById('fundo-select').value = id;
+    MU.desenharCarta();
   };
 
-  /* ---------- Contexto comum (limites, densidade) ---------- */
-  MU.ctx = { itens: {}, estado: {} };   // estado[temaId] = {limites:{on,cor}, densidade:{on}}
-  var CTX_DEF = { limites: { on: true, cor: '#444444' }, densidade: { on: false } };
+  /* ---------- Contexto comum (limites, densidade) e peças do fundo «Carta» ---------- */
+  MU.ctx = { itens: {}, estado: {} };   // estado[temaId] = {limites:{on}, densidade:{on}}
+  var CTX_DEF = { limites: { on: true }, densidade: { on: false } };
 
   async function montarContexto() {
     var d = await MU.carregarDados('contexto');
     var map = MU.map;
-    map.createPane('bgPane'); map.getPane('bgPane').style.zIndex = 250;
-    map.createPane('limitesPane'); map.getPane('limitesPane').style.zIndex = 440;
-    var lim = await MU.camadaMascara({ src: d.municipios, color: '#444444', pane: 'limitesPane' });
+    var lim = await MU.camadaMascara({ src: d.municipios, color: TINTA, pane: 'limitesPane', op: 0.9 });
     var dens = L.imageOverlay(d.ghspop, BOUNDS, { opacity: 0.7, pane: 'bgPane' });
     MU.ctx.itens = { limites: lim, densidade: dens };
+    /* fundo «Carta»: placa de papel, água (Landsat, layers_historico/rio.png) e véu sobre os concelhos vizinhos */
+    var agua = await MU.extractMask(d.agua), fora = await MU.extractMask(d.fora);
+    var placa = L.rectangle(BOUNDS, { pane: 'cartaPane', stroke: false, fillColor: '#E6EDEB', fillOpacity: 1, interactive: false });
+    var ovAgua = L.imageOverlay(MU.renderColored(agua, '#A9CADB'), BOUNDS, { pane: 'cartaPane' });
+    var veu = L.imageOverlay(MU.renderColored(fora, '#E6EDEB'), BOUNDS, { pane: 'veuPane', opacity: 0.58 });
+    MU.ctx.carta = function () { return L.featureGroup([placa, ovAgua, veu]); };
     var box = document.getElementById('ctx-rows');
     MU.ctx.rowLim = MU.linha(box, {
-      label: 'Limites municipais', checked: true, color: '#444444', editavel: true,
-      onToggle: function (on) { on ? lim.overlay.addTo(map) : map.removeLayer(lim.overlay); },
-      onColor: function (hex) { lim.setColor(hex); }
+      label: 'Limites municipais', checked: true, color: TINTA,
+      onToggle: function (on) { on ? lim.overlay.addTo(map) : map.removeLayer(lim.overlay); }
     });
     MU.ctx.rowDens = MU.linha(box, {
-      label: 'Densidade populacional', checked: false,
+      label: 'Densidade populacional (GHS-POP)', checked: false, color: '#8b6934',
       onToggle: function (on) {
         on ? dens.addTo(map) : map.removeLayer(dens);
-        document.getElementById('pop-legend').style.display = on ? 'block' : 'none';
+        document.getElementById('pop-legend').style.display = on ? 'flex' : 'none';
       }
     });
+    /* parques: índice para o «Ir para um parque», rótulos e fichas */
+    MU.PARQUES = d.parques.features.map(function (f) {
+      var b = L.geoJson(f).getBounds();
+      return { f: f, b: b, centro: b.getCenter() };
+    });
+    MU._maiorParque = Math.max.apply(null, d.parques.features.map(function (f) { return f.properties.area_calc_ha || 0; }));
+    var sel = document.getElementById('ir');
+    sel.innerHTML = '<option value="">Ir para um parque…</option>' + MU.PARQUES.map(function (p, i) { return i; })
+      .sort(function (a, b) { return MU.PARQUES[a].f.properties.nome.localeCompare(MU.PARQUES[b].f.properties.nome, 'pt'); })
+      .map(function (i) { return '<option value="' + i + '">' + MU.PARQUES[i].f.properties.nome + '</option>'; }).join('');
+    sel.addEventListener('change', function () {
+      if (sel.value === '') return;
+      var i = +sel.value, t = MU.TEMAS[MU.tema], P = MU.PARQUES[i];
+      if (t && t.linhaParques && !t.linhaParques.cb.checked) { t.linhaParques.cb.checked = true; t.linhaParques.cb.dispatchEvent(new Event('change')); }
+      map.fitBounds(P.b, { maxZoom: 17, padding: [80, 80] });
+      var g = t && t._parquesCamada, lay = null;
+      if (g) g.eachLayer(function (l) { if (l.feature === P.f) lay = l; });
+      MU.fichaParque(i, lay, g);
+    });
+    verdes(d.stats);
+  }
+
+  /* legenda fixa: os três verdes numa escala comum (0-1000 ha) */
+  function verdes(S) {
+    var V = [['#0B5232', 'Parques e jardins', S.parques_ha], ['#D9642B', 'Verde pago ou não usufruível', S.pago], ['#D6C496', 'Verde privado', S.privado]];
+    document.getElementById('verdes').innerHTML = '<h3>Os três verdes <span>ha no concelho</span></h3>' + V.map(function (v) {
+      return '<div class="vd"><i style="background:' + v[0] + '"></i><span>' + v[1] + '</span><span class="ha">' + MU.n(v[2]) + ' ha</span>' +
+        '<div class="med"><i style="background:' + v[0] + ';width:' + (v[2] / 1000 * 100).toFixed(1) + '%"></i></div></div>';
+    }).join('') + '<div class="esc" aria-hidden="true"><span>0</span><span>250</span><span>500</span><span>750</span><span>1000 ha</span></div>';
   }
 
   function guardarCtx(id) {
     if (!MU.ctx.rowLim) return;
-    MU.ctx.estado[id] = {
-      limites: { on: MU.ctx.rowLim.cb.checked, cor: MU.ctx.itens.limites.cor },
-      densidade: { on: MU.ctx.rowDens.cb.checked }
-    };
+    MU.ctx.estado[id] = { limites: { on: MU.ctx.rowLim.cb.checked }, densidade: { on: MU.ctx.rowDens.cb.checked } };
   }
   function aplicarCtx(t) {
     if (!MU.ctx.rowLim) return;
@@ -312,16 +586,154 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
       limites: Object.assign({}, CTX_DEF.limites, (t.ctx || {}).limites),
       densidade: Object.assign({}, CTX_DEF.densidade, (t.ctx || {}).densidade)
     };
-    var lim = MU.ctx.itens.limites;
-    lim.setColor(e.limites.cor);
-    MU.ctx.rowLim.cor.value = e.limites.cor;
     MU.ctx.rowLim.cb.checked = e.limites.on;
     MU.ctx.rowLim.cb.dispatchEvent(new Event('change'));
     MU.ctx.rowDens.cb.checked = e.densidade.on;
     MU.ctx.rowDens.cb.dispatchEvent(new Event('change'));
   }
 
+  /* ---------- moldura de carta: quadrícula, esquadria, área fora do estudo, rótulos ---------- */
+  /* âncoras dos rótulos de lugares (centróides OSM/Nominatim da maquete V2b; posições fixas, sem pedidos à rede) */
+  var LUGARES = [
+    { n: 'Foz do Douro', lon: -8.6702, lat: 41.1514, k: 'f' }, { n: 'Lordelo do Ouro', lon: -8.6517, lat: 41.1531, k: 'f' },
+    { n: 'Ramalde', lon: -8.6433, lat: 41.1700, k: 'f' }, { n: 'Boavista', lon: -8.6291, lat: 41.1579, k: 'f' },
+    { n: 'Paranhos', lon: -8.6058, lat: 41.1739, k: 'f' }, { n: 'Baixa', lon: -8.6108, lat: 41.1483, k: 'f' },
+    { n: 'Bonfim', lon: -8.5940, lat: 41.1511, k: 'f' }, { n: 'Campanhã', lon: -8.5750, lat: 41.1544, k: 'f' },
+    { n: 'Matosinhos', lon: -8.6870, lat: 41.1860, k: 'm' }, { n: 'Maia', lon: -8.6150, lat: 41.1880, k: 'm' },
+    { n: 'Gondomar', lon: -8.5520, lat: 41.1520, k: 'm' }, { n: 'Vila Nova de Gaia', lon: -8.6200, lat: 41.1330, k: 'm' },
+    { n: 'Rio Douro', lon: -8.6235, lat: 41.1397, k: 'a', rot: 0.02 }, { n: 'Oceano Atlântico', lon: -8.6930, lat: 41.1610, k: 'a', rot: -Math.PI / 2 }
+  ];
+  var CV = null;
+  function passo(pxDeg) {
+    var st = [0.001, 0.002, 0.005, 0.01, 0.02, 0.05];
+    for (var i = 0; i < st.length; i++) if (st[i] * pxDeg >= 90) return st[i];
+    return 0.05;
+  }
+  MU.desenharCarta = function () {
+    var map = MU.map;
+    if (!map || !CV) return;
+    if (MU._rafCarta) return;
+    MU._rafCarta = requestAnimationFrame(function () { MU._rafCarta = 0; desenhar(); });
+  };
+  function desenhar() {
+    var map = MU.map, sz = map.getSize(), W = sz.x, H = sz.y, d = window.devicePixelRatio || 1;
+    if (!W || !H) return;
+    L.DomUtil.setPosition(CV, map.containerPointToLayerPoint([0, 0]));
+    if (CV.width !== Math.round(W * d) || CV.height !== Math.round(H * d)) {
+      CV.width = Math.round(W * d); CV.height = Math.round(H * d); CV.style.width = W + 'px'; CV.style.height = H + 'px';
+    }
+    var x = CV.getContext('2d'), carta = MU.fundoActual === 'carta';
+    var SUAVE = '#4B6270', GRADE = 'rgba(16,33,44,.10)', FORA = '#F3F4F0', HALO = carta ? '#E6EDEB' : '#FFFFFF';
+    x.setTransform(d, 0, 0, d, 0, 0); x.clearRect(0, 0, W, H);
+    var a0 = map.latLngToContainerPoint([B.N, B.W]), a1 = map.latLngToContainerPoint([B.S, B.E]);
+    /* esquadria da área de estudo */
+    x.strokeStyle = TINTA; x.lineWidth = 1;
+    x.strokeRect(Math.round(a0.x) + .5, Math.round(a0.y) + .5, Math.round(a1.x - a0.x), Math.round(a1.y - a0.y));
+    /* quadrícula de coordenadas (só dentro da placa) e graduação na esquadria */
+    var st = passo((a1.x - a0.x) / (B.E - B.W)), dec = st < 0.01 ? 3 : 2, lon, lat, q;
+    var cx0 = Math.max(a0.x, 0), cy0 = Math.max(a0.y, 0), cx1 = Math.min(a1.x, W), cy1 = Math.min(a1.y, H);
+    var lons = [], lats = [];
+    for (lon = Math.ceil(B.W / st - 1e-9) * st; lon <= B.E + 1e-9; lon += st) lons.push([lon, map.latLngToContainerPoint([B.N, lon]).x]);
+    for (lat = Math.ceil(B.S / st - 1e-9) * st; lat <= B.N + 1e-9; lat += st) lats.push([lat, map.latLngToContainerPoint([lat, B.W]).y]);
+    if (cx1 > cx0 && cy1 > cy0) {
+      x.save(); x.beginPath(); x.rect(cx0, cy0, cx1 - cx0, cy1 - cy0); x.clip();
+      x.strokeStyle = GRADE; x.beginPath();
+      lons.forEach(function (p) { x.moveTo(Math.round(p[1]) + .5, cy0); x.lineTo(Math.round(p[1]) + .5, cy1); });
+      lats.forEach(function (p) { x.moveTo(cx0, Math.round(p[1]) + .5); x.lineTo(cx1, Math.round(p[1]) + .5); });
+      x.stroke(); x.restore();
+    }
+    x.font = '400 10.5px "IBM Plex Mono", monospace'; x.fillStyle = SUAVE; x.strokeStyle = TINTA;
+    var topo = Math.max(a0.y, 0), esq = Math.max(a0.x, 0);
+    x.textAlign = 'center';
+    lons.forEach(function (p) {
+      if (p[1] < esq + 30 || p[1] > W - 120) return;
+      x.beginPath(); x.moveTo(p[1], topo); x.lineTo(p[1], topo + 6); x.stroke();
+      x.textBaseline = topo > 18 ? 'bottom' : 'top';
+      x.fillText(MU.n(Math.abs(p[0]), dec) + '° O', p[1], topo > 18 ? topo - 3 : topo + 8);
+    });
+    lats.forEach(function (p) {
+      if (p[1] < topo + 40 || p[1] > H - 70) return;
+      x.beginPath(); x.moveTo(esq, p[1]); x.lineTo(esq + 6, p[1]); x.stroke();
+      x.save(); x.translate(esq > 18 ? esq - 4 : esq + 9, p[1]); x.rotate(-Math.PI / 2);
+      x.textBaseline = esq > 18 ? 'bottom' : 'top'; x.fillText(MU.n(p[0], dec) + '° N', 0, 0); x.restore();
+    });
+    /* rótulo da área fora do estudo (só no fundo «Carta», onde ela fica tracejada), na maior faixa visível */
+    if (carta) {
+      var faixas = [[a1.x, 0, W - a1.x, H], [0, 0, a0.x, H], [0, a1.y, W, H - a1.y], [0, 0, W, a0.y]]
+        .filter(function (f) { return f[2] > 150 && f[3] > 40; })
+        .sort(function (u, v) { return (v[1] === 0 && v[2] === W) - (u[1] === 0 && u[2] === W) || v[2] * v[3] - u[2] * u[3]; });   // faixa de cima primeiro, como na V2b (em baixo ficam os controlos)
+      if (faixas.length) {
+        var f = faixas[0], fx = f[0] + f[2] / 2, fy = f[1] + f[3] / 2;
+        if (f[1] === 0 && f[3] < H) fy = Math.max(14, Math.min(fy, f[3] - 40));
+        if (f[1] > 0) fy = Math.max(fy, f[1] + 40);
+        if (f[3] === H) fy = H / 2;
+        x.font = '400 11px "IBM Plex Mono", monospace'; x.textAlign = 'center'; x.textBaseline = 'middle';
+        var tw = x.measureText('Fora da área de estudo').width + 16;
+        x.fillStyle = FORA; x.fillRect(fx - tw / 2, fy - 10, tw, 20);
+        x.strokeStyle = GRADE; x.strokeRect(fx - tw / 2 + .5, fy - 9.5, tw - 1, 19);
+        x.fillStyle = SUAVE; x.fillText('Fora da área de estudo', fx, fy);
+      }
+    }
+    /* rótulos: parques primeiro (prioridade), depois lugares e água, sem sobreposição */
+    var caixas = [], livre = function (b) { return !caixas.some(function (c) { return b[0] < c[2] && b[2] > c[0] && b[1] < c[3] && b[3] > c[1]; }); };
+    var halo = function (t, X, Y) { x.lineWidth = 3.5; x.lineJoin = 'round'; x.strokeStyle = HALO; x.strokeText(t, X, Y); x.fillText(t, X, Y); };
+    if (MU.PARQUES && MU.parquesVisiveis()) {
+      x.font = '600 11.5px "IBM Plex Sans", sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+      MU.PARQUES.forEach(function (p) {
+        var nw = map.latLngToContainerPoint(p.b.getNorthWest()), se = map.latLngToContainerPoint(p.b.getSouthEast());
+        if (se.x - nw.x < 70 || se.x < 0 || nw.x > W || se.y < 0 || nw.y > H) return;
+        var c = map.latLngToContainerPoint(p.centro), nome = p.f.properties.nome, tw = x.measureText(nome).width;
+        var b = [c.x - tw / 2 - 3, c.y - 9, c.x + tw / 2 + 3, c.y + 9];
+        if (!livre(b)) return; caixas.push(b);
+        x.fillStyle = '#0B3A24'; x.lineWidth = 3.5; x.lineJoin = 'round'; x.strokeStyle = '#FFFFFF';
+        x.strokeText(nome, c.x, c.y); x.fillText(nome, c.x, c.y);
+      });
+    }
+    LUGARES.forEach(function (Lg) {
+      var q = map.latLngToContainerPoint([Lg.lat, Lg.lon]);
+      if (q.x < -100 || q.x > W + 100 || q.y < -30 || q.y > H + 30) return;
+      x.font = Lg.k === 'a' ? 'italic 400 13px "IBM Plex Serif", serif' : '600 12px "IBM Plex Sans", sans-serif';
+      var tw = x.measureText(Lg.n).width * 1.12;
+      var b = Lg.rot && Math.abs(Lg.rot) > 1 ? [q.x - 9, q.y - tw / 2, q.x + 9, q.y + tw / 2] : [q.x - tw / 2, q.y - 9, q.x + tw / 2, q.y + 9];
+      if (!livre(b)) return; caixas.push(b);
+      x.save(); x.translate(q.x, q.y); if (Lg.rot) x.rotate(Lg.rot);
+      x.textAlign = 'center'; x.textBaseline = 'middle';
+      if (Lg.k === 'a') {
+        x.font = 'italic 400 ' + (Lg.rot ? 13 : 12.5) + 'px "IBM Plex Serif", serif'; x.fillStyle = '#2F5A70'; x.letterSpacing = '0.12em';
+        x.lineWidth = 3; x.lineJoin = 'round'; x.strokeStyle = '#A9CADB'; x.strokeText(Lg.n, 0, 0); x.fillText(Lg.n, 0, 0);
+      } else if (Lg.k === 'm') {
+        x.font = '500 12px "IBM Plex Sans", sans-serif'; x.fillStyle = SUAVE; x.letterSpacing = '0.06em'; halo(Lg.n, 0, 0);
+      } else {
+        x.font = '600 11.5px "IBM Plex Sans", sans-serif'; x.fillStyle = TINTA; x.letterSpacing = '0.04em'; x.globalAlpha = 0.82; halo(Lg.n, 0, 0);
+      }
+      x.restore();
+    });
+    x.letterSpacing = '0px';
+  }
+
+  /* ---------- pé do mapa: escala, coordenadas; zoom ---------- */
+  function escala() {
+    var map = MU.map, y = map.getSize().y / 2;
+    var mpp = map.distance(map.containerPointToLatLng([0, y]), map.containerPointToLatLng([100, y])) / 100;
+    var op = [50, 100, 200, 250, 500, 1000, 2000, 5000];
+    var m = op.filter(function (v) { return v <= mpp * 100; }).pop() || 50;
+    document.querySelector('#pe .bar').style.width = (m / mpp).toFixed(1) + 'px';
+    document.querySelector('#pe .esc-t').textContent = m >= 1000 ? MU.n(m / 1000) + ' km' : m + ' m';
+  }
+  MU.verConcelho = function () {
+    var map = MU.map;
+    map.fitBounds([[41.138, -8.692], [41.186, -8.552]], { paddingTopLeft: [24, 56], paddingBottomRight: [24, 56], animate: false });
+    // ecrã estreito: o concelho inteiro ficaria minúsculo; aproxima ~2x sobre o centro (como a maquete)
+    if (map.getSize().x < 640) map.setView([41.158, -8.618], map.getZoom() + 1, { animate: false });
+  };
+
   /* ---------- temas ---------- */
+  var ICON = {
+    acessibilidade: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9.5" stroke-dasharray="2.5 2"/><circle cx="12" cy="12" r="3.5" fill="currentColor"/></svg>',
+    hoje: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h11l-3-3M20 17H9l3 3"/></svg>',
+    historico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 20h18M5 20v-4h4v4M10 20v-8h4v8M15 20V6h4v14"/></svg>',
+    privado: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18"/><rect x="8" y="8" width="8" height="8" fill="currentColor" stroke="none"/></svg>'
+  };
   MU.registarTema = function (t) { MU.TEMAS[t.id] = t; MU.ORDEM.push(t.id); };
 
   MU.abrirTema = async function (id) {
@@ -331,13 +743,15 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
       var ant = MU.TEMAS[MU.tema];
       guardarCtx(ant.id);
       ant.desactivar();
-      document.getElementById('tema-' + ant.id).style.display = 'none';
     }
+    MU.ficha(null);
     MU.tema = id;
     var painel = document.getElementById('tema-' + id);
-    painel.style.display = 'block';
-    document.querySelectorAll('.tabs button').forEach(function (b) {
-      b.classList.toggle('active', b.dataset.tema === id);
+    document.querySelectorAll('.tema').forEach(function (d) {
+      var on = d.dataset.t === id;
+      d.classList.toggle('on', on);
+      d.firstChild.setAttribute('aria-expanded', on);
+      d.firstChild.lastChild.textContent = on ? '' : 'abrir';
     });
     if (!t._montado) {
       t._montado = true;
@@ -352,18 +766,22 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
         throw e;
       }
     }
-    if (MU.tema !== id) return;   // o utilizador mudou de separador entretanto
-    // cada tema abre com o fundo da página original; depois de o utilizador escolher um, essa escolha persiste
-    // fundos exclusivos de um tema (p.ex. Ortofoto 1947) só aparecem nesse tema e saem dele ao mudar de separador
+    if (MU.tema !== id) return;   // o utilizador mudou de tema entretanto
+    painel.appendChild(document.getElementById('ctx-bloco'));   // contexto, fundo e fonte vão com o tema aberto
+    var pn = document.getElementById('panel');
+    if (window.innerWidth <= 760 && !pn.classList.contains('aberto')) pn.scrollTop = painel.parentNode.offsetTop - document.getElementById('alca').offsetHeight;
+    // cada tema abre com o seu fundo; depois de o utilizador escolher um, essa escolha persiste
+    // fundos exclusivos de um tema (p.ex. Ortofoto 1947) só aparecem nesse tema e saem dele ao mudar de tema
     var fSel = document.getElementById('fundo-select');
     MU.FUNDOS.forEach(function (f) {
       if (f.so) [].forEach.call(fSel.options, function (o) { if (o.value === f.id) o.hidden = (f.so !== id); });
     });
     var fAct = MU.FUNDOS.filter(function (f) { return f.id === MU.fundoActual; })[0];
-    if (!MU.fundoManual || (fAct && fAct.so && fAct.so !== id)) MU.setFundo(t.fundo || 'positron');
-    document.getElementById('fonte').innerHTML = t.fonte || '';
+    if (!MU.fundoManual || (fAct && fAct.so && fAct.so !== id)) MU.setFundo(t.fundo || 'carta');
+    document.getElementById('fonte').innerHTML = t.fonte ? 'Fonte: ' + t.fonte : '';
     aplicarCtx(t);
     t.activar();
+    MU.desenharCarta();
   };
 
   /* parâmetro do hash (#tema=acessibilidade&vista=propostas) */
@@ -383,17 +801,21 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
   }
 
   MU.iniciar = async function () {
-    var map = MU.map = L.map('map').setView([41.155, -8.63], 13);
-    var tabs = document.getElementById('tabs');
+    var map = MU.map = L.map('map', { zoomControl: false, zoomSnap: 0.25, zoomDelta: 0.5, wheelPxPerZoomLevel: 120 });
+    map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+    [['cartaPane', 210], ['bgPane', 250], ['parquesPane', 540], ['veuPane', 560], ['limitesPane', 565], ['rotPane', 640]]
+      .forEach(function (p) { map.createPane(p[0]); map.getPane(p[0]).style.zIndex = p[1]; });
+    ['veuPane', 'limitesPane', 'rotPane'].forEach(function (p) { map.getPane(p).style.pointerEvents = 'none'; });
+    MU.verConcelho();
+    var temas = document.getElementById('temas');
     MU.ORDEM.forEach(function (id) {
       var t = MU.TEMAS[id];
-      var b = document.createElement('button');
-      b.dataset.tema = id; b.textContent = t.rotulo;
-      b.addEventListener('click', function () { location.hash = 'tema=' + id; });
-      tabs.appendChild(b);
       var d = document.createElement('div');
-      d.id = 'tema-' + id; d.style.display = 'none';
-      document.getElementById('temas').appendChild(d);
+      d.className = 'tema'; d.dataset.t = id;
+      d.innerHTML = '<button type="button" aria-expanded="false">' + (ICON[id] || '') + '<span>' + t.rotulo + '</span><span class="q">abrir</span></button>' +
+        '<div class="corpo" id="tema-' + id + '"></div>';
+      d.firstChild.addEventListener('click', function () { location.hash = 'tema=' + id; });
+      temas.appendChild(d);
     });
     var sel = document.getElementById('fundo-select');
     MU.FUNDOS.forEach(function (f) {
@@ -405,303 +827,343 @@ hr { border:0; border-top:1px solid #ddd; margin:10px 0 6px 0; }
       if (id === MU.tema) { var t = MU.TEMAS[id]; if (t.aoHash) t.aoHash(); }  // só mudou um parâmetro
       else MU.abrirTema(id);
     });
+    /* controlos do mapa (fora do arrasto do Leaflet) */
+    ['ficha', 'ir', 'zoom', 'pe'].forEach(function (k) {
+      var e = document.getElementById(k); L.DomEvent.disableClickPropagation(e); L.DomEvent.disableScrollPropagation(e);
+    });
+    document.querySelectorAll('#zoom button').forEach(function (b) {
+      b.onclick = function () { var z = +b.dataset.z; if (z > 0) map.zoomIn(); else if (z < 0) map.zoomOut(); else MU.verConcelho(); };
+    });
+    map.on('mousemove', function (e) { document.querySelector('#pe .xy').textContent = MU.n(e.latlng.lat, 4) + '° N  ' + MU.n(Math.abs(e.latlng.lng), 4) + '° O'; });
+    map.on('mouseout', function () { document.querySelector('#pe .xy').textContent = '—'; });
+    map.on('click', function () { MU.ficha(null); });
+    map.on('zoomend moveend resize', escala);
+    map.on('move zoomend resize', MU.desenharCarta);
+    CV = L.DomUtil.create('canvas', 'mu-carta-canvas', map.getPane('rotPane'));
+    if (window.ResizeObserver) new ResizeObserver(function () { map.invalidateSize(); MU.desenharCarta(); }).observe(map.getContainer());
+    /* painel em folha deslizante no telemóvel */
+    var pn = document.getElementById('panel'), alca = document.getElementById('alca');
+    alca.addEventListener('click', function () {
+      var on = !pn.classList.contains('aberto'); pn.classList.toggle('aberto', on);
+      alca.setAttribute('aria-expanded', on); alca.textContent = on ? 'Esconder o painel' : 'Mostrar camadas e números';
+    });
+    var rodape = function () {
+      var r = document.querySelector('.pv-rodape');
+      if (r && window.ResizeObserver) new ResizeObserver(function () { document.documentElement.style.setProperty('--rodh', r.offsetHeight + 'px'); }).observe(r);
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', rodape); else rodape();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(MU.desenharCarta);
     await montarContexto();
+    escala();
     MU.abrirTema(temaDoHash());
   };
 })();
 
-/* Tema «Mapa 2016-2025» (antes mapa/mapa.html): uso do solo 2024-25 e transições 2016 → 2025. */
-MU.registarTema({
-  id: 'hoje',
-  rotulo: 'Mapa 2016-2025',
-  fundo: 'dark',
-  dados: 'hoje',
-  ctx: { limites: { on: true, cor: '#FFFFFF' }, densidade: { on: false } },
-  fonte: 'Fonte: Sentinel-2 (ESA) &bull; Copernicus',
-
-  async montar(painel) {
-    painel.innerHTML =
-      '<b style="font-size:14px;">Espa&ccedil;o verde do Porto</b><br>' +
-      '<span class="tema-sub">2016-17 &rarr; 2024-25 &bull; Sentinel-2 10m</span>' +
-      '<div class="section">Uso do solo (2024-25)</div><div class="uso"></div>' +
-      '<div class="section">Transi&ccedil;&otilde;es (2016 &rarr; 2025)</div><div class="trans"></div>';
-    await MU.addCamadas(this, painel.querySelector('.uso'), [
-      { id: 'uso_arvores', label: 'Árvores (2024-25)', color: '#228B22', show: false },
-      { id: 'uso_solo', label: 'Solo (2024-25)', color: '#C2B280', show: false },
-      { id: 'uso_edificado', label: 'Edificado (2024-25)', color: '#888888', show: false }
-    ], true);
-    await MU.addCamadas(this, painel.querySelector('.trans'), [
-      { id: 'arvores_edificado', label: 'Árvores → Edificado', color: '#D7263D' },
-      { id: 'arvores_solo', label: 'Árvores → Solo', color: '#E8A838' },
-      { id: 'solo_edificado', label: 'Solo → Edificado', color: '#6A1B9A' },
-      { id: 'solo_arvores', label: 'Solo → Árvores', color: '#2E7D32' }
-    ], true);
-  },
-
-  activar() { MU.activarCamadas(this); },
-  desactivar() { MU.desactivarCamadas(this); }
-});
-
 /* Tema «Acessibilidade e propostas» (antes acessibilidade/acessibilidade_verde.html e
    acessibilidade/conversao_verde.html). Duas vistas do mesmo mapa:
    «actual» = situação actual; «propostas» = simulação com os 46 candidatos a conversão. */
-MU.registarTema({
-  id: 'acessibilidade',
-  rotulo: 'Acessibilidade e propostas',
-  fundo: 'positron',
-  dados: 'acessibilidade',
-  ctx: { limites: { on: true, cor: '#444444' }, densidade: { on: false } },
-  fonte: 'Sentinel-2 10m (ESA) &bull; GHS-POP 100m (JRC)<br>78 parques e jardins (CMP + OSM)<br>' +
-         'M&eacute;todo: Two-Step Floating Catchment Area',
+(function () {
+  /* paleta das categorias (maquete V2b); as imagens chegam já recoloridas de mapa_unico.py (RECOLOR_ACC) */
+  var CAT = { crit: '#A23B86', insuf: '#E6A6CC', adeq: '#3E6AB3', baixa: '#C8C8C8' };
+  var TIPO = {
+    'Estrategia de expansao (CMP)': { cor: '#00A884', rot: 'Estratégia de expansão (CMP)' },
+    'Verde em PDM / fechado ao publico': { cor: '#D9642B', rot: 'Verde em PDM fechado ao público' },
+    'Verde privado': { cor: '#D6C496', rot: 'Verde privado' }
+  };
+  var orla = function (hex) {   // contorno tracejado: a própria cor escurecida para a tinta
+    var a = MU.hexToRgb(hex), b = MU.hexToRgb('#10212C');
+    return '#' + a.map(function (v, i) { return ('0' + Math.round(v + (b[i] - v) * 0.4).toString(16)).slice(-2); }).join('');
+  };
 
-  vista: 'actual',       // 'actual' | 'propostas'
-  ind: 'acc',            // 'acc' | 'prox' | null
-  _ov: {},               // cache de overlays: _ov[chave]
-  _nomesCand: true,
+  MU.registarTema({
+    id: 'acessibilidade',
+    rotulo: 'Acessibilidade e propostas',
+    fundo: 'carta',
+    dados: 'acessibilidade',
+    ctx: { limites: { on: true }, densidade: { on: false } },
+    fonte: 'Sentinel-2 10 m (ESA) &middot; GHS-POP 100 m (JRC) &middot; 78 parques e jardins (CMP, OSM) &middot; ' +
+           'm&eacute;todo Two-Step Floating Catchment Area (2SFCA). Hectares por contagem de p&iacute;xeis (&asymp; 57 m&sup2; cada) dentro do concelho.',
+
+    vista: 'actual',       // 'actual' | 'propostas'
+    ind: null,             // 'acc' | 'prox' | null
+    _ov: {},               // cache de overlays: _ov[chave]
+    _nomesCand: true,
+
+    async montar(painel) {
+      var self = this, D = MU.DADOS.acessibilidade, C = MU.DADOS.contexto, S = C.stats, map = MU.map;
+      map.createPane('accPane'); map.getPane('accPane').style.zIndex = 450;
+      map.createPane('lowPopPane'); map.getPane('lowPopPane').style.zIndex = 475;
+      map.createPane('accMonoPane'); map.getPane('accMonoPane').style.zIndex = 480;
+      map.createPane('candGeoPane'); map.getPane('candGeoPane').style.zIndex = 550;
+
+      var P = D.meta;
+      this._num = {
+        actual: { prox: P.pct_actual, acc: P.sfca_actual_pct },
+        propostas: { prox: P.pct_simulado, acc: P.sfca_sim_pct }
+      };
+      var esc = MU.escala([S.parques_ha, S.pago, S.privado]);
+
+      painel.innerHTML =
+        '<p class="desc">Quem vive a menos de 300 m de um parque com pelo menos 0,4 ha, e quanto verde p&uacute;blico cabe a cada habitante ' +
+        'num raio de 500 m. &laquo;Com propostas&raquo; junta 46 espa&ccedil;os candidatos a convers&atilde;o.</p>' +
+        '<div class="nums" id="ac-nums"></div>' +
+        '<div class="seg" id="ac-vista" role="group" aria-label="Vista">' +
+          '<button type="button" data-v="actual">Situa&ccedil;&atilde;o actual</button>' +
+          '<button type="button" data-v="propostas">Com 46 propostas</button></div>' +
+        '<div id="ac-intro" class="tema-sub" style="display:none;margin:6px 0 0;">Simula&ccedil;&atilde;o sequencial para atingir 80% de cobertura a &le; 300 m (Konijnendijk 3-30-300).</div>' +
+        MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div id="ac-camadas"></div>';
+
+      var box = painel.querySelector('#ac-camadas');
+
+      // --- Parques e jardins (camada comum; clicar abre a ficha) ---
+      this._lParques = MU.linhaParques(this, box, { on: true, esc: esc });
+
+      // --- verde pago e verde privado (todas as áreas): pré-coloridos em Python, cores fixas das camadas ---
+      this._mono = [];
+      [[C.pago, 'Verde pago ou n&atilde;o usufru&iacute;vel', '#D9642B', S.pago],
+       [D.imgs.privado, 'Verde privado', '#D6C496', S.privado]].forEach(function (d) {
+        var ov = L.imageOverlay(d[0], MU.BOUNDS, { pane: 'accMonoPane' });
+        var l = MU.linha(box, {
+          label: d[1], checked: true, color: d[2], ha: d[3], esc: esc,
+          onToggle: function (on) { self._toggle(ov, on); },
+          opacidade: { v: 1, onInput: function (v) { ov.setOpacity(v); } }
+        });
+        self._mono.push({ ov: ov, linha: l });
+      });
+
+      // --- indicadores (um de cada vez): verde público a 500 m por habitante, parque a 300 m ---
+      this._opInd = 0.75;
+      var opInd = { v: 0.75, onInput: function (v) { self._opInd = v; Object.keys(self._ov).forEach(function (k) { self._ov[k].setOpacity(v); }); } };
+      this._lInd = {
+        acc: MU.linha(box, {
+          label: 'Verde p&uacute;blico a 500 m, por habitante', checked: false,
+          color: 'linear-gradient(90deg,' + CAT.crit + ' 0 33%,' + CAT.insuf + ' 33% 66%,' + CAT.adeq + ' 66%)',
+          leg: [[CAT.crit, '0 a 3 m&sup2;, d&eacute;fice cr&iacute;tico'], [CAT.insuf, '3 a 9 m&sup2;, insuficiente'],
+                [CAT.adeq, 'mais de 9 m&sup2;, adequado (OMS: &ge; 9 m&sup2;/hab)'], [CAT.baixa, 'baixa densidade']],
+          onToggle: function (on) { self._setInd(on ? 'acc' : null); }, opacidade: opInd
+        }),
+        prox: MU.linha(box, {
+          label: 'Parque a 300 m ou menos', checked: false,
+          color: 'linear-gradient(90deg,' + CAT.adeq + ' 0 50%,' + CAT.crit + ' 50%)',
+          leg: [[CAT.adeq, 'a 300 m ou menos de um parque &ge; 0,4 ha'], [CAT.crit, 'a mais de 300 m'], [CAT.baixa, 'baixa densidade']],
+          onToggle: function (on) { self._setInd(on ? 'prox' : null); }, opacidade: opInd
+        })
+      };
+
+      // --- Candidatos a conversão (GeoJSON tracejado; clicar abre a ficha; nomes a partir do zoom 14) ---
+      this._cand = L.geoJson(D.candidatos, {
+        pane: 'candGeoPane',
+        filter: function (f) { return !/^Parques e Jardins j/.test(f.properties.tipo); },
+        style: function (f) {
+          var c = (TIPO[f.properties.tipo] || {}).cor || '#888888';
+          return { color: orla(c), weight: 1.6, opacity: 1, dashArray: '5 3', fillColor: c, fillOpacity: 0.6 };
+        },
+        onEachFeature: function (f, layer) {
+          var p = f.properties, t = TIPO[p.tipo] || { rot: p.tipo, cor: '#888888' };
+          layer.on('click', function (e) {
+            L.DomEvent.stopPropagation(e);
+            MU.ficha({
+              titulo: p.nome || 'Candidato sem nome', sub: 'Candidato n.&ordm; ' + p.rank + ' &middot; ' + t.rot, cor: t.cor,
+              layer: layer, grupo: self._cand,
+              linhas: [['&Aacute;rea', MU.n(p.area_ha, 2) + ' ha']].concat(p.pop_delta != null ? [
+                ['Habitantes que passam a ter parque a &le; 300 m', '+' + MU.n(p.pop_delta)],
+                ['Cobertura do concelho', MU.n(p.pct_antes, 1) + ' % &rarr; ' + MU.n(p.pct_depois, 1) + ' %']] : [])
+            });
+          });
+          layer.bindTooltip('#' + p.rank + (p.nome ? ' — ' + p.nome : ''),
+            { permanent: true, direction: 'center', className: 'cand-label', offset: [0, 0] });
+          if (p.label_lat && p.label_lon) {
+            layer.on('tooltipopen', function () { layer.getTooltip().setLatLng([p.label_lat, p.label_lon]); });
+          }
+        }
+      });
+      this._lCand = MU.linha(box, {
+        label: 'Candidatos a convers&atilde;o (46)', checked: false,
+        color: 'linear-gradient(90deg,' + TIPO['Estrategia de expansao (CMP)'].cor + ' 0 33%,#D9642B 33% 66%,#D6C496 66%)',
+        leg: Object.keys(TIPO).map(function (k) { return [TIPO[k].cor, TIPO[k].rot, true]; }),
+        onToggle: function (on) { self._toggle(self._cand, on); },
+        opacidade: { v: 0.6, onInput: function (v) { self._cand.setStyle({ fillOpacity: v }); } }
+      });
+      this._lNomes = MU.linha(box, {
+        label: 'Nomes dos candidatos', checked: true, sub: true,
+        onToggle: function (on) { self._nomesCand = on; self._rotulos(); }
+      });
+
+      painel.querySelector('#ac-vista').addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (b) self.setVista(b.dataset.v, true);
+      });
+      map.on('zoomend', function () { if (MU.tema === 'acessibilidade') self._rotulos(); });
+    },
+
+    /* ---------- estado ---------- */
+    _toggle: function (layer, on) {
+      if (MU.tema !== 'acessibilidade') return;
+      on ? layer.addTo(MU.map) : MU.map.removeLayer(layer);
+      this._rotulos();
+    },
+
+    _setInd: function (ind) {
+      this.ind = ind;
+      var self = this;
+      ['acc', 'prox'].forEach(function (k) {
+        var l = self._lInd[k], on = k === ind;
+        if (l.cb.checked !== on) { l.cb.checked = on; l.row.classList.toggle('off', !on); }
+      });
+      this._render();
+    },
+
+    _rotulos: function () {
+      var z = MU.map.getZoom(), nomes = this._nomesCand;
+      document.querySelectorAll('.cand-label').forEach(function (l) { l.style.display = (nomes && z >= 14) ? '' : 'none'; });
+    },
+
+    _overlay: function () {
+      if (!this.ind) return null;
+      var D = MU.DADOS.acessibilidade.imgs, k = this.vista + '_' + this.ind;
+      var src = { actual_acc: D.acc, propostas_acc: D.acc_sim, actual_prox: D.prox, propostas_prox: D.prox_sim }[k];
+      if (!this._ov[k]) this._ov[k] = L.imageOverlay(src, MU.BOUNDS, { opacity: this._opInd, pane: 'accPane' });
+      this._ov[k].setOpacity(this._opInd);
+      return this._ov[k];
+    },
+
+    _lowPop: function () {
+      if (!this._ovLow) this._ovLow = L.imageOverlay(MU.DADOS.acessibilidade.imgs.baixa, MU.BOUNDS, { pane: 'lowPopPane' });
+      return this._ovLow;
+    },
+
+    _render: function () {
+      var map = MU.map, self = this, S = MU.DADOS.contexto.stats, pr = this.vista === 'propostas', N = this._num[this.vista];
+      Object.keys(this._ov).forEach(function (k) { map.removeLayer(self._ov[k]); });
+      map.removeLayer(this._lowPop());
+      if (MU.tema === 'acessibilidade') {
+        var ov = this._overlay();
+        if (ov) { ov.addTo(map); this._lowPop().addTo(map); }
+      }
+      document.querySelectorAll('#ac-vista button').forEach(function (b) {
+        var on = b.dataset.v === self.vista;
+        b.classList.toggle('active', on); b.setAttribute('aria-pressed', on);
+      });
+      document.getElementById('ac-nums').innerHTML = MU.htmlNums([
+        { v: MU.n(S.m2hab, 1), u: 'm&sup2;', r: 'de parque por habitante: ' + MU.n(S.parques_ha) + ' ha para ' + MU.n(S.pop) + ' habitantes (GHS-POP)' },
+        { v: MU.n(N.prox), u: '%', r: 'da popula&ccedil;&atilde;o a &le; 300 m de um parque com &ge; 0,4 ha' + (pr ? ', com as propostas' : '') },
+        { v: MU.n(N.acc, 1), u: '%', r: 'da popula&ccedil;&atilde;o com &ge; 9 m&sup2; de verde p&uacute;blico a 500 m' + (pr ? ', com as propostas' : '') }
+      ]);
+      document.getElementById('ac-intro').style.display = pr ? 'block' : 'none';
+      this._lCand.row.style.display = pr ? '' : 'none';
+      this._lNomes.row.style.display = pr ? '' : 'none';
+    },
+
+    /* alterna entre situação actual e propostas; o indicador mantém-se */
+    setVista: function (v, deUtilizador) {
+      if (v === this.vista && !deUtilizador) return;
+      this.vista = v;
+      var c = this._lCand.cb;
+      if (c.checked !== (v === 'propostas')) { c.checked = (v === 'propostas'); c.dispatchEvent(new Event('change')); }
+      MU.setHash({ tema: 'acessibilidade', vista: v });
+      this._render();
+    },
+
+    /* primeira entrada: vista pedida no URL; «propostas» abre como a página original (proximidade, parques desligados) */
+    _inicial: function () {
+      var v = MU.param('vista') === 'propostas' ? 'propostas' : 'actual';
+      this.vista = v;
+      var p = this._lParques.cb, c = this._lCand.cb;
+      p.checked = (v === 'actual'); p.closest('.cam').classList.toggle('off', !p.checked);
+      c.checked = (v === 'propostas'); c.closest('.cam').classList.toggle('off', !c.checked);
+      if (v === 'propostas') this._setInd('prox');
+    },
+
+    aoHash: function () {   // #tema=acessibilidade&vista=… alterado à mão com o tema já aberto
+      var v = MU.param('vista') === 'propostas' ? 'propostas' : 'actual';
+      if (v !== this.vista) this.setVista(v, false);
+    },
+
+    activar: function () {
+      var map = MU.map;
+      if (!this._iniciado) { this._iniciado = true; this._inicial(); }
+      this._render();
+      MU.activarParques(this);
+      if (this._lCand.cb.checked) this._cand.addTo(map);
+      this._mono.forEach(function (m) { if (m.linha.cb.checked) m.ov.addTo(map); });
+      MU.setHash({ tema: 'acessibilidade', vista: this.vista });
+      this._rotulos();
+    },
+
+    desactivar: function () {
+      var map = MU.map, self = this;
+      Object.keys(this._ov).forEach(function (k) { map.removeLayer(self._ov[k]); });
+      map.removeLayer(this._lowPop());
+      MU.desactivarParques(this);
+      map.removeLayer(this._cand);
+      this._mono.forEach(function (m) { map.removeLayer(m.ov); });
+    }
+  });
+})();
+
+/* Tema «Mudanças 2016–2025» (antes mapa/mapa.html): transições 2016-17 → 2024-25 e uso do solo 2024-25
+   (Sentinel-2, 10 m). Cores da maquete «Carta» V2b; as máscaras são tingidas no browser. */
+MU.registarTema({
+  id: 'hoje',
+  rotulo: 'Mudanças 2016–2025',
+  fundo: 'carta',
+  dados: 'hoje',
+  ctx: { limites: { on: true }, densidade: { on: false } },
+  fonte: 'Sentinel-2 10 m (ESA, Copernicus) &middot; 2016-17 e 2024-25. Hectares por contagem de p&iacute;xeis (&asymp; 57 m&sup2; cada) dentro do concelho.',
 
   async montar(painel) {
-    var self = this, D = MU.DADOS.acessibilidade, map = MU.map;
-    map.createPane('accPane'); map.getPane('accPane').style.zIndex = 450;
-    map.createPane('lowPopPane'); map.getPane('lowPopPane').style.zIndex = 475;
-    map.createPane('parquesPane'); map.getPane('parquesPane').style.zIndex = 540;
-    map.createPane('candGeoPane'); map.getPane('candGeoPane').style.zIndex = 550;
-
-    var P = D.meta;
-    var pct0 = function (x) { return Math.round(x) + '%'; };
-    var pct1 = function (x) { return x.toFixed(1).replace('.', ',') + '%'; };
-    this._pct = {
-      actual: { prox: pct0(P.pct_actual), acc: pct1(P.sfca_actual_pct) },
-      propostas: { prox: pct0(P.pct_simulado), acc: pct1(P.sfca_sim_pct) }
-    };
-
+    var S = MU.DADOS.contexto.stats;
+    var trans = [
+      { id: 'arvores_edificado', label: 'Árvores para edificado', color: '#D93A3A', ha: S.arvores_edificado },
+      { id: 'arvores_solo', label: 'Árvores para solo', color: '#C98A1A', ha: S.arvores_solo },
+      { id: 'solo_edificado', label: 'Solo para edificado', color: '#7A55B8', ha: S.solo_edificado },
+      { id: 'solo_arvores', label: 'Solo para árvores', color: '#1FA6A0', ha: S.solo_arvores }
+    ];
+    var uso = [
+      { id: 'uso_arvores', label: 'Árvores 2024-25', color: '#4F9A62', show: false, op: 0.55, ha: S.uso_arvores },
+      { id: 'uso_solo', label: 'Solo 2024-25', color: '#D9B77A', show: false, op: 0.6, ha: S.uso_solo },
+      { id: 'uso_edificado', label: 'Edificado 2024-25', color: '#8A8496', show: false, op: 0.45, ha: S.uso_edificado }
+    ];
+    var esc = MU.escala(trans.map(function (c) { return c.ha; }));
     painel.innerHTML =
-      '<b style="font-size:14px;">Acessibilidade a Verde P&uacute;blico</b>' +
-      '<div class="ab-group" id="ac-vista" style="margin-top:6px;">' +
-        '<button class="ab-btn" data-v="actual">Situa&ccedil;&atilde;o actual</button>' +
-        '<button class="ab-btn" data-v="propostas">Com propostas</button></div>' +
-      '<div id="ac-intro" class="tema-sub" style="display:none;margin:-2px 0 6px;">Simula&ccedil;&atilde;o sequencial para atingir 80% de cobertura a &le;300m (Konijnendijk)</div>' +
-      '<div class="section">Indicador</div>' +
-      '<div class="ab-group" id="ac-ind">' +
-        '<button class="ab-btn" data-i="acc">Acessibilidade 500m<small></small></button>' +
-        '<button class="ab-btn" data-i="prox">Proximidade 300m<small></small></button></div>' +
-
-      '<div id="acc-legend" style="display:none;">' +
-        '<div class="section">Acessibilidade 500m (m&sup2;/hab)</div>' +
-        '<div class="leg">' +
-          '<div><i style="background:#B71C1C"></i><span>0 &ndash; 3 (d&eacute;fice cr&iacute;tico)</span></div>' +
-          '<div><i style="background:#E8A838"></i><span>3 &ndash; 9 (insuficiente)</span></div>' +
-          '<div><i style="background:#2E7D32"></i><span>&gt;9 (adequado)</span></div>' +
-          '<div><i style="background:#C8C8C8"></i><span>Baixa densidade</span></div></div>' +
-        '<div class="nota">OMS recomenda &ge;9 m&sup2;/hab</div></div>' +
-      '<div id="prox-legend" style="display:none;">' +
-        '<div class="section">Proximidade 300m (Konijnendijk 3-30-300)</div>' +
-        '<div class="leg">' +
-          '<div><i style="background:#2E7D32"></i><span>&le;300m de parque &ge;0,4 ha (cumpre)</span></div>' +
-          '<div><i style="background:#B71C1C"></i><span>&gt;300m de parque &ge;0,4 ha (n&atilde;o cumpre)</span></div></div>' +
-        '<div class="nota">OMS: &ge;0,4 ha de verde a &lt;300m de casa</div></div>' +
-      '<div id="cand-legend" style="display:none;">' +
-        '<div class="section">Candidatos (por prioridade)</div>' +
-        '<div class="leg">' +
-          '<div><i style="background:#00897B"></i><span>Estrat&eacute;gia de expans&atilde;o (CMP)</span></div>' +
-          '<div><i style="background:#D9642B"></i><span>Verde em PDM / fechado ao p&uacute;blico</span></div>' +
-          '<div><i style="background:#D6C496"></i><span>Verde privado</span></div></div></div>' +
-
-      '<div class="section">Camadas</div><div id="ac-camadas"></div>';
-
-    var box = painel.querySelector('#ac-camadas');
-
-    // --- Parques e Jardins (GeoJSON, popups, rótulos a partir do zoom 14) ---
-    this._parques = L.geoJson(D.parques, {
-      pane: 'parquesPane',
-      style: function () { return { color: '#0B5232', weight: 2.5, opacity: 0.9, fillColor: '#0B5232', fillOpacity: 0.45 }; },
-      onEachFeature: function (f, layer) {
-        var p = f.properties, area = p.area_calc_ha ? p.area_calc_ha + ' ha' : '';
-        layer.bindPopup('<b style="font-size:13px;">' + p.nome + '</b><br><span style="color:#666;">' +
-          (p.tipo || '') + (area ? ' &mdash; ' + area : '') + '</span>');
-        layer.bindTooltip(p.nome, { permanent: true, direction: 'center', className: 'park-label', offset: [0, 0] });
-      }
-    });
-    this._lParques = MU.linha(box, {
-      label: 'Parques e Jardins', checked: true, color: '#0B5232', editavel: false,
-      onToggle: function (on) { self._toggle(self._parques, on); }
-    });
-
-    // --- Candidatos a conversão (GeoJSON, popups, rótulos a partir do zoom 13) ---
-    var TIPO = {
-      'Estrategia de expansao (CMP)': { cor: '#00897B', rot: 'Estratégia de expansão (CMP)' },
-      'Verde em PDM / fechado ao publico': { cor: '#D9642B', rot: 'Verde em PDM / fechado ao público' },
-      'Verde privado': { cor: '#D6C496', rot: 'Verde privado' }
-    };
-    this._cand = L.geoJson(D.candidatos, {
-      pane: 'candGeoPane',
-      filter: function (f) { return !/^Parques e Jardins j/.test(f.properties.tipo); },
-      style: function (f) {
-        var c = (TIPO[f.properties.tipo] || {}).cor || '#888';
-        return { color: c, weight: 2, opacity: 1, fillColor: c, fillOpacity: 0.45 };
-      },
-      onEachFeature: function (f, layer) {
-        var p = f.properties, t = TIPO[p.tipo] || { rot: p.tipo };
-        var h = '<b style="font-size:13px;">#' + p.rank + '</b>' + (p.nome ? ' &mdash; ' + p.nome : '');
-        h += '<br><span style="color:#666;">' + t.rot + '</span><br><span style="color:#666;">&Aacute;rea: ' + p.area_ha + ' ha</span>';
-        if (p.pop_delta != null) {
-          h += '<br><span style="color:#2E7D32;">+' + p.pop_delta.toLocaleString() + ' hab cobertos</span>';
-          h += '<br><span style="color:#444;">Cobertura: ' + p.pct_antes + '% &rarr; ' + p.pct_depois + '%</span>';
-        }
-        layer.bindPopup(h);
-        layer.bindTooltip('#' + p.rank + (p.nome ? ' — ' + p.nome : ''),
-          { permanent: true, direction: 'center', className: 'cand-label', offset: [0, 0] });
-        if (p.label_lat && p.label_lon) {
-          layer.on('tooltipopen', function () { layer.getTooltip().setLatLng([p.label_lat, p.label_lon]); });
-        }
-      }
-    });
-    this._lCand = MU.linha(box, {
-      label: 'Candidatos a conversão (46)', checked: false, color: '#00897B', editavel: false,
-      onToggle: function (on) { self._toggle(self._cand, on); self._legendas(); }
-    });
-    this._lNomes = MU.linha(box, {
-      label: 'Nomes dos candidatos', checked: true,
-      onToggle: function (on) { self._nomesCand = on; self._rotulos(); }
-    });
-    this._lNomes.row.style.marginLeft = '20px';
-
-    // --- Verde privado (todas as áreas) e verde em PDM: só visualização, pré-coloridas em Python ---
-    this._mono = [];
-    [['privado', 'Verde privado (todas as áreas)', '#D6C496'],
-     ['pago', 'Verde em PDM / fechado ao público', '#D9642B']].forEach(function (d) {
-      var ov = L.imageOverlay(D.imgs[d[0]], MU.BOUNDS);
-      var l = MU.linha(box, {
-        label: d[1], checked: false, color: d[2], editavel: false,
-        onToggle: function (on) { self._toggle(ov, on); }
-      });
-      self._mono.push({ ov: ov, linha: l });
-    });
-
-    // --- botões: vista e indicador ---
-    painel.querySelector('#ac-vista').addEventListener('click', function (e) {
-      var b = e.target.closest('button'); if (b) self.setVista(b.dataset.v, true);
-    });
-    painel.querySelector('#ac-ind').addEventListener('click', function (e) {
-      var b = e.target.closest('button'); if (!b) return;
-      self.ind = (self.ind === b.dataset.i) ? null : b.dataset.i;   // clicar no activo desliga
-      self._render();
-    });
-    map.on('zoomend', function () { if (MU.tema === 'acessibilidade') self._rotulos(); });
+      '<p class="desc">O que mudou entre 2016-17 e 2024-25, p&iacute;xel a p&iacute;xel, na classifica&ccedil;&atilde;o Sentinel-2 de 10 m: ' +
+      '&aacute;rvores que deram lugar a edificado ou solo, e solo que ganhou &aacute;rvores.</p>' +
+      '<div class="nums">' + MU.htmlNums([
+        { v: MU.n(S.arvores_edificado + S.arvores_solo), u: 'ha', r: 'de &aacute;rvores perdidas para edificado ou solo, 2016-17 a 2024-25' },
+        { v: MU.n(S.solo_arvores), u: 'ha', r: 'de solo que ganhou &aacute;rvores no mesmo per&iacute;odo' },
+        { v: MU.n(S.solo_edificado), u: 'ha', r: 'de solo que passou a edificado' }
+      ]) + '</div>' +
+      MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
+    var box = painel.querySelector('.camadas');
+    await MU.addCamadas(this, box, trans, esc);
+    await MU.addCamadas(this, box, uso, esc);
+    MU.linhaParques(this, box, { on: true, contorno: true, label: 'Parques e jardins (contorno)', ha: false });
   },
 
-  /* ---------- estado ---------- */
-  _toggle: function (layer, on) {
-    if (MU.tema !== 'acessibilidade') return;
-    on ? layer.addTo(MU.map) : MU.map.removeLayer(layer);
-    this._rotulos();
-  },
-
-  _rotulos: function () {
-    var z = MU.map.getZoom(), nomes = this._nomesCand;
-    document.querySelectorAll('.park-label').forEach(function (l) { l.style.display = z >= 14 ? '' : 'none'; });
-    document.querySelectorAll('.cand-label').forEach(function (l) { l.style.display = (nomes && z >= 13) ? '' : 'none'; });
-  },
-
-  _overlay: function () {
-    if (!this.ind) return null;
-    var D = MU.DADOS.acessibilidade.imgs, k = this.vista + '_' + this.ind;
-    var src = { actual_acc: D.acc, propostas_acc: D.acc_sim, actual_prox: D.prox, propostas_prox: D.prox_sim }[k];
-    if (!this._ov[k]) this._ov[k] = L.imageOverlay(src, MU.BOUNDS, { opacity: 0.7, pane: 'accPane' });
-    return this._ov[k];
-  },
-
-  _lowPop: function () {
-    if (!this._ovLow) this._ovLow = L.imageOverlay(MU.DADOS.acessibilidade.imgs.baixa, MU.BOUNDS, { pane: 'lowPopPane' });
-    return this._ovLow;
-  },
-
-  _legendas: function () {
-    var $ = function (id) { return document.getElementById(id); };
-    $('acc-legend').style.display = this.ind === 'acc' ? 'block' : 'none';
-    $('prox-legend').style.display = this.ind === 'prox' ? 'block' : 'none';
-    $('cand-legend').style.display = (this._lCand.cb.checked && this.vista === 'propostas') ? 'block' : 'none';
-  },
-
-  _render: function () {
-    var map = MU.map, self = this;
-    Object.keys(this._ov).forEach(function (k) { map.removeLayer(self._ov[k]); });
-    map.removeLayer(this._lowPop());
-    var ov = this._overlay();
-    if (ov) { ov.addTo(map); this._lowPop().addTo(map); }
-    document.querySelectorAll('#ac-vista .ab-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.v === self.vista); });
-    document.querySelectorAll('#ac-ind .ab-btn').forEach(function (b) {
-      b.classList.toggle('active', b.dataset.i === self.ind);
-      b.querySelector('small').textContent = (self.vista === 'actual' ? 'Actual ' : 'Simulado ') + self._pct[self.vista][b.dataset.i];
-    });
-    document.getElementById('ac-intro').style.display = this.vista === 'propostas' ? 'block' : 'none';
-    this._legendas();
-  },
-
-  /* alterna entre situação actual e propostas; o indicador mantém-se */
-  setVista: function (v, deUtilizador) {
-    if (v === this.vista && !deUtilizador) return;
-    this.vista = v;
-    var c = this._lCand.cb;
-    if (c.checked !== (v === 'propostas')) { c.checked = (v === 'propostas'); c.dispatchEvent(new Event('change')); }
-    MU.setHash({ tema: 'acessibilidade', vista: v });
-    this._render();
-  },
-
-  /* primeira entrada: vista pedida no URL; «propostas» abre como a página original (proximidade, parques desligados) */
-  _inicial: function () {
-    var v = MU.param('vista') === 'propostas' ? 'propostas' : 'actual';
-    this.vista = v;
-    this.ind = v === 'propostas' ? 'prox' : 'acc';
-    var p = this._lParques.cb, c = this._lCand.cb;
-    p.checked = (v === 'actual'); c.checked = (v === 'propostas');
-  },
-
-  aoHash: function () {   // #tema=acessibilidade&vista=… alterado à mão com o separador já aberto
-    var v = MU.param('vista') === 'propostas' ? 'propostas' : 'actual';
-    if (v !== this.vista) this.setVista(v, false);
-  },
-
-  activar: function () {
-    var map = MU.map, self = this;
-    if (!this._iniciado) { this._iniciado = true; this._inicial(); }
-    this._render();
-    var pares = [[this._lParques, this._parques], [this._lCand, this._cand]];
-    pares.forEach(function (p) { if (p[0].cb.checked) p[1].addTo(map); });
-    this._mono.forEach(function (m) { if (m.linha.cb.checked) m.ov.addTo(map); });
-    MU.setHash({ tema: 'acessibilidade', vista: this.vista });
-    this._rotulos();
-  },
-
-  desactivar: function () {
-    var map = MU.map, self = this;
-    Object.keys(this._ov).forEach(function (k) { map.removeLayer(self._ov[k]); });
-    map.removeLayer(this._lowPop());
-    map.removeLayer(this._parques); map.removeLayer(this._cand);
-    this._mono.forEach(function (m) { map.removeLayer(m.ov); });
-  }
+  activar() { MU.activarCamadas(this); MU.activarParques(this); },
+  desactivar() { MU.desactivarCamadas(this); MU.desactivarParques(this); }
 });
 
-/* Tema «Histórico»: linha do tempo 2023-24 → 1947 (uma época de cada vez), minigráfico de
-   percentagens, perda e ganho de vegetação e, para 1979, o detalhe das 5 classes de Filipa Guilherme.
-   (antes: ~30 caixas por camada; sem NDVI — a página ndvi_historico/ continua à parte). */
+/* Tema «Histórico»: escada das épocas 2023-24 → 1947 (uma de cada vez, cada uma com a sua cor), números-chave,
+   edificado opcional, perda e ganho de vegetação, cortina para comparar duas épocas e, para 1979, o detalhe
+   das 5 classes de Filipa Guilherme. (sem NDVI — a página ndvi_historico/ continua à parte). */
 (function () {
-  /* id, rótulo, fonte/resolução, fonte diferente das restantes (ressalva) */
+  /* id, rótulo, fonte/resolução, fonte diferente das restantes (ressalva), cor da época (maquete V2b) */
   var L30 = 'Landsat 5 TM, 30 m; NDVI &ge; 0,25';
   var L8 = 'Landsat 8/9 OLI (harmonizado para TM, Roy et al. 2016), 30 m; NDVI &ge; 0,25';
   var EPOCAS = [
-    { id: '2023-24', nome: '2023-2024', fonte: L8 },
-    { id: '2016-17', nome: '2016-2017', fonte: L8 },
-    { id: '2001-05', nome: '2001-2005', fonte: L30 },
-    { id: '1995-00', nome: '1995-2000', fonte: L30 },
-    { id: '1985-90', nome: '1985-1990', fonte: L30 },
-    { id: '1979', nome: '1979', dif: true,
+    { id: '2023-24', nome: '2023-2024', curto: '2023–24', cor: '#2E8B4E', fonte: L8 },
+    { id: '2016-17', nome: '2016-2017', curto: '2016–17', cor: '#7A55B8', fonte: L8 },
+    { id: '2001-05', nome: '2001-2005', curto: '2001–05', cor: '#C08A12', fonte: L30 },
+    { id: '1995-00', nome: '1995-2000', curto: '1995–2000', cor: '#10A38A', fonte: L30 },
+    { id: '1985-90', nome: '1985-1990', curto: '1985–90', cor: '#3E6AB3', fonte: L30 },
+    { id: '1979', nome: '1979', curto: '1979', cor: '#B03A7A', dif: true,
       fonte: 'Ocupa&ccedil;&atilde;o do solo 1979 (Filipa Guilherme), vectorial; vegeta&ccedil;&atilde;o = &aacute;rvores, arbustos e herb&aacute;ceas, edificado = elementos artificiais' },
-    { id: '1947', nome: '1947', dif: true,
+    { id: '1947', nome: '1947', curto: '1947', cor: '#8C5A2B', dif: true,
       fonte: 'Ortofotomapa 1947 (CIIMAR/FCUP); Pixel RF (textura local), limpo com Sentinel-2 e Landsat 1985' }
   ];
   var RESSALVA = 'Fonte diferente das outras &eacute;pocas: n&atilde;o compar&aacute;vel em rigor.';
   var BOUNDS_1947 = [[41.12912995365261, -8.700884213830351], [41.189999037480554, -8.539187462666328]];
-  var COR = { veg: '#4E9F5D', edif: '#C4A882', perda: '#D64545', ganho: '#1F9D55' };  /* paleta única: todas as épocas (incl. 1947) são tingidas por filtro SVG */
+  var COR = { edif: '#C4A882', perda: '#6A3FB5', ganho: '#E0B000' };  /* todas as máscaras são tingidas por filtro SVG */
   var CLASSES_1979 = [
     ['ABE', 'Elementos artificiais (constru&iacute;do)', '#C4A882'],
     ['TRS', '&Aacute;rvores e arbustos', '#357A47'],
@@ -721,26 +1183,25 @@ MU.registarTema({
     }
   });
 
-  var pc = function (x) { return x.toLocaleString('pt-PT', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %'; };
-  var ha = function (x) { return x.toLocaleString('pt-PT', { maximumFractionDigits: 0 }) + ' ha'; };
+  var pc = function (x) { return MU.n(x, 1) + ' %'; };
+  var ha = function (x) { return MU.n(x) + ' ha'; };
   var por = function (id) { return EPOCAS.filter(function (e) { return e.id === id; })[0]; };
 
   MU.registarTema({
     id: 'historico',
-    rotulo: 'Histórico 1947-2024',
-    fundo: 'positron',
+    rotulo: 'Histórico 1947–2024',
+    fundo: 'carta',
     dados: 'historico',
-    ctx: { limites: { on: true, cor: '#444444' }, densidade: { on: false } },
-    fonte: 'Ortofotomapa 1947 (CIIMAR/FCUP) &bull; Landsat MSS/TM/OLI (USGS/NASA)<br>' +
-           '1947: Pixel RF (textura local), limpo com Sentinel-2 e Landsat 1985<br>' +
-           'Hist&oacute;rico: NDVI &ge; 0,25 &bull; Roy et al. 2016<br>' +
-           'Ocupa&ccedil;&atilde;o do solo 1979: <a href="https://www.cibio.up.pt/en/people/details/filipa-isabel-jesus-guilherme/" target="_blank" rel="noopener">Filipa Guilherme</a><br>' +
-           'Limites: CAOP 2025 (DGT)',
+    ctx: { limites: { on: true }, densidade: { on: false } },
+    fonte: 'Ortofotomapa 1947 (CIIMAR/FCUP) &middot; Landsat MSS/TM/OLI (USGS/NASA), NDVI &ge; 0,25 (Roy et al. 2016) &middot; ' +
+           '1947: Pixel RF (textura local), limpo com Sentinel-2 e Landsat 1985 &middot; ' +
+           'ocupa&ccedil;&atilde;o do solo 1979: <a href="https://www.cibio.up.pt/en/people/details/filipa-isabel-jesus-guilherme/" target="_blank" rel="noopener">Filipa Guilherme</a> &middot; ' +
+           'limites: CAOP 2025 (DGT). Hectares por contagem de p&iacute;xeis (&asymp; 57 m&sup2; cada) dentro do concelho.',
 
     async montar(painel) {
-      var D = MU.DADOS.historico, map = MU.map;
-      var est = { epoca: null, perdaGanho: false, det79: false, comparar: false, esq: '2023-24', dir: '1947' };
-      var activo = false, visiveis = [], cache = {}, opac = 1, mud = null, det = null, pos = 0.5;
+      var D = MU.DADOS.historico, S = MU.DADOS.contexto.stats, map = MU.map, self = this;
+      var est = { epoca: null, edif: false, perdaGanho: false, det79: false, comparar: false, esq: '2023-24', dir: '1947' };
+      var activo = false, visiveis = [], cache = {}, opac = 0.9, mud = null, det = null, pos = 0.5;
       var PANES = { masc: 'hMascPane', o47: 'h1947Pane' };
       var PANES_ESQ = { masc: 'hEsqPane', o47: 'hEsqPane' }, PANES_DIR = { masc: 'hDirPane', o47: 'hDirPane' };
       [['h1947Pane', 405], ['hCobPane', 408], ['hMascPane', 415], ['hEsqPane', 416], ['hDirPane', 417], ['hMudPane', 420]]
@@ -748,54 +1209,45 @@ MU.registarTema({
 
       /* ---- painel ---- */
       var num = D.numeros;
-      var grafico = EPOCAS.map(function (e) {
+      var escada = EPOCAS.map(function (e) {
         var n = num[e.id];
         var tip = e.nome + ': vegetação ' + pc(n.veg) + ', edificado ' + pc(n.edif) +
                   (n.cobertura < 100 ? ' (cobertura ' + pc(n.cobertura) + ' do concelho)' : '');
-        return '<button type="button" class="h-col" data-epoca="' + e.id + '" title="' + tip + '">' +
-          '<span class="h-barras"><i class="h-b h-bv" style="height:' + (n.veg * 0.6).toFixed(1) + 'px"></i>' +
-          '<i class="h-b h-be" style="height:' + (n.edif * 0.6).toFixed(1) + 'px"></i></span>' +
-          '<span class="h-ano">' + e.id.slice(0, 4) + (e.dif ? '*' : '') + '</span></button>';
+        return '<button type="button" role="radio" data-epoca="' + e.id + '" style="--ep:' + e.cor + '" title="' + tip + '">' +
+          '<span>' + e.curto + (e.dif ? '<small>outra fonte</small>' : '') + '</span>' +
+          '<span class="b"><i style="width:' + n.veg.toFixed(1) + '%"></i></span><span>' + pc(n.veg) + '</span></button>';
       }).join('');
       var opcoes = EPOCAS.map(function (e) { return '<option value="' + e.id + '">' + e.nome + '</option>'; }).join('');
       var cobBaixa = EPOCAS.filter(function (e) { return num[e.id].cobertura < 100; }).map(function (e) {
         return e.nome + ': cobertura ' + pc(num[e.id].cobertura) + ' do concelho';
       });
       painel.innerHTML =
-        '<b style="font-size:14px;">Vegeta&ccedil;&atilde;o e edificado do Porto</b><br>' +
-        '<span class="tema-sub">1947-2024 &bull; escolhe uma &eacute;poca</span>' +
-        '<div class="h-tempo" id="h-tempo">' + EPOCAS.map(function (e) {
-          return '<button type="button" class="ab-btn" data-epoca="' + e.id + '">' + e.id + '</button>';
-        }).join('') + '</div>' +
-        '<div class="h-comp" id="h-comp" style="display:none">' +
+        '<p class="desc">Vegeta&ccedil;&atilde;o no concelho em sete &eacute;pocas. 1947 (ortofoto) e 1979 (cartografia vectorial) v&ecirc;m de ' +
+        'fontes diferentes das restantes: n&atilde;o s&atilde;o compar&aacute;veis em rigor.</p>' +
+        '<div class="nums" id="h-nums"></div>' +
+        '<div id="h-escada">' + MU.cab2('&Eacute;poca &middot; vegeta&ccedil;&atilde;o no concelho', '0&ndash;100 %') +
+        '<div class="escada" id="h-tempo" role="radiogroup" aria-label="&Eacute;poca">' + escada + '</div></div>' +
+        '<div class="h-comp" id="h-comp" style="display:none">' + MU.cab2('Comparar duas &eacute;pocas', 'arrasta a barra no mapa') +
           '<label>Esquerda <select id="h-esq">' + opcoes + '</select></label>' +
-          '<label>Direita <select id="h-dir">' + opcoes + '</select></label>' +
-          '<span class="tema-sub">Arrasta a barra no mapa.</span></div>' +
-        '<div class="h-fonte" id="h-fonte"></div>' +
-        '<div class="section">% do concelho em cada &eacute;poca</div>' +
-        '<div class="h-graf" id="h-graf">' + grafico + '</div>' +
-        '<div class="leg h-leg2"><div><i style="background:' + COR.veg + '"></i><span>vegeta&ccedil;&atilde;o</span>' +
-          '<i style="background:' + COR.edif + ';margin-left:8px"></i><span>edificado</span></div></div>' +
-        '<div class="h-nums" id="h-nums"></div>' +
-        '<div class="nota">* fonte diferente (n&atilde;o compar&aacute;vel em rigor). O resto (solo nu, &aacute;gua, sombras) n&atilde;o est&aacute; contado.' +
-          (cobBaixa.length ? '<br>' + cobBaixa.join('<br>') : '') + '</div>' +
-        '<div class="section">Vista</div>' +
-        '<div id="h-mud"></div>' +
-        '<button type="button" id="h-cmp" class="ab-btn" style="margin:4px 0;width:100%">Comparar duas &eacute;pocas</button>' +
-        '<button type="button" id="h-79" class="ab-btn" style="display:none;margin:4px 0;width:100%">Ver as 5 classes de 1979</button>' +
+          '<label>Direita <select id="h-dir">' + opcoes + '</select></label></div>' +
+        '<p class="h-fonte" id="h-fonte"></p>' +
+        MU.cab2('Camadas', '') + '<div id="h-cams"></div><div id="h-mud"></div><div id="h-parq"></div>' +
         '<div class="leg" id="h-leg"></div>' +
-        '<div class="row" style="margin-top:4px;"><label style="font-size:11px;color:#666;" for="h-op">Opacidade</label>' +
-          '<input type="range" id="h-op" min="10" max="100" step="5" value="100" style="flex:1;">' +
-          '<span id="h-op-v" class="tema-sub" style="width:30px;">100%</span></div>';
+        '<button type="button" id="h-cmp" class="btn">Comparar duas &eacute;pocas</button>' +
+        '<button type="button" id="h-79" class="btn" style="display:none">Ver as 5 classes de 1979</button>' +
+        '<p class="fonte" style="margin-top:12px">* outra fonte: n&atilde;o compar&aacute;vel em rigor. O resto (solo nu, &aacute;gua, sombras) n&atilde;o est&aacute; contado.' +
+          (cobBaixa.length ? '<br>' + cobBaixa.join('<br>') : '') + '</p>';
 
-      /* filtro SVG que tinge as máscaras (alfa) com a paleta única; sem canvas de 170 Mpx */
+      /* filtro SVG que tinge as máscaras (alfa) com a cor de cada época; sem canvas de 170 Mpx */
       var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('width', '0'); svg.setAttribute('height', '0'); svg.style.position = 'absolute';
       var matriz = function (hex) {
         var c = MU.hexToRgb(hex).map(function (v) { return (v / 255).toFixed(4); });
         return '0 0 0 0 ' + c[0] + '  0 0 0 0 ' + c[1] + '  0 0 0 0 ' + c[2] + '  0 0 0 1 0';
       };
-      svg.innerHTML = [['veg', COR.veg], ['edif', COR.edif], ['perda', COR.perda], ['ganho', COR.ganho]].map(function (k) {
+      var tons = [['edif', COR.edif], ['perda', COR.perda], ['ganho', COR.ganho]]
+        .concat(EPOCAS.map(function (e) { return ['ep' + e.id, e.cor]; }));
+      svg.innerHTML = tons.map(function (k) {
         return '<filter id="h-tint-' + k[0] + '" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="' +
                matriz(k[1]) + '"/></filter>';
       }).join('');
@@ -807,19 +1259,20 @@ MU.registarTema({
         ov.on('add', function () { ov.getElement().style.filter = 'url(#h-tint-' + tom + ')'; });
         return ov;
       };
-      function camadas(id, panes) {
+      function camadas(id, panes) {   // [vegetação, edificado]
         var k = id + '|' + panes.masc;
         if (cache[k]) return cache[k];
         var ls;
         if (id === '1947') {
-          ls = [['uso_1947_vegetacao', 'veg'], ['uso_1947_edificado', 'edif']].map(function (d) {
+          ls = [['uso_1947_vegetacao', 'ep1947'], ['uso_1947_edificado', 'edif']].map(function (d) {
             return imagem(D[d[0]], BOUNDS_1947, panes.o47, d[1]);
           });
         } else {
-          ls = ['veg', 'edif'].map(function (p) { return imagem(D[p + '_' + id], MU.BOUNDS, panes.masc, p); });
+          ls = [['veg', 'ep' + id], ['edif', 'edif']].map(function (p) { return imagem(D[p[0] + '_' + id], MU.BOUNDS, panes.masc, p[1]); });
         }
         return (cache[k] = ls);
       }
+      var daEpoca = function (id, panes) { var c = camadas(id, panes); return est.edif ? c : [c[0]]; };
       function perdaGanho() {
         return mud || (mud = [['veg_perda', 'perda'], ['veg_ganho', 'ganho']].map(function (d) {
           return imagem(D[d[0]], MU.BOUNDS, 'hMudPane', d[1]);
@@ -832,7 +1285,7 @@ MU.registarTema({
             filter: function (f) { return f.properties.c === c[0]; },
             style: function () { return { stroke: false, fillColor: c[2], fillOpacity: 0.75 }; },
             onEachFeature: function (f, layer) {
-              layer.bindPopup('<b style="font-size:13px;">' + c[1] + '</b><br><span style="color:#666;">1979 &mdash; ' +
+              layer.bindPopup('<b style="font-size:13px;">' + c[1] + '</b><br><span style="color:#4B6270;">1979 &mdash; ' +
                 f.properties.ha.toLocaleString('pt-PT') + ' ha</span>');
             }
           });
@@ -879,95 +1332,127 @@ MU.registarTema({
       sep.addEventListener('pointerup', fimArrasto);
       sep.addEventListener('pointercancel', fimArrasto);
 
+      /* ---- linhas de camadas ---- */
+      var q = function (s) { return painel.querySelector(s); };
+      var boxVeg = MU.linha(q('#h-cams'), {
+        label: 'Vegeta&ccedil;&atilde;o na &eacute;poca escolhida', checked: true, color: EPOCAS[0].cor,
+        onToggle: function (on) { est.veg = on; mostrar(); },
+        opacidade: { v: 90, min: 10, max: 100, step: 5, id: 'h-op', onInput: function (v) {
+          opac = v / 100;
+          Object.keys(cache).forEach(function (k) { cache[k].forEach(function (o) { o.setOpacity(opac); }); });
+          if (mud) mud.forEach(function (o) { o.setOpacity(opac); });
+        } }
+      });
+      est.veg = true;
+      var boxEdif = MU.linha(q('#h-cams'), {
+        label: 'Edificado na &eacute;poca escolhida', checked: false, color: COR.edif,
+        onToggle: function (on) { est.edif = on; mostrar(); }
+      });
+      var boxMud = MU.linha(q('#h-mud'), {
+        label: 'Perda e ganho 1985-90 &rarr; 2023-24', checked: false,
+        color: 'linear-gradient(90deg,' + COR.perda + ' 0 50%,' + COR.ganho + ' 50%)',
+        leg: [[COR.perda, 'Perda de vegeta&ccedil;&atilde;o &middot; <span class="n">' + ha(S.perda) + '</span>'],
+              [COR.ganho, 'Ganho de vegeta&ccedil;&atilde;o &middot; <span class="n">' + ha(S.ganho) + '</span>']],
+        onToggle: function (on) { est.perdaGanho = on; mostrar(); }
+      });
+      MU.linhaParques(this, q('#h-parq'), { on: false, contorno: true, label: 'Parques e jardins actuais (contorno)', ha: false });
+
       /* ---- estado → mapa e painel ---- */
       var leg = function (cor, txt) { return '<div><i style="background:' + cor + '"></i><span>' + txt + '</span></div>'; };
-      var legVegEdif = function (id) {
-        return leg(COR.veg, 'Vegeta&ccedil;&atilde;o') + leg(COR.edif, 'Edificado');
-      };
-      var q = function (s) { return painel.querySelector(s); };
+      var difPP = function (a, b) { var d = num[a].veg - num[b].veg; return MU.n(Math.abs(d), 1); };
       function mostrar() {
         visiveis.forEach(function (l) { map.removeLayer(l); });
         visiveis = [];
         sep.style.display = (activo && est.comparar) ? 'block' : 'none';
         if (!activo) return;
-        var ls = est.comparar ? camadas(est.esq, PANES_ESQ).concat(camadas(est.dir, PANES_DIR))
+        var ls = est.comparar ? daEpoca(est.esq, PANES_ESQ).concat(daEpoca(est.dir, PANES_DIR))
                : est.perdaGanho ? perdaGanho()
-               : (est.epoca === '1979' && est.det79) ? detalhe79() : camadas(est.epoca, PANES);
+               : (est.epoca === '1979' && est.det79) ? detalhe79() : daEpoca(est.epoca, PANES);
+        if (!est.comparar && !est.perdaGanho && !est.det79 && !est.veg) ls = ls.slice(1);
         ls.forEach(function (l) { l.addTo(map); visiveis.push(l); });
-        q('#h-tempo').style.display = est.comparar ? 'none' : 'grid';
+        q('#h-escada').style.display = est.comparar ? 'none' : 'block';
         q('#h-comp').style.display = est.comparar ? 'block' : 'none';
-        q('#h-cmp').textContent = est.comparar ? 'Sair da comparação' : 'Comparar duas épocas';
+        var bc = q('#h-cmp'); bc.textContent = est.comparar ? 'Sair da comparação' : 'Comparar duas épocas'; bc.classList.toggle('active', est.comparar);
         boxMud.cb.disabled = est.comparar;
-        painel.querySelectorAll('[data-epoca]').forEach(function (b) {
-          b.classList.toggle('active', !est.comparar && !est.perdaGanho && b.dataset.epoca === est.epoca);
+        painel.querySelectorAll('#h-tempo [data-epoca]').forEach(function (b) {
+          var on = !est.comparar && !est.perdaGanho && b.dataset.epoca === est.epoca;
+          b.classList.toggle('active', on); b.setAttribute('aria-checked', on);
         });
         var b79 = q('#h-79');
         if (est.comparar) {
           var a = por(est.esq), d = por(est.dir), na = num[est.esq], nd = num[est.dir];
           q('#h-esq').value = est.esq; q('#h-dir').value = est.dir;
+          boxVeg.row.style.setProperty('--sw', 'linear-gradient(90deg,' + a.cor + ' 0 50%,' + d.cor + ' 50%)');
           q('#h-fonte').innerHTML = '<b>Esq. ' + a.nome + '</b>: ' + a.fonte + '<br><b>Dir. ' + d.nome + '</b>: ' + d.fonte +
             ((a.dif || d.dif) ? '<br><i>' + RESSALVA + '</i>' : '');
-          q('#h-nums').innerHTML = a.nome + ': veg. <b>' + pc(na.veg) + '</b>, edif. <b>' + pc(na.edif) + '</b><br>' +
-            d.nome + ': veg. <b>' + pc(nd.veg) + '</b>, edif. <b>' + pc(nd.edif) + '</b>';
+          q('#h-nums').innerHTML = MU.htmlNums([
+            { v: MU.n(na.veg, 1), u: '%', r: 'do concelho com vegeta&ccedil;&atilde;o em ' + a.nome + ' (esquerda)' },
+            { v: MU.n(nd.veg, 1), u: '%', r: 'em ' + d.nome + ' (direita)' },
+            { v: difPP(est.esq, est.dir), u: 'p.p.', r: 'de diferen&ccedil;a entre as duas &eacute;pocas' }
+          ]);
           b79.style.display = 'none';
-          q('#h-leg').innerHTML = (est.esq === '1947' || est.dir === '1947')
-            ? legVegEdif()
-            : legVegEdif(est.esq);
+          q('#h-leg').innerHTML = leg(a.cor, 'Vegeta&ccedil;&atilde;o, esquerda: ' + a.nome) + leg(d.cor, 'Vegeta&ccedil;&atilde;o, direita: ' + d.nome) +
+            (est.edif ? leg(COR.edif, 'Edificado') : '');
           sep.querySelector('.h-etq-e').textContent = a.nome;
           sep.querySelector('.h-etq-d').textContent = d.nome;
           recorte();
           return;
         }
         var e = por(est.epoca), n = num[est.epoca];
+        boxVeg.row.style.setProperty('--sw', e.cor);
         if (est.perdaGanho) {
           q('#h-fonte').innerHTML = '<b>Perda e ganho</b>: diferen&ccedil;a entre 1985-90 e 2023-24. ' + por('1985-90').fonte + ' / ' + por('2023-24').fonte;
-          q('#h-nums').innerHTML = '';
+          q('#h-nums').innerHTML = MU.htmlNums([
+            { v: MU.n(S.perda), u: 'ha', r: 'de vegeta&ccedil;&atilde;o perdida entre 1985-90 e 2023-24' },
+            { v: MU.n(S.ganho), u: 'ha', r: 'de vegeta&ccedil;&atilde;o ganha no mesmo per&iacute;odo' },
+            { v: difPP('1985-90', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos no concelho' }
+          ]);
         } else {
           q('#h-fonte').innerHTML = '<b>' + e.nome + '</b>: ' + e.fonte + (e.dif ? '<br><i>' + RESSALVA + '</i>' : '');
-          q('#h-nums').innerHTML = e.nome + ': vegeta&ccedil;&atilde;o <b>' + pc(n.veg) + '</b> &bull; edificado <b>' + pc(n.edif) + '</b>';
+          q('#h-nums').innerHTML = MU.htmlNums([
+            { v: MU.n(n.veg, 1), u: '%', r: 'do concelho com vegeta&ccedil;&atilde;o em ' + e.nome + (e.dif ? ' (outra fonte)' : '') },
+            { v: MU.n(n.edif, 1), u: '%', r: 'de edificado na mesma &eacute;poca' },
+            { v: difPP('1947', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos entre 1947 e 2023-24' }
+          ]);
         }
         b79.style.display = (est.epoca === '1979' && !est.perdaGanho) ? 'block' : 'none';
         b79.textContent = est.det79 ? 'Voltar às 2 classes' : 'Ver as 5 classes de 1979';
-        q('#h-leg').innerHTML = est.perdaGanho
-          ? leg(COR.perda, 'Perda de vegeta&ccedil;&atilde;o (1985-90 &rarr; 2023-24)') + leg(COR.ganho, 'Ganho de vegeta&ccedil;&atilde;o')
-          : (est.epoca === '1979' && est.det79)
-            ? CLASSES_1979.map(function (c) { return leg(c[2], c[1] + ' (' + ha(D.cobertura_1979_ha[c[0]]) + ')'); }).join('')
-            : legVegEdif(est.epoca);
+        b79.classList.toggle('active', est.det79);
+        q('#h-leg').innerHTML = (est.epoca === '1979' && est.det79 && !est.perdaGanho)
+          ? CLASSES_1979.map(function (c) { return leg(c[2], c[1] + ' (' + ha(D.cobertura_1979_ha[c[0]]) + ')'); }).join('')
+          : '';
       }
       function seleccionar(id) {
         if (!por(id)) return;
         if (id !== '1979') est.det79 = false;
         est.epoca = id; est.perdaGanho = false; est.comparar = false;
-        if (boxMud) boxMud.cb.checked = false;
+        if (boxMud) { boxMud.cb.checked = false; boxMud.row.classList.add('off'); }
         mostrar();
       }
       function comparar(on, esq, dir) {
         if (on) {
           if (esq && por(esq)) est.esq = esq;
           if (dir && por(dir)) est.dir = dir;
-          est.perdaGanho = false; est.det79 = false; boxMud.cb.checked = false;
+          est.perdaGanho = false; est.det79 = false; boxMud.cb.checked = false; boxMud.row.classList.add('off');
         } else if (est.comparar) est.epoca = est.esq;
         est.comparar = !!on;
         mostrar();
       }
 
-      var boxMud = MU.linha(q('#h-mud'), {
-        label: 'Perda e ganho de vegetação (1985-90 → 2023-24)', checked: false,
-        onToggle: function (on) { est.perdaGanho = on; mostrar(); }
-      });
       q('#h-79').addEventListener('click', function () { est.det79 = !est.det79; mostrar(); });
       q('#h-cmp').addEventListener('click', function () { comparar(!est.comparar); });
       q('#h-esq').addEventListener('change', function () { est.esq = this.value; mostrar(); });
       q('#h-dir').addEventListener('change', function () { est.dir = this.value; mostrar(); });
-      painel.addEventListener('click', function (ev) {
-        var b = ev.target.closest && ev.target.closest('#h-tempo [data-epoca], #h-graf [data-epoca]');
+      q('#h-tempo').addEventListener('click', function (ev) {
+        var b = ev.target.closest && ev.target.closest('[data-epoca]');
         if (b) seleccionar(b.dataset.epoca);
       });
-      q('#h-op').addEventListener('input', function () {
-        opac = +this.value / 100;
-        q('#h-op-v').textContent = this.value + '%';
-        Object.keys(cache).forEach(function (k) { cache[k].forEach(function (o) { o.setOpacity(opac); }); });
-        if (mud) mud.forEach(function (o) { o.setOpacity(opac); });
+      q('#h-tempo').addEventListener('keydown', function (ev) {   // setas percorrem as épocas (radiogroup)
+        var d = (ev.key === 'ArrowDown' || ev.key === 'ArrowRight') ? 1 : (ev.key === 'ArrowUp' || ev.key === 'ArrowLeft') ? -1 : 0;
+        if (!d) return;
+        var i = EPOCAS.indexOf(por(est.epoca)) + d;
+        if (i < 0 || i >= EPOCAS.length) return;
+        seleccionar(EPOCAS[i].id); q('#h-tempo [data-epoca="' + EPOCAS[i].id + '"]').focus(); ev.preventDefault();
       });
 
       MU.historico = {
@@ -975,7 +1460,7 @@ MU.registarTema({
         seleccionar: seleccionar,
         comparar: comparar,
         cortina: cortina,
-        estado: function () { return { epoca: est.epoca, perdaGanho: est.perdaGanho, comparar: est.comparar }; },
+        estado: function () { return { epoca: est.epoca, perdaGanho: est.perdaGanho, comparar: est.comparar, edif: est.edif }; },
         ligar1979Detalhe: function (on) { est.det79 = !!on; mostrar(); },
         _ligar: function (on) { activo = on; if (on && !est.epoca) est.epoca = '2023-24'; mostrar(); }
       };
@@ -983,19 +1468,20 @@ MU.registarTema({
 
     activar() {
       var h = MU.historico;
-      h._ligar(true);   // mantém o estado (época, cortina, perda/ganho) ao voltar ao separador
+      h._ligar(true);   // mantém o estado (época, cortina, perda/ganho) ao voltar ao tema
+      MU.activarParques(this);
       if (MU.param('vista') === '1947') {
         h.seleccionar('1947');
         if (!MU.fundoManual) MU.setFundo('orto1947');
       }
     },
-    aoHash() {   // só mudou um parâmetro do hash com o separador aberto
+    aoHash() {   // só mudou um parâmetro do hash com o tema aberto
       if (MU.param('vista') === '1947') {
         MU.historico.seleccionar('1947');
         if (!MU.fundoManual) MU.setFundo('orto1947');
       }
     },
-    desactivar() { MU.historico._ligar(false); }
+    desactivar() { MU.historico._ligar(false); MU.desactivarParques(this); }
   });
 })();
 
@@ -1003,29 +1489,49 @@ MU.registarTema({
 MU.registarTema({
   id: 'privado',
   rotulo: 'Verde privado',
-  fundo: 'positron',
+  fundo: 'carta',
   dados: 'privado',
-  ctx: { limites: { on: true, cor: '#444444' }, densidade: { on: false } },
-  fonte: 'Sentinel-2 10m (ESA) &bull; 2016-17 vs 2024-25<br>Parques exclu&iacute;dos via OpenStreetMap',
+  ctx: { limites: { on: true }, densidade: { on: false } },
+  fonte: 'Sentinel-2 10 m (ESA) &middot; 2016-17 e 2024-25 &middot; parques exclu&iacute;dos via OpenStreetMap. ' +
+         'Hectares por contagem de p&iacute;xeis (&asymp; 57 m&sup2; cada) dentro do concelho.',
 
   async montar(painel) {
+    var S = MU.DADOS.contexto.stats, map = MU.map, self = this;
+    var esc = MU.escala([S.subsistente, S.perdido, S.parques_ha]);
     painel.innerHTML =
-      '<b style="font-size:14px;">Verde Privado</b><br>' +
-      '<span class="tema-sub">Espa&ccedil;os verdes privados encravados no tecido urbano</span>' +
-      '<div class="section">Camadas</div><div class="camadas"></div>';
-    await MU.addCamadas(this, painel.querySelector('.camadas'), [
-      { id: 'interior_subsistente', label: 'Subsistente (áreas principais)', color: '#2E7D32' },
-      { id: 'interior_perdido', label: 'Perdido (2016-2025)', color: '#D7263D' },
-      { id: 'centro_alargado', label: 'Interior VCI', color: '#FFD700' }
-    ], false);
+      '<p class="desc">O verde que sobra quando se retiram os parques, o verde pago e as estradas: logradouros, interiores de ' +
+      'quarteir&atilde;o, quintas privadas. E o que deles se perdeu desde 2016.</p>' +
+      '<div class="nums">' + MU.htmlNums([
+        { v: MU.n(S.subsistente), u: 'ha', r: 'de verde privado subsistente nas &aacute;reas principais' },
+        { v: MU.n(S.perdido), u: 'ha', r: 'de verde privado perdido entre 2016 e 2025' },
+        { v: MU.n(S.privado), u: 'ha', r: 'de verde privado em todo o concelho, contando as &aacute;reas pequenas' }
+      ]) + '</div>' +
+      MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
+    var box = painel.querySelector('.camadas');
+    await MU.addCamadas(this, box, [
+      { id: 'interior_subsistente', label: 'Subsistente (áreas principais)', color: '#D6C496', ha: S.subsistente },
+      { id: 'interior_perdido', label: 'Perdido 2016–2025', color: '#7E3FA0', ha: S.perdido },
+      { id: 'centro_alargado', label: 'Interior da VCI', color: '#E0B000', show: false, ha: S.centro_alargado }
+    ], esc);
+    // verde pago (contexto, pré-colorido), desligado à partida
+    map.createPane('privPagoPane'); map.getPane('privPagoPane').style.zIndex = 405;
+    this._pago = L.imageOverlay(MU.DADOS.contexto.pago, MU.BOUNDS, { pane: 'privPagoPane' });
+    this._lPago = MU.linha(box, {
+      label: 'Verde pago ou não usufruível', checked: false, color: '#D9642B', ha: S.pago, esc: esc,
+      onToggle: function (on) { if (MU.tema === 'privado') on ? self._pago.addTo(map) : map.removeLayer(self._pago); },
+      opacidade: { v: 1, onInput: function (v) { self._pago.setOpacity(v); } }
+    });
+    MU.linhaParques(this, box, { on: true, esc: esc });
   },
 
-  activar() { MU.activarCamadas(this); },
-  desactivar() { MU.desactivarCamadas(this); }
+  activar() {
+    MU.activarCamadas(this); MU.activarParques(this);
+    if (this._lPago.cb.checked) this._pago.addTo(MU.map);
+  },
+  desactivar() { MU.desactivarCamadas(this); MU.desactivarParques(this); MU.map.removeLayer(this._pago); }
 });
 
 MU.iniciar();
 </script>
-<script>if(window.innerWidth<=768){var p=document.getElementById('panel'),b=document.getElementById('panel-toggle');p.classList.add('collapsed');b.textContent='▲ Abrir legenda';}</script>
 </body>
 </html>
