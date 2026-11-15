@@ -1,214 +1,129 @@
 ---
 layout: default
 title: null
-description: "Mapas interactivos de vegetação, uso do solo e mudanças urbanas no Porto, construídos com dados de satélite abertos (Sentinel-2, Landsat, Google Earth Engine)."
+wide: true
+description: "O verde e a cidade do Porto, medidos com dados abertos: mapas desde 1947, os 50 espaços verdes do Grande Porto, a velocidade dos autocarros e artigos."
+# Página de entrada, maquete P2b «Palco e régua». Estilo: assets/css/inicio.css; comportamento: assets/js/inicio.js.
+# Dados: os 4 temas e as fontes (abaixo), site.posts, site.espacos e _data/inicio_autocarros.json (gerar_inicio.py).
+# As contagens da página saem destes dados; nunca escrever números à mão.
+temas:   # leg = [token --d-*, texto]; o rio junta-se sempre
+  - k: hoje
+    n: "Mapa 2016–2025"
+    img: mapa-mudancas.png
+    t: "Árvores e o que as substituiu, 2016–2025"
+    s: "Sentinel-2, classificação pixel a pixel"
+    leg: [[claro, "Árvores, 2024-25"], [perda, "Árvores que deram lugar a edificado"], [edif, "Edificado"]]
+  - k: acessibilidade
+    n: "Acessibilidade e propostas"
+    img: mapa-camadas.png
+    t: "As três camadas de verde"
+    s: "PDM do Porto, OSM, Sentinel-2"
+    leg: [[parque, "Parques e jardins"], [pago, "Verde pago ou não usufruível"], [priv, "Verde privado"]]
+  - k: historico
+    n: "Histórico 1947–2024"
+    img: mapa-historico.png
+    t: "Vegetação perdida desde 1985-90"
+    s: "Landsat"
+    leg: [[claro, "Vegetação, 2023-24"], [perda, "Vegetação perdida desde 1985-90"]]
+  - k: privado
+    n: "Verde privado"
+    img: mapa-privado.png
+    t: "Logradouros e quintas privadas"
+    s: "Sentinel-2, OSM"
+    leg: [[priv, "Verde privado que subsiste"], [perda, "Perdido, 2016–2025"]]
+ficha_fontes:
+  - ["1947", "Ortofotomapa aéreo"]
+  - ["1985–2024", "Landsat"]
+  - ["2016–2025", "Sentinel-2"]
+  - ["PDM", "Plano Director Municipal do Porto"]
+  - ["OSM", "OpenStreetMap"]
+  - ["GHS-POP", "População, Comissão Europeia"]
+  - ["2026", "Posições dos autocarros (Porto Digital)"]
 ---
+{%- assign B = site.data.inicio_autocarros -%}
+{%- assign esp_n = site.espacos.size -%}
+{%- assign esp_sel = site.espacos | where: "seleccionado", true -%}
+{%- assign esp_s = esp_sel.size -%}
+{%- assign po = site.espacos | where: "title", "Parque Oriental" | first -%}
+{%- assign novo = site.posts.first -%}
+{%- assign art_n = site.posts.size -%}
+{%- capture d_ini -%}{% include data-pt.html d=site.posts.last.date %}{%- endcapture -%}
+{%- assign d_ini = d_ini | strip | split: " " -%}
+{%- capture d_fim -%}{% include data-pt.html d=novo.date %}{%- endcapture -%}
+{%- assign d_fim = d_fim | strip | split: " " -%}
+{%- assign img = site.baseurl | append: "/assets/images/inicio/" -%}
+{%- capture coords -%}<span class="coord nw-c">41,187° N · 8,693° W</span><span class="coord se-c">41,139° N · 8,551° W</span><span class="escala" aria-hidden="true">1 km<i></i></span>{%- endcapture -%}
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/inicio.css">
+<div class="inicio">
+ <section class="topo">
+  <div class="apres">
+   <div class="selo"><img class="emb" src="{{ img }}emblema.png" alt="" width="196" height="196"><span class="lg-word" role="img" aria-label="Porto Verde"></span></div>
+   <h1 class="frase">O verde e a cidade do Porto, medidos com dados abertos.</h1>
+   <p>Mapas do verde desde 1947, de fotografia aérea e satélite; a campanha dos {{ esp_s }} espaços verdes do Grande Porto; a velocidade dos autocarros; e artigos sobre o que muda na cidade.</p>
+   <div class="accoes"><a class="bt pr" href="{{ site.baseurl }}/mapa_unico/mapa_unico.html">Abrir os mapas</a><a class="bt" href="{{ novo.url | prepend: site.baseurl }}">Ler o artigo mais recente</a></div>
+  </div>
+  <div class="palco" id="palco" aria-label="Pré-visualização da área">
+   <div class="palco-in">
+    <div class="palco-h"><span id="palco-n">Mapas e uso do solo</span><button class="parar" id="parar" type="button" hidden>Parar a volta</button></div>
+    <div id="stage">
 
-<style>
+     <figure class="fg on" data-k="mapas">
+      <div class="vis">{% for t in page.temas %}<img class="mp mp-alt{% if forloop.first %} on{% endif %}" data-t="{{ t.k }}" src="{{ img }}{{ t.img }}" alt="Mapa do concelho do Porto: {{ t.t }}" width="900" height="407">{% endfor %}{{ coords }}</div>
+      <figcaption>
+       {%- for t in page.temas %}
+       <div class="mp-alt{% if forloop.first %} on{% endif %}" data-t="{{ t.k }}"><b class="fg-t">{{ t.t }}</b><ul class="lgd">{% for l in t.leg %}<li><i style="background:var(--d-{{ l[0] }})"></i>{{ l[1] }}</li>{% endfor %}<li><i style="background:var(--d-rio)"></i>Rio Douro e mar</li></ul><span class="fg-s">{{ t.s }}</span></div>
+       {%- endfor %}
+       <ul class="temas" aria-label="Os {{ page.temas.size }} temas do mapa">{% for t in page.temas %}<li><a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html#tema={{ t.k }}" data-t="{{ t.k }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">{{ t.n }}</a></li>{% endfor %}</ul>
+       <div class="entrar"><a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html">Entrar em «Mapas e uso do solo»</a></div>
+      </figcaption>
+     </figure>
 
-  /* Two-column layout */
-  .main-layout {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 2.5rem;
-    align-items: start;
-    margin-bottom: 2.5rem;
-  }
-  .section-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    margin: 0 0 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee;
-  }
+     <figure class="fg" data-k="esp">
+      <div class="vis"><div class="esp"><div class="ph"><img src="{{ site.baseurl }}/50espacos/media/parque-oriental/02.jpg" alt="Parque Oriental, Campanhã: choupos e prado"><span class="credito">Foto: crédito a confirmar</span></div>
+       <div class="fi"><b>{{ po.title }}</b><span class="lc">{{ po.freguesia }}, {{ po.concelho }} · <span class="nw">{{ po.area_ha | round }} ha</span></span><p>Vale do rio Tinto: um dos {{ esp_s }} espaços que a campanha decidiu defender.</p>
+        <div class="units" aria-hidden="true">{% for i in (1..esp_n) %}<span{% if i <= esp_s %} class="s"{% endif %}></span>{% endfor %}</div><span class="units-l">■ {{ esp_s }} seleccionados, de {{ esp_n }}</span></div></div></div>
+      <figcaption><b class="fg-t">Um dos {{ esp_s }}: o {{ po.title }}</b><p class="fg-n">A campanha da Campo Aberto, lançada em 2006: {{ esp_n }} espaços propostos por cidadãos, escolas e associações; {{ esp_s }} seleccionados em Abril de 2009.</p><span class="fg-s">Ficha da campanha, 2006–2008</span>
+       <div class="entrar"><a href="{{ site.baseurl }}/50espacos/">Entrar em «50 Espaços Verdes»</a><a href="{{ po.url | prepend: site.baseurl }}">Ficha do {{ po.title }}</a></div></figcaption>
+     </figure>
 
-  /* Maps grid */
-  .map-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.2rem;
-  }
-  .map-card {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-  }
-  .map-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-  }
-  .map-card .card-color {
-    height: 6px;
-  }
-  .map-card .card-body {
-    padding: 1.2rem 1.4rem;
-  }
-  .map-card .card-body h3 {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin-bottom: 0.4rem;
-  }
-  .map-card .card-body p {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-  .map-card .card-body time {
-    display: block;
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-bottom: 0.3rem;
-  }
+     <figure class="fg" data-k="mob">
+      <div class="vis"><svg class="bus" viewBox="0 0 900 {{ B.altura }}" role="img" aria-label="Rede de autocarros do Porto: troços abaixo de 14 km/h na ponta da tarde"><image href="{{ img }}mapa-base.png" width="900" height="{{ B.altura }}"/>{% for c in B.camadas %}<path class="{{ c.c }}" d="{{ c.d }}"/>{% endfor %}<circle class="mk" cx="{{ B.pior.x }}" cy="{{ B.pior.y }}" r="13"/></svg>{{ coords }}</div>
+      <figcaption><b class="fg-t">Onde os autocarros andam abaixo de <span class="nw">14 km/h</span></b>
+       <ul class="lgd"><li><i class="ln" style="background:var(--d-v1)"></i>abaixo de 7 km/h</li><li><i class="ln" style="background:var(--d-v2)"></i>7 a 10,5</li><li><i class="ln" style="background:var(--d-v3)"></i>10,5 a 14</li><li><i class="ln" style="background:var(--d-ok)"></i>14 km/h ou mais</li></ul>
+       <p class="fg-n">Ponta da tarde (17–19 h), dias úteis: {{ B.n_criticos }} de {{ B.n_trocos }} troços abaixo de <span class="nw">14 km/h</span>. Espessura: tempo perdido. Círculo: o ponto mais penalizado, {{ B.pior.nome }}.</p>
+       <span class="fg-s">Posições da STCP (Porto Digital), {{ B.intervalo_curto }}</span>
+       <div class="entrar"><a href="{{ site.baseurl }}/Mobilidade/autocarros.html">Autocarros: mapa</a><a href="{{ site.baseurl }}/Mobilidade/analise.html">Autocarros: análise</a><a href="{{ site.baseurl }}/atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a></div></figcaption>
+     </figure>
 
-  /* Articles column */
-  .articles-col {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-  }
-  .card-thumb {
-    display: block;
-    width: 100%;
-    height: 170px;
-    object-fit: cover;
-    object-position: center 30%;
-  }
+     <figure class="fg" data-k="art">
+      <div class="vis"><div class="art"><img src="{{ site.baseurl }}{{ novo.image }}" alt=""><span class="at">O mais recente · {% include data-pt.html d=novo.date %}</span></div></div>
+      <figcaption><b class="fg-t">{{ novo.title }}</b><span class="fg-s">{{ art_n }} artigos, de {{ d_ini[1] }}{% if d_ini[2] != d_fim[2] %} de {{ d_ini[2] }}{% endif %} a {{ d_fim[1] }} de {{ d_fim[2] }}</span>
+       <div class="entrar"><a href="{{ novo.url | prepend: site.baseurl }}">Ler o artigo</a><a href="{{ site.baseurl }}/artigos/">Todos os artigos</a></div></figcaption>
+     </figure>
 
-  /* Video */
-  .video-section {
-    margin: 2rem 0;
-  }
-  .video-section h2 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 1rem;
-  }
-  .video-wrap {
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-  .video-wrap video { display: block; width: 100%; }
-  .video-caption {
-    font-size: 0.8rem;
-    color: var(--muted);
-    margin-top: 0.6rem;
-    text-align: center;
-  }
-
-  /* Responsive */
-  @media (max-width: 800px) {
-    .main-layout {
-      grid-template-columns: 1fr;
-    }
-  }
-  @media (max-width: 580px) {
-    .stats-strip {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .stat-item:nth-child(2) { border-right: none; }
-    .stat-item:nth-child(1),
-    .stat-item:nth-child(2) { border-bottom: 1px solid #f0f0f0; }
-  }
-</style>
-
-
-<div class="main-layout">
-
-  <div class="maps-col">
-    <div class="map-grid">
-
-      <a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=acessibilidade" class="map-card">
-        <img src="{{ site.baseurl }}/assets/images/cards/acessibilidade.jpg" class="card-thumb" style="object-position:center center" alt="Acessibilidade e propostas">
-        <div class="card-body">
-          <h3>Acessibilidade e Propostas</h3>
-          <p>Acessibilidade a espa&ccedil;os verdes p&uacute;blicos (2SFCA, 500m) e 46 propostas de parque que colmatam o d&eacute;fice de proximidade (300m).</p>
-        </div>
-      </a>
-
-      <a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=hoje" class="map-card">
-        <img src="{{ site.baseurl }}/assets/images/cards/mudancas.jpg" class="card-thumb" style="object-position:center center" alt="Mudanças 2016-2025">
-        <div class="card-body">
-          <h3>Mudanças 2016 &mdash; 2025</h3>
-          <p>Classificação de árvores, solo e edificado. Transições detectadas entre os dois períodos.</p>
-        </div>
-      </a>
-
-      <a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=historico" class="map-card">
-        <img src="{{ site.baseurl }}/assets/images/cards/historico.jpg" class="card-thumb" style="object-position:center center" alt="Histórico 1947-2024">
-        <div class="card-body">
-          <h3>Histórico 1947 &mdash; 2024</h3>
-          <p>Ortofoto aérea de 1947, ocupação do solo de 1979 e décadas de vegetação Landsat com normalização inter-sensor.</p>
-        </div>
-      </a>
-
-      <a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=privado" class="map-card">
-        <img src="{{ site.baseurl }}/assets/images/cards/verde_privado.jpg" class="card-thumb" style="object-position:center center" alt="Verde Privado">
-        <div class="card-body">
-          <h3>Verde Privado</h3>
-          <p>Espaços verdes privados encravados no tecido urbano: os que subsistem e os que foram perdidos.</p>
-        </div>
-      </a>
-
-      <a href="{{ site.baseurl }}/50espacos/" class="map-card">
-        <img src="{{ site.baseurl }}/assets/images/cards/50espacos.jpg" class="card-thumb" style="object-position:center center" alt="Campanha 50 espaços verdes">
-        <div class="card-body">
-          <h3>50 Espaços Verdes</h3>
-          <p>A campanha da Campo Aberto: 111 espaços verdes do Grande Porto, 50 a defender. Fichas, mapa e imprensa.</p>
-        </div>
-      </a>
-
-      <a href="{{ site.baseurl }}/atropelamentos/dashboard_atropelamentos.html" class="map-card">
-        <img src="{{ site.baseurl }}/assets/images/cards/atropelamentos.jpg" class="card-thumb" style="object-position:center center" alt="Atropelamentos — Grande Porto">
-        <div class="card-body">
-          <h3>Atropelamentos &mdash; Grande Porto</h3>
-          <p>Dashboard de sinistralidade rodoviária com peões e ciclistas.</p>
-        </div>
-      </a>
+     <figure class="fg" data-k="fontes">
+      <div class="vis"><div class="ft"><dl>{% for f in page.ficha_fontes %}<dt>{{ f[0] }}</dt><dd>{{ f[1] }}</dd>{% endfor %}</dl></div></div>
+      <figcaption><b class="fg-t">{{ page.ficha_fontes.size }} fontes de dados, todas citadas</b><p class="fg-n">Cada mapa e cada número diz de onde vem; o código de cada análise está no GitHub.</p>
+       <div class="entrar"><a href="{{ site.baseurl }}/sobre/">Entrar em «Sobre»</a></div></figcaption>
+     </figure>
 
     </div>
+   </div>
   </div>
-
-  <div class="articles-col">
-    {% for post in site.posts %}
-    <a href="{{ post.url | prepend: site.baseurl }}" class="map-card">
-      {% if post.image %}
-      <img src="{{ site.baseurl }}{{ post.image }}" alt="{{ post.title }}" class="card-thumb">
-      {% else %}
-      <div class="card-color" style="background:#e4e8e1;"></div>
-      {% endif %}
-      <div class="card-body">
-        <h3>{{ post.title }}</h3>
-        <time>{% include data-pt.html d=post.date abrev=true %}</time>
-        <p>{{ post.description | default: post.excerpt | strip_html | truncatewords: 22 }}</p>
-      </div>
-    </a>
-    {% endfor %}
-  </div>
-
+ </section>
+ <h2 class="sr">Áreas do site</h2>
+ <ul class="regua" id="regua">
+  <li><a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html" data-k="mapas" style="--ac:var(--c-mapas)" class="on"><b>Mapas e uso do solo</b><span>Parques, verde pago e verde privado; o que mudou desde 1947.</span><small>{{ page.temas.size }} temas, 1947–2025</small></a></li>
+  <li><a href="{{ site.baseurl }}/50espacos/" data-k="esp" style="--ac:var(--c-esp)"><b>50 Espaços Verdes</b><span>A campanha da Campo Aberto pelos espaços verdes do Grande Porto.</span><small>{{ esp_n }} espaços, {{ esp_s }} seleccionados</small></a></li>
+  <li><a href="{{ site.baseurl }}/Mobilidade/autocarros.html" data-k="mob" style="--ac:var(--c-mob)"><b>Mobilidade</b><span>Onde os autocarros perdem tempo, troço a troço; e os atropelamentos.</span><small>{{ B.veiculos }} autocarros, {{ B.linhas }} linhas</small></a></li>
+  <li><a href="{{ site.baseurl }}/artigos/" data-k="art" style="--ac:var(--c-art)"><b>Artigos</b><span>Análises com dados, reportagens e textos enviados às entidades.</span><small>{{ art_n }}, desde {{ d_ini[1] }} de {{ d_ini[2] }}</small></a></li>
+  <li><a href="{{ site.baseurl }}/sobre/" data-k="fontes" style="--ac:var(--c-fontes)"><b>Fontes e código</b><span>De onde vem cada número, e o código de cada análise.</span><small>{{ page.ficha_fontes.size }} fontes de dados</small></a></li>
+ </ul>
+ <section class="ult" aria-label="Artigos">
+  <a class="novo" href="{{ novo.url | prepend: site.baseurl }}"><h2>O mais recente</h2>{% if novo.image %}<img src="{{ site.baseurl }}{{ novo.image }}" alt="">{% endif %}<time datetime="{{ novo.date | date: '%Y-%m-%d' }}">{% include data-pt.html d=novo.date %}</time><b>{{ novo.title }}</b><span>{{ novo.description | default: novo.excerpt | strip_html | truncatewords: 40 }}</span></a>
+  <div class="lista"><h2>Últimos artigos</h2>
+   <ol>{% for post in site.posts offset:1 limit:6 %}<li><a href="{{ post.url | prepend: site.baseurl }}"><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{% include data-pt.html d=post.date %}</time><b>{{ post.title }}</b></a></li>{% endfor %}</ol>
+   <a class="todos" href="{{ site.baseurl }}/artigos/">Todos os artigos</a></div>
+ </section>
 </div>
-
-<div class="video-section">
-  <h2>Crescimento urbano 1987 &mdash; 2024</h2>
-  <div class="video-wrap">
-    <video controls poster="{{ site.baseurl }}/animacao/frame_2024.png">
-      <source src="{{ site.baseurl }}/animacao/animacao_cairo.mp4" type="video/mp4">
-    </video>
-  </div>
-  <p class="video-caption">Evolução bienal vectorial do edificado, dados Landsat.</p>
-</div>
-
-<div style="text-align:center; margin: 3rem 0 1rem;">
-  <img src="{{ site.baseurl }}/favicon.png" alt="GEE Porto" style="width:120px; height:120px; object-fit:contain; opacity:0.85;">
-</div>
+<script src="{{ site.baseurl }}/assets/js/inicio.js" defer></script>

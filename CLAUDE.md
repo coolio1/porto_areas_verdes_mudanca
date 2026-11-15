@@ -45,6 +45,7 @@ Menu, abas e rodapé: `assets/js/moldura.js` em todas as páginas (`docs/navegac
 
 ## Cards do index e artigos (`_posts/`)
 Thumbnails e criação de artigos: skill `porto-verde-posts`. Nunca editar `index.html` para juntar artigos (lista `site.posts` sozinho).
+- **Entrada (`index.html`, maquete P2b «Palco e régua»):** estilo `assets/css/inicio.css` (tudo sob `.inicio`), comportamento `assets/js/inicio.js`, imagens `assets/images/inicio/`; temas e fontes no front matter; contagens só de Liquid/dados. Rede dos autocarros: `python gerar_inicio.py` → `_data/inicio_autocarros.json` (lê `Mobilidade/autocarros.html` e `analise.html`; correr depois de os regenerar; `test_inicio.py` acusa dados velhos). Já não usa os cards de `capture_cards.py`.
 
 ## Regras de código
 - Grayscale: `np.mean(array[:,:,:3], axis=2)`, **nunca** `PIL .convert('L')`.

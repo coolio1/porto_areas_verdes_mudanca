@@ -6,6 +6,7 @@
    data-menu    «flutuante» (por defeito; botões fixos no canto) ou «barra» (Jekyll: barra de filete com o logo, no topo)
    data-rodape  «mapa» (por defeito; etiqueta fixa em baixo) ou «leitura» (fim da página)
    data-fontes  fontes dos dados desta página (sobrepõe a tabela FONTES)
+   Abas da Mobilidade: vão para o elemento [data-abas] da página, se existir (folha.css); senão, fixas sob o menu.
    A raiz do site deduz-se do próprio src do script; o CSS (porto-verde.css) é ligado aqui. */
 (function () {
   'use strict';
@@ -37,6 +38,7 @@
   var ABAS_NO_FUNDO_MOVEL = ['atropelamentos/dashboard_atropelamentos.html']; // título por baixo do menu
   var FONTES_PADRAO = 'Sentinel-2, Landsat, OSM, PDM Porto';
   var FONTES = {
+    'mapa_unico/mapa_unico.html': 'Sentinel-2, Landsat, GHS-POP, OpenStreetMap, PDM do Porto, CAOP',
     'Mobilidade/autocarros.html': 'Porto Digital, OSM',
     'Mobilidade/analise.html': 'Porto Digital, STCP, CM Porto, OSM',
     'atropelamentos/dashboard_atropelamentos.html': 'ANSR, INE'
@@ -78,9 +80,12 @@
     var menu;
     if (MENU === 'barra') {
       // barra de filete com o logo (páginas Jekyll); a mesma lista de PAGINAS, também no menu de telemóvel
+      // na entrada só o emblema: o logótipo grande já está na página
+      var entrada = P === '' || P === 'index.html';
       var marca = '<a class="pv-barra__marca" href="' + RAIZ + 'index.html" aria-label="Porto Verde, início">' +
         '<img class="pv-barra__mini" src="' + RAIZ + 'assets/images/mini-logo.png" alt="" width="34" height="34">' +
-        '<img class="pv-barra__nome" src="' + RAIZ + 'assets/images/wordmark.png" alt="Porto Verde" width="150" height="31"></a>';
+        (entrada ? '' : '<img class="pv-barra__nome" src="' + RAIZ + 'assets/images/wordmark.png" alt="Porto Verde" width="150" height="31">') +
+        '</a>';
       menu = el('header', { 'class': 'pv-barra' },
         marca + '<nav class="pv-barra__links" aria-label="Menu">' + ligacoes(PAGINAS, 'active') + '</nav>' +
         '<details class="pv-barra__menu"><summary>Menu</summary><nav aria-label="Menu (telemóvel)">' +
@@ -93,15 +98,20 @@
     // abas da Mobilidade (só nas páginas que as têm)
     if (ABAS.some(function (a) { return a[0] === P; })) {
       var abas = el('div', { id: 'abas-mobilidade' }, ligacoes(ABAS, 'on', true));
-      if (ABAS_NO_FUNDO_MOVEL.indexOf(P) >= 0) abas.className = 'no-fundo';
-      document.body.insertBefore(abas, menu.nextSibling);
+      var lugar = document.querySelector('[data-abas]'); // a página pode reservar o lugar das abas (folha.css)
+      if (lugar) lugar.appendChild(abas);
+      else {
+        if (ABAS_NO_FUNDO_MOVEL.indexOf(P) >= 0) abas.className = 'no-fundo';
+        document.body.insertBefore(abas, menu.nextSibling);
+      }
     }
     // rodapé
     var fontes = S.dataset.fontes || FONTES[P] || FONTES_PADRAO;
     var logo = (P === '' && RODAPE === 'leitura') ? '' :
       '<a class="pv-rodape__logo" href="' + RAIZ + 'index.html"><img src="' + RAIZ + 'favicon.png" alt="Porto Verde"></a>';
     document.body.appendChild(el('footer', { 'class': 'pv-rodape pv-rodape--' + RODAPE },
-      logo + '<p>Porto Verde<br>Dados abertos: ' + esc(fontes) + '</p>'));
+      logo + '<p><span class="pv-rodape__nome">Porto Verde</span><br><span class="pv-rodape__fontes">Dados abertos: ' +
+      esc(fontes) + '</span></p>'));
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar);
   else montar();
