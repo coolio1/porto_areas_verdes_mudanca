@@ -1,0 +1,52 @@
+/* artigos.css — página /artigos/ (artigos/index.html), maquete A «Índice» (aprovada 2026-11-15).
+   Tudo dentro de .artigos. Cor do tema = marca de 10 px, nunca texto. Modo claro só (escuro: fase 2). */
+.artigos {
+  --paper: #FAFAF7; --panel: #FFFFFF; --ink: #10212C; --ink2: #3E5260; --ink3: #56697A; --rule: #10212C;
+  --hair: rgba(16, 33, 44, .16); --brand: #0B5232; --wash: #EEF2F0;
+  --t-auri: #A51D45; --t-dados: #0B5232; --t-hab: #D9642B; --t-deb: #5E8CA6;
+  --sans: 'IBM Plex Sans', system-ui, sans-serif; --serif: 'IBM Plex Serif', Georgia, serif; --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --gut: clamp(16px, 3.2vw, 48px);
+  max-width: 1280px; margin: 0 auto; padding: clamp(24px, 4vw, 56px) var(--gut) 72px;
+  font: 16px/1.5 var(--sans); color: var(--ink); hyphens: none; -webkit-hyphens: none;
+}
+.artigos a { color: inherit; }
+.artigos :focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.artigos h1, .artigos h2 { text-wrap: balance; margin: 0; }
+
+.artigos .cab { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); padding-bottom: 14px; }
+.artigos .cab h1 { font: 600 clamp(30px, 4vw, 46px)/1.1 var(--sans); letter-spacing: -.02em; }
+.artigos .cab .n { font: 12.5px/1.3 var(--mono); color: var(--ink3); }
+.artigos .mono { font: 12px/1.3 var(--mono); color: var(--ink3); letter-spacing: .02em; }
+
+.artigos .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 0; border-bottom: 1px solid var(--hair); }
+.artigos .chip { all: unset; box-sizing: border-box; cursor: pointer; font: 500 12.5px/1 var(--mono); padding: 8px 11px; border: 1px solid var(--rule); background: var(--panel);
+  display: inline-flex; gap: 8px; align-items: center; }
+.artigos .chip:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.artigos .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.artigos .chip i { width: 8px; height: 8px; display: block; }
+.artigos .chip[aria-pressed="true"] i { outline: 1px solid var(--paper); }
+
+.artigos .marca { display: inline-block; width: 10px; height: 10px; flex: none; }
+.artigos .t-auri { background: var(--t-auri); } .artigos .t-dados { background: var(--t-dados); }
+.artigos .t-hab { background: var(--t-hab); } .artigos .t-deb { background: var(--t-deb); }
+
+.artigos .ano { padding: 26px 0 8px; font: 500 12.5px/1 var(--mono); color: var(--ink3); border-bottom: 1px solid var(--rule); letter-spacing: .06em; }
+.artigos .lin { display: grid; grid-template-columns: 112px minmax(0, 1fr) 224px; gap: clamp(16px, 2.4vw, 32px); padding: 22px 0; border-bottom: 1px solid var(--hair); align-items: start; }
+.artigos .lin[hidden] { display: none; }
+.artigos .dt { display: flex; flex-direction: column; gap: 8px; }
+.artigos .dt b { font: 500 13px/1.2 var(--mono); color: var(--ink); }
+.artigos .lin h2 { font: 600 clamp(19px, 1.9vw, 24px)/1.25 var(--serif); margin: 0; }   /* vence «article h2» do layout */
+.artigos .lin h2 a { text-decoration: none; }
+.artigos .lin:hover h2 a { text-decoration: underline; text-underline-offset: 4px; }
+.artigos .lin p { margin: 8px 0 12px; font: 400 15px/1.55 var(--serif); color: var(--ink2); max-width: 66ch;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.artigos .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.artigos .tag { font: 11.5px/1 var(--mono); color: var(--ink3); border: 1px solid var(--hair); padding: 4px 6px; white-space: nowrap; }
+.artigos .thumb { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border: 1px solid var(--rule); background: var(--wash); border-radius: 0; }
+.artigos .vazio { padding: 40px 0; font: 14px var(--mono); color: var(--ink3); }
+
+@media (max-width: 760px) {
+  .artigos .lin { grid-template-columns: 1fr; }
+  .artigos .lin .thumb-a { order: -1; }
+  .artigos .dt { flex-direction: row; justify-content: space-between; align-items: center; }
+}

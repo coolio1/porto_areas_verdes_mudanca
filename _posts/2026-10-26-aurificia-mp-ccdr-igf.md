@@ -3,6 +3,7 @@ layout: post
 title: "Companhia Aurifícia: novas participações ao MP e entidades da tutela"
 description: "Em Outubro de 2026, três novos textos sobre a operação da antiga Companhia Aurifícia, no Porto, seguiram para o Ministério Público, a CCDR Norte e o Património Cultural e a Inspecção-Geral de Finanças: o que sustentam e o que pedem."
 date: 2026-10-26
+tema: auri
 tags: [urbanismo, porto, verde, património, Aurifícia]
 image: /assets/images/aurificia-denuncia-diagrama-volumes.jpg
 ---

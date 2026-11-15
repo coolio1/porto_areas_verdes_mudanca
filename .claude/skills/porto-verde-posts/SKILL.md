@@ -19,6 +19,8 @@ description: Protocolo de Porto Verde para criar artigos (_posts/). Usar ao adic
    title: "Título em PT-PT"
    description: "Descrição de 1-2 frases para SEO e card do índice."
    date: YYYY-MM-DD
+   tema: auri | dados | hab | deb     # filtro de /artigos/; tema novo = acrescentar a `temas:` em artigos/index.html
+   image: /assets/images/<ficheiro>.jpg
    tags: [tag1, tag2, ...]
    ---
    ```

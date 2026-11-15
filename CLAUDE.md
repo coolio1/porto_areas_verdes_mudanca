@@ -44,7 +44,7 @@ Menu, abas e rodapé: `assets/js/moldura.js` em todas as páginas (`docs/navegac
 - Mapas HTML gerados têm de abrir no browser e mostrar as layers.
 
 ## Entrada e artigos (`_posts/`)
-Criação de artigos: skill `porto-verde-posts`. Nunca editar `index.html` para juntar artigos (lista `site.posts` sozinho).
+Criação de artigos: skill `porto-verde-posts`. **Lista `/artigos/` (maquete A «Índice»):** `artigos/index.html` + `assets/css/artigos.css` + `assets/js/artigos.js`; o filtro usa o campo `tema:` de cada artigo (chave `temas:` no front matter da página; artigo sem tema aparece na lista mas sem filtro). Nunca editar `index.html` para juntar artigos (lista `site.posts` sozinho).
 - **Entrada (`index.html`, maquete P2b «Palco e régua»):** estilo `assets/css/inicio.css` (tudo sob `.inicio`), comportamento `assets/js/inicio.js`, imagens `assets/images/inicio/`; temas e fontes no front matter; contagens só de Liquid/dados. Rede dos autocarros: `python gerar_inicio.py` → `_data/inicio_autocarros.json` (lê `Mobilidade/autocarros.html` e `analise.html`; `gerar_autocarros.py` e `gerar_analise.py` chamam-no sozinhos no fim quando gravam a página publicada; `test_inicio.py` acusa dados velhos). Mapas de fundo: `gerar_inicio_mapas.py` (só do repo, água do OSM; difere ~2 % dos PNG publicados, gerar para outra pasta e comparar antes de substituir).
 
 ## Regras de código

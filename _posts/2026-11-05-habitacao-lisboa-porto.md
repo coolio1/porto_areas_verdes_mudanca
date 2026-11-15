@@ -3,6 +3,7 @@ layout: post
 title: "Casas em Lisboa e Porto: o que causou a subida de preços, o que funciona e o que ainda é só promessa"
 description: "O que diz a literatura científica sobre a subida dos preços da habitação em Portugal, o que deu resultado noutros países e que ideias menos conhecidas têm resultado medido. A leitura mais provável: faltam casas a preços que as famílias consigam pagar onde elas são precisas, e nenhuma medida isolada resolve."
 date: 2026-11-05
+tema: hab
 image: /assets/images/habitacao-ilustracao-casas.jpg
 article_class: nota
 tags: [habitação, porto, lisboa, política urbana, alojamento local, imigração, rendas, urbanismo]

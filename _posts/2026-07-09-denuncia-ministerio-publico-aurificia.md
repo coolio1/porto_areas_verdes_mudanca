@@ -3,6 +3,7 @@ layout: post
 title: "Denúncia ao Ministério Público: arranque de árvores na Companhia Aurifícia enquanto a Câmara do Porto mantém silêncio"
 description: "Cidadãos e as associações Campo Aberto e Quercus denunciam ao Ministério Público o início do abate de árvores no interior do quarteirão classificado da antiga Companhia Aurifícia, e pedem a suspensão cautelar urgente das obras."
 date: 2026-07-09
+tema: auri
 tags: [urbanismo, porto, verde, património, denúncia]
 image: /assets/images/aurificia-denuncia-foto-aerea.jpg
 ---

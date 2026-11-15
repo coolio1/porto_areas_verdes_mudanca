@@ -1,65 +1,48 @@
 ---
 layout: default
 title: Artigos
+wide: true
 description: "Todos os artigos publicados no Porto Verde."
+# Maquete A «Índice». Estilo: assets/css/artigos.css; filtro: assets/js/artigos.js.
+# O tema de cada artigo é o campo `tema:` do seu front matter (chave abaixo); artigo sem tema entra em «outros».
+# Contagens e lista saem de site.posts; nunca escrever números à mão.
+temas:
+  - { k: auri, n: "Companhia Aurifícia" }
+  - { k: dados, n: "Mapas e dados" }
+  - { k: hab, n: "Habitação" }
+  - { k: deb, n: "Debates" }
 ---
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/artigos.css">
+<script src="{{ site.baseurl }}/assets/js/artigos.js" defer></script>
 
-<style>
-  .post-list { list-style: none; margin: 0; padding: 0; }
-  .post-list li {
-    display: flex;
-    gap: 1.1rem;
-    align-items: flex-start;
-    border-bottom: 1px solid #eee;
-    padding: 1.2rem 0;
-  }
-  .post-thumb {
-    flex: 0 0 9.5rem;
-    width: 9.5rem;
-    aspect-ratio: 16 / 10;
-    border-radius: 4px;
-    overflow: hidden;
-    display: block;
-    background: #e4e8e1;
-  }
-  .post-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 0; }
-  .post-text { flex: 1 1 auto; min-width: 0; }
-  @media (max-width: 520px) {
-    .post-list li { gap: 0.8rem; }
-    .post-thumb { flex-basis: 5.5rem; width: 5.5rem; aspect-ratio: 1 / 1; }
-  }
-  .post-list li:last-child { border-bottom: none; }
-  .post-list time {
-    display: block;
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-bottom: 0.3rem;
-  }
-  .post-list a {
-    font: 700 1.05rem/1.35 var(--pv-serif);
-    color: var(--text);
-    text-decoration: none;
-  }
-  .post-list a:hover { color: var(--accent); }
-  .post-list p {
-    font-size: 0.875rem;
-    color: var(--muted);
-    margin-top: 0.3rem;
-    line-height: 1.5;
-  }
-</style>
+<div class="artigos">
+  <div class="cab"><h1>Artigos</h1><span class="n">{{ site.posts | size }} de {{ site.posts | size }} · mais recente primeiro</span></div>
 
-<h1>Artigos</h1>
+  <div class="chips" role="group" aria-label="Filtrar por tema">
+    <button type="button" class="chip" data-f="" aria-pressed="true">Todos · {{ site.posts | size }}</button>
+    {%- for t in page.temas %}
+    {%- assign n = site.posts | where: "tema", t.k | size %}
+    {%- if n > 0 %}<button type="button" class="chip" data-f="{{ t.k }}" aria-pressed="false"><i class="t-{{ t.k }}"></i>{{ t.n }} · {{ n }}</button>{% endif %}
+    {%- endfor %}
+  </div>
 
-<ul class="post-list">
-  {% for post in site.posts %}
-  <li>
-    <a class="post-thumb" href="{{ post.url | prepend: site.baseurl }}" tabindex="-1" aria-hidden="true">{% if post.image %}<img src="{{ site.baseurl }}{{ post.image }}" alt="" loading="lazy">{% endif %}</a>
-    <div class="post-text">
-      <time>{% include data-pt.html d=post.date abrev=true %}</time>
-      <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+  {%- assign ano_atual = "" %}
+  {%- for post in site.posts %}
+  {%- assign ano = post.date | date: "%Y" %}
+  {%- if ano != ano_atual %}{%- assign ano_atual = ano %}
+  <div class="ano">{{ ano }}</div>
+  {%- endif %}
+  {%- assign nome_tema = "" %}
+  {%- for t in page.temas %}{% if t.k == post.tema %}{% assign nome_tema = t.n %}{% endif %}{% endfor %}
+  <article class="lin" data-tema="{{ post.tema }}">
+    <div class="dt"><b>{% include data-pt.html d=post.date abrev=true %}</b>{% if nome_tema != "" %}<span class="mono"><span class="marca t-{{ post.tema }}"></span> {{ nome_tema }}</span>{% endif %}</div>
+    <div>
+      <h2><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h2>
       {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+      {%- if post.tags.size > 0 %}<div class="tags">{% for tag in post.tags limit: 4 %}<span class="tag">{{ tag }}</span>{% endfor %}</div>{% endif %}
     </div>
-  </li>
-  {% endfor %}
-</ul>
+    <a class="thumb-a" href="{{ post.url | prepend: site.baseurl }}" tabindex="-1" aria-hidden="true">{% if post.image %}<img class="thumb" src="{{ site.baseurl }}{{ post.image }}" alt="" loading="lazy">{% else %}<span class="thumb" style="display:block"></span>{% endif %}</a>
+  </article>
+  {%- endfor %}
+  <div class="vazio" hidden>Nenhum artigo neste tema.</div>
+</div>

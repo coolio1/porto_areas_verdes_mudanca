@@ -3,6 +3,7 @@ layout: post
 title: "Carta aberta ao Presidente da Câmara Municipal do Porto – pela reformulação do Projeto para a Antiga Companhia Aurifícia"
 description: "Dezassete cidadãos pedem ao Presidente da CMP a revisão do projeto de 85 milhões de euros na Antiga Companhia Aurifícia: 122 fogos e 252 lugares de estacionamento que violam o PDM e destroem o último grande logradouro verde do centro do Porto."
 date: 2026-04-22
+tema: auri
 tags: [urbanismo, porto, verde, património, carta-aberta]
 image: /assets/images/aurificia-fachada-historica.jpg
 ---
