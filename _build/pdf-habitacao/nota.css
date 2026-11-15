@@ -129,8 +129,8 @@ section#recomendações>h2,section#referências>h2{break-before:auto;margin-top:
 /* página Conclusões */
 
 .toc h2{font-size:34pt;margin-bottom:.5em}
-.toc li{font-size:10.6pt;line-height:1.55}
-.toc li.n2{font-size:11.6pt;margin-top:.9em}
+.toc li{font-size:10pt;line-height:1.4}
+.toc li.n2{font-size:11pt;margin-top:.7em}
 .toc li.n3{padding-left:20px}
 
 /* Conclusões v7 */

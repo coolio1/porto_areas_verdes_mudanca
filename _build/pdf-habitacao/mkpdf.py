@@ -34,6 +34,13 @@ rest = l[2]
 # o Resumo sai do PDF (pedido do utilizador, 2026-11-07): a página Conclusões faz esse papel
 _i, _j = rest.index("## Resumo"), rest.index("## 1 Introdução")
 rest = rest[:_i] + rest[_j:]
+# a Introdução e as Recomendações saem (pedido do utilizador, 2026-11-14): a Síntese científica
+# (secção 1, escrita no artigo) absorve-as; as Limitações passam a 5 e a nota não remete para 1, 5 ou 6
+_i, _j = rest.index("## 1 Introdução"), rest.index("## 2 Métodos")
+rest = rest[:_i] + rest[_j:]
+_i, _j = rest.index("## 5 Recomendações"), rest.index("## 6 Limitações")
+rest = rest[:_i] + rest[_j:]
+rest = rest.replace("## 6 Limitações", "## 5 Limitações", 1)
 
 titulo_full = l[0].lstrip("% ").strip()
 titulo, _, sub = titulo_full.partition(": ")
@@ -47,52 +54,47 @@ def fig(n, cap):
 
 FIGS = [
     (
-        "O debate público atribui esta subida",
-        "fig1-serie-2008-2025",
-        "Figura 1. Preços das casas e rendimento disponível bruto das famílias em Portugal, 2008–2025 (índice, 2008 = 100, valores correntes). Fonte: Eurostat.",
-    ),
-    (
         "### 3.2 Imigração",
         "fig3-choques-v2",
-        "Figura 2. Os cinco choques na procura, com números-chave de cada um.",
+        "Figura 4. Os cinco choques na procura, com números-chave de cada um.",
     ),
     (
         "### 3.6 ",
         "fig2-oferta",
-        "Figura 3. Três sinais do lado da oferta em Portugal: licenciamentos, municípios em que as famílias cresceram mais do que os alojamentos (2011–2021 e 2021–2024) e prazos de licenciamento.",
+        "Figura 5. Três sinais do lado da oferta em Portugal: licenciamentos, municípios em que as famílias cresceram mais do que os alojamentos (2011–2021 e 2021–2024) e prazos de licenciamento.",
     ),
     (
         "### 3.9 ",
         "fig5-habitacao-publica",
-        "Figura 4. Peso do parque social ou a custo controlado no total de habitações.",
+        "Figura 6. Peso do parque social ou a custo controlado no total de habitações.",
     ),
     (
         "### 3.12 ",
         "fig6-vazios",
-        "Figura 5. Fogos vagos, fora do mercado e em bom estado, e devolutos com IMI agravado, em Lisboa e no Porto.",
-    ),
-    (
-        "### 4.2 ",
-        "fig4-efeitos-precos",
-        "Figura 6. Efeito estimado de várias medidas nos preços, em estudos de contextos diferentes (ordens de grandeza, não comparáveis ao ponto).",
-    ),
-    (
-        "## 6 Limitações",
-        "fig7-roteiro",
-        "Figura 7. Roteiro das recomendações por horizonte temporal.",
+        "Figura 7. Fogos vagos, fora do mercado e em bom estado, e devolutos com IMI agravado, em Lisboa e no Porto.",
     ),
 ]
+# figuras da Síntese científica (secção 1): mesma imagem do artigo, legenda do PDF
+FIGS_SINTESE = {
+    "habitacao-fig1-serie-2008-2025": (
+        "fig1-serie-2008-2025",
+        "Figura 1. Preços das casas e rendimento disponível bruto das famílias em Portugal, 2008–2025 (índice, 2008 = 100, valores correntes). Fonte: Eurostat.",
+    ),
+    "habitacao-fig4-efeitos-precos": (
+        "fig4-efeitos-precos",
+        "Figura 2. Efeito estimado de várias medidas nos preços, em estudos de contextos diferentes (ordens de grandeza, não comparáveis ao ponto).",
+    ),
+}
+FIG_ROTEIRO = (
+    "fig7-roteiro",
+    "Figura 3. Roteiro das recomendações por horizonte temporal.",
+)
 for anchor, n, cap in FIGS:
     assert rest.count(anchor) == 1, anchor
     rest = rest.replace(anchor, fig(n, cap) + anchor, 1)
 
 # ---------- frases em destaque (verbatim do texto) ----------
 PULLS = [
-    (
-        "## 1 Introdução",
-        "Não existe, para Portugal, uma decomposição publicada que atribua a cada factor uma parte da subida dos preços.",
-        2,
-    ),
     (
         "### 3.3 ",
         "O crescimento do AL foi muito rápido e concentrado em poucos anos.",
@@ -138,6 +140,43 @@ def pull_after_para(text, anchor, quote, idx):
 for anchor, quote, idx in PULLS:
     rest = pull_after_para(rest, anchor, quote, idx)
 
+
+# ---------- Síntese científica (secção 1): vem do artigo, única fonte ----------
+def sintese_cientifica():
+    post = (SP.parent.parent / "_posts" / "2026-11-05-habitacao-lisboa-porto.md").read_text(encoding="utf-8")
+    a, b = post.index("## Síntese científica\n"), post.index("## A nota completa (PDF)")
+    t = post[a:b].rstrip() + "\n"
+    t = t.replace("## Síntese científica", "## 1 Síntese científica", 1)
+    k = [0]
+
+    def h3(m):
+        k[0] += 1
+        return f"### 1.{k[0]} " + re.sub(r"^\d+\.\s+", "", m.group(1))
+
+    t = re.sub(r"^### (.+)$", h3, t, flags=re.MULTILINE)
+
+    def img(m):
+        n, cap = FIGS_SINTESE[m.group(1)]
+        return fig(n, cap).strip("\n") + "\n"
+
+    t = re.sub(
+        r"!\[[^\]]*\]\(\{\{ site\.baseurl \}\}/assets/images/([^)]+)\.png\)\n\*[^\n]*\*\n", img, t
+    )
+    t = t.replace("{: .tabela-texto}\n", "")
+    t = t.replace(" da nota completa)", ")")
+    t = t.replace(
+        "remetem para a lista de referências da nota completa (PDF)",
+        "remetem para as Referências, no fim do documento",
+    )
+    marca = "Grau de certeza: **"
+    assert t.count(marca) == 1
+    t = t.replace(marca, fig(*FIG_ROTEIRO).strip("\n") + "\n\n" + marca)
+    assert "{{" not in t and "{%" not in t and "site.baseurl" not in t, "restos de Liquid na síntese"
+    return t
+
+
+rest = sintese_cientifica() + "\n" + rest
+
 # ---------- capa, síntese e índice ----------
 cover = f"""
 <div class="capa">
@@ -146,7 +185,7 @@ cover = f"""
 <h1>{titulo.replace(" da habitação", "<br>da habitação").replace(" em Lisboa", "<br>em Lisboa")}</h1>
 <div class="base"><p class="sub">{sub}</p>
 <div class="meta"><div><b>Porto Verde</b><br>Estudo de síntese · __NPAG__ páginas</div><div style="text-align:right">Ilustração gerada por<br>inteligência artificial</div></div>
-<p class="aviso"><b>Aviso:</b> Este artigo foi gerado com recurso a inteligência artificial e não reflecte necessariamente a opinião do autor.</p></div>
+<p class="aviso"><b>Aviso:</b> Este artigo foi gerado com recurso a inteligência artificial e não reflecte necessariamente a opinião do autor. As recomendações das subsecções 1.6 e 1.7 são inferências da síntese a partir dos estudos, não resultados deles.</p></div>
 </div>
 
 """
@@ -280,7 +319,7 @@ def norm(x):
 def find_pages():
     d = pymupdf.open(str(SP / "nota_raw.pdf"))
     texts = [norm(pg.get_text()) for pg in d]
-    start = next(i for i in range(3, len(d)) if "Introdução" in texts[i][:30])
+    start = next(i for i in range(3, len(d)) if "Entre 2008 e 2025, o índice" in texts[i])
     res = {}
     cur = start
     for i, (lv, t) in enumerate(heads):
@@ -300,7 +339,7 @@ def find_pages():
     return res, d
 
 
-NPAG = "98"
+NPAG = "100"
 render(None)
 pages, d = find_pages()
 d.close()

@@ -1,11 +1,11 @@
-"""Página «Conclusões»: tese, quatro números, cinco choques, veredicto por medida, pacote."""
+"""Página «Síntese»: tese, quatro números, cinco choques, veredicto por medida, pacote."""
 
 import re
 
 TESE = (
-    "A habitação terá encarecido porque vários aumentos da procura "
-    "coincidiram com uma oferta que não acompanhou; o peso de cada um não foi medido. "
-    "A leitura mais provável dos estudos é um pacote, "
+    "A evidência é compatível com vários aumentos simultâneos da procura "
+    "perante uma oferta que respondeu pouco; o peso de cada factor não foi medido em Portugal. "
+    "A leitura dos estudos favorece um pacote, "
     "não uma medida isolada."
 )
 
@@ -27,7 +27,7 @@ NUMEROS = [
     ),
     (
         "3 a 6 %",
-        "de descida dos preços em 2022 se, desde 2012, se tivesse construído ao ritmo dos anos 2000 ou ao dobro (modelo sobre o passado)",
+        "de descida dos preços médios nacionais em 2022 com o ritmo de construção dos anos 2000, ou o dobro, em 2012–2022 (simulação)",
         "folha",
     ),
 ]
@@ -36,7 +36,7 @@ CHOQUES = [
     (
         "Famílias mais pequenas",
         "> 70 %",
-        "do aumento do número de famílias em Portugal, 1981–2011, explicado por serem mais pequenas",
+        "do aumento do número de famílias em Portugal, 1981–2011, explicado pela menor dimensão média",
     ),
     (
         "Imigração",
@@ -51,65 +51,65 @@ CHOQUES = [
     (
         "Compradores não residentes",
         "5,0 %",
-        "das transacções de casas em Portugal, 8,3 % do valor (2025)",
+        "das transacções de casas em Portugal, 8,3 % do valor (2025; domicílio fiscal no estrangeiro)",
     ),
     (
         "Garantia pública a jovens",
         "26,8 %",
-        "do valor dos novos empréstimos para compra de casa em Portugal (2025)",
+        "do montante dos novos empréstimos à habitação em Portugal (2025; jovens até 35 anos)",
     ),
 ]
 
 # (selo, classe, medida, efeito medido, onde / força da evidência)
 MEDIDAS = [
     (
-        "Funciona",
+        "Efeito local",
         "ok",
         "Regular e fiscalizar o alojamento local",
-        "preços de venda cerca de 8 % abaixo dos de zonas semelhantes sem a medida, só nos bairros abrangidos (Lisboa, suspensão de 2018)",
-        "Rendas (estudos não comparáveis): mais AL sobe-as em Berlim (até +2,4 % por anúncio comercial a mais); restringir o AL baixou-as em Los Angeles (cerca de −2 %); em Sydney subiram 2,7–3,6 %. Certeza moderada",
+        "preços de venda cerca de 8 % abaixo dos de bairros de comparação (Lisboa, suspensão de 2018)",
+        "Rendas (estudos não comparáveis): mais AL sobe-as em Berlim (até +2,4 % por anúncio comercial); restringi-lo associou-se a −2 % em Los Angeles; Sydney +2,7–3,6 %; Nova Iorque, sem efeito. Certeza moderada",
     ),
     (
-        "Funciona, pouco",
+        "Efeito modesto",
         "ok",
         "Construir mais",
-        "preços 3 a 6 % mais baixos (simulação); rendas cerca de 23 % mais baixas oito anos depois (Auckland, reforma do zonamento)",
-        "Valores não comparáveis. Certeza moderada na direcção, baixa na dimensão",
+        "preços médios nacionais 3 a 6 % mais baixos em 2022 (simulação); rendas cerca de 23 % abaixo da comparação, oito anos depois (Auckland, zonamento)",
+        "Valores não comparáveis; efeito da oferta em três a sete anos. Certeza moderada na direcção, mais incerta na dimensão em Portugal",
     ),
     (
         "Sem medição",
         "dep",
         "Habitação a custo controlado em grande escala",
         "habitação com custos e rendas ou preços limitados, pública ou de entidades sem fins lucrativos",
-        "Descontos medidos a moradores (Irlanda, Zurique); nenhum estudo isolou o efeito nas rendas (Viena, Portugal). Certeza baixa",
+        "Moradores pagam abaixo do mercado (Irlanda: 29,9 %); efeito nas rendas do mercado por isolar (Viena, Portugal). Certeza baixa",
     ),
     (
-        "Depende",
+        "Por inferência",
         "dep",
         "Menos imposto na compra de casa, mais no imposto anual",
-        "recomendação da Organização para a Cooperação e Desenvolvimento Económico (OCDE): o imposto sobre a compra (IMT) trava mais a mudança de casa do que o imposto anual (IMI)",
-        "Reino Unido e Canadá: mais imposto na compra baixa a mobilidade (−35 a −42 % por +2 p.p.); nos preços, cerca de 60 % de um corte ficou com os compradores. Sem estudo em Portugal. Certeza moderada",
+        "recomendação da Organização para a Cooperação e Desenvolvimento Económico (OCDE): o imposto municipal na compra (IMT) trava mais a mudança de casa do que o anual sobre imóveis (IMI)",
+        "Reino Unido e Canadá: mais imposto na compra, menos mudanças de casa (Reino Unido: −35 a −42 % por +2 p.p.); num corte temporário, cerca de 60 % do ganho ficou com os compradores. Sem estudo em Portugal. Certeza moderada",
     ),
     (
-        "Efeitos adversos",
+        "Sobem preços",
         "nao",
         "Apoios a quem compra casa",
-        "isenção do IMT a jovens até 35 anos: preços pedidos cerca de 3,2 % acima do estimado sem a isenção, 12 meses depois de anunciada (Maio de 2024); <em>Help to Buy</em> (crédito em Inglaterra): fez subir os preços das casas novas em Londres entre 4,5 % e 6,4 % mais do que logo fora da Grande Londres",
-        "Sem mais casas, o apoio a quem compra vai parar ao preço (não é trocar imposto na compra pelo anual). Certeza moderada",
+        "isenção do IMT a jovens até 35 anos: preços pedidos 3,2 % acima do contrafactual em 12 meses; <em>Help to Buy</em> (Inglaterra): casas novas em Londres 4,5 a 6,4 % mais caras do que logo fora da Grande Londres",
+        "Oferta rígida: parte do apoio vai para o preço; na fronteira galesa (oferta menos restrita), sem efeito significativo nos preços. Certeza moderada",
     ),
     (
-        "Efeitos adversos",
+        "Menos mobilidade",
         "nao",
         "Tectos de renda de primeira geração (limite rígido à renda)",
-        "protegem quem tem contrato; reduzem as mudanças de casa e podem reduzir a oferta; efeito global incerto",
-        "112 estudos, dos dois tipos. Certeza moderada a alta; nos de 2.ª geração (Portugal não avaliado), moderada",
+        "rendas abrangidas mais baixas (Berlim: −7 a −11 %); menos mudanças de casa e menos casas anunciadas (Berlim: metade); efeito no bem-estar «duvidoso» em Berlim",
+        "112 estudos. Certeza moderada nos efeitos adversos (mobilidade, oferta); 2.ª geração: rendas abrangidas 2 a 7 % mais baixas, certeza moderada; limites portugueses não avaliados",
     ),
     (
         "Limitado",
         "peq",
         "Impostos sobre compradores estrangeiros",
         "preços cerca de 5 % mais baixos em Vancouver e 7 a 9 % em Toronto, sem melhoria detectada nas rendas",
-        "Colúmbia Britânica e Ontário. Sem melhoria nas rendas; pouco peso em Portugal (não residentes fiscais: 5,0 % das transacções, 2025). Certeza baixa (resultados tirados dos resumos publicados)",
+        "Colúmbia Britânica e Ontário; nas zonas abrangidas da Colúmbia Britânica, as rendas subiram mais. Pouco peso em Portugal (não residentes fiscais: 5,0 % das transacções, 2025). Certeza baixa",
     ),
 ]
 
@@ -127,11 +127,11 @@ ICONOS = [
 PASSOS = [
     (
         "Já",
-        "Parar de piorar: criar o registo de casas vagas; não alargar apoios à compra; não criar novos tectos rígidos de renda; fazer cumprir as zonas de contenção do AL.",
+        "Parar de piorar: criar o registo municipal de casas vagas; não alargar apoios à compra; não criar novos tectos rígidos de renda; fazer cumprir as zonas de contenção do AL.",
     ),
     (
         "Em um a três anos",
-        "Mais oferta: licenças a prazo certo, com pareceres e protecção ambiental; solo público urbanizado; imigrantes como mão-de-obra; IMI agravado aplicado de forma sistemática aos devolutos.",
+        "Mais oferta: licenças a prazo certo e monitorizado, sem dispensar pareceres; solo público urbanizado; imigrantes como mão-de-obra; IMI agravado aplicado de forma sistemática aos devolutos.",
     ),
     (
         "Em três a dez anos",
@@ -139,20 +139,20 @@ PASSOS = [
     ),
     (
         "Em paralelo",
-        "Menos imposto na compra (IMT) e mais no imposto anual (IMI); avaliar as medidas comparando com o que teria acontecido sem elas.",
+        "Menos imposto na compra (IMT) e mais no imposto anual (IMI); avaliar com contrafactual os apoios à renda e as medidas fiscais antes de os alargar.",
     ),
 ]
 
 TERRITORIO = (
     "Em 2021, Lisboa e Porto tinham 29 600 casas vagas (sem ocupante no Censo) fora do mercado e em bom estado "
-    "(21 801 em Lisboa; 7 799 no Porto); mobilizá-las é complemento: poucos milhares de casas de uma só vez, "
-    "por cálculo ilustrativo. A nova oferta deve ficar fora da estrutura ecológica "
+    "(21 801 em Lisboa; 7 799 no Porto); mobilizá-las daria, por estimativa ilustrativa, poucos milhares de casas "
+    "de uma só vez: complemento, não substituto da oferta nova, que deve ficar fora da estrutura ecológica "
     "(onde o plano municipal protege espaços verdes e linhas de água)."
 )
 
 NICHO = (
-    "Renda de custo (<em>cost rental</em>), cooperativas e outras: efeitos só locais; nenhuma baixou "
-    "os preços de uma cidade; algumas sem avaliação."
+    "Renda de custo (<em>cost rental</em>), cooperativas e outras: efeitos medidos só locais; nenhum "
+    "na cidade inteira; várias sem contrafactual."
 )
 
 CSS = """
@@ -236,15 +236,15 @@ def html(img="img/hero.png"):
     )
     out = f"""<div class="conc">
 <div class="topo"><img class="im" src="{img}"><div class="veu"></div>
- <div class="kick">Síntese deste artigo</div><h2>Conclusões</h2>
+ <div class="kick">Ler primeiro</div><h2>Síntese</h2>
  <p class="tese">{TESE}</p>
  <div class="nums">{nums}</div></div>
-<div class="choques"><p class="sec">Cinco choques na procura (aumentos fortes de pessoas ou de dinheiro à procura de casa; o 1.º, uma tendência longa)</p><div class="cs">{chq}</div></div>
-<div class="ver"><p class="sec">O que dizem os estudos sobre cada medida <span style="text-transform:none;letter-spacing:0;font-weight:400">(selo: o que os estudos mostram; certeza: solidez e coerência dos estudos)</span></p>{ver}</div>
-<div class="pacote"><div class="k">O que os estudos sugerem</div><h4>Um pacote em três etapas, mais medidas em paralelo</h4>
+<div class="choques"><p class="sec">Cinco factores de procura (o 1.º, uma tendência longa; os outros, choques recentes): peso de cada um nos preços por medir</p><div class="cs">{chq}</div></div>
+<div class="ver"><p class="sec">O que dizem os estudos sobre cada medida <span style="text-transform:none;letter-spacing:0;font-weight:400">(selo: síntese dos efeitos estimados; certeza: solidez e coerência dos estudos)</span></p>{ver}</div>
+<div class="pacote"><div class="k">Leitura a partir dos estudos, não conclusão deles</div><h4>Um pacote em três etapas, mais medidas em paralelo</h4>
  <div class="passos">{pas}</div>
  <p class="terr"><b>Casas vazias e espaços verdes.</b> {TERRITORIO}</p>
  <p class="terr nic"><b>Ideias menos conhecidas.</b> {NICHO}</p>
- <div class="rod"><span><b>Leia por zona, não por cidade:</b> as médias escondem diferenças entre bairros; os efeitos valem para as zonas estudadas.<br>Certeza global: moderada quanto à direcção dos efeitos, baixa quanto à sua dimensão em Portugal.</span><span>Porto Verde · portoverde.pt</span></div></div>
+ <div class="rod"><span><b>Leitura por zona, não por cidade:</b> as médias escondem diferenças entre bairros; os efeitos valem para as zonas estudadas.<br>Certeza global: moderada quanto à direcção dos efeitos, mais incerta quanto à sua dimensão em Portugal.</span><span>Porto Verde · portoverde.pt</span></div></div>
 </div>"""
     return _nb(out)
