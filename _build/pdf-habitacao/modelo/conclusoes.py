@@ -248,3 +248,74 @@ def html(img="img/hero.png"):
  <div class="rod"><span><b>Leitura por zona, não por cidade:</b> as médias escondem diferenças entre bairros; os efeitos valem para as zonas estudadas.<br>Certeza global: moderada quanto à direcção dos efeitos, mais incerta quanto à sua dimensão em Portugal.</span><span>Porto Verde · portoverde.pt</span></div></div>
 </div>"""
     return _nb(out)
+
+
+# ---------------- v27 (conceito E, 2026-11-15) ----------------
+PASSOS_E = [
+    ("1 · Já · 0–12 meses", "p1", "Parar de piorar",
+     "Não alargar garantia pública nem isenções de IMT; registo municipal de casas vagas; fazer cumprir os limites de AL."),
+    ("2 · 1–3 anos", "p2", "Desbloquear a oferta",
+     "Licenças a prazo certo e monitorizado (545 dias em Lisboa, 453 no Porto, em 2023); IMI agravado aplicado de forma sistemática."),
+    ("3 · 3–10 anos", "p3", "Custo controlado",
+     "Operadores sem fins lucrativos, renda de custo e afectação permanente, em solo público já urbanizado."),
+    ("4 · Em paralelo", "p4", "Fiscalidade e avaliação",
+     "Menos imposto na compra e mais no imposto anual; avaliar cada medida com contrafactual."),
+]
+
+
+def html_e():
+    """Página «Síntese» do PDF v27: cartaz de uma página no sistema do conceito E."""
+    ver = "".join(
+        f'<div class="ln {c}"><span class="ic"><svg viewBox="0 0 24 24">{ICONOS[k]}</svg></span>'
+        f'<div><h3>{m}</h3><p class="ef">{e}</p></div><span class="selo">{s}</span></div>'
+        for k, (s, c, m, e, v) in enumerate(MEDIDAS)
+    )
+    chq = "".join(
+        f"<div><i>{a}</i><b>{n}</b><span>{d}</span></div>" for a, n, d in CHOQUES
+    )
+    pas = "".join(
+        f'<div class="passo {c}"><div class="h">{h}</div><b style="font:600 8pt var(--fs)">{t}</b><div class="d">{d}</div></div>'
+        for h, c, t, d in PASSOS_E
+    )
+    out = f"""<div class="conc"><div class="gr"></div><div class="in">
+<div class="barra"><span class="lab">Síntese · o dossier numa página</span><span class="lab">Porto Verde · Nota 02</span></div>
+<h2>As casas subiram 145 % e os rendimentos 69 %. Nenhuma medida isolada chega: a resposta é um pacote.</h2>
+<div class="l1">
+ <div class="box graf2"><div class="tt"><span class="lab" style="font-weight:500">Preços vs rendimento · 2008 = 100</span><span class="lab" style="color:#D9642B">esquema com os pontos finais · série na Figura 1</span></div>
+ <svg viewBox="0 0 400 170" role="img" aria-label="Preços das casas a 245 e rendimento a 169 em 2025, partindo de 100 em 2008">
+ <g stroke="rgba(16,33,44,.12)"><line x1="26" x2="396" y1="14" y2="14"/><line x1="26" x2="396" y1="59" y2="59"/><line x1="26" x2="396" y1="104" y2="104"/></g>
+ <line x1="26" x2="396" y1="149" y2="149" stroke="#10212C"/>
+ <polygon points="26,149 330,16 330,85" fill="#D9642B" opacity=".13"/>
+ <polyline points="26,149 330,16" fill="none" stroke="#D9642B" stroke-width="3"/>
+ <polyline points="26,149 330,85" fill="none" stroke="#0B5232" stroke-width="3"/>
+ <line x1="330" x2="330" y1="16" y2="85" stroke="#10212C" stroke-dasharray="3 3"/>
+ <circle cx="330" cy="16" r="4" fill="#D9642B"/><circle cx="330" cy="85" r="4" fill="#0B5232"/>
+ <g font-family="IBM Plex Mono,monospace" font-size="9" fill="#56697A"><text x="0" y="17">250</text><text x="0" y="62">200</text><text x="0" y="107">150</text><text x="0" y="152">100</text><text x="26" y="166">2008</text><text x="306" y="166">2025</text></g>
+ <g font-family="IBM Plex Sans,sans-serif" font-weight="700"><text x="340" y="22" font-size="19" fill="#D9642B">245</text><text x="340" y="91" font-size="19" fill="#0B5232">169</text><text x="340" y="56" font-size="9" fill="#10212C" font-weight="500">+76</text></g></svg>
+ <div class="leg2"><span><i style="background:#D9642B"></i>preços das casas</span><span><i style="background:#0B5232"></i>rendimento disponível bruto das famílias</span></div></div>
+ <div class="st">
+  <div class="box"><b>17,6 %</b><span>Índice de Preços da Habitação, 2025 (9,1 % em 2024)</span></div>
+  <div class="box"><b>+10,2 %</b><span>renda mediana dos novos contratos, 2.º trimestre de 2026</span></div>
+  <div class="box"><b>164 / 308</b><span>concelhos em que o rendimento mediano não chega para comprar casa sem passar 35 % de taxa de esforço</span></div>
+ </div></div>
+<div class="l2">
+ <div class="box" style="border-top:1.3mm solid #0B5232"><p class="sec" style="color:#0B5232">Medido · identificação causal</p>
+  <div class="bar"><span>Contenção do AL em Lisboa (2018): preços nos bairros abrangidos</span><span><i style="width:57%;background:#0B5232"></i></span><b>−8 %</b></div>
+  <div class="bar"><span>Isenção de IMT a jovens: preços pedidos nos anúncios</span><span><i style="width:23%;background:#D9642B"></i></span><b>+3,2 %</b></div></div>
+ <div class="box" style="border-top:1.3mm solid #E0A033"><p class="sec">Simulação · o que o modelo implica, não o medido (preços de 2022)</p>
+  <div class="bar"><span>Com o número de AL de 2015</span><span><i style="width:100%;background:#E0A033"></i></span><b>−14 %</b></div>
+  <div class="bar"><span>Com os residentes estrangeiros de 2015</span><span><i style="width:57%;background:#E0A033"></i></span><b>−8 %</b></div>
+  <div class="bar"><span>Construção a ritmo duas vezes maior</span><span><i style="width:43%;background:#E0A033"></i></span><b>−6 %</b></div>
+  <div class="bar"><span>Construção ao ritmo dos anos 2000</span><span><i style="width:21%;background:#E0A033"></i></span><b>−3 %</b></div></div>
+</div>
+<div><p class="sec">Cinco factores de procura (o 1.º, uma tendência longa; os outros, choques recentes): peso de cada um nos preços por medir</p><div class="cs">{chq}</div></div>
+<div><p class="sec">O que dizem os estudos sobre cada medida</p><div class="ver">{ver}</div></div>
+<div class="pacote"><p class="sec">O pacote · leitura a partir dos estudos, não conclusão deles</p><div class="passos">{pas}</div></div>
+<div class="rod"><div><b>Certeza (GRADE simplificado):</b> moderada quanto à direcção dos efeitos, mais incerta quanto à dimensão em Portugal. Nenhuma medida isolada tem efeito medido de dois dígitos nos preços médios das cidades. As médias escondem diferenças entre bairros.</div><div><b>Parque vazio:</b> 21 801 casas vazias em Lisboa e 7 799 no Porto (Censos 2021); complemento da oferta nova, não substituto. Porto Verde · portoverde.pt</div></div>
+</div></div>"""
+    return _nb_texto(out)
+
+
+def _nb_texto(h):
+    """_nb só no texto: nunca dentro de tags (viewBox e pontos do SVG partem com espaços duros)."""
+    return "".join(p if p.startswith("<") else _nb(p) for p in re.split(r"(<[^>]*>)", h))
