@@ -281,6 +281,51 @@ def nohyphen(path):
 SECCOES = {"1": "#E0A033", "2": "#3F9C80", "3": "#19A06B", "4": "#D9642B", "5": "#6F9BE0", "": "#9AA8A2"}
 
 
+# Camada de leitura (acrescentada, 2026-11-15): frases e números extraídos do texto de cada secção; nada novo.
+LER = {
+    "1": ("Não existe medição causal do peso de cada factor, só simulações. A evidência é compatível com uma "
+          "<b>tendência de fundo</b> (famílias mais pequenas) e <b>choques simultâneos</b>, perante uma oferta que "
+          "respondeu pouco. A resposta é um <b>pacote sequenciado</b>, não uma medida isolada.",
+          [("17,6 %", "Índice de Preços da Habitação, 2025 (9,1 % em 2024)"),
+           ("−8 %", "preços nos bairros abrangidos pela contenção do alojamento local em Lisboa (2018)"),
+           ("&gt; 70 %", "do aumento do número de famílias, 1981–2011, explicado pela menor dimensão média")]),
+    "2": ("Revisão de síntese, não meta-análise: os estudos foram comparados quanto à direcção, à magnitude e às "
+          "condições, não somados. <b>Prioridade aos desenhos com identificação causal.</b> A certeza de cada "
+          "conclusão segue uma versão simplificada do sistema GRADE.",
+          [("298", "referências na lista final"), ("6", "línguas de pesquisa"),
+           ("4", "níveis de certeza: alta, moderada, baixa, muito baixa")]),
+    "3": ("Percorre 19 temas, dos preços e rendas às medidas recentes. Os estudos portugueses com <b>identificação "
+          "causal</b> são poucos e incidem em instrumentos específicos; o resto é simulação, evidência descritiva "
+          "ou de outros países.",
+          [("−8 %", "preços com a contenção do alojamento local em Lisboa (2018)"),
+           ("+3,2 %", "preços pedidos 12 meses depois da isenção de IMT a jovens"),
+           ("19", "temas, de 3.1 a 3.19")]),
+    "4": ("Nenhuma opção de política tem certeza alta. <b>Moderada quanto à direcção:</b> mais oferta privada, "
+          "regular o alojamento local, subsídios à procura, tectos de rendas e fiscalidade recorrente. "
+          "<b>Baixa:</b> habitação a custo controlado em escala, restringir compradores estrangeiros e limitar "
+          "a imigração.",
+          [("−3 % a −6 %", "preços médios nacionais em 2022 com 300 mil ou 700 mil fogos a mais (simulação, não medição)"),
+           ("+3,2 %", "preços pedidos por m² ao fim de 12 meses de IMT Jovem"),
+           ("21 801", "fogos vagos em Lisboa, alvo da mobilização do parque vazio")]),
+    "5": ("Poucos estudos causais portugueses; muitas fontes são documentos de trabalho sem revisão por pares; as "
+          "contagens de devolutos diferem entre fontes. <b>Fica por responder</b> que parte da subida se deve à "
+          "imigração.",
+          [("70 862", "saldo migratório em 2025, contra 216 629 em 2024"),
+           ("17,6 %", "subida dos preços em 2025, apesar desse saldo mais baixo"),
+           ("4", "questões que ficam por responder")]),
+}
+
+
+def painel_ler(num):
+    if num not in LER:
+        return ""
+    res, nums = LER[num]
+    nm = "".join(f'<div class="nm"><b>{a}</b><span>{b}</span></div>' for a, b in nums)
+    return (f'<div class="lp"><span class="lab">Ler primeiro · em resumo</span><div class="res">{res}</div>'
+            f'<div class="nums">{nm}</div>'
+            f'<div class="nota">Camada de leitura: texto e números extraídos da secção; não é conteúdo novo</div></div>')
+
+
 def abertura(i, pages):
     """Página escura de abertura da secção, com a lista das subsecções e as suas páginas."""
     t = heads[i][1]
@@ -304,7 +349,7 @@ def abertura(i, pages):
         f'::: {{.abertura style="--c:{cor}"}}\n'
         f'<div class="gr"></div><div class="in"><div class="cab"><span class="lab">Porto Verde · Nota 02</span>'
         f'<span class="lab">Secção {num or "—"}</span></div>'
-        f'<div class="n">{num or "·"}</div><div class="t">{txt}</div>{bloco}</div>\n:::\n\n'
+        f'<div class="n">{num or "·"}</div><div class="t">{txt}</div>{painel_ler(num)}{bloco}</div>\n:::\n\n'
     )
 
 
