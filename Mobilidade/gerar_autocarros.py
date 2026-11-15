@@ -45,7 +45,9 @@ def main(argv=None) -> int:
     html = pagina.renderizar(r, aqui / "velocidade" / "template.html")
     a.saida.write_text(html, encoding="utf-8")
     print(f"{a.saida}: {len(html.encode('utf-8')) / 1024 / 1024:.2f} MB; dias {r['dias']}; coladas {r['coladas_pct']:.1f} %")
-    return 0
+    sys.path.insert(0, str(aqui.parent))
+    import gerar_inicio  # a rede da entrada lê esta página: actualiza-se em cadeia
+    return gerar_inicio.encadear(a.saida, aqui / "autocarros.html")
 
 
 if __name__ == "__main__":

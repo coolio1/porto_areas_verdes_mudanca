@@ -59,7 +59,9 @@ def main(argv=None) -> int:
     html = renderizar(r, AQUI / "analise" / "template.html")
     a.saida.write_text(html, encoding="utf-8")
     print(f"{a.saida}: {len(html.encode('utf-8')) / 1024:.0f} KB; {len(r['dias'])} dias da recolha; {r['stcp']['passagens']} passagens do pacote")
-    return 0
+    sys.path.insert(0, str(AQUI.parent))
+    import gerar_inicio  # o n.º de autocarros e linhas da entrada vem desta página: actualiza-se em cadeia
+    return gerar_inicio.encadear(a.saida, AQUI / "analise.html")
 
 
 if __name__ == "__main__":

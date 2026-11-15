@@ -5,7 +5,6 @@
 ├── _config.yml, _layouts/, _posts/, index.html, sobre.md   # Jekyll site (GitHub Pages)
 ├── assets/js/moldura.js    # Fonte única do menu, abas e rodapé (desenhados no browser)
 ├── nav.py                  # Atalho: get_nav() devolve a etiqueta <script> da moldura
-├── capture_cards.py        # Thumbnails dos cards do index (Playwright)
 ├── check_leaflet_init.py   # Validação Leaflet (pre-commit hook)
 ├── test_area.py            # Calibração (área teste Serralves)
 ├── mapa_unico/             # PÁGINA ÚNICA dos mapas (4 temas em separadores) — ver «Mapa único» abaixo

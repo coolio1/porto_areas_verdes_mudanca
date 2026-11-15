@@ -9,7 +9,7 @@
 Raiz = site Jekyll/GitHub Pages; detalhe em `docs/estrutura.md`.
 - **`mapa_unico/` = página única dos mapas (4 temas em separadores); as páginas antigas abaixo são redirects (`mapa_unico/gerar_stubs.py`)**: `mapa/` (Sentinel-2 2016-2025), `ndvi_historico/` (Landsat 1947-2024), `interiores/` (verde privado), `1947/` (classificação ortofoto), `animacao/`, `atropelamentos/` (dashboard + DB), `acessibilidade/` (pipeline 2SFCA + conversão).
 - `layers/`, `layers_historico/` — layers partilhados na raiz; `docs/` — planos e specs (fora do Jekyll).
-- `assets/js/moldura.js` (menu, abas da Mobilidade e rodapé: única fonte), `nav.py` (atalho que devolve a etiqueta `<script>`), `assets/css/porto-verde.css`, `capture_cards.py`, `check_leaflet_init.py`.
+- `assets/js/moldura.js` (menu, abas da Mobilidade e rodapé: única fonte), `nav.py` (atalho que devolve a etiqueta `<script>`), `assets/css/porto-verde.css`, `check_leaflet_init.py`.
 
 ## Navegação entre páginas
 Menu, abas e rodapé: `assets/js/moldura.js` em todas as páginas (`docs/navegacao.md`); os geradores só escrevem a etiqueta `<script>` (`nav.get_nav`). Rodapé: «Porto Verde» (nunca o nome pessoal do utilizador) e fontes curtas por página (`FONTES` no JS).
@@ -43,9 +43,9 @@ Menu, abas e rodapé: `assets/js/moldura.js` em todas as páginas (`docs/navegac
 - Scripts GEE dependem de autenticação: `ee.Initialize()` a falhar não é bug do código.
 - Mapas HTML gerados têm de abrir no browser e mostrar as layers.
 
-## Cards do index e artigos (`_posts/`)
-Thumbnails e criação de artigos: skill `porto-verde-posts`. Nunca editar `index.html` para juntar artigos (lista `site.posts` sozinho).
-- **Entrada (`index.html`, maquete P2b «Palco e régua»):** estilo `assets/css/inicio.css` (tudo sob `.inicio`), comportamento `assets/js/inicio.js`, imagens `assets/images/inicio/`; temas e fontes no front matter; contagens só de Liquid/dados. Rede dos autocarros: `python gerar_inicio.py` → `_data/inicio_autocarros.json` (lê `Mobilidade/autocarros.html` e `analise.html`; correr depois de os regenerar; `test_inicio.py` acusa dados velhos). Já não usa os cards de `capture_cards.py`.
+## Entrada e artigos (`_posts/`)
+Criação de artigos: skill `porto-verde-posts`. Nunca editar `index.html` para juntar artigos (lista `site.posts` sozinho).
+- **Entrada (`index.html`, maquete P2b «Palco e régua»):** estilo `assets/css/inicio.css` (tudo sob `.inicio`), comportamento `assets/js/inicio.js`, imagens `assets/images/inicio/`; temas e fontes no front matter; contagens só de Liquid/dados. Rede dos autocarros: `python gerar_inicio.py` → `_data/inicio_autocarros.json` (lê `Mobilidade/autocarros.html` e `analise.html`; `gerar_autocarros.py` e `gerar_analise.py` chamam-no sozinhos no fim quando gravam a página publicada; `test_inicio.py` acusa dados velhos). Mapas de fundo: `gerar_inicio_mapas.py` (só do repo, água do OSM; difere ~2 % dos PNG publicados, gerar para outra pasta e comparar antes de substituir).
 
 ## Regras de código
 - Grayscale: `np.mean(array[:,:,:3], axis=2)`, **nunca** `PIL .convert('L')`.

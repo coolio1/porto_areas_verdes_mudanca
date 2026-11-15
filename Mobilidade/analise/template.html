@@ -288,7 +288,7 @@ __NAV__
       </div>
 
       <div class="fila k-ana" id="excepcao">
-        <div class="capt"><h2><small>V</small>A excepção: quarta-feira, 11 de Novembro</h2><p>Um dia útil em que os autocarros andaram muito mais depressa e chegaram adiantados. Não parece erro dos dados: foi feriado.</p></div>
+        <div class="capt"><h2><small>V</small>A excepção: quarta-feira, 11 de Novembro</h2><p>Um dia útil em que os autocarros andaram muito mais depressa e chegaram adiantados. Não parece erro dos dados; o autor indica que foi feriado.</p></div>
         <div class="p sem c5">
           <div class="cab"><code data-ref="A-E"></code><h3>Quatro dias úteis seguem o mesmo padrão; a quarta-feira 11 é diferente</h3></div>
           <div class="leg" id="l12"></div>
@@ -540,12 +540,12 @@ function g5() {
       svg.append('text').attr('x', x(p) + 9).attr('y', y(v) + (i === 0 ? 14 : i === 1 ? 4 : -2)).style('fill', C.ink).style('font-weight', 600).text(`${p * 100} % → ${nf(v * 100, 0)} %`); });
     dest = svg.append('g'); }
   const ruas = D.ruas.slice(0, 15);
-  { const { svg, w, h, narrow } = base('#g5b', 15 * 27 + 40), m = { l: narrow ? 128 : 215, r: 44, t: 8, b: 30 }, nomeRua = n => n === '(sem nome)' ? 'troços sem nome (OSM)' : n;
+  { const { svg, w, h, narrow } = base('#g5b', 15 * 27 + 56), m = { l: narrow ? 142 : 252, r: 44, t: 8, b: 46 }, nomeRua = n => n === '(sem nome)' ? 'troços sem nome (OSM)' : n;
     const x = d3.scaleLinear().domain([0, d3.max(ruas, d => d.am + d.pm)]).nice().range([m.l, w - m.r]), y = d3.scaleBand().domain(ruas.map(d => d.rua)).range([m.t, h - m.b]).padding(.28);
     eixoX(svg, x, h - m.b + 2, x.ticks(4), t => t);
-    svg.append('text').attr('class', 'fraco').attr('x', w - m.r).attr('y', h - 2).attr('text-anchor', 'end').text('minutos perdidos por hora');
+    svg.append('text').attr('class', 'fraco').attr('x', w - m.r).attr('y', h - 3).attr('text-anchor', 'end').text('minutos perdidos por hora');
     ruas.forEach(d => { const g = svg.append('g');
-      g.append('text').attr('x', m.l - 8).attr('y', y(d.rua) + y.bandwidth() / 2).attr('dy', '.32em').attr('text-anchor', 'end').style('fill', C.ink).text(corte(nomeRua(d.rua), narrow ? 19 : 36));
+      g.append('text').attr('x', m.l - 8).attr('y', y(d.rua) + y.bandwidth() / 2).attr('dy', '.32em').attr('text-anchor', 'end').style('fill', C.ink).text(corte(nomeRua(d.rua), narrow ? 17 : 34));
       g.append('rect').attr('x', x(0)).attr('y', y(d.rua)).attr('height', y.bandwidth()).attr('width', Math.max(0, x(d.am) - x(0) - 1)).attr('fill', C.p[1]).attr('rx', 3);
       g.append('rect').attr('x', x(d.am)).attr('y', y(d.rua)).attr('height', y.bandwidth()).attr('width', Math.max(0, x(d.am + d.pm) - x(d.am))).attr('fill', C.p[4]).attr('rx', 3);
       g.append('text').attr('x', x(d.am + d.pm) + 6).attr('y', y(d.rua) + y.bandwidth() / 2).attr('dy', '.32em').text(nf(d.am + d.pm, 0));

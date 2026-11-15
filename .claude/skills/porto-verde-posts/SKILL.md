@@ -1,29 +1,7 @@
 ---
 name: porto-verde-posts
-description: Protocolo de Porto Verde para criar artigos (_posts/) e thumbnails dos cards do index (capture_cards.py). Usar ao adicionar/editar artigos ou cards do site.
+description: Protocolo de Porto Verde para criar artigos (_posts/). Usar ao adicionar/editar artigos do site.
 ---
-
-## Cards do index — protocolo de thumbnails
-
-Cada card de mapa no `index.html` tem um thumbnail (`<img class="card-thumb">`) capturado automaticamente via Playwright a partir do GitHub Pages.
-
-### Quando regenerar
-- Ao adicionar um novo card ao `index.html`
-- Ao alterar significativamente o aspecto visual de um mapa existente
-
-### Como capturar
-```bash
-python capture_cards.py
-```
-- Requer Playwright Chromium: `python -m playwright install chromium` (só uma vez)
-- Abre cada URL do GitHub Pages em headless, aguarda tiles Leaflet, faz screenshot do `#map`
-- Guarda em `assets/images/cards/<slug>.jpg` (600×340px, JPEG Q88)
-
-### Ao adicionar um novo card
-1. Adicionar entrada em `MAPS` em `capture_cards.py` com `slug`, `url` e `wait_for`
-2. Correr `python capture_cards.py` (só o novo slug é gerado; os existentes são substituídos se já existirem)
-3. No `index.html`, usar `<img src="{{ site.baseurl }}/assets/images/cards/<slug>.jpg" class="card-thumb" style="object-position:center center" alt="...">`
-4. Commit incluindo a imagem nova e o `index.html`
 
 ## Artigos (`_posts/`) — protocolo de criação
 

@@ -110,5 +110,18 @@ def main():
           f"autocarros, {out['linhas']} linhas; {SAIDA.stat().st_size // 1024} KB")
 
 
+def encadear(saida, esperada):
+    """Chamado no fim de gerar_autocarros.py / gerar_analise.py: actualiza o JSON da entrada, mas só quando a página
+    gerada é a publicada (com --saida para a scratchpad não mexe em _data/). Devolve 0 se correu bem ou se saltou."""
+    if Path(saida).resolve() != Path(esperada).resolve():
+        return 0
+    try:
+        main()
+    except Exception as e:  # noqa: BLE001 — diz porquê; o teste test_inicio.py acusa dados velhos
+        print(f"AVISO: gerar_inicio.py falhou ({e}); correr `python gerar_inicio.py` à mão", file=__import__('sys').stderr)
+        return 1
+    return 0
+
+
 if __name__ == "__main__":
     main()
