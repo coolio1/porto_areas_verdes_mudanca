@@ -80,11 +80,11 @@
     var menu;
     if (MENU === 'barra') {
       // barra de filete com o logo (páginas Jekyll); a mesma lista de PAGINAS, também no menu de telemóvel
-      // na entrada só o emblema: o logótipo grande já está na página
+      // na entrada sem marca na barra: o logótipo grande já está na página
       var entrada = P === '' || P === 'index.html';
-      var marca = '<a class="pv-barra__marca" href="' + RAIZ + 'index.html" aria-label="Porto Verde, início">' +
+      var marca = entrada ? '' : '<a class="pv-barra__marca" href="' + RAIZ + 'index.html" aria-label="Porto Verde, início">' +
         '<img class="pv-barra__mini" src="' + RAIZ + 'assets/images/mini-logo.png" alt="" width="34" height="34">' +
-        (entrada ? '' : '<img class="pv-barra__nome" src="' + RAIZ + 'assets/images/wordmark.png" alt="Porto Verde" width="150" height="31">') +
+        '<img class="pv-barra__nome" src="' + RAIZ + 'assets/images/wordmark.png" alt="Porto Verde" width="150" height="31">' +
         '</a>';
       menu = el('header', { 'class': 'pv-barra' },
         marca + '<nav class="pv-barra__links" aria-label="Menu">' + ligacoes(PAGINAS, 'active') + '</nav>' +
