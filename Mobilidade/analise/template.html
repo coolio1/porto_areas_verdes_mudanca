@@ -5,267 +5,344 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Autocarros: análise — Porto Verde</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="../assets/css/folha.css">
 <style>
-  :root{--surface:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--ink3:#76746f;--grid:#e1e0d9;--panel:#ffffff;--marca:#ef4444;
+  /* Análise na folha de levantamento (../assets/css/folha.css): cada figura é uma fila — gráfico em A–E, leitura em F–H.
+     Cores dos dados (--v*, --o*, --p*, --s*, --gris): as da análise, separadas do cromo; o JS lê-as daqui. */
+  :root{--surface:#E6EDEB;--ink:#10212C;--ink2:#3E5260;--ink3:#6B7E89;--panel:#FAFAF7;
     --v0:#971b1a;--v1:#c44039;--v2:#e27368;--v3:#f2988e;--v4:#efeeeb;--v5:#8bb7f0;--v6:#639be1;--v7:#2d74ca;--v8:#07519d;
     --o1:#2d74ca;--o2:#f2988e;--o3:#971b1a;--o4:#8a8882;
     --p1:#b6aeee;--p2:#9889e3;--p3:#7b65d1;--p4:#6044b5;--p5:#452b8a;--p6:#2e1961;
     --s1:#1baf7a;--s2:#6250d6;--gris:#898781}
-  @media (max-width:700px){body{padding-top:116px}}
-  *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--surface);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;padding-top:64px;hyphens:none}
-  main{max-width:1080px;margin:0 auto;padding:0 16px 80px}
-  h1{font:600 clamp(32px,5.4vw,56px)/1.06 Georgia,"Iowan Old Style",serif;letter-spacing:-.02em;margin:28px 0 14px;max-width:17ch}
-  .lead{font-size:19px;color:var(--ink2);max-width:64ch;margin:0 0 8px}
-  .meta{font-size:14px;color:var(--ink3);max-width:72ch;margin:0 0 28px}
-  .nums{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 20px}
-  .nums div{background:var(--panel);border:1px solid var(--grid);border-radius:12px;padding:14px 16px}
-  .nums b{display:block;font:600 34px/1.05 Georgia,serif;letter-spacing:-.02em}
-  .nums span{font-size:13.5px;color:var(--ink2);line-height:1.35;display:block;margin-top:6px}
-  @media (max-width:760px){.nums{grid-template-columns:1fr 1fr}.nums b{font-size:28px}}
-  .indice{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px;font-size:14px}
-  .indice a{color:var(--ink2);text-decoration:none;border:1px solid var(--grid);padding:4px 12px;border-radius:999px}
-  .indice a.destaque{background:var(--pv-verde,#0B5232);border-color:var(--pv-verde,#0B5232);color:#fff;font-weight:600}
+  .fila{scroll-margin-top:12px}
+  .tit .lead{font-size:16px;line-height:1.55;color:var(--tinta);max-width:68ch;margin-top:12px}
+  .tit .meta{font-size:13px;color:var(--tinta2);max-width:76ch}
+  .nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--fio)}
+  .nums div{padding:14px 18px 6px 0;min-width:0}
+  .nums div+div{padding-left:18px;border-left:1px solid var(--grid)}
+  .nums b{display:block;font:700 40px/1 var(--sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--tinta)}
+  .nums span{display:block;font-size:12.5px;color:var(--tinta2);line-height:1.4;margin-top:8px}
+  .indice{display:flex;flex-wrap:wrap;margin:24px 0 0;padding:0 1px 1px 0}
+  .indice a{font:500 12.5px/1 var(--sans);padding:9px 12px;border:1px solid var(--fio);margin:0 -1px -1px 0;text-decoration:none;color:var(--tinta);background:var(--folha)}
+  .indice a.destaque{background:var(--cap-prop);border-color:var(--fio);color:#fff;font-weight:600}
   .indice a[hidden]{display:none}
-  .indice a:hover{border-color:var(--ink3);color:var(--ink)}
-  section{margin:84px 0 0}
-  h2{font:600 clamp(26px,3.6vw,38px)/1.12 Georgia,"Iowan Old Style",serif;letter-spacing:-.015em;margin:0 0 8px}
-  h2 small{font:500 15px system-ui,sans-serif;color:var(--ink3);letter-spacing:0;display:block;margin-bottom:6px}
-  .sub{color:var(--ink2);max-width:66ch;margin:0 0 26px}
-  h3{font:600 clamp(19px,2.4vw,24px)/1.22 Georgia,serif;margin:0 0 6px;max-width:34ch}
-  figure{margin:0 0 56px}
-  .leg{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:13px;color:var(--ink2);margin:6px 0 10px}
-  .leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-  .cartao{background:var(--panel);border:1px solid var(--grid);border-radius:14px;padding:16px 14px 10px;position:relative}
+  .indice a:not(.destaque):hover{background:color-mix(in srgb,var(--tinta) 7%,var(--folha))}
+  .capt h2 small{font:inherit;color:inherit;margin-right:.55em}
+  .leg{display:flex;gap:6px 16px;flex-wrap:wrap;font:11px var(--mono);color:var(--tinta2);margin:0 0 10px}
+  .leg i{display:inline-block;width:16px;height:8px;margin-right:5px;vertical-align:-1px}
+  .cartao{background:var(--placa);border:1px solid var(--fio);padding:14px 14px 10px;position:relative}
   .cartao svg:not(.leaflet-zoom-animated){display:block;width:100%;height:auto;overflow:visible}
   .mapa14 .leaflet-marker-icon svg,.mapa14 .leaflet-control svg{width:auto;height:auto;display:inline}
   .fundo14{margin:0 0 10px}
-  .cartao svg text{font:12px system-ui,sans-serif;fill:var(--ink2)}
+  .cartao svg text{font:11px var(--mono);fill:var(--ink2)}
   .cartao svg .fraco{fill:var(--ink3)}
   .cartao svg .forte{fill:var(--ink);font-weight:600}
-  .cartao svg .grelha{stroke:var(--grid);stroke-width:1}
+  .cartao svg .grelha{stroke:#C3CFCC;stroke-width:1}
   .cartao svg .eixo path{display:none}
-  .cartao svg .eixo line{stroke:var(--grid)}
+  .cartao svg .eixo line{stroke:#C3CFCC}
   .cartao svg .eixo text{fill:var(--ink3)}
-  .duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
   .duo.a{grid-template-columns:1.1fr .9fr}
   .duo.b{grid-template-columns:.8fr 1.2fr}
-  @media (max-width:820px){.duo,.duo.a,.duo.b{grid-template-columns:1fr}}
-  .nota{font-size:14.5px;color:var(--ink2);max-width:72ch;margin:14px 0 0}
-  .nota b{color:var(--ink)}
-  .limite{font-size:13.5px;color:var(--ink3);max-width:72ch;margin:6px 0 0;padding-left:12px;border-left:3px solid var(--grid)}
-  .aviso{background:var(--panel);border:1px solid var(--grid);border-left:4px solid var(--p4);border-radius:10px;padding:12px 14px;font-size:14.5px;color:var(--ink2);max-width:76ch;margin:0 0 18px}
-  .aviso b{color:var(--ink)}
-  .mapa14{height:540px;border-radius:10px;background:#eceae6}
-  .mapa14 .num{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:700;font-size:12.5px;line-height:1;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}
   .duo.c14{grid-template-columns:1.25fr .75fr}
-  @media (max-width:820px){.mapa14{height:400px}.duo.c14{grid-template-columns:1fr}}
+  /* leitura (F–H, ou por baixo nas figuras largas) */
+  .ler .nota{font-size:13.5px;line-height:1.6;color:var(--tinta);margin:0;max-width:72ch}
+  .ler .nota b{color:var(--tinta)}
+  .ler .limite{font-size:12.5px;line-height:1.55;color:var(--tinta2);margin:14px 0 0;padding:2px 0 2px 12px;border-left:3px solid var(--cc);max-width:72ch}
+  .ler .limite b{color:var(--tinta)}
+  .lerb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 44px;border-top:1px solid var(--grid);padding-top:22px}
+  .lerb .limite{margin-top:0}
+  .lerb details,.lerb .indicios{grid-column:1/-1}
+  .indicios{max-width:72ch;margin:14px 0 0;padding-left:18px;color:var(--tinta2);font-size:13px;line-height:1.55}
+  .indicios li{margin:6px 0}
+  .indicios b{color:var(--tinta)}
+  details{margin-top:16px;font-size:12.5px;color:var(--tinta2)}
+  summary{cursor:pointer;width:max-content;font:11.5px var(--mono);color:var(--tinta2);padding:4px 0}
+  summary:hover{color:var(--tinta)}
+  details .tb{max-height:300px;overflow:auto;margin-top:8px;border-top:1px solid var(--fio)}
+  table{border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+  th,td{padding:4px 10px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+  td{font-family:var(--mono);font-size:11.5px}
+  th:first-child,td:first-child{text-align:left}
+  th{position:sticky;top:0;background:var(--folha);color:var(--tinta2);font:500 11px var(--mono);border-bottom:1px solid var(--fio)}
+  .aviso{background:var(--folha);border:1px solid var(--fio);border-left:4px solid var(--cap-prop);padding:12px 14px;font-size:13.5px;line-height:1.55;color:var(--tinta2);max-width:96ch;margin:0 0 26px}
+  .aviso b{color:var(--tinta)}
+  .mapa14{height:540px;background:var(--placa)}
+  .mapa14 .num{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:700;font-size:12.5px;line-height:1;border:2px solid #fff}
   .zl{max-height:540px;overflow:auto;padding:0 2px 6px}
-  .zr{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:10px 8px;border-bottom:1px solid var(--grid);cursor:pointer;border-radius:8px;border-left:4px solid transparent}
+  .zr{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:10px 8px;border-bottom:1px solid var(--grid);cursor:pointer;border-left:4px solid transparent}
   .zr:focus-visible{outline:2px solid var(--p4);outline-offset:-2px}
   .zr.sel{border-left-color:var(--p4);background:rgba(96,68,181,.14)}
-  .dica{margin:2px 0 8px;font-size:13px;color:var(--ink3)}
+  .dica{margin:2px 0 8px;font:11px var(--mono);color:var(--ink3)}
   .fundo14 .tudo{margin-left:auto}
-  .mapa14{scroll-margin-top:130px}
-  .pp14 .leaflet-popup-content{margin:12px 14px;font-size:13.5px;line-height:1.4}
-  .pp h4{margin:0 0 4px;font-size:15px;line-height:1.3;display:flex;gap:8px;align-items:flex-start}
+  .mapa14{scroll-margin-top:30px}
+  .pp14 .leaflet-popup-content{margin:12px 14px;font-size:13px;line-height:1.4}
+  .pp h4{margin:0 0 4px;font-size:14.5px;line-height:1.3;display:flex;gap:8px;align-items:flex-start}
   .pp h4 .nr{flex:none;width:24px;height:24px;border-radius:50%;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
   .pp p{margin:3px 0}
   .pp .ms{font-weight:600}
-  .pp .peq{color:#76746f;font-size:12.5px}
+  .pp .peq{color:var(--ink3);font-size:12px}
   .zr:last-child{border-bottom:0}
   .zr.on{background:rgba(96,68,181,.09)}
   .zr .nr{width:26px;height:26px;border-radius:50%;color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
-  .zr h4{margin:0 0 2px;font-size:15px;line-height:1.3;color:var(--ink)}
-  .zr p{margin:2px 0;font-size:13.5px;line-height:1.4;color:var(--ink2)}
+  .zr h4{margin:0 0 2px;font-size:14px;line-height:1.3;color:var(--ink)}
+  .zr p{margin:2px 0;font-size:13px;line-height:1.4;color:var(--ink2)}
   .zr .ms{color:var(--ink);font-weight:600}
-  .zr .peq{color:var(--ink3);font-size:12.5px}
-  .tip{position:fixed;pointer-events:none;background:#14171c;color:#f0efec;font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;opacity:0;transition:opacity .08s;z-index:2000;max-width:260px}
-  .tip b{color:#fff}
-  .botoes{display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap;align-items:center}
-  .botoes button{font:inherit;font-size:14px;padding:5px 14px;border:1px solid var(--grid);background:var(--surface);color:var(--ink);border-radius:999px;cursor:pointer}
-  .botoes button.on{background:var(--ink);border-color:var(--ink);color:var(--surface)}
-  .botoes button:focus-visible,.botoes input:focus-visible,summary:focus-visible{outline:2px solid var(--s2);outline-offset:2px}
-  .botoes input{font:inherit;font-size:14px;padding:5px 14px;border:1px solid var(--grid);background:var(--surface);color:var(--ink);border-radius:999px;width:230px;max-width:100%}
-  details{margin-top:8px;font-size:13.5px;color:var(--ink2)}
-  summary{cursor:pointer;width:max-content;color:var(--ink3);padding:2px 0}
-  details .tb{max-height:300px;overflow:auto;margin-top:8px}
-  table{border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
-  th,td{padding:3px 10px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
-  th:first-child,td:first-child{text-align:left}
-  th{position:sticky;top:0;background:var(--surface);color:var(--ink);font-weight:600}
-  .med{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13.5px;margin:5px 0}
-  .med i{display:block;height:9px;border-radius:5px;background:var(--p4)}
-  .med em{font-style:normal;text-align:right;color:var(--ink2);font-variant-numeric:tabular-nums}
-  .indicios{max-width:72ch;margin:14px 0 0;padding-left:20px;color:var(--ink2);font-size:15px}
-  .indicios li{margin:6px 0}
-  .final{background:var(--panel);border:1px solid var(--grid);border-radius:14px;padding:22px 24px;max-width:78ch}
-  .final ul{margin:8px 0 0;padding-left:20px;color:var(--ink2)}
-  .final li{margin:6px 0}
+  .zr .peq{color:var(--ink3);font-size:12px}
+  .tip{position:fixed;pointer-events:none;background:#fff;color:#10212C;border:1px solid #10212C;font:12px/1.45 var(--mono);padding:6px 9px;opacity:0;transition:opacity .08s;z-index:2000;max-width:280px}
+  .tip b{color:#10212C}
+  .botoes{display:flex;margin:0 0 12px;flex-wrap:wrap;align-items:center;padding:0 1px 1px 0}
+  .botoes button{font:500 13px var(--sans);padding:7px 12px;border:1px solid var(--fio);margin:0 -1px -1px 0;background:var(--folha);color:var(--tinta);cursor:pointer}
+  .botoes button.on{background:var(--tinta);color:var(--folha)}
+  .botoes button:not(.on):hover{background:color-mix(in srgb,var(--tinta) 7%,var(--folha))}
+  .botoes button:focus-visible,.botoes input:focus-visible,summary:focus-visible{outline:2px solid var(--marca);outline-offset:2px}
+  .botoes input{font:13px var(--sans);padding:7px 12px;border:1px solid var(--fio);background:var(--folha);color:var(--tinta);border-radius:0;width:250px;max-width:100%}
+  .med{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+  .med i{display:block;height:9px;background:var(--p4)}
+  .med em{font:normal 11.5px var(--mono);text-align:right;color:var(--ink2);font-variant-numeric:tabular-nums}
+  .met{font-size:13.5px;line-height:1.6;columns:2;column-gap:44px;margin:0;padding:0;list-style:none;color:var(--tinta2)}
+  .met li{break-inside:avoid;margin:0 0 12px}
+  .met b{color:var(--tinta)}
+  @media (max-width:1100px){.duo,.duo.a,.duo.b,.duo.c14{grid-template-columns:1fr}}
+  @media (max-width:900px){
+    .nums{grid-template-columns:1fr 1fr}
+    .nums div:nth-child(3){padding-left:0;border-left:0}
+    .nums div:nth-child(n+3){border-top:1px solid var(--grid)}
+    .nums b{font-size:30px}
+    .lerb{grid-template-columns:1fr}
+    .lerb .limite{margin-top:14px}
+    .mapa14{height:400px}
+    .med{grid-template-columns:110px 1fr 44px}
+    .met{columns:1}
+  }
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tip{transition:none}}
 </style>
 </head>
-<body>
+<body class="folha-pg">
 __NAV__
-<main>
-  <header>
-    <h1>Os autocarros do Porto: quando e onde ficam parados</h1>
-    <p class="lead">Seguimos, minuto a minuto, __VEICULOS__ autocarros da STCP em __LINHAS__ linhas, de __INTERVALO__ (__LEITURAS__ posições de GPS). Juntámos os horários e as horas de passagem estimadas pela STCP em __DIASPACOTE__ dias úteis de Outubro e Novembro (__PASSAGENS__ passagens).</p>
-    <p class="meta">Como se calcula: a velocidade vem do próprio autocarro. Não contamos o tempo em que pára de propósito, numa paragem ou no fim da linha; contamos o tempo parado no trânsito. Só há 4 dias úteis normais medidos, por isso isto é um retrato destes dias, não a média do ano. A quarta-feira 11 de Novembro foi diferente e tem um capítulo próprio.</p>
-    <div class="nums" id="nums"></div>
-    <nav class="indice" aria-label="Capítulos"><a href="#propostas" id="ir-propostas" class="destaque" hidden>Propostas de medidas →</a><a href="#quando">Quando</a><a href="#onde">Onde</a><a href="#linhas">As linhas</a><a href="#horario">O horário</a><a href="#excepcao">A excepção</a><a href="#limites">O que não sabemos</a></nav>
-  </header>
+<div class="pg">
+  <div class="folha">
+    <div class="colz cima" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
+    <div class="colz baixo" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
+    <main class="int">
+      <div class="fila k-met">
+        <div class="p sem c8 tit">
+          <div><h1>Os autocarros do Porto: <em>quando e onde</em> ficam parados</h1>
+          <p class="lead">Seguimos, minuto a minuto, __VEICULOS__ autocarros da STCP em __LINHAS__ linhas, de __INTERVALO__ (__LEITURAS__ posições de GPS). Juntámos os horários e as horas de passagem estimadas pela STCP em __DIASPACOTE__ dias úteis de Outubro e Novembro (__PASSAGENS__ passagens).</p>
+          <p class="meta">Como se calcula: a velocidade vem do próprio autocarro. Não contamos o tempo em que pára de propósito, numa paragem ou no fim da linha; contamos o tempo parado no trânsito. Só há 4 dias úteis normais medidos, por isso isto é um retrato destes dias, não a média do ano. A quarta-feira 11 de Novembro foi diferente e tem um capítulo próprio.</p></div>
+          <div data-abas></div>
+        </div>
+      </div>
 
-  <section id="quando">
-    <h2><small>I</small>Quando: em que gasta o tempo um autocarro</h2>
-    <p class="sub">Cada ponto de GPS vale cerca de 1 minuto. Somando todos, vê-se em que gasta o tempo um autocarro: a andar, parado numa paragem ou parado no trânsito.</p>
-    <figure>
-      <h3 id="t1"></h3>
-      <div class="leg" id="l1"></div>
-      <div class="cartao"><div id="g1"></div></div>
-      <p class="nota" id="n1"></p>
-      <p class="limite">Não sabemos se o tempo «parado na paragem» é a entrada de passageiros ou um semáforo ao lado da paragem. Contamos como paragem o autocarro parado a menos de 40 m de uma paragem (ou a 100 m de um terminal).</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb1"></div></details>
-    </figure>
-    <figure>
-      <h3 id="t2"></h3>
-      <div class="cartao"><div id="g2"></div></div>
-      <p class="nota" id="n2"></p>
-      <p class="limite">Não sabemos porque pára cada autocarro (semáforo, fila, passadeira, avaria).</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb2"></div></details>
-    </figure>
-  </section>
+      <div class="fila k-met">
+        <div class="p sem c8">
+          <div class="cab"><code data-ref="A-H"></code><h3>Em quatro números</h3></div>
+          <div class="nums" id="nums"></div>
+          <nav class="indice" aria-label="Capítulos"><a href="#propostas" id="ir-propostas" class="destaque" hidden>Propostas de medidas →</a><a href="#quando">Quando</a><a href="#onde">Onde</a><a href="#linhas">As linhas</a><a href="#horario">O horário</a><a href="#excepcao">A excepção</a><a href="#limites">O que não sabemos</a></nav>
+        </div>
+      </div>
 
-  <section id="onde">
-    <h2><small>II</small>Onde: o sentido do trânsito e as ruas mais lentas</h2>
-    <p class="sub">A cidade não abranda por igual: depende da hora, do sentido e da rua.</p>
-    <figure>
-      <h3>De manhã são mais lentos os autocarros que entram no centro; à tarde, os que saem</h3>
-      <div class="leg"><span><i style="background:var(--s1)"></i>a entrar para o centro</span><span><i style="background:var(--s2)"></i>a sair do centro</span></div>
-      <div class="duo a"><div class="cartao"><div id="g4a"></div></div><div class="cartao"><div id="g4b"></div></div></div>
-      <p class="nota" id="n4"></p>
-      <p class="limite">Não sabemos se a causa é o trânsito de quem vai e vem do trabalho: os autocarros que entram de manhã também levam mais gente, e não temos dados de lotação. Medido entre 1,5 e 8 km dos Aliados; «entrar» = ir em direcção ao centro (até 60° de desvio).</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb4"></div></details>
-    </figure>
-    <figure>
-      <h3 id="t5"></h3>
-      <div class="duo b"><div class="cartao"><div id="g5a"></div></div><div class="cartao"><div id="g5b"></div></div></div>
-      <div class="leg" style="margin-top:10px"><span><i style="background:var(--p2)"></i>manhã (7–9 h)</span><span><i style="background:var(--p5)"></i>tarde (17–19 h)</span></div>
-      <p class="nota" id="n5"></p>
-      <p class="limite">Uma rua com muitos autocarros aparece mesmo que não seja a mais lenta, porque contam os minutos de todos os autocarros. Não sabemos se uma faixa BUS resolveria.</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb5"></div></details>
-    </figure>
-    <figure id="f13" hidden>
-      <h3 id="t13"></h3>
-      <div class="leg"><span><i style="background:var(--s1)"></i>troço com corredor BUS</span><span><i style="background:var(--gris)"></i>troço sem corredor</span></div>
-      <div class="duo b"><div class="cartao"><div id="g13a"></div></div><div class="cartao"><div id="g13b"></div></div></div>
-      <p class="nota" id="n13"></p>
-      <p class="limite" id="l13"></p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb13"></div></details>
-    </figure>
-  </section>
+      <div class="fila k-ana" id="quando">
+        <div class="capt"><h2><small>I</small>Quando: em que gasta o tempo um autocarro</h2><p>Cada ponto de GPS vale cerca de 1 minuto. Somando todos, vê-se em que gasta o tempo um autocarro: a andar, parado numa paragem ou parado no trânsito.</p></div>
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3 id="t1"></h3></div>
+          <div class="leg" id="l1"></div>
+          <div class="cartao"><div id="g1"></div></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n1"></p>
+          <p class="limite">Não sabemos se o tempo «parado na paragem» é a entrada de passageiros ou um semáforo ao lado da paragem. Contamos como paragem o autocarro parado a menos de 40 m de uma paragem (ou a 100 m de um terminal).</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb1"></div></details>
+        </div>
+      </div>
 
-  <section id="linhas">
-    <h2><small>III</small>As linhas</h2>
-    <p class="sub">Umas linhas perdem muito à tarde; outras são lentas mas regulares.</p>
-    <figure>
-      <h3 id="t6"></h3>
-      <div class="botoes"><input id="q6" type="search" placeholder="procurar linha (ex. 603)" aria-label="Procurar linha"></div>
-      <div class="cartao"><div id="g6"></div></div>
-      <p class="nota" id="n6"></p>
-      <p class="limite">Velocidade só enquanto o autocarro anda (sem esperas), em 4 dias úteis normais. Linhas com poucas leituras não aparecem.</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb6"></div></details>
-    </figure>
-    <figure>
-      <h3>Uma linha lenta não é necessariamente irregular</h3>
-      <div class="cartao"><div id="g7"></div></div>
-      <p class="nota" id="n7"></p>
-      <p class="limite">Irregularidade = quanto variam as durações das viagens face ao horário (diferença entre o percentil 90 e o 10 de «duração real ÷ programada»). Não sabemos a causa (trânsito, obras, desvios, gestão da linha). Comparado com o horário de 26 de Outubro; 3 dias úteis normais.</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb7"></div></details>
-    </figure>
-  </section>
+      <div class="fila k-ana">
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3 id="t2"></h3></div>
+          <div class="cartao"><div id="g2"></div></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n2"></p>
+          <p class="limite">Não sabemos porque pára cada autocarro (semáforo, fila, passadeira, avaria).</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb2"></div></details>
+        </div>
+      </div>
 
-  <section id="horario">
-    <h2><small>IV</small>O horário e a rua</h2>
-    <p class="sub">Aqui entram as horas de passagem estimadas pela STCP: quando cada autocarro devia passar e quando passou. Consideramos «pontual» chegar entre 1 minuto antes e 3 minutos depois da hora. É uma regra nossa; convém confirmar a da STCP antes de comparar com números oficiais.</p>
-    <figure>
-      <h3 id="t8"></h3>
-      <div class="cartao"><div id="g8"></div></div>
-      <p class="nota" id="n8"></p>
-      <p class="limite">Linha = atraso mediano; faixa escura = metade das passagens (percentis 25–75); faixa clara = 80 % (percentis 10–90). Atraso em minutos; 18 dias úteis entre 19 de Outubro e 12 de Novembro, sem o dia 11. «Início» e «fim» = primeiro e último décimo do percurso.</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb8"></div></details>
-    </figure>
-    <figure>
-      <h3>Cada linha: com quanto atraso parte e com quanto chega</h3>
-      <div class="botoes" id="b9" role="group" aria-label="Janela da chegada"><button data-j="todas" class="on">Todo o dia</button><button data-j="manha">Manhã</button><button data-j="entre_pontas">Entre pontas</button><button data-j="tarde">Tarde</button></div>
-      <div class="cartao"><div id="g9"></div></div>
-      <p class="nota" id="n9"></p>
-      <p class="limite">Ponto oco = atraso à partida (primeiros 15 % do percurso); ponto cheio = à chegada (últimos 15 %). 85 % dos tempos intermédios do horário foram reconstruídos pelo pacote: um troço «mau» pode ser um horário mal reconstruído.</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb9"></div></details>
-    </figure>
-    <figure>
-      <h3>Os autocarros da mesma linha aproximam-se uns dos outros durante o percurso</h3>
-      <div class="duo"><div class="cartao"><div id="g10a"></div></div><div class="cartao"><div id="g10b"></div></div></div>
-      <div id="m10" style="margin-top:14px"></div>
-      <p class="nota" id="n10"></p>
-      <p class="limite">Pares de autocarros seguidos da mesma linha, no mesmo sentido e paragem. Pelotão = chegam com menos de metade do intervalo previsto; buraco = com mais de uma vez e meia. Os buracos estão subestimados (pares com um autocarro intermédio não visto não contam).</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb10"></div></details>
-    </figure>
-    <figure>
-      <h3 id="t11"></h3>
-      <div class="leg"><span><i style="background:var(--p3)"></i>viagens programadas</span><span><i style="background:var(--p6)"></i>vistas no GPS</span></div>
-      <div class="cartao"><div id="g11"></div></div>
-      <p class="nota" id="n11"></p>
-      <p class="limite">Hipótese, não prova: se as viagens demoram 17 % mais e a frota é a mesma, algumas viagens da ponta da tarde podem não se fazer (ou mudar de identificador). Os dados não distinguem uma viagem suprimida de um GPS desligado: «não vista» não quer dizer «não feita».</p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb11"></div></details>
-    </figure>
-  </section>
+      <div class="fila k-ana" id="onde">
+        <div class="capt"><h2><small>II</small>Onde: o sentido do trânsito e as ruas mais lentas</h2><p>A cidade não abranda por igual: depende da hora, do sentido e da rua.</p></div>
+        <div class="p sem c8">
+          <div class="cab"><code data-ref="A-H"></code><h3>De manhã são mais lentos os autocarros que entram no centro; à tarde, os que saem</h3></div>
+          <div class="leg"><span><i style="background:var(--s1)"></i>a entrar para o centro</span><span><i style="background:var(--s2)"></i>a sair do centro</span></div>
+          <div class="duo a"><div class="cartao"><div id="g4a"></div></div><div class="cartao"><div id="g4b"></div></div></div>
+          <div class="ler lerb">
+          <p class="nota" id="n4"></p>
+          <p class="limite">Não sabemos se a causa é o trânsito de quem vai e vem do trabalho: os autocarros que entram de manhã também levam mais gente, e não temos dados de lotação. Medido entre 1,5 e 8 km dos Aliados; «entrar» = ir em direcção ao centro (até 60° de desvio).</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb4"></div></details>
+          </div>
+        </div>
+      </div>
 
-  <section id="excepcao">
-    <h2><small>V</small>A excepção: quarta-feira, 11 de Novembro</h2>
-    <p class="sub">Um dia útil em que os autocarros andaram muito mais depressa e chegaram adiantados. Não parece erro dos dados: foi feriado.</p>
-    <figure>
-      <h3>Quatro dias úteis seguem o mesmo padrão; a quarta-feira 11 é diferente</h3>
-      <div class="leg" id="l12"></div>
-      <div class="cartao"><div id="g12a"></div></div>
-      <p class="nota" id="n12a"></p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb12a"></div></details>
-    </figure>
-    <figure>
-      <h3>Atraso por dia: só o dia 11 fica abaixo de zero (autocarros adiantados)</h3>
-      <div class="leg"><span><i style="background:var(--s1)"></i>manhã</span><span><i style="background:var(--gris)"></i>entre pontas</span><span><i style="background:var(--s2)"></i>tarde</span><span style="color:var(--ink3)">pontos esbatidos = poucos dados</span></div>
-      <div class="cartao"><div id="g12b"></div></div>
-      <p class="nota" id="n12b"></p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb12b"></div></details>
-    </figure>
-    <figure>
-      <h3>No dia 11 houve o dobro de paragens longas</h3>
-      <div id="m12"></div>
-      <p class="nota" id="n12c"></p>
-      <ul class="indicios" id="ind"></ul>
-      <p class="limite"><b>Causa provável, não provada: foi feriado.</b> O autor indica que o dia 11 foi feriado (dia de São Martinho); não conseguimos confirmá-lo em fontes oficiais, porque não é feriado nacional nem municipal do Porto. Um feriado explicaria menos trânsito e menos escolas, e portanto viagens cerca de 18 % mais curtas. O horário aplicado era de dia útil, e os dados não mostram quem circulou menos.</p>
-    </figure>
-  </section>
+      <div class="fila k-ana">
+        <div class="p sem c8">
+          <div class="cab"><code data-ref="A-H"></code><h3 id="t5"></h3></div>
+          <div class="duo b"><div class="cartao"><div id="g5a"></div></div><div class="cartao"><div id="g5b"></div></div></div>
+          <div class="leg" style="margin-top:10px"><span><i style="background:var(--p2)"></i>manhã (7–9 h)</span><span><i style="background:var(--p5)"></i>tarde (17–19 h)</span></div>
+          <div class="ler lerb">
+          <p class="nota" id="n5"></p>
+          <p class="limite">Uma rua com muitos autocarros aparece mesmo que não seja a mais lenta, porque contam os minutos de todos os autocarros. Não sabemos se uma faixa BUS resolveria.</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb5"></div></details>
+          </div>
+        </div>
+      </div>
 
-  <section id="propostas" hidden>
-    <h2><small>VI</small>Propostas: onde poderia ajudar uma medida</h2>
-    <p class="sub" id="s14"></p>
-    <div class="aviso" id="av14"></div>
-    <figure>
-      <h3 id="t14"></h3>
-      <div class="leg" id="l14leg"></div>
-      <div class="duo c14"><div class="cartao"><div id="g14a"></div></div><div class="cartao"><div class="zl" id="g14b"></div></div></div>
-      <p class="nota" id="n14"></p>
-      <p class="limite" id="m14"></p>
-      <details><summary>Ver os números</summary><div class="tb" id="tb14"></div></details>
-    </figure>
-  </section>
+      <div class="fila k-ana" id="f13" hidden>
+        <div class="p sem c8">
+          <div class="cab"><code data-ref="A-H"></code><h3 id="t13"></h3></div>
+          <div class="leg"><span><i style="background:var(--s1)"></i>troço com corredor BUS</span><span><i style="background:var(--gris)"></i>troço sem corredor</span></div>
+          <div class="duo b"><div class="cartao"><div id="g13a"></div></div><div class="cartao"><div id="g13b"></div></div></div>
+          <div class="ler lerb">
+          <p class="nota" id="n13"></p>
+          <p class="limite" id="l13"></p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb13"></div></details>
+          </div>
+        </div>
+      </div>
 
-  <section id="limites">
-    <div class="final">
-      <h2 style="font-size:26px">O que esta análise não permite concluir</h2>
-      <ul>
+      <div class="fila k-ana" id="linhas">
+        <div class="capt"><h2><small>III</small>As linhas</h2><p>Umas linhas perdem muito à tarde; outras são lentas mas regulares.</p></div>
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3 id="t6"></h3></div>
+          <div class="botoes"><input id="q6" type="search" placeholder="procurar linha (ex. 603)" aria-label="Procurar linha"></div>
+          <div class="cartao"><div id="g6"></div></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n6"></p>
+          <p class="limite">Velocidade só enquanto o autocarro anda (sem esperas), em 4 dias úteis normais. Linhas com poucas leituras não aparecem.</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb6"></div></details>
+        </div>
+      </div>
+
+      <div class="fila k-ana">
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3>Uma linha lenta não é necessariamente irregular</h3></div>
+          <div class="cartao"><div id="g7"></div></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n7"></p>
+          <p class="limite">Irregularidade = quanto variam as durações das viagens face ao horário (diferença entre o percentil 90 e o 10 de «duração real ÷ programada»). Não sabemos a causa (trânsito, obras, desvios, gestão da linha). Comparado com o horário de 26 de Outubro; 3 dias úteis normais.</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb7"></div></details>
+        </div>
+      </div>
+
+      <div class="fila k-ana" id="horario">
+        <div class="capt"><h2><small>IV</small>O horário e a rua</h2><p>Aqui entram as horas de passagem estimadas pela STCP: quando cada autocarro devia passar e quando passou. Consideramos «pontual» chegar entre 1 minuto antes e 3 minutos depois da hora. É uma regra nossa; convém confirmar a da STCP antes de comparar com números oficiais.</p></div>
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3 id="t8"></h3></div>
+          <div class="cartao"><div id="g8"></div></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n8"></p>
+          <p class="limite">Linha = atraso mediano; faixa escura = metade das passagens (percentis 25–75); faixa clara = 80 % (percentis 10–90). Atraso em minutos; 18 dias úteis entre 19 de Outubro e 12 de Novembro, sem o dia 11. «Início» e «fim» = primeiro e último décimo do percurso.</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb8"></div></details>
+        </div>
+      </div>
+
+      <div class="fila k-ana">
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3>Cada linha: com quanto atraso parte e com quanto chega</h3></div>
+          <div class="botoes" id="b9" role="group" aria-label="Janela da chegada"><button data-j="todas" class="on">Todo o dia</button><button data-j="manha">Manhã</button><button data-j="entre_pontas">Entre pontas</button><button data-j="tarde">Tarde</button></div>
+          <div class="cartao"><div id="g9"></div></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n9"></p>
+          <p class="limite">Ponto oco = atraso à partida (primeiros 15 % do percurso); ponto cheio = à chegada (últimos 15 %). 85 % dos tempos intermédios do horário foram reconstruídos pelo pacote: um troço «mau» pode ser um horário mal reconstruído.</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb9"></div></details>
+        </div>
+      </div>
+
+      <div class="fila k-ana">
+        <div class="p sem c8">
+          <div class="cab"><code data-ref="A-H"></code><h3>Os autocarros da mesma linha aproximam-se uns dos outros durante o percurso</h3></div>
+          <div class="duo"><div class="cartao"><div id="g10a"></div></div><div class="cartao"><div id="g10b"></div></div></div>
+          <div id="m10" style="margin-top:14px"></div>
+          <div class="ler lerb">
+          <p class="nota" id="n10"></p>
+          <p class="limite">Pares de autocarros seguidos da mesma linha, no mesmo sentido e paragem. Pelotão = chegam com menos de metade do intervalo previsto; buraco = com mais de uma vez e meia. Os buracos estão subestimados (pares com um autocarro intermédio não visto não contam).</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb10"></div></details>
+          </div>
+        </div>
+      </div>
+
+      <div class="fila k-ana">
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3 id="t11"></h3></div>
+          <div class="leg"><span><i style="background:var(--p3)"></i>viagens programadas</span><span><i style="background:var(--p6)"></i>vistas no GPS</span></div>
+          <div class="cartao"><div id="g11"></div></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n11"></p>
+          <p class="limite">Hipótese, não prova: se as viagens demoram 17 % mais e a frota é a mesma, algumas viagens da ponta da tarde podem não se fazer (ou mudar de identificador). Os dados não distinguem uma viagem suprimida de um GPS desligado: «não vista» não quer dizer «não feita».</p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb11"></div></details>
+        </div>
+      </div>
+
+      <div class="fila k-ana" id="excepcao">
+        <div class="capt"><h2><small>V</small>A excepção: quarta-feira, 11 de Novembro</h2><p>Um dia útil em que os autocarros andaram muito mais depressa e chegaram adiantados. Não parece erro dos dados: foi feriado.</p></div>
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3>Quatro dias úteis seguem o mesmo padrão; a quarta-feira 11 é diferente</h3></div>
+          <div class="leg" id="l12"></div>
+          <div class="cartao"><div id="g12a"></div></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n12a"></p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb12a"></div></details>
+        </div>
+      </div>
+
+      <div class="fila k-ana">
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3>Atraso por dia: só o dia 11 fica abaixo de zero (autocarros adiantados)</h3></div>
+          <div class="leg"><span><i style="background:var(--s1)"></i>manhã</span><span><i style="background:var(--gris)"></i>entre pontas</span><span><i style="background:var(--s2)"></i>tarde</span><span style="color:var(--ink3)">pontos esbatidos = poucos dados</span></div>
+          <div class="cartao"><div id="g12b"></div></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n12b"></p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb12b"></div></details>
+        </div>
+      </div>
+
+      <div class="fila k-ana">
+        <div class="p sem c5">
+          <div class="cab"><code data-ref="A-E"></code><h3>No dia 11 houve o dobro de paragens longas</h3></div>
+          <div id="m12"></div>
+        </div>
+        <div class="p c3 ler">
+          <p class="nota" id="n12c"></p>
+          <ul class="indicios" id="ind"></ul>
+          <p class="limite"><b>Causa provável, não provada: foi feriado.</b> O autor indica que o dia 11 foi feriado (dia de São Martinho); não conseguimos confirmá-lo em fontes oficiais, porque não é feriado nacional nem municipal do Porto. Um feriado explicaria menos trânsito e menos escolas, e portanto viagens cerca de 18 % mais curtas. O horário aplicado era de dia útil, e os dados não mostram quem circulou menos.</p>
+        </div>
+      </div>
+
+      <div class="fila k-prop" id="propostas" hidden>
+        <div class="capt"><h2><small>VI</small>Propostas: onde poderia ajudar uma medida</h2><p id="s14"></p></div>
+        <div class="p sem c8">
+          <div class="aviso" id="av14"></div>
+          <div class="cab"><code data-ref="A-H"></code><h3 id="t14"></h3></div>
+          <div class="leg" id="l14leg"></div>
+          <div class="duo c14"><div class="cartao"><div id="g14a"></div></div><div class="cartao"><div class="zl" id="g14b"></div></div></div>
+          <div class="ler lerb">
+          <p class="nota" id="n14"></p>
+          <p class="limite" id="m14"></p>
+          <details><summary>Ver os números</summary><div class="tb" id="tb14"></div></details>
+          </div>
+        </div>
+      </div>
+
+      <div class="fila k-met" id="limites">
+        <div class="capt"><h2>O que esta análise não permite concluir</h2><p>Critérios e limites do que se mostra acima.</p></div>
+        <div class="p sem c8">
+          <ul class="met">
         <li><b>Poucos dias.</b> 4 dias úteis normais, 1 dia atípico e 1 domingo parcial medidos; 18 dias úteis do pacote, só em 3 períodos do dia. Só Novembro: não sabemos como é no Verão ou com chuva.</li>
         <li><b>Causas.</b> Vemos onde e quando os autocarros são lentos, não porquê. Não temos dados de trânsito, semáforos, lotação, passageiros nem obras.</li>
         <li><b>Propostas de medidas.</b> São hipóteses nossas, a partir de poucos dias de GPS: não há contagens de carros, passageiros, largura das ruas nem estacionamento, e não são uma proposta da Câmara do Porto ou da STCP.</li>
@@ -273,9 +350,13 @@ __NAV__
         <li><b>Espera dos passageiros.</b> Os pelotões mostram irregularidade; sem dados de passageiros não calculamos quanto esperam.</li>
         <li><b>Definições nossas.</b> «Pontual» (−1 a +3 min), «crítico» (menos de 14 km/h) e a referência de 25 km/h são critérios deste projecto, não metas oficiais.</li>
       </ul>
-    </div>
-  </section>
-</main>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="../assets/js/folha.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -882,6 +963,7 @@ document.getElementById('q6').addEventListener('input', g6);
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change', () => { ult = 0; redes(); });
 let tm; addEventListener('resize', () => { clearTimeout(tm); tm = setTimeout(redes, 150); });
 redes();
+if (window.folhaNumerar) folhaNumerar();
 </script>
 </body>
 </html>

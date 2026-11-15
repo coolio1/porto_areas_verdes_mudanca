@@ -1,186 +1,265 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Autocarros: mapa da velocidade STCP | Porto Verde</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="../assets/css/folha.css">
 <style>
-  html,body{height:100%;margin:0;font:13px 'Segoe UI',Arial,sans-serif;color:#333}
-  #mapa{position:absolute;inset:0}
-  #painel{position:absolute;z-index:900;top:10px;left:10px;width:300px;max-height:calc(100% - 20px);overflow:auto;background:rgba(255,255,255,.95);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.2);padding:12px 14px}
-  h1{font-size:16px;line-height:1.25;margin:0 0 4px}
-  .sub{color:#666;margin:0 0 10px}
-  .grupo{display:flex;gap:4px;margin:6px 0}
-  .grupo button{flex:1;border:1px solid #ccc;background:#fff;border-radius:5px;padding:5px 4px;font:inherit;cursor:pointer;color:#444}
-  .grupo button small{display:block;color:#888;font-size:10px}
-  .grupo button.on{background:#7a0019;border-color:#7a0019;color:#fff}
-  .grupo button.on small{color:#f0c9cf}
-  .grupo button:disabled{background:#f3f3f3;color:#aaa;cursor:not-allowed}
-  .definicao{margin:8px 0 0;font-size:12px;line-height:1.4;color:#444;background:#f6f6f6;border-radius:5px;padding:6px 8px}
-  .legenda{margin:10px 0 2px}
-  .barra{height:10px;border-radius:5px;background:linear-gradient(90deg,#5c0011,#c1272d 35%,#f08a4b 70%,#f7d774)}
-  .escala{display:flex;justify-content:space-between;color:#666;font-size:11px;margin-top:2px}
-  #estado{margin:8px 0;font-weight:600}
-  ol{padding-left:20px;margin:6px 0}
-  ol li{margin:3px 0;cursor:pointer}
-  ol li:hover{color:#7a0019}
-  ol li small{color:#777}
-  .aviso{color:#666;font-size:11.5px;line-height:1.4;margin-top:10px;border-top:1px solid #eee;padding-top:8px}
-  #rastos{position:absolute;inset:0;z-index:450;pointer-events:none;width:100%;height:100%;display:none}
-  .grande{font-size:38px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
-  .grande small{font-size:13px;font-weight:400;color:#666;margin-left:4px}
-  .comp{margin:6px 0 0;color:#555}
-  .par{display:flex;gap:18px;margin:10px 0 4px;padding-top:8px;border-top:1px solid #eee}
-  .par b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
-  .par span{color:#666;font-size:11.5px}
-  #lentas{list-style:none;padding:0;margin:4px 0}
-  #lentas li{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid #eee;font-variant-numeric:tabular-nums}
-  #lentas li span{color:#666}
-  #estado-agora{color:#666;font-size:11.5px;line-height:1.4;margin:8px 0 0}
-  #estado-agora.erro{color:#b3261e}
-  @media(max-width:700px){
-    #painel{top:auto;bottom:0;left:0;right:0;width:auto;max-height:46%;border-radius:10px 10px 0 0}
-    body .pv-rodape--mapa{bottom:calc(46% + 6px)}
-    .leaflet-control-zoom{display:none}
+  /* fila do mapa: mapa à esquerda em duas linhas; comandos em cima e leitura em baixo, à direita */
+  .fila.mapa2 > .p.map { grid-column: 1 / 6; grid-row: 2 / 4; }
+  .fila.mapa2 > .p.cmd { grid-column: 6 / 9; grid-row: 2; }
+  .fila.mapa2 > .p.leit { grid-column: 6 / 9; grid-row: 3; border-top: 1px solid var(--grid); }
+  .mapa-w { position: relative; height: clamp(540px, calc(100vh - 150px), 820px); padding: 0; overflow: hidden; }
+  #mapa { position: absolute; inset: 0; }
+  #rastos { position: absolute; inset: 0; z-index: 450; pointer-events: none; width: 100%; height: 100%; display: none; }
+  .mapa-w.noite { background: var(--noite); border-color: var(--noite); }
+  .mapa-w.noite #mapa { background: var(--noite); }
+  .mapa-leg { position: absolute; left: 12px; bottom: 26px; z-index: 1000; background: color-mix(in srgb, var(--placa) 92%, transparent);
+    border: 1px solid var(--fio); padding: 10px 12px; max-width: 330px; }
+  .mapa-leg .rot { font: 11px var(--mono); color: var(--tinta2); margin: 0 0 6px; }
+  .rampa { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; font: 11px var(--mono); color: var(--tinta2); }
+  .rampa i { display: block; height: 8px; }
+  .rampa span { display: block; padding-top: 3px; white-space: nowrap; }
+  .zt { display: flex; flex-wrap: wrap; gap: 4px 12px; font: 11px var(--mono); color: var(--tinta2); margin-top: 9px; }
+  .zt:empty { display: none; }
+  .zt i { display: inline-block; width: 11px; height: 11px; margin-right: 4px; vertical-align: -1px; }
+  .zt i.ring { border-radius: 50%; border: 2px solid var(--rc); background: transparent; }
+  .zt i.esp { width: 22px; height: 0; border-top: 2px solid var(--tinta2); vertical-align: 3px; position: relative; }
+  .zt i.esp::after { content: ""; position: absolute; right: 0; top: -5px; width: 9px; border-top: 6px solid var(--tinta2); }
+  .zt i.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--a2); }
+  .mapa-w.noite .mapa-leg { background: color-mix(in srgb, var(--noite) 88%, transparent); border-color: #5E7380; color: #E7EDEB; }
+  .mapa-w.noite .mapa-leg .rot, .mapa-w.noite .rampa, .mapa-w.noite .zt { color: #B8C7CE; }
+  .mapa-w .leaflet-control-zoom { margin: 0 12px 26px 0; }
+
+  /* comandos */
+  .cmd .grupo { margin: 0 0 16px; }
+  .cmd .grupo > .rot { font: 11px var(--mono); color: var(--tinta2); margin: 0 0 6px; display: block; }
+  .defin { margin: 4px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--tinta2); border-left: 3px solid var(--cc); padding: 2px 0 2px 12px; }
+  .defin b { color: var(--tinta); }
+
+  /* leitura */
+  .estado { font: 12px var(--mono); color: var(--tinta); margin: 0 0 16px; padding: 10px 0; border-top: 1px solid var(--fio); border-bottom: 1px solid var(--grid); }
+  .lista-t { font-size: 14px; font-weight: 700; margin: 0 0 8px; }
+  ol.pontos { list-style: none; margin: 0; padding: 0; counter-reset: p; }
+  ol.pontos li { counter-increment: p; border-bottom: 1px solid var(--grid); }
+  ol.pontos button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 8px; align-items: baseline;
+    width: 100%; padding: 7px 2px; cursor: pointer; font-size: 12.5px; line-height: 1.35; }
+  ol.pontos button::before { content: counter(p); font: 11px var(--mono); color: var(--tinta2); }
+  ol.pontos button em { font-style: normal; color: var(--tinta2); }
+  ol.pontos button span.v { font: 11.5px var(--mono); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  ol.pontos button:hover, ol.pontos button:focus-visible { background: color-mix(in srgb, var(--tinta) 6%, transparent); }
+  ol.pontos button:focus-visible { outline: 2px solid var(--marca); outline-offset: -2px; }
+  .aviso { font-size: 11.5px; line-height: 1.55; color: var(--tinta2); margin: 18px 0 0; padding-top: 12px; border-top: 1px solid var(--grid); }
+
+  /* mostrador «Agora» */
+  .mostr .grande { display: flex; align-items: baseline; gap: 8px; }
+  .mostr .grande b { font-size: 64px; line-height: .95; font-weight: 700; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+  .mostr .grande span { font: 12px var(--mono); color: var(--tinta2); }
+  .mostr .vs { margin: 10px 0 0; font-size: 13px; color: var(--tinta2); }
+  .mostr .vs b { color: var(--tinta); }
+  .par { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--grid); margin-top: 16px; }
+  .par > div { padding: 10px 0; min-width: 0; }
+  .par > div + div { padding-left: 16px; border-left: 1px solid var(--grid); }
+  .par b { display: block; font-size: 27px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .par span { display: block; font-size: 12px; color: var(--tinta2); line-height: 1.35; }
+  .mostr .lentas td { padding: 6px 0; }
+  .mostr .lentas td:first-child { font-weight: 600; width: 52px; }
+  .mostr .lentas td.n { color: var(--tinta2); }
+  .mostr .lentas td.b { width: 34%; padding-left: 10px; }
+  .mostr .lentas td.b i { display: block; height: 8px; }
+  .relogio { font: 11.5px/1.45 var(--mono); color: var(--tinta2); margin: 14px 0 0; }
+  .relogio.erro { color: #B3261E; }
+
+  @media (max-width: 900px) {
+    .fila.mapa2 > .p.cmd, .fila.mapa2 > .p.map, .fila.mapa2 > .p.leit { grid-column: 1 / -1; grid-row: auto; }
+    .fila.mapa2 > .p.map { padding-top: 22px; }
+    .fila.mapa2 > .p.cmd { padding-bottom: 20px; }
+    .mapa-leg { position: static; max-width: none; border-width: 1px 0 0; }
+    .mapa-w { display: flex; flex-direction: column; height: auto; }
+    .mapa-w .caixa { position: relative; height: min(460px, 62vh); }
+    .mostr .grande b { font-size: 54px; }
   }
+  @media (min-width: 901px) { .mapa-w .caixa { position: absolute; inset: 0; } }
 </style>
 </head>
-<body>
+<body class="folha-pg">
 __NAV__
-<div id="mapa"></div>
-<canvas id="rastos" aria-hidden="true"></canvas>
-<div id="painel">
-  <h1>Onde os autocarros andam mais devagar</h1>
-  <p class="sub">Velocidade média nas ruas por onde passam os autocarros STCP, no Porto e concelhos vizinhos.</p>
-  <div class="grupo" id="g-dia">
-    <button data-dia="util" class="on">Dias úteis<small>__DIAS_UTIL__</small></button>
-    <button data-dia="fds" __FDS_ATRIBUTOS__>Fim-de-semana<small>__FDS_TEXTO__</small></button>
-  </div>
-  <div class="grupo" id="g-per">
-    <button data-per="dia">Dia todo</button>
-    <button data-per="am">Ponta da manhã</button>
-    <button data-per="pm" class="on">Ponta da tarde</button>
-  </div>
-  <div class="grupo" id="g-modo">
-    <button data-modo="vel" class="on">Velocidade</button>
-    <button data-modo="ph">Autocarros por hora</button>
-    <button data-modo="perdido">Tempo perdido</button>
-    <button data-modo="agora">Agora</button>
-  </div>
-  <p id="definicao" class="definicao"></p>
-  <div class="legenda"><div class="barra" id="barra"></div>
-    <div class="escala"><span id="esc-a"></span><span id="esc-b"></span></div></div>
-  <div id="bloco-agora" style="display:none">
-    <div class="grande"><span id="agora-media">–</span><small>km/h, média da rede</small></div>
-    <p class="comp" id="agora-comp"></p>
-    <div class="par">
-      <div><b id="agora-parados">–</b><span>% parados no trânsito</span></div>
-      <div><b id="agora-n">–</b><span>autocarros em serviço</span></div>
+<div class="pg">
+  <div class="folha">
+    <div class="colz cima" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
+    <div class="colz baixo" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
+    <div class="int">
+
+      <div class="fila k-met">
+        <div class="p sem c8 tit">
+          <div><h1>Onde os autocarros STCP andam <em>mais devagar</em></h1>
+            <p>Velocidade média nas ruas por onde passam os autocarros STCP, no Porto e concelhos vizinhos. Recolha própria das posições de GPS (Porto Digital), de __INTERVALO__.</p></div>
+          <div data-abas></div>
+        </div>
+      </div>
+
+      <div class="fila k-mapa mapa2">
+        <div class="capt"><h2>Autocarros: mapa</h2><p>Escolhe o que o mapa mostra: velocidade, autocarros por hora, tempo perdido ou os autocarros agora. Toca num troço ou num círculo para ver os números.</p></div>
+        <div class="p cmd" aria-label="Comandos do mapa">
+          <div class="cab"><code data-ref="F-H"></code><h3>Mostrar no mapa</h3></div>
+          <div class="grupo"><span class="rot" id="r-modo">o quê</span>
+            <div class="bts m2" style="--n:2" id="g-modo" role="group" aria-labelledby="r-modo">
+              <button type="button" data-modo="vel" aria-pressed="true"><i class="k" style="background:var(--v4)"></i>Velocidade</button>
+              <button type="button" data-modo="ph" aria-pressed="false"><i class="k" style="background:var(--o4)"></i>Autocarros por hora</button>
+              <button type="button" data-modo="perdido" aria-pressed="false"><i class="k" style="background:var(--t3)"></i>Tempo perdido</button>
+              <button type="button" data-modo="agora" aria-pressed="false"><i class="k" style="background:var(--noite);box-shadow:inset 0 0 0 2px var(--a2)"></i>Agora</button>
+            </div></div>
+          <div class="grupo" id="g-dia-w"><span class="rot" id="r-dia">dias</span>
+            <div class="bts" style="--n:2" id="g-dia" role="group" aria-labelledby="r-dia">
+              <button type="button" data-dia="util" aria-pressed="true">Dias úteis<small>__DIAS_UTIL__</small></button>
+              <button type="button" data-dia="fds" aria-pressed="false" __FDS_ATRIBUTOS__>Fim-de-semana<small>__FDS_TEXTO__</small></button>
+            </div></div>
+          <div class="grupo" id="g-per-w"><span class="rot" id="r-per">período</span>
+            <div class="bts" style="--n:3" id="g-per" role="group" aria-labelledby="r-per">
+              <button type="button" data-per="dia" aria-pressed="false">Dia todo<small>6:00–21:59</small></button>
+              <button type="button" data-per="am" aria-pressed="false">Ponta da manhã<small>7:00–9:59</small></button>
+              <button type="button" data-per="pm" aria-pressed="true">Ponta da tarde<small>17:00–19:59</small></button>
+            </div></div>
+          <p id="definicao" class="defin"></p>
+        </div>
+        <div class="p sem map">
+          <div class="cab"><code data-ref="A-E"></code><h3 id="map-tit"></h3></div>
+          <div class="placa fig mapa-w" id="mapa-w">
+            <div class="caixa"><div id="mapa" role="region" aria-label="Mapa da rede de autocarros STCP"></div>
+              <canvas id="rastos" aria-hidden="true"></canvas></div>
+            <div class="mapa-leg" id="mapa-leg"><div class="rot" id="leg-rot"></div><div class="rampa" id="rampa"></div><div class="zt" id="zt"></div></div>
+          </div>
+          <p class="fonte" id="map-fonte"></p>
+        </div>
+        <div class="p leit">
+          <div id="bloco-estatico">
+            <p class="estado" id="estado" role="status"></p>
+            <h3 class="lista-t" id="lista-titulo">Pontos com mais tempo perdido</h3>
+            <ol class="pontos" id="lista"></ol>
+            <p class="aviso">Só autocarros STCP. Média das posições registadas entre __INTERVALO__, com as esperas em paragens e terminais descontadas;
+            o trânsito parado conta. «Tempo perdido» = minutos de autocarro perdidos por hora face a 25 km/h, somados para todos os
+            autocarros que passam (mais autocarros e mais lentos, maior): é a espessura na vista Velocidade e o tamanho dos círculos.
+            Os autocarros por hora são estimados a partir de uma posição por minuto.
+            Entram __COLADAS__ % das posições registadas; as linhas sem rota no OpenStreetMap (como a 107 e 605) ficam de fora.
+            Os feriados contam como dias úteis.__DERIVADOS__</p>
+          </div>
+          <div id="bloco-agora" class="mostr" hidden>
+            <div class="grande"><b id="agora-media">–</b><span>km/h, média da rede</span></div>
+            <p class="vs" id="agora-comp"></p>
+            <div class="par">
+              <div><b id="agora-parados">–</b><span>% parados no trânsito</span></div>
+              <div><b id="agora-n">–</b><span>autocarros em serviço</span></div>
+            </div>
+            <h3 class="lista-t" style="margin-top:20px">Linhas mais lentas agora</h3>
+            <table class="tab lentas"><tbody id="lentas"></tbody></table>
+            <p class="relogio" id="estado-agora" role="status" aria-live="polite">A obter as posições…</p>
+            <p class="aviso">Posições do broker de dados abertos da Porto Digital (licença CC0), actualizadas cerca de uma vez por minuto; só autocarros com posição
+            de há menos de 5 minutos. As esperas em paragens e terminais (≤ 2 km/h a menos de 40 m de uma paragem ou 100 m de um terminal) ficam de fora e o trânsito parado conta.
+            O habitual é a média da rede nessa hora nos dias úteis recolhidos (__DIAS_BASE__). As linhas só entram com pelo menos 3 autocarros, um terço deles
+            em andamento (para não contar autocarros parados fora de serviço). Nada é guardado: as posições vivem só no teu browser.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div style="font-weight:600;margin-top:8px">Linhas mais lentas agora</div>
-    <ul id="lentas"></ul>
-    <p id="estado-agora" role="status" aria-live="polite">A obter as posições…</p>
-    <p class="aviso">Posições do broker de dados abertos da Porto Digital (licença CC0), actualizadas cerca de uma vez por minuto; só autocarros com posição
-    de há menos de 5 minutos. As esperas em paragens e terminais (≤ 2 km/h a menos de 40 m de uma paragem ou 100 m de um terminal) ficam de fora e o trânsito parado conta.
-    O habitual é a média da rede nessa hora nos dias úteis recolhidos (__DIAS_BASE__). As linhas só entram com pelo menos 3 autocarros, um terço deles
-    em andamento (para não contar autocarros parados fora de serviço). Nada é guardado: as posições vivem só no teu browser.</p>
-  </div>
-  <div id="bloco-estatico">
-  <div id="estado"></div>
-  <div id="lista-titulo" style="font-weight:600">Pontos com mais tempo perdido</div>
-  <ol id="lista"></ol>
-  <p class="aviso">Só autocarros STCP. Média das posições registadas entre __INTERVALO__, com as esperas em paragens e terminais descontadas;
-  o trânsito parado conta. «Tempo perdido» = minutos de autocarro perdidos por hora face a 25 km/h, somados para todos os
-  autocarros que passam (mais autocarros e mais lentos, maior): é a espessura na vista Velocidade e o tamanho dos círculos.
-  Os autocarros por hora são estimados a partir de uma posição por minuto.
-  Entram __COLADAS__ % das posições registadas; as linhas sem rota no OpenStreetMap (como a 107 e 605) ficam de fora.
-  Os feriados contam como dias úteis.__DERIVADOS__</p>
   </div>
 </div>
+<script src="../assets/js/folha.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 const D = __DADOS__;
 const estado = {dia: 'util', per: 'pm', modo: 'vel'};
-const mapa = L.map('mapa', {preferCanvas: true, zoomControl: false}).setView([41.16, -8.62], 12);
+const el = id => document.getElementById(id);
+const tocar = matchMedia('(max-width: 900px) and (pointer: coarse)').matches;      // telemóvel: um dedo rola a página, dois movem o mapa
+const mapa = L.map('mapa', {preferCanvas: true, zoomControl: false, scrollWheelZoom: false, dragging: !tocar}).setView([41.16, -8.62], 12);
 L.control.zoom({position: 'bottomright'}).addTo(mapa);
+mapa.on('click', () => mapa.scrollWheelZoom.enable());                               // a roda só aproxima depois de clicar no mapa
+el('mapa-w').addEventListener('mouseleave', () => mapa.scrollWheelZoom.disable());
 const baseClara = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
   {subdomains: 'abcd', maxZoom: 19, attribution: '&copy; OpenStreetMap &copy; CARTO'}).addTo(mapa);
 const baseEscura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
   {subdomains: 'abcd', maxZoom: 19, attribution: '&copy; OpenStreetMap &copy; CARTO'});    // só na vista «Agora», onde os rastos brilham
 const camada = L.layerGroup().addTo(mapa);
-const PARAGENS = [[0, [92, 0, 17]], [.35, [193, 39, 45]], [.7, [240, 138, 75]], [1, [247, 215, 116]]];
 
-const VOLUME = [[0, [198, 219, 239]], [.5, [66, 146, 198]], [1, [8, 48, 107]]];       // poucos -> muitos autocarros
-const PERDIDO = [[0, [242, 224, 247]], [.5, [177, 103, 196]], [1, [64, 10, 98]]];     // pouco -> muito tempo perdido (roxo, para não se confundir com a velocidade)
+// paleta de dados (assets/css/folha.css): cada vista com a sua, separada do cromo
+const cssv = (n, f) => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || f;
+const PALETA = {
+  vel: [['--v0', '#22609E'], ['--v1', '#3FA894'], ['--v2', '#E3A019'], ['--v3', '#E2522B'], ['--v4', '#A3123A']],     // ≥ 25 … < 8 km/h
+  ph: [['--o1', '#78ADCB'], ['--o2', '#5A92BA'], ['--o3', '#3F77A3'], ['--o5', '#17436E'], ['--o6', '#0B2B4D']],      // poucos → muitos autocarros
+  perdido: [['--t1', '#C9A6DD'], ['--t2', '#A877C7'], ['--t3', '#8549AE'], ['--t4', '#5F2489'], ['--t5', '#3B0A5E']], // pouco → muito tempo perdido (roxo)
+  agora: [['--a0', '#6FA8E8'], ['--a1', '#62CDB3'], ['--a2', '#F2C14A'], ['--a3', '#F4844A'], ['--a4', '#F0506A']],   // velocidade sobre o mapa escuro
+};
+const COR = Object.fromEntries(Object.entries(PALETA).map(([k, v]) => [k, v.map(([n, f]) => cssv(n, f))]));
+const VL = ['≥ 25', '20–25', '14–20', '8–14', '< 8'];
+const cls = v => v >= 25 ? 0 : v >= 20 ? 1 : v >= 14 ? 2 : v >= 8 ? 3 : 4;
+const CINZA = '#9AA8A6', PAPEL = cssv('--folha', '#FAFAF7');
+const PER = {dia: 'dia todo', am: 'ponta da manhã', pm: 'ponta da tarde'};
 const DEFINICAO = {
-  vel: '<b>Velocidade:</b> média a que os autocarros andam em cada troço de rua, sem contar as esperas nas paragens. Quanto mais escuro, mais lento.',
+  vel: '<b>Velocidade:</b> média a que os autocarros andam em cada troço de rua, sem contar as esperas nas paragens. Vermelho e laranja = <b>crítico</b>, menos de 14 km/h; a espessura desses troços e o tamanho dos círculos = <b>tempo perdido</b>.',
   ph: '<b>Autocarros por hora:</b> quantos autocarros passam por hora, num sentido (estimativa). Quanto mais escuro, mais autocarros. Não diz se andam depressa ou devagar.',
   perdido: '<b>Tempo perdido:</b> minutos de autocarro perdidos por hora, somando todos os autocarros, face a andar a 25 km/h. Mostra onde o atraso pesa mais: ruas lentas e muito usadas. Quanto mais escuro, mais tempo perdido.',
   agora: '<b>Agora:</b> a velocidade real dos autocarros neste momento. Cada rasto corre pela rua, no sentido dos autocarros, e cada ponto é um autocarro, da cor do rasto; vermelho é parado no trânsito, azul é fluido.',
 };
-const VEL_AGORA = [[0, [215, 25, 28]], [.25, [253, 174, 97]], [.5, [255, 255, 191]], [.75, [171, 217, 233]], [1, [44, 123, 182]]];
-const COR_PONTO = {vel: '#7a0019', perdido: '#400a62'};
+const TITULO = {vel: 'Velocidade média por troço', ph: 'Autocarros por hora, por troço', perdido: 'Tempo perdido por troço', agora: 'Agora: os autocarros neste momento'};
 
-function rampa(paragens, t) {
-  t = Math.min(1, Math.max(0, t));
-  for (let i = 1; i < paragens.length; i++) {
-    if (t <= paragens[i][0]) {
-      const [t0, c0] = paragens[i - 1], [t1, c1] = paragens[i], f = (t - t0) / (t1 - t0);
-      return 'rgb(' + c0.map((x, k) => Math.round(x + f * (c1[k] - x))).join(',') + ')';
-    }
-  }
-}
-const cor = v => rampa(PARAGENS, (v - 3) / 11);
-const css = paragens => 'linear-gradient(90deg,' + paragens.map(p => rampa(paragens, p[0]) + ' ' + p[0] * 100 + '%').join(',') + ')';
-const percentil = (xs, q) => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor(s.length * q)]; };
+const percentil = (xs, q) => { const s = [...xs].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(s.length * q))]; };
 const f1 = x => x.toFixed(1).replace('.', ',');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const classes = (ref, fmt) => { const t = [.2, .4, .6, .8].map(q => q * ref); return ['< ' + fmt(t[0]), fmt(t[0]) + '–' + fmt(t[1]), fmt(t[1]) + '–' + fmt(t[2]), fmt(t[2]) + '–' + fmt(t[3]), '≥ ' + fmt(t[3])]; };
+const quinto = t => Math.min(4, Math.floor(t * 5));
+function legenda(rot, cores, rotulos, extra) {
+  el('leg-rot').textContent = rot;
+  el('rampa').innerHTML = cores.map((c, i) => `<div><i style="background:${c}"></i><span>${rotulos[i]}</span></div>`).join('');
+  el('zt').innerHTML = extra || '';
+}
 
 function desenhar() {
   const ag = estado.modo === 'agora';
-  for (const id of ['g-dia', 'g-per']) document.getElementById(id).style.display = ag ? 'none' : '';
-  document.getElementById('bloco-agora').style.display = ag ? '' : 'none';
-  document.getElementById('bloco-estatico').style.display = ag ? 'none' : '';
+  for (const id of ['g-dia-w', 'g-per-w']) el(id).hidden = ag;
+  el('bloco-agora').hidden = !ag;
+  el('bloco-estatico').hidden = ag;
+  el('mapa-w').classList.toggle('noite', ag);
+  el('definicao').innerHTML = DEFINICAO[estado.modo];
+  el('map-tit').textContent = TITULO[estado.modo] + (ag ? '' : ' · ' + PER[estado.per] + (estado.dia === 'fds' ? ', fim-de-semana' : ', dias úteis'));
   if (ag) {
     camada.clearLayers();
-    document.getElementById('definicao').innerHTML = DEFINICAO.agora;
-    document.getElementById('barra').style.background = css(VEL_AGORA);
-    document.getElementById('esc-a').textContent = '0 km/h';
-    document.getElementById('esc-b').textContent = '40 km/h ou mais';
+    legenda('km/h agora', COR.agora.slice().reverse(), VL.slice().reverse(),
+      '<span><i class="dot"></i>ponto = um autocarro</span><span>rasto = corrente no sentido dos autocarros</span>');
+    el('map-fonte').textContent = 'Posições ao vivo do broker de dados abertos da Porto Digital (CC0), lidas de 20 em 20 s · nada é guardado' + (tocar ? ' · dois dedos movem o mapa' : '');
     AGORA.ligar();
     return;
   }
   AGORA.desligar();
   camada.clearLayers();
+  el('map-fonte').textContent = 'Recolha própria · Porto Digital (CC0) · troços OSM · ' + D.intervalo + ' · toca num troço ou num círculo para ver os números' + (tocar ? ' · dois dedos movem o mapa' : '');
   const chave = estado.dia + '|' + estado.per;
   const linhas = D.variantes[chave], marcadores = D.marcadores[chave];
-  const estadoEl = document.getElementById('estado'), lista = document.getElementById('lista');
+  const estadoEl = el('estado'), lista = el('lista');
   lista.innerHTML = '';
   if (!linhas.length) {
     estadoEl.textContent = 'Sem dados suficientes para este período.';
-    document.getElementById('lista-titulo').style.display = 'none';
+    el('lista-titulo').hidden = true;
+    legenda('', [], [], '');
     return;
   }
-  document.getElementById('lista-titulo').style.display = '';
   const porTroco = new Map();
   for (const r of linhas) {
     if (!porTroco.has(r[0])) porTroco.set(r[0], []);
     porTroco.get(r[0]).push(r);
   }
   const modo = estado.modo;
-  document.getElementById('lista-titulo').style.display = modo === 'ph' ? 'none' : '';
+  el('lista-titulo').hidden = modo === 'ph';
   const ref = Math.max(1, percentil(linhas.map(r => r[4]), .95));      // min perdidos por hora
   const refPh = Math.max(1, percentil(linhas.map(r => r[3]), .95));    // autocarros por hora
-  const legenda = {
-    vel: [css(PARAGENS), '3 km/h', '14 km/h ou mais: sem destaque'],
-    ph: [css(VOLUME), 'poucos autocarros', refPh >= 10 ? Math.round(refPh) + ' ou mais por hora' : f1(refPh) + ' ou mais por hora'],
-    perdido: [css(PERDIDO), 'pouco tempo perdido', Math.round(ref) + ' min/h ou mais'],
-  }[modo];
-  document.getElementById('definicao').innerHTML = DEFINICAO[modo];
-  document.getElementById('barra').style.background = legenda[0];
-  document.getElementById('esc-a').textContent = legenda[1];
-  document.getElementById('esc-b').textContent = legenda[2];
+  const per = PER[estado.per];
+  if (modo === 'vel') legenda('km/h no troço, ' + per, [4, 3, 2, 1, 0].map(c => COR.vel[c]), [4, 3, 2, 1, 0].map(c => VL[c]),
+    `<span><i class="esp"></i>espessura &lt; 14 km/h = tempo perdido</span><span><i class="ring" style="--rc:${COR.vel[4]}"></i>pontos com mais tempo perdido</span>`);
+  else if (modo === 'ph') legenda('autocarros por hora, num sentido, ' + per, COR.ph, classes(refPh, v => v >= 10 ? Math.round(v) : f1(v)),
+    '<span><i class="esp"></i>espessura = autocarros por hora</span>');
+  else legenda('min/h perdidos face a 25 km/h, ' + per, COR.perdido, classes(ref, v => Math.round(v)),
+    `<span><i class="esp"></i>espessura = tempo perdido</span><span><i class="ring" style="--rc:${COR.perdido[4]}"></i>pontos com mais tempo perdido</span>`);
   // direcção representativa de cada troço: a mais lenta (velocidade), a mais frequentada (volume) ou a que mais perde
   const chaveModo = {vel: r => r[2], ph: r => -r[3], perdido: r => -r[4]}[modo];
   const itens = [...porTroco.entries()].map(([i, rs]) => [i, rs.sort((a, b) => chaveModo(a) - chaveModo(b))]);
@@ -191,33 +270,42 @@ function desenhar() {
     if (rs.some(r => r[2] < 14)) criticos++;
     let estilo;
     if (modo === 'vel') {
-      estilo = crit ? {color: cor(p[2]), weight: 3 + 7 * Math.sqrt(Math.min(1, p[4] / ref)), opacity: .92, lineCap: 'round'}
-                    : {color: '#b5b5b5', weight: 2, opacity: .45};
+      const c = cls(p[2]);
+      if (crit) {
+        const w = 2.5 + 5.5 * Math.sqrt(Math.min(1, p[4] / ref));
+        L.polyline(D.trocos[i], {color: PAPEL, weight: w + 2.5, opacity: .9, interactive: false}).addTo(camada);     // auréola de papel
+        estilo = {color: COR.vel[c], weight: w, opacity: .95, lineCap: 'round'};
+      } else estilo = {color: COR.vel[c], weight: [2.2, 1.8, 1.5][2 - c] || 1.5, opacity: .8, lineCap: 'round'};
     } else if (modo === 'ph') {
       const t = Math.min(1, p[3] / refPh);
-      estilo = {color: rampa(VOLUME, t), weight: 2 + 7 * Math.sqrt(t), opacity: .88, lineCap: 'round'};
+      estilo = {color: COR.ph[quinto(t)], weight: 2 + 7 * Math.sqrt(t), opacity: .9, lineCap: 'round'};
     } else {
       const t = Math.min(1, p[4] / ref);
-      estilo = p[4] > 0 ? {color: rampa(PERDIDO, t), weight: 2 + 8 * Math.sqrt(t), opacity: .92, lineCap: 'round'}
-                        : {color: '#b5b5b5', weight: 2, opacity: .45};
+      estilo = p[4] > 0 ? {color: COR.perdido[quinto(t)], weight: 2 + 8 * Math.sqrt(t), opacity: .92, lineCap: 'round'}
+                        : {color: CINZA, weight: 1.5, opacity: .6};
     }
     const linha = L.polyline(D.trocos[i], estilo).addTo(camada);
     linha.bindPopup(() => '<b>' + f1(p[2]) + ' km/h</b> de média neste sentido<br>'
       + 'Passam cerca de ' + f1(p[3]) + ' autocarros por hora; no total perdem ' + f1(p[4])
       + ' min por hora face a 25 km/h (cerca de ' + Math.round(p[4] * 60 / p[3]) + ' s cada um)'
-      + (rs.length > 1 ? '<br><span style="color:#777">Outro sentido: ' + f1(rs[1][2]) + ' km/h, ' + f1(rs[1][3]) + ' autocarros por hora</span>' : ''));
+      + (rs.length > 1 ? '<br><span style="color:#6B7E89">Outro sentido: ' + f1(rs[1][2]) + ' km/h, ' + f1(rs[1][3]) + ' autocarros por hora</span>' : ''));
   }
-  const maxM = Math.max(1, ...marcadores.map(m => m.perdido));
+  const maxM = Math.max(1, ...marcadores.map(m => m.perdido)), corPonto = modo === 'perdido' ? COR.perdido[4] : COR.vel[4];
   (modo === 'ph' ? [] : marcadores).forEach((m, k) => {      // no volume os pontos críticos só confundiam
     const nome = esc(m.rua || 'Rua sem nome') + (m.cruzamento ? ' &middot; ' + esc(m.cruzamento) : '');
-    const c = L.circleMarker([m.lat, m.lon], {radius: 9 + 15 * Math.sqrt(m.perdido / maxM), color: COR_PONTO[modo], weight: 2,
-      fillColor: COR_PONTO[modo], fillOpacity: .1}).addTo(camada);
+    const c = L.circleMarker([m.lat, m.lon], {radius: 9 + 15 * Math.sqrt(m.perdido / maxM), color: corPonto, weight: 2,
+      fillColor: corPonto, fillOpacity: .08}).addTo(camada);
     c.bindPopup('<b>' + nome + '</b><br>' + f1(m.v) + ' km/h no troço mais penalizado<br>Neste ponto, no total, os autocarros perdem ' + f1(m.perdido)
       + ' min por hora face a 25 km/h (soma dos troços à volta, nos dois sentidos)');
     if (k < 10) {
       const li = document.createElement('li');
-      li.innerHTML = nome + ' <small>' + (modo === 'perdido' ? f1(m.perdido) + ' min/h perdidos' : f1(m.v) + ' km/h') + '</small>';
-      li.onclick = () => { mapa.setView([m.lat, m.lon], 16); c.openPopup(); };
+      li.innerHTML = '<button type="button"><span>' + esc(m.rua || 'Rua sem nome') + (m.cruzamento ? ' <em>· ' + esc(m.cruzamento) + '</em>' : '')
+        + '</span><span class="v">' + (modo === 'perdido' ? f1(m.perdido) + ' min/h' : f1(m.v) + ' km/h') + '</span></button>';
+      li.firstChild.addEventListener('click', () => {
+        const r = el('mapa-w').getBoundingClientRect();
+        if (r.top < 0 || r.bottom > innerHeight) el('mapa-w').scrollIntoView({block: 'center'});
+        mapa.setView([m.lat, m.lon], 16); c.openPopup();
+      });
       lista.appendChild(li);
     }
   });
@@ -230,8 +318,9 @@ const AGORA = (() => {
   const INTERVALO_MS = 20000, IDADE_MAX_S = 300, KMH_MAX = 90, PARADO = 2, RAIO_ESPERA = 40, RAIO_TERMINAL = 100;
   const ESCALA = 120, RAIO = 700, LIM = .9;      // LIM: ±52° de diferença de sentido
   const KX = 111320 * Math.cos(41.15 * Math.PI / 180), KY = 111320;
-  const cv = document.getElementById('rastos'), reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const H_ = D.habitual, el = id => document.getElementById(id);
+  const cv = el('rastos'), reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const H_ = D.habitual;
+  const corAgora = kmh => COR.agora[cls(kmh)];
   let rendPontos = null, ativo = false, P = [], parts = [], W = 0, H = 0, ctx = null, tIntervalo = null, tEstado = null, raf = null;
   let ultimaLeitura = 0, ultimaOk = 0, ult = 0;
 
@@ -291,15 +380,16 @@ const AGORA = (() => {
     for (const p of v) if (p.rota) { if (!porRota.has(p.rota)) porRota.set(p.rota, []); porRota.get(p.rota).push(p.kmh); }
     const lentas = [...porRota.entries()].filter(([, a]) => a.length >= 3 && a.filter(k => k >= PARADO).length * 3 >= a.length)
       .map(([r, a]) => [r, mediana(a), a.length]).sort((a, b) => a[1] - b[1]).slice(0, 5);
-    el('lentas').innerHTML = lentas.length ? lentas.map(([r, m, n]) => '<li><b>' + r + '</b><span>' + f1(m) + ' km/h · ' + n + ' autocarros</span></li>').join('')
-      : '<li><span>Sem linhas com 3 autocarros ou mais.</span></li>';
+    el('lentas').innerHTML = lentas.length ? lentas.map(([r, m, n]) => '<tr><td>' + esc(r) + '</td><td>' + f1(m) + ' km/h</td><td class="n">' + n
+      + ' autocarros</td><td class="b"><i style="width:' + Math.min(100, 100 * m / 25) + '%;background:' + COR.vel[cls(m)] + '"></i></td></tr>').join('')
+      : '<tr><td colspan="4">Sem linhas com 3 autocarros ou mais.</td></tr>';
   }
   function textoEstado() {
     const e = el('estado-agora');
     if (!ultimaOk) return;
     if (Date.now() - ultimaOk > 3 * INTERVALO_MS) {
-      e.className = 'erro'; e.textContent = 'Sem ligação ao feed da Porto Digital. A mostrar a última leitura (há ' + Math.round((Date.now() - ultimaOk) / 1000) + ' s); a tentar de novo.';
-    } else { e.className = ''; e.textContent = 'Posição mais recente há ' + Math.round((Date.now() - ultimaLeitura) / 1000) + ' s. Actualiza de ' + INTERVALO_MS / 1000 + ' em ' + INTERVALO_MS / 1000 + ' s.'; }
+      e.className = 'relogio erro'; e.textContent = 'Sem ligação ao feed da Porto Digital. A mostrar a última leitura (há ' + Math.round((Date.now() - ultimaOk) / 1000) + ' s); a tentar de novo.';
+    } else { e.className = 'relogio'; e.textContent = 'Posição mais recente há ' + Math.round((Date.now() - ultimaLeitura) / 1000) + ' s. Actualiza de ' + INTERVALO_MS / 1000 + ' em ' + INTERVALO_MS / 1000 + ' s.'; }
   }
   async function obter() {
     if (document.hidden || !ativo) return;
@@ -316,7 +406,7 @@ const AGORA = (() => {
       mostrar(v);
       if (reduzido) redesenharParado();
     } catch (err) {
-      if (!ultimaOk) { const e = el('estado-agora'); e.className = 'erro'; e.textContent = 'Sem ligação ao feed da Porto Digital (' + err.message + '). A tentar de novo.'; }
+      if (!ultimaOk) { const e = el('estado-agora'); e.className = 'relogio erro'; e.textContent = 'Sem ligação ao feed da Porto Digital (' + err.message + '). A tentar de novo.'; }
     }
     textoEstado();
   }
@@ -389,7 +479,7 @@ const AGORA = (() => {
     const q = Q[Math.floor(Math.random() * Q.length)], t = rede.tr[q.k];
     return {k: q.k, d: q.d, s: Math.min(t.len, Math.max(0, q.s + (Math.random() - .5) * 300)), vida: 90 + Math.random() * 140};
   }
-  function ajustar() { const r = document.getElementById('mapa').getBoundingClientRect(); W = cv.width = r.width; H = cv.height = r.height; ctx = cv.getContext('2d'); }
+  function ajustar() { const r = el('mapa').getBoundingClientRect(); W = cv.width = r.width; H = cv.height = r.height; ctx = cv.getContext('2d'); }
   const px = (x, y) => mapa.latLngToContainerPoint([y / KY, x / KX]);
   function mover(p, dt) {          // false = a partícula acabou (sem autocarros à volta ou sem saída)
     const a0 = posicao(p.k, p.s, p.d), c = campo(a0.x, a0.y, a0.h);
@@ -401,7 +491,7 @@ const AGORA = (() => {
       p.k = nx.k; p.d = nx.d; p.s = nx.s;
     }
     const a = px(a0.x, a0.y), b0 = posicao(p.k, p.s, p.d), b = px(b0.x, b0.y);
-    ctx.strokeStyle = rampa(VEL_AGORA, c.kmh / 40);
+    ctx.strokeStyle = corAgora(c.kmh);
     ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x + .01, b.y); ctx.stroke();      // parado: fica um ponto
     return true;
   }
@@ -411,7 +501,7 @@ const AGORA = (() => {
     if (Q.length) {
       if (parts.length < 1800) parts = Array.from({length: 1800}, semear);
       ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = 'rgba(0,0,0,.03)'; ctx.fillRect(0, 0, W, H);
-      ctx.globalCompositeOperation = 'source-over'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.globalAlpha = .9;
+      ctx.globalCompositeOperation = 'source-over'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.globalAlpha = .9;
       for (let i = 0; i < parts.length; i++) if (--parts[i].vida < 0 || !mover(parts[i], dt)) parts[i] = semear();
       ctx.globalAlpha = 1;
     }
@@ -420,7 +510,7 @@ const AGORA = (() => {
   function redesenharParado() {      // movimento reduzido: cada partícula desenha o seu caminho de uma vez
     if (!ativo || !Q.length) return;
     ctx.clearRect(0, 0, W, H);
-    ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.lineWidth = 3; ctx.lineCap = 'round';
     for (let i = 0; i < 1800; i++) {
       const p = semear();
       for (let k = 0; k < 45; k++) {
@@ -432,8 +522,8 @@ const AGORA = (() => {
   }
   function desenharPontos() {        // um ponto por autocarro colado a uma rua, da cor do rasto
     pontos.clearLayers();
-    for (const q of Q) L.circleMarker([q.y / KY, q.x / KX], {pane: 'pontosAgora', renderer: rendPontos, radius: 7, weight: 2, color: '#10141c',
-      fillColor: rampa(VEL_AGORA, q.kmh / 40), fillOpacity: 1, opacity: .9, interactive: false}).addTo(pontos);
+    for (const q of Q) L.circleMarker([q.y / KY, q.x / KX], {pane: 'pontosAgora', renderer: rendPontos, radius: 6, weight: 1.5, color: '#0B1418',
+      fillColor: corAgora(q.kmh), fillOpacity: 1, opacity: .9, interactive: false}).addTo(pontos);
   }
   function ligar() {
     if (ativo) return;
@@ -443,7 +533,7 @@ const AGORA = (() => {
       rede = construirRede();
       mapa.createPane('pontosAgora').style.zIndex = 460;
       rendPontos = L.canvas({pane: 'pontosAgora'});
-      ruas = L.layerGroup(D.trocos.map(ll => L.polyline(ll, {color: '#4a5263', weight: 2, opacity: .75, interactive: false})));
+      ruas = L.layerGroup(D.trocos.map(ll => L.polyline(ll, {color: cssv('--noite-rua', '#3C4D57'), weight: 2, opacity: .9, interactive: false})));
       pontos = L.layerGroup();
     }
     ruas.addTo(mapa); pontos.addTo(mapa);
@@ -471,7 +561,7 @@ const AGORA = (() => {
 document.querySelectorAll('#g-dia button, #g-per button, #g-modo button').forEach(b => b.addEventListener('click', () => {
   if (b.disabled) return;
   if (b.dataset.dia) estado.dia = b.dataset.dia; else if (b.dataset.modo) estado.modo = b.dataset.modo; else estado.per = b.dataset.per;
-  b.parentElement.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+  b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
   desenhar();
 }));
 desenhar();

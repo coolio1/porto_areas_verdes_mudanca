@@ -33,7 +33,7 @@ def renderizar(r: dict, template: Path) -> str:
     ini, fim = datetime.date.fromisoformat(dias[0]["d"]), datetime.date.fromisoformat(dias[-1]["d"])
     s = r["stcp"]
     corpo = (Path(template).read_text(encoding="utf-8")
-             .replace("__NAV__", nav.get_nav("Mobilidade/analise.html", depth=1, rodape="leitura"))
+             .replace("__NAV__", nav.get_nav("Mobilidade/analise.html", depth=1, menu="barra", rodape="leitura"))
              .replace("__LEITURAS__", f"{r['leituras']:,}".replace(",", " "))
              .replace("__VEICULOS__", str(r["veiculos"])).replace("__LINHAS__", str(r["linhas"]))
              .replace("__INTERVALO__", _intervalo_txt(ini, fim))

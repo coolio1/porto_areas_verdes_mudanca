@@ -116,8 +116,13 @@ def test_selector_mostrar_por_velocidade_autocarros_e_tempo_perdido():
 def test_cada_vista_tem_definicao_e_paleta_propria():
     h = html()
     assert 'id="definicao"' in h and "Não diz se andam depressa" in h and "somando todos os autocarros" in h
-    # vistas distintas não partilham cores: vermelho/amarelo = velocidade, azul = volume, roxo = tempo perdido
-    assert "const PERDIDO = [[0, [242, 224, 247]]" in h
+    # vistas distintas não partilham cores (folha.css): classes de velocidade, azul = volume, roxo = tempo perdido
+    paleta = re.search(r"const PALETA = \{(.*?)\n\};", h, re.S).group(1)
+    vistas = dict(re.findall(r"^\s*(\w+): \[(.*)\],", paleta, re.M))     # uma vista por linha
+    assert set(vistas) == {"vel", "ph", "perdido", "agora"}
+    cores = [set(re.findall(r"#[0-9A-F]{6}", v)) for v in vistas.values()]
+    assert all(len(c) == 5 for c in cores) and all(a.isdisjoint(b) for i, a in enumerate(cores) for b in cores[i + 1:])
+    assert "'--t1', '#C9A6DD'" in paleta
 
 
 def test_menu_e_abas_vem_da_moldura():
