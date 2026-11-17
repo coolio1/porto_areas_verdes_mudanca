@@ -455,6 +455,7 @@
   /* ---------- temas ---------- */
   var ICON = {
     acessibilidade: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9.5" stroke-dasharray="2.5 2"/><circle cx="12" cy="12" r="3.5" fill="currentColor"/></svg>',
+    regra: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 21V9l5-3 5 3v12M13 21V4l8 4v13M3 21h18"/><circle cx="17" cy="14" r="1.6" fill="currentColor" stroke="none"/></svg>',
     hoje: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h11l-3-3M20 17H9l3 3"/></svg>',
     historico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 20h18M5 20v-4h4v4M10 20v-8h4v8M15 20V6h4v14"/></svg>',
     privado: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18"/><rect x="8" y="8" width="8" height="8" fill="currentColor" stroke="none"/></svg>'
@@ -531,7 +532,7 @@
     ['veuPane', 'limitesPane', 'rotPane'].forEach(function (p) { map.getPane(p).style.pointerEvents = 'none'; });
     MU.verConcelho();
     var temas = document.getElementById('temas'), tabs = document.getElementById('tabs');
-    var CURTO = { acessibilidade: 'Acesso', hoje: 'Mudanças', historico: 'Histórico', privado: 'Privado' };
+    var CURTO = { acessibilidade: 'Acesso', regra: '3-30-300', hoje: 'Mudanças', historico: 'Histórico', privado: 'Privado' };
     MU.ORDEM.forEach(function (id) {
       var t = MU.TEMAS[id];
       var b = document.createElement('button');

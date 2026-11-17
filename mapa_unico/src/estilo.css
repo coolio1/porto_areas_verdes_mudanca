@@ -6,7 +6,7 @@
   /* placa do mapa (fundo «Carta») */
   --map-papel:#E6EDEB;--map-agua:#A9CADB;--map-fora:#F3F4F0;--map-grade:rgba(16,33,44,.10);--map-rot-agua:#2F5A70;--map-halo:#E6EDEB;
   /* cor-guia de cada tema (cromo, AA sobre o papel) */
-  --g-acessibilidade:#0B5232;--g-hoje:#B42F2F;--g-historico:#7A4E22;--g-privado:#7C6526;
+  --g-acessibilidade:#0B5232;--g-regra:#2E5C94;--g-hoje:#B42F2F;--g-historico:#7A4E22;--g-privado:#7C6526;
   --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'IBM Plex Sans',system-ui,sans-serif;--serif:'IBM Plex Serif',Georgia,serif;
   color-scheme:light;
 }
@@ -48,17 +48,17 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .alca{display:none}
 
 /* separadores fixos dos temas (sempre à vista) + corpo do tema aberto com scroll próprio */
-.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid var(--filete);flex:none}
+.tabs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);border-bottom:1px solid var(--filete);flex:none}
 .tab{--guia:var(--g-acessibilidade);all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;
   padding:9px 2px 8px;border-top:3px solid transparent;font:500 12.5px/1.1 var(--sans);color:var(--suave);text-align:center;min-width:0}
 .tab+.tab{border-left:1px solid var(--fino)}
-.tab[data-t="hoje"]{--guia:var(--g-hoje)}.tab[data-t="historico"]{--guia:var(--g-historico)}.tab[data-t="privado"]{--guia:var(--g-privado)}
+.tab[data-t="regra"]{--guia:var(--g-regra)}.tab[data-t="hoje"]{--guia:var(--g-hoje)}.tab[data-t="historico"]{--guia:var(--g-historico)}.tab[data-t="privado"]{--guia:var(--g-privado)}
 .tab svg{width:20px;height:20px;color:var(--guia);display:block}
 .tab:hover{background:var(--realce)}
 .tab.on{border-top-color:var(--guia);color:var(--tinta);font-weight:700;background:var(--painel)}
 .tab:focus-visible{outline:2px solid var(--tinta);outline-offset:-4px}
 .tema{--guia:var(--g-acessibilidade);display:none}
-.tema[data-t="hoje"]{--guia:var(--g-hoje)}.tema[data-t="historico"]{--guia:var(--g-historico)}.tema[data-t="privado"]{--guia:var(--g-privado)}
+.tema[data-t="regra"]{--guia:var(--g-regra)}.tema[data-t="hoje"]{--guia:var(--g-hoje)}.tema[data-t="historico"]{--guia:var(--g-historico)}.tema[data-t="privado"]{--guia:var(--g-privado)}
 .tema.on{display:block}
 .tema-tit{margin:0;padding:14px 20px 4px 24px;font:700 21px/1.2 var(--sans);letter-spacing:-.015em}
 .corpo{padding:0 20px 18px 24px}

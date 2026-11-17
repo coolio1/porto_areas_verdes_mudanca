@@ -1,4 +1,4 @@
-"""Gera mapa_unico.html (página única com 4 temas) e os ficheiros de dados por tema.
+"""Gera mapa_unico.html (página única com 5 temas) e os ficheiros de dados por tema.
 
 Fontes: src/ (CSS, JS do núcleo e dos temas, modelo HTML) e layers/ (PNG já calculados
 pelos pipelines de cada tema). Nunca editar o HTML gerado à mão.
@@ -23,7 +23,7 @@ LAYERS = RAIZ / "layers"
 PAGINA = "mapa_unico/mapa_unico.html"
 
 # Temas na ordem dos separadores (um ficheiro src/tema_<id>.js cada); o primeiro abre sem hash
-TEMAS = ["acessibilidade", "hoje", "historico", "privado"]
+TEMAS = ["acessibilidade", "regra", "hoje", "historico", "privado"]
 
 ACC_LAYERS = RAIZ / "acessibilidade" / "layers"
 
@@ -178,6 +178,16 @@ def dados_historico() -> dict:
     return d
 
 
+def dados_regra() -> dict:
+    """Regra 3-30-300: máscaras de edifícios por indicador (PNG de 1 bit, grelha de 3 m) e números.
+    Gerados por regra_303030/mapa_png.py (ver regra_303030/CLAUDE.md); aqui só se embutem."""
+    pasta = RAIZ / "regra_303030" / "layers"
+    d = {k: "data:image/png;base64," + base64.b64encode((pasta / f"{k}.png").read_bytes()).decode()
+         for k in ("todos", "nenhum", "c3", "c30", "c300")}
+    d["numeros"] = json.loads((pasta / "numeros.json").read_text(encoding="utf-8"))
+    return d
+
+
 def _mascara_1bit(m) -> str:
     """Máscara booleana -> PNG de paleta a 1 bit (preto opaco onde True), em data URI."""
     import io
@@ -252,6 +262,7 @@ def escrever_dados() -> None:
             _escrever(nome, {k: _b64(p) for k, p in imgs.items()})
     _escrever("contexto", dados_contexto())
     _escrever("acessibilidade", dados_acessibilidade())
+    _escrever("regra", dados_regra())
     _escrever("historico", dados_historico())
 
 
