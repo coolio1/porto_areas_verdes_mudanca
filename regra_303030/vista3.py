@@ -88,13 +88,18 @@ def n3(b, d, n_edif, raio=RAIO_M):
     return np.bincount(b[d <= raio], minlength=n_edif)
 
 
-def main():
+def carregar_arvores():
+    """Árvores que contam no «3» (ver docstring); o índice 0..N-1 é o `t` dos pares gravados."""
     import geopandas as gpd
+    arv = gpd.read_file(DADOS / "arvores.gpkg")
+    return arv[~((arv.origem == "cmp") & (arv.detectado == 0))].reset_index(drop=True)
+
+
+def main():
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from edificios import carregar
     ed = carregar()
-    arv = gpd.read_file(DADOS / "arvores.gpkg")
-    arv = arv[~((arv.origem == "cmp") & (arv.detectado == 0))].reset_index(drop=True)
+    arv = carregar_arvores()
     xy = np.stack([arv.geometry.x, arv.geometry.y], 1)
     print("edifícios:", len(ed), "| árvores:", len(arv))
     b, t, d, sem = calcular(list(ed.geometry), xy)
