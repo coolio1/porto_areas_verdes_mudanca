@@ -23,7 +23,15 @@ BBOX_PORTO = [-8.68, 41.14, -8.55, 41.19]
 def procurar(s, colecao, limite):
     r = s.post(f"{BASE}/dgt-be/v1/search", json={"collections": [colecao], "bbox": BBOX_PORTO, "limit": limite}, timeout=60)
     r.raise_for_status()
-    return r.json()["features"]
+    fs = r.json()["features"]
+    if limite > 1:  # a caixa apanha folhas de concelhos vizinhos: ficar só com as que cruzam o Porto
+        import geopandas as gpd
+        from shapely.geometry import shape
+        caop = Path(__file__).resolve().parents[1] / "CAOP_Continente_2025-gpkg" / "CAOP2025_municipios.shp"
+        m = gpd.read_file(caop)
+        poly = m[m["dtmn"] == "1312"].to_crs(4326).geometry.iloc[0]
+        fs = [f for f in fs if shape(f["geometry"]).intersects(poly)]
+    return fs
 
 
 def descarregar(s, item, destino=DESTINO):
