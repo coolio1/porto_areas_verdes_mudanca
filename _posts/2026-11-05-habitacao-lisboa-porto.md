@@ -11,6 +11,11 @@ tags: [habitação, porto, lisboa, política urbana, alojamento local, imigraç�
 
 > **Aviso:** Este artigo foi gerado com recurso a inteligência artificial e não reflecte necessariamente a opinião do Porto Verde, com a excepção da última secção, que expõe a posição do Porto Verde. As recomendações das secções 4 e 5 são inferências da síntese a partir dos estudos, não resultados deles.
 
+> **Ler e consultar**
+>
+> - 📄 **[Nota completa em PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf)**: 100 páginas, 7 figuras, método, grau de certeza e mais de 300 referências.
+> - 💬 **[Caderno de consulta no NotebookLM](https://notebook.google.com/notebook/a4a5dc57-e276-4d93-9ee8-90fb5b8ac8a7/preview)**: os textos dos estudos citados, para pesquisar e fazer perguntas.
+
 {% include conclusoes-habitacao.html %}
 
 ## Síntese científica
@@ -96,8 +101,6 @@ Grau de certeza: **moderado quanto à direcção** destas medidas e **mais incer
 ## A nota completa (PDF)
 
 A síntese de todos os estudos, com o método, o grau de certeza de cada conclusão, os limites e mais de 300 referências, está em [PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (100 páginas, com 7 figuras). Inclui também o regime do arrendamento, os apoios à renda, o papel dos juros e a fiscalidade do arrendamento.
-
-Os textos dos estudos que sustentam a nota podem ser consultados e interrogados num [caderno público no NotebookLM](https://notebook.google.com/notebook/a4a5dc57-e276-4d93-9ee8-90fb5b8ac8a7/preview).
 
 ## Porque é que isto interessa ao Porto Verde
 
