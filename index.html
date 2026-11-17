@@ -64,7 +64,7 @@ ficha_fontes:
   </div>
   <div class="palco" id="palco" aria-label="Pré-visualização da área">
    <div class="palco-in">
-    <div class="palco-h"><span id="palco-n">Mapas e uso do solo</span><button class="parar" id="parar" type="button" hidden>Parar a volta</button></div>
+    <div class="palco-h"><span id="palco-n">Verde e uso do solo</span><button class="parar" id="parar" type="button" hidden>Parar a volta</button></div>
     <div id="stage">
 
      <figure class="fg on" data-k="mapas">
@@ -74,7 +74,7 @@ ficha_fontes:
        <div class="mp-alt{% if forloop.first %} on{% endif %}" data-t="{{ t.k }}"><b class="fg-t">{{ t.t }}</b><ul class="lgd">{% for l in t.leg %}<li><i style="background:var(--d-{{ l[0] }})"></i>{{ l[1] }}</li>{% endfor %}<li><i style="background:var(--d-rio)"></i>Rio Douro e mar</li></ul><span class="fg-s">{{ t.s }}</span></div>
        {%- endfor %}
        <ul class="temas" aria-label="Os {{ page.temas.size }} temas do mapa">{% for t in page.temas %}<li><a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html#tema={{ t.k }}" data-t="{{ t.k }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">{{ t.n }}</a></li>{% endfor %}</ul>
-       <div class="entrar"><a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html">Entrar em «Mapas e uso do solo»</a></div>
+       <div class="entrar"><a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html">Entrar em «Verde e uso do solo»</a></div>
       </figcaption>
      </figure>
 
@@ -113,7 +113,7 @@ ficha_fontes:
  </section>
  <h2 class="sr">Áreas do site</h2>
  <ul class="regua" id="regua">
-  <li><a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html" data-k="mapas" style="--ac:var(--c-mapas)" class="on"><b>Mapas e uso do solo</b><span>Parques, verde pago e verde privado; o que mudou desde 1947.</span><small>{{ page.temas.size }} temas, 1947–2025</small></a></li>
+  <li><a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html" data-k="mapas" style="--ac:var(--c-mapas)" class="on"><b>Verde e uso do solo</b><span>Parques, verde pago e verde privado; o que mudou desde 1947.</span><small>{{ page.temas.size }} temas, 1947–2025</small></a></li>
   <li><a href="{{ site.baseurl }}/50espacos/" data-k="esp" style="--ac:var(--c-esp)"><b>50 Espaços Verdes</b><span>A campanha da Campo Aberto pelos espaços verdes do Grande Porto.</span><small>{{ esp_n }} espaços, {{ esp_s }} seleccionados</small></a></li>
   <li><a href="{{ site.baseurl }}/Mobilidade/autocarros.html" data-k="mob" style="--ac:var(--c-mob)"><b>Mobilidade</b><span>Onde os autocarros perdem tempo, troço a troço; e os atropelamentos.</span><small>{{ B.veiculos }} autocarros, {{ B.linhas }} linhas</small></a></li>
   <li><a href="{{ site.baseurl }}/artigos/" data-k="art" style="--ac:var(--c-art)"><b>Artigos</b><span>Análises com dados, reportagens e textos enviados às entidades.</span><small>{{ art_n }}, desde {{ d_ini[1] }} de {{ d_ini[2] }}</small></a></li>

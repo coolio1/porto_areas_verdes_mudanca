@@ -20,7 +20,7 @@
   // ---- dados (a única lista) ----
   var PAGINAS = [
     ['index.html', 'Início'],
-    ['mapa_unico/mapa_unico.html', 'Mapas e uso do solo'],
+    ['mapa_unico/mapa_unico.html', 'Verde e uso do solo'],
     ['50espacos/', '50 Espaços Verdes'],
     ['Mobilidade/autocarros.html', 'Mobilidade'],
     ['artigos/', 'Artigos'],

@@ -113,11 +113,18 @@
 
   /* Cria camadas de máscara + linhas do painel para defs [{id,label,color,show,op,ha}] (dados em
      MU.DADOS[tema.dados][id]) e guarda-as em tema._camadas, para activar/desactivar em bloco. */
+  /* Pane com nível fixo: a ordem das camadas no mapa não depende da ordem em que se ligam.
+     Regra: topo da lista do painel = topo do mapa (z maior); cada def indica o seu z (< 540, o dos parques). */
+  MU.pane = function (nome, z) {
+    if (!MU.map.getPane(nome)) MU.map.createPane(nome);
+    MU.map.getPane(nome).style.zIndex = z;
+    return nome;
+  };
   MU.addCamadas = async function (tema, box, defs, esc) {
     tema._camadas = tema._camadas || [];
     for (var i = 0; i < defs.length; i++) {
       var c = defs[i];
-      var cam = await MU.camadaMascara({ src: MU.DADOS[tema.dados][c.id], color: c.color, op: c.op });
+      var cam = await MU.camadaMascara({ src: MU.DADOS[tema.dados][c.id], color: c.color, op: c.op, pane: c.z ? MU.pane('mu-' + tema.id + '-' + c.id, c.z) : undefined });
       var l = { cam: cam, linha: null };
       l.linha = MU.linha(box, {
         label: c.label, checked: c.show !== false, color: c.color, ha: c.ha, esc: esc,

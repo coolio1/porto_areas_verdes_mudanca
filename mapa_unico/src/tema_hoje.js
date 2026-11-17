@@ -11,15 +11,16 @@ MU.registarTema({
   async montar(painel) {
     var S = MU.DADOS.contexto.stats;
     var trans = [
-      { id: 'arvores_edificado', label: 'Árvores para edificado', color: '#D93A3A', ha: S.arvores_edificado },
-      { id: 'arvores_solo', label: 'Árvores para solo', color: '#C98A1A', ha: S.arvores_solo },
-      { id: 'solo_edificado', label: 'Solo para edificado', color: '#7A55B8', ha: S.solo_edificado },
-      { id: 'solo_arvores', label: 'Solo para árvores', color: '#1FA6A0', ha: S.solo_arvores }
+      { id: 'arvores_edificado', label: 'Árvores para edificado', color: '#D93A3A', ha: S.arvores_edificado, z: 470 },
+      { id: 'arvores_solo', label: 'Árvores para solo', color: '#C98A1A', ha: S.arvores_solo, z: 460 },
+      { id: 'solo_edificado', label: 'Solo para edificado', color: '#7A55B8', ha: S.solo_edificado, z: 450 },
+      { id: 'solo_arvores', label: 'Solo para árvores', color: '#1FA6A0', ha: S.solo_arvores, z: 440 }
     ];
+    /* referência 2024-25 por baixo das mudanças (topo da lista = topo do mapa) */
     var uso = [
-      { id: 'uso_arvores', label: 'Árvores 2024-25', color: '#4F9A62', show: false, op: 0.55, ha: S.uso_arvores },
-      { id: 'uso_solo', label: 'Solo 2024-25', color: '#D9B77A', show: false, op: 0.6, ha: S.uso_solo },
-      { id: 'uso_edificado', label: 'Edificado 2024-25', color: '#8A8496', show: false, op: 0.45, ha: S.uso_edificado }
+      { id: 'uso_arvores', label: 'Árvores 2024-25', color: '#4F9A62', show: false, op: 0.55, ha: S.uso_arvores, z: 430 },
+      { id: 'uso_solo', label: 'Solo 2024-25', color: '#D9B77A', show: false, op: 0.6, ha: S.uso_solo, z: 420 },
+      { id: 'uso_edificado', label: 'Edificado 2024-25', color: '#8A8496', show: false, op: 0.45, ha: S.uso_edificado, z: 410 }
     ];
     var esc = MU.escala(trans.map(function (c) { return c.ha; }));
     painel.innerHTML =
@@ -32,9 +33,9 @@ MU.registarTema({
       ]) + '</div>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
     var box = painel.querySelector('.camadas');
+    MU.linhaParques(this, box, { on: true, contorno: true, label: 'Parques e jardins (contorno)', ha: false });
     await MU.addCamadas(this, box, trans, esc);
     await MU.addCamadas(this, box, uso, esc);
-    MU.linhaParques(this, box, { on: true, contorno: true, label: 'Parques e jardins (contorno)', ha: false });
   },
 
   activar() { MU.activarCamadas(this); MU.activarParques(this); },

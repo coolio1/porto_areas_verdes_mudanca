@@ -54,41 +54,7 @@
 
       var box = painel.querySelector('#ac-camadas');
 
-      // --- Parques e jardins (camada comum; clicar abre a ficha) ---
-      this._lParques = MU.linhaParques(this, box, { on: true, esc: esc });
-
-      // --- verde pago e verde privado (todas as áreas): pré-coloridos em Python, cores fixas das camadas ---
-      this._mono = [];
-      [[C.pago, 'Verde pago ou n&atilde;o usufru&iacute;vel', '#D9642B', S.pago],
-       [D.imgs.privado, 'Verde privado', '#D6C496', S.privado]].forEach(function (d) {
-        var ov = L.imageOverlay(d[0], MU.BOUNDS, { pane: 'accMonoPane' });
-        var l = MU.linha(box, {
-          label: d[1], checked: true, color: d[2], ha: d[3], esc: esc,
-          onToggle: function (on) { self._toggle(ov, on); },
-          opacidade: { v: 1, onInput: function (v) { ov.setOpacity(v); } }
-        });
-        self._mono.push({ ov: ov, linha: l });
-      });
-
-      // --- indicadores (um de cada vez): verde público a 500 m por habitante, parque a 300 m ---
-      this._opInd = 0.75;
-      var opInd = { v: 0.75, onInput: function (v) { self._opInd = v; Object.keys(self._ov).forEach(function (k) { self._ov[k].setOpacity(v); }); } };
-      this._lInd = {
-        acc: MU.linha(box, {
-          label: 'Verde p&uacute;blico a 500 m, por habitante', checked: false,
-          color: 'linear-gradient(90deg,' + CAT.crit + ' 0 33%,' + CAT.insuf + ' 33% 66%,' + CAT.adeq + ' 66%)',
-          leg: [[CAT.crit, '0 a 3 m&sup2;, d&eacute;fice cr&iacute;tico'], [CAT.insuf, '3 a 9 m&sup2;, insuficiente'],
-                [CAT.adeq, 'mais de 9 m&sup2;, adequado (OMS: &ge; 9 m&sup2;/hab)'], [CAT.baixa, 'baixa densidade']],
-          onToggle: function (on) { self._setInd(on ? 'acc' : null); }, opacidade: opInd
-        }),
-        prox: MU.linha(box, {
-          label: 'Parque a 300 m ou menos', checked: false,
-          color: 'linear-gradient(90deg,' + CAT.adeq + ' 0 50%,' + CAT.crit + ' 50%)',
-          leg: [[CAT.adeq, 'a 300 m ou menos de um parque &ge; 0,4 ha'], [CAT.crit, 'a mais de 300 m'], [CAT.baixa, 'baixa densidade']],
-          onToggle: function (on) { self._setInd(on ? 'prox' : null); }, opacidade: opInd
-        })
-      };
-
+      // topo da lista = topo do mapa: Candidatos (550) > Parques (540) > verdes (480) > indicadores (450-475)
       // --- Candidatos a conversão (GeoJSON tracejado; clicar abre a ficha; nomes a partir do zoom 14) ---
       this._cand = L.geoJson(D.candidatos, {
         pane: 'candGeoPane',
@@ -127,6 +93,41 @@
         label: 'Nomes dos candidatos', checked: true, sub: true,
         onToggle: function (on) { self._nomesCand = on; self._rotulos(); }
       });
+
+      // --- Parques e jardins (camada comum; clicar abre a ficha) ---
+      this._lParques = MU.linhaParques(this, box, { on: true, esc: esc });
+
+      // --- verde pago e verde privado (todas as áreas): pré-coloridos em Python, cores fixas das camadas ---
+      this._mono = [];
+      [[C.pago, 'Verde pago ou n&atilde;o usufru&iacute;vel', '#D9642B', S.pago],
+       [D.imgs.privado, 'Verde privado', '#D6C496', S.privado]].forEach(function (d) {
+        var ov = L.imageOverlay(d[0], MU.BOUNDS, { pane: 'accMonoPane' });
+        var l = MU.linha(box, {
+          label: d[1], checked: true, color: d[2], ha: d[3], esc: esc,
+          onToggle: function (on) { self._toggle(ov, on); },
+          opacidade: { v: 1, onInput: function (v) { ov.setOpacity(v); } }
+        });
+        self._mono.push({ ov: ov, linha: l });
+      });
+
+      // --- indicadores (um de cada vez): verde público a 500 m por habitante, parque a 300 m ---
+      this._opInd = 0.75;
+      var opInd = { v: 0.75, onInput: function (v) { self._opInd = v; Object.keys(self._ov).forEach(function (k) { self._ov[k].setOpacity(v); }); } };
+      this._lInd = {
+        acc: MU.linha(box, {
+          label: 'Verde p&uacute;blico a 500 m, por habitante', checked: false,
+          color: 'linear-gradient(90deg,' + CAT.crit + ' 0 33%,' + CAT.insuf + ' 33% 66%,' + CAT.adeq + ' 66%)',
+          leg: [[CAT.crit, '0 a 3 m&sup2;, d&eacute;fice cr&iacute;tico'], [CAT.insuf, '3 a 9 m&sup2;, insuficiente'],
+                [CAT.adeq, 'mais de 9 m&sup2;, adequado (OMS: &ge; 9 m&sup2;/hab)'], [CAT.baixa, 'baixa densidade']],
+          onToggle: function (on) { self._setInd(on ? 'acc' : null); }, opacidade: opInd
+        }),
+        prox: MU.linha(box, {
+          label: 'Parque a 300 m ou menos', checked: false,
+          color: 'linear-gradient(90deg,' + CAT.adeq + ' 0 50%,' + CAT.crit + ' 50%)',
+          leg: [[CAT.adeq, 'a 300 m ou menos de um parque &ge; 0,4 ha'], [CAT.crit, 'a mais de 300 m'], [CAT.baixa, 'baixa densidade']],
+          onToggle: function (on) { self._setInd(on ? 'prox' : null); }, opacidade: opInd
+        })
+      };
 
       painel.querySelector('#ac-vista').addEventListener('click', function (e) {
         var b = e.target.closest('button'); if (b) self.setVista(b.dataset.v, true);

@@ -388,11 +388,18 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 
   /* Cria camadas de máscara + linhas do painel para defs [{id,label,color,show,op,ha}] (dados em
      MU.DADOS[tema.dados][id]) e guarda-as em tema._camadas, para activar/desactivar em bloco. */
+  /* Pane com nível fixo: a ordem das camadas no mapa não depende da ordem em que se ligam.
+     Regra: topo da lista do painel = topo do mapa (z maior); cada def indica o seu z (< 540, o dos parques). */
+  MU.pane = function (nome, z) {
+    if (!MU.map.getPane(nome)) MU.map.createPane(nome);
+    MU.map.getPane(nome).style.zIndex = z;
+    return nome;
+  };
   MU.addCamadas = async function (tema, box, defs, esc) {
     tema._camadas = tema._camadas || [];
     for (var i = 0; i < defs.length; i++) {
       var c = defs[i];
-      var cam = await MU.camadaMascara({ src: MU.DADOS[tema.dados][c.id], color: c.color, op: c.op });
+      var cam = await MU.camadaMascara({ src: MU.DADOS[tema.dados][c.id], color: c.color, op: c.op, pane: c.z ? MU.pane('mu-' + tema.id + '-' + c.id, c.z) : undefined });
       var l = { cam: cam, linha: null };
       l.linha = MU.linha(box, {
         label: c.label, checked: c.show !== false, color: c.color, ha: c.ha, esc: esc,
@@ -916,41 +923,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 
       var box = painel.querySelector('#ac-camadas');
 
-      // --- Parques e jardins (camada comum; clicar abre a ficha) ---
-      this._lParques = MU.linhaParques(this, box, { on: true, esc: esc });
-
-      // --- verde pago e verde privado (todas as áreas): pré-coloridos em Python, cores fixas das camadas ---
-      this._mono = [];
-      [[C.pago, 'Verde pago ou n&atilde;o usufru&iacute;vel', '#D9642B', S.pago],
-       [D.imgs.privado, 'Verde privado', '#D6C496', S.privado]].forEach(function (d) {
-        var ov = L.imageOverlay(d[0], MU.BOUNDS, { pane: 'accMonoPane' });
-        var l = MU.linha(box, {
-          label: d[1], checked: true, color: d[2], ha: d[3], esc: esc,
-          onToggle: function (on) { self._toggle(ov, on); },
-          opacidade: { v: 1, onInput: function (v) { ov.setOpacity(v); } }
-        });
-        self._mono.push({ ov: ov, linha: l });
-      });
-
-      // --- indicadores (um de cada vez): verde público a 500 m por habitante, parque a 300 m ---
-      this._opInd = 0.75;
-      var opInd = { v: 0.75, onInput: function (v) { self._opInd = v; Object.keys(self._ov).forEach(function (k) { self._ov[k].setOpacity(v); }); } };
-      this._lInd = {
-        acc: MU.linha(box, {
-          label: 'Verde p&uacute;blico a 500 m, por habitante', checked: false,
-          color: 'linear-gradient(90deg,' + CAT.crit + ' 0 33%,' + CAT.insuf + ' 33% 66%,' + CAT.adeq + ' 66%)',
-          leg: [[CAT.crit, '0 a 3 m&sup2;, d&eacute;fice cr&iacute;tico'], [CAT.insuf, '3 a 9 m&sup2;, insuficiente'],
-                [CAT.adeq, 'mais de 9 m&sup2;, adequado (OMS: &ge; 9 m&sup2;/hab)'], [CAT.baixa, 'baixa densidade']],
-          onToggle: function (on) { self._setInd(on ? 'acc' : null); }, opacidade: opInd
-        }),
-        prox: MU.linha(box, {
-          label: 'Parque a 300 m ou menos', checked: false,
-          color: 'linear-gradient(90deg,' + CAT.adeq + ' 0 50%,' + CAT.crit + ' 50%)',
-          leg: [[CAT.adeq, 'a 300 m ou menos de um parque &ge; 0,4 ha'], [CAT.crit, 'a mais de 300 m'], [CAT.baixa, 'baixa densidade']],
-          onToggle: function (on) { self._setInd(on ? 'prox' : null); }, opacidade: opInd
-        })
-      };
-
+      // topo da lista = topo do mapa: Candidatos (550) > Parques (540) > verdes (480) > indicadores (450-475)
       // --- Candidatos a conversão (GeoJSON tracejado; clicar abre a ficha; nomes a partir do zoom 14) ---
       this._cand = L.geoJson(D.candidatos, {
         pane: 'candGeoPane',
@@ -989,6 +962,41 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
         label: 'Nomes dos candidatos', checked: true, sub: true,
         onToggle: function (on) { self._nomesCand = on; self._rotulos(); }
       });
+
+      // --- Parques e jardins (camada comum; clicar abre a ficha) ---
+      this._lParques = MU.linhaParques(this, box, { on: true, esc: esc });
+
+      // --- verde pago e verde privado (todas as áreas): pré-coloridos em Python, cores fixas das camadas ---
+      this._mono = [];
+      [[C.pago, 'Verde pago ou n&atilde;o usufru&iacute;vel', '#D9642B', S.pago],
+       [D.imgs.privado, 'Verde privado', '#D6C496', S.privado]].forEach(function (d) {
+        var ov = L.imageOverlay(d[0], MU.BOUNDS, { pane: 'accMonoPane' });
+        var l = MU.linha(box, {
+          label: d[1], checked: true, color: d[2], ha: d[3], esc: esc,
+          onToggle: function (on) { self._toggle(ov, on); },
+          opacidade: { v: 1, onInput: function (v) { ov.setOpacity(v); } }
+        });
+        self._mono.push({ ov: ov, linha: l });
+      });
+
+      // --- indicadores (um de cada vez): verde público a 500 m por habitante, parque a 300 m ---
+      this._opInd = 0.75;
+      var opInd = { v: 0.75, onInput: function (v) { self._opInd = v; Object.keys(self._ov).forEach(function (k) { self._ov[k].setOpacity(v); }); } };
+      this._lInd = {
+        acc: MU.linha(box, {
+          label: 'Verde p&uacute;blico a 500 m, por habitante', checked: false,
+          color: 'linear-gradient(90deg,' + CAT.crit + ' 0 33%,' + CAT.insuf + ' 33% 66%,' + CAT.adeq + ' 66%)',
+          leg: [[CAT.crit, '0 a 3 m&sup2;, d&eacute;fice cr&iacute;tico'], [CAT.insuf, '3 a 9 m&sup2;, insuficiente'],
+                [CAT.adeq, 'mais de 9 m&sup2;, adequado (OMS: &ge; 9 m&sup2;/hab)'], [CAT.baixa, 'baixa densidade']],
+          onToggle: function (on) { self._setInd(on ? 'acc' : null); }, opacidade: opInd
+        }),
+        prox: MU.linha(box, {
+          label: 'Parque a 300 m ou menos', checked: false,
+          color: 'linear-gradient(90deg,' + CAT.adeq + ' 0 50%,' + CAT.crit + ' 50%)',
+          leg: [[CAT.adeq, 'a 300 m ou menos de um parque &ge; 0,4 ha'], [CAT.crit, 'a mais de 300 m'], [CAT.baixa, 'baixa densidade']],
+          onToggle: function (on) { self._setInd(on ? 'prox' : null); }, opacidade: opInd
+        })
+      };
 
       painel.querySelector('#ac-vista').addEventListener('click', function (e) {
         var b = e.target.closest('button'); if (b) self.setVista(b.dataset.v, true);
@@ -1114,15 +1122,16 @@ MU.registarTema({
   async montar(painel) {
     var S = MU.DADOS.contexto.stats;
     var trans = [
-      { id: 'arvores_edificado', label: 'Árvores para edificado', color: '#D93A3A', ha: S.arvores_edificado },
-      { id: 'arvores_solo', label: 'Árvores para solo', color: '#C98A1A', ha: S.arvores_solo },
-      { id: 'solo_edificado', label: 'Solo para edificado', color: '#7A55B8', ha: S.solo_edificado },
-      { id: 'solo_arvores', label: 'Solo para árvores', color: '#1FA6A0', ha: S.solo_arvores }
+      { id: 'arvores_edificado', label: 'Árvores para edificado', color: '#D93A3A', ha: S.arvores_edificado, z: 470 },
+      { id: 'arvores_solo', label: 'Árvores para solo', color: '#C98A1A', ha: S.arvores_solo, z: 460 },
+      { id: 'solo_edificado', label: 'Solo para edificado', color: '#7A55B8', ha: S.solo_edificado, z: 450 },
+      { id: 'solo_arvores', label: 'Solo para árvores', color: '#1FA6A0', ha: S.solo_arvores, z: 440 }
     ];
+    /* referência 2024-25 por baixo das mudanças (topo da lista = topo do mapa) */
     var uso = [
-      { id: 'uso_arvores', label: 'Árvores 2024-25', color: '#4F9A62', show: false, op: 0.55, ha: S.uso_arvores },
-      { id: 'uso_solo', label: 'Solo 2024-25', color: '#D9B77A', show: false, op: 0.6, ha: S.uso_solo },
-      { id: 'uso_edificado', label: 'Edificado 2024-25', color: '#8A8496', show: false, op: 0.45, ha: S.uso_edificado }
+      { id: 'uso_arvores', label: 'Árvores 2024-25', color: '#4F9A62', show: false, op: 0.55, ha: S.uso_arvores, z: 430 },
+      { id: 'uso_solo', label: 'Solo 2024-25', color: '#D9B77A', show: false, op: 0.6, ha: S.uso_solo, z: 420 },
+      { id: 'uso_edificado', label: 'Edificado 2024-25', color: '#8A8496', show: false, op: 0.45, ha: S.uso_edificado, z: 410 }
     ];
     var esc = MU.escala(trans.map(function (c) { return c.ha; }));
     painel.innerHTML =
@@ -1135,9 +1144,9 @@ MU.registarTema({
       ]) + '</div>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
     var box = painel.querySelector('.camadas');
+    MU.linhaParques(this, box, { on: true, contorno: true, label: 'Parques e jardins (contorno)', ha: false });
     await MU.addCamadas(this, box, trans, esc);
     await MU.addCamadas(this, box, uso, esc);
-    MU.linhaParques(this, box, { on: true, contorno: true, label: 'Parques e jardins (contorno)', ha: false });
   },
 
   activar() { MU.activarCamadas(this); MU.activarParques(this); },
@@ -1232,7 +1241,7 @@ MU.registarTema({
           '<label>Esquerda <select id="h-esq">' + opcoes + '</select></label>' +
           '<label>Direita <select id="h-dir">' + opcoes + '</select></label></div>' +
         '<p class="h-fonte" id="h-fonte"></p>' +
-        MU.cab2('Camadas', '') + '<div id="h-cams"></div><div id="h-mud"></div><div id="h-parq"></div>' +
+        MU.cab2('Camadas', '') + '<div id="h-parq"></div><div id="h-mud"></div><div id="h-cams"></div>' +
         '<div class="leg" id="h-leg"></div>' +
         '<button type="button" id="h-cmp" class="btn">Comparar duas &eacute;pocas</button>' +
         '<button type="button" id="h-79" class="btn" style="display:none">Ver as 5 classes de 1979</button>' +
@@ -1335,6 +1344,10 @@ MU.registarTema({
 
       /* ---- linhas de camadas ---- */
       var q = function (s) { return painel.querySelector(s); };
+      var boxEdif = MU.linha(q('#h-cams'), {
+        label: 'Edificado na &eacute;poca escolhida', checked: false, color: COR.edif,
+        onToggle: function (on) { est.edif = on; mostrar(); }
+      });
       var boxVeg = MU.linha(q('#h-cams'), {
         label: 'Vegeta&ccedil;&atilde;o na &eacute;poca escolhida', checked: true, color: EPOCAS[0].cor,
         onToggle: function (on) { est.veg = on; mostrar(); },
@@ -1345,10 +1358,6 @@ MU.registarTema({
         } }
       });
       est.veg = true;
-      var boxEdif = MU.linha(q('#h-cams'), {
-        label: 'Edificado na &eacute;poca escolhida', checked: false, color: COR.edif,
-        onToggle: function (on) { est.edif = on; mostrar(); }
-      });
       var boxMud = MU.linha(q('#h-mud'), {
         label: 'Perda e ganho 1985-90 &rarr; 2023-24', checked: false,
         color: 'linear-gradient(90deg,' + COR.perda + ' 0 50%,' + COR.ganho + ' 50%)',
@@ -1509,20 +1518,22 @@ MU.registarTema({
       ]) + '</div>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
     var box = painel.querySelector('.camadas');
+    /* topo da lista = topo do mapa: Parques (540) > Perdido > VCI > Verde pago > Subsistente */
+    MU.linhaParques(this, box, { on: true, esc: esc });
     await MU.addCamadas(this, box, [
-      { id: 'interior_subsistente', label: 'Subsistente (áreas principais)', color: '#D6C496', ha: S.subsistente },
-      { id: 'interior_perdido', label: 'Perdido 2016–2025', color: '#7E3FA0', ha: S.perdido },
-      { id: 'centro_alargado', label: 'Interior da VCI', color: '#E0B000', show: false, ha: S.centro_alargado }
+      { id: 'interior_perdido', label: 'Perdido 2016–2025', color: '#7E3FA0', ha: S.perdido, z: 440 },
+      { id: 'centro_alargado', label: 'Interior da VCI', color: '#E0B000', show: false, ha: S.centro_alargado, z: 430 }
     ], esc);
     // verde pago (contexto, pré-colorido), desligado à partida
-    map.createPane('privPagoPane'); map.getPane('privPagoPane').style.zIndex = 405;
-    this._pago = L.imageOverlay(MU.DADOS.contexto.pago, MU.BOUNDS, { pane: 'privPagoPane' });
+    this._pago = L.imageOverlay(MU.DADOS.contexto.pago, MU.BOUNDS, { pane: MU.pane('privPagoPane', 420) });
     this._lPago = MU.linha(box, {
       label: 'Verde pago ou não usufruível', checked: false, color: '#D9642B', ha: S.pago, esc: esc,
       onToggle: function (on) { if (MU.tema === 'privado') on ? self._pago.addTo(map) : map.removeLayer(self._pago); },
       opacidade: { v: 1, onInput: function (v) { self._pago.setOpacity(v); } }
     });
-    MU.linhaParques(this, box, { on: true, esc: esc });
+    await MU.addCamadas(this, box, [
+      { id: 'interior_subsistente', label: 'Subsistente (áreas principais)', color: '#D6C496', ha: S.subsistente, z: 410 }
+    ], esc);
   },
 
   activar() {

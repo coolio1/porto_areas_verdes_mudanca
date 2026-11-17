@@ -86,7 +86,7 @@
           '<label>Esquerda <select id="h-esq">' + opcoes + '</select></label>' +
           '<label>Direita <select id="h-dir">' + opcoes + '</select></label></div>' +
         '<p class="h-fonte" id="h-fonte"></p>' +
-        MU.cab2('Camadas', '') + '<div id="h-cams"></div><div id="h-mud"></div><div id="h-parq"></div>' +
+        MU.cab2('Camadas', '') + '<div id="h-parq"></div><div id="h-mud"></div><div id="h-cams"></div>' +
         '<div class="leg" id="h-leg"></div>' +
         '<button type="button" id="h-cmp" class="btn">Comparar duas &eacute;pocas</button>' +
         '<button type="button" id="h-79" class="btn" style="display:none">Ver as 5 classes de 1979</button>' +
@@ -189,6 +189,10 @@
 
       /* ---- linhas de camadas ---- */
       var q = function (s) { return painel.querySelector(s); };
+      var boxEdif = MU.linha(q('#h-cams'), {
+        label: 'Edificado na &eacute;poca escolhida', checked: false, color: COR.edif,
+        onToggle: function (on) { est.edif = on; mostrar(); }
+      });
       var boxVeg = MU.linha(q('#h-cams'), {
         label: 'Vegeta&ccedil;&atilde;o na &eacute;poca escolhida', checked: true, color: EPOCAS[0].cor,
         onToggle: function (on) { est.veg = on; mostrar(); },
@@ -199,10 +203,6 @@
         } }
       });
       est.veg = true;
-      var boxEdif = MU.linha(q('#h-cams'), {
-        label: 'Edificado na &eacute;poca escolhida', checked: false, color: COR.edif,
-        onToggle: function (on) { est.edif = on; mostrar(); }
-      });
       var boxMud = MU.linha(q('#h-mud'), {
         label: 'Perda e ganho 1985-90 &rarr; 2023-24', checked: false,
         color: 'linear-gradient(90deg,' + COR.perda + ' 0 50%,' + COR.ganho + ' 50%)',

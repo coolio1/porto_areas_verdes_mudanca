@@ -21,20 +21,22 @@ MU.registarTema({
       ]) + '</div>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
     var box = painel.querySelector('.camadas');
+    /* topo da lista = topo do mapa: Parques (540) > Perdido > VCI > Verde pago > Subsistente */
+    MU.linhaParques(this, box, { on: true, esc: esc });
     await MU.addCamadas(this, box, [
-      { id: 'interior_subsistente', label: 'Subsistente (áreas principais)', color: '#D6C496', ha: S.subsistente },
-      { id: 'interior_perdido', label: 'Perdido 2016–2025', color: '#7E3FA0', ha: S.perdido },
-      { id: 'centro_alargado', label: 'Interior da VCI', color: '#E0B000', show: false, ha: S.centro_alargado }
+      { id: 'interior_perdido', label: 'Perdido 2016–2025', color: '#7E3FA0', ha: S.perdido, z: 440 },
+      { id: 'centro_alargado', label: 'Interior da VCI', color: '#E0B000', show: false, ha: S.centro_alargado, z: 430 }
     ], esc);
     // verde pago (contexto, pré-colorido), desligado à partida
-    map.createPane('privPagoPane'); map.getPane('privPagoPane').style.zIndex = 405;
-    this._pago = L.imageOverlay(MU.DADOS.contexto.pago, MU.BOUNDS, { pane: 'privPagoPane' });
+    this._pago = L.imageOverlay(MU.DADOS.contexto.pago, MU.BOUNDS, { pane: MU.pane('privPagoPane', 420) });
     this._lPago = MU.linha(box, {
       label: 'Verde pago ou não usufruível', checked: false, color: '#D9642B', ha: S.pago, esc: esc,
       onToggle: function (on) { if (MU.tema === 'privado') on ? self._pago.addTo(map) : map.removeLayer(self._pago); },
       opacidade: { v: 1, onInput: function (v) { self._pago.setOpacity(v); } }
     });
-    MU.linhaParques(this, box, { on: true, esc: esc });
+    await MU.addCamadas(this, box, [
+      { id: 'interior_subsistente', label: 'Subsistente (áreas principais)', color: '#D6C496', ha: S.subsistente, z: 410 }
+    ], esc);
   },
 
   activar() {

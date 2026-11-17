@@ -92,6 +92,10 @@ Uma só página, `mapa_unico/mapa_unico.html`, com 4 temas: `#tema=hoje` (Mapa 2
   oceano; o Douro não tem máscara no repositório) e véu sobre os concelhos vizinhos; tracejado fora da área de
   estudo, quadrícula, esquadria, norte, escala e rótulos (parques + 14 lugares com coordenadas fixas) num canvas
   (`core.js`, `MU.desenharCarta`).
+- **Ordem das camadas (2026-11-17):** topo da lista do painel = topo do mapa, com nível fixo por camada (`z` nas
+  defs de `MU.addCamadas`, `MU.pane`), nunca pela ordem em que se ligam (Leaflet empilha por ordem de adição no
+  mesmo pane). Limites: Parques 540, candidatos 550; camadas dos temas entre 410 e 480. Camada nova → pôr o `z` e a
+  linha na posição certa da lista.
 - `dados/contexto.js` tem o comum a todos os temas: limites, GHS-POP, parques (GeoJSON), verde pago, água, véu e
   `stats` (hectares por contagem de píxeis × 56,87 m² dentro de `acessibilidade/layers/porto_mask.npy`; barras
   das camadas; o bloco fixo «Os três verdes» foi removido em 2026-11-17).
