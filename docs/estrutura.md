@@ -7,7 +7,8 @@
 ├── nav.py                  # Atalho: get_nav() devolve a etiqueta <script> da moldura
 ├── check_leaflet_init.py   # Validação Leaflet (pre-commit hook)
 ├── test_area.py            # Calibração (área teste Serralves)
-├── mapa_unico/             # PÁGINA ÚNICA dos mapas (4 temas em separadores) — ver «Mapa único» abaixo
+├── mapa_unico/             # PÁGINA ÚNICA dos mapas (5 temas em separadores) — ver «Mapa único» abaixo
+├── regra_303030/           # Regra 3-30-300: pipeline LiDAR/OSM/GHS-POP → máscaras (`layers/`) do tema `regra`; números em `docs/regra_303030_numeros.md`; ver CLAUDE.md
 ├── mapa/                   # Mapa actual (Sentinel-2 2016-2025); o .html é agora um redirect
 
 │   ├── porto_publish.py    # Pipeline → mapa.html
@@ -60,7 +61,7 @@
 
 ## Mapa único (`mapa_unico/`)
 
-Uma só página, `mapa_unico/mapa_unico.html`, com 4 temas: `#tema=hoje` (Mapa 2016-2025), `#tema=acessibilidade`
+Uma só página, `mapa_unico/mapa_unico.html`, com 5 temas (o 2.º, `#tema=regra`, é a Regra 3-30-300: máscaras de `regra_303030/layers/` embutidas por `dados_regra()`): `#tema=hoje` (Mapa 2016-2025), `#tema=acessibilidade`
 (+ `&vista=propostas`), `#tema=historico` (+ `&vista=1947` abre com a ortofoto), `#tema=privado`.
 
 - `mapa_unico.py` gera o HTML (nunca editar à mão) e `dados/<tema>.js` (imagens base64 e GeoJSON, carregados só ao

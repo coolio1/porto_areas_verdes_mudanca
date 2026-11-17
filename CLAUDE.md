@@ -7,7 +7,7 @@
 
 ## Estrutura do projecto
 Raiz = site Jekyll/GitHub Pages; detalhe em `docs/estrutura.md`.
-- **`mapa_unico/` = página única dos mapas (4 temas em separadores); as páginas antigas abaixo são redirects (`mapa_unico/gerar_stubs.py`)**: `mapa/` (Sentinel-2 2016-2025), `ndvi_historico/` (Landsat 1947-2024), `interiores/` (verde privado), `1947/` (classificação ortofoto), `animacao/`, `atropelamentos/` (dashboard + DB), `acessibilidade/` (pipeline 2SFCA + conversão).
+- **`mapa_unico/` = página única dos mapas (5 temas em separadores); as páginas antigas abaixo são redirects (`mapa_unico/gerar_stubs.py`)**: `mapa/` (Sentinel-2 2016-2025), `ndvi_historico/` (Landsat 1947-2024), `interiores/` (verde privado), `1947/` (classificação ortofoto), `animacao/`, `atropelamentos/` (dashboard + DB), `acessibilidade/` (pipeline 2SFCA + conversão).
 - `layers/`, `layers_historico/` — layers partilhados na raiz; `docs/` — planos e specs (fora do Jekyll).
 - `assets/js/moldura.js` (menu, abas da Mobilidade e rodapé: única fonte), `nav.py` (atalho que devolve a etiqueta `<script>`), `assets/css/porto-verde.css`, `check_leaflet_init.py`.
 
@@ -37,6 +37,13 @@ Menu, abas e rodapé: `assets/js/moldura.js` em todas as páginas (`docs/navegac
 
 ## Verde privado — pipeline de regeneração
 `interiores/interiores_quarteiroes.py` (Sentinel-2 → subtrai parques e verde pago → máscara de estradas OSM → vectorização). Sem GEE: apagar `layers/interior_subsistente.png` e `layers/interior_perdido.png` e correr o script a partir da raiz. Passos completos e alternativa rápida: `docs/pipeline-verde-privado.md`.
+
+## Regra 3-30-300 (`regra_303030/`; tema `regra` do mapa único)
+- Unidade = edifício OSM (42 104). Dados pesados em `S:\3 30 300\dados` (`PV_REGRA_DADOS`); venv `%LOCALAPPDATA%\PortoVerde\venv` (`requirements.txt`); `pip` fora do venv ≠.
+- Ordem: `obter_pbf.py` (Geofabrik→edifícios+rede) → `obter_lidar.py` (DGT, `DGT_USER/DGT_PASS` no `.env` global) → `rede300.py` («300») → `copa.py` (nDSM, folhas más) → `arvores.py` → `vista3.py` («3») → `copa500.py` («30») → `numeros.py` (tabela em `docs/regra_303030_numeros.md`) → `populacao.py` (GHS-POP calibrado ao Censos 2021) → `mapa_png.py` (máscaras em `regra_303030/layers/`) → `mapa_unico.py` (`dados/regra.js`).
+- Folha LiDAR má = datas MDS/MDT >30 d **e** >2 % nDSM<−1 m disperso; mancha negativa contínua ≥10 000 px = água, não erro.
+- Serralves e espaços vedados contam como parque (decisão do utilizador, 2026-11-17). Pendente: validação (300 pontos que o utilizador rotula).
+- Atribuição ODbL (OSM) obrigatória na fonte do tema. Testes: `pytest regra_303030/tests` (venv) + `python mapa_unico/tests/pw_regra.py`.
 
 ## Validação
 - Script alterado → no mínimo `python -m py_compile <script>.py`.
