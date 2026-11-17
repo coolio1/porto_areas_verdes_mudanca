@@ -97,6 +97,8 @@ Grau de certeza: **moderado quanto à direcção** destas medidas e **mais incer
 
 A síntese de todos os estudos, com o método, o grau de certeza de cada conclusão, os limites e mais de 300 referências, está em [PDF]({{ site.baseurl }}/assets/pdfs/habitacao-lisboa-porto-nota-completa-2026.pdf) (100 páginas, com 7 figuras). Inclui também o regime do arrendamento, os apoios à renda, o papel dos juros e a fiscalidade do arrendamento.
 
+Os textos dos estudos que sustentam a nota podem ser consultados e interrogados num [caderno público no NotebookLM](https://notebook.google.com/notebook/a4a5dc57-e276-4d93-9ee8-90fb5b8ac8a7/preview).
+
 ## Porque é que isto interessa ao Porto Verde
 
 O Porto Verde mapeia e defende os espaços verdes do Porto. A falta de habitação ameaça-os de duas maneiras: empurra a construção para o solo ainda livre e dá argumentos para dispensar as regras de ordenamento. Por isso, as duas coisas tratam-se juntas: dar preferência às casas que já existem e ao solo já urbanizado e bem servido por transporte público, construir sem esperar que uma via se esgote, e nunca na estrutura ecológica nem em espaços verdes protegidos. É uma leitura assente nos estudos citados, não uma conclusão deles: nenhum estudo mede, para Portugal, quanto espaço verde se poupa ou quantas casas se perdem por esta via.
