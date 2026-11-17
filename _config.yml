@@ -52,6 +52,7 @@ exclude:
   - docs
   - espacos_pipeline
   - mapa_unico/src
+  - "regra_303030/*"
   - "Land_cover_1979*"
   - archive
   - "*.gpkg"
