@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.join(ROOT_DIR, "acessibilidade"))
 from acessibilidade_gee import getComposite, classify
 from interiores_html import build_html
 
+load_dotenv(os.path.join(ROOT_DIR, "..", ".env"))  # global (OneDrive\Claude\.env); o local abaixo sobrepõe
 load_dotenv(os.path.join(ROOT_DIR, ".env"))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)

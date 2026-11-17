@@ -15,6 +15,7 @@ def export_river_mask():
         print(f'  Rio mask already exists: {output_path}')
         return output_path
 
+    load_dotenv(os.path.join(os.path.dirname(LAYERS_DIR), '..', '.env'))  # global (OneDrive\Claude\.env); o local abaixo sobrepõe
     load_dotenv(os.path.join(os.path.dirname(LAYERS_DIR), '.env'))
     GEE_PROJECT = os.environ["GEE_PROJECT"]
     ee.Initialize(project=GEE_PROJECT)

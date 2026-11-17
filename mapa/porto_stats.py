@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(ROOT_DIR, '..', '.env'))  # global (OneDrive\Claude\.env); o local abaixo sobrepõe
 load_dotenv(os.path.join(ROOT_DIR, '.env'))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)

@@ -12,6 +12,7 @@ import webbrowser
 import requests
 from dotenv import load_dotenv
 
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))  # global (OneDrive\Claude\.env); o local abaixo sobrepõe
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)

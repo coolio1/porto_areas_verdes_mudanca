@@ -1,9 +1,9 @@
 # GEE Porto — Espaços Verdes e Uso do Solo
 
 ## Credenciais
-- **API keys** do `.env` global (`C:\Users\quent\OneDrive\Claude\.env`), carregado no topo de `GEE/server.py`; um `.env` local pode sobrepor.
-- `GEE_PROJECT` no `.env` (local ou global), nunca hardcoded; asset paths em f-strings: `f'projects/{GEE_PROJECT}/assets/...'`.
-- **`CARTO_BASEMAPS_KEY`** (`.env` local, gitignored): sem chave, os mosaicos CARTO saem com marca de água «API KEY REQUIRED». `carto.py` (`aplicar_chave`/`com_chave`) junta `?key=` aos URLs `basemaps.cartocdn.com`; **todo gerador de mapa (também os novos) chama `aplicar_chave(html)` antes de gravar**.
+- **Todas as chaves** no `.env` global (`C:\Users\quent\OneDrive\Claude\.env`; desde 2026-11-17 inclui `GEE_PROJECT`, `CARTO_BASEMAPS_KEY`, `DGT_USER`, `DGT_PASS`), carregado no topo de `GEE/server.py` e de cada gerador (`load_dotenv(.../'..'/'.env')`); um `.env` local, se existir, sobrepõe. Já não há `.env` no projecto.
+- `GEE_PROJECT` no `.env`, nunca hardcoded; asset paths em f-strings: `f'projects/{GEE_PROJECT}/assets/...'`.
+- **`CARTO_BASEMAPS_KEY`** (`.env` global): sem chave, os mosaicos CARTO saem com marca de água «API KEY REQUIRED». `carto.py` (`aplicar_chave`/`com_chave`) junta `?key=` aos URLs `basemaps.cartocdn.com`; **todo gerador de mapa (também os novos) chama `aplicar_chave(html)` antes de gravar**.
 
 ## Estrutura do projecto
 Raiz = site Jekyll/GitHub Pages; detalhe em `docs/estrutura.md`.
