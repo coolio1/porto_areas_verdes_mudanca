@@ -33,8 +33,8 @@ def avaliar(df, n3, copa, d300):
     return c3, c30, c300, c3 & c30 & c300
 
 
-def tabela(df, b, t, d, arv):
-    """Linhas (rótulo, %3, %30, %300, %todos) para a base e cada variante."""
+def tabela(df, b, t, d, arv, pesos=None):
+    """Linhas (rótulo, %3, %30, %300, %todos) para a base e cada variante; com `pesos` (população) é % de residentes."""
     n = len(df)
     linhas = []
 
@@ -44,7 +44,7 @@ def tabela(df, b, t, d, arv):
         col = ("d_rede_" if a_pe else "d_euc_") + ("05" if parque == 0.5 else "1")
         d300 = df[col].values <= 300
         r = avaliar(df, n3_, copa, d300)
-        linhas.append((rotulo, *(100 * x.mean() for x in r)))
+        linhas.append((rotulo, *(100 * np.average(x, weights=pesos) for x in r)))
 
     linha("**Base** (30 m · 3 árvores ≥25 m² e ≥3 m · 30 % a 500 m · 0,5 ha a pé)")
     linha("«3» a ≤ 20 m", n3=n3_variante(b, t, d, arv, n, raio3=20))
