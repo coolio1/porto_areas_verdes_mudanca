@@ -42,7 +42,7 @@ Menu, abas e rodapé: `assets/js/moldura.js` em todas as páginas (`docs/navegac
 - Unidade = edifício OSM (42 104). Dados pesados em `S:\3 30 300\dados` (`PV_REGRA_DADOS`); venv `%LOCALAPPDATA%\PortoVerde\venv` (`requirements.txt`); `pip` fora do venv ≠.
 - Ordem: `obter_pbf.py` (Geofabrik→edifícios+rede) → `obter_lidar.py` (DGT, `DGT_USER/DGT_PASS` no `.env` global) → `rede300.py` («300») → `copa.py` (nDSM, folhas más) → `arvores.py` → `vista3.py` («3») → `copa500.py` («30») → `numeros.py` (tabela em `docs/regra_303030_numeros.md`) → `populacao.py` (GHS-POP calibrado ao Censos 2021) → `mapa_png.py` (máscaras em `regra_303030/layers/`) → `mapa_unico.py` (`dados/regra.js`).
 - Folha LiDAR má = datas MDS/MDT >30 d **e** >2 % nDSM<−1 m disperso; mancha negativa contínua ≥10 000 px = água, não erro.
-- Serralves e espaços vedados contam como parque (decisão do utilizador, 2026-11-17). Pendente: validação (300 pontos que o utilizador rotula).
+- Serralves e espaços vedados contam como parque (decisão do utilizador, 2026-11-17). Validação (2026-11-18): 150 edifícios lidos na ortofoto DGT por IA, sem o utilizador; ver `docs/regra_303030_validacao.md`.
 - Atribuição ODbL (OSM) obrigatória na fonte do tema. Testes: `pytest regra_303030/tests` (venv) + `python mapa_unico/tests/pw_regra.py`.
 
 ## Validação

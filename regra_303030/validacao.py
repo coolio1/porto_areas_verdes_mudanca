@@ -1,11 +1,11 @@
-"""3-30-300 · amostra de validação: 300 edifícios para o utilizador confirmar no terreno/Street View.
+"""3-30-300 · amostra de validação: 50 edifícios para o utilizador confirmar no terreno/Street View.
 
-Amostra estratificada e reprodutível (semente fixa): 60 edifícios de cada um de 5 estratos — cumprem os três,
+Amostra estratificada e reprodutível (semente fixa): 10 edifícios de cada um de 5 estratos — cumprem os três,
 nenhum, só o «3», só o «30» e só o «300». Para cada ponto: o veredicto do modelo e as colunas em branco
 `ve_3_arvores` (s/n), `copa_30` (s/n), `parque_300m` (s/n) para o utilizador preencher; as linhas vêm
 misturadas, para não rotular por estrato.
 
-Saída: <DADOS>\\validacao_300_pontos.csv (idx, coordenadas WGS84, ligação ao Google Maps, colunas em branco) e
+Saída: <DADOS>\\validacao_pontos.csv (idx, coordenadas WGS84, ligação ao Google Maps, colunas em branco) e
 validacao_modelo.csv (veredicto do modelo, à parte para não enviesar); nada vai para o repo.
 Uso: python validacao.py   (venv PortoVerde)
 """
@@ -58,7 +58,7 @@ def main():
     # o modelo fica noutro ficheiro: quem rotula não deve ver o veredicto (evita enviesar)
     modelo = ["idx", "estrato", "modelo_n_arvores", "modelo_copa500_pct", "modelo_parque_a_pe_m"]
     out[modelo].to_csv(DADOS / "validacao_modelo.csv", index=False)
-    out.drop(columns=modelo[1:]).to_csv(DADOS / "validacao_300_pontos.csv", index=False, encoding="utf-8-sig")
+    out.drop(columns=modelo[1:]).to_csv(DADOS / "validacao_pontos.csv", index=False, encoding="utf-8-sig")
     print(len(out), "pontos;", out.estrato.value_counts().to_dict())
 
 
