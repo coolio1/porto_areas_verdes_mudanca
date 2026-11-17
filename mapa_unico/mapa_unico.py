@@ -22,7 +22,7 @@ DADOS = AQUI / "dados"
 LAYERS = RAIZ / "layers"
 PAGINA = "mapa_unico/mapa_unico.html"
 
-# Temas na ordem do acordeão (um ficheiro src/tema_<id>.js cada); o primeiro abre sem hash
+# Temas na ordem dos separadores (um ficheiro src/tema_<id>.js cada); o primeiro abre sem hash
 TEMAS = ["acessibilidade", "hoje", "historico", "privado"]
 
 ACC_LAYERS = RAIZ / "acessibilidade" / "layers"

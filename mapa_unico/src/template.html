@@ -17,22 +17,20 @@
 <!--NAV-->
 <aside id="panel" aria-label="Temas, camadas e legenda">
   <button type="button" class="alca" id="alca" aria-expanded="false">Mostrar camadas e números</button>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Tipo de mapa"></div>
   <div class="temas" id="temas"></div>
-  <div class="verdes" id="verdes"></div>
   <div id="ctx-bloco">
     <div class="cab2"><span>Contexto</span><span></span></div>
     <div id="ctx-rows"></div>
     <div id="pop-legend" class="pop-leg" style="display:none;">
       <span>0</span><i></i><span>150+ hab/píxel de 100 m</span>
     </div>
-    <div class="cab2"><span>Fundo</span><span></span></div>
-    <select id="fundo-select" aria-label="Fundo do mapa"></select>
     <p class="fonte" id="fonte"></p>
   </div>
 </aside>
 <main id="map" aria-label="Mapa do Porto">
   <div class="cx ficha" id="ficha" role="region" aria-label="Ficha" aria-live="polite"></div>
-  <select class="ir" id="ir" aria-label="Ir para um parque"></select>
+  <div class="topo-ctl" id="topo-ctl"><select class="ir" id="ir" aria-label="Ir para um parque"></select><select class="ir fundo" id="fundo-select" aria-label="Fundo do mapa"></select></div>
   <div class="cx zoom" id="zoom"><button type="button" data-z="1" aria-label="Aproximar">+</button><button type="button" data-z="-1" aria-label="Afastar">−</button><button type="button" data-z="0" aria-label="Ver o concelho inteiro">⌂</button></div>
   <div class="cx pe" id="pe"><span class="norte" title="Norte"><svg viewBox="0 0 14 20" aria-hidden="true"><path d="M7 1 12 15 7 12 2 15Z" fill="currentColor"/><path d="M7 1 7 12 2 15Z" fill="var(--painel)" stroke="currentColor" stroke-width=".8"/></svg><span class="sr">Norte para cima</span></span><span><span><span class="bar"></span><span class="esc-t"></span></span></span><span class="xy" aria-hidden="true">—</span></div>
 </main>

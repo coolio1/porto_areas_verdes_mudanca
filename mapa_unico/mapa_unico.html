@@ -59,21 +59,21 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .temas{flex:1;overflow-y:auto;min-height:0;scrollbar-width:thin}
 .alca{display:none}
 
-/* acordeão: cada tema com a sua cor-guia (fio, ícone, cabeçalho) */
-.tema{--guia:var(--g-acessibilidade);border-bottom:1px solid var(--filete);position:relative}
+/* separadores fixos dos temas (sempre à vista) + corpo do tema aberto com scroll próprio */
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid var(--filete);flex:none}
+.tab{--guia:var(--g-acessibilidade);all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;
+  padding:9px 2px 8px;border-top:3px solid transparent;font:500 12.5px/1.1 var(--sans);color:var(--suave);text-align:center;min-width:0}
+.tab+.tab{border-left:1px solid var(--fino)}
+.tab[data-t="hoje"]{--guia:var(--g-hoje)}.tab[data-t="historico"]{--guia:var(--g-historico)}.tab[data-t="privado"]{--guia:var(--g-privado)}
+.tab svg{width:20px;height:20px;color:var(--guia);display:block}
+.tab:hover{background:var(--realce)}
+.tab.on{border-top-color:var(--guia);color:var(--tinta);font-weight:700;background:var(--painel)}
+.tab:focus-visible{outline:2px solid var(--tinta);outline-offset:-4px}
+.tema{--guia:var(--g-acessibilidade);display:none}
 .tema[data-t="hoje"]{--guia:var(--g-hoje)}.tema[data-t="historico"]{--guia:var(--g-historico)}.tema[data-t="privado"]{--guia:var(--g-privado)}
-.tema::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--guia);opacity:0}
-.tema.on::before{opacity:1}
-.tema>button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:10px;
-  padding:11px 20px;cursor:pointer;font:600 16px/1.2 var(--sans);color:var(--tinta)}
-.tema>button:hover{background:var(--realce)}
-.tema>button svg{width:22px;height:22px;color:var(--guia);display:block}
-.tema>button .q{font:400 11.5px var(--mono);color:var(--suave);white-space:nowrap}
-.tema>button:focus-visible{outline:2px solid var(--tinta);outline-offset:-4px}
-.tema.on>button{font-weight:700;font-size:21px;letter-spacing:-.015em;padding-top:16px;padding-bottom:8px;border-top:3px solid var(--guia);margin-top:-1px}
-.tema.on>button svg{width:24px;height:24px}
-.corpo{padding:0 20px 18px 24px;display:none}
-.tema.on .corpo{display:block}
+.tema.on{display:block}
+.tema-tit{margin:0;padding:14px 20px 4px 24px;font:700 21px/1.2 var(--sans);letter-spacing:-.015em}
+.corpo{padding:0 20px 18px 24px}
 .desc{font:400 14px/1.55 var(--serif);margin:2px 0 14px;max-width:46ch}
 .tema-sub{font:400 12px var(--mono);color:var(--suave)}
 
@@ -101,7 +101,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .cab2{display:flex;justify-content:space-between;gap:8px;font:400 11px/1 var(--mono);color:var(--suave);margin:18px 0 6px;padding-bottom:6px;border-bottom:1px solid var(--fino)}
 
 /* camadas: amostra de cor = interruptor; barra de ha na cor da camada; opacidade quando ligada */
-.cam{--sw:var(--tinta);display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:6px 0}
+.cam{--sw:var(--tinta);display:grid;grid-template-columns:18px minmax(0,1fr) auto auto;gap:4px 10px;align-items:center;padding:6px 0}
 .cam input[type=checkbox]{appearance:none;-webkit-appearance:none;width:18px;height:18px;margin:0;border:1px solid var(--tinta);cursor:pointer;background:transparent;border-radius:0}
 .cam input[type=checkbox]:checked{background:var(--sw);box-shadow:inset 0 0 0 2px var(--painel)}
 .cam input[type=checkbox].contorno:checked{background:transparent;box-shadow:inset 0 0 0 2px var(--painel),inset 0 0 0 4px var(--sw)}
@@ -112,12 +112,16 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .cam .med i{position:absolute;left:0;top:0;bottom:0;background:var(--sw);min-width:2px}
 .cam.off{color:var(--suave)}
 .cam.off .med i{opacity:.3}
-.cam .op{grid-column:3/4;display:none;align-items:center;width:64px}
-.cam:not(.off) .op{display:flex}
-.cam .op input{width:64px}
-.cam:not(:has(.med)) .op{grid-column:2/4;width:auto}.cam:not(:has(.med)) .op input{width:100%}
+.cam .op{grid-column:2/-1;display:none;align-items:center}
+.cam.opa:not(.off) .op{display:flex}
+.cam .op input{width:100%}
+.opb{all:unset;cursor:pointer;width:22px;height:18px;display:flex;align-items:center;justify-content:center;color:var(--suave)}
+.opb svg{width:14px;height:14px;display:block}
+.opb:hover,.opb[aria-expanded="true"]{color:var(--tinta);background:var(--realce)}
+.opb:focus-visible{outline:2px solid var(--tinta);outline-offset:1px}
+.cam.off .opb{visibility:hidden}
 .cam.sub{margin-left:28px}
-.catleg{grid-column:2/4;display:grid;gap:4px;margin:2px 0 2px;font:400 12px/1.3 var(--sans);color:var(--tinta)}
+.catleg{grid-column:2/-1;display:grid;gap:4px;margin:2px 0 2px;font:400 12px/1.3 var(--sans);color:var(--tinta)}
 .cam.off .catleg{display:none}
 .catleg span{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:center}
 .catleg i{display:block;width:22px;height:12px}
@@ -161,17 +165,6 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .h-etq-e{right:10px}.h-etq-d{left:10px}
 .h-asa:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
 
-/* legenda fixa: os três verdes numa escala comum */
-.verdes{border-top:1px solid var(--filete);padding:12px 20px 14px;background:var(--painel)}
-.verdes h3{font:700 14px var(--sans);margin:0 0 9px;display:flex;justify-content:space-between;align-items:baseline}
-.verdes h3 span{font:400 11px var(--mono);color:var(--suave)}
-.vd{display:grid;grid-template-columns:14px minmax(0,1fr) 62px;gap:3px 8px;align-items:center;margin-bottom:6px;font-size:12.5px}
-.vd>i{width:14px;height:14px;display:block}
-.vd .med{grid-column:2/4;height:8px;position:relative;background:repeating-linear-gradient(90deg,var(--fino) 0 1px,transparent 1px 25%)}
-.vd .med i{position:absolute;inset:0 auto 0 0}
-.vd .ha{font:500 12px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
-.esc{display:flex;justify-content:space-between;font:400 10.5px var(--mono);color:var(--suave);margin-left:22px}
-
 /* ===== mapa ===== */
 #map{grid-area:mapa;position:relative;min-width:0;min-height:0;font-family:var(--sans)}
 #map.leaflet-container{background:var(--map-fora)}
@@ -201,8 +194,9 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .ficha .cmp .med i{display:block;height:100%;background:var(--marca)}
 .ficha .x{all:unset;position:absolute;right:8px;top:8px;width:26px;height:26px;text-align:center;line-height:26px;cursor:pointer;font-size:18px}
 .ficha .x:focus-visible{outline:2px solid var(--tinta)}
-.ir{position:absolute;z-index:1000;right:60px;top:16px;font:400 13px var(--sans);border:1px solid var(--filete);background:var(--painel);color:var(--tinta);
-  padding:6px 8px;border-radius:0;height:36px;max-width:230px}
+.topo-ctl{position:absolute;z-index:1000;right:60px;top:16px;display:flex;gap:8px}
+.ir{font:400 13px var(--sans);border:1px solid var(--filete);background:var(--painel);color:var(--tinta);padding:6px 8px;border-radius:0;height:36px;max-width:230px;min-width:0}
+.ir.fundo{max-width:190px}
 /* Leaflet à maneira da carta: sem sombras nem cantos redondos */
 #map .leaflet-popup-content-wrapper{border-radius:0;box-shadow:none;border:1px solid var(--filete);background:var(--painel);color:var(--tinta)}
 #map .leaflet-popup-tip{box-shadow:none;border:1px solid var(--filete);background:var(--painel)}
@@ -223,21 +217,22 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
   body.mu .pv-barra__links a{flex:none;border-bottom:0!important;border-right:1px solid var(--filete)!important}
   #panel{position:absolute;left:0;right:0;bottom:var(--rodh,52px);z-index:1100;border-right:0;border-top:1px solid var(--filete);
     max-height:var(--espia,200px);overflow:hidden;transition:max-height .25s ease}
-  #panel.aberto{max-height:calc(100% - var(--rodh,52px) - 40px);overflow-y:auto}
-  .temas{flex:none;overflow:visible}
+  #panel.aberto{max-height:calc(100% - var(--rodh,52px) - 40px)}
+  #panel:not(.aberto) .temas{overflow:hidden}
   .alca{all:unset;display:block;box-sizing:border-box;width:100%;padding:8px 16px 6px;cursor:pointer;font:500 12px var(--mono);color:var(--suave);
     text-align:center;border-bottom:1px solid var(--fino)}
   .alca::before{content:"";display:block;width:36px;height:3px;background:var(--tinta);margin:0 auto 6px}
   .alca:focus-visible{outline:2px solid var(--tinta);outline-offset:-3px}
-  .tema>button{padding:9px 16px}
-  .tema.on>button{font-size:18px;padding-top:10px}
+  .tab{padding:7px 2px 6px}
+  .tema-tit{font-size:18px;padding:10px 16px 2px 20px}
   .corpo{padding:0 16px 14px 20px}
   .num.mor b{font-size:40px}
-  .verdes{padding:10px 16px 12px}
   #map{margin-bottom:var(--espia,200px)}
   #panel:not(.aberto) .desc{display:none}
   .ficha{left:12px;right:12px;width:auto;top:12px}
-  .ir{left:12px;right:auto;top:auto;bottom:12px;max-width:170px}
+  .topo-ctl{left:12px;right:auto;top:12px;flex-direction:column;gap:6px}
+  .ir,.ir.fundo{max-width:170px}
+  .ficha.on~.topo-ctl{display:none}
   .pe{left:auto;right:12px;bottom:12px}
   .pe .xy{display:none}
   .zoom{right:12px;top:12px}
@@ -245,6 +240,12 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
   body.mu .pv-rodape--mapa{padding:8px 16px 10px;position:relative;z-index:1200}
   body.mu .pv-rodape p{display:block}
   body.mu .pv-rodape__nome{display:block}
+}
+@media (min-width:761px) and (max-height:820px){
+  body.mu .pv-barra__marca{padding:8px 20px 6px}
+  body.mu .pv-barra__mini{width:30px;height:30px}
+  body.mu .pv-barra__nome{width:128px}
+  body.mu .pv-barra__links a{padding:5px 10px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
@@ -254,30 +255,28 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 <script src="../assets/js/moldura.js" data-pagina="mapa_unico/mapa_unico.html" data-menu="barra"></script>
 <aside id="panel" aria-label="Temas, camadas e legenda">
   <button type="button" class="alca" id="alca" aria-expanded="false">Mostrar camadas e números</button>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Tipo de mapa"></div>
   <div class="temas" id="temas"></div>
-  <div class="verdes" id="verdes"></div>
   <div id="ctx-bloco">
     <div class="cab2"><span>Contexto</span><span></span></div>
     <div id="ctx-rows"></div>
     <div id="pop-legend" class="pop-leg" style="display:none;">
       <span>0</span><i></i><span>150+ hab/píxel de 100 m</span>
     </div>
-    <div class="cab2"><span>Fundo</span><span></span></div>
-    <select id="fundo-select" aria-label="Fundo do mapa"></select>
     <p class="fonte" id="fonte"></p>
   </div>
 </aside>
 <main id="map" aria-label="Mapa do Porto">
   <div class="cx ficha" id="ficha" role="region" aria-label="Ficha" aria-live="polite"></div>
-  <select class="ir" id="ir" aria-label="Ir para um parque"></select>
+  <div class="topo-ctl" id="topo-ctl"><select class="ir" id="ir" aria-label="Ir para um parque"></select><select class="ir fundo" id="fundo-select" aria-label="Fundo do mapa"></select></div>
   <div class="cx zoom" id="zoom"><button type="button" data-z="1" aria-label="Aproximar">+</button><button type="button" data-z="-1" aria-label="Afastar">−</button><button type="button" data-z="0" aria-label="Ver o concelho inteiro">⌂</button></div>
   <div class="cx pe" id="pe"><span class="norte" title="Norte"><svg viewBox="0 0 14 20" aria-hidden="true"><path d="M7 1 12 15 7 12 2 15Z" fill="currentColor"/><path d="M7 1 7 12 2 15Z" fill="var(--painel)" stroke="currentColor" stroke-width=".8"/></svg><span class="sr">Norte para cima</span></span><span><span><span class="bar"></span><span class="esc-t"></span></span></span><span class="xy" aria-hidden="true">—</span></div>
 </main>
 <script>
 /* Núcleo do mapa único do Porto Verde. Tudo vive em window.MU (sem globais soltas):
    cada tema regista-se com MU.registarTema() e só é montado quando é aberto.
-   Gramática «Carta» (maquete V2b): acordeão de temas com cor-guia, números-chave, camadas com amostra
-   que é o interruptor e barra de hectares, «Os três verdes» fixos, ficha do parque, moldura de carta
+   Gramática «Carta» (maquete V2b): separadores fixos dos temas com cor-guia, números-chave, camadas com amostra
+   que é o interruptor e barra de hectares, fundo do mapa sobre o mapa, ficha do parque, moldura de carta
    (quadrícula, esquadria, área fora do estudo tracejada) e fundo «Carta» sem mosaicos. */
 (function () {
   var BOUNDS = [[41.13, -8.7], [41.19, -8.54]];
@@ -359,7 +358,9 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
     row.className = 'cam' + (o.checked ? '' : ' off') + (o.sub ? ' sub' : '');
     if (o.color) row.style.setProperty('--sw', o.color);
     var h = '<input type="checkbox" id="' + id + '"' + (o.checked ? ' checked' : '') + (o.contorno ? ' class="contorno"' : '') + '>' +
-      '<label for="' + id + '">' + o.label + '</label><span class="ha">' + (o.ha ? MU.ha(o.ha) : '') + '</span>';
+      '<label for="' + id + '">' + o.label + '</label><span class="ha">' + (o.ha ? MU.ha(o.ha) : '') + '</span>' +
+      (o.opacidade ? '<button type="button" class="opb" aria-expanded="false" aria-label="Opacidade: ' + o.label.replace(/<[^>]+>/g, '') + '" title="Opacidade">' +
+        '<svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M7 1.5a5.5 5.5 0 0 1 0 11z" fill="currentColor"/></svg></button>' : '');
     if (o.ha && o.esc && o.ha <= o.esc) h += '<div class="med" aria-hidden="true"><i style="width:' + Math.min(100, o.ha / o.esc * 100).toFixed(2) + '%"></i></div>';
     if (o.leg) {
       h += '<div class="catleg">' + o.leg.map(function (l) {
@@ -378,6 +379,8 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
       row.classList.toggle('off', !cb.checked);
       if (o.onToggle) o.onToggle(cb.checked);
     });
+    var opb = row.querySelector('.opb');
+    if (opb) opb.addEventListener('click', function () { var a = row.classList.toggle('opa'); opb.setAttribute('aria-expanded', a); });
     var op = row.querySelector('.op input');
     if (op) op.addEventListener('input', function () { o.opacidade.onInput(+op.value); });
     return { row: row, cb: cb, op: op };
@@ -564,16 +567,6 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
       if (g) g.eachLayer(function (l) { if (l.feature === P.f) lay = l; });
       MU.fichaParque(i, lay, g);
     });
-    verdes(d.stats);
-  }
-
-  /* legenda fixa: os três verdes numa escala comum (0-1000 ha) */
-  function verdes(S) {
-    var V = [['#0B5232', 'Parques e jardins', S.parques_ha], ['#D9642B', 'Verde pago ou não usufruível', S.pago], ['#D6C496', 'Verde privado', S.privado]];
-    document.getElementById('verdes').innerHTML = '<h3>Os três verdes <span>ha no concelho</span></h3>' + V.map(function (v) {
-      return '<div class="vd"><i style="background:' + v[0] + '"></i><span>' + v[1] + '</span><span class="ha">' + MU.n(v[2]) + ' ha</span>' +
-        '<div class="med"><i style="background:' + v[0] + ';width:' + (v[2] / 1000 * 100).toFixed(1) + '%"></i></div></div>';
-    }).join('') + '<div class="esc" aria-hidden="true"><span>0</span><span>250</span><span>500</span><span>750</span><span>1000 ha</span></div>';
   }
 
   function guardarCtx(id) {
@@ -747,12 +740,12 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
     MU.ficha(null);
     MU.tema = id;
     var painel = document.getElementById('tema-' + id);
-    document.querySelectorAll('.tema').forEach(function (d) {
-      var on = d.dataset.t === id;
-      d.classList.toggle('on', on);
-      d.firstChild.setAttribute('aria-expanded', on);
-      d.firstChild.lastChild.textContent = on ? '' : 'abrir';
+    document.querySelectorAll('.tema').forEach(function (d) { d.classList.toggle('on', d.dataset.t === id); });
+    document.querySelectorAll('.tab').forEach(function (b) {
+      var on = b.dataset.t === id;
+      b.classList.toggle('on', on); b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1;
     });
+    document.getElementById('temas').scrollTop = 0;
     if (!t._montado) {
       t._montado = true;
       painel.innerHTML = '<span class="tema-sub carregando">A carregar…</span>';
@@ -767,9 +760,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
       }
     }
     if (MU.tema !== id) return;   // o utilizador mudou de tema entretanto
-    painel.appendChild(document.getElementById('ctx-bloco'));   // contexto, fundo e fonte vão com o tema aberto
-    var pn = document.getElementById('panel');
-    if (window.innerWidth <= 760 && !pn.classList.contains('aberto')) pn.scrollTop = painel.parentNode.offsetTop - document.getElementById('alca').offsetHeight;
+    painel.appendChild(document.getElementById('ctx-bloco'));   // contexto e fonte vão com o tema aberto
     // cada tema abre com o seu fundo; depois de o utilizador escolher um, essa escolha persiste
     // fundos exclusivos de um tema (p.ex. Ortofoto 1947) só aparecem nesse tema e saem dele ao mudar de tema
     var fSel = document.getElementById('fundo-select');
@@ -807,14 +798,24 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
       .forEach(function (p) { map.createPane(p[0]); map.getPane(p[0]).style.zIndex = p[1]; });
     ['veuPane', 'limitesPane', 'rotPane'].forEach(function (p) { map.getPane(p).style.pointerEvents = 'none'; });
     MU.verConcelho();
-    var temas = document.getElementById('temas');
+    var temas = document.getElementById('temas'), tabs = document.getElementById('tabs');
+    var CURTO = { acessibilidade: 'Acesso', hoje: 'Mudanças', historico: 'Histórico', privado: 'Privado' };
     MU.ORDEM.forEach(function (id) {
       var t = MU.TEMAS[id];
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'tab'; b.id = 'tab-' + id; b.dataset.t = id; b.tabIndex = -1;
+      b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', 'false'); b.setAttribute('aria-controls', 'tema-' + id);
+      b.innerHTML = (ICON[id] || '') + '<span>' + (CURTO[id] || t.rotulo) + '</span>';
+      b.addEventListener('click', function () { location.hash = 'tema=' + id; });
+      b.addEventListener('keydown', function (e) {
+        var i = MU.ORDEM.indexOf(id), j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? MU.ORDEM.length - 1 : -1;
+        if (j < 0) return;
+        e.preventDefault(); var n = document.getElementById('tab-' + MU.ORDEM[(j + MU.ORDEM.length) % MU.ORDEM.length]); n.focus(); n.click();
+      });
+      tabs.appendChild(b);
       var d = document.createElement('div');
-      d.className = 'tema'; d.dataset.t = id;
-      d.innerHTML = '<button type="button" aria-expanded="false">' + (ICON[id] || '') + '<span>' + t.rotulo + '</span><span class="q">abrir</span></button>' +
-        '<div class="corpo" id="tema-' + id + '"></div>';
-      d.firstChild.addEventListener('click', function () { location.hash = 'tema=' + id; });
+      d.className = 'tema'; d.dataset.t = id; d.setAttribute('role', 'tabpanel'); d.setAttribute('aria-labelledby', 'tab-' + id);
+      d.innerHTML = '<h2 class="tema-tit">' + t.rotulo + '</h2><div class="corpo" id="tema-' + id + '"></div>';
       temas.appendChild(d);
     });
     var sel = document.getElementById('fundo-select');
@@ -828,7 +829,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
       else MU.abrirTema(id);
     });
     /* controlos do mapa (fora do arrasto do Leaflet) */
-    ['ficha', 'ir', 'zoom', 'pe'].forEach(function (k) {
+    ['ficha', 'topo-ctl', 'zoom', 'pe'].forEach(function (k) {
       var e = document.getElementById(k); L.DomEvent.disableClickPropagation(e); L.DomEvent.disableScrollPropagation(e);
     });
     document.querySelectorAll('#zoom button').forEach(function (b) {

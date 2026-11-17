@@ -1,7 +1,7 @@
 /* Núcleo do mapa único do Porto Verde. Tudo vive em window.MU (sem globais soltas):
    cada tema regista-se com MU.registarTema() e só é montado quando é aberto.
-   Gramática «Carta» (maquete V2b): acordeão de temas com cor-guia, números-chave, camadas com amostra
-   que é o interruptor e barra de hectares, «Os três verdes» fixos, ficha do parque, moldura de carta
+   Gramática «Carta» (maquete V2b): separadores fixos dos temas com cor-guia, números-chave, camadas com amostra
+   que é o interruptor e barra de hectares, fundo do mapa sobre o mapa, ficha do parque, moldura de carta
    (quadrícula, esquadria, área fora do estudo tracejada) e fundo «Carta» sem mosaicos. */
 (function () {
   var BOUNDS = [[41.13, -8.7], [41.19, -8.54]];
@@ -83,7 +83,9 @@
     row.className = 'cam' + (o.checked ? '' : ' off') + (o.sub ? ' sub' : '');
     if (o.color) row.style.setProperty('--sw', o.color);
     var h = '<input type="checkbox" id="' + id + '"' + (o.checked ? ' checked' : '') + (o.contorno ? ' class="contorno"' : '') + '>' +
-      '<label for="' + id + '">' + o.label + '</label><span class="ha">' + (o.ha ? MU.ha(o.ha) : '') + '</span>';
+      '<label for="' + id + '">' + o.label + '</label><span class="ha">' + (o.ha ? MU.ha(o.ha) : '') + '</span>' +
+      (o.opacidade ? '<button type="button" class="opb" aria-expanded="false" aria-label="Opacidade: ' + o.label.replace(/<[^>]+>/g, '') + '" title="Opacidade">' +
+        '<svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M7 1.5a5.5 5.5 0 0 1 0 11z" fill="currentColor"/></svg></button>' : '');
     if (o.ha && o.esc && o.ha <= o.esc) h += '<div class="med" aria-hidden="true"><i style="width:' + Math.min(100, o.ha / o.esc * 100).toFixed(2) + '%"></i></div>';
     if (o.leg) {
       h += '<div class="catleg">' + o.leg.map(function (l) {
@@ -102,6 +104,8 @@
       row.classList.toggle('off', !cb.checked);
       if (o.onToggle) o.onToggle(cb.checked);
     });
+    var opb = row.querySelector('.opb');
+    if (opb) opb.addEventListener('click', function () { var a = row.classList.toggle('opa'); opb.setAttribute('aria-expanded', a); });
     var op = row.querySelector('.op input');
     if (op) op.addEventListener('input', function () { o.opacidade.onInput(+op.value); });
     return { row: row, cb: cb, op: op };
@@ -288,16 +292,6 @@
       if (g) g.eachLayer(function (l) { if (l.feature === P.f) lay = l; });
       MU.fichaParque(i, lay, g);
     });
-    verdes(d.stats);
-  }
-
-  /* legenda fixa: os três verdes numa escala comum (0-1000 ha) */
-  function verdes(S) {
-    var V = [['#0B5232', 'Parques e jardins', S.parques_ha], ['#D9642B', 'Verde pago ou não usufruível', S.pago], ['#D6C496', 'Verde privado', S.privado]];
-    document.getElementById('verdes').innerHTML = '<h3>Os três verdes <span>ha no concelho</span></h3>' + V.map(function (v) {
-      return '<div class="vd"><i style="background:' + v[0] + '"></i><span>' + v[1] + '</span><span class="ha">' + MU.n(v[2]) + ' ha</span>' +
-        '<div class="med"><i style="background:' + v[0] + ';width:' + (v[2] / 1000 * 100).toFixed(1) + '%"></i></div></div>';
-    }).join('') + '<div class="esc" aria-hidden="true"><span>0</span><span>250</span><span>500</span><span>750</span><span>1000 ha</span></div>';
   }
 
   function guardarCtx(id) {
@@ -471,12 +465,12 @@
     MU.ficha(null);
     MU.tema = id;
     var painel = document.getElementById('tema-' + id);
-    document.querySelectorAll('.tema').forEach(function (d) {
-      var on = d.dataset.t === id;
-      d.classList.toggle('on', on);
-      d.firstChild.setAttribute('aria-expanded', on);
-      d.firstChild.lastChild.textContent = on ? '' : 'abrir';
+    document.querySelectorAll('.tema').forEach(function (d) { d.classList.toggle('on', d.dataset.t === id); });
+    document.querySelectorAll('.tab').forEach(function (b) {
+      var on = b.dataset.t === id;
+      b.classList.toggle('on', on); b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1;
     });
+    document.getElementById('temas').scrollTop = 0;
     if (!t._montado) {
       t._montado = true;
       painel.innerHTML = '<span class="tema-sub carregando">A carregar…</span>';
@@ -491,9 +485,7 @@
       }
     }
     if (MU.tema !== id) return;   // o utilizador mudou de tema entretanto
-    painel.appendChild(document.getElementById('ctx-bloco'));   // contexto, fundo e fonte vão com o tema aberto
-    var pn = document.getElementById('panel');
-    if (window.innerWidth <= 760 && !pn.classList.contains('aberto')) pn.scrollTop = painel.parentNode.offsetTop - document.getElementById('alca').offsetHeight;
+    painel.appendChild(document.getElementById('ctx-bloco'));   // contexto e fonte vão com o tema aberto
     // cada tema abre com o seu fundo; depois de o utilizador escolher um, essa escolha persiste
     // fundos exclusivos de um tema (p.ex. Ortofoto 1947) só aparecem nesse tema e saem dele ao mudar de tema
     var fSel = document.getElementById('fundo-select');
@@ -531,14 +523,24 @@
       .forEach(function (p) { map.createPane(p[0]); map.getPane(p[0]).style.zIndex = p[1]; });
     ['veuPane', 'limitesPane', 'rotPane'].forEach(function (p) { map.getPane(p).style.pointerEvents = 'none'; });
     MU.verConcelho();
-    var temas = document.getElementById('temas');
+    var temas = document.getElementById('temas'), tabs = document.getElementById('tabs');
+    var CURTO = { acessibilidade: 'Acesso', hoje: 'Mudanças', historico: 'Histórico', privado: 'Privado' };
     MU.ORDEM.forEach(function (id) {
       var t = MU.TEMAS[id];
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'tab'; b.id = 'tab-' + id; b.dataset.t = id; b.tabIndex = -1;
+      b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', 'false'); b.setAttribute('aria-controls', 'tema-' + id);
+      b.innerHTML = (ICON[id] || '') + '<span>' + (CURTO[id] || t.rotulo) + '</span>';
+      b.addEventListener('click', function () { location.hash = 'tema=' + id; });
+      b.addEventListener('keydown', function (e) {
+        var i = MU.ORDEM.indexOf(id), j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? MU.ORDEM.length - 1 : -1;
+        if (j < 0) return;
+        e.preventDefault(); var n = document.getElementById('tab-' + MU.ORDEM[(j + MU.ORDEM.length) % MU.ORDEM.length]); n.focus(); n.click();
+      });
+      tabs.appendChild(b);
       var d = document.createElement('div');
-      d.className = 'tema'; d.dataset.t = id;
-      d.innerHTML = '<button type="button" aria-expanded="false">' + (ICON[id] || '') + '<span>' + t.rotulo + '</span><span class="q">abrir</span></button>' +
-        '<div class="corpo" id="tema-' + id + '"></div>';
-      d.firstChild.addEventListener('click', function () { location.hash = 'tema=' + id; });
+      d.className = 'tema'; d.dataset.t = id; d.setAttribute('role', 'tabpanel'); d.setAttribute('aria-labelledby', 'tab-' + id);
+      d.innerHTML = '<h2 class="tema-tit">' + t.rotulo + '</h2><div class="corpo" id="tema-' + id + '"></div>';
       temas.appendChild(d);
     });
     var sel = document.getElementById('fundo-select');
@@ -552,7 +554,7 @@
       else MU.abrirTema(id);
     });
     /* controlos do mapa (fora do arrasto do Leaflet) */
-    ['ficha', 'ir', 'zoom', 'pe'].forEach(function (k) {
+    ['ficha', 'topo-ctl', 'zoom', 'pe'].forEach(function (k) {
       var e = document.getElementById(k); L.DomEvent.disableClickPropagation(e); L.DomEvent.disableScrollPropagation(e);
     });
     document.querySelectorAll('#zoom button').forEach(function (b) {

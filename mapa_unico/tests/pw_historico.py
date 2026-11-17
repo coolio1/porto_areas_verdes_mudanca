@@ -81,7 +81,10 @@ with sync_playwright() as p:
     ok("hash) mudar para vista=1947 com o separador aberto selecciona 1947 e liga a ortofoto", pg.evaluate("MU.historico.estado().epoca") == "1947" and pg.evaluate("MU.fundoActual") == "orto1947")
     pg.evaluate("location.hash = 'tema=historico'")
     pg.click("#h-tempo button[data-epoca='2023-24']")
-    # i) opacidade global
+    # i) opacidade global (o slider está atrás do botão «opacidade» da linha)
+    ok("i) slider de opacidade escondido por omissão", not pg.is_visible("#h-op"))
+    pg.locator(".cam:has(#h-op) .opb").click()
+    ok("i) botão abre o slider", pg.is_visible("#h-op"))
     pg.fill("#h-op", "50")
     pg.dispatch_event("#h-op", "input")
     op = pg.evaluate("[...MU.map.getPane('hMascPane').querySelectorAll('img')].map(i => i.style.opacity)")

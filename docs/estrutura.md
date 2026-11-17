@@ -85,14 +85,16 @@ Uma só página, `mapa_unico/mapa_unico.html`, com 4 temas: `#tema=hoje` (Mapa 2
 - Ficheiros `layers/` e `acessibilidade/layers/` continuam a ser a fonte dos PNG; o mapa único não os lê em
   tempo de execução (tudo embutido em `dados/`), por isso `file://` funciona.
 - **Desenho «Carta» (maquete V2b, 2026-11-15):** ordem dos temas Acessibilidade (abre por omissão) → Mudanças →
-  Histórico → Privado, em acordeão no painel; barra do site (`nav.get_nav(..., menu="barra")`) e rodapé da
+  Histórico → Privado, em separadores fixos no topo do painel (só o corpo do tema faz scroll; 2026-11-17: o acordeão
+  escondia os outros temas abaixo da dobra no Surface Pro); opacidade atrás de um botão por linha; o fundo do mapa
+  é um seletor sobre o mapa (`#fundo-select`, ao lado de «Ir para um parque»); barra do site (`nav.get_nav(..., menu="barra")`) e rodapé da
   `moldura.js`. Fundo por omissão «Carta» (sem mosaicos): placa de papel, água (`layers_historico/rio.png`, só o
   oceano; o Douro não tem máscara no repositório) e véu sobre os concelhos vizinhos; tracejado fora da área de
   estudo, quadrícula, esquadria, norte, escala e rótulos (parques + 14 lugares com coordenadas fixas) num canvas
   (`core.js`, `MU.desenharCarta`).
 - `dados/contexto.js` tem o comum a todos os temas: limites, GHS-POP, parques (GeoJSON), verde pago, água, véu e
   `stats` (hectares por contagem de píxeis × 56,87 m² dentro de `acessibilidade/layers/porto_mask.npy`; barras
-  das camadas e «Os três verdes»).
+  das camadas; o bloco fixo «Os três verdes» foi removido em 2026-11-17).
 - **`RECOLOR_ACC`** (`mapa_unico.py`): as categorias da acessibilidade (vermelho/âmbar/verde) são recoloridas para
   a paleta V2b (`#A23B86`/`#E6A6CC`/`#3E6AB3`) só ao embutir; os PNG de `acessibilidade/layers/` ficam iguais. Cor
   desconhecida = erro (assert). As cores fixas dos três verdes não mudam.
