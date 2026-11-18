@@ -486,6 +486,7 @@
         if (t.dados) await MU.carregarDados(t.dados);
         painel.innerHTML = '';
         await t.montar(painel);
+        MU.moverNums(id, painel);
       } catch (e) {
         painel.innerHTML = '<span class="tema-sub">Erro: ' + e.message + '</span>';
         t._montado = false;
@@ -505,8 +506,37 @@
     document.getElementById('fonte').innerHTML = t.fonte ? 'Fonte: ' + t.fonte : '';
     aplicarCtx(t);
     t.activar();
+    MU.mostrarNums();
     MU.desenharCarta();
   };
+
+  /* Números-chave: saem do painel (que fica para a legenda) para um cartão sobre o mapa, com X para fechar.
+     Cada tema tem o seu bloco `.nums` (movido, não copiado: os temas continuam a actualizá-lo pelo id).
+     Fechado = botão «Números» no mesmo sítio; a escolha lembra-se no browser; em ecrã pequeno abre fechado. */
+  MU.moverNums = function (id, painel) {
+    var w = document.createElement('div'); w.className = 'nums-tema'; w.dataset.t = id;
+    [].slice.call(painel.querySelectorAll('.nums')).forEach(function (n) { w.appendChild(n); });
+    if (w.children.length) document.getElementById('nums-corpo').appendChild(w);
+  };
+  MU.numsFechado = (function () {
+    try { var v = localStorage.getItem('pv-nums-fechado'); if (v !== null) return v === '1'; } catch (e) { /* sem armazenamento */ }
+    return window.matchMedia('(max-width:760px)').matches;
+  })();
+  MU.mostrarNums = function () {
+    var tem = false;
+    document.querySelectorAll('#nums-corpo .nums-tema').forEach(function (w) {
+      var on = w.dataset.t === MU.tema; w.classList.toggle('on', on); if (on) tem = true;
+    });
+    document.getElementById('nums-card').classList.toggle('on', tem && !MU.numsFechado);
+    document.getElementById('nums-chip').classList.toggle('on', tem && MU.numsFechado);
+  };
+  MU.fecharNums = function (fechar) {
+    MU.numsFechado = fechar;
+    try { localStorage.setItem('pv-nums-fechado', fechar ? '1' : '0'); } catch (e) { /* sem armazenamento */ }
+    MU.mostrarNums();
+  };
+  document.getElementById('nums-x').addEventListener('click', function () { MU.fecharNums(true); });
+  document.getElementById('nums-chip').addEventListener('click', function () { MU.fecharNums(false); });
 
   /* parâmetro do hash (#tema=acessibilidade&vista=propostas) */
   MU.param = function (nome) {

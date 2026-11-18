@@ -188,7 +188,7 @@
       sep.addEventListener('pointercancel', fimArrasto);
 
       /* ---- linhas de camadas ---- */
-      var q = function (s) { return painel.querySelector(s); };
+      var q = function (s) { return painel.querySelector(s) || document.querySelector(s); };   // #h-nums vive no cartão do mapa
       var boxEdif = MU.linha(q('#h-cams'), {
         label: 'Edificado na &eacute;poca escolhida', checked: false, color: COR.edif,
         onToggle: function (on) { est.edif = on; mostrar(); }

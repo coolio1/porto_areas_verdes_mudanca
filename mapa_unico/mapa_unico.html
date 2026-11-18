@@ -194,6 +194,20 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .ficha .cmp .med i{display:block;height:100%;background:var(--marca)}
 .ficha .x{all:unset;position:absolute;right:8px;top:8px;width:26px;height:26px;text-align:center;line-height:26px;cursor:pointer;font-size:18px}
 .ficha .x:focus-visible{outline:2px solid var(--tinta)}
+/* números-chave sobre o mapa (core.js: MU.moverNums) */
+.nums-card{left:16px;bottom:62px;width:292px;padding:10px 16px 12px;display:none;max-height:calc(100% - 150px);overflow:auto}
+.nums-card.on{display:block}
+.nums-tit{display:block;font:500 11px var(--mono);color:var(--suave);margin:0 28px 8px 0;text-transform:uppercase;letter-spacing:.04em}
+.nums-card .x{all:unset;position:absolute;right:6px;top:5px;width:26px;height:26px;text-align:center;line-height:26px;cursor:pointer;font-size:18px;color:var(--tinta)}
+.nums-card .x:hover{background:var(--realce)}
+.nums-card .x:focus-visible,.nums-chip:focus-visible{outline:2px solid var(--tinta);outline-offset:-3px}
+.nums-card .nums-tema{display:none}.nums-card .nums-tema.on{display:block}
+.nums-card .nums{margin:0}
+.nums-card .num.mor{gap:10px}
+.nums-card .num.mor b{font-size:36px}
+.nums-chip{left:16px;bottom:62px;display:none;padding:6px 10px;font:500 11.5px var(--mono);color:var(--tinta);cursor:pointer}
+.nums-chip.on{display:block}
+.nums-chip:hover{background:var(--realce)}
 .topo-ctl{position:absolute;z-index:1000;right:60px;top:16px;display:flex;gap:8px}
 .ir{font:400 13px var(--sans);border:1px solid var(--filete);background:var(--painel);color:var(--tinta);padding:6px 8px;border-radius:0;height:36px;max-width:230px;min-width:0}
 .ir.fundo{max-width:190px}
@@ -227,6 +241,9 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
   .tema-tit{font-size:18px;padding:10px 16px 2px 20px}
   .corpo{padding:0 16px 14px 20px}
   .num.mor b{font-size:40px}
+  .nums-card{left:12px;right:12px;bottom:56px;width:auto;max-height:calc(100% - 70px)}
+  .nums-chip{left:12px;bottom:12px}
+  .nums-card .num.mor b{font-size:30px}
   #map{margin-bottom:var(--espia,200px)}
   #panel:not(.aberto) .desc{display:none}
   .ficha{left:12px;right:12px;width:auto;top:12px}
@@ -268,6 +285,8 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 </aside>
 <main id="map" aria-label="Mapa do Porto">
   <div class="cx ficha" id="ficha" role="region" aria-label="Ficha" aria-live="polite"></div>
+  <div class="cx nums-card" id="nums-card" role="region" aria-label="Números-chave"><span class="nums-tit">Números-chave</span><button type="button" class="x" id="nums-x" aria-label="Fechar os números-chave">×</button><div id="nums-corpo"></div></div>
+  <button type="button" class="cx nums-chip" id="nums-chip" aria-label="Mostrar os números-chave">Números</button>
   <div class="topo-ctl" id="topo-ctl"><select class="ir" id="ir" aria-label="Ir para um parque"></select><select class="ir fundo" id="fundo-select" aria-label="Fundo do mapa"></select></div>
   <div class="cx zoom" id="zoom"><button type="button" data-z="1" aria-label="Aproximar">+</button><button type="button" data-z="-1" aria-label="Afastar">−</button><button type="button" data-z="0" aria-label="Ver o concelho inteiro">⌂</button></div>
   <div class="cx pe" id="pe"><span class="norte" title="Norte"><svg viewBox="0 0 14 20" aria-hidden="true"><path d="M7 1 12 15 7 12 2 15Z" fill="currentColor"/><path d="M7 1 7 12 2 15Z" fill="var(--painel)" stroke="currentColor" stroke-width=".8"/></svg><span class="sr">Norte para cima</span></span><span><span><span class="bar"></span><span class="esc-t"></span></span></span><span class="xy" aria-hidden="true">—</span></div>
@@ -761,6 +780,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
         if (t.dados) await MU.carregarDados(t.dados);
         painel.innerHTML = '';
         await t.montar(painel);
+        MU.moverNums(id, painel);
       } catch (e) {
         painel.innerHTML = '<span class="tema-sub">Erro: ' + e.message + '</span>';
         t._montado = false;
@@ -780,8 +800,37 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
     document.getElementById('fonte').innerHTML = t.fonte ? 'Fonte: ' + t.fonte : '';
     aplicarCtx(t);
     t.activar();
+    MU.mostrarNums();
     MU.desenharCarta();
   };
+
+  /* Números-chave: saem do painel (que fica para a legenda) para um cartão sobre o mapa, com X para fechar.
+     Cada tema tem o seu bloco `.nums` (movido, não copiado: os temas continuam a actualizá-lo pelo id).
+     Fechado = botão «Números» no mesmo sítio; a escolha lembra-se no browser; em ecrã pequeno abre fechado. */
+  MU.moverNums = function (id, painel) {
+    var w = document.createElement('div'); w.className = 'nums-tema'; w.dataset.t = id;
+    [].slice.call(painel.querySelectorAll('.nums')).forEach(function (n) { w.appendChild(n); });
+    if (w.children.length) document.getElementById('nums-corpo').appendChild(w);
+  };
+  MU.numsFechado = (function () {
+    try { var v = localStorage.getItem('pv-nums-fechado'); if (v !== null) return v === '1'; } catch (e) { /* sem armazenamento */ }
+    return window.matchMedia('(max-width:760px)').matches;
+  })();
+  MU.mostrarNums = function () {
+    var tem = false;
+    document.querySelectorAll('#nums-corpo .nums-tema').forEach(function (w) {
+      var on = w.dataset.t === MU.tema; w.classList.toggle('on', on); if (on) tem = true;
+    });
+    document.getElementById('nums-card').classList.toggle('on', tem && !MU.numsFechado);
+    document.getElementById('nums-chip').classList.toggle('on', tem && MU.numsFechado);
+  };
+  MU.fecharNums = function (fechar) {
+    MU.numsFechado = fechar;
+    try { localStorage.setItem('pv-nums-fechado', fechar ? '1' : '0'); } catch (e) { /* sem armazenamento */ }
+    MU.mostrarNums();
+  };
+  document.getElementById('nums-x').addEventListener('click', function () { MU.fecharNums(true); });
+  document.getElementById('nums-chip').addEventListener('click', function () { MU.fecharNums(false); });
 
   /* parâmetro do hash (#tema=acessibilidade&vista=propostas) */
   MU.param = function (nome) {
@@ -1392,7 +1441,7 @@ MU.registarTema({
       sep.addEventListener('pointercancel', fimArrasto);
 
       /* ---- linhas de camadas ---- */
-      var q = function (s) { return painel.querySelector(s); };
+      var q = function (s) { return painel.querySelector(s) || document.querySelector(s); };   // #h-nums vive no cartão do mapa
       var boxEdif = MU.linha(q('#h-cams'), {
         label: 'Edificado na &eacute;poca escolhida', checked: false, color: COR.edif,
         onToggle: function (on) { est.edif = on; mostrar(); }

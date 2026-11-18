@@ -182,6 +182,20 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .ficha .cmp .med i{display:block;height:100%;background:var(--marca)}
 .ficha .x{all:unset;position:absolute;right:8px;top:8px;width:26px;height:26px;text-align:center;line-height:26px;cursor:pointer;font-size:18px}
 .ficha .x:focus-visible{outline:2px solid var(--tinta)}
+/* números-chave sobre o mapa (core.js: MU.moverNums) */
+.nums-card{left:16px;bottom:62px;width:292px;padding:10px 16px 12px;display:none;max-height:calc(100% - 150px);overflow:auto}
+.nums-card.on{display:block}
+.nums-tit{display:block;font:500 11px var(--mono);color:var(--suave);margin:0 28px 8px 0;text-transform:uppercase;letter-spacing:.04em}
+.nums-card .x{all:unset;position:absolute;right:6px;top:5px;width:26px;height:26px;text-align:center;line-height:26px;cursor:pointer;font-size:18px;color:var(--tinta)}
+.nums-card .x:hover{background:var(--realce)}
+.nums-card .x:focus-visible,.nums-chip:focus-visible{outline:2px solid var(--tinta);outline-offset:-3px}
+.nums-card .nums-tema{display:none}.nums-card .nums-tema.on{display:block}
+.nums-card .nums{margin:0}
+.nums-card .num.mor{gap:10px}
+.nums-card .num.mor b{font-size:36px}
+.nums-chip{left:16px;bottom:62px;display:none;padding:6px 10px;font:500 11.5px var(--mono);color:var(--tinta);cursor:pointer}
+.nums-chip.on{display:block}
+.nums-chip:hover{background:var(--realce)}
 .topo-ctl{position:absolute;z-index:1000;right:60px;top:16px;display:flex;gap:8px}
 .ir{font:400 13px var(--sans);border:1px solid var(--filete);background:var(--painel);color:var(--tinta);padding:6px 8px;border-radius:0;height:36px;max-width:230px;min-width:0}
 .ir.fundo{max-width:190px}
@@ -215,6 +229,9 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
   .tema-tit{font-size:18px;padding:10px 16px 2px 20px}
   .corpo{padding:0 16px 14px 20px}
   .num.mor b{font-size:40px}
+  .nums-card{left:12px;right:12px;bottom:56px;width:auto;max-height:calc(100% - 70px)}
+  .nums-chip{left:12px;bottom:12px}
+  .nums-card .num.mor b{font-size:30px}
   #map{margin-bottom:var(--espia,200px)}
   #panel:not(.aberto) .desc{display:none}
   .ficha{left:12px;right:12px;width:auto;top:12px}

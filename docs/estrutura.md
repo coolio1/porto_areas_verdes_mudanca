@@ -97,6 +97,10 @@ Uma só página, `mapa_unico/mapa_unico.html`, com 5 temas (o 2.º, `#tema=regra
   defs de `MU.addCamadas`, `MU.pane`), nunca pela ordem em que se ligam (Leaflet empilha por ordem de adição no
   mesmo pane). Limites: Parques 540, candidatos 550; camadas dos temas entre 410 e 480. Camada nova → pôr o `z` e a
   linha na posição certa da lista.
+- **Números-chave (2026-11-18):** o bloco `.nums` de cada tema sai do painel (que fica para a legenda) para o cartão `#nums-card`
+  sobre o mapa (em baixo à esquerda, por cima da escala), com X; fechado = botão «Números» (`#nums-chip`); a escolha fica em
+  `localStorage` (`pv-nums-fechado`) e em ecrã ≤760 px abre fechado. `core.js`: `MU.moverNums/mostrarNums/fecharNums`; o bloco é
+  movido, não copiado (os temas continuam a actualizá-lo por id). Tema novo com números = `<div class="nums">` no painel e nada mais.
 - `dados/contexto.js` tem o comum a todos os temas: limites, GHS-POP, parques (GeoJSON), verde pago, água, véu e
   `stats` (hectares por contagem de píxeis × 56,87 m² dentro de `acessibilidade/layers/porto_mask.npy`; barras
   das camadas; o bloco fixo «Os três verdes» foi removido em 2026-11-17).
