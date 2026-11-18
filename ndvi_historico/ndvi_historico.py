@@ -6,6 +6,7 @@ import ee
 import requests
 import os
 import math
+import sys
 import io
 import time
 from PIL import Image
@@ -20,6 +21,12 @@ load_dotenv(os.path.join(ROOT_DIR, '..', '.env'))  # global (OneDrive\Claude\.en
 load_dotenv(os.path.join(ROOT_DIR, '.env'))
 GEE_PROJECT = os.environ["GEE_PROJECT"]
 ee.Initialize(project=GEE_PROJECT)
+
+sys.path.insert(0, SCRIPT_DIR)
+import cenas_aprovadas as _ca
+_D_CENAS = _ca.carregar()
+APROVADAS = _ca.aprovadas(_D_CENAS)               # controlo por cena nos alvos estaveis (controlo_cenas.py)
+IC_L8, SL_L8 = _ca.recta_l8_l7(_D_CENAS)          # NDVI7 = IC + SL * NDVI8 (ancoras: construido e arvores, 2013-2021)
 
 # Mesma area do projecto original
 porto = ee.Geometry.Polygon([
@@ -116,7 +123,7 @@ def ndvi_l8(img):
 
     Sem harmonizacao de Roy et al. 2016 (retirada em 2026-11-18): os coeficientes que aqui estavam
     (0.9585/0.9785) nao eram os de Roy para NDVI e a Google nao a recomenda na Colecao 2 SR. A diferenca
-    de sensor corrige-se com o desvio medido na sobreposicao L7/L8 (OFFSET_OLI, abaixo).
+    de sensor corrige-se com o desvio medido na sobreposicao L7/L8 (recta l8_para_l7, abaixo).
     """
     img = cloud_mask_l8(img)
     nir = img.select('SR_B5').multiply(0.0000275).add(-0.2)
@@ -153,17 +160,20 @@ def get_ndvi_composite(sensor, years):
                 .filterBounds(porto)
                 .filterDate(start, end)
                 .filter(ee.Filter.lt('CLOUD_COVER', 40))
+                .filter(ee.Filter.inList('system:index', APROVADAS))
                 .map(ndvi_l5))
         else:  # Landsat 8/9
             col8 = (ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
                 .filterBounds(porto)
                 .filterDate(start, end)
                 .filter(ee.Filter.lt('CLOUD_COVER', 40))
+                .filter(ee.Filter.inList('system:index', APROVADAS))
                 .map(ndvi_l8))
             col9 = (ee.ImageCollection('LANDSAT/LC09/C02/T1_L2')
                 .filterBounds(porto)
                 .filterDate(start, end)
                 .filter(ee.Filter.lt('CLOUD_COVER', 40))
+                .filter(ee.Filter.inList('system:index', APROVADAS))
                 .map(ndvi_l8))
             col = col8.merge(col9)
         cols.append(col)
@@ -182,7 +192,8 @@ def get_ndvi_composite(sensor, years):
 # A normalizacao PIF (regressao em 3 tipos de alvo) foi retirada em 2026-11-18: criava uma queda
 # artificial de ~14 p.p. na vegetacao 1985-90 -> 2023-24 que as medicoes ano a ano nao confirmam.
 # Agora: Landsat 5 fica em bruto (L5 ~ L7: 49,8 vs 49,5 % em 1999-2011) e o OLI (L8/9) recebe um
-# desvio aditivo de NDVI, medido na sobreposicao L7/L8 (2013-2021) sobre o concelho.
+# recta de NDVI (alvos estaveis construido e arvores, sobreposicao L7/L8 2013-2021); cenas avariadas excluidas
+# por controlo por cena (cenas_aprovadas.py).
 # Evidencia: ndvi_historico/diagnostico_anos.py (% de vegetacao ano a ano).
 PONTE_ANOS = list(range(2013, 2022))   # L7 e L8 em simultaneo (L9 so desde 2021)
 
@@ -195,7 +206,7 @@ def composito_l7(years):
     for year in years:
         c = (ee.ImageCollection('LANDSAT/LE07/C02/T1_L2')
              .filterBounds(porto).filterDate(f'{year}-06-01', f'{year}-09-30')
-             .filter(ee.Filter.lt('CLOUD_COVER', 40)).map(ndvi_l7))
+             .filter(ee.Filter.lt('CLOUD_COVER', 40)).filter(ee.Filter.inList('system:index', APROVADAS)).map(ndvi_l7))
         cols = c if cols is None else cols.merge(c)
     return cols.median().clip(porto)
 
@@ -204,22 +215,25 @@ def composito_l8_so(years):
     for year in years:
         c = (ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
              .filterBounds(porto).filterDate(f'{year}-06-01', f'{year}-09-30')
-             .filter(ee.Filter.lt('CLOUD_COVER', 40)).map(ndvi_l8))
+             .filter(ee.Filter.lt('CLOUD_COVER', 40)).filter(ee.Filter.inList('system:index', APROVADAS)).map(ndvi_l8))
         cols = c if cols is None else cols.merge(c)
     return cols.median().clip(porto)
 
 def media_concelho(img):
     return img.reduceRegion(ee.Reducer.mean(), portoMuniGeom, 30, maxPixels=1e9).get('ndvi').getInfo()
 
-print('A medir o desvio de sensor L8-L7 na sobreposicao', PONTE_ANOS[0], '-', PONTE_ANOS[-1], '...')
+def l8_para_l7(ndvi_img):
+    """NDVI de L8/9 -> escala L7/L5, pela recta dos alvos estaveis (controlo_cenas.py + cenas_aprovadas.py)."""
+    return ndvi_img.multiply(SL_L8).add(IC_L8).clamp(-1, 1).rename('ndvi')
+
+print('Ponte L8 -> L7 (recta dos alvos estaveis, 2013-2021):', f'NDVI7 = {IC_L8:+.4f} + {SL_L8:.4f} * NDVI8',
+      f'| {len(APROVADAS)} cenas aprovadas de {len(_D_CENAS)}')
 _l7 = composito_l7(PONTE_ANOS)
 _l8 = composito_l8_so(PONTE_ANOS)
-OFFSET_OLI = media_concelho(_l8.subtract(_l7).rename('ndvi'))
-print(f'  desvio NDVI (L8 - L7, media do concelho) = {OFFSET_OLI:+.4f}')
 _pct = lambda im: 100 * im.gte(0.25).rename('ndvi').reduceRegion(
     ee.Reducer.mean(), portoMuniGeom, 30, maxPixels=1e9).get('ndvi').getInfo()
 print(f'  % vegetacao na sobreposicao (so diagnostico, limiar 0,25): L7={_pct(_l7):.1f}  L8 bruto={_pct(_l8):.1f}  '
-      f'L8 corrigido={_pct(_l8.subtract(OFFSET_OLI)):.1f}')
+      f'L8 corrigido={_pct(l8_para_l7(_l8)):.1f}')
 
 print('\nA calcular compositos NDVI por epoca...')
 composites = {}
@@ -227,8 +241,8 @@ for name, sensor, years in EPOCHS:
     ndvi, count = get_ndvi_composite(sensor, years)
     n = count.getInfo()
     if sensor == 'Landsat 8':
-        ndvi = ndvi.subtract(OFFSET_OLI).clamp(-1, 1)
-        print(f'  {name} ({sensor}): {n} cenas, desvio {-OFFSET_OLI:+.4f} aplicado')
+        ndvi = l8_para_l7(ndvi)
+        print(f'  {name} ({sensor}): {n} cenas, recta L8->L7 aplicada')
     else:
         print(f'  {name} ({sensor}): {n} cenas, sem ajuste')
     composites[name] = ndvi
@@ -322,13 +336,16 @@ def _ep(vals):
 print('\nA medir a dispersao ano a ano por epoca...')
 incerteza = {}
 for name, sensor, years in EPOCHS:
-    vals = []
+    vals, usados = [], []
     for y in years:
         im, cnt = get_ndvi_composite(sensor, [y])
+        if cnt.getInfo() == 0:
+            print(f'  {name} {y}: sem cenas aprovadas, ano saltado')
+            continue
         if sensor == 'Landsat 8':
-            im = im.subtract(OFFSET_OLI)
-        vals.append(pct_veg(im))
-    incerteza[name] = {'anos': years, 'veg_por_ano': [round(v, 1) for v in vals],
+            im = l8_para_l7(im)
+        vals.append(pct_veg(im)); usados.append(y)
+    incerteza[name] = {'anos': usados, 'veg_por_ano': [round(v, 1) for v in vals],
                        'media_anos': round(statistics.mean(vals), 1),
                        'dp_anual': round(statistics.stdev(vals), 1),
                        'ep': round(_ep(vals), 1)}
@@ -336,7 +353,7 @@ for name, sensor, years in EPOCHS:
 
 dif_ponte = []
 for y in PONTE_ANOS:
-    dif_ponte.append(pct_veg(composito_l8_so([y]).subtract(OFFSET_OLI)) - pct_veg(composito_l7([y])))
+    dif_ponte.append(pct_veg(l8_para_l7(composito_l8_so([y]))) - pct_veg(composito_l7([y])))
 incerteza['ponte_L8_L7'] = {'anos': PONTE_ANOS, 'dif_pp_por_ano': [round(v, 1) for v in dif_ponte],
                             'media_pp': round(statistics.mean(dif_ponte), 1), 'ep': round(_ep(dif_ponte), 1)}
 print(f'  ponte L8-L7 (residual apos o desvio, p.p.): {incerteza["ponte_L8_L7"]}')
