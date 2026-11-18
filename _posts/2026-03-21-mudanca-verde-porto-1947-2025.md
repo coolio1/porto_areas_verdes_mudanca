@@ -10,7 +10,7 @@ tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação, animação, deteção
 
 **Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1947–2025): Uma Análise Quantitativa Baseada em Deteção Remota**
 
-> **Actualização de 18 de Novembro de 2026.** A primeira versão deste artigo concluía que o Porto tinha perdido 1 785 ha de vegetação desde 1985 (de 45,0 % para 30,0 % do concelho). Essa queda era em grande parte **artificial**: vinha da normalização entre sensores Landsat e de um limiar fixo de NDVI que contava como vegetação 27 % do que já estava construído em 1979. Com a ponte de sensor corrigida, a vegetação calculada por píxel e as incertezas, a série de satélite **não mostra perda detectável entre 1985 e 2024** (32,5 % → 35,2 %, ±1,4 p.p.). Os números do concelho (e só do concelho) foram recalculados e as secções 4.2, 5 e 6 reescritas. Método e limites: [docs/historico_ponte_landsat7.md](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/docs/historico_ponte_landsat7.md).
+> **Actualização de 18 de Novembro de 2026.** A primeira versão deste artigo concluía que o Porto tinha perdido 1 785 ha de vegetação desde 1985 (de 45,0 % para 30,0 % do concelho). Essa queda era em grande parte **artificial**: vinha da normalização entre sensores Landsat e de um limiar fixo de NDVI (índice de vegetação por diferença normalizada) que contava como vegetação 27 % do que já estava construído em 1979. Com a ponte de sensor corrigida, a vegetação calculada por píxel e as incertezas, a série de satélite **não mostra perda detectável entre 1985 e 2024** (32,5 % → 35,2 %, ±1,4 p.p.). Os números do concelho (e só do concelho) foram recalculados e as secções 4.2, 5 e 6 reescritas. Método e limites: [docs/historico_ponte_landsat7.md](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/docs/historico_ponte_landsat7.md).
 
 
 ---
@@ -52,7 +52,7 @@ Quanto aos serviços de ecossistema prestados pela infraestrutura verde remanesc
 </video>
 
 
-A animação mostra a evolução bienal do Porto entre 1987 e 2024, interpolada a partir das cinco épocas de classificação Landsat. **Atenção:** foi construída com a série anterior (limiar NDVI ≥ 0,25 e normalização PIF), que exagerava a perda de vegetação. Não corresponde à série corrigida da secção 5.2 e serve só de ilustração da expansão do edificado; está por refazer.
+A animação mostra a evolução bienal do Porto entre 1987 e 2024, interpolada a partir das cinco épocas de classificação Landsat. **Atenção:** foi construída com a série anterior (limiar NDVI ≥ 0,25 e normalização por alvos pseudo-invariantes), que exagerava a perda de vegetação. Não corresponde à série corrigida da secção 5.2 e serve só de ilustração da expansão do edificado; está por refazer.
 
 ---
 
@@ -76,7 +76,7 @@ A primeira versão harmonizava os sensores com os coeficientes de Roy *et al.* (
 
 - **Salto de sensor, não de paisagem.** Landsat 5 e Landsat 7 dão o mesmo resultado (49,8 e 49,5 % em 1999–2011, com o limiar antigo), mas Landsat 8/9 dá +7 a +9 p.p. sobre o 7 na sobreposição 2013–2021. A normalização PIF absorvia esse salto na série e criava uma queda artificial de ~14 p.p. entre 1985–90 e 2023–24.
 - **Limiar demasiado baixo.** A 30 m, NDVI ≥ 0,25 corresponde a só ~23 % de vegetação no píxel; 27 % do construído de 1979 contava como vegetação em 1985–90.
-- **Sem incerteza.** Uma diferença de 1 a 3 p.p. entre épocas não se distingue do ruído sem a medir.
+- **Sem incerteza.** Uma diferença de 1 a 3 p.p. de vegetação entre épocas não se distingue do ruído sem a medir.
 
 O método actual:
 
