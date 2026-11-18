@@ -21,8 +21,8 @@ MU.registarTema({
     ];
     var esc = MU.escala(camadas.map(function (c) { return c.ha; }));
     painel.innerHTML =
-      '<p class="desc">Cada edif&iacute;cio v&ecirc; pelo menos <b>3</b> &aacute;rvores da janela, tem <b>30&nbsp;%</b> de copa &agrave; sua volta (c&iacute;rculo de 500&nbsp;m) ' +
-      'e um parque a <b>300&nbsp;m</b> a p&eacute;? Regra proposta por Cecil Konijnendijk; aqui medida edif&iacute;cio a edif&iacute;cio.</p>' +
+      '<p class="desc">A regra <b>3-30-300</b> mede o acesso ao verde: <b>3</b> &aacute;rvores &agrave; vista da janela, <b>30&nbsp;%</b> de copa no bairro ' +
+      '(500&nbsp;m &agrave; volta) e um parque a <b>300&nbsp;m</b> a p&eacute;. Proposta por Cecil Konijnendijk; aqui, edif&iacute;cio a edif&iacute;cio.</p>' +
       '<div class="nums">' + MU.htmlNums([
         { v: MU.n(N.todos.residentes_pct, 1), u: '%', r: 'dos residentes vivem num edif&iacute;cio que cumpre os tr&ecirc;s indicadores (' + p(N.todos.edificios_pct) + ' dos edif&iacute;cios)' },
         { v: MU.n(N.c30.residentes_pct, 1), u: '%', r: 'cumprem o &laquo;30&raquo;, o mais dif&iacute;cil' },
