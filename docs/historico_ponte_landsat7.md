@@ -21,4 +21,4 @@ Consistente com o tema Hoje (35,6 % por construção) e com Guilherme et al. 202
 - A referência é uma classificação de satélite (Sentinel-2, regras sazonais), não verdade de terreno. A ortofoto DGT 2025 foi tentada e não serve: só RGB, as copas escuras ficam cinzentas (ExGR, ExG e HSV falharam).
 - O desvio de sensor é único (média do concelho); sobra +0,8 p.p. de resíduo entre L8 e L7.
 - 1947 (74,5 %, `1947/clean_1947.py` só converte edificado em vegetação) e 1979 (50,0 %, vegetação = árvores, arbustos e herbáceas) usam outra definição: **não comparáveis** com a série Landsat (os 1979 e 1947 ficam acima porque contam herbáceas/campos como vegetação). Série longa de uma só fonte: camadas de Guilherme et al. 1947/1979/2019 (pedir à autora).
-- O artigo `_posts/2026-03-21-mudanca-verde-porto-1947-2025.md` usa números e método PIF anteriores: por rever.
+- O artigo `_posts/2026-03-21-mudanca-verde-porto-1947-2025.md` foi corrigido em 2026-11-18 (série, método, Sentinel-2 só do concelho; revisão por leitor leigo). A animação (`animacao/`) usa a série antiga: por refazer.
