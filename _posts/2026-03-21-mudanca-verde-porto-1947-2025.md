@@ -80,7 +80,7 @@ A primeira versão harmonizava os sensores com os coeficientes de Roy *et al.* (
 
 O método actual:
 
-1. **Controlo por cena e ponte de sensor.** Cada cena Landsat (Junho–Setembro) é medida em áreas que não mudaram — construído em 1979 e ainda construído em 2024, e árvores em 1979 e ainda árvores em 2024. Uma cena cujo NDVI nessas áreas foge ao resto do seu sensor é névoa ou nuvem não mascarada, não paisagem: 78 de 609 cenas (13 %) foram excluídas, o que deixou 2002 sem nenhuma cena válida. O Landsat 5 fica em reflectância de superfície sem correcção. O Landsat 8/9 passa à escala do Landsat 7 por uma recta (NDVI₇ = −0,020 + 0,959·NDVI₈) calculada nessas duas áreas na sobreposição de 2013 a 2021, porque o desvio entre sensores não é constante (0,026 no construído, 0,051 nas árvores). Compósitos de mediana de Junho a Setembro.
+1. **Controlo por cena e ponte de sensor.** Cada cena Landsat (Junho–Setembro) é medida em áreas que não mudaram — construído em 1979 e ainda construído em 2024, e árvores em 1979 e ainda árvores em 2024. Uma cena cujo NDVI nessas áreas foge ao resto do seu sensor é névoa ou nuvem não mascarada, não paisagem: 102 de 721 cenas (14 %) foram excluídas (em 2002, todas as do Landsat 5). O Landsat 5 fica em reflectância de superfície sem correcção e, a partir de 1999, junta-se-lhe o Landsat 7 (mesmas bandas), o que duplica as cenas de cada época. O Landsat 8/9 passa à escala do Landsat 7 por uma recta (NDVI₇ = −0,020 + 0,959·NDVI₈) calculada nessas duas áreas na sobreposição de 2013 a 2021, porque o desvio entre sensores não é constante (0,026 no construído, 0,051 nas árvores). Compósitos de mediana de Junho a Setembro.
 2. **Fracção de vegetação por píxel.** Uma curva monótona NDVI → fracção (regressão isotónica) calibrada em 2023–24 contra as classes «árvores» e «solo/relva» do Sentinel-2 (secção 4.3), e aplicada a todas as épocas. O píxel passa a contar pela fracção (não por 0 ou 1) e a fracção de 50 % corresponde a NDVI ≈ 0,36.
 3. **Só o concelho.** Percentagens e hectares contam apenas píxeis dentro do Porto (CAOP 2025, 4 142 ha), sem água permanente.
 4. **Incerteza (1σ).** Erro-padrão da percentagem anual dentro de cada época, somado em quadratura ao erro da ponte (resíduo +0,6 ± 0,5 p.p.).
@@ -139,8 +139,8 @@ Guilherme *et al.* (2022) obtiveram 31 % de elementos construídos artificiais 
 | 1947 | Ortofoto SPLAL, Random Forest + limpeza | 74,5 (não comparável) |
 | 1979 | Cartografia de ocupação do solo de 1979 (árvores, arbustos e herbáceas) | 50,0 (não comparável) |
 | 1985–90 | Landsat 5 | 32,6 ± 1,3 |
-| 1995–00 | Landsat 5 | 33,0 ± 0,6 |
-| 2001–05 | Landsat 5 | 30,2 ± 0,7 |
+| 1995–00 | Landsat 5 e 7 | 33,1 ± 0,4 |
+| 2001–05 | Landsat 5 e 7 | 30,8 ± 0,5 |
 | 2016–17 | Landsat 8 (com ponte) | 34,7 ± 1,4 |
 | 2023–24 | Landsat 8/9 (com ponte) | 35,3 ± 0,5 |
 
@@ -148,14 +148,14 @@ Guilherme *et al.* (2022) obtiveram 31 % de elementos construídos artificiais 
 
 Nessa série:
 
-- **De 1985–90 a 2000 não há variação** (32,6 → 33,0 %).
-- **2001–05 é o mínimo** (30,2 %), 2,8 p.p. abaixo de 1995–00, uma diferença que ultrapassa o ruído (σ combinado 0,9 p.p.) e que se mantém depois de excluir as cenas avariadas. A causa não foi investigada: pode ser paisagem ou um ano atípico (2002 não tem cenas válidas).
-- **Entre 2001–05 e 2016–17 há recuperação** (+4,5 p.p.), que se mantém em 2023–24.
+- **De 1985–90 a 2000 não há variação** (32,6 → 33,1 %).
+- **2001–05 é o mínimo** (30,8 %), 2,3 p.p. abaixo de 1995–00. É frágil: com só o Landsat 5 dava 30,2 %, e nos mesmos anos o Landsat 7 dá valores mais altos; entre sensores, um mesmo ano difere até ±2 p.p., mais do que o erro indicado (±0,5). O ano mais baixo é 2005 (29,7 %), de seca extrema. A causa não foi apurada: pode ser clima, paisagem ou ruído de amostragem.
+- **Entre 2001–05 e 2016–17 há recuperação** (+3,9 p.p.), que se mantém em 2023–24.
 - **1985–90 → 2023–24: +2,7 p.p. (≈ +110 ha), com σ combinado de 1,4 p.p.**, ou seja, um aumento ligeiro, no limite do que a série distingue. **Não há tendência detectável de perda de vegetação nos satélites.**
 
 O resultado é coerente com o tema «Hoje» do mapa (35,6 % de vegetação em 2024–25, que serviu de referência à calibração), pelo que a coincidência vem da construção e não é uma confirmação independente e com Guilherme *et al.* (2022): ~38 % do concelho sem elementos construídos em 2019 (100 − 62 %). **Não reproduz**, porém, a expansão urbana de 276 ha em 1990–2000 e 169 ha em 2000–2006 de Quental (2010): essa discrepância fica por esclarecer (as definições diferem: expansão do edificado e não fracção de vegetação, e 30 m não vê o preenchimento de logradouros).
 
-Quanto a perda e ganho entre o início (1985–2000) e o fim (2016–2024) da série, em manchas ≥ 0,5 ha dentro do concelho: **cerca de 228 ha de perda e 290 ha de ganho** (saldo +62 ha, ≈ +1,5 p.p.). Este saldo é menor que a diferença das médias da série (+2,7 p.p., ≈ +110 ha) porque só conta manchas ≥ 0,5 ha com variação ≥ 0,30; os dois são do mesmo tamanho que a incerteza da série (±1,4 p.p., ≈ ±58 ha). A perda é uma realidade local, mas compensada por ganhos noutros sítios.
+Quanto a perda e ganho entre o início (1985–2000) e o fim (2016–2024) da série, em manchas ≥ 0,5 ha dentro do concelho: **cerca de 226 ha de perda e 286 ha de ganho** (saldo +59 ha, ≈ +1,4 p.p.). Este saldo é menor que a diferença das médias da série (+2,7 p.p., ≈ +110 ha) porque só conta manchas ≥ 0,5 ha com variação ≥ 0,30; os dois são do mesmo tamanho que a incerteza da série (±1,4 p.p., ≈ ±58 ha). A perda é uma realidade local, mas compensada por ganhos noutros sítios.
 
 ### 5.3. Padrões Espaciais de Transformação
 
@@ -164,14 +164,14 @@ Perda e ganho por freguesia (ha, manchas ≥ 0,5 ha; valores arredondados, a som
 | Freguesia | Perda | Ganho |
 |-----------|-------|-------|
 | Paranhos | 79 | 40 |
-| Campanhã | 52 | 54 |
-| Ramalde | 37 | 65 |
-| Aldoar, Foz do Douro e Nevogilde | 34 | 52 |
-| Lordelo do Ouro e Massarelos | 17 | 49 |
+| Campanhã | 51 | 53 |
+| Ramalde | 36 | 64 |
+| Aldoar, Foz do Douro e Nevogilde | 35 | 51 |
+| Lordelo do Ouro e Massarelos | 16 | 48 |
 | Bonfim | 4 | 19 |
-| Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória | 5 | 12 |
+| Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória | 6 | 11 |
 
-- **Paranhos concentra a perda** (79 ha, 35 % do total) e é a única freguesia onde a perda supera o ganho com margem. Compatível com a conversão de terrenos agrícolas em edificado documentada por Guilherme *et al.* (2022) para o norte da cidade.
+- **Paranhos concentra a perda** (79 ha, 35 % do total) e é a única freguesia onde a perda supera o ganho com margem. Compatível com a conversão de terrenos agrícolas em edificado documentada por Guilherme *et al.* (2022) para o norte da cidade.
 - **Campanhã** perde (50 ha) e ganha (56 ha) quase o mesmo: reconfiguração, não recuo.
 - **Ramalde, Aldoar–Foz–Nevogilde e Lordelo–Massarelos** ganham mais do que perdem (novas arborizações, parques e maturação de copas), o que a série de satélite não separa de crescimento espontâneo de vegetação.
 - **O centro histórico e Bonfim** têm pouca variação, por já estarem impermeabilizados no início da série.
@@ -209,8 +209,8 @@ Nota de coerência: árvores mais solo/relva em 2024–25 somam 1 471 ha (35,5 
 
 ## 6. Conclusões
 
-1. **Entre 1985 e 2024 não há perda líquida de vegetação detectável por satélite no Porto** (houve um mínimo em 2001–05, depois recuperado). A série corrigida vai de 32,6 % (1985–90) a 35,3 % (2023–24), com mínimo de 30,2 % em 2001–05. A queda de 45,0 % para 30,0 % da primeira versão era um artefacto de sensor e de limiar.
-2. **A perda de espaço livre é real, mas localizada**: cerca de 228 ha de perda (concentrados em Paranhos) contra 290 ha de ganho em manchas ≥ 0,5 ha. No Sentinel-2 (2016–2025), o solo permeável encolheu 159 ha (−15,1 %) e o edificado cresceu 175 ha (+7,0 %), enquanto as árvores quase não variaram (−2,7 %).
+1. **Entre 1985 e 2024 não há perda líquida de vegetação detectável por satélite no Porto** (houve um mínimo frágil em 2001–05, depois recuperado). A série corrigida vai de 32,6 % (1985–90) a 35,3 % (2023–24), com mínimo de 30,8 % em 2001–05. A queda de 45,0 % para 30,0 % da primeira versão era um artefacto de sensor e de limiar.
+2. **A perda de espaço livre é real, mas localizada**: cerca de 226 ha de perda (concentrados em Paranhos) contra 286 ha de ganho em manchas ≥ 0,5 ha. No Sentinel-2 (2016–2025), o solo permeável encolheu 159 ha (−15,1 %) e o edificado cresceu 175 ha (+7,0 %), enquanto as árvores quase não variaram (−2,7 %).
 3. **O que satélite a 30 m não mede**: a transformação mais profunda do século XX (agricultura → cidade) ocorreu sobretudo antes de 1985 e não é quantificável com esta série. Guilherme *et al.* (2022) documentam a duplicação do edificado entre 1947 e 2019 (31 % → 62 %); os valores de 1947 e 1979 deste trabalho vêm de outras fontes e métodos e não se somam à série Landsat.
 4. **Para o planeamento** (32,6 % do concelho em risco térmico elevado, Lopes *et al.*, 2025): o que a análise sustenta é proteger o solo permeável e a vegetação herbácea que resta, não alegar uma perda geral de vegetação. As árvores têm sido mais resilientes do que o solo permeável.
 

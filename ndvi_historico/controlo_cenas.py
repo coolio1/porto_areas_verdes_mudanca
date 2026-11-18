@@ -48,7 +48,7 @@ print('pontos construido', PC.size().getInfo(), 'arvores', PA.size().getInfo(), 
 
 SENS = {'L5': ('LANDSAT/LT05/C02/T1_L2', 'SR_B4', 'SR_B3'), 'L7': ('LANDSAT/LE07/C02/T1_L2', 'SR_B4', 'SR_B3'),
         'L8': ('LANDSAT/LC08/C02/T1_L2', 'SR_B5', 'SR_B4'), 'L9': ('LANDSAT/LC09/C02/T1_L2', 'SR_B5', 'SR_B4')}
-ANOS = {'L5': range(1985, 2012), 'L7': range(2013, 2022), 'L8': range(2013, 2025), 'L9': range(2022, 2025)}
+ANOS = {'L5': range(1985, 2012), 'L7': range(1999, 2022), 'L8': range(2013, 2025), 'L9': range(2022, 2025)}
 
 
 def por_cena(sens, ano):
@@ -69,6 +69,13 @@ def por_cena(sens, ano):
     return [x['properties'] for x in c.map(f).getInfo()['features']]
 
 
+# Uso: sem argumentos refaz tudo; `controlo_cenas.py L7:1999:2012` mede so esse sensor e intervalo e ANEXA ao CSV.
+ANEXAR = len(sys.argv) > 1
+if ANEXAR:
+    _s, _a, _b = sys.argv[1].split(':')
+    SENS = {_s: SENS[_s]}
+    ANOS = {_s: range(int(_a), int(_b) + 1)}
+
 linhas = []
 for s in SENS:
     for a in ANOS[s]:
@@ -82,8 +89,9 @@ for s in SENS:
         linhas += r
         print(s, a, len(r), flush=True)
 cols = ['sensor', 'data', 'id', 'cc', 'construido', 'arvores', 'n_constr']
-with open(os.path.join(RAIZ, 'layers_historico', 'controlo_cenas.csv'), 'w', newline='', encoding='utf-8') as f:
+with open(os.path.join(RAIZ, 'layers_historico', 'controlo_cenas.csv'), 'a' if ANEXAR else 'w', newline='', encoding='utf-8') as f:
     w = csv.DictWriter(f, cols, extrasaction='ignore')
-    w.writeheader()
+    if not ANEXAR:
+        w.writeheader()
     w.writerows(linhas)
 print('guardado', len(linhas))

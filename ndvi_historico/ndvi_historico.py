@@ -162,6 +162,13 @@ def get_ndvi_composite(sensor, years):
                 .filter(ee.Filter.lt('CLOUD_COVER', 40))
                 .filter(ee.Filter.inList('system:index', APROVADAS))
                 .map(ndvi_l5))
+            if year >= 1999:   # L7 ETM+ (mesmas bandas e escala do TM) duplica as cenas e reduz o ruido de amostragem
+                col = col.merge(ee.ImageCollection('LANDSAT/LE07/C02/T1_L2')
+                    .filterBounds(porto)
+                    .filterDate(start, end)
+                    .filter(ee.Filter.lt('CLOUD_COVER', 40))
+                    .filter(ee.Filter.inList('system:index', APROVADAS))
+                    .map(ndvi_l7))
         else:  # Landsat 8/9
             col8 = (ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
                 .filterBounds(porto)
