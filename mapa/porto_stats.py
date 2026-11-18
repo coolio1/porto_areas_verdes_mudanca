@@ -15,6 +15,8 @@ porto = ee.Geometry.Polygon([
 
 municipios = ee.FeatureCollection(f'projects/{GEE_PROJECT}/assets/CAOP2025_municipios')
 municipiosPorto = municipios.filterBounds(porto)
+# Concelho do Porto (CAOP 2025): as estatisticas contam so dentro dele (2026-11-18; antes contavam o rectangulo todo)
+portoMuniGeom = municipios.filter(ee.Filter.eq('municipio', 'Porto')).geometry()
 
 BANDS = ['B3', 'B4', 'B8', 'B11', 'SCL']
 
@@ -131,8 +133,8 @@ classes = [
 print(f'\n{"Classe":<20} {"2016-17":>10} {"2024-25":>10} {"Mudanca":>10} {"Mudanca%":>10}')
 print('-' * 62)
 for name, mask_e, mask_l in classes:
-    ha_e = calc_ha(mask_e.selfMask(), porto)
-    ha_l = calc_ha(mask_l.selfMask(), porto)
+    ha_e = calc_ha(mask_e.selfMask(), portoMuniGeom)
+    ha_l = calc_ha(mask_l.selfMask(), portoMuniGeom)
     diff = ha_l - ha_e
     pct = (diff / ha_e * 100) if ha_e > 0 else 0
     print(f'{name:<20} {ha_e:>10.1f} {ha_l:>10.1f} {diff:>+10.1f} {pct:>+9.1f}%')
@@ -146,7 +148,7 @@ transitions = [
 ]
 
 for name, mask in transitions:
-    ha = calc_ha(mask.selfMask(), porto)
+    ha = calc_ha(mask.selfMask(), portoMuniGeom)
     print(f'  {name}: {ha:.1f} ha')
 
 print('\nDone.')

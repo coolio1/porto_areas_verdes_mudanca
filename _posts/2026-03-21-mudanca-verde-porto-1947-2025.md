@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1947–2025)"
-description: "Análise quantitativa da evolução do solo e vegetação no Porto entre 1947 e 2025, com ortofotomapa aéreo, Landsat, Sentinel-2 e NDVI via Google Earth Engine."
+description: "Análise quantitativa da vegetação no Porto entre 1947 e 2025 (ortofotomapa de 1947, Landsat e Sentinel-2), corrigida em Novembro de 2026: sem tendência detectável de perda de vegetação desde 1985."
 date: 2026-03-21
 tema: dados
 image: /assets/images/artigo-mudanca-solo.jpg
@@ -9,6 +9,9 @@ tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação, animação, deteção
 ---
 
 **Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1947–2025): Uma Análise Quantitativa Baseada em Deteção Remota**
+
+> **Actualização de 18 de Novembro de 2026.** A primeira versão deste artigo concluía que o Porto tinha perdido 1 785 ha de vegetação desde 1985 (de 45,0 % para 30,0 % do concelho). Essa queda era em grande parte **artificial**: vinha da normalização entre sensores Landsat e de um limiar fixo de NDVI que contava como vegetação 27 % do que já estava construído em 1979. Com a ponte de sensor corrigida, a vegetação calculada por píxel e as incertezas, a série de satélite **não mostra perda detectável entre 1985 e 2024** (32,5 % → 35,2 %, ±1,4 p.p.). Os números do concelho (e só do concelho) foram recalculados e as secções 4.2, 5 e 6 reescritas. Método e limites: [docs/historico_ponte_landsat7.md](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/docs/historico_ponte_landsat7.md).
+
 
 ---
 
@@ -18,11 +21,12 @@ O espaço verde urbano desempenha um papel ecológico e social insubstituível, 
 
 Lopes *et al.* (2025) demonstraram recentemente que 32,6% do território municipal se encontra em zonas de elevado risco térmico, com a intensidade da ilha de calor urbana (UHI) particularmente pronunciada durante as noites de verão — um fenómeno agravado pela escassez de infraestrutura verde, sobretudo em áreas socioeconomicamente desfavorecidas. A quantificação rigorosa da evolução da cobertura vegetal torna-se, assim, não apenas um exercício académico mas um instrumento de planeamento urbano com implicações diretas na saúde pública e na resiliência climática.
 
-Utilizando fotografia aérea histórica e imagens de satélite processadas em *Google Earth Engine*, este trabalho analisa a evolução quantitativa e espacial da vegetação no município do Porto ao longo de quase 80 anos. Através da conjugação de um ortofotomapa aéreo de 1947 (0,49 m/pixel), dados multitemporais de média resolução (Landsat a 30 m) e de alta resolução (Sentinel-2 a 10 m), avalia-se o ritmo da expansão do edificado à custa dos espaços verdes, o balanço líquido de perdas e ganhos, e a tipologia da vegetação afetada. Os resultados dialogam diretamente com a literatura existente, atualizando e validando os padrões documentados por Guilherme *et al.* (2022) e Madureira *et al.* (2011) através de deteção remota espectral e temporal.
+Utilizando fotografia aérea histórica e imagens de satélite processadas em *Google Earth Engine*, este trabalho analisa a evolução quantitativa e espacial da vegetação no município do Porto ao longo de quase 80 anos. Através da conjugação de um ortofotomapa aéreo de 1947 (0,49 m/pixel), dados multitemporais de média resolução (Landsat a 30 m) e de alta resolução (Sentinel-2 a 10 m), avalia-se o balanço de perdas e ganhos de vegetação e a tipologia da vegetação afetada. Os resultados são confrontados com Guilherme *et al.* (2022) e Madureira *et al.* (2011); onde não coincidem, o artigo di-lo.
+
 
 - **Classificação do ortofoto aéreo de 1947** — Random Forest sobre textura local a 0,49 m
 - **Animação do crescimento urbano 1987–2024** — evolução bienal vectorial em 4K
-- **Análise histórica 1985–2024** — Landsat a 30 m, com NDVI harmonizado entre sensores
+- **Análise histórica 1985–2024** — Landsat a 30 m, com ponte de sensor (Landsat 7), fracção de vegetação por píxel e incerteza
 - **Análise detalhada 2016–2025** — Sentinel-2 a 10 m, com classificação árvores/solo/edificado
 
 ---
@@ -47,9 +51,11 @@ Quanto aos serviços de ecossistema prestados pela infraestrutura verde remanesc
   <source src="{{ site.baseurl }}/animacao/animacao_cairo.mp4" type="video/mp4">
 </video>
 
-A animação mostra a evolução bienal do Porto entre 1987 e 2024, com dados interpolados a partir das cinco épocas de classificação Landsat. Cada cor representa uma era de construção diferente — do castanho escuro (pré-1990) ao magenta (2023–24) — enquanto o verde recua progressivamente.
+
+A animação mostra a evolução bienal do Porto entre 1987 e 2024, interpolada a partir das cinco épocas de classificação Landsat. **Atenção:** foi construída com a série anterior (limiar NDVI ≥ 0,25 e normalização PIF), que exagerava a perda de vegetação. Não corresponde à série corrigida da secção 5.2 e serve só de ilustração da expansão do edificado; está por refazer.
 
 ---
+
 
 ## 4. Metodologia
 
@@ -63,17 +69,25 @@ A classificação em duas classes — **vegetação** e **edificado** — utiliz
 
 Após a classificação inicial, um segundo *pipeline* de limpeza cruzou os resultados com camadas independentes — a vegetação Landsat de 1985, as árvores e solo Sentinel-2 actuais — para remover falsos positivos de edificado em zonas comprovadamente verdes. Um filtro de maioria (15 × 15 pixels) suavizou o ruído residual. A máscara do rio Douro foi excluída (transparente) para não contaminar as estatísticas.
 
+
 ### 4.2. Análise Histórica (1985–2024) com Landsat (30 m)
 
-A comparação direta entre os sensores *Thematic Mapper* (TM, Landsat 5) e *Operational Land Imager* (OLI, Landsat 8/9) requer correção radiométrica, visto que as diferentes respostas espectrais inflacionam sistematicamente o NDVI no Landsat 8. Para mitigar este enviesamento, aplicou-se um duplo nível de harmonização:
+A primeira versão harmonizava os sensores com os coeficientes de Roy *et al.* (2016) e uma regressão em alvos pseudo-invariantes (PIF), e contava como vegetação todo o píxel com NDVI ≥ 0,25. Os dois passos foram abandonados, por três razões medidas:
 
-1. **Transformação linear das bandas Red e NIR** através dos coeficientes de Roy *et al.* (2016), convertendo as reflectâncias OLI para o espaço espectral do TM.
-2. **Normalização por Alvos Pseudo-Invariantes (PIF)**, utilizando 6 pontos de calibração empiricamente estáveis ao longo de 40 anos:
-   - **Água** (Douro e Oceano Atlântico) — NDVI ≈ 0
-   - **Solo nu** — NDVI intermédio
-   - **Manchas florestais maduras** (Serralves e Parque da Cidade) — NDVI elevado
+- **Salto de sensor, não de paisagem.** Landsat 5 e Landsat 7 dão o mesmo resultado (49,8 e 49,5 % em 1999–2011, com o limiar antigo), mas Landsat 8/9 dá +7 a +9 p.p. sobre o 7 na sobreposição 2013–2021. A normalização PIF absorvia esse salto na série e criava uma queda artificial de ~14 p.p. entre 1985–90 e 2023–24.
+- **Limiar demasiado baixo.** A 30 m, NDVI ≥ 0,25 corresponde a só ~23 % de vegetação no píxel; 27 % do construído de 1979 contava como vegetação em 1985–90.
+- **Sem incerteza.** Uma diferença de 1 a 3 p.p. entre épocas não se distingue do ruído sem a medir.
 
-Para cada época, extraiu-se o NDVI nestes pontos de referência e calculou-se uma regressão linear que alinha os valores com a época de referência (1985–90), corrigindo simultaneamente diferenças de sensor, atmosfera e calibração. A vegetação foi classificada com um limiar de **NDVI ≥ 0,25** aplicado à mediana de verão (Junho–Setembro), agregando entre 54 e 70 cenas por época.
+O método actual:
+
+1. **Ponte de sensor.** Landsat 5 em reflectância de superfície, sem correcção. Landsat 8/9 com um desvio aditivo de NDVI (+0,034) medido como média(Landsat 8 − Landsat 7) no concelho em 2013–2021, anos em que ambos existem. Compósitos de mediana de Junho a Setembro.
+2. **Fracção de vegetação por píxel.** Uma curva monótona NDVI → fracção (regressão isotónica) calibrada em 2023–24 contra as classes «árvores» e «solo/relva» do Sentinel-2 (secção 4.3), e aplicada a todas as épocas. O píxel passa a contar pela fracção (não por 0 ou 1) e a fracção de 50 % corresponde a NDVI ≈ 0,34.
+3. **Só o concelho.** Percentagens e hectares contam apenas píxeis dentro do Porto (CAOP 2025, 4 142 ha), sem água permanente.
+4. **Incerteza (1σ).** Erro-padrão da percentagem anual dentro de cada época, somado em quadratura ao erro da ponte (resíduo +0,8 ± 0,4 p.p.).
+5. **Perda e ganho.** Variação da fracção ≥ 0,30 entre o início (média de 1985–90 e 1995–00) e o fim (média de 2016–17 e 2023–24), em manchas contínuas ≥ 0,5 ha.
+
+**Limite principal:** a referência de calibração é uma classificação de satélite (Sentinel-2), não verdade de terreno. A ortofoto DGT de 2025 foi tentada e não serve (só RGB: as copas escuras ficam cinzentas).
+
 
 ### 4.3. Análise Detalhada (2016–2025) com Sentinel-2 (10 m)
 
@@ -103,107 +117,105 @@ Solo/Relva: tudo o resto
 
 O *pipeline* incluiu a análise de **81 cenas Sentinel-2**, validação de separabilidade via *clustering K-means* (k=2 a 10) nas bandas *Red Edge*, e filtragem do edificado conjugando o NDBI (Índice de Diferença Normalizada do Edificado) com a máscara *ESA WorldCover 2021*. A análise temporal revelou que o melhor discriminador é o NDVI de final de Maio/início de Junho — nessa janela, árvores mantêm NDVI > 0,7 enquanto a relva cai para < 0,3. A validação cruzada com o *ESA WorldCover 2021* atingiu uma precisão de **90,4%** na identificação de árvores.
 
+
+A tabela da secção 5.4 conta apenas o concelho do Porto (4 142 ha), não o rectângulo do mapa (≈ 8 900 ha) que a primeira versão usava por engano.
+
 ---
+
+
 
 ## 5. Resultados e Discussão
 
 ### 5.1. O Ponto de Partida: Porto em 1947
 
-A classificação do ortofoto aéreo de 1947 revela um município ainda predominantemente verde: **59,7% de vegetação (2 473 ha)** contra **40,3% de edificado (1 669 ha)**. Este resultado é coerente com a ordem de grandeza de Guilherme *et al.* (2022), que estimaram 31% de elementos construídos artificiais (ABE) em 1947. A diferença (40% vs. 31%) reflecte divergências metodológicas expectáveis: a classificação *Random Forest* sobre textura em escala de cinzentos tende a classificar como edificado certas superfícies minerais (caminhos de terra batida, muros de propriedades agrícolas, afloramentos) que na fotointerpretação manual de Guilherme *et al.* foram integradas nas categorias permeáveis. A classificação por textura não dispõe de informação espectral multibanda, o que limita a capacidade de distinguir solo mineral de superfícies construídas — um viés conservador que sobrestima ligeiramente o edificado.
+A classificação do ortofoto de 1947 (*Random Forest* sobre textura) deu 59,7 % de vegetação (2 473 ha) e 40,3 % de edificado (1 669 ha). Esse resultado bruto sobrestima o edificado, porque caminhos de terra, muros e afloramentos ficam classificados como edificado. A limpeza com camadas independentes (`1947/clean_1947.py`) converte edificado em vegetação onde as outras fontes mostram verde e dá **74,5 % de vegetação e 21,2 % de edificado**, os valores que o mapa mostra. A limpeza só converte num sentido (edificado → vegetação): 74,5 % é um valor máximo, não uma medida.
 
-Independentemente desta diferença metodológica, ambas as estimativas convergem no essencial: **em 1947, a maioria do território municipal era permeável e vegetado**, com uma vasta matriz de quintas, hortas e terrenos agrícolas que se estendiam pelas freguesias periféricas de Paranhos, Ramalde e Campanhã. A cidade densa restringia-se ao centro histórico e aos eixos de expansão oitocentista.
+Guilherme *et al.* (2022) obtiveram 31 % de elementos construídos artificiais (ABE) em 1947 por fotointerpretação, entre os 21 % (limpo) e os 40 % (bruto) daqui. Independentemente do número exacto, ambas as fontes coincidem no essencial: **em 1947 a maioria do concelho era permeável e vegetada**, com uma matriz de quintas, hortas e terrenos agrícolas pelas periferias de Paranhos, Ramalde e Campanhã, e a cidade densa restrita ao centro histórico e aos eixos oitocentistas.
 
-### 5.2. Evolução Histórica e Ritmos de Perda (1947–2024)
+### 5.2. Evolução Histórica (1985–2024)
 
-Conjugando o ortofoto de 1947 com a série Landsat, obtém-se uma trajectória de quase oito décadas. A cobertura vegetal caiu de **59,7%** em 1947 para **45,0%** no final dos anos 1980 e para **30,0%** em 2024. Em termos relativos, o município perdeu **metade da sua matriz verde** entre 1947 e o presente — uma transformação consistente com a duplicação da superfície artificial documentada por Guilherme *et al.* (2022), de 31% em 1947 para 62% em 2019.
+| Época | Fonte | Vegetação (% do concelho) |
+|-------|-------|---------------------------|
+| 1947 | Ortofoto SPLAL, Random Forest + limpeza | 74,5 (não comparável) |
+| 1979 | Cartografia de ocupação do solo de 1979 (árvores, arbustos e herbáceas) | 50,0 (não comparável) |
+| 1985–90 | Landsat 5 | 32,5 ± 1,3 |
+| 1995–00 | Landsat 5 | 32,8 ± 0,6 |
+| 2001–05 | Landsat 5 | 30,0 ± 0,9 |
+| 2016–17 | Landsat 8 (com ponte) | 34,6 ± 1,4 |
+| 2023–24 | Landsat 8/9 (com ponte) | 35,2 ± 0,5 |
 
-A maior parte desta perda ocorreu nas décadas de 1950 a 1980, antes da era dos satélites: entre 1947 e 1985, a cobertura vegetal recuou de 59,7% para 45,0%, uma contracção de **quase 15 pontos percentuais** num período de forte crescimento demográfico e expansão industrial no Porto.
+**1947 e 1979 não se comparam com a série Landsat nem entre si:** usam outras definições (contam herbáceas e campos como vegetação; 1947 tem a limpeza assimétrica da secção 5.1). A série Landsat é uma só fonte, um só método, e é essa que se pode ler como evolução.
 
-| Época | Fonte | % verde do município |
-|-------|-------|---------------------|
-| **1947** | **Ortofoto SPLAL (RF)** | **59,7%** |
-| 1985–90 | Landsat 5 (NDVI) | 45,0% |
-| 1995–00 | Landsat 5 (NDVI) | 35,6% |
-| 2001–05 | Landsat 5 (NDVI) | 30,0% |
-| 2016–17 | Landsat 8 (NDVI) | 31,4% |
-| 2023–24 | Landsat 8 (NDVI) | 30,0% |
+Nessa série:
 
-**Nota metodológica:** O valor de 1947 deriva de classificação por textura em escala de cinzentos (duas classes: vegetação/edificado), enquanto a série Landsat utiliza um limiar espectral (NDVI ≥ 0,25). As duas abordagens não são comparáveis pixel a pixel, mas a convergência com os dados publicados por Guilherme *et al.* (2022) e Madureira *et al.* (2011) — que apontam para ~70–75% de coberto verde no final do séc. XIX e ~38% em 2019 — reforça a robustez da tendência de longo prazo.
+- **De 1985–90 a 2000 não há variação** (32,5 → 32,8 %).
+- **2001–05 é o mínimo** (30,0 %), 2,8 p.p. abaixo de 1995–00, uma diferença que ultrapassa o ruído (σ combinado 1,1 p.p.). A causa não foi investigada: pode ser paisagem ou um ano atípico.
+- **Entre 2001–05 e 2016–17 há recuperação** (+4,6 p.p.), que se mantém em 2023–24.
+- **1985–90 → 2023–24: +2,7 p.p. (≈ +110 ha), com σ combinado de 1,4 p.p.**, ou seja, um aumento ligeiro, no limite do que a série distingue. **Não há tendência detectável de perda de vegetação nos satélites.**
 
-A série Landsat permite quantificar as dinâmicas com maior detalhe. A análise longitudinal revela que a cidade passou de **5 352 ha** de vegetação (NDVI ≥ 0,25) no final da década de 1980 para **3 567 ha** em 2024 — uma **perda líquida de 1 785 hectares** neste período. O balanço bruto entre 1987 e 2024 quantifica-se em **2 266 hectares de vegetação destruída** contra **481 hectares de vegetação ganha**. A dinâmica desta perda balizou-se em três fases cronológicas distintas:
+O resultado é coerente com o tema «Hoje» do mapa (35,6 % de vegetação em 2024–25, que serviu de referência à calibração) e com Guilherme *et al.* (2022): ~38 % do concelho sem elementos construídos em 2019 (100 − 62 %). **Não reproduz**, porém, a expansão urbana de 276 ha em 1990–2000 e 169 ha em 2000–2006 de Quental (2010): essa discrepância fica por esclarecer (as definições diferem: expansão do edificado e não fracção de vegetação, e 30 m não vê o preenchimento de logradouros).
 
-#### Fase I — 1987–2003: Expansão Acelerada
-
-Perda de 1 780 hectares a uma taxa de **111 ha/ano**. Este período reflete o pico da expansão urbana sobre as antigas periferias agrícolas do concelho — Paranhos, Ramalde e Campanhã. Estes dados corroboram as estatísticas de Quental (2010), que identificou a década de 1990 como o período de maior e mais intenso crescimento do edificado no Porto (276 ha de nova expansão urbana).
-
-#### Fase II — 2003–2016: Estabilização e Recuperação
-
-Observou-se uma ténue recuperação (+160 ha, +12 ha/ano). Este abrandamento espelha a confluência de múltiplos fatores: a exaustão dos solos limpos disponíveis para urbanização; a crise económica do setor imobiliário (2008–2013); a maturação de novas infraestruturas verdes públicas construídas no fim dos anos 90; e a colonização espontânea de terrenos agrícolas abandonados por vegetação arbustiva — fenómeno também documentado na zona oriental da cidade por Guilherme *et al.* (2022). Relaciona-se igualmente com os ritmos decrescentes de expansão bruta medidos por Quental para o início dos anos 2000 (redução de 276 ha para 169 ha de nova urbanização).
-
-#### Fase III — 2017–2024: Nova Pressão Urbana e Densificação
-
-A cidade regressa a uma trajetória de **perda acelerada (−165 ha em 8 anos)**, refletindo a retoma do mercado imobiliário e o *boom* turístico pós-2015. O padrão de crescimento alterou-se qualitativamente: já não se trata de expansão centrífuga sobre periferias rurais, mas de **densificação e preenchimento de vazios intraurbanos** — o que explica a dispersão espacial das novas construções por todo o tecido urbano existente.
-
-#### Evolução bienal interpolada
-
-| Ano | Vegetação (ha) | % do município | Variação vs 1987 |
-|-----|---------------|----------------|------------------|
-| 1987 | 5 352 | **45,0%** | — |
-| 1991 | 4 907 | 41,3% | −445 ha |
-| 1997 | 4 240 | 35,6% | −1 112 ha |
-| 2003 | 3 572 | **30,0%** | −1 780 ha |
-| 2009 | 3 646 | 30,7% | −1 706 ha |
-| 2016 | 3 732 | 31,4% | −1 620 ha |
-| 2024 | 3 567 | **30,0%** | **−1 785 ha** |
+Quanto a perda e ganho entre o início (1985–2000) e o fim (2016–2024) da série, em manchas ≥ 0,5 ha dentro do concelho: **cerca de 223 ha de perda e 296 ha de ganho** (saldo +73 ha, dentro da incerteza de ±58 ha). A perda é uma realidade local, mas compensada por ganhos noutros sítios.
 
 ### 5.3. Padrões Espaciais de Transformação
 
-A distribuição geográfica da perda de vegetação confirma a evolução assimétrica documentada na literatura:
+Perda e ganho por freguesia (ha, manchas ≥ 0,5 ha; Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória contam como uma união):
 
-- **Zona Ocidental (Foz, Nevogilde, Aldoar):** demonstrou ser a mais resiliente, mantendo elevados níveis de cobertura vegetal não apenas graças ao Parque da Cidade (80 ha), mas ao tecido residencial de baixa densidade com jardins privados significativos. Mesmo em 2024, esta zona permanece maioritariamente verde.
+| Freguesia | Perda | Ganho |
+|-----------|-------|-------|
+| Paranhos | 78 | 41 |
+| Campanhã | 50 | 56 |
+| Ramalde | 36 | 65 |
+| Aldoar, Foz do Douro e Nevogilde | 34 | 52 |
+| Lordelo do Ouro e Massarelos | 16 | 50 |
+| Bonfim | 4 | 20 |
+| Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória | 5 | 13 |
 
-- **Centro Histórico (Sé, Miragaia, Cedofeita):** sofreu alterações marginais por já se encontrar profundamente impermeabilizado no arranque da série temporal (década de 1980). Não havia verde para perder.
+- **Paranhos concentra a perda** (78 ha, 35 % do total) e é a única freguesia onde a perda supera o ganho com margem. Compatível com a conversão de terrenos agrícolas em edificado documentada por Guilherme *et al.* (2022) para o norte da cidade.
+- **Campanhã** perde (50 ha) e ganha (56 ha) quase o mesmo: reconfiguração, não recuo.
+- **Ramalde, Aldoar–Foz–Nevogilde e Lordelo–Massarelos** ganham mais do que perdem (novas arborizações, parques e maturação de copas), o que a série de satélite não separa de crescimento espontâneo de vegetação.
+- **O centro histórico e Bonfim** têm pouca variação, por já estarem impermeabilizados no início da série.
 
-- **Periferias Norte e Este (Paranhos, Ramalde, Campanhã):** sofreram a maior transformação. As grandes quintas e áreas agrícolas visíveis em 1987 foram inteiramente reconfiguradas ao longo dos eixos viários, dando lugar a um *continuum* edificado. Esta distribuição valida a tese de que a **acessibilidade viária foi o vetor primordial do crescimento urbano**, um padrão consistente com a dinâmica observada por Guilherme *et al.* (2022) para a zona norte da cidade.
+A afirmação anterior de que a «acessibilidade viária foi o vector primordial do crescimento» **não foi testada** nesta análise e foi retirada.
 
 ### 5.4. Análise Granular e Tipológica (2016–2025)
 
-A dissecação da última década com recurso ao Sentinel-2 (10 m) introduz uma camada analítica crítica, permitindo distinguir entre cobertura arbórea e herbácea.
+O Sentinel-2 (10 m) separa cobertura arbórea de herbácea. Resultados dentro do concelho:
 
-| Classe | 2016–17 (ha) | 2024–25 (ha) | Mudança | % |
+| Classe | 2016–17 (ha) | 2024–25 (ha) | Mudança | % |
 |--------|-------------|-------------|---------|---|
-| **Árvores** | 1 254 | 1 229 | **−25 ha** | −2,0% |
-| Solo/Relva | 2 298 | 2 005 | −293 ha | −12,7% |
-| Edificado | 5 395 | 5 714 | +319 ha | +5,9% |
+| **Árvores** | 587 | 571 | −16 ha | −2,7 % |
+| Solo/Relva | 1 059 | 900 | −159 ha | −15,1 % |
+| Edificado | 2 496 | 2 671 | +175 ha | +7,0 % |
 
-Entre 2016 e 2025, a cidade perdeu 25 hectares de cobertura arbórea (−2,0%) mas **293 hectares de cobertura herbácea e solos permeáveis** (−12,7%). Concomitantemente, o edificado cresceu 319 hectares (+5,9%).
+Em oito anos o concelho perdeu 16 ha de cobertura arbórea (−2,7 %) e 159 ha de solo permeável e relva (−15,1 %), enquanto o edificado cresceu 175 ha (+7,0 %). Dentro das árvores, as «puras» recuam (398 → 335 ha) e o «verde urbano» (árvores mistas, ruas arborizadas) sobe (189 → 237 ha): a divisão entre as duas é sensível às regras de classificação e não deve ser lida isoladamente.
 
 #### Transições de uso do solo
 
 | Transição | Área (ha) |
 |-----------|-----------|
-| Árvores → Edificado | 49 |
-| Árvores → Solo | 126 |
-| Solo → Edificado | **221** |
-| Solo → Árvores | 127 |
+| Árvores → Edificado | 29 |
+| Árvores → Solo | 61 |
+| Solo → Edificado | **124** |
+| Solo → Árvores | 59 |
 
-Da análise de transições, sobressai que a **força motriz do crescimento urbano atual é a conversão de solo/relva em edificado** (221 ha), enquanto a conversão direta de áreas florestadas em edificado se limitou a 49 ha. Estes resultados empíricos validam a tese central de Guilherme *et al.* (2022): perante a urbanização, a cobertura arbórea (TRS) tende a ser preservada — protegida por dinâmicas de planeamento, parques públicos e propriedades privadas — enquanto as áreas herbáceas e agrícolas (HER) são sumariamente suprimidas pelo avanço da impermeabilização.
+A **conversão de solo/relva em edificado** (124 ha) é a transição dominante; a de árvores em edificado limita-se a 29 ha. Isto vai no sentido da tese de Guilherme *et al.* (2022): a cobertura arbórea é mais resiliente do que a herbácea e agrícola. 59 ha de solo passaram a árvores, o que pode reflectir arborização (como o programa *FUN Porto*) e crescimento natural das copas. Cada ano é uma classificação independente: diferenças de poucas dezenas de hectares podem ser ruído de classificação.
 
-Nota positiva: o algoritmo detetou **127 hectares de solo/relva que transitaram para a classe arbórea**, indicando esforços recentes de arborização — potencialmente associados ao programa *FUN Porto* (Florestas Urbanas Nativas), que distribuiu cerca de 10 000 árvores a residentes desde 2016 — e o crescimento natural do dossel das copas. Este ganho compensa parcialmente as perdas ecológicas estruturais, embora a substituição funcional de solo permeável por copa arbórea não seja equivalente em termos de serviços hidrológicos.
+Nota de coerência: árvores mais solo/relva em 2024–25 somam 1 471 ha (35,5 % do concelho), igual à série Landsat de 2023–24 (35,2 %) pela calibração.
 
 ---
 
 ## 6. Conclusões
 
-A integração de fotografia aérea histórica (1947) com dados de satélite de média e alta resolução espacial permite afirmar, com elevada precisão quantitativa, que o Porto perdeu **metade da sua matriz verde** ao longo de quase 80 anos — de 59,7% de cobertura vegetal em 1947 para 30,0% em 2024. Só no período coberto pela série Landsat (1985–2024), a perda líquida foi de **1 785 hectares**. O trabalho demonstra que esta perda foi de natureza fortemente tipológica: vitimou sobretudo os solos outrora agrícolas e prados abertos (cobertura herbácea), enquanto a estrutura arbórea manteve uma **resiliência notável** perante a pressão urbanística — um padrão consistente ao longo de múltiplas escalas temporais e espaciais, e convergente com as conclusões independentes de Guilherme *et al.* (2022) baseadas em fotointerpretação.
+1. **Desde 1985 não há perda de vegetação detectável por satélite no Porto.** A série corrigida vai de 32,5 % (1985–90) a 35,2 % (2023–24), com mínimo de 30,0 % em 2001–05. A queda de 45,0 % para 30,0 % da primeira versão era um artefacto de sensor e de limiar.
+2. **A perda de espaço livre é real, mas localizada**: cerca de 223 ha de perda (concentrados em Paranhos) contra 296 ha de ganho em manchas ≥ 0,5 ha. No Sentinel-2 (2016–2025), o solo permeável encolheu 159 ha (−15,1 %) e o edificado cresceu 175 ha (+7,0 %), enquanto as árvores quase não variaram (−2,7 %).
+3. **O que satélite a 30 m não mede**: a transformação mais profunda do século XX (agricultura → cidade) ocorreu sobretudo antes de 1985 e não é quantificável com esta série. Entre 1947 e 1979, Guilherme *et al.* (2022) documentam a duplicação do edificado (31 % → 62 % em 2019); os valores de 1947 e 1979 deste trabalho vêm de outras fontes e métodos e não se somam à série Landsat.
+4. **Para o planeamento** (32,6 % do concelho em risco térmico elevado, Lopes *et al.*, 2025): o que a análise sustenta é proteger o solo permeável e a vegetação herbácea que resta, não alegar uma perda geral de vegetação. As árvores têm sido mais resilientes do que o solo permeável.
 
-A classificação do ortofoto de 1947 revela ainda que a maior contracção percentual ocorreu nas décadas pré-satélite (1947–1985), período de forte crescimento demográfico e expansão industrial que reduziu a cobertura verde de ~60% para ~45%. Este dado sublinha a importância de fontes históricas pré-Landsat para uma compreensão completa da trajectória urbana.
-
-Ao melhorar a metodologia de calibração espectral multitemporal (PIF), a filtragem fenológica sazonal e a extensão da série temporal a 1947, esta análise oferece um diagnóstico reprodutível e atualizado. A ausência de estudos publicados que combinem a classificação quantitativa de ortofotomapas aéreos históricos com a série temporal NDVI Landsat para o Porto confere originalidade a este contributo.
-
-Os resultados acarretam implicações diretas para o planeamento urbano. Dado que 32,6% do município se encontra em zonas de elevado risco térmico (Lopes *et al.*, 2025), e que a perda de vegetação se concentra nos solos permeáveis herbáceos — fundamentais para a regulação hidrológica e a mitigação do escoamento superficial —, torna-se imperativo que as futuras políticas urbanísticas foquem não apenas na proteção do estrato arbóreo, mas também na **fixação e permeabilidade dos últimos redutos de solo e cobertura herbácea**. A resiliência da cobertura arbórea, embora encorajadora, não deve obscurecer o colapso silencioso dos solos permeáveis — o substrato ecológico que sustenta a capacidade de infiltração, a recarga de aquíferos e a regulação microclimática à escala do bairro.
+**Limites:** a calibração usa uma classificação de satélite, não verdade de terreno; o desvio de sensor é único para todo o concelho (resíduo +0,8 p.p.); a série Landsat a 30 m não distingue relva regada de árvores; e a discrepância com Quental (2010) não está resolvida. Para uma série longa de uma só fonte, faltam as camadas de Guilherme *et al.* (1947/1979/2019), a pedir à autora.
 
 ---
+
 
 ## 7. Referências
 
@@ -216,13 +228,13 @@ Os resultados acarretam implicações diretas para o planeamento urbano. Dado qu
 - Madureira, H., Andresen, T. & Monteiro, A. (2011). Green structure and planning evolution in Porto. *Urban Forestry & Urban Greening*, 10(2), 141–149. [doi:10.1016/j.ufug.2010.12.004](https://doi.org/10.1016/j.ufug.2010.12.004)
 - Madureira, H. & Andresen, T. (2014). Planning for multifunctional urban green infrastructures: Promises and challenges. *Urban Design International*, 19, 38–49. [doi:10.1057/udi.2013.11](https://doi.org/10.1057/udi.2013.11)
 - Quental, N. (2010). *Modeling a sustainable urban structure: An application to the Metropolitan Area of Porto*. Tese de Doutoramento em Engenharia do Território, Instituto Superior Técnico, Universidade Técnica de Lisboa. [PDF](https://coolio1.github.io/pdfs/2010-08-02%20-%20Tese%20de%20doutoramento.pdf)
-- Roy, D.P. *et al.* (2016). Characterization of Landsat-7 to Landsat-8 reflective wavelength and normalized difference vegetation index continuity. *Remote Sensing of Environment*, 185, 57–70. [doi:10.1016/j.rse.2015.12.024](https://doi.org/10.1016/j.rse.2015.12.024)
+
 
 ---
 
 ## Mapas interativos
 
-- **[Mapa histórico (1985–2024)]({{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=historico)** — alternância entre épocas, máscaras de vegetação, zonas de perda e ganho
+- **[Mapa histórico (1985–2024)]({{ site.baseurl }}/mapa_unico/mapa_unico.html#tema=historico)** — alternância entre épocas, vegetação por píxel, zonas de perda e ganho
 - **[Mapa detalhado (2016–2025)]({{ site.baseurl }}/mapa.html)** — classificação árvores/solo/edificado a 10 m
 
 ---
@@ -233,8 +245,8 @@ Todo o *pipeline* está disponível no repositório:
 
 - [`1947/orto_1947.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/1947/orto_1947.py) — classificação do ortofoto 1947 (tiles WMS + Random Forest)
 - [`1947/clean_1947.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/1947/clean_1947.py) — limpeza/pós-processamento com máscaras Sentinel e Landsat
-- [`ndvi_historico.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/ndvi_historico.py) — análise histórica 1985–2024 (Landsat + normalização PIF)
-- [`porto_publish.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/porto_publish.py) — pipeline Sentinel-2 (classificação + mapa)
+- [`ndvi_historico/ndvi_historico.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/ndvi_historico/ndvi_historico.py) — análise histórica 1985–2024 (ponte Landsat 7, fracção de vegetação, incerteza)
+- [`mapa/porto_publish.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/mapa/porto_publish.py) — pipeline Sentinel-2 (classificação + mapa)
 - [`test_area.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/test_area.py) — calibração na área de teste
-- [`porto_stats.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/porto_stats.py) — cálculo de estatísticas
+- [`mapa/porto_stats.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/mapa/porto_stats.py) — cálculo de estatísticas
 - [`animacao/animacao_cairo.py`](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/animacao/animacao_cairo.py) — animação vectorial Cairo com interpolação bienal
