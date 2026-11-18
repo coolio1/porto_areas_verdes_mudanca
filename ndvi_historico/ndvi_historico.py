@@ -182,113 +182,62 @@ def get_ndvi_composite(sensor, years):
     return median, count
 
 # ============================================================
-# Alvos pseudo-invariantes (PIF) para normalizacao inter-sensor
-# Buffer de 60m (~2 pixeis Landsat) a volta de cada ponto
+# Compositos por epoca + ponte Landsat 7 (desvio de sensor)
 # ============================================================
-PIF_BUFFER = 60  # metros
+# A normalizacao PIF (regressao em 3 tipos de alvo) foi retirada em 2026-11-18: criava uma queda
+# artificial de ~14 p.p. na vegetacao 1985-90 -> 2023-24 que as medicoes ano a ano nao confirmam.
+# Agora: Landsat 5 fica em bruto (L5 ~ L7: 49,8 vs 49,5 % em 1999-2011) e o OLI (L8/9) recebe um
+# desvio aditivo de NDVI, medido na sobreposicao L7/L8 (2013-2021) sobre o concelho.
+# Evidencia: ndvi_historico/diagnostico_anos.py (% de vegetacao ano a ano).
+PONTE_ANOS = list(range(2013, 2022))   # L7 e L8 em simultaneo (L9 so desde 2021)
 
-PIF_POINTS = {
-    'floresta': [
-        ee.Geometry.Point([-8.657919, 41.157911]).buffer(PIF_BUFFER),  # Serralves
-        ee.Geometry.Point([-8.677261, 41.168894]).buffer(PIF_BUFFER),  # Parque Cidade
-    ],
-    'solo_relva': [
-        ee.Geometry.Point([-8.658664, 41.163311]).buffer(PIF_BUFFER),
-        ee.Geometry.Point([-8.588781, 41.144906]).buffer(PIF_BUFFER),
-    ],
-    'agua': [
-        ee.Geometry.Point([-8.586953, 41.140633]).buffer(PIF_BUFFER),  # Douro/Foz
-        ee.Geometry.Point([-8.683278, 41.149100]).buffer(PIF_BUFFER),  # Mar
-    ],
-}
+def ndvi_l7(img):
+    """NDVI para Landsat 7 ETM+ (mesmas bandas e escala do TM)."""
+    return ndvi_l5(img)
 
-# Juntar todos os pontos PIF numa FeatureCollection para extraccao
-pif_features = []
-for pif_type, geoms in PIF_POINTS.items():
-    for i, geom in enumerate(geoms):
-        pif_features.append(ee.Feature(geom, {'type': pif_type, 'idx': i}))
-pif_fc = ee.FeatureCollection(pif_features)
+def composito_l7(years):
+    cols = None
+    for year in years:
+        c = (ee.ImageCollection('LANDSAT/LE07/C02/T1_L2')
+             .filterBounds(porto).filterDate(f'{year}-06-01', f'{year}-09-30')
+             .filter(ee.Filter.lt('CLOUD_COVER', 40)).map(ndvi_l7))
+        cols = c if cols is None else cols.merge(c)
+    return cols.median().clip(porto)
 
-# ============================================================
-# Calcular compositos (antes da normalizacao)
-# ============================================================
-print('A calcular compositos NDVI por epoca...')
-composites_raw = {}
+def composito_l8_so(years):
+    cols = None
+    for year in years:
+        c = (ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
+             .filterBounds(porto).filterDate(f'{year}-06-01', f'{year}-09-30')
+             .filter(ee.Filter.lt('CLOUD_COVER', 40)).map(ndvi_l8))
+        cols = c if cols is None else cols.merge(c)
+    return cols.median().clip(porto)
+
+def media_concelho(img):
+    return img.reduceRegion(ee.Reducer.mean(), portoMuniGeom, 30, maxPixels=1e9).get('ndvi').getInfo()
+
+print('A medir o desvio de sensor L8-L7 na sobreposicao', PONTE_ANOS[0], '-', PONTE_ANOS[-1], '...')
+_l7 = composito_l7(PONTE_ANOS)
+_l8 = composito_l8_so(PONTE_ANOS)
+OFFSET_OLI = media_concelho(_l8.subtract(_l7).rename('ndvi'))
+print(f'  desvio NDVI (L8 - L7, media do concelho) = {OFFSET_OLI:+.4f}')
+_pct = lambda im: 100 * im.gte(0.25).rename('ndvi').reduceRegion(
+    ee.Reducer.mean(), portoMuniGeom, 30, maxPixels=1e9).get('ndvi').getInfo()
+print(f'  % vegetacao na sobreposicao: L7={_pct(_l7):.1f}  L8 bruto={_pct(_l8):.1f}  '
+      f'L8 corrigido={_pct(_l8.subtract(OFFSET_OLI)):.1f}')
+
+print('\nA calcular compositos NDVI por epoca...')
+composites = {}
 for name, sensor, years in EPOCHS:
     ndvi, count = get_ndvi_composite(sensor, years)
     n = count.getInfo()
-    print(f'  {name} ({sensor}): {n} cenas')
-    composites_raw[name] = ndvi
+    if sensor == 'Landsat 8':
+        ndvi = ndvi.subtract(OFFSET_OLI).clamp(-1, 1)
+        print(f'  {name} ({sensor}): {n} cenas, desvio {-OFFSET_OLI:+.4f} aplicado')
+    else:
+        print(f'  {name} ({sensor}): {n} cenas, sem ajuste')
+    composites[name] = ndvi
 
-# ============================================================
-# Normalizacao PIF: ajustar todas as epocas ao nivel da referencia
-# Referencia = primeira epoca (1985-90, Landsat 5)
-# ============================================================
-print('\nA extrair NDVI nos pontos PIF...')
-REF_EPOCH = '1985-90'  # Referencia fixa: Landsat 5 SR (nao MSS DN)
-
-def extract_pif_values(composite, epoch_name):
-    """Extrai NDVI medio em cada ponto PIF."""
-    values = {}
-    for pif_type, geoms in PIF_POINTS.items():
-        type_vals = []
-        for geom in geoms:
-            val = composite.reduceRegion(
-                reducer=ee.Reducer.mean(),
-                geometry=geom,
-                scale=30,
-            ).getInfo().get('ndvi', None)
-            if val is not None:
-                type_vals.append(val)
-        values[pif_type] = sum(type_vals) / len(type_vals) if type_vals else None
-    return values
-
-# Extrair valores PIF para todas as epocas
-pif_values = {}
-for name, sensor, years in EPOCHS:
-    pif_values[name] = extract_pif_values(composites_raw[name], name)
-    print(f'  {name}: agua={pif_values[name]["agua"]:.4f}  '
-          f'solo={pif_values[name]["solo_relva"]:.4f}  '
-          f'floresta={pif_values[name]["floresta"]:.4f}')
-
-# Calcular normalizacao linear por minimos quadrados
-# Para cada epoca: NDVI_norm = slope * NDVI_raw + intercept
-# onde slope e intercept minimizam o erro vs os valores de referencia
-print('\nA calcular coeficientes de normalizacao...')
-ref_vals = pif_values[REF_EPOCH]
-ref_points = [ref_vals['agua'], ref_vals['solo_relva'], ref_vals['floresta']]
-
-composites = {}
-for name, sensor, years in EPOCHS:
-    if name == REF_EPOCH:
-        composites[name] = composites_raw[name]
-        print(f'  {name}: referencia (sem ajuste)')
-        continue
-
-    epoch_vals = pif_values[name]
-    raw_points = [epoch_vals['agua'], epoch_vals['solo_relva'], epoch_vals['floresta']]
-
-    # Regressao linear: ref = slope * raw + intercept
-    n = len(raw_points)
-    sum_x = sum(raw_points)
-    sum_y = sum(ref_points)
-    sum_xy = sum(x * y for x, y in zip(raw_points, ref_points))
-    sum_xx = sum(x * x for x in raw_points)
-    slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x)
-    intercept = (sum_y - slope * sum_x) / n
-
-    print(f'  {name}: slope={slope:.4f}  intercept={intercept:+.4f}')
-
-    # Aplicar normalizacao
-    composites[name] = composites_raw[name].multiply(slope).add(intercept).clamp(-1, 1)
-
-# Verificar valores normalizados
-print('\nA verificar normalizacao...')
-for name, sensor, years in EPOCHS:
-    vals = extract_pif_values(composites[name], name)
-    print(f'  {name}: agua={vals["agua"]:.4f}  '
-          f'solo={vals["solo_relva"]:.4f}  '
-          f'floresta={vals["floresta"]:.4f}')
 
 # ============================================================
 # Download das camadas

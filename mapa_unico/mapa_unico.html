@@ -1262,7 +1262,7 @@ MU.registarTema({
 (function () {
   /* id, rótulo, fonte/resolução, fonte diferente das restantes (ressalva), cor da época (maquete V2b) */
   var L30 = 'Landsat 5 TM, 30 m; NDVI &ge; 0,25';
-  var L8 = 'Landsat 8/9 OLI (harmonizado para TM, Roy et al. 2016), 30 m; NDVI &ge; 0,25';
+  var L8 = 'Landsat 8/9 OLI (harmonizado para TM, Roy et al. 2016, e ajustado ao TM por um desvio de NDVI de 0,04 medido em Landsat 7), 30 m; NDVI &ge; 0,25';
   var EPOCAS = [
     { id: '2023-24', nome: '2023-2024', curto: '2023–24', cor: '#2E8B4E', fonte: L8 },
     { id: '2016-17', nome: '2016-2017', curto: '2016–17', cor: '#7A55B8', fonte: L8 },
@@ -1473,6 +1473,8 @@ MU.registarTema({
       /* ---- estado → mapa e painel ---- */
       var leg = function (cor, txt) { return '<div><i style="background:' + cor + '"></i><span>' + txt + '</span></div>'; };
       var difPP = function (a, b) { var d = num[a].veg - num[b].veg; return MU.n(Math.abs(d), 1); };
+      /* saldo com sinal (b − a): «+1,4» = mais vegetação em b; «−2,0» = menos */
+      var saldoPP = function (a, b) { var d = num[b].veg - num[a].veg; return (d > 0 ? '+' : d < 0 ? '−' : '') + MU.n(Math.abs(d), 1); };
       function mostrar() {
         visiveis.forEach(function (l) { map.removeLayer(l); });
         visiveis = [];
@@ -1518,7 +1520,7 @@ MU.registarTema({
           q('#h-nums').innerHTML = MU.htmlNums([
             { v: MU.n(S.perda), u: 'ha', r: 'de vegeta&ccedil;&atilde;o perdida, 1985-90 a 2023-24' },
             { v: MU.n(S.ganho), u: 'ha', r: 'ganhos' },
-            { v: difPP('1985-90', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos' }
+            { v: saldoPP('1985-90', '2023-24'), u: 'p.p.', r: 'de saldo de vegeta&ccedil;&atilde;o' }
           ]);
         } else {
           q('#h-fonte').innerHTML = '<b>' + e.nome + '</b>: ' + e.fonte + (e.dif ? '<br><i>' + RESSALVA + '</i>' : '');
