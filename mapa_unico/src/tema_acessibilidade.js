@@ -17,6 +17,7 @@
   MU.registarTema({
     id: 'acessibilidade',
     rotulo: 'Acessibilidade e propostas',
+  artigo: { url: 'https://portoverde.pt/posts/acessibilidade-verde-publico-porto/' },
     fundo: 'carta',
     dados: 'acessibilidade',
     ctx: { limites: { on: true }, densidade: { on: false } },
@@ -43,8 +44,7 @@
       var esc = MU.escala([S.parques_ha, S.pago, S.privado]);
 
       painel.innerHTML =
-        '<p class="desc">Quem vive a menos de 300 m de um parque com pelo menos 0,4 ha, e quanto verde p&uacute;blico cabe a cada habitante ' +
-        'num raio de 500 m. &laquo;Com propostas&raquo; junta 46 espa&ccedil;os candidatos a convers&atilde;o.</p>' +
+        '<p class="desc">Popula&ccedil;&atilde;o a &le; 300&nbsp;m de um parque e verde p&uacute;blico por habitante. As propostas juntam 46 espa&ccedil;os candidatos.</p>' +
         '<div class="nums" id="ac-nums"></div>' +
         '<div class="seg" id="ac-vista" role="group" aria-label="Vista">' +
           '<button type="button" data-v="actual">Situa&ccedil;&atilde;o actual</button>' +
@@ -184,9 +184,9 @@
         b.classList.toggle('active', on); b.setAttribute('aria-pressed', on);
       });
       document.getElementById('ac-nums').innerHTML = MU.htmlNums([
-        { v: MU.n(S.m2hab, 1), u: 'm&sup2;', r: 'de parque por habitante: ' + MU.n(S.parques_ha) + ' ha para ' + MU.n(S.pop) + ' habitantes (GHS-POP)' },
-        { v: MU.n(N.prox), u: '%', r: 'da popula&ccedil;&atilde;o a &le; 300 m de um parque com &ge; 0,4 ha' + (pr ? ', com as propostas' : '') },
-        { v: MU.n(N.acc, 1), u: '%', r: 'da popula&ccedil;&atilde;o com &ge; 9 m&sup2; de verde p&uacute;blico a 500 m' + (pr ? ', com as propostas' : '') }
+        { v: MU.n(S.m2hab, 1), u: 'm&sup2;', r: 'de parque por habitante' },
+        { v: MU.n(N.prox), u: '%', r: 'a &le; 300 m de um parque (&ge; 0,4 ha)' + (pr ? ', com propostas' : '') },
+        { v: MU.n(N.acc, 1), u: '%', r: 'com &ge; 9 m&sup2; de verde a 500 m' + (pr ? ', com propostas' : '') }
       ]);
       document.getElementById('ac-intro').style.display = pr ? 'block' : 'none';
       this._lCand.row.style.display = pr ? '' : 'none';

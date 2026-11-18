@@ -21,17 +21,15 @@ MU.registarTema({
     ];
     var esc = MU.escala(camadas.map(function (c) { return c.ha; }));
     painel.innerHTML =
-      '<p class="desc">A regra <b>3-30-300</b> mede o acesso ao verde: <b>3</b> &aacute;rvores &agrave; vista da janela, <b>30&nbsp;%</b> de copa no bairro ' +
-      '(500&nbsp;m &agrave; volta) e um parque a <b>300&nbsp;m</b> a p&eacute;. Proposta por Cecil Konijnendijk; aqui, edif&iacute;cio a edif&iacute;cio.</p>' +
+      '<p class="desc"><b>3</b> &aacute;rvores &agrave; vista, <b>30&nbsp;%</b> de copa a 500&nbsp;m, um parque a <b>300&nbsp;m</b> a p&eacute;: edif&iacute;cio a edif&iacute;cio.</p>' +
       '<div class="nums">' + MU.htmlNums([
-        { v: MU.n(N.todos.residentes_pct, 1), u: '%', r: 'dos residentes vivem num edif&iacute;cio que cumpre os tr&ecirc;s indicadores (' + p(N.todos.edificios_pct) + ' dos edif&iacute;cios)' },
-        { v: MU.n(N.c30.residentes_pct, 1), u: '%', r: 'cumprem o &laquo;30&raquo;, o mais dif&iacute;cil' },
+        { v: MU.n(N.todos.residentes_pct, 1), u: '%', r: 'dos residentes cumprem os tr&ecirc;s' },
+        { v: MU.n(N.c30.residentes_pct, 1), u: '%', r: 'cumprem o &laquo;30&raquo;' },
         { v: MU.n(N.nenhum.residentes_pct, 1), u: '%', r: 'n&atilde;o cumprem nenhum' }
       ]) + '</div>' +
-      '<p class="tema-sub">Residentes que cumprem cada um: &laquo;3&raquo; ' + p(N.c3.residentes_pct) + ' &middot; &laquo;30&raquo; ' + p(N.c30.residentes_pct) +
-      ' &middot; &laquo;300&raquo; ' + p(N.c300.residentes_pct) + '</p>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha de edificado') + '<div class="camadas"></div>' +
       '<details class="nota-lim"><summary>Como se mediu e o que n&atilde;o garante</summary>' +
+      '<p class="tema-sub">Regra de Cecil Konijnendijk. Residentes que cumprem cada indicador: &laquo;3&raquo; ' + p(N.c3.residentes_pct) + ', &laquo;30&raquo; ' + p(N.c30.residentes_pct) + ', &laquo;300&raquo; ' + p(N.c300.residentes_pct) + '; os tr&ecirc;s: ' + p(N.todos.edificios_pct) + ' dos edif&iacute;cios.</p>' +
       '<p class="tema-sub">&laquo;3&raquo;: &aacute;rvores com copa &ge; 25&nbsp;m&sup2; e &ge; 3&nbsp;m (LiDAR) mais o invent&aacute;rio da C&acirc;mara, vistas a &le; 30&nbsp;m de janelas simuladas a cada 5&nbsp;m, em linha de vista 2D (ignora a altura dos obst&aacute;culos). O &laquo;3&raquo; n&atilde;o tem base cient&iacute;fica pr&oacute;pria.</p>' +
       '<p class="tema-sub">&laquo;30&raquo;: o resultado depende muito do limiar: a 25&nbsp;% passa de ' + MU.n(N.c30.edificios_pct, 1) + '&nbsp;% para ' + MU.n(N.sens.c30_limiar25_pct, 1) + '&nbsp;% dos edif&iacute;cios. O LiDAR &eacute; de inverno (2024&ndash;26): copas de folha caduca podem estar subestimadas. Duas folhas com alturas n&atilde;o fi&aacute;veis ficam de fora.</p>' +
       '<p class="tema-sub">&laquo;300&raquo;: a p&eacute; pela rede do OpenStreetMap, parques &ge; 0,5&nbsp;ha (com &ge; 1&nbsp;ha: ' + MU.n(N.sens.c300_1ha_pct, 1) + '&nbsp;% dos edif&iacute;cios). Serralves e outros espa&ccedil;os vedados contam como parque.</p>' +

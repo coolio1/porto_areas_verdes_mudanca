@@ -45,6 +45,7 @@
   MU.registarTema({
     id: 'historico',
     rotulo: 'Histórico 1947–2024',
+  artigo: { url: 'https://portoverde.pt/posts/mudanca-verde-porto-1947-2025/' },
     fundo: 'carta',
     dados: 'historico',
     ctx: { limites: { on: true }, densidade: { on: false } },
@@ -77,8 +78,7 @@
         return e.nome + ': cobertura ' + pc(num[e.id].cobertura) + ' do concelho';
       });
       painel.innerHTML =
-        '<p class="desc">Vegeta&ccedil;&atilde;o no concelho em sete &eacute;pocas. 1947 (ortofoto) e 1979 (cartografia vectorial) v&ecirc;m de ' +
-        'fontes diferentes das restantes: n&atilde;o s&atilde;o compar&aacute;veis em rigor.</p>' +
+        '<p class="desc">Vegeta&ccedil;&atilde;o do concelho em sete &eacute;pocas. 1947 e 1979 v&ecirc;m de outras fontes: compara&ccedil;&atilde;o indicativa.</p>' +
         '<div class="nums" id="h-nums"></div>' +
         '<div id="h-escada">' + MU.cab2('&Eacute;poca &middot; vegeta&ccedil;&atilde;o no concelho', '0&ndash;100 %') +
         '<div class="escada" id="h-tempo" role="radiogroup" aria-label="&Eacute;poca">' + escada + '</div></div>' +
@@ -241,9 +241,9 @@
           q('#h-fonte').innerHTML = '<b>Esq. ' + a.nome + '</b>: ' + a.fonte + '<br><b>Dir. ' + d.nome + '</b>: ' + d.fonte +
             ((a.dif || d.dif) ? '<br><i>' + RESSALVA + '</i>' : '');
           q('#h-nums').innerHTML = MU.htmlNums([
-            { v: MU.n(na.veg, 1), u: '%', r: 'do concelho com vegeta&ccedil;&atilde;o em ' + a.nome + ' (esquerda)' },
-            { v: MU.n(nd.veg, 1), u: '%', r: 'em ' + d.nome + ' (direita)' },
-            { v: difPP(est.esq, est.dir), u: 'p.p.', r: 'de diferen&ccedil;a entre as duas &eacute;pocas' }
+            { v: MU.n(na.veg, 1), u: '%', r: 'de vegeta&ccedil;&atilde;o em ' + a.nome + ' (esq.)' },
+            { v: MU.n(nd.veg, 1), u: '%', r: 'em ' + d.nome + ' (dir.)' },
+            { v: difPP(est.esq, est.dir), u: 'p.p.', r: 'de diferen&ccedil;a' }
           ]);
           b79.style.display = 'none';
           q('#h-leg').innerHTML = leg(a.cor, 'Vegeta&ccedil;&atilde;o, esquerda: ' + a.nome) + leg(d.cor, 'Vegeta&ccedil;&atilde;o, direita: ' + d.nome) +
@@ -258,16 +258,16 @@
         if (est.perdaGanho) {
           q('#h-fonte').innerHTML = '<b>Perda e ganho</b>: diferen&ccedil;a entre 1985-90 e 2023-24. ' + por('1985-90').fonte + ' / ' + por('2023-24').fonte;
           q('#h-nums').innerHTML = MU.htmlNums([
-            { v: MU.n(S.perda), u: 'ha', r: 'de vegeta&ccedil;&atilde;o perdida entre 1985-90 e 2023-24' },
-            { v: MU.n(S.ganho), u: 'ha', r: 'de vegeta&ccedil;&atilde;o ganha no mesmo per&iacute;odo' },
-            { v: difPP('1985-90', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos no concelho' }
+            { v: MU.n(S.perda), u: 'ha', r: 'de vegeta&ccedil;&atilde;o perdida, 1985-90 a 2023-24' },
+            { v: MU.n(S.ganho), u: 'ha', r: 'ganhos' },
+            { v: difPP('1985-90', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos' }
           ]);
         } else {
           q('#h-fonte').innerHTML = '<b>' + e.nome + '</b>: ' + e.fonte + (e.dif ? '<br><i>' + RESSALVA + '</i>' : '');
           q('#h-nums').innerHTML = MU.htmlNums([
-            { v: MU.n(n.veg, 1), u: '%', r: 'do concelho com vegeta&ccedil;&atilde;o em ' + e.nome + (e.dif ? ' (outra fonte)' : '') },
-            { v: MU.n(n.edif, 1), u: '%', r: 'de edificado na mesma &eacute;poca' },
-            { v: difPP('1947', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos entre 1947 e 2023-24' }
+            { v: MU.n(n.veg, 1), u: '%', r: 'de vegeta&ccedil;&atilde;o em ' + e.nome + (e.dif ? ' (outra fonte)' : '') },
+            { v: MU.n(n.edif, 1), u: '%', r: 'de edificado' },
+            { v: difPP('1947', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos desde 1947' }
           ]);
         }
         b79.style.display = (est.epoca === '1979' && !est.perdaGanho) ? 'block' : 'none';

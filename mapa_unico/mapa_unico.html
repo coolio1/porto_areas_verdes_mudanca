@@ -195,14 +195,17 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .ficha .x{all:unset;position:absolute;right:8px;top:8px;width:26px;height:26px;text-align:center;line-height:26px;cursor:pointer;font-size:18px}
 .ficha .x:focus-visible{outline:2px solid var(--tinta)}
 /* números-chave sobre o mapa (core.js: MU.moverNums) */
-.nums-card{left:16px;bottom:62px;width:292px;padding:10px 16px 12px;display:none;max-height:calc(100% - 150px);overflow:auto}
+.nums-card{left:16px;bottom:62px;width:292px;padding:14px 34px 12px 16px;display:none;max-height:calc(100% - 150px);overflow:auto}
 .nums-card.on{display:block}
-.nums-tit{display:block;font:500 11px var(--mono);color:var(--suave);margin:0 28px 8px 0;text-transform:uppercase;letter-spacing:.04em}
 .nums-card .x{all:unset;position:absolute;right:6px;top:5px;width:26px;height:26px;text-align:center;line-height:26px;cursor:pointer;font-size:18px;color:var(--tinta)}
 .nums-card .x:hover{background:var(--realce)}
 .nums-card .x:focus-visible,.nums-chip:focus-visible{outline:2px solid var(--tinta);outline-offset:-3px}
 .nums-card .nums-tema{display:none}.nums-card .nums-tema.on{display:block}
 .nums-card .nums{margin:0}
+.nums-artigo{display:block;margin-top:10px;padding-top:8px;border-top:1px solid var(--fino);font:500 12px/1.35 var(--mono);color:var(--marca);text-decoration:underline;text-underline-offset:2px}
+.nums-artigo[hidden]{display:none}
+.nums-artigo:hover{color:var(--tinta)}
+.nums-artigo:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
 .nums-card .num.mor{gap:10px}
 .nums-card .num.mor b{font-size:36px}
 .nums-chip{left:16px;bottom:62px;display:none;padding:6px 10px;font:500 11.5px var(--mono);color:var(--tinta);cursor:pointer}
@@ -285,7 +288,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 </aside>
 <main id="map" aria-label="Mapa do Porto">
   <div class="cx ficha" id="ficha" role="region" aria-label="Ficha" aria-live="polite"></div>
-  <div class="cx nums-card" id="nums-card" role="region" aria-label="Números-chave"><span class="nums-tit">Números-chave</span><button type="button" class="x" id="nums-x" aria-label="Fechar os números-chave">×</button><div id="nums-corpo"></div></div>
+  <div class="cx nums-card" id="nums-card" role="region" aria-label="Números-chave"><button type="button" class="x" id="nums-x" aria-label="Fechar os números-chave">×</button><div id="nums-corpo"></div><a class="nums-artigo" id="nums-artigo" target="_blank" rel="noopener" hidden>Ler o artigo &rarr;</a></div>
   <button type="button" class="cx nums-chip" id="nums-chip" aria-label="Mostrar os números-chave">Números</button>
   <div class="topo-ctl" id="topo-ctl"><select class="ir" id="ir" aria-label="Ir para um parque"></select><select class="ir fundo" id="fundo-select" aria-label="Fundo do mapa"></select></div>
   <div class="cx zoom" id="zoom"><button type="button" data-z="1" aria-label="Aproximar">+</button><button type="button" data-z="-1" aria-label="Afastar">−</button><button type="button" data-z="0" aria-label="Ver o concelho inteiro">⌂</button></div>
@@ -821,6 +824,10 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
     document.querySelectorAll('#nums-corpo .nums-tema').forEach(function (w) {
       var on = w.dataset.t === MU.tema; w.classList.toggle('on', on); if (on) tem = true;
     });
+    /* artigo do site sobre o tema (opcional: `artigo: {url}` na definição do tema; sem artigo, sem ligação) */
+    var art = MU.TEMAS[MU.tema] && MU.TEMAS[MU.tema].artigo, la = document.getElementById('nums-artigo');
+    la.hidden = !art;
+    if (art) la.href = art.url;
     document.getElementById('nums-card').classList.toggle('on', tem && !MU.numsFechado);
     document.getElementById('nums-chip').classList.toggle('on', tem && MU.numsFechado);
   };
@@ -936,6 +943,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
   MU.registarTema({
     id: 'acessibilidade',
     rotulo: 'Acessibilidade e propostas',
+  artigo: { url: 'https://portoverde.pt/posts/acessibilidade-verde-publico-porto/' },
     fundo: 'carta',
     dados: 'acessibilidade',
     ctx: { limites: { on: true }, densidade: { on: false } },
@@ -962,8 +970,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
       var esc = MU.escala([S.parques_ha, S.pago, S.privado]);
 
       painel.innerHTML =
-        '<p class="desc">Quem vive a menos de 300 m de um parque com pelo menos 0,4 ha, e quanto verde p&uacute;blico cabe a cada habitante ' +
-        'num raio de 500 m. &laquo;Com propostas&raquo; junta 46 espa&ccedil;os candidatos a convers&atilde;o.</p>' +
+        '<p class="desc">Popula&ccedil;&atilde;o a &le; 300&nbsp;m de um parque e verde p&uacute;blico por habitante. As propostas juntam 46 espa&ccedil;os candidatos.</p>' +
         '<div class="nums" id="ac-nums"></div>' +
         '<div class="seg" id="ac-vista" role="group" aria-label="Vista">' +
           '<button type="button" data-v="actual">Situa&ccedil;&atilde;o actual</button>' +
@@ -1103,9 +1110,9 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
         b.classList.toggle('active', on); b.setAttribute('aria-pressed', on);
       });
       document.getElementById('ac-nums').innerHTML = MU.htmlNums([
-        { v: MU.n(S.m2hab, 1), u: 'm&sup2;', r: 'de parque por habitante: ' + MU.n(S.parques_ha) + ' ha para ' + MU.n(S.pop) + ' habitantes (GHS-POP)' },
-        { v: MU.n(N.prox), u: '%', r: 'da popula&ccedil;&atilde;o a &le; 300 m de um parque com &ge; 0,4 ha' + (pr ? ', com as propostas' : '') },
-        { v: MU.n(N.acc, 1), u: '%', r: 'da popula&ccedil;&atilde;o com &ge; 9 m&sup2; de verde p&uacute;blico a 500 m' + (pr ? ', com as propostas' : '') }
+        { v: MU.n(S.m2hab, 1), u: 'm&sup2;', r: 'de parque por habitante' },
+        { v: MU.n(N.prox), u: '%', r: 'a &le; 300 m de um parque (&ge; 0,4 ha)' + (pr ? ', com propostas' : '') },
+        { v: MU.n(N.acc, 1), u: '%', r: 'com &ge; 9 m&sup2; de verde a 500 m' + (pr ? ', com propostas' : '') }
       ]);
       document.getElementById('ac-intro').style.display = pr ? 'block' : 'none';
       this._lCand.row.style.display = pr ? '' : 'none';
@@ -1182,17 +1189,15 @@ MU.registarTema({
     ];
     var esc = MU.escala(camadas.map(function (c) { return c.ha; }));
     painel.innerHTML =
-      '<p class="desc">A regra <b>3-30-300</b> mede o acesso ao verde: <b>3</b> &aacute;rvores &agrave; vista da janela, <b>30&nbsp;%</b> de copa no bairro ' +
-      '(500&nbsp;m &agrave; volta) e um parque a <b>300&nbsp;m</b> a p&eacute;. Proposta por Cecil Konijnendijk; aqui, edif&iacute;cio a edif&iacute;cio.</p>' +
+      '<p class="desc"><b>3</b> &aacute;rvores &agrave; vista, <b>30&nbsp;%</b> de copa a 500&nbsp;m, um parque a <b>300&nbsp;m</b> a p&eacute;: edif&iacute;cio a edif&iacute;cio.</p>' +
       '<div class="nums">' + MU.htmlNums([
-        { v: MU.n(N.todos.residentes_pct, 1), u: '%', r: 'dos residentes vivem num edif&iacute;cio que cumpre os tr&ecirc;s indicadores (' + p(N.todos.edificios_pct) + ' dos edif&iacute;cios)' },
-        { v: MU.n(N.c30.residentes_pct, 1), u: '%', r: 'cumprem o &laquo;30&raquo;, o mais dif&iacute;cil' },
+        { v: MU.n(N.todos.residentes_pct, 1), u: '%', r: 'dos residentes cumprem os tr&ecirc;s' },
+        { v: MU.n(N.c30.residentes_pct, 1), u: '%', r: 'cumprem o &laquo;30&raquo;' },
         { v: MU.n(N.nenhum.residentes_pct, 1), u: '%', r: 'n&atilde;o cumprem nenhum' }
       ]) + '</div>' +
-      '<p class="tema-sub">Residentes que cumprem cada um: &laquo;3&raquo; ' + p(N.c3.residentes_pct) + ' &middot; &laquo;30&raquo; ' + p(N.c30.residentes_pct) +
-      ' &middot; &laquo;300&raquo; ' + p(N.c300.residentes_pct) + '</p>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha de edificado') + '<div class="camadas"></div>' +
       '<details class="nota-lim"><summary>Como se mediu e o que n&atilde;o garante</summary>' +
+      '<p class="tema-sub">Regra de Cecil Konijnendijk. Residentes que cumprem cada indicador: &laquo;3&raquo; ' + p(N.c3.residentes_pct) + ', &laquo;30&raquo; ' + p(N.c30.residentes_pct) + ', &laquo;300&raquo; ' + p(N.c300.residentes_pct) + '; os tr&ecirc;s: ' + p(N.todos.edificios_pct) + ' dos edif&iacute;cios.</p>' +
       '<p class="tema-sub">&laquo;3&raquo;: &aacute;rvores com copa &ge; 25&nbsp;m&sup2; e &ge; 3&nbsp;m (LiDAR) mais o invent&aacute;rio da C&acirc;mara, vistas a &le; 30&nbsp;m de janelas simuladas a cada 5&nbsp;m, em linha de vista 2D (ignora a altura dos obst&aacute;culos). O &laquo;3&raquo; n&atilde;o tem base cient&iacute;fica pr&oacute;pria.</p>' +
       '<p class="tema-sub">&laquo;30&raquo;: o resultado depende muito do limiar: a 25&nbsp;% passa de ' + MU.n(N.c30.edificios_pct, 1) + '&nbsp;% para ' + MU.n(N.sens.c30_limiar25_pct, 1) + '&nbsp;% dos edif&iacute;cios. O LiDAR &eacute; de inverno (2024&ndash;26): copas de folha caduca podem estar subestimadas. Duas folhas com alturas n&atilde;o fi&aacute;veis ficam de fora.</p>' +
       '<p class="tema-sub">&laquo;300&raquo;: a p&eacute; pela rede do OpenStreetMap, parques &ge; 0,5&nbsp;ha (com &ge; 1&nbsp;ha: ' + MU.n(N.sens.c300_1ha_pct, 1) + '&nbsp;% dos edif&iacute;cios). Serralves e outros espa&ccedil;os vedados contam como parque.</p>' +
@@ -1212,6 +1217,7 @@ MU.registarTema({
 MU.registarTema({
   id: 'hoje',
   rotulo: 'Mudanças 2016–2025',
+  artigo: { url: 'https://portoverde.pt/posts/mudanca-verde-porto-1947-2025/' },
   fundo: 'carta',
   dados: 'hoje',
   ctx: { limites: { on: true }, densidade: { on: false } },
@@ -1233,12 +1239,11 @@ MU.registarTema({
     ];
     var esc = MU.escala(trans.map(function (c) { return c.ha; }));
     painel.innerHTML =
-      '<p class="desc">O que mudou entre 2016-17 e 2024-25, p&iacute;xel a p&iacute;xel, na classifica&ccedil;&atilde;o Sentinel-2 de 10 m: ' +
-      '&aacute;rvores que deram lugar a edificado ou solo, e solo que ganhou &aacute;rvores.</p>' +
+      '<p class="desc">O que mudou entre 2016-17 e 2024-25, p&iacute;xel a p&iacute;xel (Sentinel-2, 10 m).</p>' +
       '<div class="nums">' + MU.htmlNums([
-        { v: MU.n(S.arvores_edificado + S.arvores_solo), u: 'ha', r: 'de &aacute;rvores perdidas para edificado ou solo, 2016-17 a 2024-25' },
-        { v: MU.n(S.solo_arvores), u: 'ha', r: 'de solo que ganhou &aacute;rvores no mesmo per&iacute;odo' },
-        { v: MU.n(S.solo_edificado), u: 'ha', r: 'de solo que passou a edificado' }
+        { v: MU.n(S.arvores_edificado + S.arvores_solo), u: 'ha', r: 'de &aacute;rvores perdidas' },
+        { v: MU.n(S.solo_arvores), u: 'ha', r: 'de solo com &aacute;rvores novas' },
+        { v: MU.n(S.solo_edificado), u: 'ha', r: 'de solo edificado' }
       ]) + '</div>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
     var box = painel.querySelector('.camadas');
@@ -1298,6 +1303,7 @@ MU.registarTema({
   MU.registarTema({
     id: 'historico',
     rotulo: 'Histórico 1947–2024',
+  artigo: { url: 'https://portoverde.pt/posts/mudanca-verde-porto-1947-2025/' },
     fundo: 'carta',
     dados: 'historico',
     ctx: { limites: { on: true }, densidade: { on: false } },
@@ -1330,8 +1336,7 @@ MU.registarTema({
         return e.nome + ': cobertura ' + pc(num[e.id].cobertura) + ' do concelho';
       });
       painel.innerHTML =
-        '<p class="desc">Vegeta&ccedil;&atilde;o no concelho em sete &eacute;pocas. 1947 (ortofoto) e 1979 (cartografia vectorial) v&ecirc;m de ' +
-        'fontes diferentes das restantes: n&atilde;o s&atilde;o compar&aacute;veis em rigor.</p>' +
+        '<p class="desc">Vegeta&ccedil;&atilde;o do concelho em sete &eacute;pocas. 1947 e 1979 v&ecirc;m de outras fontes: compara&ccedil;&atilde;o indicativa.</p>' +
         '<div class="nums" id="h-nums"></div>' +
         '<div id="h-escada">' + MU.cab2('&Eacute;poca &middot; vegeta&ccedil;&atilde;o no concelho', '0&ndash;100 %') +
         '<div class="escada" id="h-tempo" role="radiogroup" aria-label="&Eacute;poca">' + escada + '</div></div>' +
@@ -1494,9 +1499,9 @@ MU.registarTema({
           q('#h-fonte').innerHTML = '<b>Esq. ' + a.nome + '</b>: ' + a.fonte + '<br><b>Dir. ' + d.nome + '</b>: ' + d.fonte +
             ((a.dif || d.dif) ? '<br><i>' + RESSALVA + '</i>' : '');
           q('#h-nums').innerHTML = MU.htmlNums([
-            { v: MU.n(na.veg, 1), u: '%', r: 'do concelho com vegeta&ccedil;&atilde;o em ' + a.nome + ' (esquerda)' },
-            { v: MU.n(nd.veg, 1), u: '%', r: 'em ' + d.nome + ' (direita)' },
-            { v: difPP(est.esq, est.dir), u: 'p.p.', r: 'de diferen&ccedil;a entre as duas &eacute;pocas' }
+            { v: MU.n(na.veg, 1), u: '%', r: 'de vegeta&ccedil;&atilde;o em ' + a.nome + ' (esq.)' },
+            { v: MU.n(nd.veg, 1), u: '%', r: 'em ' + d.nome + ' (dir.)' },
+            { v: difPP(est.esq, est.dir), u: 'p.p.', r: 'de diferen&ccedil;a' }
           ]);
           b79.style.display = 'none';
           q('#h-leg').innerHTML = leg(a.cor, 'Vegeta&ccedil;&atilde;o, esquerda: ' + a.nome) + leg(d.cor, 'Vegeta&ccedil;&atilde;o, direita: ' + d.nome) +
@@ -1511,16 +1516,16 @@ MU.registarTema({
         if (est.perdaGanho) {
           q('#h-fonte').innerHTML = '<b>Perda e ganho</b>: diferen&ccedil;a entre 1985-90 e 2023-24. ' + por('1985-90').fonte + ' / ' + por('2023-24').fonte;
           q('#h-nums').innerHTML = MU.htmlNums([
-            { v: MU.n(S.perda), u: 'ha', r: 'de vegeta&ccedil;&atilde;o perdida entre 1985-90 e 2023-24' },
-            { v: MU.n(S.ganho), u: 'ha', r: 'de vegeta&ccedil;&atilde;o ganha no mesmo per&iacute;odo' },
-            { v: difPP('1985-90', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos no concelho' }
+            { v: MU.n(S.perda), u: 'ha', r: 'de vegeta&ccedil;&atilde;o perdida, 1985-90 a 2023-24' },
+            { v: MU.n(S.ganho), u: 'ha', r: 'ganhos' },
+            { v: difPP('1985-90', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos' }
           ]);
         } else {
           q('#h-fonte').innerHTML = '<b>' + e.nome + '</b>: ' + e.fonte + (e.dif ? '<br><i>' + RESSALVA + '</i>' : '');
           q('#h-nums').innerHTML = MU.htmlNums([
-            { v: MU.n(n.veg, 1), u: '%', r: 'do concelho com vegeta&ccedil;&atilde;o em ' + e.nome + (e.dif ? ' (outra fonte)' : '') },
-            { v: MU.n(n.edif, 1), u: '%', r: 'de edificado na mesma &eacute;poca' },
-            { v: difPP('1947', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos entre 1947 e 2023-24' }
+            { v: MU.n(n.veg, 1), u: '%', r: 'de vegeta&ccedil;&atilde;o em ' + e.nome + (e.dif ? ' (outra fonte)' : '') },
+            { v: MU.n(n.edif, 1), u: '%', r: 'de edificado' },
+            { v: difPP('1947', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos desde 1947' }
           ]);
         }
         b79.style.display = (est.epoca === '1979' && !est.perdaGanho) ? 'block' : 'none';
@@ -1607,12 +1612,11 @@ MU.registarTema({
     var S = MU.DADOS.contexto.stats, map = MU.map, self = this;
     var esc = MU.escala([S.subsistente, S.perdido, S.parques_ha]);
     painel.innerHTML =
-      '<p class="desc">O verde que sobra quando se retiram os parques, o verde pago e as estradas: logradouros, interiores de ' +
-      'quarteir&atilde;o, quintas privadas. E o que deles se perdeu desde 2016.</p>' +
+      '<p class="desc">Verde fora de parques e estradas: logradouros, interiores de quarteir&atilde;o, quintas. E o que se perdeu desde 2016.</p>' +
       '<div class="nums">' + MU.htmlNums([
-        { v: MU.n(S.subsistente), u: 'ha', r: 'de verde privado subsistente nas &aacute;reas principais' },
-        { v: MU.n(S.perdido), u: 'ha', r: 'de verde privado perdido entre 2016 e 2025' },
-        { v: MU.n(S.privado), u: 'ha', r: 'de verde privado em todo o concelho, contando as &aacute;reas pequenas' }
+        { v: MU.n(S.subsistente), u: 'ha', r: 'de verde privado subsistente' },
+        { v: MU.n(S.perdido), u: 'ha', r: 'perdidos desde 2016' },
+        { v: MU.n(S.privado), u: 'ha', r: 'no concelho, com &aacute;reas pequenas' }
       ]) + '</div>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
     var box = painel.querySelector('.camadas');

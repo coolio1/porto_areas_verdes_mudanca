@@ -12,12 +12,11 @@ MU.registarTema({
     var S = MU.DADOS.contexto.stats, map = MU.map, self = this;
     var esc = MU.escala([S.subsistente, S.perdido, S.parques_ha]);
     painel.innerHTML =
-      '<p class="desc">O verde que sobra quando se retiram os parques, o verde pago e as estradas: logradouros, interiores de ' +
-      'quarteir&atilde;o, quintas privadas. E o que deles se perdeu desde 2016.</p>' +
+      '<p class="desc">Verde fora de parques e estradas: logradouros, interiores de quarteir&atilde;o, quintas. E o que se perdeu desde 2016.</p>' +
       '<div class="nums">' + MU.htmlNums([
-        { v: MU.n(S.subsistente), u: 'ha', r: 'de verde privado subsistente nas &aacute;reas principais' },
-        { v: MU.n(S.perdido), u: 'ha', r: 'de verde privado perdido entre 2016 e 2025' },
-        { v: MU.n(S.privado), u: 'ha', r: 'de verde privado em todo o concelho, contando as &aacute;reas pequenas' }
+        { v: MU.n(S.subsistente), u: 'ha', r: 'de verde privado subsistente' },
+        { v: MU.n(S.perdido), u: 'ha', r: 'perdidos desde 2016' },
+        { v: MU.n(S.privado), u: 'ha', r: 'no concelho, com &aacute;reas pequenas' }
       ]) + '</div>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
     var box = painel.querySelector('.camadas');

@@ -527,6 +527,10 @@
     document.querySelectorAll('#nums-corpo .nums-tema').forEach(function (w) {
       var on = w.dataset.t === MU.tema; w.classList.toggle('on', on); if (on) tem = true;
     });
+    /* artigo do site sobre o tema (opcional: `artigo: {url}` na definição do tema; sem artigo, sem ligação) */
+    var art = MU.TEMAS[MU.tema] && MU.TEMAS[MU.tema].artigo, la = document.getElementById('nums-artigo');
+    la.hidden = !art;
+    if (art) la.href = art.url;
     document.getElementById('nums-card').classList.toggle('on', tem && !MU.numsFechado);
     document.getElementById('nums-chip').classList.toggle('on', tem && MU.numsFechado);
   };

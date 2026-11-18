@@ -3,6 +3,7 @@
 MU.registarTema({
   id: 'hoje',
   rotulo: 'Mudanças 2016–2025',
+  artigo: { url: 'https://portoverde.pt/posts/mudanca-verde-porto-1947-2025/' },
   fundo: 'carta',
   dados: 'hoje',
   ctx: { limites: { on: true }, densidade: { on: false } },
@@ -24,12 +25,11 @@ MU.registarTema({
     ];
     var esc = MU.escala(trans.map(function (c) { return c.ha; }));
     painel.innerHTML =
-      '<p class="desc">O que mudou entre 2016-17 e 2024-25, p&iacute;xel a p&iacute;xel, na classifica&ccedil;&atilde;o Sentinel-2 de 10 m: ' +
-      '&aacute;rvores que deram lugar a edificado ou solo, e solo que ganhou &aacute;rvores.</p>' +
+      '<p class="desc">O que mudou entre 2016-17 e 2024-25, p&iacute;xel a p&iacute;xel (Sentinel-2, 10 m).</p>' +
       '<div class="nums">' + MU.htmlNums([
-        { v: MU.n(S.arvores_edificado + S.arvores_solo), u: 'ha', r: 'de &aacute;rvores perdidas para edificado ou solo, 2016-17 a 2024-25' },
-        { v: MU.n(S.solo_arvores), u: 'ha', r: 'de solo que ganhou &aacute;rvores no mesmo per&iacute;odo' },
-        { v: MU.n(S.solo_edificado), u: 'ha', r: 'de solo que passou a edificado' }
+        { v: MU.n(S.arvores_edificado + S.arvores_solo), u: 'ha', r: 'de &aacute;rvores perdidas' },
+        { v: MU.n(S.solo_arvores), u: 'ha', r: 'de solo com &aacute;rvores novas' },
+        { v: MU.n(S.solo_edificado), u: 'ha', r: 'de solo edificado' }
       ]) + '</div>' +
       MU.cab2('Camadas', 'barras: 0&ndash;' + MU.n(esc) + ' ha') + '<div class="camadas"></div>';
     var box = painel.querySelector('.camadas');

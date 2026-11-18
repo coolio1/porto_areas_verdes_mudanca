@@ -101,6 +101,10 @@ Uma só página, `mapa_unico/mapa_unico.html`, com 5 temas (o 2.º, `#tema=regra
   sobre o mapa (em baixo à esquerda, por cima da escala), com X; fechado = botão «Números» (`#nums-chip`); a escolha fica em
   `localStorage` (`pv-nums-fechado`) e em ecrã ≤760 px abre fechado. `core.js`: `MU.moverNums/mostrarNums/fecharNums`; o bloco é
   movido, não copiado (os temas continuam a actualizá-lo por id). Tema novo com números = `<div class="nums">` no painel e nada mais.
+  **Artigo do site:** campo opcional `artigo: {url}` na definição do tema (`tema_<id>.js`) acrescenta «Ler o artigo →» no fundo do
+  cartão; sem o campo, sem ligação. **Texto curto (2026-11-18):** `.desc` = 1 frase; legenda de cada número ≤ 6 palavras, sem repetir
+  a unidade nem o período; detalhe de método vai para a nota «Como se mediu», não para o topo do painel. Hoje: Acessibilidade → 2SFCA; Mudanças e Histórico → dinâmicas 1947–2025; 3-30-300 e Privado
+  ainda sem artigo (quando o artigo for publicado, pôr o campo e o `/posts/<slug>/`).
 - `dados/contexto.js` tem o comum a todos os temas: limites, GHS-POP, parques (GeoJSON), verde pago, água, véu e
   `stats` (hectares por contagem de píxeis × 56,87 m² dentro de `acessibilidade/layers/porto_mask.npy`; barras
   das camadas; o bloco fixo «Os três verdes» foi removido em 2026-11-17).

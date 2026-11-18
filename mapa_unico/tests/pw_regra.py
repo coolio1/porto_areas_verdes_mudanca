@@ -53,6 +53,10 @@ with sync_playwright() as p:
             pg.evaluate("location.hash = 'tema=hoje'")
             pg.wait_for_timeout(1500)
             ok(tag + "ao sair, sem camadas da regra no mapa", pg.evaluate("document.querySelectorAll('#map .leaflet-pane[class*=mu-regra] img').length") == 0)
+            ok(tag + "«Mudanças» mostra a ligação ao artigo", pg.is_visible("#nums-artigo") and "/posts/mudanca-verde-porto-1947-2025/" in pg.get_attribute("#nums-artigo", "href"))
+            pg.evaluate("location.hash = 'tema=regra'")
+            pg.wait_for_timeout(1000)
+            ok(tag + "«3-30-300» sem artigo, sem ligação", not pg.is_visible("#nums-artigo"))
         # separadores inteiros dentro do painel, sem corte nem scroll horizontal
         caixas = pg.eval_on_selector_all("#tabs .tab", "t => t.map(x => { const r = x.getBoundingClientRect(); return [r.left, r.right, x.scrollWidth, x.clientWidth]; })")
         vw = pg.evaluate("window.innerWidth")
