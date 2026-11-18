@@ -67,6 +67,7 @@ Criação de artigos: skill `porto-verde-posts`. **Lista `/artigos/` (maquete A 
 - **Antes de juntar um polígono:** existe no PDM? Senão, OSM. Nunca inventar nem aproximar geometrias.
 
 ## Lições aprendidas
+- **Método do Histórico mudou → grep do artigo (2026-11-18):** o artigo `_posts/2026-03-21-mudanca-verde-porto-1947-2025.md` e a animação repetem números do Histórico e do Sentinel-2; ao mudar `ndvi_historico.py` ou `porto_stats.py`, `Grep` dos valores antigos em `_posts/` e `animacao/` e corrigir (o artigo ficou com a queda artificial 45→30 %). Cálculos só do concelho, nunca do rectângulo do mapa.
 - **Verificar consumidores antes de alterar dados** — ao editar `parques_porto.geojson` ou outra fonte partilhada, grep por todos os que a referenciam e actualizar em cadeia.
 - Lições técnicas antigas (OBIA 1947, Overpass): fim de `docs/estrutura.md`.
 - **Nunca inventar referências** — verificar sempre online autores, anos e títulos antes de citar.
