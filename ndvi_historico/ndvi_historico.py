@@ -11,7 +11,6 @@ import time
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = None
 from dotenv import load_dotenv
-from ndvi_historico_html import build_html
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
@@ -113,19 +112,15 @@ def ndvi_l5(img):
     return ndvi.clamp(-1, 1)
 
 def ndvi_l8(img):
-    """NDVI para Landsat 8/9 OLI, harmonizado para nivel TM (Roy et al. 2016).
+    """NDVI para Landsat 8/9 OLI (SR_B5=NIR, SR_B4=Red), reflectancia de superficie C2.
 
-    Coeficientes OLI->ETM+ (slope, intercept) por banda:
-      Red (B4):  0.9585, -0.0002
-      NIR (B5):  0.9785, -0.0010
-    Aplicados apos conversao a reflectancia de superficie.
+    Sem harmonizacao de Roy et al. 2016 (retirada em 2026-11-18): os coeficientes que aqui estavam
+    (0.9585/0.9785) nao eram os de Roy para NDVI e a Google nao a recomenda na Colecao 2 SR. A diferenca
+    de sensor corrige-se com o desvio medido na sobreposicao L7/L8 (OFFSET_OLI, abaixo).
     """
     img = cloud_mask_l8(img)
-    nir_raw = img.select('SR_B5').multiply(0.0000275).add(-0.2)
-    red_raw = img.select('SR_B4').multiply(0.0000275).add(-0.2)
-    # Harmonizar OLI -> TM (Roy et al. 2016, Table 2)
-    red = red_raw.multiply(0.9585).add(-0.0002)
-    nir = nir_raw.multiply(0.9785).add(-0.0010)
+    nir = img.select('SR_B5').multiply(0.0000275).add(-0.2)
+    red = img.select('SR_B4').multiply(0.0000275).add(-0.2)
     ndvi = nir.subtract(red).divide(nir.add(red)).rename('ndvi')
     return ndvi.clamp(-1, 1)
 
@@ -238,6 +233,44 @@ for name, sensor, years in EPOCHS:
         print(f'  {name} ({sensor}): {n} cenas, sem ajuste')
     composites[name] = ndvi
 
+# ============================================================
+# Incerteza por epoca (2026-11-18): dispersao ano a ano da % de vegetacao dentro de cada epoca
+# (mesmo metodo, 1 compósito por ano) e erro da ponte L8-L7. Vai para layers_historico/incerteza.json.
+# ============================================================
+import json, statistics
+
+def pct_veg(img):
+    return 100 * img.gte(0.25).rename('ndvi').reduceRegion(
+        ee.Reducer.mean(), portoMuniGeom, 30, maxPixels=1e9).get('ndvi').getInfo()
+
+def _ep(vals):
+    return statistics.stdev(vals) / len(vals) ** 0.5 if len(vals) > 1 else None
+
+print('\nA medir a dispersao ano a ano por epoca...')
+incerteza = {}
+for name, sensor, years in EPOCHS:
+    vals = []
+    for y in years:
+        im, cnt = get_ndvi_composite(sensor, [y])
+        if sensor == 'Landsat 8':
+            im = im.subtract(OFFSET_OLI)
+        vals.append(pct_veg(im))
+    incerteza[name] = {'anos': years, 'veg_por_ano': [round(v, 1) for v in vals],
+                       'media_anos': round(statistics.mean(vals), 1),
+                       'dp_anual': round(statistics.stdev(vals), 1),
+                       'ep': round(_ep(vals), 1)}
+    print(f'  {name}: media dos anos {incerteza[name]["media_anos"]}  dp {incerteza[name]["dp_anual"]}  ep {incerteza[name]["ep"]}')
+
+dif_ponte = []
+for y in PONTE_ANOS:
+    dif_ponte.append(pct_veg(composito_l8_so([y])) - pct_veg(composito_l7([y])))
+incerteza['ponte_L8_L7'] = {'anos': PONTE_ANOS, 'dif_pp_por_ano': [round(v, 1) for v in dif_ponte],
+                            'media_pp': round(statistics.mean(dif_ponte), 1), 'ep': round(_ep(dif_ponte), 1)}
+print(f'  ponte L8-L7 (bruta, p.p.): {incerteza["ponte_L8_L7"]}')
+os.makedirs(LAYERS_DIR, exist_ok=True)
+with open(os.path.join(LAYERS_DIR, 'incerteza.json'), 'w', encoding='utf-8') as _f:
+    json.dump(incerteza, _f, ensure_ascii=False, indent=1)
+
 
 # ============================================================
 # Download das camadas
@@ -262,7 +295,7 @@ def _robust_download(vis_image, filepath, label, transparent_black=False):
             if wait:
                 print(f'  Retry {attempt+1}/5 apos {wait}s...')
                 time.sleep(wait)
-            url = vis_image.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png'})
+            url = vis_image.getThumbURL({'region': porto, 'dimensions': DIM, 'format': 'png', 'crs': 'EPSG:4326'})
             print(f'  A descarregar {label}...')
             r = requests.get(url, timeout=120)
             img = PILImage.open(io.BytesIO(r.content)).convert('RGBA')
@@ -312,8 +345,45 @@ for name, sensor, years in EPOCHS:
 # Perda/ganho de vegetacao (primeira vs ultima epoca)
 first_epoch = EPOCHS[0][0]   # 1985-90
 last_epoch = EPOCHS[-1][0]   # 2023-24
-veg_loss = veg_masks[first_epoch].And(veg_masks[last_epoch].Not()).selfMask()
-veg_gain = veg_masks[first_epoch].Not().And(veg_masks[last_epoch]).selfMask()
+# Com histerese (2026-11-18; a versao simples 1985-90 vs 2023-24 era sobretudo ruido do limiar: 54 % da
+# perda em manchas <1 ha): mudanca de classe nas duas epocas de cada ponta E salto de NDVI >= 0,15 E mancha
+# >= 0,5 ha (6 pixeis ligados).
+DELTA_NDVI = 0.15
+MANCHA_MIN_PX = 6
+_a1, _a2 = EPOCHS[0][0], EPOCHS[1][0]      # 1985-90, 1995-00
+_b1, _b2 = EPOCHS[-2][0], EPOCHS[-1][0]    # 2016-17, 2023-24
+
+MANCHA_MIN_HA = 0.5
+
+def filtrar_manchas(png, min_ha=MANCHA_MIN_HA):
+    """Tira ao PNG de perda/ganho as manchas (8-ligadas, dentro do concelho) com menos de min_ha.
+    Feito em Python depois do download: o connectedPixelCount do GEE reavalia-se a escala do render
+    (6,6 m) e deixava 298 de 339 manchas abaixo de 0,5 ha."""
+    import numpy as np
+    from scipy import ndimage as ndi
+    im = Image.open(png).convert('RGBA')
+    arr = np.array(im)
+    concelho = np.array(Image.open(os.path.join(LAYERS_DIR, 'porto_mask.png')))[..., 3] > 0
+    ha_px = 4142.1 / concelho.sum()
+    dentro = (arr[..., 3] > 0) & concelho
+    lab, k = ndi.label(dentro, np.ones((3, 3)))
+    area = np.bincount(lab.ravel(), minlength=k + 1) * ha_px
+    manter = area >= min_ha
+    manter[0] = False
+    arr[dentro & ~manter[lab]] = (0, 0, 0, 0)   # fora do concelho nao se mexe (so cor)
+    Image.fromarray(arr).save(png)
+    return float(area[manter].sum()), int(manter.sum())
+
+def _mancha(m):
+    return m.selfMask()
+
+_nv = {n: veg_masks[n].Not() for n in veg_masks}
+_loss = (veg_masks[_a1].And(veg_masks[_a2]).And(_nv[_b1]).And(_nv[_b2])
+         .And(composites[first_epoch].subtract(composites[last_epoch]).gte(DELTA_NDVI)))
+_gain = (_nv[_a1].And(_nv[_a2]).And(veg_masks[_b1]).And(veg_masks[_b2])
+         .And(composites[last_epoch].subtract(composites[first_epoch]).gte(DELTA_NDVI)))
+veg_loss = _mancha(_loss)
+veg_gain = _mancha(_gain)
 
 # ============================================================
 # Downloads (com pausa entre pedidos para evitar desconexoes)
@@ -340,10 +410,11 @@ for name, sensor, years in EPOCHS:
 
 # Perda e ganho
 print('\nA descarregar perda/ganho de vegetacao...')
-download_mask(veg_loss, 'FF4444', 'veg_perda.png')
-time.sleep(DOWNLOAD_PAUSE)
-download_mask(veg_gain, '44FF44', 'veg_ganho.png')
-time.sleep(DOWNLOAD_PAUSE)
+for _m, _cor, _f in ((veg_loss, 'FF4444', 'veg_perda.png'), (veg_gain, '44FF44', 'veg_ganho.png')):
+    download_mask(_m, _cor, _f)
+    _ha, _n = filtrar_manchas(os.path.join(LAYERS_DIR, _f))
+    print(f'  {_f}: {_n} manchas >= {MANCHA_MIN_HA} ha, {_ha:.1f} ha no concelho')
+    time.sleep(DOWNLOAD_PAUSE)
 
 # Municipios
 print('\nA descarregar limites...')
@@ -361,19 +432,19 @@ print(f'  {"-"*12} {"-"*12} {"-"*14} {"-"*13}')
 
 # Area total da regiao (pixeis validos)
 total_pixels = composites[first_epoch].gt(-1).reduceRegion(
-    reducer=ee.Reducer.sum(), geometry=porto, scale=30, maxPixels=1e9
+    reducer=ee.Reducer.sum(), geometry=portoMuniGeom, scale=30, maxPixels=1e9
 ).getInfo().get('ndvi', 0)
 
 for name, sensor, years in EPOCHS:
     stats = composites[name].reduceRegion(
         reducer=ee.Reducer.mean(),
-        geometry=porto,
+        geometry=portoMuniGeom,
         scale=30,
         maxPixels=1e9
     ).getInfo()
     veg_count = veg_masks[name].reduceRegion(
         reducer=ee.Reducer.sum(),
-        geometry=porto,
+        geometry=portoMuniGeom,
         scale=30,
         maxPixels=1e9
     ).getInfo()
@@ -385,23 +456,16 @@ for name, sensor, years in EPOCHS:
 
 # Perda/ganho totais
 loss_count = veg_loss.unmask(0).reduceRegion(
-    reducer=ee.Reducer.sum(), geometry=porto, scale=30, maxPixels=1e9
+    reducer=ee.Reducer.sum(), geometry=portoMuniGeom, scale=30, maxPixels=1e9
 ).getInfo().get('ndvi', 0)
 gain_count = veg_gain.unmask(0).reduceRegion(
-    reducer=ee.Reducer.sum(), geometry=porto, scale=30, maxPixels=1e9
+    reducer=ee.Reducer.sum(), geometry=portoMuniGeom, scale=30, maxPixels=1e9
 ).getInfo().get('ndvi', 0)
-print(f'\n  Vegetacao perdida ({first_epoch} -> {last_epoch}): {loss_count * PIXEL_AREA_HA:.0f} ha')
+print('\n  (perda/ganho com histerese, ANTES do filtro de manchas >= 0,5 ha; os valores finais estao acima)')
+print(f'  Vegetacao perdida ({first_epoch} -> {last_epoch}): {loss_count * PIXEL_AREA_HA:.0f} ha')
 print(f'  Vegetacao ganha  ({first_epoch} -> {last_epoch}): {gain_count * PIXEL_AREA_HA:.0f} ha')
 print(f'  Balanco liquido: {(gain_count - loss_count) * PIXEL_AREA_HA:+.0f} ha')
 
 
-build_html(
-    SCRIPT_DIR,
-    LAYERS_DIR,
-    BOUNDS,
-    BOUNDS_1947,
-    EPOCHS,
-    LAYERS_1947,
-    WMS_1947_URL,
-    WMS_1947_LAYER,
-)
+# build_html retirado em 2026-11-18: ndvi_historico.html é agora um redireccionamento para o mapa único
+# (e a chamada falhava à procura de 1947/layers). As camadas vão para layers_historico/ e o mapa lê-as.

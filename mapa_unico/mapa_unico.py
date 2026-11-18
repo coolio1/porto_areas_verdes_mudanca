@@ -175,7 +175,26 @@ def dados_historico() -> dict:
         k: round(float(v), 1) for k, v in c79.recortar_ao_porto(g).groupby("LC_1979_ab")["ha"].sum().items()
     }
     d["numeros"] = percentagens(RAIZ)
+    d["incerteza"] = incerteza_epocas(hist / "incerteza.json")
     return d
+
+
+def incerteza_epocas(caminho: Path) -> dict:
+    """1σ (p.p.) da % de vegetação por época Landsat: erro-padrão dos anos da época; as épocas Landsat 8/9
+    somam (em quadratura) o erro da ponte L8-L7. 1947 e 1979 (outra fonte) ficam sem valor."""
+    import json
+    import math
+
+    if not caminho.exists():
+        return {}
+    j = json.loads(caminho.read_text(encoding="utf-8"))
+    ponte = j["ponte_L8_L7"]["ep"] or 0.0
+    out = {}
+    for e in EPOCAS:
+        if e in j and j[e]["ep"] is not None:
+            ep = j[e]["ep"]
+            out[e] = round(math.hypot(ep, ponte) if e in ("2016-17", "2023-24") else ep, 1)
+    return out
 
 
 def dados_regra() -> dict:

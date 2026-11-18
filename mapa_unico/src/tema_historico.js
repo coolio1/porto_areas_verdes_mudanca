@@ -4,7 +4,7 @@
 (function () {
   /* id, rótulo, fonte/resolução, fonte diferente das restantes (ressalva), cor da época (maquete V2b) */
   var L30 = 'Landsat 5 TM, 30 m; NDVI &ge; 0,25';
-  var L8 = 'Landsat 8/9 OLI (harmonizado para TM, Roy et al. 2016, e ajustado ao TM por um desvio de NDVI de 0,04 medido em Landsat 7), 30 m; NDVI &ge; 0,25';
+  var L8 = 'Landsat 8/9 OLI, 30 m, ajustado ao TM por um desvio de NDVI medido em Landsat 7; NDVI &ge; 0,25';
   var EPOCAS = [
     { id: '2023-24', nome: '2023-2024', curto: '2023–24', cor: '#2E8B4E', fonte: L8 },
     { id: '2016-17', nome: '2016-2017', curto: '2016–17', cor: '#7A55B8', fonte: L8 },
@@ -49,7 +49,7 @@
     fundo: 'carta',
     dados: 'historico',
     ctx: { limites: { on: true }, densidade: { on: false } },
-    fonte: 'Ortofotomapa 1947 (CIIMAR/FCUP) &middot; Landsat MSS/TM/OLI (USGS/NASA), NDVI &ge; 0,25 (Roy et al. 2016) &middot; ' +
+    fonte: 'Ortofotomapa 1947 (CIIMAR/FCUP) &middot; Landsat TM/ETM+/OLI (USGS/NASA), NDVI &ge; 0,25 &middot; ' +
            '1947: Pixel RF (textura local), limpo com Sentinel-2 e Landsat 1985 &middot; ' +
            'ocupa&ccedil;&atilde;o do solo 1979: <a href="https://www.cibio.up.pt/en/people/details/filipa-isabel-jesus-guilherme/" target="_blank" rel="noopener">Filipa Guilherme</a> &middot; ' +
            'limites: CAOP 2025 (DGT). Hectares por contagem de p&iacute;xeis (&asymp; 57 m&sup2; cada) dentro do concelho.',
@@ -217,6 +217,12 @@
       var difPP = function (a, b) { var d = num[a].veg - num[b].veg; return MU.n(Math.abs(d), 1); };
       /* saldo com sinal (b − a): «+1,4» = mais vegetação em b; «−2,0» = menos */
       var saldoPP = function (a, b) { var d = num[b].veg - num[a].veg; return (d > 0 ? '+' : d < 0 ? '−' : '') + MU.n(Math.abs(d), 1); };
+      /* 1σ (p.p.) da % de vegetação por época Landsat (dispersão ano a ano + ponte L8-L7); 1947/1979 não têm */
+      var INC = D.incerteza || {};
+      var sigma = function (a, b) { return (INC[a] != null && INC[b] != null) ? Math.sqrt(INC[a] * INC[a] + INC[b] * INC[b]) : null; };
+      var pm = function (s) { return s == null ? '' : ' (&plusmn;' + MU.n(s, 1) + ')'; };
+      /* diferença maior que 2σ → distinta do ruído; senão, não afirmar tendência */
+      var distinta = function (a, b) { var s = sigma(a, b); return s != null && Math.abs(num[b].veg - num[a].veg) > 2 * s; };
       function mostrar() {
         visiveis.forEach(function (l) { map.removeLayer(l); });
         visiveis = [];
@@ -245,7 +251,8 @@
           q('#h-nums').innerHTML = MU.htmlNums([
             { v: MU.n(na.veg, 1), u: '%', r: 'de vegeta&ccedil;&atilde;o em ' + a.nome + ' (esq.)' },
             { v: MU.n(nd.veg, 1), u: '%', r: 'em ' + d.nome + ' (dir.)' },
-            { v: difPP(est.esq, est.dir), u: 'p.p.', r: 'de diferen&ccedil;a' }
+            { v: difPP(est.esq, est.dir), u: 'p.p.',
+              r: 'de diferen&ccedil;a' + pm(sigma(est.esq, est.dir)) + (sigma(est.esq, est.dir) != null && !distinta(est.esq, est.dir) ? '; dentro do ru&iacute;do' : '') }
           ]);
           b79.style.display = 'none';
           q('#h-leg').innerHTML = leg(a.cor, 'Vegeta&ccedil;&atilde;o, esquerda: ' + a.nome) + leg(d.cor, 'Vegeta&ccedil;&atilde;o, direita: ' + d.nome) +
@@ -262,15 +269,15 @@
           q('#h-nums').innerHTML = MU.htmlNums([
             { v: MU.n(S.perda), u: 'ha', r: 'de vegeta&ccedil;&atilde;o perdida, 1985-90 a 2023-24' },
             { v: MU.n(S.ganho), u: 'ha', r: 'ganhos' },
-            { v: saldoPP('1985-90', '2023-24'), u: 'p.p.', r: 'de saldo de vegeta&ccedil;&atilde;o' }
+            { v: saldoPP('1985-90', '2023-24'), u: 'p.p.',
+              r: 'de saldo' + pm(sigma('1985-90', '2023-24')) + (distinta('1985-90', '2023-24') ? '' : '; sem tend&ecirc;ncia detect&aacute;vel') }
           ]);
         } else {
           q('#h-fonte').innerHTML = '<b>' + e.nome + '</b>: ' + e.fonte + (e.dif ? '<br><i>' + RESSALVA + '</i>' : '');
           q('#h-nums').innerHTML = MU.htmlNums([
             { v: MU.n(n.veg, 1), u: '%', r: 'de vegeta&ccedil;&atilde;o em ' + e.nome + (e.dif ? ' (outra fonte)' : '') },
-            { v: MU.n(n.edif, 1), u: '%', r: 'de edificado' },
-            { v: difPP('1947', '2023-24'), u: 'p.p.', r: 'de vegeta&ccedil;&atilde;o a menos desde 1947' }
-          ]);
+            { v: MU.n(n.edif, 1), u: '%', r: 'de edificado' }
+          ].concat(INC[e.id] != null ? [{ v: '&plusmn;' + MU.n(INC[e.id], 1), u: 'p.p.', r: 'de incerteza (1&sigma;)' }] : []));
         }
         b79.style.display = (est.epoca === '1979' && !est.perdaGanho) ? 'block' : 'none';
         b79.textContent = est.det79 ? 'Voltar às 2 classes' : 'Ver as 5 classes de 1979';
