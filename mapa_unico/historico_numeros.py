@@ -16,9 +16,14 @@ GRELHA = (41.13, -8.7, 41.19, -8.54)  # lat_s, lon_o, lat_n, lon_e (épocas Land
 BOUNDS_1947 = (41.12912995365261, -8.700884213830351, 41.189999037480554, -8.539187462666328)
 
 
-def contar(mascara_alfa: np.ndarray, concelho: np.ndarray) -> float:
-    """% de píxeis com alfa > 0 dentro do concelho (bool, mesma forma)."""
-    return 100.0 * float(((mascara_alfa > 0) & concelho).sum()) / float(concelho.sum())
+def contar(mascara_alfa: np.ndarray, concelho: np.ndarray, binaria: bool = False) -> float:
+    """% do concelho (bool, mesma forma) coberta pela máscara.
+
+    Camadas Landsat (padrão): alfa = fracção de vegetação/edificado por píxel (fase 2, 2026-11-18), ponderada
+    por alfa/255. Camadas binárias (1947: alfa 0/200): `binaria=True` conta píxeis com alfa > 0."""
+    if binaria:
+        return 100.0 * float(((mascara_alfa > 0) & concelho).sum()) / float(concelho.sum())
+    return 100.0 * float((mascara_alfa.astype(np.float64)[concelho] / 255.0).sum()) / float(concelho.sum())
 
 
 def _alfa(origem) -> np.ndarray:
@@ -69,10 +74,10 @@ def percentagens(raiz: Path) -> dict:
             veg = _alfa(raiz / "1947" / "layers" / "uso_1947_vegetacao.png")
             h, w = veg.shape
             c47, cob = _concelho_na_grelha_1947(concelho, w, h)
-            v = contar(veg, c47)
+            v = contar(veg, c47, binaria=True)
             del veg
             edif = _alfa(raiz / "1947" / "layers" / "uso_1947_edificado.png")
-            out[e] = {"veg": r(v), "edif": r(contar(edif, c47)), "cobertura": r(cob)}
+            out[e] = {"veg": r(v), "edif": r(contar(edif, c47, binaria=True)), "cobertura": r(cob)}
         else:
             veg = _alfa(hist / f"veg_{e}.png")
             edif = _alfa(hist / f"edif_{e}.png")

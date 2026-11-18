@@ -34,8 +34,8 @@ def test_sete_epocas_do_mais_recente_ao_mais_antigo(nums):
 
 def test_conferem_com_contagem_independente(nums):
     mask = np.array(Image.open(RAIZ / "layers_historico" / "porto_mask.png"))[..., 3] > 0
-    veg = np.array(Image.open(RAIZ / "layers_historico" / "veg_2023-24.png"))[..., 3] > 0
-    esperado = 100 * (veg & mask).sum() / mask.sum()
+    veg = np.array(Image.open(RAIZ / "layers_historico" / "veg_2023-24.png"))[..., 3] / 255.0  # alfa = fracção
+    esperado = 100 * veg[mask].sum() / mask.sum()
     assert abs(nums["2023-24"]["veg"] - esperado) < 0.1
 
 
@@ -111,3 +111,15 @@ def test_perda_ganho_sem_manchas_abaixo_de_meio_hectare():
         lab, k = ndi.label(a, np.ones((3, 3)))
         areas = np.bincount(lab.ravel())[1:] * ha_px
         assert k > 0 and areas.min() >= 0.5, f"{n}: menor mancha {areas.min():.2f} ha"
+
+
+def test_contar_binaria_ignora_o_valor_do_alfa():
+    """1947 tem alfa 200 (não 255): binária conta píxeis, ponderada daria 78 %."""
+    concelho = np.ones((2, 2), bool)
+    m = np.array([[200, 0], [0, 0]], np.uint8)
+    assert contar(m, concelho, binaria=True) == 25.0
+    assert abs(contar(m, concelho) - 100 * (200 / 255) / 4) < 1e-9
+
+
+def test_1947_nao_mudou_com_a_fase_2(nums):
+    assert abs(nums["1947"]["veg"] - 74.5) < 0.1 and abs(nums["1947"]["edif"] - 21.2) < 0.1

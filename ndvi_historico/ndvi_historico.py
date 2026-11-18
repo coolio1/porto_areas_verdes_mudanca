@@ -218,7 +218,7 @@ OFFSET_OLI = media_concelho(_l8.subtract(_l7).rename('ndvi'))
 print(f'  desvio NDVI (L8 - L7, media do concelho) = {OFFSET_OLI:+.4f}')
 _pct = lambda im: 100 * im.gte(0.25).rename('ndvi').reduceRegion(
     ee.Reducer.mean(), portoMuniGeom, 30, maxPixels=1e9).get('ndvi').getInfo()
-print(f'  % vegetacao na sobreposicao: L7={_pct(_l7):.1f}  L8 bruto={_pct(_l8):.1f}  '
+print(f'  % vegetacao na sobreposicao (so diagnostico, limiar 0,25): L7={_pct(_l7):.1f}  L8 bruto={_pct(_l8):.1f}  '
       f'L8 corrigido={_pct(_l8.subtract(OFFSET_OLI)):.1f}')
 
 print('\nA calcular compositos NDVI por epoca...')
@@ -234,13 +234,86 @@ for name, sensor, years in EPOCHS:
     composites[name] = ndvi
 
 # ============================================================
-# Incerteza por epoca (2026-11-18): dispersao ano a ano da % de vegetacao dentro de cada epoca
-# (mesmo metodo, 1 compósito por ano) e erro da ponte L8-L7. Vai para layers_historico/incerteza.json.
+# Fraccao de vegetacao por pixel (fase 2, 2026-11-18)
 # ============================================================
-import json, statistics
+# O limiar fixo NDVI >= 0,25 a 30 m sobrestima a vegetacao urbana (27-36 % do construido de 1979 contava como
+# vegetacao) e mistura perda real com pixeis mistos. Aqui o NDVI converte-se numa FRACCAO de vegetacao por pixel
+# com uma curva empirica monotona NDVI -> fraccao, calibrada em 2023-24 contra a classificacao Sentinel-2 (10 m)
+# do tema «Hoje» (Arvores + Solo = nao edificado, layers/uso_*.png). A mesma curva aplica-se a todas as epocas
+# (os sensores ja estao ligados pela ponte L7). Guarda layers_historico/fvc_calibracao.json.
+import json
+import statistics
+import numpy as np
+import rasterio
+from scipy import ndimage as ndi
 
-def pct_veg(img):
-    return 100 * img.gte(0.25).rename('ndvi').reduceRegion(
+GRELHA_W, GRELHA_H = 2048, 769   # grelha das camadas (EPSG:4326, caixa `porto`)
+
+def baixar_matriz(img, tentativas=5):
+    """Descarrega uma imagem EE (1 banda) como matriz float na grelha das camadas (nan onde sem dados)."""
+    for t in range(tentativas):
+        try:
+            url = img.getDownloadURL({'region': porto, 'dimensions': f'{GRELHA_W}x{GRELHA_H}',
+                                      'crs': 'EPSG:4326', 'format': 'GEO_TIFF'})
+            dados = requests.get(url, timeout=300).content
+            with rasterio.open(io.BytesIO(dados)) as ds:
+                a = ds.read(1).astype(np.float32)
+                if ds.nodata is not None:
+                    a[a == ds.nodata] = np.nan
+            return a
+        except Exception as e:
+            print(f'  descarga da matriz falhou ({t + 1}/{tentativas}): {str(e)[:80]}')
+            time.sleep(5 * (t + 1))
+    raise RuntimeError('nao foi possivel descarregar a matriz')
+
+def _alfa(caminho):
+    return np.array(Image.open(caminho))[..., 3]
+
+def _isotonica(y, w):
+    """Regressao isotonica crescente (PAVA) com pesos."""
+    blocos = []
+    for yi, wi in zip(y, w):
+        blocos.append([yi, wi, 1])
+        while len(blocos) > 1 and blocos[-2][0] > blocos[-1][0]:
+            b2, b1 = blocos.pop(), blocos.pop()
+            wt = b1[1] + b2[1]
+            blocos.append([(b1[0] * b1[1] + b2[0] * b2[1]) / wt, wt, b1[2] + b2[2]])
+    return np.concatenate([[b[0]] * b[2] for b in blocos])
+
+print('\nA calibrar NDVI -> fraccao de vegetacao (2023-24 vs Sentinel-2 do tema Hoje)...')
+CONCELHO = _alfa(os.path.join(LAYERS_DIR, 'porto_mask.png')) > 0
+_ref = (_alfa(os.path.join(ROOT_DIR, 'layers', 'uso_arvores.png')) > 0) | \
+       (_alfa(os.path.join(ROOT_DIR, 'layers', 'uso_solo.png')) > 0)
+_n23 = baixar_matriz(composites['2023-24'])
+_ok = CONCELHO & np.isfinite(_n23)
+_bordas = np.arange(-0.2, 0.9001, 0.025)
+_idx = np.digitize(_n23[_ok], _bordas) - 1
+_xs, _ys, _ws = [], [], []
+for _i in range(len(_bordas) - 1):
+    _s = _idx == _i
+    if _s.sum() >= 300:
+        _xs.append(float(_n23[_ok][_s].mean())); _ys.append(float(_ref[_ok][_s].mean())); _ws.append(int(_s.sum()))
+_ys = np.clip(_isotonica(_ys, _ws), 0, 1)
+LUT_X = [round(x, 4) for x in _xs]
+LUT_Y = [round(float(y), 4) for y in _ys]
+_fvc23 = np.interp(_n23[_ok], LUT_X, LUT_Y)
+print(f'  referencia (Arvores+Solo, Hoje): {100 * _ref[_ok].mean():.1f} %  | fraccao calibrada 2023-24: {100 * _fvc23.mean():.1f} %')
+with open(os.path.join(LAYERS_DIR, 'fvc_calibracao.json'), 'w', encoding='utf-8') as _f:
+    json.dump({'ndvi': LUT_X, 'fraccao': LUT_Y, 'pixeis': int(_ok.sum()),
+               'ref_pct': round(100 * float(_ref[_ok].mean()), 1), 'fvc_2023_24_pct': round(100 * float(_fvc23.mean()), 1),
+               'referencia': 'layers/uso_arvores.png + uso_solo.png (Sentinel-2 10 m, tema Hoje)'},
+              _f, indent=1)
+
+def fvc(ndvi_img):
+    """NDVI (bandas 'ndvi') -> fraccao de vegetacao 0-1, pela curva calibrada."""
+    return ndvi_img.interpolate(LUT_X, LUT_Y, 'clamp').rename('ndvi')
+
+# ============================================================
+# Incerteza por epoca: dispersao ano a ano da % de vegetacao (fraccao media no concelho, 1 compósito por ano)
+# e erro residual da ponte L8-L7 (depois do desvio). Vai para layers_historico/incerteza.json.
+# ============================================================
+def pct_veg(ndvi_img):
+    return 100 * fvc(ndvi_img).reduceRegion(
         ee.Reducer.mean(), portoMuniGeom, 30, maxPixels=1e9).get('ndvi').getInfo()
 
 def _ep(vals):
@@ -263,10 +336,10 @@ for name, sensor, years in EPOCHS:
 
 dif_ponte = []
 for y in PONTE_ANOS:
-    dif_ponte.append(pct_veg(composito_l8_so([y])) - pct_veg(composito_l7([y])))
+    dif_ponte.append(pct_veg(composito_l8_so([y]).subtract(OFFSET_OLI)) - pct_veg(composito_l7([y])))
 incerteza['ponte_L8_L7'] = {'anos': PONTE_ANOS, 'dif_pp_por_ano': [round(v, 1) for v in dif_ponte],
                             'media_pp': round(statistics.mean(dif_ponte), 1), 'ep': round(_ep(dif_ponte), 1)}
-print(f'  ponte L8-L7 (bruta, p.p.): {incerteza["ponte_L8_L7"]}')
+print(f'  ponte L8-L7 (residual apos o desvio, p.p.): {incerteza["ponte_L8_L7"]}')
 os.makedirs(LAYERS_DIR, exist_ok=True)
 with open(os.path.join(LAYERS_DIR, 'incerteza.json'), 'w', encoding='utf-8') as _f:
     json.dump(incerteza, _f, ensure_ascii=False, indent=1)
@@ -321,99 +394,72 @@ def download_mask(image, color_hex, filename):
     return _robust_download(vis, os.path.join(LAYERS_DIR, filename), filename, transparent_black=True)
 
 # ============================================================
-# Mascaras de vegetacao (NDVI >= 0.4) por epoca
+# Camadas de vegetacao, edificado e perda/ganho (calculadas em Python a partir da fraccao por pixel)
 # ============================================================
-NDVI_VEG_THRESHOLD = 0.25
-
-veg_masks = {}
-for name, sensor, years in EPOCHS:
-    veg_masks[name] = composites[name].gte(NDVI_VEG_THRESHOLD)
-
-# Mascara de agua permanente (JRC Global Surface Water)
-# occurrence > 50% = agua permanente (rio Douro, mar, etc.)
-# unmask(0) garante que pixeis sem dados JRC ficam como 0 (nao-agua)
-jrc_water = ee.Image('JRC/GSW1_4/GlobalSurfaceWater').select('occurrence')
-water_mask = jrc_water.unmask(0).gt(50).clip(porto)  # 1 = agua, 0 = nao-agua
-
-# Mascaras de edificado (tudo o que nao e vegetacao nem agua)
-portoMuniMask = ee.Image.constant(1).clip(portoMuniGeom)
-edif_masks = {}
-for name, sensor, years in EPOCHS:
-    not_veg = veg_masks[name].Not()
-    edif_masks[name] = not_veg.updateMask(water_mask.Not()).updateMask(portoMuniMask)
-
-# Perda/ganho de vegetacao (primeira vs ultima epoca)
+# veg_<epoca>.png : alfa = fraccao de vegetacao (0-255); a cor e so tingida no mapa. Fora do concelho mantem-se
+#                   (so cor); os numeros contam apenas dentro do concelho (mapa_unico/historico_numeros.py).
+# edif_<epoca>.png: alfa = (1 - fraccao) onde nao ha agua permanente (JRC GSW > 50 %), so dentro do concelho.
+# veg_perda/ganho : variacao da fraccao entre o inicio (media 1985-90 e 1995-00) e o fim (2016-17 e 2023-24)
+#                   >= DELTA_FVC, em manchas >= MANCHA_MIN_HA dentro do concelho (histerese: sem 1 so epoca).
+DELTA_FVC = 0.30
+MANCHA_MIN_HA = 0.5
 first_epoch = EPOCHS[0][0]   # 1985-90
 last_epoch = EPOCHS[-1][0]   # 2023-24
-# Com histerese (2026-11-18; a versao simples 1985-90 vs 2023-24 era sobretudo ruido do limiar: 54 % da
-# perda em manchas <1 ha): mudanca de classe nas duas epocas de cada ponta E salto de NDVI >= 0,15 E mancha
-# >= 0,5 ha (6 pixeis ligados).
-DELTA_NDVI = 0.15
-MANCHA_MIN_PX = 6
-_a1, _a2 = EPOCHS[0][0], EPOCHS[1][0]      # 1985-90, 1995-00
-_b1, _b2 = EPOCHS[-2][0], EPOCHS[-1][0]    # 2016-17, 2023-24
+_inicio = [EPOCHS[0][0], EPOCHS[1][0]]      # 1985-90, 1995-00
+_fim = [EPOCHS[-2][0], EPOCHS[-1][0]]       # 2016-17, 2023-24
+HA_PX = 4142.1 / CONCELHO.sum()             # ha por pixel da grelha (CAOP 2025)
 
-MANCHA_MIN_HA = 0.5
+NIVEIS_ALFA = 16   # alfa quantizado a 16 niveis (a fraccao tem ~5 p.p. de erro): PNG e historico.js ficam leves
 
-def filtrar_manchas(png, min_ha=MANCHA_MIN_HA):
-    """Tira ao PNG de perda/ganho as manchas (8-ligadas, dentro do concelho) com menos de min_ha.
-    Feito em Python depois do download: o connectedPixelCount do GEE reavalia-se a escala do render
-    (6,6 m) e deixava 298 de 339 manchas abaixo de 0,5 ha."""
-    import numpy as np
-    from scipy import ndimage as ndi
-    im = Image.open(png).convert('RGBA')
-    arr = np.array(im)
-    concelho = np.array(Image.open(os.path.join(LAYERS_DIR, 'porto_mask.png')))[..., 3] > 0
-    ha_px = 4142.1 / concelho.sum()
-    dentro = (arr[..., 3] > 0) & concelho
+def alfa_de(fraccao):
+    """Fraccao 0-1 -> alfa uint8 quantizado a NIVEIS_ALFA niveis (multiplos de 255/(N-1))."""
+    return np.round(np.round(np.clip(fraccao, 0, 1) * (NIVEIS_ALFA - 1)) * 255 / (NIVEIS_ALFA - 1)).astype(np.uint8)
+
+def png_alfa(alfa, cor_hex, caminho):
+    """Grava RGBA com cor fixa e o alfa dado (uint8)."""
+    r, g, b = (int(cor_hex[i:i + 2], 16) for i in (0, 2, 4))
+    rgba = np.zeros(alfa.shape + (4,), np.uint8)
+    rgba[..., 0], rgba[..., 1], rgba[..., 2], rgba[..., 3] = r, g, b, alfa
+    Image.fromarray(rgba).save(caminho)
+
+def manchas_minimas(bool_arr, min_ha=MANCHA_MIN_HA):
+    """Mantem so as manchas (8-ligadas) dentro do concelho com area >= min_ha; fora do concelho nao se mexe."""
+    dentro = bool_arr & CONCELHO
     lab, k = ndi.label(dentro, np.ones((3, 3)))
-    area = np.bincount(lab.ravel(), minlength=k + 1) * ha_px
+    area = np.bincount(lab.ravel(), minlength=k + 1) * HA_PX
     manter = area >= min_ha
     manter[0] = False
-    arr[dentro & ~manter[lab]] = (0, 0, 0, 0)   # fora do concelho nao se mexe (so cor)
-    Image.fromarray(arr).save(png)
-    return float(area[manter].sum()), int(manter.sum())
+    out = bool_arr & (~CONCELHO | manter[lab])
+    return out, float(area[manter].sum()), int(manter.sum())
 
-def _mancha(m):
-    return m.selfMask()
+print('\nA descarregar a agua permanente (JRC) e a fraccao de vegetacao por epoca...')
+jrc_water = ee.Image('JRC/GSW1_4/GlobalSurfaceWater').select('occurrence')
+water_mask = jrc_water.unmask(0).gt(50).clip(porto).rename('ndvi')
+AGUA = np.nan_to_num(baixar_matriz(water_mask)) > 0.5
 
-_nv = {n: veg_masks[n].Not() for n in veg_masks}
-_loss = (veg_masks[_a1].And(veg_masks[_a2]).And(_nv[_b1]).And(_nv[_b2])
-         .And(composites[first_epoch].subtract(composites[last_epoch]).gte(DELTA_NDVI)))
-_gain = (_nv[_a1].And(_nv[_a2]).And(veg_masks[_b1]).And(veg_masks[_b2])
-         .And(composites[last_epoch].subtract(composites[first_epoch]).gte(DELTA_NDVI)))
-veg_loss = _mancha(_loss)
-veg_gain = _mancha(_gain)
+FVC = {}
+for name, sensor, years in EPOCHS:
+    a = baixar_matriz(fvc(composites[name]))
+    FVC[name] = np.clip(np.nan_to_num(a, nan=0.0), 0, 1)
+    alfa_v = alfa_de(FVC[name])
+    png_alfa(alfa_v, '00FF00', os.path.join(LAYERS_DIR, f'veg_{name}.png'))
+    alfa_e = alfa_de(1 - FVC[name])
+    alfa_e[~CONCELHO | AGUA] = 0
+    png_alfa(alfa_e, 'C4A882', os.path.join(LAYERS_DIR, f'edif_{name}.png'))
+    print(f'  {name}: veg {100 * (alfa_v[CONCELHO] / 255).mean():.1f} %  edif {100 * (alfa_e[CONCELHO] / 255).mean():.1f} %')
 
-# ============================================================
-# Downloads (com pausa entre pedidos para evitar desconexoes)
-# ============================================================
+_ini = np.mean([FVC[n] for n in _inicio], axis=0)
+_fi = np.mean([FVC[n] for n in _fim], axis=0)
+for _f, _delta, _cor in (('veg_perda.png', _ini - _fi, 'FF4444'), ('veg_ganho.png', _fi - _ini, '44FF44')):
+    _m, _ha, _n = manchas_minimas(_delta >= DELTA_FVC)
+    png_alfa(np.where(_m, 255, 0).astype(np.uint8), _cor, os.path.join(LAYERS_DIR, _f))
+    print(f'  {_f}: {_n} manchas >= {MANCHA_MIN_HA} ha, {_ha:.1f} ha no concelho')
+
+# NDVI por epoca (so visual)
 DOWNLOAD_PAUSE = 5  # segundos entre downloads
-
-# NDVI por epoca
 print('\nA descarregar camadas NDVI...')
 for name, sensor, years in EPOCHS:
     download_ndvi(composites[name], f'ndvi_{name}.png', f'NDVI {name}')
-    time.sleep(DOWNLOAD_PAUSE)
-
-# Mascaras de vegetacao por epoca
-print('\nA descarregar mascaras de vegetacao...')
-for name, sensor, years in EPOCHS:
-    download_mask(veg_masks[name].selfMask(), '00FF00', f'veg_{name}.png')
-    time.sleep(DOWNLOAD_PAUSE)
-
-# Mascaras de edificado por epoca
-print('\nA descarregar mascaras de edificado...')
-for name, sensor, years in EPOCHS:
-    download_mask(edif_masks[name].selfMask(), 'C4A882', f'edif_{name}.png')
-    time.sleep(DOWNLOAD_PAUSE)
-
-# Perda e ganho
-print('\nA descarregar perda/ganho de vegetacao...')
-for _m, _cor, _f in ((veg_loss, 'FF4444', 'veg_perda.png'), (veg_gain, '44FF44', 'veg_ganho.png')):
-    download_mask(_m, _cor, _f)
-    _ha, _n = filtrar_manchas(os.path.join(LAYERS_DIR, _f))
-    print(f'  {_f}: {_n} manchas >= {MANCHA_MIN_HA} ha, {_ha:.1f} ha no concelho')
     time.sleep(DOWNLOAD_PAUSE)
 
 # Municipios
@@ -422,49 +468,15 @@ muni_styled = ee.Image().byte().paint(featureCollection=municipiosPorto, color=1
 download_mask(muni_styled, 'FFFFFF', 'municipios.png')
 
 # ============================================================
-# Estatisticas: NDVI medio + area de vegetacao por epoca
+# Estatisticas (a partir das camadas gravadas, dentro do concelho)
 # ============================================================
-PIXEL_AREA_HA = 30 * 30 / 10000  # 30m pixel = 0.09 ha
-
-print('\n--- Estatisticas por epoca ---')
-print(f'  {"Epoca":<12} {"NDVI medio":>12} {"Area veg (ha)":>14} {"Area veg (%)":>13}')
-print(f'  {"-"*12} {"-"*12} {"-"*14} {"-"*13}')
-
-# Area total da regiao (pixeis validos)
-total_pixels = composites[first_epoch].gt(-1).reduceRegion(
-    reducer=ee.Reducer.sum(), geometry=portoMuniGeom, scale=30, maxPixels=1e9
-).getInfo().get('ndvi', 0)
-
+print('\n--- Estatisticas por epoca (fraccao de vegetacao, % do concelho) ---')
 for name, sensor, years in EPOCHS:
-    stats = composites[name].reduceRegion(
-        reducer=ee.Reducer.mean(),
-        geometry=portoMuniGeom,
-        scale=30,
-        maxPixels=1e9
-    ).getInfo()
-    veg_count = veg_masks[name].reduceRegion(
-        reducer=ee.Reducer.sum(),
-        geometry=portoMuniGeom,
-        scale=30,
-        maxPixels=1e9
-    ).getInfo()
-    ndvi_mean = stats.get('ndvi', 0)
-    veg_pixels = veg_count.get('ndvi', 0)
-    veg_ha = veg_pixels * PIXEL_AREA_HA
-    veg_pct = (veg_pixels / total_pixels * 100) if total_pixels > 0 else 0
-    print(f'  {name:<12} {ndvi_mean:>12.4f} {veg_ha:>13.0f} {veg_pct:>12.1f}%')
+    v = FVC[name][CONCELHO].mean()
+    print(f'  {name:<10} veg {100 * v:5.1f} %  = {4142.1 * v:6.0f} ha-equivalentes')
 
-# Perda/ganho totais
-loss_count = veg_loss.unmask(0).reduceRegion(
-    reducer=ee.Reducer.sum(), geometry=portoMuniGeom, scale=30, maxPixels=1e9
-).getInfo().get('ndvi', 0)
-gain_count = veg_gain.unmask(0).reduceRegion(
-    reducer=ee.Reducer.sum(), geometry=portoMuniGeom, scale=30, maxPixels=1e9
-).getInfo().get('ndvi', 0)
-print('\n  (perda/ganho com histerese, ANTES do filtro de manchas >= 0,5 ha; os valores finais estao acima)')
-print(f'  Vegetacao perdida ({first_epoch} -> {last_epoch}): {loss_count * PIXEL_AREA_HA:.0f} ha')
-print(f'  Vegetacao ganha  ({first_epoch} -> {last_epoch}): {gain_count * PIXEL_AREA_HA:.0f} ha')
-print(f'  Balanco liquido: {(gain_count - loss_count) * PIXEL_AREA_HA:+.0f} ha')
+# build_html retirado em 2026-11-18: ndvi_historico.html é agora um redireccionamento para o mapa único
+# (e a chamada falhava à procura de 1947/layers). As camadas vão para layers_historico/ e o mapa lê-as.
 
 
 # build_html retirado em 2026-11-18: ndvi_historico.html é agora um redireccionamento para o mapa único
