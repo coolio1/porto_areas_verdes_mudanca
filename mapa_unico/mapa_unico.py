@@ -172,7 +172,7 @@ def dados_historico() -> dict:
     d["edif_1979"] = "data:image/png;base64," + base64.b64encode(medif).decode()
     d["cobertura_1979"] = c79.geojson(g)
     d["cobertura_1979_ha"] = {
-        k: round(float(v), 1) for k, v in g.groupby("LC_1979_ab")["ha"].sum().items()
+        k: round(float(v), 1) for k, v in c79.recortar_ao_porto(g).groupby("LC_1979_ab")["ha"].sum().items()
     }
     d["numeros"] = percentagens(RAIZ)
     return d

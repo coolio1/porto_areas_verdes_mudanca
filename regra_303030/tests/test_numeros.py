@@ -39,3 +39,10 @@ def test_tabela_base_e_variantes():
     base = L[0]
     assert base[1] == 100.0 and base[2] == 50.0 and base[3] == 100.0 and base[4] == 50.0
     assert len(L) == 11
+
+
+def test_peso_dentro_zera_os_de_fora():
+    df = pd.DataFrame({"dentro": [True, False, True]})
+    assert list(numeros.peso_dentro(df)) == [1.0, 0.0, 1.0]
+    assert list(numeros.peso_dentro(df, [2, 5, 3])) == [2.0, 0.0, 3.0]
+    assert list(numeros.peso_dentro(pd.DataFrame({"x": [1, 2]}))) == [1.0, 1.0]       # sem coluna: todos contam

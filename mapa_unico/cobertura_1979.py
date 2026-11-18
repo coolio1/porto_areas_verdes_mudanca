@@ -46,6 +46,21 @@ def carregar() -> gpd.GeoDataFrame:
     return g
 
 
+CAOP = RAIZ / "CAOP_Continente_2025-gpkg" / "CAOP2025_municipios.shp"
+
+
+def recortar_ao_porto(g: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    """Polígonos recortados ao concelho do Porto (CAOP 2025, dtmn 1312) com `ha` recalculado: para os números.
+    O ficheiro de 1979 passa o limite (~2 % da área); as imagens podem passar, os cálculos não."""
+    caop = gpd.read_file(CAOP)
+    poly = caop[caop["dtmn"] == "1312"].to_crs(g.crs).geometry.iloc[0]
+    s = g.copy()
+    s["geometry"] = s.geometry.intersection(poly)
+    s = s[~s.geometry.is_empty].copy()
+    s["ha"] = s.geometry.area / 1e4
+    return s
+
+
 def geojson(g: gpd.GeoDataFrame) -> dict:
     s = g.copy()
     s["geometry"] = s.geometry.simplify(TOLERANCIA_M, preserve_topology=True)

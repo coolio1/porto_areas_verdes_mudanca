@@ -55,10 +55,20 @@ def test_1979_confere_com_as_areas_vectoriais(nums):
     """1979 vem das áreas vectoriais (as mesmas ha da legenda das 5 classes), não de píxeis rasterizados."""
     import cobertura_1979 as c79
 
-    ha = c79.carregar().groupby("LC_1979_ab")["ha"].sum()
+    ha = c79.recortar_ao_porto(c79.carregar()).groupby("LC_1979_ab")["ha"].sum()
     total = float(ha.sum())
     assert abs(nums["1979"]["veg"] - 100 * (ha["TRS"] + ha["HER"]) / total) < 0.1
     assert abs(nums["1979"]["edif"] - 100 * ha["ABE"] / total) < 0.1
+
+
+def test_1979_recortado_nao_passa_o_concelho():
+    """Os números de 1979 só contam o que está dentro do concelho (o ficheiro original passa o limite)."""
+    import cobertura_1979 as c79
+
+    g = c79.carregar()
+    s = c79.recortar_ao_porto(g)
+    assert s.ha.sum() < g.ha.sum() - 20          # o original tem >20 ha fora do concelho
+    assert s.ha.sum() <= 4142.1                   # ≤ área do concelho (CAOP)
 
 
 def test_mascara_visual_1979_confere_com_as_areas_vectoriais():

@@ -117,7 +117,7 @@ def main():
     from pyproj import Transformer
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import numeros
-    from edificios import carregar
+    from edificios import carregar, dentro_do_porto
     obter()
     ed = carregar()
     h = alturas(ed)
@@ -138,6 +138,7 @@ def main():
     for k in np.unique(celulas):
         pop_cel[int(k)] = float(a[int(k // 100000) - r0, int(k % 100000) - c0])
     pop, perdida = distribuir(celulas, pop_cel, peso, res)
+    pop = np.where(dentro_do_porto(ed), pop, 0.0)   # edifícios fora do concelho não têm residentes contados; a calibração é sobre os de dentro
     bruto = pop.sum()
     pop = pop * CENSOS_2021 / bruto
     print("GHS-POP nas células dos edifícios: %.0f hab (Censos 2021: %d; factor de calibração %.3f; perdida sem edifícios: %.0f)" % (bruto, CENSOS_2021, CENSOS_2021 / bruto, perdida))

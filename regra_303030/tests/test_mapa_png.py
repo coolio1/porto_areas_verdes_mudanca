@@ -44,3 +44,13 @@ def test_png_1bit_valido_e_com_a_forma_certa():
 def test_camadas_conhecidas():
     df = pd.DataFrame({k: [True] for k in ("todos", "nenhum", "c3", "c30", "c300")})
     assert set(mapa_png.categorias(df)) == set(mapa_png.CAMADAS)
+
+
+def test_edificios_fora_do_concelho_nao_contam():
+    df = pd.DataFrame({"todos": [True, True, False], "nenhum": [False, False, True], "c3": [True, True, False],
+                       "c30": [True, True, False], "c300": [True, True, False], "dentro": [True, False, True]})
+    pop = np.array([10.0, 0.0, 90.0])
+    ha = np.array([1e4, 5e4, 1e4])
+    n = mapa_png.numeros(df, pop, ha)
+    assert n["todos"] == {"edificios_pct": 50.0, "residentes_pct": 10.0, "ha": 1.0}     # o de fora não entra em nada
+    assert n["total"] == {"edificios": 2, "residentes": 100, "ha": 2.0}

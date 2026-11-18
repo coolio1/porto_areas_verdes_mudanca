@@ -63,6 +63,7 @@ Criação de artigos: skill `porto-verde-posts`. **Lista `/artigos/` (maquete A 
 ## Operações em dados geoespaciais
 - **GeoJSON >50 linhas ou substituição de blocos:** NUNCA editar inline com Edit/Write → script Python descartável que lê a fonte, transforma e escreve; apagá-lo depois.
 - **GEE:** só classificação raster (NDVI, uso do solo pixel-a-pixel). **Proibido gerar ou derivar polígonos de parques com GEE.**
+- **Cálculos só dentro do concelho (2026-11-18, pedido do utilizador):** totais, percentagens, hectares e população contam só o que está dentro do Porto (CAOP 2025, `dtmn` 1312); as imagens podem passar o limite, esbatidas. Fonte que passa o limite (OSM, Land cover 1979) → recortar ao CAOP antes de somar (`edificios.dentro_do_porto`, `cobertura_1979.recortar_ao_porto`). O contexto de vizinhança (copa a 500 m em volta de um edifício de fronteira) pode ir além do limite, é medição e não contagem.
 - **Antes de juntar um polígono:** existe no PDM? Senão, OSM. Nunca inventar nem aproximar geometrias.
 
 ## Lições aprendidas

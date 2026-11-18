@@ -7,12 +7,12 @@
  "nenhum": {
   "edificios_pct": 23.6,
   "residentes_pct": 10.7,
-  "ha": 133.6
+  "ha": 133.5
  },
  "c3": {
   "edificios_pct": 61.2,
-  "residentes_pct": 82.8,
-  "ha": 773.2
+  "residentes_pct": 82.9,
+  "ha": 773.1
  },
  "c30": {
   "edificios_pct": 5.3,
@@ -21,13 +21,13 @@
  },
  "c300": {
   "edificios_pct": 36.0,
-  "residentes_pct": 32.5,
+  "residentes_pct": 32.6,
   "ha": 306.1
  },
  "total": {
-  "edificios": 42104,
+  "edificios": 42098,
   "residentes": 231962,
-  "ha": 974.0
+  "ha": 973.8
  },
  "sens": {
   "c30_limiar25_pct": 19.4,

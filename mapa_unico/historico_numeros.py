@@ -57,8 +57,8 @@ def percentagens(raiz: Path) -> dict:
     for e in EPOCAS:
         if e == "1979":
             # áreas vectoriais (as ha da legenda das 5 classes); a rasterização por PIL incha o contorno.
-            # Denominador: soma das 5 classes (partição do território, ~0,7 % acima do concelho).
-            ha = c79.carregar().groupby("LC_1979_ab")["ha"].sum()
+            # Recortadas ao concelho (o ficheiro passa o limite ~2 %); denominador: soma das 5 classes dentro do concelho.
+            ha = c79.recortar_ao_porto(c79.carregar()).groupby("LC_1979_ab")["ha"].sum()
             total = float(ha.sum())
             out[e] = {
                 "veg": r(100 * float(ha["TRS"] + ha["HER"]) / total),

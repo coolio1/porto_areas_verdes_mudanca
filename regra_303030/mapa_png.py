@@ -47,18 +47,25 @@ def grelha(passo_m=PASSO_M):
     return w, h, from_bounds(W, S, E, N, w, h)
 
 
+def dentro(df):
+    """Edifícios dentro do concelho (coluna `dentro`; sem ela, todos)."""
+    return df["dentro"].values.astype(bool) if "dentro" in df else np.ones(len(df), dtype=bool)
+
+
 def categorias(df):
-    """Dicionário nome → máscara booleana por edifício."""
-    return {"todos": df.todos.values, "nenhum": df.nenhum.values, "c3": df.c3.values, "c30": df.c30.values, "c300": df.c300.values}
+    """Dicionário nome → máscara booleana por edifício (só os de dentro do concelho)."""
+    d = dentro(df)
+    return {"todos": df.todos.values & d, "nenhum": df.nenhum.values & d, "c3": df.c3.values & d, "c30": df.c30.values & d, "c300": df.c300.values & d}
 
 
 def numeros(df, pop, ha):
-    """% de edifícios, % de residentes e hectares de implantação por camada."""
+    """% de edifícios, % de residentes e hectares de implantação por camada (só edifícios dentro do concelho)."""
+    d = dentro(df)
     out = {}
     for k, m in categorias(df).items():
-        out[k] = {"edificios_pct": round(100 * float(m.mean()), 1), "residentes_pct": round(100 * float(pop[m].sum() / pop.sum()), 1),
+        out[k] = {"edificios_pct": round(100 * float(m.sum() / d.sum()), 1), "residentes_pct": round(100 * float(pop[m].sum() / pop[d].sum()), 1),
                   "ha": round(float(ha[m].sum()) / 1e4, 1)}
-    out["total"] = {"edificios": int(len(df)), "residentes": int(round(float(pop.sum()))), "ha": round(float(ha.sum()) / 1e4, 1)}
+    out["total"] = {"edificios": int(d.sum()), "residentes": int(round(float(pop[d].sum()))), "ha": round(float(ha[d].sum()) / 1e4, 1)}
     return out
 
 
@@ -84,8 +91,9 @@ def main():
         (SAIDA / f"{k}.png").write_bytes(png_1bit(mask))
         print(k, "%d px" % mask.sum(), "%.0f KB" % (os.path.getsize(SAIDA / f'{k}.png') / 1024))
     n = numeros(df, pop, ed.geometry.area.values)
-    n["sens"] = {"c30_limiar25_pct": round(100 * float((df.copa500 >= 25).mean()), 1),    # % de edifícios com o limiar a 25 %
-                 "c300_1ha_pct": round(100 * float((df.d_rede_1 <= 300).mean()), 1)}      # % de edifícios com parque ≥ 1 ha
+    dd = dentro(df)
+    n["sens"] = {"c30_limiar25_pct": round(100 * float(((df.copa500 >= 25).values & dd).sum() / dd.sum()), 1),    # % de edifícios com o limiar a 25 %
+                 "c300_1ha_pct": round(100 * float(((df.d_rede_1 <= 300).values & dd).sum() / dd.sum()), 1)}      # % de edifícios com parque ≥ 1 ha
     (SAIDA / "numeros.json").write_text(json.dumps(n, ensure_ascii=False, indent=1), encoding="utf-8")
     print("grelha", w, "x", h)
 
