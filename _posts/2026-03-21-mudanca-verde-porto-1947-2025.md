@@ -10,14 +10,14 @@ tags: [porto, sentinel-2, landsat, ndvi, gee, vegetação, animação, deteção
 
 **Dinâmicas de Ocupação do Solo e Cobertura Vegetal na Cidade do Porto (1947–2025): Uma Análise Quantitativa Baseada em Deteção Remota**
 
-> **Actualização de 18 de Novembro de 2026.** A primeira versão deste artigo concluía que o Porto tinha perdido 1 785 ha de vegetação desde 1985 (de 45,0 % para 30,0 % do concelho). Essa queda era em grande parte **artificial**: vinha da normalização entre sensores Landsat e de um limiar fixo de NDVI (índice de vegetação por diferença normalizada) que contava como vegetação 27 % do que já estava construído em 1979. Com a ponte de sensor corrigida, a vegetação calculada por píxel e as incertezas, a série de satélite **não mostra perda detectável entre 1985 e 2024** (32,5 % → 35,2 %, ±1,4 p.p.). Os números do concelho (e só do concelho) foram recalculados e as secções 4.2, 5 e 6 reescritas. Método e limites: [docs/historico_ponte_landsat7.md](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/docs/historico_ponte_landsat7.md).
+> **Actualização de 18 de Novembro de 2026.** A primeira versão deste artigo concluía que o Porto tinha perdido cerca de um terço da vegetação desde 1985 (de 45,0 % para 30,0 % da área analisada, que era maior do que o concelho). Essa queda era em grande parte **artificial**: vinha da normalização entre sensores Landsat e de um limiar fixo de NDVI (índice de vegetação por diferença normalizada) que contava como vegetação 27 % do que já estava construído em 1979. Com a ponte de sensor corrigida, a vegetação calculada por píxel e as incertezas, a série de satélite **não mostra perda detectável entre 1985 e 2024** (32,5 % → 35,2 %, ±1,4 p.p.). Os números do concelho (e só do concelho) foram recalculados e as secções 4.2, 5 e 6 reescritas. Método e limites: [docs/historico_ponte_landsat7.md](https://github.com/coolio1/porto_areas_verdes_mudanca/blob/main/docs/historico_ponte_landsat7.md).
 
 
 ---
 
 ## 1. Introdução
 
-O espaço verde urbano desempenha um papel ecológico e social insubstituível, fornecendo serviços de ecossistema vitais — desde a mitigação do efeito de ilha de calor até à promoção da saúde pública, regulação hidrológica e manutenção da biodiversidade (Graça *et al.*, 2018). Contudo, nas últimas décadas, a cidade do Porto tem sido palco de uma intensa transformação territorial, com a progressiva conversão de solos permeáveis em superfícies impermeabilizadas.
+O espaço verde urbano desempenha um papel ecológico e social insubstituível, fornecendo serviços de ecossistema vitais — desde a mitigação do efeito de ilha de calor até à promoção da saúde pública, regulação hidrológica e manutenção da biodiversidade (Graça *et al.*, 2018). Contudo, nos últimos séculos, a cidade do Porto tem sido palco de uma intensa transformação territorial, ao longo do século XX, com a progressiva conversão de solos permeáveis em superfícies impermeabilizadas.
 
 Lopes *et al.* (2025) demonstraram recentemente que 32,6% do território municipal se encontra em zonas de elevado risco térmico, com a intensidade da ilha de calor urbana (UHI) particularmente pronunciada durante as noites de verão — um fenómeno agravado pela escassez de infraestrutura verde, sobretudo em áreas socioeconomicamente desfavorecidas. A quantificação rigorosa da evolução da cobertura vegetal torna-se, assim, não apenas um exercício académico mas um instrumento de planeamento urbano com implicações diretas na saúde pública e na resiliência climática.
 
@@ -74,13 +74,13 @@ Após a classificação inicial, um segundo *pipeline* de limpeza cruzou os resu
 
 A primeira versão harmonizava os sensores com os coeficientes de Roy *et al.* (2016) e uma regressão em alvos pseudo-invariantes (PIF), e contava como vegetação todo o píxel com NDVI ≥ 0,25. Os dois passos foram abandonados, por três razões medidas:
 
-- **Salto de sensor, não de paisagem.** Landsat 5 e Landsat 7 dão o mesmo resultado (49,8 e 49,5 % em 1999–2011, com o limiar antigo), mas Landsat 8/9 dá +7 a +9 p.p. sobre o 7 na sobreposição 2013–2021. A normalização PIF absorvia esse salto na série e criava uma queda artificial de ~14 p.p. entre 1985–90 e 2023–24.
+- **Salto de sensor, não de paisagem.** Landsat 5 e Landsat 7 dão o mesmo resultado (49,8 e 49,5 % em 1999–2011, com o limiar antigo), mas Landsat 8/9 dá +7 a +9 p.p. sobre o 7 na sobreposição 2013–2021. A normalização PIF absorvia esse salto na série e criava uma queda artificial da ordem de 15 p.p. entre 1985–90 e 2023–24.
 - **Limiar demasiado baixo.** A 30 m, NDVI ≥ 0,25 corresponde a só ~23 % de vegetação no píxel; 27 % do construído de 1979 contava como vegetação em 1985–90.
 - **Sem incerteza.** Uma diferença de 1 a 3 p.p. de vegetação entre épocas não se distingue do ruído sem a medir.
 
 O método actual:
 
-1. **Ponte de sensor.** Landsat 5 em reflectância de superfície, sem correcção. Landsat 8/9 com um desvio aditivo de NDVI (+0,034) medido como média(Landsat 8 − Landsat 7) no concelho em 2013–2021, anos em que ambos existem. Compósitos de mediana de Junho a Setembro.
+1. **Ponte de sensor.** Landsat 5 em reflectância de superfície, sem correcção. Landsat 8/9 com um desvio aditivo de NDVI de +0,034 (o Landsat 8/9 dá NDVI mais alto que o 7), subtraído a estas épocas, medido como média(Landsat 8 − Landsat 7) no concelho em 2013–2021, anos em que ambos existem. Compósitos de mediana de Junho a Setembro.
 2. **Fracção de vegetação por píxel.** Uma curva monótona NDVI → fracção (regressão isotónica) calibrada em 2023–24 contra as classes «árvores» e «solo/relva» do Sentinel-2 (secção 4.3), e aplicada a todas as épocas. O píxel passa a contar pela fracção (não por 0 ou 1) e a fracção de 50 % corresponde a NDVI ≈ 0,34.
 3. **Só o concelho.** Percentagens e hectares contam apenas píxeis dentro do Porto (CAOP 2025, 4 142 ha), sem água permanente.
 4. **Incerteza (1σ).** Erro-padrão da percentagem anual dentro de cada época, somado em quadratura ao erro da ponte (resíduo +0,8 ± 0,4 p.p.).
@@ -115,7 +115,7 @@ Edificado:
 Solo/Relva: tudo o resto
 ```
 
-O *pipeline* incluiu a análise de **81 cenas Sentinel-2**, validação de separabilidade via *clustering K-means* (k=2 a 10) nas bandas *Red Edge*, e filtragem do edificado conjugando o NDBI (Índice de Diferença Normalizada do Edificado) com a máscara *ESA WorldCover 2021*. A análise temporal revelou que o melhor discriminador é o NDVI de final de Maio/início de Junho — nessa janela, árvores mantêm NDVI > 0,7 enquanto a relva cai para < 0,3. A validação cruzada com o *ESA WorldCover 2021* atingiu uma precisão de **90,4%** na identificação de árvores.
+O *pipeline* incluiu a análise de **81 cenas Sentinel-2**, validação de separabilidade via *clustering K-means* (k=2 a 10) nas bandas *Red Edge*, e filtragem do edificado conjugando o NDBI (Índice de Diferença Normalizada do Edificado) com a máscara *ESA WorldCover 2021*. A análise temporal revelou que o melhor discriminador é o NDVI de final de Maio/início de Junho — nessa janela, árvores mantêm NDVI > 0,7 enquanto a relva cai para < 0,3. A concordância com o mapa *ESA WorldCover 2021* (outro mapa de satélite, que também entra nas regras acima) foi de **90,4%** na identificação de árvores.
 
 
 A tabela da secção 5.4 conta apenas o concelho do Porto (4 142 ha), não o rectângulo do mapa (≈ 8 900 ha) que a primeira versão usava por engano.
@@ -128,7 +128,7 @@ A tabela da secção 5.4 conta apenas o concelho do Porto (4 142 ha), não o rec
 
 ### 5.1. O Ponto de Partida: Porto em 1947
 
-A classificação do ortofoto de 1947 (*Random Forest* sobre textura) deu 59,7 % de vegetação (2 473 ha) e 40,3 % de edificado (1 669 ha). Esse resultado bruto sobrestima o edificado, porque caminhos de terra, muros e afloramentos ficam classificados como edificado. A limpeza com camadas independentes (`1947/clean_1947.py`) converte edificado em vegetação onde as outras fontes mostram verde e dá **74,5 % de vegetação e 21,2 % de edificado**, os valores que o mapa mostra. A limpeza só converte num sentido (edificado → vegetação): 74,5 % é um valor máximo, não uma medida.
+A classificação do ortofoto de 1947 (*Random Forest* sobre textura) deu 59,7 % de vegetação (2 473 ha) e 40,3 % de edificado (1 669 ha). Esse resultado bruto sobrestima o edificado, porque caminhos de terra, muros e afloramentos ficam classificados como edificado. A limpeza com camadas independentes (`1947/clean_1947.py`) converte edificado em vegetação onde as outras fontes mostram verde e dá **74,5 % de vegetação e 21,2 % de edificado** (os 4,3 % restantes ficam sem classe, como o rio), os valores que o mapa mostra. A limpeza só converte num sentido (edificado → vegetação): 74,5 % é um valor máximo, não uma medida.
 
 Guilherme *et al.* (2022) obtiveram 31 % de elementos construídos artificiais (ABE) em 1947 por fotointerpretação, entre os 21 % (limpo) e os 40 % (bruto) daqui. Independentemente do número exacto, ambas as fontes coincidem no essencial: **em 1947 a maioria do concelho era permeável e vegetada**, com uma matriz de quintas, hortas e terrenos agrícolas pelas periferias de Paranhos, Ramalde e Campanhã, e a cidade densa restrita ao centro histórico e aos eixos oitocentistas.
 
@@ -153,13 +153,13 @@ Nessa série:
 - **Entre 2001–05 e 2016–17 há recuperação** (+4,6 p.p.), que se mantém em 2023–24.
 - **1985–90 → 2023–24: +2,7 p.p. (≈ +110 ha), com σ combinado de 1,4 p.p.**, ou seja, um aumento ligeiro, no limite do que a série distingue. **Não há tendência detectável de perda de vegetação nos satélites.**
 
-O resultado é coerente com o tema «Hoje» do mapa (35,6 % de vegetação em 2024–25, que serviu de referência à calibração) e com Guilherme *et al.* (2022): ~38 % do concelho sem elementos construídos em 2019 (100 − 62 %). **Não reproduz**, porém, a expansão urbana de 276 ha em 1990–2000 e 169 ha em 2000–2006 de Quental (2010): essa discrepância fica por esclarecer (as definições diferem: expansão do edificado e não fracção de vegetação, e 30 m não vê o preenchimento de logradouros).
+O resultado é coerente com o tema «Hoje» do mapa (35,6 % de vegetação em 2024–25, que serviu de referência à calibração), pelo que a coincidência vem da construção e não é uma confirmação independente e com Guilherme *et al.* (2022): ~38 % do concelho sem elementos construídos em 2019 (100 − 62 %). **Não reproduz**, porém, a expansão urbana de 276 ha em 1990–2000 e 169 ha em 2000–2006 de Quental (2010): essa discrepância fica por esclarecer (as definições diferem: expansão do edificado e não fracção de vegetação, e 30 m não vê o preenchimento de logradouros).
 
-Quanto a perda e ganho entre o início (1985–2000) e o fim (2016–2024) da série, em manchas ≥ 0,5 ha dentro do concelho: **cerca de 223 ha de perda e 296 ha de ganho** (saldo +73 ha, dentro da incerteza de ±58 ha). A perda é uma realidade local, mas compensada por ganhos noutros sítios.
+Quanto a perda e ganho entre o início (1985–2000) e o fim (2016–2024) da série, em manchas ≥ 0,5 ha dentro do concelho: **cerca de 223 ha de perda e 296 ha de ganho** (saldo +73 ha, ≈ +1,8 p.p.). Este saldo é menor que a diferença das médias da série (+2,7 p.p., ≈ +110 ha) porque só conta manchas ≥ 0,5 ha com variação ≥ 0,30; os dois são do mesmo tamanho que a incerteza da série (±1,4 p.p., ≈ ±58 ha). A perda é uma realidade local, mas compensada por ganhos noutros sítios.
 
 ### 5.3. Padrões Espaciais de Transformação
 
-Perda e ganho por freguesia (ha, manchas ≥ 0,5 ha; Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória contam como uma união):
+Perda e ganho por freguesia (ha, manchas ≥ 0,5 ha; valores arredondados, daí 297 ha de ganho na soma contra 296 ha no total; Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória formam uma só união de freguesias):
 
 | Freguesia | Perda | Ganho |
 |-----------|-------|-------|
@@ -199,17 +199,19 @@ Em oito anos o concelho perdeu 16 ha de cobertura arbórea (−2,7 %) e 159 ha 
 | Solo → Edificado | **124** |
 | Solo → Árvores | 59 |
 
-A **conversão de solo/relva em edificado** (124 ha) é a transição dominante; a de árvores em edificado limita-se a 29 ha. Isto vai no sentido da tese de Guilherme *et al.* (2022): a cobertura arbórea é mais resiliente do que a herbácea e agrícola. 59 ha de solo passaram a árvores, o que pode reflectir arborização (como o programa *FUN Porto*) e crescimento natural das copas. Cada ano é uma classificação independente: diferenças de poucas dezenas de hectares podem ser ruído de classificação.
+A **conversão de solo/relva em edificado** (124 ha) é a transição dominante; a de árvores em edificado limita-se a 29 ha. Isto vai no sentido da tese de Guilherme *et al.* (2022): a cobertura arbórea é mais resiliente do que a herbácea e agrícola. 59 ha de solo passaram a árvores, o que pode reflectir arborização (como o programa *FUN Porto*) e crescimento natural das copas. As quatro transições são as únicas calculadas (não as inversas, como edificado → solo), por isso não somam às variações por classe da tabela anterior. Cada ano é uma classificação independente: diferenças de poucas dezenas de hectares podem ser ruído de classificação.
 
-Nota de coerência: árvores mais solo/relva em 2024–25 somam 1 471 ha (35,5 % do concelho), igual à série Landsat de 2023–24 (35,2 %) pela calibração.
+Nota de coerência: árvores mais solo/relva em 2024–25 somam 1 471 ha (35,5 % do concelho), próximo da série Landsat de 2023–24 (35,2 %), por construção da calibração.
+
+**Duas séries que não concordam.** Em 2016–17 o Sentinel-2 dá 1 646 ha de árvores e solo/relva (39,7 %) e o Landsat 34,6 %; de 2016–17 a 2024–25 o Sentinel-2 desce 4,2 p.p. (−175 ha) e o Landsat sobe 0,6 p.p. (dentro do ruído). Não sabemos qual acerta: a calibração do Landsat usa o Sentinel-2 de 2024–25 como referência e não o de 2016–17, e as regras do Sentinel-2 são limiares fixos aplicados a cada ano. A descida do Sentinel-2 é portanto um indício a confirmar, não um facto.
 
 ---
 
 ## 6. Conclusões
 
-1. **Desde 1985 não há perda de vegetação detectável por satélite no Porto.** A série corrigida vai de 32,5 % (1985–90) a 35,2 % (2023–24), com mínimo de 30,0 % em 2001–05. A queda de 45,0 % para 30,0 % da primeira versão era um artefacto de sensor e de limiar.
+1. **Entre 1985 e 2024 não há perda líquida de vegetação detectável por satélite no Porto** (houve um mínimo em 2001–05, depois recuperado). A série corrigida vai de 32,5 % (1985–90) a 35,2 % (2023–24), com mínimo de 30,0 % em 2001–05. A queda de 45,0 % para 30,0 % da primeira versão era um artefacto de sensor e de limiar.
 2. **A perda de espaço livre é real, mas localizada**: cerca de 223 ha de perda (concentrados em Paranhos) contra 296 ha de ganho em manchas ≥ 0,5 ha. No Sentinel-2 (2016–2025), o solo permeável encolheu 159 ha (−15,1 %) e o edificado cresceu 175 ha (+7,0 %), enquanto as árvores quase não variaram (−2,7 %).
-3. **O que satélite a 30 m não mede**: a transformação mais profunda do século XX (agricultura → cidade) ocorreu sobretudo antes de 1985 e não é quantificável com esta série. Entre 1947 e 1979, Guilherme *et al.* (2022) documentam a duplicação do edificado (31 % → 62 % em 2019); os valores de 1947 e 1979 deste trabalho vêm de outras fontes e métodos e não se somam à série Landsat.
+3. **O que satélite a 30 m não mede**: a transformação mais profunda do século XX (agricultura → cidade) ocorreu sobretudo antes de 1985 e não é quantificável com esta série. Guilherme *et al.* (2022) documentam a duplicação do edificado entre 1947 e 2019 (31 % → 62 %); os valores de 1947 e 1979 deste trabalho vêm de outras fontes e métodos e não se somam à série Landsat.
 4. **Para o planeamento** (32,6 % do concelho em risco térmico elevado, Lopes *et al.*, 2025): o que a análise sustenta é proteger o solo permeável e a vegetação herbácea que resta, não alegar uma perda geral de vegetação. As árvores têm sido mais resilientes do que o solo permeável.
 
 **Limites:** a calibração usa uma classificação de satélite, não verdade de terreno; o desvio de sensor é único para todo o concelho (resíduo +0,8 p.p.); a série Landsat a 30 m não distingue relva regada de árvores; e a discrepância com Quental (2010) não está resolvida. Para uma série longa de uma só fonte, faltam as camadas de Guilherme *et al.* (1947/1979/2019), a pedir à autora.
