@@ -11,6 +11,9 @@ ano: 2025
 estado: outro
 contestacao: "Petição, providência cautelar, moção da Assembleia Municipal e protestos contra o abate de árvores do separador central da Avenida da Boavista."
 criterio: documental
+fotos:
+  - {papel: depois, ficheiro: depois-5.jpg, ano: 2025, fonte: "Observador (foto da notícia)", url: "https://observador.pt/2025/10/03/metro-do-porto-suspende-temporarimente-obra-da-segunda-fase-do-metrobus/", sha256: 0b7eeaa8aeb608824254334ca842003a7a1883466872bb443ca0478cb2f9ac46}
+  - {papel: depois, ficheiro: depois-2.jpg, ano: 2025, fonte: "RTP Notícias (foto da notícia)", url: "https://www.rtp.pt/noticias/economia/obras-da-segunda-fase-do-metrobus-do-porto-arrancam-na-segunda-feira_n1684481", sha256: 25e1c07e67ff8f195e255230bea5a37d06f59452ee3605d3f91940ac2c270303}
 referencias:
   - titulo: "Candidato do PSD/CDS à Câmara do Porto encabeça petição para suspender 2.ª fase do metrobus"
     url: "https://www.dn.pt/local-geral/pedro-duarte-encabe%C3%A7a-peti%C3%A7%C3%A3o-para-suspender-2%C2%AA-fase-do-metrobus-do-porto"

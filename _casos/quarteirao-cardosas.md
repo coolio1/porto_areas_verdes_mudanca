@@ -11,6 +11,9 @@ ano: 2011
 estado: alterado
 contestacao: "O ICOMOS-Portugal acusou a Porto Vivo de «puro fachadismo» (2012, 2018); a Porto Vivo defendeu em 2015 que o quarteirão estava adulterado, e a operação recebeu prémios de reabilitação."
 criterio: documental
+fotos:
+  - {papel: depois, ficheiro: depois-1.jpg, ano: 2011, fonte: "Público (foto da notícia)", url: "https://www.publico.pt/2013/04/01/local/noticia/relatorio-do-icomosportugal-arrasa-intervencao-nas-cardosas-do-porto-1589749", sha256: 934e6b5abc8e1ca2a57ba5cbe31758bb0457b915e7de01d22f7dea98bdfa36cc}
+  - {papel: depois, ficheiro: depois-2.jpg, ano: 2011, fonte: "JPN (foto da notícia)", url: "https://jpn.up.pt/2015/04/08/reabilitacao-urbana-ainda-nao-esqueceram-as-cardosas/", sha256: aefa14f6fa66067cf8eeaad02d80f8628c4e53cda1c0b1b712e61f78c77ab5d2}
 referencias:
   - titulo: "Relatório do Icomos-Portugal arrasa intervenção nas Cardosas do Porto"
     url: "https://www.publico.pt/2013/04/01/local/noticia/relatorio-do-icomosportugal-arrasa-intervencao-nas-cardosas-do-porto-1589749"

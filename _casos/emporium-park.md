@@ -14,6 +14,9 @@ criterio: documental
 fotos_ligadas:
   - {papel: depois, fonte: "JN (2026)", url: "https://www.jn.pt/pais/artigo/associacao-tenta-travar-em-tribunal-construcoes-junto-ao-parque-da-cidade-do-porto/18051796"}
   - {papel: depois, fonte: "Viva Porto (2026)", url: "https://viva-porto.pt/foi-interposta-acao-no-tribunal-para-travar-condominio-junto-ao-parque-da-cidade/"}
+fotos:
+  - {papel: depois, ficheiro: depois-2.jpg, ano: 2026, fonte: "Viva Porto (foto da notícia)", url: "https://viva-porto.pt/foi-interposta-acao-no-tribunal-para-travar-condominio-junto-ao-parque-da-cidade/", sha256: f412dc979336d4bbf26fa309e87827f473b3b1536649f9ddefa13e664d28179c}
+  - {papel: antes, ficheiro: antes-4.jpg, ano: 2026, fonte: "Jornal de Notícias (foto da notícia)", url: "https://www.jn.pt/pais/artigo/pedro-duarte-chama-aberracao-monstruosa-a-obra-embargada-junto-ao-parque-da-cidade/18093387", sha256: a17e3d2f68b56bec7ce4185782c43c0a2966bab9294524c8beeefe4975165c77}
 referencias:
   - titulo: "Associação tenta travar em tribunal construções junto ao Parque da Cidade do Porto"
     url: "https://www.jn.pt/pais/artigo/associacao-tenta-travar-em-tribunal-construcoes-junto-ao-parque-da-cidade-do-porto/18051796"

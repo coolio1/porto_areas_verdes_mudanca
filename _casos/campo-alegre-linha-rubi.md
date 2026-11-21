@@ -14,6 +14,9 @@ criterio: documental
 fotos_ligadas:
   - {papel: antes, fonte: "JPN (2024)", url: "https://www.jpn.up.pt/2024/09/09/metro-do-porto-pede-para-abater-uma-centena-de-arvores-no-campo-alegre/"}
   - {papel: antes, fonte: "Público (2024)", url: "https://www.publico.pt/2024/09/17/local/noticia/porto-impediu-corte-tunel-campo-alegre-alternativa-custa-abate-30-arvores-2104474"}
+fotos:
+  - {papel: antes, ficheiro: antes-1.jpg, ano: 2024, fonte: "JPN (foto da notícia)", url: "https://www.jpn.up.pt/2024/09/09/metro-do-porto-pede-para-abater-uma-centena-de-arvores-no-campo-alegre/", sha256: 14374acc55212ec56f95e7677371acb9116b0b17462653d426e514dc80e5d5b2}
+  - {papel: antes, ficheiro: antes-5.jpg, ano: 2024, fonte: "Jornal de Notícias (foto da notícia)", url: "https://www.jn.pt/pais/artigo/nao-e-compreensivel-abate-de-99-arvores-pela-metro-do-porto/17820583", sha256: 47b4b2dc09d6cfad19eb974698a26c4de3a2e7e0ca1a630988c135989e904c30}
 referencias:
   - titulo: "Título Único Ambiental da Linha Rubi (Declaração de Impacte Ambiental e condições)"
     url: "https://siaia.apambiente.pt/AIADOC/AIA3532/tua_dia_aia35322023313173233.pdf"

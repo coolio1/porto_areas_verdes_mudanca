@@ -13,6 +13,8 @@ contestacao: "Moradores pediram esclarecimentos à Câmara e à Quercus e o Bloc
 criterio: documental
 fotos_ligadas:
   - {papel: depois, fonte: "Público (fotogaleria, 2022)", url: "https://www.publico.pt/2022/07/02/local/noticia/montepio-abateu-dezenas-arvores-porte-centro-porto-2012143"}
+fotos:
+  - {papel: depois, ficheiro: depois-1.jpg, ano: 2022, fonte: "Público (foto da notícia)", url: "https://www.publico.pt/2022/07/02/local/noticia/montepio-abateu-dezenas-arvores-porte-centro-porto-2012143", sha256: fb173e4a0dadf6dc1796482c206d5dd391f009137d47268f4b7d4a288b7dfd73}
 referencias:
   - titulo: "Montepio abateu dezenas de árvores de grande porte no centro do Porto"
     url: "https://www.publico.pt/2022/07/02/local/noticia/montepio-abateu-dezenas-arvores-porte-centro-porto-2012143"

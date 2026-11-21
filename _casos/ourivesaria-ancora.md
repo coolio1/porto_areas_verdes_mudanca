@@ -14,6 +14,9 @@ criterio: editorial
 nota_editorial: "Loja de 1923, fora do Porto de Tradição e sem contestação formal: entra pela cobertura da imprensa. O projecto de hotel assenta em declarações do proprietário e não foi confirmado."
 fotos_ligadas:
   - {papel: antes, fonte: "Time Out (2025)", url: "https://www.timeout.pt/porto/pt/noticias/a-historica-ourivesaria-ancora-vai-fechar-no-centro-do-porto-e-nao-e-a-unica-a-casa-dos-linhos-tambem-012825"}
+fotos:
+  - {papel: antes, ficheiro: antes-1.jpg, ano: 2025, fonte: "Time Out Porto (foto da notícia)", url: "https://www.timeout.pt/porto/pt/noticias/a-historica-ourivesaria-ancora-vai-fechar-no-centro-do-porto-e-nao-e-a-unica-a-casa-dos-linhos-tambem-012825", sha256: 0159149be4ae7b0ae007ffda61b6526bdbb96cff14c5cfec14893abea587ded0}
+  - {papel: depois, ficheiro: depois-4.jpg, ano: 2025, fonte: "Marketeer (foto da notícia)", url: "https://marketeer.sapo.pt/historica-ourivesaria-ancora-com-ordem-para-sair-da-rua-31-de-janeiro-no-dia-31-de-janeiro/", sha256: fb0461ffbc7bb0d6313ec8491e338880f9987b9f674746ee1f92406f49c6e723}
 referencias:
   - titulo: "A centenária Ourivesaria Âncora vai sair da Rua 31 de Janeiro… a 31 de Janeiro"
     url: "https://www.publico.pt/2025/01/27/local/noticia/centenaria-ourivesaria-ancora-vai-sair-rua-31-janeiro-31-janeiro-2120295"

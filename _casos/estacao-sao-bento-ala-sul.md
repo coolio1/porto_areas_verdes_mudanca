@@ -14,6 +14,8 @@ criterio: documental
 fotos_ligadas:
   - {papel: depois, fonte: "Time Out (2024)", url: "https://www.timeout.com/news/time-out-market-porto-is-now-open-050324"}
   - {papel: depois, fonte: "Time Out (2024)", url: "https://www.timeout.pt/porto/pt/noticias/contagem-decrescente-time-out-market-porto-abre-a-3-de-maio-saiba-tudo-aqui-042424"}
+fotos:
+  - {papel: depois, ficheiro: depois-2.jpg, ano: 2016, fonte: "Time Out Porto (foto da notícia)", url: "https://www.timeout.pt/porto/pt/noticias/contagem-decrescente-time-out-market-porto-abre-a-3-de-maio-saiba-tudo-aqui-042424", sha256: eb6cd3a4d4950017d014693a0c5c562d53d541a8eb9bc1011943c669e46f5900}
 referencias:
   - titulo: "BE diz que obras na Estação de São Bento são «ilegítimas»"
     url: "https://www.dn.pt/arquivo/diario-de-noticias/bediz-queobras-na-estacao-de-sao-bento-sao-ilegitimas-5511944.html"

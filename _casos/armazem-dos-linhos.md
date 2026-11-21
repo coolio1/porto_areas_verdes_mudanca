@@ -15,6 +15,10 @@ fotos_ligadas:
   - {papel: antes, fonte: "Público (fotogaleria, 2025)", url: "https://www.publico.pt/2025/01/30/fotogaleria/armazem-linhos-413179"}
   - {papel: antes, fonte: "JN (2024)", url: "https://www.jn.pt/pais/artigo/nao-havia-necessidade-de-sairmos-assim-armazem-dos-linhos-deixa-rua-de-passos-manuel/17832885"}
   - {papel: depois, fonte: "Time Out (2025)", url: "https://www.timeout.pt/porto/pt/noticias/depois-do-despejo-o-historico-armazem-dos-linhos-abre-loja-pop-up-012025"}
+fotos:
+  - {papel: antes, ficheiro: antes-1.jpg, ano: 2024, fonte: "Público (foto da notícia)", url: "https://www.publico.pt/2025/01/30/fotogaleria/armazem-linhos-413179", sha256: c87187dbecfe9dedb5af23603a82c9611263499be1ffe7d6d5501339b5979044}
+  - {papel: antes, ficheiro: antes-6.jpg, ano: 2024, fonte: "Time Out Porto (foto da notícia)", url: "https://www.timeout.pt/porto/pt/noticias/foram-119-anos-de-historia-armazem-dos-linhos-obrigado-a-sair-de-passos-manuel-080524", sha256: 933712e7630a30ee286cb105430ddef9aaceeb7fde0dda13fa42ead99202e988}
+  - {papel: depois, ficheiro: depois-7.jpg, ano: 2024, fonte: "NiT (foto da notícia)", url: "https://www.nit.pt/compras/lojas-e-marcas/furia-dos-despejos-continua-na-baixa-do-porto-armazem-dos-linhos-vai-mesmo-fechar", sha256: b58658a4c93a0b4a8892f7b48618fc38c2304ade2f444b4b00e9c5c6e92e6c16}
 referencias:
   - titulo: "Porto quer proteger estas 37 lojas históricas"
     url: "https://observador.pt/2017/06/22/camara-do-porto-quer-proteger-pelo-menos-37-lojas-historicas/"

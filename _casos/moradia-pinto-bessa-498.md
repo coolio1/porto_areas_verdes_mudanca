@@ -14,6 +14,10 @@ criterio: documental
 fotos_ligadas:
   - {papel: antes, fonte: "azulejosporto.pt", url: "https://azulejosporto.pt/rua-pinto-bessa-498-porto/"}
   - {papel: antes, fonte: "Porto Sombrio (2014)", url: "http://portosombrio.blogspot.com/2014/02/moradia-n498.html"}
+fotos:
+  - {papel: antes, ficheiro: antes-2.jpg, ano: 2019, fonte: "Porto Sombrio (foto da notícia)", url: "http://portosombrio.blogspot.com/2014/02/moradia-n498.html", sha256: f186e538c1ec6a75ea27b9f50d707a9f8f1c43736557964cf9fd8032271926f6}
+  - {papel: antes, ficheiro: antes-1.jpg, ano: 2019, fonte: "Azulejos do Porto (foto da notícia)", url: "https://azulejosporto.pt/rua-pinto-bessa-498-porto/", sha256: 39531cdea122b86957b5f0b7c44c20ceb3fba52ffb8067644aa53d0dfee909fb}
+  - {papel: depois, ficheiro: depois-3.jpg, ano: 2019, fonte: "Público (foto da notícia)", url: "https://www.publico.pt/2019/05/17/local/noticia/estranho-caso-demolicao-moradia-historica-rua-pinto-bessa-1873126", sha256: 6303ab7bd1ec8b57093a095c718750df2b5cefa082cfcf37aa6773b325447c3f}
 referencias:
   - titulo: "O estranho caso da demolição de uma moradia histórica na Rua de Pinto Bessa"
     url: "https://www.publico.pt/2019/05/17/local/noticia/estranho-caso-demolicao-moradia-historica-rua-pinto-bessa-1873126"
