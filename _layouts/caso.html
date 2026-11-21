@@ -2,7 +2,7 @@
 layout: default
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/casos.css?v={{ site.time | date: '%s' }}">
-{%- assign tipos_ = "arvores:Árvores|demolicao:Demolição|patrimonio_alterado:Património alterado|interiores_destruidos:Interiores destruídos|descaracterizacao:Descaracterização" | split: "|" -%}
+{%- assign tipos_ = "arvores:Árvores|demolicao:Demolição|patrimonio_alterado:Património alterado|lojas_historicas:Loja histórica" | split: "|" -%}
 {%- assign tipo_nome_ = page.tipo -%}
 {%- for t in tipos_ -%}{%- assign par_ = t | split: ":" -%}{%- if par_[0] == page.tipo -%}{%- assign tipo_nome_ = par_[1] -%}{%- endif -%}{%- endfor -%}
 {%- assign galeria_nome_ = "Horrores" -%}{%- if page.galeria == "sucessos" -%}{%- assign galeria_nome_ = "Sucessos" -%}{%- endif -%}

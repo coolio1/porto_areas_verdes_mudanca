@@ -2,7 +2,7 @@
 title: "Confeitaria Serrana: demolição do interior (Rua do Loureiro)"
 titulo: "Confeitaria Serrana: demolição do interior (Rua do Loureiro)"
 galeria: horrores
-tipo: interiores_destruidos
+tipo: lojas_historicas
 lat: 41.1451
 lon: -8.6102
 aproximada: true

@@ -41,7 +41,7 @@ def montar(casos):
     shutil.copy(RAIZ / "mapa_unico" / "mapa_unico.html", tmp / "mapa_unico")
     shutil.copy(RAIZ / "mapa_unico" / "dados" / "contexto.js", tmp / "mapa_unico" / "dados")
     shutil.copy(RAIZ / "assets" / "js" / "moldura.js", tmp / "assets" / "js")
-    tipos = ["arvores", "demolicao", "patrimonio_alterado", "interiores_destruidos", "descaracterizacao"]
+    tipos = ["arvores", "demolicao", "patrimonio_alterado", "lojas_historicas"]
     d = {"casos": casos, "numeros": {
         "total": len(casos), "por_tipo": {t: sum(c["tipo"] == t for c in casos) for t in tipos},
         "por_galeria": {g: sum(c["galeria"] == g for c in casos) for g in ("horrores", "sucessos")}}}

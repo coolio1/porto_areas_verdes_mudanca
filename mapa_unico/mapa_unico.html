@@ -1684,7 +1684,7 @@ MU.registarTema({
 (function () {
   var TIPOS = [
     ['arvores', 'Árvores e verde'], ['demolicao', 'Demolições'], ['patrimonio_alterado', 'Património alterado'],
-    ['interiores_destruidos', 'Interiores destruídos'], ['descaracterizacao', 'Descaracterizações']
+    ['lojas_historicas', 'Lojas históricas']
   ];
   var ROTULO = {}; TIPOS.forEach(function (t) { ROTULO[t[0]] = t[1]; });
   var COR = { horrores: '#B42F2F', sucessos: '#3E6AB3' };
@@ -1695,8 +1695,7 @@ MU.registarTema({
     arvores: '<circle cx="11" cy="11" r="7"/>',
     demolicao: '<rect x="4" y="4" width="14" height="14"/>',
     patrimonio_alterado: '<polygon points="11,3 19,11 11,19 3,11"/>',
-    interiores_destruidos: '<polygon points="11,3.5 19,18 3,18"/>',
-    descaracterizacao: '<path d="M8 3h6v5h5v6h-5v5H8v-5H3V8h5z"/>'
+    lojas_historicas: '<polygon points="11,3.5 19,18 3,18"/>'
   };
 
   function svg(tipo, cor, aprox, tam) {   // aproximada = contorno tracejado e miolo branco

@@ -4,7 +4,7 @@ title: Casos
 description: Casos conhecidos e documentados no Porto, com fonte e fotos de antes e depois.
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/casos.css?v={{ site.time | date: '%s' }}">
-{%- assign tipos_ = "arvores:Árvores|demolicao:Demolições|patrimonio_alterado:Património|interiores_destruidos:Interiores|descaracterizacao:Descaracterização" | split: "|" -%}
+{%- assign tipos_ = "arvores:Árvores|demolicao:Demolições|patrimonio_alterado:Património|lojas_historicas:Lojas históricas" | split: "|" -%}
 {%- assign casos_ = site.casos | sort: "ano" | reverse -%}
 {%- assign n_h_ = site.casos | where: "galeria", "horrores" | size -%}
 {%- assign n_s_ = site.casos | where: "galeria", "sucessos" | size -%}

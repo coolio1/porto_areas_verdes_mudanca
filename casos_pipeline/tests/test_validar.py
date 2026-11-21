@@ -126,3 +126,8 @@ def test_excerto_demasiado_curto(caso_ok, fontes):
 def test_fontes_por_omissao_nao_traz_caminho_pessoal():
     import casos_pipeline.validar as v
     assert "quent" not in open(v.__file__, encoding="utf-8").read()
+
+
+def test_quatro_tipos_incluindo_lojas_historicas():
+    from casos_pipeline.modelo import TIPOS
+    assert TIPOS == ("arvores", "demolicao", "patrimonio_alterado", "lojas_historicas")

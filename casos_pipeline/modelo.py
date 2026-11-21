@@ -7,7 +7,7 @@ import yaml
 
 RAIZ = Path(__file__).resolve().parents[1]
 
-TIPOS = ("arvores", "demolicao", "patrimonio_alterado", "interiores_destruidos", "descaracterizacao")
+TIPOS = ("arvores", "demolicao", "patrimonio_alterado", "lojas_historicas")
 GALERIAS = ("horrores", "sucessos")
 ESTADOS = ("demolido", "alterado", "abatido", "revertido", "outro")
 CRITERIOS = ("documental", "lista", "editorial")
