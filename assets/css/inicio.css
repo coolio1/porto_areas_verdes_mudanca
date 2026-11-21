@@ -8,7 +8,7 @@
   --hair: rgba(16, 33, 44, .16);
   --brand: #0B5232; --brandtx: #0B5232; --logo: #0B5232; --wash: #EEF2F0;
   --plate: #E6EDEB; --plate-tx: #3E5260;   /* placa dos mapas: clara nos dois modos (as camadas são fixas) */
-  --c-mapas: #0B5232; --c-esp: #D6C496; --c-mob: #A51D45; --c-art: #10212C; --c-fontes: #A9CADB;
+  --c-mapas: #0B5232; --c-esp: #D6C496; --c-mob: #A51D45; --c-art: #10212C; --c-casos: #B42F2F; --c-fontes: #A9CADB;
   --d-parque: #0B5232; --d-pago: #D9642B; --d-priv: #D6C496; --d-rio: #A9CADB; --d-margem: #5E8CA6; --d-claro: #A3D2BD;
   --d-perda: #9B3F8C; --d-edif: #D9DCE0;
   --d-v1: #5C0A22; --d-v2: #A51D45; --d-v3: #D4587C; --d-ok: #AEB9BE; --d-sel: #0B5232;
@@ -130,8 +130,8 @@
 .inicio .ft dt { color: var(--ink2); white-space: nowrap; }
 .inicio .ft dd { margin: 0; }
 
-/* ---------- Régua: as 5 áreas, peso igual ---------- */
-.inicio .regua { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-bottom: 1px solid var(--rule); margin: 0; padding: 0; list-style: none; }
+/* ---------- Régua: as 6 áreas, peso igual ---------- */
+.inicio .regua { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-bottom: 1px solid var(--rule); margin: 0; padding: 0; list-style: none; }
 .inicio .regua li { min-width: 0; border-left: 1px solid var(--hair); }
 .inicio .regua li:first-child { border-left: 0; }
 .inicio .regua a { display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 18px clamp(12px, 1.4vw, 22px) 18px; text-decoration: none; position: relative; }
@@ -166,7 +166,7 @@
 /* ---------- Ecrãs estreitos ---------- */
 @media (max-width: 1100px) { .inicio .esp .fi p { display: none; } }
 @media (max-width: 980px) {
-  /* telemóvel: apresentação → as 5 áreas → palco → artigos */
+  /* telemóvel: apresentação → as 6 áreas → palco → artigos */
   .inicio { display: flex; flex-direction: column; }
   .inicio .topo { display: contents; }
   .inicio .apres { order: 1; border-right: 0; border-bottom: 1px solid var(--rule); }

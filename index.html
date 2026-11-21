@@ -47,6 +47,9 @@ ficha_fontes:
 {%- assign po = site.espacos | where: "title", "Parque Oriental" | first -%}
 {%- assign novo = site.posts.first -%}
 {%- assign art_n = site.posts.size -%}
+{%- assign cas_n = site.casos.size -%}
+{%- assign cas_h = site.casos | where: "galeria", "horrores" | size -%}
+{%- assign cas_f = site.casos | where: "slug", "confeitaria-serrana" | first -%}
 {%- capture d_ini -%}{% include data-pt.html d=site.posts.last.date %}{%- endcapture -%}
 {%- assign d_ini = d_ini | strip | split: " " -%}
 {%- capture d_fim -%}{% include data-pt.html d=novo.date %}{%- endcapture -%}
@@ -95,6 +98,12 @@ ficha_fontes:
        <div class="entrar"><a href="{{ site.baseurl }}/Mobilidade/autocarros.html">Autocarros: mapa</a><a href="{{ site.baseurl }}/Mobilidade/analise.html">Autocarros: análise</a><a href="{{ site.baseurl }}/atropelamentos/dashboard_atropelamentos.html">Atropelamentos</a></div></figcaption>
      </figure>
 
+     <figure class="fg" data-k="casos">
+      <div class="vis"><div class="art"><img src="{{ site.baseurl }}/Horrores/media/confeitaria-serrana/serrana-interior-2012.jpg" alt="Interior da Confeitaria Serrana, na Rua do Loureiro, antes da demolição"><span class="at">{{ cas_f.titulo | escape }}</span></div></div>
+      <figcaption><b class="fg-t">{{ cas_n }} casos documentados, com fonte e fotos</b><p class="fg-n">Abates, demolições e alterações no Porto que geraram contestação pública, no mapa e na lista; a cobertura nunca é completa.</p>
+       <div class="entrar"><a href="{{ site.baseurl }}/casos/">Entrar em «Horrores e sucessos»</a><a href="{{ site.baseurl }}/casos/lista/">Lista de casos</a></div></figcaption>
+     </figure>
+
      <figure class="fg" data-k="art">
       <div class="vis"><div class="art"><img src="{{ site.baseurl }}{{ novo.image }}" alt=""><span class="at">O mais recente · {% include data-pt.html d=novo.date %}</span></div></div>
       <figcaption><b class="fg-t">{{ novo.title }}</b><span class="fg-s">{{ art_n }} artigos, de {{ d_ini[1] }}{% if d_ini[2] != d_fim[2] %} de {{ d_ini[2] }}{% endif %} a {{ d_fim[1] }} de {{ d_fim[2] }}</span>
@@ -116,6 +125,7 @@ ficha_fontes:
   <li><a href="{{ site.baseurl }}/mapa_unico/mapa_unico.html" data-k="mapas" style="--ac:var(--c-mapas)" class="on"><b>Verde e uso do solo</b><span>Parques, verde pago e verde privado; o que mudou desde 1947.</span><small>{{ page.temas.size }} temas, 1947–2025</small></a></li>
   <li><a href="{{ site.baseurl }}/50espacos/" data-k="esp" style="--ac:var(--c-esp)"><b>50 Espaços Verdes</b><span>A campanha da Campo Aberto pelos espaços verdes do Grande Porto.</span><small>{{ esp_n }} espaços, {{ esp_s }} seleccionados</small></a></li>
   <li><a href="{{ site.baseurl }}/Mobilidade/autocarros.html" data-k="mob" style="--ac:var(--c-mob)"><b>Mobilidade</b><span>Onde os autocarros perdem tempo, troço a troço; e os atropelamentos.</span><small>{{ B.veiculos }} autocarros, {{ B.linhas }} linhas</small></a></li>
+  <li><a href="{{ site.baseurl }}/casos/" data-k="casos" style="--ac:var(--c-casos)"><b>Horrores e sucessos</b><span>Abates, demolições e alterações que geraram contestação, caso a caso.</span><small>{{ cas_n }} casos, {{ cas_h }} horrores</small></a></li>
   <li><a href="{{ site.baseurl }}/artigos/" data-k="art" style="--ac:var(--c-art)"><b>Artigos</b><span>Análises com dados, reportagens e textos enviados às entidades.</span><small>{{ art_n }}, desde {{ d_ini[1] }} de {{ d_ini[2] }}</small></a></li>
   <li><a href="{{ site.baseurl }}/sobre/" data-k="fontes" style="--ac:var(--c-fontes)"><b>Fontes e código</b><span>De onde vem cada número, e o código de cada análise.</span><small>{{ page.ficha_fontes.size }} fontes de dados</small></a></li>
  </ul>
