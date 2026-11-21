@@ -6,7 +6,7 @@
   /* placa do mapa (fundo «Carta») */
   --map-papel:#E6EDEB;--map-agua:#A9CADB;--map-fora:#F3F4F0;--map-grade:rgba(16,33,44,.10);--map-rot-agua:#2F5A70;--map-halo:#E6EDEB;
   /* cor-guia de cada tema (cromo, AA sobre o papel) */
-  --g-acessibilidade:#0B5232;--g-regra:#2E5C94;--g-hoje:#B42F2F;--g-historico:#7A4E22;--g-privado:#7C6526;
+  --g-acessibilidade:#0B5232;--g-regra:#2E5C94;--g-hoje:#B42F2F;--g-historico:#7A4E22;--g-privado:#7C6526;--g-casos:#6A3FB5;
   --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'IBM Plex Sans',system-ui,sans-serif;--serif:'IBM Plex Serif',Georgia,serif;
   color-scheme:light;
 }
@@ -52,13 +52,13 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .tab{--guia:var(--g-acessibilidade);all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;
   padding:9px 2px 8px;border-top:3px solid transparent;font:500 12.5px/1.1 var(--sans);color:var(--suave);text-align:center;min-width:0}
 .tab+.tab{border-left:1px solid var(--fino)}
-.tab[data-t="regra"]{--guia:var(--g-regra)}.tab[data-t="hoje"]{--guia:var(--g-hoje)}.tab[data-t="historico"]{--guia:var(--g-historico)}.tab[data-t="privado"]{--guia:var(--g-privado)}
+.tab[data-t="regra"]{--guia:var(--g-regra)}.tab[data-t="hoje"]{--guia:var(--g-hoje)}.tab[data-t="historico"]{--guia:var(--g-historico)}.tab[data-t="privado"]{--guia:var(--g-privado)}.tab[data-t="casos"]{--guia:var(--g-casos)}
 .tab svg{width:20px;height:20px;color:var(--guia);display:block}
 .tab:hover{background:var(--realce)}
 .tab.on{border-top-color:var(--guia);color:var(--tinta);font-weight:700;background:var(--painel)}
 .tab:focus-visible{outline:2px solid var(--tinta);outline-offset:-4px}
 .tema{--guia:var(--g-acessibilidade);display:none}
-.tema[data-t="regra"]{--guia:var(--g-regra)}.tema[data-t="hoje"]{--guia:var(--g-hoje)}.tema[data-t="historico"]{--guia:var(--g-historico)}.tema[data-t="privado"]{--guia:var(--g-privado)}
+.tema[data-t="regra"]{--guia:var(--g-regra)}.tema[data-t="hoje"]{--guia:var(--g-hoje)}.tema[data-t="historico"]{--guia:var(--g-historico)}.tema[data-t="privado"]{--guia:var(--g-privado)}.tema[data-t="casos"]{--guia:var(--g-casos)}
 .tema.on{display:block}
 .tema-tit{margin:0;padding:14px 20px 4px 24px;font:700 21px/1.2 var(--sans);letter-spacing:-.015em}
 .corpo{padding:0 20px 18px 24px}
@@ -182,6 +182,26 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .ficha .cmp .med i{display:block;height:100%;background:var(--marca)}
 .ficha .x{all:unset;position:absolute;right:8px;top:8px;width:26px;height:26px;text-align:center;line-height:26px;cursor:pointer;font-size:18px}
 .ficha .x:focus-visible{outline:2px solid var(--tinta)}
+/* tema Casos: corpo da ficha (rola dentro da ficha), fotos antes/depois, referências */
+.ficha .fcorpo{margin-top:12px;max-height:calc(100vh - 300px);overflow-y:auto;font-size:13px;line-height:1.5}
+.ficha .fcorpo p{margin:0 0 8px}
+.ficha .fotos{display:grid;gap:6px;margin-bottom:10px}.ficha .fotos.n2{grid-template-columns:1fr 1fr}
+.ficha .fotos figure{margin:0}.ficha .fotos img{display:block;width:100%;height:96px;object-fit:cover;border:1px solid var(--fino)}
+.ficha .fotos.n1 img{height:140px}
+.ficha figcaption{font:400 10.5px/1.3 var(--mono);color:var(--suave);margin-top:2px}
+.ficha .cont{font-size:12.5px}.ficha .nota-ed{font-size:12.5px;border-left:3px solid var(--g-casos);padding-left:8px}
+.ficha .refs{margin:0 0 8px;padding-left:18px;font-size:12px}.ficha .refs span{font-family:var(--mono);color:var(--suave)}
+.ficha .ver-caso{display:inline-block;font:500 12.5px var(--sans);margin-top:2px}
+/* tema Casos: marcadores, cartão de hover, filtros */
+.caso-mk{background:none;border:0}.caso-mk svg{display:block}
+.caso-mk:focus-visible{outline:2px solid var(--tinta);outline-offset:1px}
+.leaflet-tooltip.caso-hover{width:210px;padding:0;white-space:normal;border:1px solid var(--filete);border-radius:0;box-shadow:none;background:var(--painel);color:var(--tinta)}
+.leaflet-tooltip.caso-hover:before{display:none}
+.caso-hover img{display:block;width:100%;height:104px;object-fit:cover;border-bottom:1px solid var(--filete)}
+.caso-hover .t{font:700 13px/1.25 var(--sans);padding:8px 10px 2px}
+.caso-hover .s{font:400 11.5px var(--mono);color:var(--suave);padding:0 10px 8px}
+.casos-filtros label{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;cursor:pointer}
+.casos-filtros .sw{display:inline-flex;width:18px;justify-content:center}.casos-filtros em{margin-left:auto;font:400 11.5px var(--mono);color:var(--suave);font-style:normal}
 /* números-chave sobre o mapa (core.js: MU.moverNums) */
 .nums-card{left:16px;bottom:62px;width:292px;padding:14px 34px 12px 16px;display:none;max-height:calc(100% - 150px);overflow:auto}
 .nums-card.on{display:block}

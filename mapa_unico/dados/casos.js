@@ -1,0 +1,1 @@
+MU.DADOS["casos"] = {"casos":[],"numeros":{"total":0,"por_tipo":{"arvores":0,"demolicao":0,"patrimonio_alterado":0,"interiores_destruidos":0,"descaracterizacao":0},"por_galeria":{"horrores":0,"sucessos":0}}};

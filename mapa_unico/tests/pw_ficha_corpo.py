@@ -26,11 +26,11 @@ with sync_playwright() as p:
 
     pg.evaluate("MU.ficha({titulo:'T',sub:'s',linhas:[['a','b']]})")
     sem = pg.inner_html("#ficha")
-    ok("sem corpo: sem bloco .corpo", pg.locator("#ficha .corpo").count() == 0)
+    ok("sem corpo: sem bloco .fcorpo", pg.locator("#ficha .fcorpo").count() == 0)
     ok("sem corpo: título e linhas como antes", "<h3>T</h3>" in sem and "<dt>a</dt><dd>b</dd>" in sem)
 
     pg.evaluate("MU.ficha({titulo:'T',sub:'s',linhas:[['a','b']],corpo:'<p id=\"c\">x</p>'})")
-    ok("com corpo: conteúdo presente", pg.locator("#ficha .corpo #c").count() == 1)
+    ok("com corpo: conteúdo presente", pg.locator("#ficha .fcorpo #c").count() == 1)
     ok("com corpo: o resto da ficha igual (corpo acrescentado no fim)", pg.inner_html("#ficha").startswith(sem))
     pg.click("#ficha .x")
     ok("× fecha a ficha com corpo", not pg.evaluate("document.getElementById('ficha').classList.contains('on')"))
