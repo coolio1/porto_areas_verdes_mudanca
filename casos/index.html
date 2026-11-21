@@ -1,0 +1,67 @@
+---
+layout: default
+title: Casos
+description: Casos conhecidos e documentados no Porto, com fonte e fotos de antes e depois.
+---
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/casos.css?v={{ site.time | date: '%s' }}">
+{%- assign tipos_ = "arvores:Árvores|demolicao:Demolições|patrimonio_alterado:Património|interiores_destruidos:Interiores|descaracterizacao:Descaracterização" | split: "|" -%}
+{%- assign casos_ = site.casos | sort: "ano" | reverse -%}
+{%- assign n_h_ = site.casos | where: "galeria", "horrores" | size -%}
+{%- assign n_s_ = site.casos | where: "galeria", "sucessos" | size -%}
+<div class="caso casos-indice">
+  <h1>Casos</h1>
+  <p class="caso-intro">Casos conhecidos e documentados no Porto, com fonte e fotos de antes e depois. A lista nunca é completa.</p>
+
+  {%- if casos_.size == 0 %}
+  <p class="caso-vazio">Ainda sem casos publicados.</p>
+  {%- else %}
+  <div class="caso-filtros">
+    <div class="caso-grupo" role="group" aria-label="Galeria">
+      <button type="button" data-galeria="horrores" aria-pressed="true"><i class="caso-horrores" aria-hidden="true"></i>Horrores · {{ n_h_ }}</button>
+      <button type="button" data-galeria="sucessos" aria-pressed="false"><i class="caso-sucessos" aria-hidden="true"></i>Sucessos · {{ n_s_ }}</button>
+    </div>
+    <div class="caso-grupo" role="group" aria-label="Tipo">
+      <button type="button" data-tipo="" aria-pressed="true">Todos</button>
+      {%- for t in tipos_ %}{% assign par_ = t | split: ":" %}
+      <button type="button" data-tipo="{{ par_[0] }}" aria-pressed="false">{{ par_[1] }}</button>
+      {%- endfor %}
+    </div>
+  </div>
+
+  <ul class="caso-grelha">
+    {%- for c in casos_ %}
+    {%- assign foto_ = c.fotos | where: "papel", "depois" | first -%}
+    {%- unless foto_ -%}{%- assign foto_ = c.fotos | first -%}{%- endunless %}
+    <li data-galeria="{{ c.galeria }}" data-tipo="{{ c.tipo }}"{% if c.galeria != "horrores" %} hidden{% endif %}>
+      <a href="{{ c.url | relative_url }}">
+        {%- if foto_ %}<img src="{{ site.baseurl }}/Horrores/media/{{ c.slug }}/{{ foto_.ficheiro }}" alt="" loading="lazy">{% else %}<span class="caso-sem-foto">sem foto</span>{% endif %}
+        <span class="caso-tit">{{ c.titulo }}</span>
+        <span class="caso-mono">{{ c.ano }} · {{ c.estado }}</span>
+      </a>
+    </li>
+    {%- endfor %}
+  </ul>
+  <p class="caso-vazio" hidden>Sem casos neste filtro.</p>
+  {%- endif %}
+
+  <a class="caso-mapa" href="{{ '/mapa_unico/mapa_unico.html' | relative_url }}#tema=casos">Ver todos no mapa →</a>
+</div>
+<script>
+(function () {
+  var q = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var cartoes = q('.caso-grelha li'); if (!cartoes.length) return;
+  var gal = 'horrores', tipo = '';
+  function aplicar() {
+    var n = 0;
+    cartoes.forEach(function (li) {
+      var ver = li.dataset.galeria === gal && (!tipo || li.dataset.tipo === tipo);
+      li.hidden = !ver; if (ver) n++;
+    });
+    q('.caso-vazio')[0].hidden = n > 0;
+    q('button[data-galeria]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.galeria === gal); });
+    q('button[data-tipo]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.tipo === tipo); });
+  }
+  q('button[data-galeria]').forEach(function (b) { b.addEventListener('click', function () { gal = b.dataset.galeria; aplicar(); }); });
+  q('button[data-tipo]').forEach(function (b) { b.addEventListener('click', function () { tipo = b.dataset.tipo; aplicar(); }); });
+})();
+</script>

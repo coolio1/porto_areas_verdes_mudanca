@@ -1,0 +1,60 @@
+/* casos.css — página do caso (_layouts/caso.html) e índice /casos/. Maquete aprovada 2026-11-21 (A, lado a lado).
+   Tudo dentro de .caso. Vermelho/azul = galeria (marca de 14 px, nunca texto corrido); forma = tipo no mapa. */
+.caso {
+  --papel: var(--pv-papel, #FAFAF7); --tinta: var(--pv-tinta, #1B2420); --suave: var(--pv-suave, #52615A); --verde: var(--pv-verde, #0B5232);
+  --horrores: #B42F2F; --sucessos: #3E6AB3;
+  --mono: ui-monospace, "IBM Plex Mono", Consolas, monospace;
+  max-width: 920px; margin: 0 auto; padding: 32px 24px 90px; color: var(--tinta); hyphens: none; -webkit-hyphens: none;
+}
+.caso a { color: var(--verde); }
+.caso :focus-visible { outline: 2px solid var(--verde); outline-offset: 3px; }
+.caso h1 { font: 700 clamp(28px, 4vw, 38px)/1.12 var(--pv-sans); letter-spacing: -.015em; margin: 8px 0; text-wrap: balance; }
+.caso h2 { font: 600 12.5px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; margin: 0 0 6px; }
+.caso-migalhas, .caso-mono { font: 12.5px/1.4 var(--mono); color: var(--suave); }
+.caso-migalhas { margin: 0 0 18px; } .caso-migalhas a { color: var(--suave); }
+.caso-etiqueta { display: flex; gap: 8px; align-items: center; margin: 0; font: 500 12px/1.3 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+.caso-etiqueta i, .caso-filtros i { width: 14px; height: 14px; border-radius: 50%; flex: none; display: inline-block; }
+.caso-horrores { background: var(--horrores); } .caso-sucessos { background: var(--sucessos); }
+.caso-etiqueta.caso-horrores { background: none; color: var(--horrores); } .caso-etiqueta.caso-horrores i { background: var(--horrores); }
+.caso-etiqueta.caso-sucessos { background: none; color: var(--sucessos); } .caso-etiqueta.caso-sucessos i { background: var(--sucessos); }
+.caso-dados { margin: 0 0 22px; padding-bottom: 16px; border-bottom: 1px solid var(--tinta); font: 13px/1.4 var(--mono); color: var(--suave); }
+
+.caso-fotos { display: grid; gap: 14px; }
+.caso-fotos-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.caso-fotos figure { margin: 0; }
+.caso-fotos img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 1px solid var(--tinta); border-radius: 0; }
+.caso-fotos-1 img { aspect-ratio: auto; max-height: 520px; object-fit: contain; }
+.caso-fotos figcaption { margin-top: 6px; font: 12px/1.4 var(--mono); color: var(--suave); }
+
+.caso-texto { margin-top: 26px; max-width: 62ch; font-size: 17px; line-height: 1.65; }
+.caso-nota { margin: 10px 0 0; font: 12.5px/1.4 var(--mono); color: var(--suave); }
+.caso-sec { margin-top: 26px; border-top: 1px solid var(--tinta); padding-top: 10px; }
+.caso-sec p, .caso-sec ol { margin: 0; max-width: 62ch; font-size: 16px; line-height: 1.6; }
+.caso-sec ol { padding-left: 22px; }
+.caso-mapa { display: inline-block; margin-top: 26px; background: var(--verde); color: #fff !important; padding: 11px 18px; min-height: 44px; box-sizing: border-box; font: 600 15px/1.4 var(--pv-sans); text-decoration: none; }
+
+/* índice */
+.casos-indice { max-width: 1100px; }
+.caso-intro { margin: 0 0 22px; max-width: 62ch; font-size: 17px; color: var(--suave); }
+.caso-filtros { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; }
+.caso-grupo { display: flex; flex-wrap: wrap; border: 1px solid var(--tinta); font: 500 13px/1 var(--pv-sans); }
+.caso-grupo button { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 9px 14px; border-right: 1px solid var(--tinta); }
+.caso-grupo button:last-child { border-right: 0; }
+.caso-grupo button:focus-visible { outline: 2px solid var(--verde); outline-offset: -4px; }
+.caso-grupo button[aria-pressed="true"] { background: var(--tinta); color: var(--papel); }
+.caso-filtros i { width: 12px; height: 12px; }
+.caso-grelha { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+.caso-grelha li[hidden], .caso-vazio[hidden] { display: none; }
+.caso-grelha li { border: 1px solid var(--tinta); background: #fff; }
+.caso-grelha a { display: block; color: var(--tinta); text-decoration: none; }
+.caso-grelha img, .caso-sem-foto { display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-bottom: 1px solid var(--tinta); background: #E6EDEB; font: 600 12px/1 var(--mono); color: var(--suave); }
+.caso-tit { display: block; padding: 11px 13px 0; font: 700 17px/1.25 var(--pv-sans); }
+.caso-grelha .caso-mono { display: block; padding: 4px 13px 14px; }
+.caso-grelha a:hover .caso-tit { text-decoration: underline; text-underline-offset: 3px; }
+.caso-vazio { margin: 0 0 20px; color: var(--suave); }
+
+@media (max-width: 640px) {
+  .caso { padding: 20px 16px 60px; }
+  .caso-fotos-2 { grid-template-columns: 1fr; }
+  .caso-texto { font-size: 16.5px; }
+}
