@@ -52,6 +52,8 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .tab{--guia:var(--g-acessibilidade);all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;
   padding:9px 2px 8px;border-top:3px solid transparent;font:500 12.5px/1.1 var(--sans);color:var(--suave);text-align:center;min-width:0}
 .tab+.tab{border-left:1px solid var(--fino)}
+.mu-um .tab[data-t]{display:none}   /* página com um só tema: só o seletor Mapa | Lista */
+.tab.lig{--guia:var(--g-casos);text-decoration:none;justify-content:center;color:inherit}
 .tab[data-t="regra"]{--guia:var(--g-regra)}.tab[data-t="hoje"]{--guia:var(--g-hoje)}.tab[data-t="historico"]{--guia:var(--g-historico)}.tab[data-t="privado"]{--guia:var(--g-privado)}.tab[data-t="casos"]{--guia:var(--g-casos)}
 .tab svg{width:20px;height:20px;color:var(--guia);display:block}
 .tab:hover{background:var(--realce)}

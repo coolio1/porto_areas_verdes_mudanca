@@ -60,7 +60,7 @@ with sync_playwright() as p:
         # separadores inteiros dentro do painel, sem corte nem scroll horizontal
         caixas = pg.eval_on_selector_all("#tabs .tab", "t => t.map(x => { const r = x.getBoundingClientRect(); return [r.left, r.right, x.scrollWidth, x.clientWidth]; })")
         vw = pg.evaluate("window.innerWidth")
-        ok(tag + "6 separadores dentro da largura", len(caixas) == 6 and all(c[0] >= -0.5 and c[1] <= vw + 0.5 for c in caixas), str([(round(c[0]), round(c[1])) for c in caixas]))
+        ok(tag + "5 separadores dentro da largura", len(caixas) == 5 and all(c[0] >= -0.5 and c[1] <= vw + 0.5 for c in caixas), str([(round(c[0]), round(c[1])) for c in caixas]))
         ok(tag + "rótulos sem corte", all(c[2] <= c[3] + 1 for c in caixas), str([(c[2], c[3]) for c in caixas]))
         ok(tag + "sem scroll horizontal da página", not pg.evaluate("document.documentElement.scrollWidth > window.innerWidth"))
         ok(tag + "sem erros de JavaScript", not erros, str(erros[:3]))

@@ -24,7 +24,7 @@ def test_layout_caso_liga_a_moldura():
     assert h.startswith("---\nlayout: default\n---")
     assert "assets/css/casos.css" in h
     assert "page.fontes" not in h                                    # o rodapé do default já usa page.fontes
-    assert "mapa_unico/mapa_unico.html' | relative_url }}#tema=casos&caso={{ page.slug }}" in h
+    assert "'/casos/' | relative_url }}#tema=casos&caso={{ page.slug }}" in h
 
 
 def test_layout_caso_mostra_referencias_e_creditos():
@@ -37,19 +37,19 @@ def test_layout_e_indice_escapam_texto_e_mostram_nota_editorial():
     h = (RAIZ / "_layouts/caso.html").read_text(encoding="utf-8")
     for campo in ("page.titulo", "page.contestacao", "f.fonte", "r.titulo", "page.nota_editorial", "page.estado", "f.ano"):
         assert "{{ " + campo + " | escape }}" in h, campo
-    i = (RAIZ / "casos/index.html").read_text(encoding="utf-8")
+    i = (RAIZ / "casos/lista/index.html").read_text(encoding="utf-8")
     assert "{{ c.titulo | escape }}" in i and "{{ c.estado | escape }}" in i
 
 
 def test_indice_lista_site_casos_com_filtros():
-    h = (RAIZ / "casos/index.html").read_text(encoding="utf-8")
+    h = (RAIZ / "casos/lista/index.html").read_text(encoding="utf-8")
     assert "site.casos" in h and "casos conhecidos e documentados" in h.lower()
     assert 'data-galeria' in h and 'data-tipo' in h
 
 
 def test_menu_tem_casos_e_fontes():
     js = (RAIZ / "assets/js/moldura.js").read_text(encoding="utf-8")
-    assert "['casos/', 'Casos']" in js
+    assert "['casos/', 'Horrores e sucessos']" in js
     assert "'casos/':" in js                                          # fontes da página /casos/
     assert (RAIZ / "docs/horrores.md").exists()
     assert "docs/horrores.md" in (RAIZ / "CLAUDE.md").read_text(encoding="utf-8")
@@ -74,3 +74,10 @@ def test_layout_nao_mostra_estado_outro():
 def test_layout_mostra_fotos_ligadas_sem_as_copiar():
     h = (RAIZ / "_layouts/caso.html").read_text(encoding="utf-8")
     assert "page.fotos_ligadas" in h and "noopener" in h
+
+
+def test_mapa_dos_casos_e_pagina_propria_com_positron():
+    h = (RAIZ / "casos/index.html").read_text(encoding="utf-8")
+    assert "MU.URL_DADOS = '../mapa_unico/dados/'" in h and "MU.LIGACOES" in h
+    assert "fundo: 'positron'" in h                                      # fundo por defeito deste mapa
+    assert "id: 'casos'" not in (RAIZ / "mapa_unico/mapa_unico.html").read_text(encoding="utf-8")

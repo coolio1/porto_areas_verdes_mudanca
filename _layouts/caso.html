@@ -10,7 +10,7 @@ layout: default
 {%- assign depois_ = page.fotos | where: "papel", "depois" | first -%}
 <div class="caso">
   <article class="caso-ficha">
-    <p class="caso-migalhas"><a href="{{ '/casos/' | relative_url }}">Casos</a> / {{ galeria_nome_ }}</p>
+    <p class="caso-migalhas"><a href="{{ '/casos/' | relative_url }}">Horrores e sucessos</a> / {{ galeria_nome_ }}</p>
     <p class="caso-etiqueta caso-{{ page.galeria }}"><i aria-hidden="true"></i>{{ galeria_nome_ }} · {{ tipo_nome_ }}</p>
     <h1>{{ page.titulo | escape }}</h1>
     <p class="caso-dados">{{ page.ano }}{% if page.estado != 'outro' %} · {{ page.estado | escape }}{% endif %}{% if page.aproximada %} · localização aproximada{% endif %}</p>
@@ -69,6 +69,6 @@ layout: default
     </section>
     {%- endif %}
 
-    <a class="caso-mapa" href="{{ '/mapa_unico/mapa_unico.html' | relative_url }}#tema=casos&caso={{ page.slug }}">Ver no mapa →</a>
+    <a class="caso-mapa" href="{{ '/casos/' | relative_url }}#tema=casos&caso={{ page.slug }}">Ver no mapa →</a>
   </article>
 </div>

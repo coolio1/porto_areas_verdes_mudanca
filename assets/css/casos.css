@@ -61,3 +61,9 @@
 
 .caso-ligadas { margin: 0 0 8px; padding-left: 18px; font-size: 16px; line-height: 1.6; }
 .caso-sec .caso-nota-ligadas { font: 12.5px/1.4 var(--mono); color: var(--suave); }
+
+/* seletor Mapa | Lista (a mesma ideia do separador do mapa) */
+.caso-abas{display:inline-grid;grid-auto-flow:column;border:1px solid var(--pv-tinta);margin:0 0 1rem}
+.caso-abas a{padding:.4rem 1.1rem;color:var(--pv-tinta);text-decoration:none;font-family:var(--pv-mono,monospace);font-size:.85rem}
+.caso-abas a+a{border-left:1px solid var(--pv-tinta)}
+.caso-abas a.on{background:var(--pv-tinta);color:var(--pv-papel)}

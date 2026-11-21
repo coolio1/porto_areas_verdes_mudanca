@@ -23,7 +23,9 @@ LAYERS = RAIZ / "layers"
 PAGINA = "mapa_unico/mapa_unico.html"
 
 # Temas na ordem dos separadores (um ficheiro src/tema_<id>.js cada); o primeiro abre sem hash
-TEMAS = ["acessibilidade", "regra", "hoje", "historico", "privado", "casos"]
+TEMAS = ["acessibilidade", "regra", "hoje", "historico", "privado"]
+# Horrores e sucessos: página própria (casos/index.html), gerada do mesmo código só com o tema `casos`
+PAGINA_CASOS = "casos/"
 
 ACC_LAYERS = RAIZ / "acessibilidade" / "layers"
 
@@ -340,19 +342,33 @@ def escrever_dados() -> None:
     _escrever("casos", dados_casos())
 
 
-def escrever_html() -> None:
+def _montar_html(temas, saida: Path, pagina: str, titulo: str, descricao: str, init: str = "") -> None:
     js = (SRC / "core.js").read_text(encoding="utf-8")
-    for t in TEMAS:
-        js += "\n" + (SRC / f"tema_{t}.js").read_text(encoding="utf-8")
+    for t in temas:
+        js += chr(10) + (SRC / f"tema_{t}.js").read_text(encoding="utf-8")
     html = (SRC / "template.html").read_text(encoding="utf-8")
     html = (
         html.replace("/*CSS*/", (SRC / "estilo.css").read_text(encoding="utf-8"))
-        .replace("<!--NAV-->", get_nav(PAGINA, depth=1, menu="barra"))
+        .replace("<!--NAV-->", get_nav(pagina, depth=1, menu="barra"))
+        .replace("/*TITULO*/", titulo)
+        .replace("/*DESC*/", descricao)
+        .replace("/*INIT*/", init)
         .replace("/*JS*/", js)
     )
-    saida = AQUI / "mapa_unico.html"
     saida.write_text(aplicar_chave(html), encoding="utf-8")
-    print(f"mapa_unico.html  {saida.stat().st_size // 1024} KB")
+    print(f"{saida.relative_to(RAIZ)}  {saida.stat().st_size // 1024} KB")
+
+
+def escrever_html() -> None:
+    _montar_html(
+        TEMAS, AQUI / "mapa_unico.html", PAGINA, "Mapa — Porto Verde",
+        "Mapa interactivo do espaço verde do Porto: acessibilidade e propostas, mudanças 2016-2025, histórico desde 1947 e verde privado.")
+    (RAIZ / "casos").mkdir(exist_ok=True)
+    _montar_html(
+        ["casos"], RAIZ / "casos" / "index.html", PAGINA_CASOS, "Horrores e sucessos — Porto Verde",
+        "Mapa de horrores e sucessos: casos documentados no Porto, com fonte e fotos.",
+        init="MU.URL_DADOS = '../mapa_unico/dados/'; "
+             "MU.LIGACOES = [{rotulo: 'Mapa', href: './', on: true}, {rotulo: 'Lista', href: 'lista/'}];")
 
 
 if __name__ == "__main__":

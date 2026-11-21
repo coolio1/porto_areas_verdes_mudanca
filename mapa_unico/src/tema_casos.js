@@ -65,8 +65,8 @@
 
   MU.registarTema({
     id: 'casos',
-    rotulo: 'Casos',
-    fundo: 'carta',
+    rotulo: 'Horrores e sucessos',
+    fundo: 'positron',
     dados: 'casos',
     ctx: { limites: { on: true }, densidade: { on: false } },
     fonte: 'imprensa, petições, actas e arquivos citados em cada caso; fotos com crédito e ligação à origem.',

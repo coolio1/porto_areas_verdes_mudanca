@@ -23,7 +23,7 @@
     ['mapa_unico/mapa_unico.html', 'Verde e uso do solo'],
     ['50espacos/', '50 Espaços Verdes'],
     ['Mobilidade/autocarros.html', 'Mobilidade'],
-    ['casos/', 'Casos'],
+    ['casos/', 'Horrores e sucessos'],
     ['artigos/', 'Artigos'],
     ['sobre/', 'Sobre']
   ];

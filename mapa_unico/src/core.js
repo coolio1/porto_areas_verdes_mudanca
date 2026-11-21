@@ -151,7 +151,7 @@
     if (!MU._dadosP[nome]) {
       MU._dadosP[nome] = new Promise(function (resolve, reject) {
         var s = document.createElement('script');
-        s.src = 'dados/' + nome + '.js';
+        s.src = (MU.URL_DADOS || 'dados/') + nome + '.js';
         s.onload = function () { resolve(MU.DADOS[nome]); };
         s.onerror = function () { reject(new Error('Falha ao carregar dados/' + nome + '.js')); };
         document.head.appendChild(s);
@@ -476,7 +476,7 @@
     MU.tema = id;
     var painel = document.getElementById('tema-' + id);
     document.querySelectorAll('.tema').forEach(function (d) { d.classList.toggle('on', d.dataset.t === id); });
-    document.querySelectorAll('.tab').forEach(function (b) {
+    document.querySelectorAll('.tab[data-t]').forEach(function (b) {
       var on = b.dataset.t === id;
       b.classList.toggle('on', on); b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1;
     });
@@ -561,6 +561,8 @@
   }
 
   MU.iniciar = async function () {
+    // ligações antigas (#tema=casos…) do mapa único: os casos têm página própria
+    if (!MU.TEMAS.casos && MU.param('tema') === 'casos') { location.replace('../casos/' + location.hash); return; }
     var map = MU.map = L.map('map', { zoomControl: false, zoomSnap: 0.25, zoomDelta: 0.5, wheelPxPerZoomLevel: 120 });
     map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
     [['placaPane', 205], ['cartaPane', 210], ['bgPane', 250], ['parquesPane', 540], ['veuPane', 560], ['limitesPane', 565], ['rotPane', 640]]
@@ -587,6 +589,15 @@
       d.innerHTML = '<h2 class="tema-tit">' + t.rotulo + '</h2><div class="corpo" id="tema-' + id + '"></div>';
       temas.appendChild(d);
     });
+    if (MU.LIGACOES) {   // página só com um tema (Horrores e sucessos): o lugar dos separadores passa a alternar Mapa | Lista
+      document.body.classList.add('mu-um');
+      MU.LIGACOES.forEach(function (l) {
+        var a = document.createElement('a');
+        a.className = 'tab lig' + (l.on ? ' on' : ''); a.href = l.href;
+        if (l.on) a.setAttribute('aria-current', 'page');
+        a.innerHTML = '<span>' + l.rotulo + '</span>'; tabs.appendChild(a);
+      });
+    }
     var sel = document.getElementById('fundo-select');
     MU.FUNDOS.forEach(function (f) {
       var o = document.createElement('option'); o.value = f.id; o.textContent = f.nome; sel.appendChild(o);

@@ -9,7 +9,7 @@ RAIZ = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(RAIZ))
 from casos_pipeline.modelo import listar_casos  # noqa: E402
 
-URL = (RAIZ / "mapa_unico" / "mapa_unico.html").as_uri()
+URL = (RAIZ / "casos" / "index.html").as_uri()
 casos = listar_casos()
 falhas = []
 

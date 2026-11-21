@@ -38,7 +38,8 @@ def montar(casos):
     tmp = Path(tempfile.mkdtemp(prefix="pw_casos_"))
     (tmp / "mapa_unico" / "dados").mkdir(parents=True)
     (tmp / "assets" / "js").mkdir(parents=True)
-    shutil.copy(RAIZ / "mapa_unico" / "mapa_unico.html", tmp / "mapa_unico")
+    (tmp / "casos").mkdir()
+    shutil.copy(RAIZ / "casos" / "index.html", tmp / "casos")
     shutil.copy(RAIZ / "mapa_unico" / "dados" / "contexto.js", tmp / "mapa_unico" / "dados")
     shutil.copy(RAIZ / "assets" / "js" / "moldura.js", tmp / "assets" / "js")
     tipos = ["arvores", "demolicao", "patrimonio_alterado", "lojas_historicas"]
@@ -52,7 +53,7 @@ def montar(casos):
             p = tmp / "Horrores" / "media" / c["slug"] / Path(f["src"]).name
             p.parent.mkdir(parents=True, exist_ok=True)
             Image.new("RGB", (300, 200), (90, 120, 90)).save(p)
-    return (tmp / "mapa_unico" / "mapa_unico.html").as_uri(), tmp
+    return (tmp / "casos" / "index.html").as_uri(), tmp
 
 
 CASOS = [
