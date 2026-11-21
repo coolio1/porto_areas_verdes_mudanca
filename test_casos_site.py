@@ -76,6 +76,12 @@ def test_layout_mostra_fotos_ligadas_sem_as_copiar():
     assert "page.fotos_ligadas" in h and "noopener" in h
 
 
+def test_front_matter_da_lista_e_yaml_valido_com_layout():
+    t = (RAIZ / "casos/lista/index.html").read_text(encoding="utf-8")
+    fm = yaml.safe_load(t.split("---", 2)[1])     # YAML inválido (ex.: «: » sem aspas) faz o Jekyll servir a página sem layout
+    assert fm["layout"] == "default" and fm["permalink"] == "/casos/lista/" and fm["wide"] is True
+
+
 def test_mapa_dos_casos_e_pagina_propria_com_positron():
     h = (RAIZ / "casos/index.html").read_text(encoding="utf-8")
     assert "MU.URL_DADOS = '../mapa_unico/dados/'" in h and "MU.LIGACOES" in h
