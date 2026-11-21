@@ -12,8 +12,8 @@ estado: alterado
 contestacao: "A Câmara do Porto fez participação de contra-ordenação, o ICOMOS Portugal pediu esclarecimentos e o Bloco de Esquerda denunciou a demolição ilegal."
 criterio: documental
 fotos:
-  - {papel: antes, ficheiro: serrana-interior-2014.jpg, ano: 2014, fonte: "João Rio, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Vista_da_pintura_de_Acacio_Lino_e_das_esculturas_de_anjos_de_Jose_de_Oliveira_Ferreira.JPG", sha256: 80f93cb30269d35f0c5fe80f88d8f3d9206a11b2e150aacc2de853e1ce4bf0c2, nota: "Interior antes da demolição: tecto pintado e galeria."}
-  - {papel: outra, ficheiro: serrana-interior-2012.jpg, ano: 2012, fonte: "Joao Pires, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Pastelaria_Serrana.JPG", sha256: d03c7f7c5bb2bd94dc78ae3cc25fad3acf992723981a01873eb162ce81c2f98e, nota: "Interior antes da demolição: tecto e escultura de anjo."}
+  - {papel: antes, ficheiro: serrana-interior-2014.jpg, ano: 2014, fonte: "João Rio, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Vista_da_pintura_de_Acacio_Lino_e_das_esculturas_de_anjos_de_Jose_de_Oliveira_Ferreira.JPG", sha256: 1bc6e9bac67daa4ca39e10416d004a9919ce8ff630014dc91326cc4374d5b329, nota: "Interior antes da demolição: tecto pintado e galeria."}
+  - {papel: outra, ficheiro: serrana-interior-2012.jpg, ano: 2012, fonte: "Joao Pires, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Pastelaria_Serrana.JPG", sha256: caeee12fb3b6b2ff0a2e5daf454d48bf1f1eb9a86911c4bef0094a54da323928, nota: "Interior antes da demolição: tecto e escultura de anjo."}
 referencias:
   - titulo: "Porto arrisca perder classificação da UNESCO por destruição de património, afirma o Bloco de Esquerda"
     url: "https://www.cmjornal.pt/politica/detalhe/porto-arrisca-perder-classificacao-da-unesco-por-destruicao-de-patrimonio-afirma-o-bloco-de-esquerda"

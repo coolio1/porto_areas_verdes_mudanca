@@ -12,8 +12,8 @@ estado: outro
 contestacao: "Petição na Assembleia da República, pedidos de classificação, carta aberta e protesto contra a demolição da estação para um centro comercial."
 criterio: documental
 fotos:
-  - {papel: antes, ficheiro: estacao-boavista-2008.jpg, ano: 2008, fonte: "Nuno Morão, Flickr, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Flickr_-_nmorao_-_Esta%C3%A7%C3%A3o_da_Boavista,_2008.03.17.jpg", sha256: 1cc163adb9fe16ffd76ec8188d8650e441b1881b2358c02d36d55249a980c3b4, nota: "Edifício de passageiros e cobertura metálica em ruína."}
-  - {papel: outra, ficheiro: estacao-boavista-2009.jpg, ano: 2009, fonte: "Antero Pires, Flickr, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Esta%C3%A7%C3%A3o_ferrovi%C3%A1ria_Boavista.jpg", sha256: 49ad0092c515d736810b4a3d604052e613cbfce58961382ed0a01babfb6b179e, nota: "Fachada, Praça de Mouzinho de Albuquerque."}
+  - {papel: antes, ficheiro: estacao-boavista-2008.jpg, ano: 2008, fonte: "Nuno Morão, Flickr, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Flickr_-_nmorao_-_Esta%C3%A7%C3%A3o_da_Boavista,_2008.03.17.jpg", sha256: c6bc9af0a8633458a623dc8382cb3b5c0cdf1e9001b92c634b7b9c21191b7137, nota: "Edifício de passageiros e cobertura metálica em ruína."}
+  - {papel: outra, ficheiro: estacao-boavista-2009.jpg, ano: 2009, fonte: "Antero Pires, Flickr, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Esta%C3%A7%C3%A3o_ferrovi%C3%A1ria_Boavista.jpg", sha256: 0b58d50757ecddfcaa787a95a32305b40256047fbd5dbfb2f086c1666be12ac9, nota: "Fachada, Praça de Mouzinho de Albuquerque."}
 referencias:
   - titulo: "Desafetação do domínio público confirma demolição da estação da Boavista no Porto"
     url: "https://observador.pt/2022/02/08/desafetacao-do-dominio-publico-confirma-demolicao-da-estacao-da-boavista-no-porto/"
