@@ -37,5 +37,65 @@ referencias:
     data: "2021-03-31"
     tipo: imprensa
     excerto: "irá simplesmente desaparecer"
+  - titulo: "Autora do Jardim de Sophia, no Porto, diz que o seu trabalho foi desrespeitado"
+    url: "https://www.publico.pt/2020/10/29/local/noticia/autora-jardim-sophia-porto-trabalho-desrespeitado-1937241"
+    data: "2020-10-29"
+    tipo: imprensa
+    excerto: "acusa a empresa Metro do Porto de desrespeitar o seu direito de autoria daquele espaço"
+  - titulo: "Porto. Linha de metro destrói Jardim de Sophia"
+    url: "https://observador.pt/2020/10/29/projeto-de-souto-de-moura-para-o-metro-do-porto-vai-demolir-metade-do-jardim-de-sophia-arquiteta-responsavel-esta-indignada/"
+    data: "2020-10-29"
+    tipo: imprensa
+    excerto: "metade do atual Jardim de Sophia será demolido, pelo que após as obras"
+  - titulo: "Porto. Arquitetos pedem revisão da linha Rosa"
+    url: "https://observador.pt/2020/11/06/arquitetos-paisagistas-pedem-a-metro-do-porto-que-reveja-projeto-da-linha-rosa/"
+    data: "2020-11-06"
+    tipo: imprensa
+    excerto: "Neste relatório, a empresa assume como inevitável o abate/transplante de 65 árvores do Jardim de Sophia e propõe um novo desenho do Jardim de Sophia"
+  - titulo: "Quase 1.500 assinaram petição em defesa do Jardim de Sophia e de 503 sobreiros em Gaia"
+    url: "https://www.jpn.up.pt/2020/11/23/quase-1-500-assinaram-peticao-em-defesa-do-jardim-de-sophia-e-de-503-sobreiros-em-gaia/"
+    data: "2020-11-23"
+    tipo: imprensa
+    excerto: "a única entidade que nunca respondeu foi a Câmara Municipal do Porto"
+  - titulo: "Presidente da Câmara diz que arquitecto vai tornar «perfeito» o jardim de Sophia"
+    url: "https://www.publico.pt/2020/12/14/local/noticia/rui-moreira-arquitecto-souto-moura-vai-tornar-perfeito-jardim-sophia-1942991"
+    data: "2020-12-14"
+    tipo: imprensa
+    excerto: "O jardim terá exactamente a dimensão do actual"
+  - titulo: "Demolição do Jardim de Sophia (Porto) e abate de quase 500 sobreiros em Gaia"
+    url: "https://www.campoaberto.pt/2023/10/16/demolicao-do-jardim-de-sophia-porto-e-abate-de-quase-500-sobreiros-em-gaia/"
+    data: "2023-10-16"
+    tipo: outro
+    excerto: "as destruições foram efetivadas a partir de julho de 2021"
+  - titulo: "Estação de metro da Galiza começa a ganhar forma"
+    url: "https://ogaiense.pt/noticias/noticiario/estacao-de-metro-da-galiza-comeca-ganhar-forma"
+    data: "2022-05-10"
+    tipo: imprensa
+    excerto: "serão integralmente repostos, valorizados e renovados"
+  - titulo: "Linha Rosa do metro do Porto evita subsolo de hospital e preserva praça da Galiza"
+    url: "https://www.publico.pt/2020/06/16/local/noticia/linha-rosa-metro-porto-evita-subsolo-hospital-preserva-praca-galiza-1920694"
+    data: "2020-06-16"
+    tipo: imprensa
+    excerto: "A paragem passa a desenvolver-se"
+  - titulo: "Porto. Metro arranca testes na Linha Rosa"
+    url: "https://observador.pt/2026/10/07/metro-do-porto-arranca-testes-de-circulacao-a-quase-meio-ano-da-abertura-da-linha-rosa/"
+    data: "2026-10-07"
+    tipo: imprensa
+    excerto: "A linha só começará a transportar passageiros no final do primeiro trimestre de 2027"
+  - titulo: "Praça da Galiza: nem tudo é cor-de-rosa (newsletter de opinião)"
+    url: "https://portoaquitaoperto.substack.com/p/praca-da-galiza-nem-tudo-e-cor-de"
+    data: "2026-06-28"
+    tipo: outro
+    excerto: "O Jardim de Sophia será reconstituído, mas de que forma e com que valências?"
 ---
-O projecto da nova Linha Rosa do Metro do Porto previa uma estação na Praça da Galiza e, com ela, o abate ou transplante de árvores do Jardim de Sophia. Em 2020, quatro associações ambientais e patrimoniais escreveram a várias entidades a pedir a revisão do projecto de execução, e foi lançada uma petição para evitar a destruição do jardim, que a Campo Aberto contabilizava em 65 árvores. Em Março de 2021, a Associação Portuguesa dos Arquitectos Paisagistas dizia, segundo a Lusa, que o jardim «irá simplesmente desaparecer» com a obra, já consignada. Estado actual do jardim: por verificar.
+O Jardim de Sophia, na Praça da Galiza, no Porto, está no traçado da Linha Rosa do Metro. Segundo o resumo do estudo de impacte ambiental divulgado em Junho de 2020, a estação passava a desenvolver-se apenas sobre o jardim e a Rua Júlio Dinis, o que pressupunha o transplante ou abate de 50 árvores e um novo desenho do jardim.
+
+A contagem mudou nos meses seguintes. Segundo as associações e a Associação Portuguesa dos Arquitectos Paisagistas, o relatório da Metro do Porto assumia como inevitável o abate ou transplante de 65 árvores. O projectista da estação disse que metade do jardim seria demolida e que seriam plantadas 74 árvores novas (66 no jardim e 8 nos arruamentos). Segundo o Público, a arquitecta paisagista autora do jardim acusou a Metro de desrespeitar o seu direito de autoria; o projectista da estação nega o desrespeito.
+
+A contestação organizou-se em 2020. Em Setembro, quatro associações escreveram a várias entidades a pedir a revisão do projecto, e, no fim de Outubro, lançaram uma petição pelo Jardim de Sophia e por 503 sobreiros em Gaia, que perto de 1500 pessoas tinham assinado a 23 de Novembro, segundo o JPN. Segundo a Campo Aberto, a Câmara do Porto foi a única entidade que nunca respondeu. O Bloco de Esquerda e Os Verdes levaram o assunto ao Parlamento. Em Novembro, a Metro informou ter adjudicado a obra.
+
+Em Dezembro de 2020, na Assembleia Municipal, o presidente da Câmara afirmou que o jardim teria «exactamente a dimensão do actual» e que o projecto ainda não estava aprovado. Em Março de 2021, a Associação Portuguesa dos Arquitectos Paisagistas dizia, segundo a Lusa, que o jardim «irá simplesmente desaparecer» com a obra, já consignada. Segundo a Campo Aberto, as destruições foram efectivadas a partir de Julho de 2021; o texto refere o conjunto do jardim e dos sobreiros, sem separar as datas.
+
+Em Maio de 2022, a Metro prometia que os jardins e áreas verdes da Praça da Galiza e imediações, incluindo o Jardim de Sophia, seriam integralmente repostos, valorizados e renovados. Em Junho de 2026, uma newsletter de opinião ainda perguntava de que forma o jardim seria reconstituído, à medida que os estaleiros saíam da praça. Em Outubro de 2026, o Observador noticiava os testes de circulação da linha, com abertura prevista para o fim do primeiro trimestre de 2027, sem referir o jardim.
+
+As fontes consultadas não indicam quantas árvores foram de facto abatidas ou transplantadas, nem o desenho final do jardim. O seu estado actual está por confirmar no local.
