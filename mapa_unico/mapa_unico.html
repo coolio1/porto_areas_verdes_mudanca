@@ -227,17 +227,17 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .casos-filtros .sw{display:inline-flex;width:18px;justify-content:center}.casos-filtros em{margin-left:auto;font:400 11.5px var(--mono);color:var(--suave);font-style:normal}
 .casos-ind{list-style:none;margin:0;padding:0}
 .casos-ind li{border-bottom:1px solid var(--fino)}
-.casos-ind button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:8px 2px;min-height:40px;cursor:pointer;font:400 14px/1.25 var(--serif)}
+.casos-ind button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:8px 2px;min-height:40px;cursor:pointer;font:400 14px/1.25 var(--sans)}
 .casos-ind button:hover{background:var(--realce)}.casos-ind button:hover .t{text-decoration:underline}
 .casos-ind button:focus-visible{outline:2px solid var(--tinta);outline-offset:-2px}
 .casos-ind .sw{display:inline-flex;justify-content:center}.casos-ind em{font:400 11.5px var(--mono);color:var(--suave);font-style:normal}
 /* «Dossiê» (mapa dos casos, única página .mu-um): numerais e títulos em serifa, filetes duplos */
 .mu-um .num b{font:600 30px/1 var(--serif);letter-spacing:-.02em}
 .mu-um .num.mor b{color:var(--tinta)}
-.mu-um .desc{font:400 15px/1.5 var(--serif)}
+.mu-um .desc{font:400 14px/1.5 var(--sans)}
 .mu-um .nums{border-top:3px double var(--tinta)}
 .mu-um .cab2{border-bottom:1px solid var(--tinta);text-transform:uppercase;letter-spacing:.06em}
-.mu-um .caso-hover .t,.mu-um #ficha .ft{font-family:var(--serif)}
+.mu-um .caso-hover .t,.mu-um #ficha .ft{font-family:var(--sans);font-weight:700}
 /* números-chave sobre o mapa (core.js: MU.moverNums) */
 .nums-card{left:16px;bottom:62px;width:292px;padding:14px 34px 12px 16px;display:none;max-height:calc(100% - 150px);overflow:auto}
 .nums-card.on{display:block}
@@ -335,7 +335,7 @@ body.mu-dossie .pv-rodape__nome{font-weight:700}body.mu-dossie .pv-rodape__fonte
 .dos-folha,.dos-mapa,.dos-cartoes{position:relative}
 .dos-titulo{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px 28px;padding:30px 28px 28px}
 .dos-titulo h1{margin:0;font:700 34px/1.08 var(--sans);letter-spacing:-.02em;max-width:26ch}
-.dos-titulo h1 em{font-style:normal;color:var(--marca)}
+.dos-titulo h1 em{font:italic 400 1.08em/1 'IBM Plex Serif',Georgia,serif;letter-spacing:-.01em;color:var(--marca)}
 .dos-titulo p{margin:8px 0 0;font-size:13.5px;line-height:1.5;color:#3E5260;max-width:74ch}
 .mu-dossie #tabs{display:flex;flex:none;border:0;padding:0;background:none;font:500 12.5px/1 var(--sans)}
 .mu-dossie #tabs .tab{display:block;padding:8px 11px;border:1px solid var(--tinta);border-left-width:0;background:#FAFAF7;color:var(--tinta);text-decoration:none;font:inherit;height:auto;flex:none;width:auto;text-align:left}

@@ -1,0 +1,11 @@
+{%- comment -%}
+  Topo-padrão das páginas «folha» (Mobilidade, Artigos, lista de Horrores e sucessos). Ver docs/template-pagina.md.
+  A página precisa de `folha: true` no front matter; fechar com {% include folha-fecha.html %}.
+  Parâmetros: titulo (1.ª parte, tinta), em (2.ª parte, serifa itálica a verde), texto (uma ou duas frases), lado (HTML opcional à direita).
+{%- endcomment -%}
+<div class="pg"><div class="folha">
+  <div class="colz cima" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
+  <div class="colz baixo" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
+  <div class="int">
+  <div class="fila primeira"><div class="p sem c8 tit"><div><h1>{{ include.titulo }}{% if include.em %} <em>{{ include.em }}</em>{% endif %}</h1><p>{{ include.texto }}</p></div>{{ include.lado }}</div></div>
+  <div class="fila"><div class="p sem c8">

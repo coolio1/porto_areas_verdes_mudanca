@@ -16,12 +16,8 @@ temas:
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/artigos.css?v={{ site.time | date: '%s' }}">
 <script src="{{ site.baseurl }}/assets/js/artigos.js" defer></script>
 
-<div class="pg"><div class="folha">
-  <div class="colz cima" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
-  <div class="colz baixo" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
-  <div class="int">
-  <div class="fila primeira"><div class="p sem c8 tit"><div><h1>Artigos <em>sobre o que muda no Porto</em></h1><p>Análises com dados, reportagens e textos enviados às entidades.</p></div><span class="n">{{ site.posts | size }} artigos · mais recente primeiro</span></div></div>
-  <div class="fila"><div class="p sem c8">
+{%- capture lado_ %}<span class="n">{{ site.posts | size }} artigos · mais recente primeiro</span>{% endcapture -%}
+{% include folha-abre.html titulo="Artigos" em="sobre o que muda no Porto" texto="Análises com dados, reportagens e textos enviados às entidades." lado=lado_ %}
 <div class="artigos">
 
   <div class="chips" role="group" aria-label="Filtrar por tema">
@@ -52,4 +48,4 @@ temas:
   {%- endfor %}
   <div class="vazio" hidden>Nenhum artigo neste tema.</div>
 </div>
-</div></div></div></div></div>
+{% include folha-fecha.html %}

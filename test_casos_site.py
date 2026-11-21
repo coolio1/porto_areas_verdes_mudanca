@@ -87,3 +87,10 @@ def test_mapa_dos_casos_e_pagina_propria_com_positron():
     assert "MU.URL_DADOS = '../mapa_unico/dados/'" in h and "MU.LIGACOES" in h
     assert "fundo: 'positron'" in h                                      # fundo por defeito deste mapa
     assert "id: 'casos'" not in (RAIZ / "mapa_unico/mapa_unico.html").read_text(encoding="utf-8")
+
+
+def test_paginas_folha_usam_o_template_comum():
+    for f in ("artigos/index.html", "casos/lista/index.html"):
+        t = (RAIZ / f).read_text(encoding="utf-8")
+        assert "folha: true" in t and "folha-abre.html" in t and "folha-fecha.html" in t, f
+    assert "italic" in (RAIZ / "assets/css/folha.css").read_text(encoding="utf-8")

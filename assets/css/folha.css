@@ -97,7 +97,7 @@
 /* título da folha (fila 1): título à esquerda, abas da Mobilidade à direita */
 .tit { display: flex; justify-content: space-between; align-items: end; gap: 28px; padding: 30px 28px 28px; }
 .tit h1 { margin: 0; font: 700 34px/1.08 var(--sans); letter-spacing: -.02em; color: var(--tinta); max-width: 26ch; }
-.tit h1 em { font-style: normal; color: var(--cc-tit, var(--marca)); }
+.tit h1 em { font: italic 400 1.08em/1 "IBM Plex Serif", Georgia, serif; letter-spacing: -.01em; color: var(--cc-tit, var(--marca)); }   /* 2.ª parte do título: serifa itálica a verde, em todas as páginas folha */
 .tit p { margin: 8px 0 0; font-size: 13.5px; color: var(--tinta2); max-width: 74ch; line-height: 1.5; }
 .tit p + p { margin-top: 6px; }
 /* abas (moldura.js põe #abas-mobilidade no [data-abas]) */

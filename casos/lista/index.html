@@ -11,13 +11,9 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
 {%- assign casos_ = site.casos | sort: "ano" | reverse -%}
 {%- assign n_h_ = site.casos | where: "galeria", "horrores" | size -%}
 {%- assign n_s_ = site.casos | where: "galeria", "sucessos" | size -%}
-<div class="pg"><div class="folha">
-  <div class="colz cima" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
-  <div class="colz baixo" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span></div>
-  <div class="int">
-  <div class="fila primeira"><div class="p sem c8 tit"><div><h1>Horrores <em>e sucessos</em></h1><p>Horrores e sucessos conhecidos e documentados no Porto, com fonte e fotos de antes e depois. A lista nunca é completa.</p></div>
-    <nav class="caso-abas" aria-label="Vista"><a href="{{ '/casos/' | relative_url }}">Mapa</a><a href="{{ '/casos/lista/' | relative_url }}" aria-current="page" class="on">Lista</a></nav></div></div>
-  <div class="fila"><div class="p sem c8"><div class="caso casos-indice">
+{%- capture lado_ %}<nav class="caso-abas" aria-label="Vista"><a href="{{ '/casos/' | relative_url }}">Mapa</a><a href="{{ '/casos/lista/' | relative_url }}" aria-current="page" class="on">Lista</a></nav>{% endcapture -%}
+{% include folha-abre.html titulo="Horrores" em="e sucessos" texto="Horrores e sucessos conhecidos e documentados no Porto, com fonte e fotos de antes e depois. A lista nunca é completa." lado=lado_ %}
+<div class="caso casos-indice">
 
   {%- if casos_.size == 0 %}
   <p class="caso-vazio">Ainda sem casos publicados.</p>
@@ -52,7 +48,8 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
   {%- endif %}
 
   <a class="caso-mapa" href="{{ '/casos/' | relative_url }}">Ver todos no mapa →</a>
-</div></div></div></div></div></div>
+</div>
+{% include folha-fecha.html %}
 <script>
 (function () {
   var q = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
