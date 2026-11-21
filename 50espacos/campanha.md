@@ -1,5 +1,8 @@
 ---
 layout: campanha
+folha: true
+folha_em: "a campanha"
+folha_texto: "Como nasceu, que espaços entraram, os critérios e o que a campanha não pretende."
 title: "A campanha «50 Espaços Verdes»"
 description: "A campanha 50 espaços verdes em perigo e a preservar, da Campo Aberto: história, critérios, metodologia e o que a campanha não pretende."
 permalink: /50espacos/campanha/

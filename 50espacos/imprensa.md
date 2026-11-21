@@ -1,5 +1,8 @@
 ---
 layout: campanha
+folha: true
+folha_em: "na imprensa"
+folha_texto: "Recortes de imprensa sobre a campanha, por ordem cronológica inversa."
 title: Imprensa
 permalink: /50espacos/imprensa/
 ---

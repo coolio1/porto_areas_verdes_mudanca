@@ -236,3 +236,12 @@
 
 /* Texto só para leitores de ecrã */
 .e50 .so-leitor { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); border: 0; white-space: nowrap; }
+
+/* dentro da folha (assets/css/folha.css; docs/template-pagina.md): tipo e fundo do resto do site, não os da secção */
+.folha .e50 { --sans: "IBM Plex Sans", system-ui, sans-serif; --serif: "IBM Plex Serif", Georgia, serif; background: none; padding: 0 0 2.4rem; }
+.folha .e50 .lista-pagina, .folha .e50 .larga { max-width: none; }
+.folha .e50 .cabeca-inicio { grid-template-columns: auto minmax(0, 1fr); padding-top: 0; }
+.folha .e50 .cabeca-inicio .logo-topo img { height: 4.2rem; }
+.folha .e50 .cabeca-inicio .logo-ca img { height: 3rem; }
+.folha .tit .ligacoes { flex: none; }
+.folha .e50 .titulo-pagina { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }   /* o título já está no topo da folha */

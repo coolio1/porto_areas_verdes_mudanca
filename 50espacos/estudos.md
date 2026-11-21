@@ -1,5 +1,8 @@
 ---
 layout: campanha
+folha: true
+folha_em: "estudos e planos"
+folha_texto: "Estudos e planos que tratam os espaços verdes da campanha."
 title: Estudos
 permalink: /50espacos/estudos/
 ---

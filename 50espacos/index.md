@@ -3,24 +3,25 @@ layout: default
 title: "Campanha «50 Espaços Verdes»: mapa e lista dos espaços"
 description: "Os 111 espaços verdes da Área Metropolitana do Porto identificados pela Campo Aberto, 50 deles seleccionados: mapa, lista e filtros por concelho."
 wide: true
+folha: true
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/50espacos.css?v={{ site.time | date: '%s' }}">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+{%- assign n_sel = site.espacos | where_exp: "e", "e.seleccionado == true" | size -%}
+{%- assign n_conc = site.espacos | map: "concelho" | uniq | size -%}
+{%- capture lado_ %}{% include ligacoes_campanha.html %}{% endcapture -%}
+{%- capture texto_ %}Campanha da Campo Aberto, lançada em Outubro de 2006: {{ site.espacos.size }} espaços verdes da Área Metropolitana do Porto propostos por cidadãos, escolas e associações, dos quais {{ n_sel }} foram seleccionados em 2009 para defender. Os {{ n_sel }} não estão ordenados entre si.{% endcapture -%}
+{% include folha-abre.html titulo="50 Espaços Verdes" em="a preservar" texto=texto_ lado=lado_ %}
 <div class="e50">
   <div class="lista-pagina">
     <h1 class="so-leitor">Campanha «50 Espaços Verdes»: mapa e lista dos espaços</h1>
-    {%- assign n_sel = site.espacos | where_exp: "e", "e.seleccionado == true" | size -%}
-    {%- assign n_conc = site.espacos | map: "concelho" | uniq | size -%}
     <div class="cabeca-inicio">
       {% include logos_campanha.html %}
-      <div class="cabeca-lado">
-        {% include ligacoes_campanha.html %}
-        <dl class="faixa">
-          <div><dt>espaços</dt><dd>{{ site.espacos.size }}</dd></div>
-          <div><dt>seleccionados</dt><dd>{{ n_sel }}</dd></div>
-          <div><dt>concelhos</dt><dd>{{ n_conc }}</dd></div>
-        </dl>
-      </div>
+      <dl class="faixa">
+        <div><dt>espaços</dt><dd>{{ site.espacos.size }}</dd></div>
+        <div><dt>seleccionados</dt><dd>{{ n_sel }}</dd></div>
+        <div><dt>concelhos</dt><dd>{{ n_conc }}</dd></div>
+      </dl>
     </div>
     <form class="filtros" aria-label="Filtros">
       <label class="filtro-select">Concelho
@@ -59,6 +60,7 @@ wide: true
     {% include rodape_campanha.html %}
   </div>
 </div>
+{% include folha-fecha.html %}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function () {

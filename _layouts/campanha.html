@@ -2,11 +2,13 @@
 layout: default
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/50espacos.css?v={{ site.time | date: '%s' }}">
+{%- capture lado_ %}{% include ligacoes_campanha.html %}{% endcapture -%}
+{% include folha-abre.html titulo="50 Espaços Verdes" em=page.folha_em texto=page.folha_texto lado=lado_ %}
 <div class="e50">
   <div class="larga">
-    {% include topo_campanha.html %}
     <main class="coluna" id="campanha">
       {{ content }}
     </main>
   </div>
 </div>
+{% include folha-fecha.html %}

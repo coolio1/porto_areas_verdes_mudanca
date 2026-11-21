@@ -90,7 +90,15 @@ def test_mapa_dos_casos_e_pagina_propria_com_positron():
 
 
 def test_paginas_folha_usam_o_template_comum():
-    for f in ("artigos/index.html", "casos/lista/index.html"):
+    for f in ("artigos/index.html", "casos/lista/index.html", "50espacos/index.md"):
         t = (RAIZ / f).read_text(encoding="utf-8")
         assert "folha: true" in t and "folha-abre.html" in t and "folha-fecha.html" in t, f
     assert "italic" in (RAIZ / "assets/css/folha.css").read_text(encoding="utf-8")
+
+
+def test_layout_campanha_usa_o_template_comum():
+    h = (RAIZ / "_layouts/campanha.html").read_text(encoding="utf-8")
+    assert "folha-abre.html" in h and "folha-fecha.html" in h
+    for f in ("campanha", "imprensa", "estudos"):
+        t = (RAIZ / f"50espacos/{f}.md").read_text(encoding="utf-8")
+        assert "folha: true" in t and "folha_em:" in t and "folha_texto:" in t, f
