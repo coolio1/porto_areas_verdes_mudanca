@@ -106,3 +106,23 @@ def test_url_de_referencia_so_http(caso_ok, fontes, url):
 def test_url_de_foto_so_http(caso_ok, fontes):
     caso_ok["fotos"][0]["url"] = "javascript:alert(1)"
     assert any("url" in e and "http" in e for e in validar_caso(caso_ok, fontes))
+
+
+def test_lat_lon_como_texto_e_erro(caso_ok, fontes):
+    caso_ok["lat"], caso_ok["lon"] = "41.15", "-8.62"
+    assert any("lat/lon" in e and "número" in e for e in validar_caso(caso_ok, fontes))
+
+
+def test_slug_com_formato_invalido(caso_ok, fontes):
+    caso_ok["slug"] = "Mau Slug/.."
+    assert any("slug" in e for e in validar_caso(caso_ok, fontes))
+
+
+def test_excerto_demasiado_curto(caso_ok, fontes):
+    caso_ok["referencias"][0]["excerto"] = "abate"
+    assert any("curto" in e for e in validar_caso(caso_ok, fontes))
+
+
+def test_fontes_por_omissao_nao_traz_caminho_pessoal():
+    import casos_pipeline.validar as v
+    assert "quent" not in open(v.__file__, encoding="utf-8").read()

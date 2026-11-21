@@ -1704,21 +1704,23 @@ MU.registarTema({
                    : 'fill="' + cor + '" stroke="#fff" stroke-width="1.5"';
     return '<svg viewBox="0 0 22 22" width="' + tam + '" height="' + tam + '" aria-hidden="true" ' + at + '>' + FORMA[tipo] + '</svg>';
   }
-  function seguro(u) { return /^https?:\/\//.test(u) ? u : '#'; }   // só http(s) nas ligações vindas dos dados
+  // só http(s) nas ligações vindas dos dados
+  function seguro(u) { return /^https?:\/\//i.test(u) ? u : '#'; }
+  function attr(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
   function texto(h) { var t = document.createElement('textarea'); t.innerHTML = h; return t.value; }
   function foto0(c) {
     return c.fotos.filter(function (f) { return f.papel === 'depois'; })[0] || c.fotos[0];
   }
   function cartaoHover(c) {
     var f = foto0(c);
-    return '<div class="hv">' + (f ? '<img src="' + f.src + '" alt="" loading="lazy">' : '') +
+    return '<div class="hv">' + (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '') +
       '<div class="t">' + c.titulo + '</div><div class="s">' + c.ano + ' · ' + ROTULO[c.tipo] + '</div></div>';
   }
   function corpoFicha(c) {
     var h = '';
     if (c.fotos.length) {
       h += '<div class="fotos n' + Math.min(c.fotos.length, 2) + '">' + c.fotos.map(function (f) {
-        return '<figure><img src="' + f.src + '" alt="' + PAPEL[f.papel] + ': ' + c.titulo + '" loading="lazy"><figcaption>' +
+        return '<figure><img src="' + attr(f.src) + '" alt="' + PAPEL[f.papel] + ': ' + c.titulo + '" loading="lazy"><figcaption>' +
           PAPEL[f.papel] + (f.ano ? ' · ' + f.ano : '') + ' · <a href="' + seguro(f.url) + '" target="_blank" rel="noopener noreferrer">' +
           (f.fonte || 'fonte') + '</a></figcaption></figure>';
       }).join('') + '</div>';

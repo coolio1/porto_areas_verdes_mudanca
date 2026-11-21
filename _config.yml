@@ -34,6 +34,7 @@ defaults:
       type: "casos"
     values:
       layout: "caso"
+      fontes: "Imprensa, actas e arquivos citados em cada caso"
   - scope:
       path: "50espacos"
     values:

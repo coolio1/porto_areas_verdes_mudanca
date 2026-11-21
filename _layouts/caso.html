@@ -13,7 +13,7 @@ layout: default
     <p class="caso-migalhas"><a href="{{ '/casos/' | relative_url }}">Casos</a> / {{ galeria_nome_ }}</p>
     <p class="caso-etiqueta caso-{{ page.galeria }}"><i aria-hidden="true"></i>{{ galeria_nome_ }} · {{ tipo_nome_ }}</p>
     <h1>{{ page.titulo | escape }}</h1>
-    <p class="caso-dados">{{ page.ano }} · {{ page.estado | escape }}{% if page.aproximada %} · localização aproximada{% endif %}</p>
+    <p class="caso-dados">{{ page.ano }}{% if page.estado != 'outro' %} · {{ page.estado | escape }}{% endif %}{% if page.aproximada %} · localização aproximada{% endif %}</p>
 
     {%- if antes_ or depois_ %}
     <div class="caso-fotos caso-fotos-{% if antes_ and depois_ %}2{% else %}1{% endif %}">

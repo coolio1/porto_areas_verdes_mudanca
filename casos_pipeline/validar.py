@@ -1,5 +1,7 @@
 """Validação dos casos: esquema, concelho, excertos literais e fotos. `python -m casos_pipeline.validar`."""
 import hashlib
+import os
+import re
 import sys
 from pathlib import Path
 
@@ -7,7 +9,10 @@ from casos_pipeline.concelho import dentro_do_porto
 from casos_pipeline.modelo import (CRITERIOS, ESTADOS, GALERIAS, PAPEIS, RAIZ, TIPOS,
                                    excerto_em_texto, listar_casos)
 
-FONTES = Path(r"C:\Users\quent\OneDrive\Claude\Fontes\Horrores")
+# textos lidos das fontes: fora do repo, ao lado dele (OneDrive/Claude/Fontes/Horrores); PV_FONTES_HORRORES sobrepõe
+FONTES = Path(os.environ.get("PV_FONTES_HORRORES") or RAIZ.parent / "Fontes" / "Horrores")
+MIN_EXCERTO = 15
+SLUG = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 MEDIA = RAIZ / "Horrores" / "media"
 OBRIGATORIOS = ("titulo", "galeria", "tipo", "lat", "lon", "origem_coord", "ano", "estado",
                 "contestacao", "criterio")
@@ -32,6 +37,11 @@ def validar_caso(caso: dict, raiz_fontes: Path, raiz_media: Path = None) -> list
         e.append("«freguesia» não se escreve: deriva-se de lat/lon pela CAOP")
     if caso.get("criterio") == "editorial" and not caso.get("nota_editorial"):
         e.append("criterio «editorial» exige «nota_editorial»")
+    if caso.get("slug") is not None and not SLUG.match(str(caso["slug"])):
+        e.append("slug com formato inválido (só minúsculas, algarismos e hífenes)")
+    for c in ("lat", "lon"):
+        if caso.get(c) not in (None, "") and (isinstance(caso[c], bool) or not isinstance(caso[c], (int, float))):
+            e.append(f"lat/lon têm de ser número, não texto («{c}»)")
     if isinstance(caso.get("lat"), (int, float)) and isinstance(caso.get("lon"), (int, float)):
         if not dentro_do_porto(caso["lat"], caso["lon"]):
             e.append("lat/lon fora do concelho do Porto (CAOP 2025)")
@@ -42,6 +52,8 @@ def validar_caso(caso: dict, raiz_fontes: Path, raiz_media: Path = None) -> list
         if not r.get("url") or not r.get("excerto"):
             e.append(f"referência {i}: faltam «url» ou «excerto»")
             continue
+        if len(" ".join(str(r["excerto"]).split())) < MIN_EXCERTO:
+            e.append(f"referência {i}: excerto demasiado curto (mínimo {MIN_EXCERTO} caracteres)")
         if not _http(r["url"]):
             e.append(f"referência {i}: url tem de começar por http:// ou https://")
         txt = Path(raiz_fontes) / caso.get("slug", "") / f"{i}.txt"

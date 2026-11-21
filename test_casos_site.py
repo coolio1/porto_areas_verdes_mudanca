@@ -59,3 +59,13 @@ def test_indice_nao_lista_rascunhos():
     gi = (RAIZ / ".gitignore").read_text(encoding="utf-8")
     assert "docs/horrores/rascunhos/" in gi
     assert "docs" in CONFIG["exclude"]
+
+
+def test_paginas_de_caso_tem_fontes_proprias():
+    d = [x for x in CONFIG["defaults"] if x["scope"].get("type") == "casos"][0]
+    assert d["values"].get("fontes")
+
+
+def test_layout_nao_mostra_estado_outro():
+    h = (RAIZ / "_layouts/caso.html").read_text(encoding="utf-8")
+    assert "page.estado != 'outro'" in h
