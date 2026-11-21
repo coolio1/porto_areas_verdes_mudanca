@@ -34,11 +34,11 @@
   function foto0(c) {
     return c.fotos.filter(function (f) { return f.papel === 'depois'; })[0] || c.fotos[0];
   }
-  function cartaoHover(c) {   // cartão pequeno: foto à esquerda (se houver), título, ano · tipo e a ligação à página
+  function cartaoHover(c) {   // cartão pequeno e inteiro clicável: foto à esquerda (se houver), título, ano · tipo
     var f = foto0(c);
-    return '<div class="hv' + (f ? '' : ' sem-foto') + '">' + (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '') +
-      '<div class="tx"><div class="t">' + c.titulo + '</div><div class="s">' + c.ano + ' · ' + (ROTULO[c.tipo] || '') + '</div>' +
-      '<a class="ver-caso" href="' + attr(c.url) + '">Ver página do caso →</a></div></div>';
+    return '<a class="hv ver-caso' + (f ? '' : ' sem-foto') + '" href="' + attr(c.url) + '" aria-label="Abrir a página: ' + attr(texto(c.titulo)) + '">' +
+      (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '') +
+      '<span class="tx"><span class="t">' + c.titulo + '</span><span class="s">' + c.ano + ' · ' + (ROTULO[c.tipo] || '') + '</span></span></a>';
   }
   function corpoFicha(c) {   // ficha compacta: fotos, resumo (1.º parágrafo, 3 linhas); o texto completo e as referências ficam na página
     var h = '';

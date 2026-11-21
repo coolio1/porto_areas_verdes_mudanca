@@ -213,12 +213,13 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .caso-mk:focus-visible{outline:2px solid var(--tinta);outline-offset:1px}
 .leaflet-tooltip.caso-hover{width:290px;padding:0;white-space:normal;border:1px solid var(--filete);border-radius:0;box-shadow:none;background:var(--painel);color:var(--tinta);pointer-events:auto}
 .leaflet-tooltip.caso-hover:before{display:none}
-.caso-hover .hv{display:grid;grid-template-columns:84px minmax(0,1fr)}.caso-hover .hv.sem-foto{grid-template-columns:minmax(0,1fr)}
+.caso-hover .hv{display:grid;color:inherit;text-decoration:none;cursor:pointer;grid-template-columns:84px minmax(0,1fr)}.caso-hover .hv.sem-foto{grid-template-columns:minmax(0,1fr)}
 .caso-hover img{display:block;width:84px;height:100%;min-height:78px;object-fit:cover;border-right:1px solid var(--filete)}
 .caso-hover .tx{padding:8px 10px 9px;display:flex;flex-direction:column;gap:3px}
+.caso-hover .hv:hover{background:var(--realce)}.caso-hover .hv:hover .t{text-decoration:underline}
+.caso-hover .hv:focus-visible{outline:2px solid var(--tinta);outline-offset:-2px}
 .caso-hover .t{font:700 14px/1.2 var(--sans)}
 .caso-hover .s{font:400 11.5px var(--mono);color:var(--suave)}
-.caso-hover .ver-caso{font:500 12.5px var(--sans);margin-top:2px}
 .casos-filtros label{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;cursor:pointer}
 .casos-filtros .sw{display:inline-flex;width:18px;justify-content:center}.casos-filtros em{margin-left:auto;font:400 11.5px var(--mono);color:var(--suave);font-style:normal}
 /* números-chave sobre o mapa (core.js: MU.moverNums) */
@@ -1720,11 +1721,11 @@ MU.registarTema({
   function foto0(c) {
     return c.fotos.filter(function (f) { return f.papel === 'depois'; })[0] || c.fotos[0];
   }
-  function cartaoHover(c) {   // cartão pequeno: foto à esquerda (se houver), título, ano · tipo e a ligação à página
+  function cartaoHover(c) {   // cartão pequeno e inteiro clicável: foto à esquerda (se houver), título, ano · tipo
     var f = foto0(c);
-    return '<div class="hv' + (f ? '' : ' sem-foto') + '">' + (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '') +
-      '<div class="tx"><div class="t">' + c.titulo + '</div><div class="s">' + c.ano + ' · ' + (ROTULO[c.tipo] || '') + '</div>' +
-      '<a class="ver-caso" href="' + attr(c.url) + '">Ver página do caso →</a></div></div>';
+    return '<a class="hv ver-caso' + (f ? '' : ' sem-foto') + '" href="' + attr(c.url) + '" aria-label="Abrir a página: ' + attr(texto(c.titulo)) + '">' +
+      (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '') +
+      '<span class="tx"><span class="t">' + c.titulo + '</span><span class="s">' + c.ano + ' · ' + (ROTULO[c.tipo] || '') + '</span></span></a>';
   }
   function corpoFicha(c) {   // ficha compacta: fotos, resumo (1.º parágrafo, 3 linhas); o texto completo e as referências ficam na página
     var h = '';
