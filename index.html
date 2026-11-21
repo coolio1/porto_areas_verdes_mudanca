@@ -56,7 +56,7 @@ ficha_fontes:
 {%- assign d_fim = d_fim | strip | split: " " -%}
 {%- assign img = site.baseurl | append: "/assets/images/inicio/" -%}
 {%- capture coords -%}<span class="coord nw-c">41,187° N · 8,693° W</span><span class="coord se-c">41,139° N · 8,551° W</span><span class="escala" aria-hidden="true">1 km<i></i></span>{%- endcapture -%}
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/inicio.css">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/inicio.css?v={{ site.time | date: '%s' }}">
 <div class="inicio">
  <section class="topo">
   <div class="apres">
