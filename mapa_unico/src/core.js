@@ -167,7 +167,7 @@
     if (!f) { box.classList.remove('on'); box.innerHTML = ''; return; }
     if (f.layer && f.grupo) { MU._sel = { layer: f.layer, grupo: f.grupo }; f.layer.setStyle({ color: TINTA, weight: 2.6 }); }
     box.style.setProperty('--fc', f.cor || PARQUE);
-    box.innerHTML = '<button type="button" class="x" aria-label="Fechar a ficha">×</button><h3>' + f.titulo + '</h3><p class="sub">' + f.sub + '</p><dl>' +
+    box.innerHTML = '<button type="button" class="x" aria-label="Fechar a ficha">×</button><h3>' + f.titulo + '</h3><p class="sub">' + f.sub + '</p>' + (f.topo || '') + '<dl>' +
       f.linhas.map(function (l) { return '<dt>' + l[0] + '</dt><dd>' + l[1] + '</dd>'; }).join('') + '</dl>' +
       (f.rel != null ? '<div class="cmp">Área face ao Parque da Cidade (' + MU.n(MU._maiorParque, 2) + ' ha)<div class="med"><i style="width:' +
         Math.max(1, f.rel * 100).toFixed(1) + '%"></i></div></div>' : '') +

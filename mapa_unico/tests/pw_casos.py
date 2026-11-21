@@ -88,7 +88,14 @@ with sync_playwright() as p:
     pg.wait_for_selector(".leaflet-tooltip.caso-hover", timeout=3000)
     ok("hover mostra cartão com o título", "Árvores da Rua A" in pg.text_content(".leaflet-tooltip.caso-hover"))
     ok("cartão de hover com foto quando há", pg.locator(".leaflet-tooltip.caso-hover img").count() == 1)
+    ok("cartão de hover com ligação à página", pg.get_attribute(".leaflet-tooltip.caso-hover a.ver-caso", "href") == "../casos/a-rua/")
+    bx = pg.locator(".leaflet-tooltip.caso-hover").bounding_box()
+    pg.mouse.move(bx["x"] + bx["width"] / 2, bx["y"] + bx["height"] / 2)
+    pg.wait_for_timeout(800)
+    ok("cartão fica aberto com o rato em cima dele", pg.locator(".leaflet-tooltip.caso-hover").count() == 1)
     pg.mouse.move(5, 5)
+    pg.wait_for_timeout(900)
+    ok("cartão fecha depois de o rato sair de ambos", pg.locator(".leaflet-tooltip.caso-hover").count() == 0)
 
     # clique = ficha fixa; × fecha
     pg.click(".caso-mk[data-slug=a-rua]")
@@ -96,6 +103,8 @@ with sync_playwright() as p:
     ok("clique abre a ficha com antes e depois", pg.locator("#ficha .fcorpo img").count() == 2)
     ok("ficha por cima do cartão «Números» (nada tapado)", pg.evaluate("(() => { const f = document.getElementById('ficha').getBoundingClientRect(); const e = document.elementFromPoint(f.left + f.width / 2, f.bottom - 8); return !!e && !!e.closest('#ficha'); })()"))
     ok("ficha com ligação à página do caso", pg.get_attribute("#ficha a.ver-caso", "href") == "../casos/a-rua/")
+    ok("ligação à página no topo da ficha (antes das fotos)", pg.evaluate("document.querySelector('#ficha a.ver-caso').getBoundingClientRect().bottom <= document.querySelector('#ficha .fcorpo').getBoundingClientRect().top + 1"))
+    ok("ficha compacta: resumo e sem lista de referências", pg.locator("#ficha .resumo").count() == 1 and pg.locator("#ficha ol.refs").count() == 0)
     ok("hash ganha o caso", "caso=a-rua" in pg.evaluate("location.hash"))
     pg.mouse.move(5, 5)
     ok("ficha fica aberta depois do rato sair", pg.evaluate("document.getElementById('ficha').classList.contains('on')"))

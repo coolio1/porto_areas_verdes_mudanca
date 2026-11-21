@@ -1,6 +1,6 @@
 /* Tema «Casos»: horrores e sucessos urbanísticos, patrimoniais e de verde do Porto, com fonte e fotos antes/depois.
    Dados de mapa_unico.py (`dados_casos`, texto já escapado). Hover = cartão; clique = ficha fixa (MU.ficha com `corpo`);
-   `#tema=casos&caso=<slug>` abre um caso. Forma do marcador = tipo; cor = galeria (vermelho horrores, azul sucessos). */
+   `#tema=casos&caso=<slug>` abre um caso. Marcador = disco com glifo do tipo; cor = galeria (vermelho horrores, azul sucessos). */
 (function () {
   var TIPOS = [
     ['arvores', 'Árvores e verde'], ['demolicao', 'Demolições'], ['patrimonio_alterado', 'Património alterado'],
@@ -11,17 +11,21 @@
   var GAL = { horrores: 'Horrores', sucessos: 'Sucessos' };
   var ESTADO = { demolido: 'Demolido', alterado: 'Alterado', abatido: 'Abatido', revertido: 'Revertido', outro: 'Outro' };
   var PAPEL = { antes: 'Antes', depois: 'Depois', outra: 'Foto' };
-  var FORMA = {
-    arvores: '<circle cx="11" cy="11" r="7"/>',
-    demolicao: '<rect x="4" y="4" width="14" height="14"/>',
-    patrimonio_alterado: '<polygon points="11,3 19,11 11,19 3,11"/>',
-    lojas_historicas: '<polygon points="11,3.5 19,18 3,18"/>'
+  // Marcador = disco da cor da galeria com o glifo do tipo (30 px); aproximada = contorno tracejado e miolo branco.
+  var GLIFO = {   // [corpo do glifo, preenchido?] no viewBox 30
+    arvores: ['<circle cx="15" cy="12" r="5"/><rect x="14" y="15" width="2" height="7"/>', true],
+    demolicao: ['<path d="M8 21V12l4 3v-3l4 3V9h6v12z"/>', true],
+    patrimonio_alterado: ['<path d="M8 21h14M10 21V13M15 21V13M20 21V13M8 12l7-5 7 5z"/>', false],
+    lojas_historicas: ['<path d="M8 12l1.5-4h11L22 12v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0V12zM9 16v6h12v-6"/>', false]
   };
 
-  function svg(tipo, cor, aprox, tam) {   // aproximada = contorno tracejado e miolo branco
-    var at = aprox ? 'fill="#fff" stroke="' + cor + '" stroke-width="2" stroke-dasharray="2.5 2"'
-                   : 'fill="' + cor + '" stroke="#fff" stroke-width="1.5"';
-    return '<svg viewBox="0 0 22 22" width="' + tam + '" height="' + tam + '" aria-hidden="true" ' + at + '>' + FORMA[tipo] + '</svg>';
+  function svg(tipo, cor, aprox, tam) {
+    var g = GLIFO[tipo], gc = aprox ? cor : '#fff';
+    var disco = aprox ? '<circle cx="15" cy="15" r="13" fill="#fff" stroke="' + cor + '" stroke-width="2.2" stroke-dasharray="3 2.4"/>'
+                      : '<circle cx="15" cy="15" r="13" fill="' + cor + '" stroke="#fff" stroke-width="2"/>';
+    var corpo = g[1] ? '<g fill="' + gc + '">' + g[0] + '</g>'
+                     : '<g fill="none" stroke="' + gc + '" stroke-width="1.8" stroke-linejoin="round">' + g[0] + '</g>';
+    return '<svg viewBox="0 0 30 30" width="' + tam + '" height="' + tam + '" aria-hidden="true">' + disco + corpo + '</svg>';
   }
   // só http(s) nas ligações vindas dos dados
   function seguro(u) { return /^https?:\/\//i.test(u) ? u : '#'; }
@@ -30,28 +34,25 @@
   function foto0(c) {
     return c.fotos.filter(function (f) { return f.papel === 'depois'; })[0] || c.fotos[0];
   }
-  function cartaoHover(c) {
+  function cartaoHover(c) {   // cartão pequeno: foto à esquerda (se houver), título, ano · tipo e a ligação à página
     var f = foto0(c);
-    return '<div class="hv">' + (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '') +
-      '<div class="t">' + c.titulo + '</div><div class="s">' + c.ano + ' · ' + ROTULO[c.tipo] + '</div></div>';
+    return '<div class="hv' + (f ? '' : ' sem-foto') + '">' + (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '') +
+      '<div class="tx"><div class="t">' + c.titulo + '</div><div class="s">' + c.ano + ' · ' + ROTULO[c.tipo] + '</div>' +
+      '<a class="ver-caso" href="' + attr(c.url) + '">Ver página do caso →</a></div></div>';
   }
-  function corpoFicha(c) {
+  function corpoFicha(c) {   // ficha compacta: fotos, resumo (1.º parágrafo, 3 linhas); o texto completo e as referências ficam na página
     var h = '';
     if (c.fotos.length) {
-      h += '<div class="fotos n' + Math.min(c.fotos.length, 2) + '">' + c.fotos.map(function (f) {
+      h += '<div class="fotos n' + Math.min(c.fotos.length, 2) + '">' + c.fotos.slice(0, 2).map(function (f) {
         return '<figure><img src="' + attr(f.src) + '" alt="' + PAPEL[f.papel] + ': ' + c.titulo + '" loading="lazy"><figcaption>' +
           PAPEL[f.papel] + (f.ano ? ' · ' + f.ano : '') + ' · <a href="' + seguro(f.url) + '" target="_blank" rel="noopener noreferrer">' +
           (f.fonte || 'fonte') + '</a></figcaption></figure>';
       }).join('') + '</div>';
     }
-    h += c.corpo_html;
-    h += '<p class="cont"><b>Contestação.</b> ' + c.contestacao + '</p>';
-    if (c.criterio === 'editorial') h += '<p class="nota-ed"><b>Avaliação do Porto Verde.</b> ' + c.nota_editorial + '</p>';
-    h += '<ol class="refs">' + c.referencias.map(function (r) {
-      return '<li><a href="' + seguro(r.url) + '" target="_blank" rel="noopener noreferrer">' + r.titulo + '</a>' +
-        (r.data ? ' <span>' + r.data + '</span>' : '') + '</li>';
-    }).join('') + '</ol>';
-    h += '<a class="ver-caso" href="' + c.url + '">Ver página do caso →</a>';
+    var p1 = (c.corpo_html.match(/<p>[\s\S]*?<\/p>/) || [''])[0];
+    h += '<div class="resumo">' + p1 + '</div>';
+    var n = c.referencias.length;
+    h += '<p class="nrefs">' + n + (n === 1 ? ' referência' : ' referências') + ' · na página do caso</p>';
     return h;
   }
 
@@ -81,26 +82,28 @@
       }
       painel.innerHTML = desc + nums + '<div class="casos-filtros">' +
         MU.cab2('Galeria', '') + Object.keys(GAL).map(function (g) {
-          return '<label><input type="checkbox" data-galeria="' + g + '" checked><span class="sw">' + svg('arvores', COR[g], false, 16) +
+          return '<label><input type="checkbox" data-galeria="' + g + '" checked><span class="sw">' + '<svg viewBox="0 0 30 30" width="20" height="20" aria-hidden="true"><circle cx="15" cy="15" r="13" fill="' + COR[g] + '"/></svg>' +
             '</span>' + GAL[g] + ' <em>' + N.por_galeria[g] + '</em></label>';
         }).join('') +
-        MU.cab2('Tipo', 'forma do marcador') + TIPOS.map(function (t) {
-          return '<label><input type="checkbox" data-tipo="' + t[0] + '" checked><span class="sw">' + svg(t[0], '#10212C', false, 16) +
+        MU.cab2('Tipo', 'glifo do marcador') + TIPOS.map(function (t) {
+          return '<label><input type="checkbox" data-tipo="' + t[0] + '" checked><span class="sw">' + svg(t[0], '#10212C', false, 20) +
             '</span>' + t[1] + ' <em>' + N.por_tipo[t[0]] + '</em></label>';
         }).join('') +
         '<p class="tema-sub">Contorno tracejado: localização aproximada.</p></div>';
       D.casos.forEach(function (c) {
         var m = L.marker([c.lat, c.lon], {
-          icon: L.divIcon({ className: 'caso-mk', html: svg(c.tipo, COR[c.galeria], c.aproximada, 22), iconSize: [22, 22], iconAnchor: [11, 11] }),
+          icon: L.divIcon({ className: 'caso-mk', html: svg(c.tipo, COR[c.galeria], c.aproximada, 30), iconSize: [30, 30], iconAnchor: [15, 15] }),
           pane: MU.pane('mu-casos', 480), keyboard: true, riseOnHover: true
         });
         m.on('add', function () {
           var e = m.getElement(); e.dataset.slug = c.slug;
           e.setAttribute('role', 'button'); e.setAttribute('aria-label', texto(c.titulo) + ', ' + ROTULO[c.tipo]);
         });
-        m.bindTooltip(cartaoHover(c), { direction: 'top', offset: [0, -10], className: 'caso-hover', opacity: 1 });
-        m.on('click', function (e) { L.DomEvent.stopPropagation(e); m.closeTooltip(); self._abrir(c, false); });
-        m.on('keypress', function (e) { if (e.originalEvent.key === 'Enter') { m.closeTooltip(); self._abrir(c, false); } });
+        // cartão ao pairar: abre no marcador e só fecha ~300 ms depois de o rato sair do marcador E do cartão
+        m.on('mouseover', function () { self._cartao(c, m); });
+        m.on('mouseout', function () { self._agendarFecho(); });
+        m.on('click', function (e) { L.DomEvent.stopPropagation(e); self._fecharCartao(); self._abrir(c, false); });
+        m.on('keypress', function (e) { if (e.originalEvent.key === 'Enter') { self._fecharCartao(); self._abrir(c, false); } });
         self._entradas.push({ c: c, m: m });
       });
       painel.querySelectorAll('.casos-filtros input').forEach(function (cb) {
@@ -111,6 +114,32 @@
         });
       });
       self._aplicar();
+    },
+
+    _cartao(c, m) {
+      var self = this;
+      clearTimeout(self._tFecho);
+      if (self._tt) MU.map.closeTooltip(self._tt);
+      var tt = L.tooltip({ direction: 'top', offset: [0, -16], className: 'caso-hover', opacity: 1, interactive: true })
+        .setLatLng(m.getLatLng()).setContent(cartaoHover(c));
+      self._tt = tt;
+      MU.map.openTooltip(tt);
+      var el = tt.getElement();
+      if (el) {
+        el.addEventListener('mouseenter', function () { clearTimeout(self._tFecho); });
+        el.addEventListener('mouseleave', function () { self._agendarFecho(); });
+      }
+    },
+
+    _agendarFecho() {
+      var self = this;
+      clearTimeout(self._tFecho);
+      self._tFecho = setTimeout(function () { self._fecharCartao(); }, 300);
+    },
+
+    _fecharCartao() {
+      clearTimeout(this._tFecho);
+      if (this._tt) { MU.map.closeTooltip(this._tt); this._tt = null; }
     },
 
     _aplicar() {
@@ -124,7 +153,8 @@
     _abrir(c, centrar) {
       MU.ficha({
         titulo: c.titulo, cor: COR[c.galeria], sub: ROTULO[c.tipo] + ' · ' + c.ano,
-        linhas: [['Estado', ESTADO[c.estado] || c.estado], ['Local', c.freguesia + (c.aproximada ? ' (aprox.)' : '')]],
+        linhas: (c.estado === 'outro' ? [] : [['Estado', ESTADO[c.estado] || c.estado]]).concat([['Local', c.freguesia + (c.aproximada ? ' (aprox.)' : '')]]),
+        topo: '<a class="ver-caso" href="' + attr(c.url) + '">Abrir a página completa →</a>',
         corpo: corpoFicha(c)
       });
       document.querySelector('#ficha .x').addEventListener('click', this._limpar);
@@ -150,6 +180,7 @@
       this._doHash();
     },
     desactivar() {
+      this._fecharCartao();
       MU.map.removeLayer(this._grupo);
       MU.map.off('click', this._limpar);
     }
