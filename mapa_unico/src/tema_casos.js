@@ -20,7 +20,7 @@
   };
 
   function svg(tipo, cor, aprox, tam) {
-    var g = GLIFO[tipo], gc = aprox ? cor : '#fff';
+    var g = GLIFO[tipo] || ['<circle cx="15" cy="15" r="4"/>', true], gc = aprox ? cor : '#fff';   // tipo desconhecido (dados em cache antigos): ponto
     var disco = aprox ? '<circle cx="15" cy="15" r="13" fill="#fff" stroke="' + cor + '" stroke-width="2.2" stroke-dasharray="3 2.4"/>'
                       : '<circle cx="15" cy="15" r="13" fill="' + cor + '" stroke="#fff" stroke-width="2"/>';
     var corpo = g[1] ? '<g fill="' + gc + '">' + g[0] + '</g>'
@@ -37,7 +37,7 @@
   function cartaoHover(c) {   // cartão pequeno: foto à esquerda (se houver), título, ano · tipo e a ligação à página
     var f = foto0(c);
     return '<div class="hv' + (f ? '' : ' sem-foto') + '">' + (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '') +
-      '<div class="tx"><div class="t">' + c.titulo + '</div><div class="s">' + c.ano + ' · ' + ROTULO[c.tipo] + '</div>' +
+      '<div class="tx"><div class="t">' + c.titulo + '</div><div class="s">' + c.ano + ' · ' + (ROTULO[c.tipo] || '') + '</div>' +
       '<a class="ver-caso" href="' + attr(c.url) + '">Ver página do caso →</a></div></div>';
   }
   function corpoFicha(c) {   // ficha compacta: fotos, resumo (1.º parágrafo, 3 linhas); o texto completo e as referências ficam na página
@@ -97,7 +97,7 @@
         });
         m.on('add', function () {
           var e = m.getElement(); e.dataset.slug = c.slug;
-          e.setAttribute('role', 'button'); e.setAttribute('aria-label', texto(c.titulo) + ', ' + ROTULO[c.tipo]);
+          e.setAttribute('role', 'button'); e.setAttribute('aria-label', texto(c.titulo) + ', ' + (ROTULO[c.tipo] || ''));
         });
         // cartão ao pairar: abre no marcador e só fecha ~300 ms depois de o rato sair do marcador E do cartão
         m.on('mouseover', function () { self._cartao(c, m); });
@@ -152,7 +152,7 @@
 
     _abrir(c, centrar) {
       MU.ficha({
-        titulo: c.titulo, cor: COR[c.galeria], sub: ROTULO[c.tipo] + ' · ' + c.ano,
+        titulo: c.titulo, cor: COR[c.galeria], sub: (ROTULO[c.tipo] || '') + ' · ' + c.ano,
         linhas: (c.estado === 'outro' ? [] : [['Estado', ESTADO[c.estado] || c.estado]]).concat([['Local', c.freguesia + (c.aproximada ? ' (aprox.)' : '')]]),
         topo: '<a class="ver-caso" href="' + attr(c.url) + '">Abrir a página completa →</a>',
         corpo: corpoFicha(c)
