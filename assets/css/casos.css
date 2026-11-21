@@ -105,3 +105,7 @@
 .folha .casos-indice { padding: 0 0 40px; max-width: none; }
 .folha .tit .caso-abas { margin: 0; flex: none; }
 .folha .caso-filtros { margin-top: 26px; }
+.folha .tit .caso-abas { border-color: #10212C; font: 500 12.5px/1 "IBM Plex Sans", system-ui, sans-serif; }
+.folha .tit .caso-abas a { color: #10212C; padding: 8px 11px; min-height: 0; }
+.folha .tit .caso-abas a + a { border-left-color: #10212C; }
+.folha .tit .caso-abas a.on { background: #10212C; color: #FAFAF7; }
