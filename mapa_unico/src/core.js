@@ -170,7 +170,8 @@
     box.innerHTML = '<button type="button" class="x" aria-label="Fechar a ficha">×</button><h3>' + f.titulo + '</h3><p class="sub">' + f.sub + '</p><dl>' +
       f.linhas.map(function (l) { return '<dt>' + l[0] + '</dt><dd>' + l[1] + '</dd>'; }).join('') + '</dl>' +
       (f.rel != null ? '<div class="cmp">Área face ao Parque da Cidade (' + MU.n(MU._maiorParque, 2) + ' ha)<div class="med"><i style="width:' +
-        Math.max(1, f.rel * 100).toFixed(1) + '%"></i></div></div>' : '');
+        Math.max(1, f.rel * 100).toFixed(1) + '%"></i></div></div>' : '') +
+      (f.corpo ? '<div class="corpo">' + f.corpo + '</div>' : '');   // corpo: HTML já escapado por quem chama (tema Casos)
     box.classList.add('on');
     box.querySelector('.x').onclick = function () { MU.ficha(null); };
   };
