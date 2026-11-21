@@ -245,3 +245,8 @@
 .folha .e50 .cabeca-inicio .logo-ca img { height: 3rem; }
 .folha .tit .ligacoes { flex: none; }
 .folha .e50 .titulo-pagina { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }   /* o título já está no topo da folha */
+/* ligações da secção como as abas da Mobilidade */
+.folha .tit .ligacoes { display: flex; gap: 0; border: 0; padding: 0; background: none; font: 500 12.5px/1 "IBM Plex Sans", system-ui, sans-serif; }
+.folha .tit .ligacoes a { padding: 8px 11px; border: 1px solid #10212C; border-left-width: 0; background: #FAFAF7; color: #10212C; text-decoration: none; white-space: nowrap; }
+.folha .tit .ligacoes a:first-child { border-left-width: 1px; }
+.folha .tit .ligacoes a[aria-current="page"] { background: #10212C; color: #FAFAF7; }
