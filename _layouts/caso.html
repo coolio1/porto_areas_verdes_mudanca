@@ -2,73 +2,100 @@
 layout: default
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/casos.css?v={{ site.time | date: '%s' }}">
-{%- assign tipos_ = "arvores:Árvores|demolicao:Demolição|patrimonio_alterado:Património alterado|lojas_historicas:Loja histórica" | split: "|" -%}
+{%- assign tipos_ = "arvores:Árvores e verde|demolicao:Demolição|patrimonio_alterado:Património alterado|lojas_historicas:Loja histórica" | split: "|" -%}
 {%- assign tipo_nome_ = page.tipo -%}
 {%- for t in tipos_ -%}{%- assign par_ = t | split: ":" -%}{%- if par_[0] == page.tipo -%}{%- assign tipo_nome_ = par_[1] -%}{%- endif -%}{%- endfor -%}
 {%- assign galeria_nome_ = "Horrores" -%}{%- if page.galeria == "sucessos" -%}{%- assign galeria_nome_ = "Sucessos" -%}{%- endif -%}
 {%- assign antes_ = page.fotos | where: "papel", "antes" | first -%}
 {%- assign depois_ = page.fotos | where: "papel", "depois" | first -%}
+{%- assign datadas_ = page.referencias | where_exp: "r", "r.data" | sort: "data" -%}
 <div class="caso">
   <article class="caso-ficha">
-    <p class="caso-migalhas"><a href="{{ '/casos/' | relative_url }}">Horrores e sucessos</a> / {{ galeria_nome_ }}</p>
-    <p class="caso-etiqueta caso-{{ page.galeria }}"><i aria-hidden="true"></i>{{ galeria_nome_ }} · {{ tipo_nome_ }}</p>
-    <h1>{{ page.titulo | escape }}</h1>
-    <p class="caso-dados">{{ page.ano }}{% if page.estado != 'outro' %} · {{ page.estado | escape }}{% endif %}{% if page.aproximada %} · localização aproximada{% endif %}</p>
-
     {%- if antes_ or depois_ %}
-    <div class="caso-fotos caso-fotos-{% if antes_ and depois_ %}2{% else %}1{% endif %}">
+    <div class="caso-dip caso-dip-{% if antes_ and depois_ %}2{% else %}1{% endif %}">
       {%- for f in page.fotos %}{% if f == antes_ or f == depois_ %}
-      <figure>
+      <figure class="caso-dip-{{ f.papel }}">
         <a href="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" target="_blank" rel="noopener"><img src="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" alt="{{ page.titulo | escape }}, {{ f.papel }}" loading="lazy"></a>
-        <figcaption>{% if f.papel == "antes" %}Antes{% else %}Depois{% endif %} · {{ f.ano | escape }} · {% if f.url %}<a href="{{ f.url | escape }}" target="_blank" rel="noopener">{{ f.fonte | escape }}</a>{% else %}{{ f.fonte | escape }}{% endif %}</figcaption>
+        <span class="caso-dip-rotulo">{% if f.papel == "antes" %}Antes{% else %}Depois{% endif %} · {{ f.ano | escape }}</span>
+        <figcaption>{% if f.url %}<a href="{{ f.url | escape }}" target="_blank" rel="noopener">{{ f.fonte | escape }}</a>{% else %}{{ f.fonte | escape }}{% endif %}</figcaption>
       </figure>
       {%- endif %}{% endfor %}
     </div>
     {%- endif %}
 
-    {%- if page.fotos_ligadas and page.fotos_ligadas.size > 0 %}
-    <section class="caso-sec"><h2>Fotos na fonte</h2>
-      <ul class="caso-ligadas">
-        {%- for f in page.fotos_ligadas %}
-        <li>{% if f.papel == "antes" %}Antes{% elsif f.papel == "depois" %}Depois{% else %}Foto{% endif %}{% if f.ano %} · {{ f.ano | escape }}{% endif %} · <a href="{{ f.url | escape }}" target="_blank" rel="noopener noreferrer">{{ f.fonte | escape }} ↗</a></li>
-        {%- endfor %}
-      </ul>
-      <p class="caso-nota-ligadas">Fotos publicadas na fonte indicada; ligação externa, sem cópia neste site.</p>
-    </section>
-    {%- endif %}
+    <div class="caso-miolo">
+      <p class="caso-migalhas"><a href="{{ '/casos/' | relative_url }}">Horrores e sucessos</a> · <a href="{{ '/casos/lista/' | relative_url }}">Lista</a></p>
+      <p class="caso-etiqueta caso-{{ page.galeria }}"><i aria-hidden="true"></i>{{ galeria_nome_ }} · {{ tipo_nome_ }} · {{ page.ano }}{% if page.estado != 'outro' %} · {{ page.estado | escape }}{% endif %}</p>
+      <h1>{{ page.titulo | escape }}</h1>
+      {%- if page.contestacao %}<p class="caso-lead">{{ page.contestacao | escape }}</p>{% endif %}
 
-    <div class="caso-texto">{{ content }}</div>
+      <div class="caso-colunas">
+        <div class="caso-coluna-texto">
+          <div class="caso-texto">{{ content }}</div>
 
-    {%- if page.criterio == "editorial" %}<p class="caso-nota">Avaliação do Porto Verde: {{ page.nota_editorial | escape }}</p>{% endif %}
+          {%- if page.criterio == "editorial" %}<p class="caso-nota">Avaliação do Porto Verde: {{ page.nota_editorial | escape }}</p>{% endif %}
 
-    {%- if page.contestacao %}
-    <section class="caso-sec"><h2>Contestação</h2><p>{{ page.contestacao | escape }}</p></section>
-    {%- endif %}
+          {%- if page.fotos_ligadas and page.fotos_ligadas.size > 0 %}
+          <section class="caso-sec"><h2>Fotos na fonte</h2>
+            <ul class="caso-ligadas">
+              {%- for f in page.fotos_ligadas %}
+              <li>{% if f.papel == "antes" %}Antes{% elsif f.papel == "depois" %}Depois{% else %}Foto{% endif %}{% if f.ano %} · {{ f.ano | escape }}{% endif %} · <a href="{{ f.url | escape }}" target="_blank" rel="noopener noreferrer">{{ f.fonte | escape }} ↗</a></li>
+              {%- endfor %}
+            </ul>
+            <p class="caso-nota-ligadas">Fotos publicadas na fonte indicada; ligação externa, sem cópia neste site.</p>
+          </section>
+          {%- endif %}
 
-    {%- assign outras_ = page.fotos | where: "papel", "outra" -%}
-    {%- if outras_.size > 0 %}
-    <section class="caso-sec"><h2>Mais fotos</h2>
-      <div class="caso-fotos caso-fotos-2">
-        {%- for f in outras_ %}
-        <figure>
-          <a href="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" target="_blank" rel="noopener"><img src="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" alt="{{ page.titulo | escape }}" loading="lazy"></a>
-          <figcaption>{{ f.ano | escape }} · {% if f.url %}<a href="{{ f.url | escape }}" target="_blank" rel="noopener">{{ f.fonte | escape }}</a>{% else %}{{ f.fonte | escape }}{% endif %}</figcaption>
-        </figure>
-        {%- endfor %}
+          {%- assign outras_ = page.fotos | where: "papel", "outra" -%}
+          {%- if outras_.size > 0 %}
+          <section class="caso-sec"><h2>Mais fotos</h2>
+            <div class="caso-fotos caso-fotos-2">
+              {%- for f in outras_ %}
+              <figure>
+                <a href="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" target="_blank" rel="noopener"><img src="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" alt="{{ page.titulo | escape }}" loading="lazy"></a>
+                <figcaption>{{ f.ano | escape }} · {% if f.url %}<a href="{{ f.url | escape }}" target="_blank" rel="noopener">{{ f.fonte | escape }}</a>{% else %}{{ f.fonte | escape }}{% endif %}</figcaption>
+              </figure>
+              {%- endfor %}
+            </div>
+          </section>
+          {%- endif %}
+        </div>
+
+        <aside class="caso-lateral">
+          <div class="caso-bloco">
+            <h2>Ficha</h2>
+            <dl class="caso-ficha-dl">
+              <div><dt>Tipo</dt><dd>{{ tipo_nome_ }}</dd></div>
+              <div><dt>Ano</dt><dd>{{ page.ano }}</dd></div>
+              {%- if page.estado != 'outro' %}<div><dt>Estado</dt><dd>{{ page.estado | escape }}</dd></div>{% endif %}
+              <div><dt>Local</dt><dd>{% if page.aproximada %}localização aproximada{% else %}localização conferida{% endif %}</dd></div>
+              {%- if page.referencias %}<div><dt>Fontes</dt><dd>{{ page.referencias.size }}</dd></div>{% endif %}
+            </dl>
+            <a class="caso-mapa" href="{{ '/casos/' | relative_url }}#tema=casos&caso={{ page.slug }}">Ver no mapa <span aria-hidden="true">→</span></a>
+          </div>
+
+          {%- if datadas_.size > 0 %}
+          <div class="caso-bloco">
+            <h2>Linha do tempo</h2>
+            <ol class="caso-tempo">
+              {%- for r in datadas_ %}
+              <li><span class="caso-mono">{{ r.data | escape }}</span><a href="{{ r.url | escape }}" target="_blank" rel="noopener">{{ r.titulo | escape }}</a></li>
+              {%- endfor %}
+            </ol>
+          </div>
+          {%- endif %}
+        </aside>
       </div>
-    </section>
-    {%- endif %}
 
-    {%- if page.referencias %}
-    <section class="caso-sec"><h2>Referências</h2>
-      <ol>
-        {%- for r in page.referencias %}
-        <li><a href="{{ r.url | escape }}" target="_blank" rel="noopener">{{ r.titulo | escape }}</a>{% if r.data %} <span class="caso-mono">{{ r.data | escape }}</span>{% endif %}</li>
-        {%- endfor %}
-      </ol>
-    </section>
-    {%- endif %}
-
-    <a class="caso-mapa" href="{{ '/casos/' | relative_url }}#tema=casos&caso={{ page.slug }}">Ver no mapa →</a>
+      {%- if page.referencias %}
+      <section class="caso-refs"><h2>Fontes</h2>
+        <ol>
+          {%- for r in page.referencias %}
+          <li><a href="{{ r.url | escape }}" target="_blank" rel="noopener">{{ r.titulo | escape }}</a>{% if r.data %} <span class="caso-mono">{{ r.data | escape }}</span>{% endif %}</li>
+          {%- endfor %}
+        </ol>
+      </section>
+      {%- endif %}
+    </div>
   </article>
 </div>

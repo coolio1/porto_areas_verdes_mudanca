@@ -36,7 +36,7 @@ description: Horrores e sucessos: casos conhecidos e documentados no Porto, com 
     {%- unless foto_ -%}{%- assign foto_ = c.fotos | first -%}{%- endunless %}
     <li data-galeria="{{ c.galeria }}" data-tipo="{{ c.tipo }}"{% if c.galeria != "horrores" %} hidden{% endif %}>
       <a href="{{ c.url | relative_url }}">
-        {%- if foto_ %}<img src="{{ site.baseurl }}/Horrores/media/{{ c.slug }}/{{ foto_.ficheiro }}" alt="" loading="lazy">{% else %}<span class="caso-sem-foto">sem foto</span>{% endif %}
+        {%- if foto_ %}<img src="{{ site.baseurl }}/Horrores/media/{{ c.slug }}/{{ foto_.ficheiro }}" alt="" loading="lazy">{% else %}<span class="caso-sem-foto">sem foto livre</span>{% endif %}
         <span class="caso-tit">{{ c.titulo | escape }}</span>
         <span class="caso-mono">{{ c.ano | escape }} · {{ c.estado | escape }}</span>
       </a>

@@ -96,7 +96,12 @@
           return '<label><input type="checkbox" data-tipo="' + t[0] + '" checked><span class="sw">' + svg(t[0], '#10212C', false, 20) +
             '</span>' + t[1] + ' <em>' + N.por_tipo[t[0]] + '</em></label>';
         }).join('') +
-        '<p class="tema-sub">Contorno tracejado: localização aproximada.</p></div>';
+        '<p class="tema-sub">Contorno tracejado: localização aproximada.</p></div>' +
+        MU.cab2('Índice', 'mais recente primeiro') + '<ol class="casos-ind">' +
+        D.casos.slice().sort(function (a, b) { return (b.ano - a.ano) || (a.titulo < b.titulo ? -1 : 1); }).map(function (c) {
+          return '<li><button type="button" data-slug="' + attr(c.slug) + '"><span class="sw">' + svg(c.tipo, COR[c.galeria], c.aproximada, 18) +
+            '</span><span class="t">' + c.titulo + '</span><em>' + c.ano + '</em></button></li>';
+        }).join('') + '</ol>';
       D.casos.forEach(function (c) {
         var m = L.marker([c.lat, c.lon], {
           icon: L.divIcon({ className: 'caso-mk', html: svg(c.tipo, COR[c.galeria], c.aproximada, 30), iconSize: [30, 30], iconAnchor: [15, 15] }),
@@ -118,6 +123,14 @@
           if (cb.dataset.galeria) self._filtro.galeria[cb.dataset.galeria] = cb.checked;
           else self._filtro.tipo[cb.dataset.tipo] = cb.checked;
           self._aplicar();
+        });
+      });
+      painel.querySelectorAll('.casos-ind button').forEach(function (b) {   // índice: abre o caso e centra o mapa nele
+        b.addEventListener('click', function () {
+          var e = self._entradas.filter(function (x) { return x.c.slug === b.dataset.slug; })[0];
+          if (!e) return;
+          if (!self._grupo.hasLayer(e.m)) self._grupo.addLayer(e.m);
+          self._fecharCartao(); self._abrir(e.c, true);
         });
       });
       self._aplicar();

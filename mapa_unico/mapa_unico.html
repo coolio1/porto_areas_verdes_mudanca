@@ -225,6 +225,19 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .caso-hover .s{font:400 11.5px var(--mono);color:var(--suave)}
 .casos-filtros label{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;cursor:pointer}
 .casos-filtros .sw{display:inline-flex;width:18px;justify-content:center}.casos-filtros em{margin-left:auto;font:400 11.5px var(--mono);color:var(--suave);font-style:normal}
+.casos-ind{list-style:none;margin:0;padding:0}
+.casos-ind li{border-bottom:1px solid var(--fino)}
+.casos-ind button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:8px 2px;min-height:40px;cursor:pointer;font:400 14px/1.25 var(--serif)}
+.casos-ind button:hover{background:var(--realce)}.casos-ind button:hover .t{text-decoration:underline}
+.casos-ind button:focus-visible{outline:2px solid var(--tinta);outline-offset:-2px}
+.casos-ind .sw{display:inline-flex;justify-content:center}.casos-ind em{font:400 11.5px var(--mono);color:var(--suave);font-style:normal}
+/* «Dossiê» (mapa dos casos, única página .mu-um): numerais e títulos em serifa, filetes duplos */
+.mu-um .num b{font:600 30px/1 var(--serif);letter-spacing:-.02em}
+.mu-um .num.mor b{color:var(--tinta)}
+.mu-um .desc{font:400 15px/1.5 var(--serif)}
+.mu-um .nums{border-top:3px double var(--tinta)}
+.mu-um .cab2{border-bottom:1px solid var(--tinta);text-transform:uppercase;letter-spacing:.06em}
+.mu-um .caso-hover .t,.mu-um #ficha .ft{font-family:var(--serif)}
 /* números-chave sobre o mapa (core.js: MU.moverNums) */
 .nums-card{left:16px;bottom:62px;width:292px;padding:14px 34px 12px 16px;display:none;max-height:calc(100% - 150px);overflow:auto}
 .nums-card.on{display:block}
