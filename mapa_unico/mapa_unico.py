@@ -23,7 +23,7 @@ LAYERS = RAIZ / "layers"
 PAGINA = "mapa_unico/mapa_unico.html"
 
 # Temas na ordem dos separadores (um ficheiro src/tema_<id>.js cada); o primeiro abre sem hash
-TEMAS = ["acessibilidade", "regra", "hoje", "historico", "privado"]
+TEMAS = ["acessibilidade", "regra", "hoje", "historico", "privado", "casos"]
 
 ACC_LAYERS = RAIZ / "acessibilidade" / "layers"
 
@@ -274,6 +274,57 @@ def dados_contexto() -> dict:
     return d
 
 
+def dados_casos(raiz: Path = RAIZ, raiz_fontes: Path = None, raiz_media: Path = None) -> dict:
+    """Tema Casos: lê `_casos/*.md` (só os revistos), valida (esquema, concelho, excertos, fotos) e
+    devolve os casos prontos a embutir. Todo o texto sai escapado (a ficha usa innerHTML).
+    Sem `raiz_fontes`/`raiz_media` usa os locais por omissão do validador."""
+    import html
+    import math
+    from collections import defaultdict
+
+    from casos_pipeline import validar
+    from casos_pipeline.concelho import freguesia_de
+    from casos_pipeline.modelo import GALERIAS, TIPOS, listar_casos
+
+    raiz_fontes = validar.FONTES if raiz_fontes is None else raiz_fontes
+    casos = listar_casos(raiz)
+    for c in casos:
+        erros = validar.validar_caso(c, raiz_fontes, raiz_media)
+        if erros:
+            raise ValueError(f"caso «{c['slug']}» inválido: " + "; ".join(erros))
+    esc = lambda s: html.escape(str(s), quote=True)
+    grupos = defaultdict(list)
+    for c in casos:
+        grupos[(c["lat"], c["lon"])].append(c)
+    out = []
+    for c in casos:
+        lat, lon = c["lat"], c["lon"]
+        g = grupos[(lat, lon)]
+        if len(g) > 1 and g.index(c) > 0:  # coordenadas repetidas: círculo de 4 m, para os dois ficarem clicáveis
+            ang = 2 * math.pi * g.index(c) / len(g)
+            lat += 4 * math.sin(ang) / 111320
+            lon += 4 * math.cos(ang) / (111320 * math.cos(math.radians(lat)))
+        paragrafos = [p.strip() for p in c["corpo"].split(chr(10) * 2) if p.strip()]
+        out.append({
+            "slug": c["slug"], "titulo": esc(c["titulo"]), "galeria": c["galeria"], "tipo": c["tipo"],
+            "lat": lat, "lon": lon, "aproximada": bool(c.get("aproximada")), "ano": esc(c["ano"]),
+            "estado": c["estado"], "contestacao": esc(c["contestacao"]),
+            "criterio": c["criterio"], "nota_editorial": esc(c.get("nota_editorial", "")),
+            "freguesia": freguesia_de(c["lat"], c["lon"]),
+            "corpo_html": "".join(f"<p>{esc(p)}</p>" for p in paragrafos),
+            "fotos": [{"papel": f["papel"], "src": f"../Horrores/media/{c['slug']}/{f['ficheiro']}",
+                       "ano": esc(f.get("ano", "")), "fonte": esc(f.get("fonte", "")), "url": esc(f["url"])}
+                      for f in c.get("fotos") or []],
+            "referencias": [{"titulo": esc(r["titulo"]), "url": esc(r["url"]), "data": esc(r.get("data", ""))}
+                            for r in c["referencias"]],
+            "url": f"../casos/{c['slug']}/",
+        })
+    return {"casos": out, "numeros": {
+        "total": len(out),
+        "por_tipo": {t: sum(x["tipo"] == t for x in out) for t in TIPOS},
+        "por_galeria": {g: sum(x["galeria"] == g for x in out) for g in GALERIAS}}}
+
+
 def escrever_dados() -> None:
     DADOS.mkdir(exist_ok=True)
     for nome, imgs in PNG_DADOS.items():
@@ -283,6 +334,7 @@ def escrever_dados() -> None:
     _escrever("acessibilidade", dados_acessibilidade())
     _escrever("regra", dados_regra())
     _escrever("historico", dados_historico())
+    _escrever("casos", dados_casos())
 
 
 def escrever_html() -> None:
@@ -302,6 +354,10 @@ def escrever_html() -> None:
 
 if __name__ == "__main__":
     # --html: só o HTML (os dados do Histórico demoram ~2 min por causa das máscaras de 1947)
-    if "--html" not in sys.argv:
+    # --casos: só os dados dos Casos (segundos) e o HTML
+    if "--casos" in sys.argv:
+        DADOS.mkdir(exist_ok=True)
+        _escrever("casos", dados_casos())
+    elif "--html" not in sys.argv:
         escrever_dados()
     escrever_html()
