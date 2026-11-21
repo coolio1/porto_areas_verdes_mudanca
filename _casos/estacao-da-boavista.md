@@ -1,4 +1,5 @@
 ---
+title: "Antiga estação ferroviária da Boavista"
 titulo: "Antiga estação ferroviária da Boavista"
 galeria: horrores
 tipo: demolicao

@@ -33,6 +33,14 @@ def test_layout_caso_mostra_referencias_e_creditos():
         assert peca in h, peca
 
 
+def test_layout_e_indice_escapam_texto_e_mostram_nota_editorial():
+    h = (RAIZ / "_layouts/caso.html").read_text(encoding="utf-8")
+    for campo in ("page.titulo", "page.contestacao", "f.fonte", "r.titulo", "page.nota_editorial", "page.estado", "f.ano"):
+        assert "{{ " + campo + " | escape }}" in h, campo
+    i = (RAIZ / "casos/index.html").read_text(encoding="utf-8")
+    assert "{{ c.titulo | escape }}" in i and "{{ c.estado | escape }}" in i
+
+
 def test_indice_lista_site_casos_com_filtros():
     h = (RAIZ / "casos/index.html").read_text(encoding="utf-8")
     assert "site.casos" in h and "casos conhecidos e documentados" in h.lower()

@@ -1,4 +1,5 @@
 ---
+title: "Jardim de Sophia (Praça da Galiza) e a Linha Rosa do Metro"
 titulo: "Jardim de Sophia (Praça da Galiza) e a Linha Rosa do Metro"
 galeria: horrores
 tipo: arvores

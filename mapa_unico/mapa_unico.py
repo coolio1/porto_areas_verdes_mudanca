@@ -287,6 +287,7 @@ def dados_casos(raiz: Path = RAIZ, raiz_fontes: Path = None, raiz_media: Path = 
     from casos_pipeline.modelo import GALERIAS, TIPOS, listar_casos
 
     raiz_fontes = validar.FONTES if raiz_fontes is None else raiz_fontes
+    raiz_media = validar.MEDIA if raiz_media is None else raiz_media
     casos = listar_casos(raiz)
     for c in casos:
         erros = validar.validar_caso(c, raiz_fontes, raiz_media)

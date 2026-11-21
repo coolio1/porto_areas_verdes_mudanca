@@ -13,6 +13,10 @@ OBRIGATORIOS = ("titulo", "galeria", "tipo", "lat", "lon", "origem_coord", "ano"
                 "contestacao", "criterio")
 
 
+def _http(url) -> bool:
+    return str(url).lower().startswith(("http://", "https://"))
+
+
 def validar_caso(caso: dict, raiz_fontes: Path, raiz_media: Path = None) -> list:
     """Erros em PT-PT; lista vazia = válido. `raiz_media` (opcional) confere ficheiros e sha256 das fotos."""
     e = []
@@ -22,6 +26,8 @@ def validar_caso(caso: dict, raiz_fontes: Path, raiz_media: Path = None) -> list
     for campo, validos in (("tipo", TIPOS), ("galeria", GALERIAS), ("estado", ESTADOS), ("criterio", CRITERIOS)):
         if caso.get(campo) not in (None, "") and caso[campo] not in validos:
             e.append(f"{campo} «{caso[campo]}» inválido (válidos: {', '.join(validos)})")
+    if caso.get("titulo") and caso.get("title") != caso["titulo"]:
+        e.append("falta «title» igual a «titulo» (o <title> da página e as pré-visualizações usam-no)")
     if "freguesia" in caso:
         e.append("«freguesia» não se escreve: deriva-se de lat/lon pela CAOP")
     if caso.get("criterio") == "editorial" and not caso.get("nota_editorial"):
@@ -36,6 +42,8 @@ def validar_caso(caso: dict, raiz_fontes: Path, raiz_media: Path = None) -> list
         if not r.get("url") or not r.get("excerto"):
             e.append(f"referência {i}: faltam «url» ou «excerto»")
             continue
+        if not _http(r["url"]):
+            e.append(f"referência {i}: url tem de começar por http:// ou https://")
         txt = Path(raiz_fontes) / caso.get("slug", "") / f"{i}.txt"
         if not txt.is_file():
             e.append(f"referência {i}: sem texto guardado em {txt}")
@@ -47,6 +55,8 @@ def validar_caso(caso: dict, raiz_fontes: Path, raiz_media: Path = None) -> list
             e.append(f"foto {nome}: papel inválido")
         if not f.get("url"):
             e.append(f"foto {nome}: falta o url de origem")
+        elif not _http(f["url"]):
+            e.append(f"foto {nome}: url tem de começar por http:// ou https://")
         if raiz_media is not None:
             p = Path(raiz_media) / caso.get("slug", "") / nome
             if not p.is_file():

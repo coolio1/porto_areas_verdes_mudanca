@@ -1,4 +1,5 @@
 ---
+title: "Confeitaria Serrana: demolição do interior (Rua do Loureiro)"
 titulo: "Confeitaria Serrana: demolição do interior (Rua do Loureiro)"
 galeria: horrores
 tipo: interiores_destruidos

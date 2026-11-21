@@ -1,4 +1,5 @@
 """dados_casos(): lê `_casos/`, valida e prepara `dados/casos.js` do tema Casos."""
+import hashlib
 import math
 import sys
 from pathlib import Path
@@ -17,7 +18,7 @@ FONTE = "Os moradores contestaram o abate das árvores da rua."
 def _caso(raiz, fontes, slug, tipo="arvores", lat=41.1480, lon=-8.6250, corpo="Descrição.", fotos="", titulo=None):
     (raiz / "_casos").mkdir(exist_ok=True)
     (raiz / "_casos" / f"{slug}.md").write_text(
-        f"---\ntitulo: {titulo or slug}\ngaleria: horrores\ntipo: {tipo}\nlat: {lat}\nlon: {lon}\n"
+        f"---\ntitle: {titulo or slug}\ntitulo: {titulo or slug}\ngaleria: horrores\ntipo: {tipo}\nlat: {lat}\nlon: {lon}\n"
         f"aproximada: false\norigem_coord: OSM\nano: 2019\nestado: abatido\ncontestacao: Petição.\n"
         f"criterio: documental\n{fotos}"
         f"referencias:\n  - {{titulo: Notícia, url: 'https://exemplo.pt/n', data: 2019-03-01, "
@@ -34,7 +35,7 @@ def ambiente(tmp_path):
 
 
 def _dados(raiz, fontes):
-    return mapa_unico.dados_casos(raiz, fontes, None)
+    return mapa_unico.dados_casos(raiz, fontes, raiz / "media")
 
 
 def _metros(a, b):
@@ -80,7 +81,10 @@ def test_caso_invalido_aborta(ambiente):
 
 def test_foto_src_relativo_e_freguesia_derivada(ambiente):
     raiz, fontes = ambiente
-    _caso(raiz, fontes, "a", fotos="fotos:\n  - {papel: antes, ficheiro: 01.jpg, ano: 2015, fonte: Arquivo, url: 'https://x.pt/f', sha256: abc}\n")
+    (raiz / "media" / "a").mkdir(parents=True)
+    (raiz / "media" / "a" / "01.jpg").write_bytes(b"jpg")
+    sha = hashlib.sha256(b"jpg").hexdigest()
+    _caso(raiz, fontes, "a", fotos=f"fotos:\n  - {{papel: antes, ficheiro: 01.jpg, ano: 2015, fonte: Arquivo, url: 'https://x.pt/f', sha256: {sha}}}\n")
     c = _dados(raiz, fontes)["casos"][0]
     assert c["fotos"][0]["src"] == "../Horrores/media/a/01.jpg"
     assert c["freguesia"] and c["url"] == "../casos/a/"
@@ -99,3 +103,10 @@ def test_sem_casos_devolve_zeros(ambiente):
     raiz, fontes = ambiente
     d = _dados(raiz, fontes)
     assert d["casos"] == [] and d["numeros"]["total"] == 0
+
+
+def test_foto_em_falta_aborta_sem_raiz_media_explicita(ambiente):
+    raiz, fontes = ambiente
+    _caso(raiz, fontes, "sem-ficheiro", fotos="fotos:" + chr(10) + "  - {papel: antes, ficheiro: nao-existe.jpg, ano: 2015, fonte: Arquivo, url: 'https://x.pt/f', sha256: abc}" + chr(10))
+    with pytest.raises(ValueError, match="sem-ficheiro"):
+        mapa_unico.dados_casos(raiz, fontes)
