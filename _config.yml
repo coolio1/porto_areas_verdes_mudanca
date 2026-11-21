@@ -13,6 +13,9 @@ collections:
   espacos:
     output: true
     permalink: /50espacos/espacos/:path/
+  casos:
+    output: true
+    permalink: /casos/:path/
 
 defaults:
   - scope:
@@ -26,6 +29,11 @@ defaults:
     values:
       layout: "espaco"
       wide: true
+  - scope:
+      path: ""
+      type: "casos"
+    values:
+      layout: "caso"
   - scope:
       path: "50espacos"
     values:
@@ -51,6 +59,7 @@ exclude:
   - .superpowers
   - docs
   - espacos_pipeline
+  - "casos_pipeline/*"
   - mapa_unico/src
   - "regra_303030/*"
   - "Land_cover_1979*"

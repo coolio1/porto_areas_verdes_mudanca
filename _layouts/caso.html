@@ -1,0 +1,63 @@
+---
+layout: default
+---
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/casos.css?v={{ site.time | date: '%s' }}">
+{%- assign tipos_ = "arvores:Árvores|demolicao:Demolição|patrimonio_alterado:Património alterado|interiores_destruidos:Interiores destruídos|descaracterizacao:Descaracterização" | split: "|" -%}
+{%- assign tipo_nome_ = page.tipo -%}
+{%- for t in tipos_ -%}{%- assign par_ = t | split: ":" -%}{%- if par_[0] == page.tipo -%}{%- assign tipo_nome_ = par_[1] -%}{%- endif -%}{%- endfor -%}
+{%- assign galeria_nome_ = "Horrores" -%}{%- if page.galeria == "sucessos" -%}{%- assign galeria_nome_ = "Sucessos" -%}{%- endif -%}
+{%- assign antes_ = page.fotos | where: "papel", "antes" | first -%}
+{%- assign depois_ = page.fotos | where: "papel", "depois" | first -%}
+<div class="caso">
+  <article class="caso-ficha">
+    <p class="caso-migalhas"><a href="{{ '/casos/' | relative_url }}">Casos</a> / {{ galeria_nome_ }}</p>
+    <p class="caso-etiqueta caso-{{ page.galeria }}"><i aria-hidden="true"></i>{{ galeria_nome_ }} · {{ tipo_nome_ }}</p>
+    <h1>{{ page.titulo | escape }}</h1>
+    <p class="caso-dados">{{ page.ano }} · {{ page.estado | escape }}{% if page.aproximada %} · localização aproximada{% endif %}</p>
+
+    {%- if antes_ or depois_ %}
+    <div class="caso-fotos caso-fotos-{% if antes_ and depois_ %}2{% else %}1{% endif %}">
+      {%- for f in page.fotos %}{% if f == antes_ or f == depois_ %}
+      <figure>
+        <a href="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" target="_blank" rel="noopener"><img src="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" alt="{{ page.titulo | escape }}, {{ f.papel }}" loading="lazy"></a>
+        <figcaption>{% if f.papel == "antes" %}Antes{% else %}Depois{% endif %} · {{ f.ano | escape }} · {% if f.url %}<a href="{{ f.url | escape }}" target="_blank" rel="noopener">{{ f.fonte | escape }}</a>{% else %}{{ f.fonte | escape }}{% endif %}</figcaption>
+      </figure>
+      {%- endif %}{% endfor %}
+    </div>
+    {%- endif %}
+
+    <div class="caso-texto">{{ content }}</div>
+
+    {%- if page.criterio == "editorial" %}<p class="caso-nota">Avaliação do Porto Verde: {{ page.nota_editorial | escape }}</p>{% endif %}
+
+    {%- if page.contestacao %}
+    <section class="caso-sec"><h2>Contestação</h2><p>{{ page.contestacao | escape }}</p></section>
+    {%- endif %}
+
+    {%- assign outras_ = page.fotos | where: "papel", "outra" -%}
+    {%- if outras_.size > 0 %}
+    <section class="caso-sec"><h2>Mais fotos</h2>
+      <div class="caso-fotos caso-fotos-2">
+        {%- for f in outras_ %}
+        <figure>
+          <a href="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" target="_blank" rel="noopener"><img src="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" alt="{{ page.titulo | escape }}" loading="lazy"></a>
+          <figcaption>{{ f.ano | escape }} · {% if f.url %}<a href="{{ f.url | escape }}" target="_blank" rel="noopener">{{ f.fonte | escape }}</a>{% else %}{{ f.fonte | escape }}{% endif %}</figcaption>
+        </figure>
+        {%- endfor %}
+      </div>
+    </section>
+    {%- endif %}
+
+    {%- if page.referencias %}
+    <section class="caso-sec"><h2>Referências</h2>
+      <ol>
+        {%- for r in page.referencias %}
+        <li><a href="{{ r.url | escape }}" target="_blank" rel="noopener">{{ r.titulo | escape }}</a>{% if r.data %} <span class="caso-mono">{{ r.data | escape }}</span>{% endif %}</li>
+        {%- endfor %}
+      </ol>
+    </section>
+    {%- endif %}
+
+    <a class="caso-mapa" href="{{ '/mapa_unico/mapa_unico.html' | relative_url }}#tema=casos&caso={{ page.slug }}">Ver no mapa →</a>
+  </article>
+</div>

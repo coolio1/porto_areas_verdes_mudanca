@@ -170,7 +170,8 @@
     box.innerHTML = '<button type="button" class="x" aria-label="Fechar a ficha">×</button><h3>' + f.titulo + '</h3><p class="sub">' + f.sub + '</p><dl>' +
       f.linhas.map(function (l) { return '<dt>' + l[0] + '</dt><dd>' + l[1] + '</dd>'; }).join('') + '</dl>' +
       (f.rel != null ? '<div class="cmp">Área face ao Parque da Cidade (' + MU.n(MU._maiorParque, 2) + ' ha)<div class="med"><i style="width:' +
-        Math.max(1, f.rel * 100).toFixed(1) + '%"></i></div></div>' : '');
+        Math.max(1, f.rel * 100).toFixed(1) + '%"></i></div></div>' : '') +
+      (f.corpo ? '<div class="fcorpo">' + f.corpo + '</div>' : '');   // corpo: HTML já escapado por quem chama (tema Casos)
     box.classList.add('on');
     box.querySelector('.x').onclick = function () { MU.ficha(null); };
   };
@@ -458,7 +459,8 @@
     regra: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 21V9l5-3 5 3v12M13 21V4l8 4v13M3 21h18"/><circle cx="17" cy="14" r="1.6" fill="currentColor" stroke="none"/></svg>',
     hoje: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h11l-3-3M20 17H9l3 3"/></svg>',
     historico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 20h18M5 20v-4h4v4M10 20v-8h4v8M15 20V6h4v14"/></svg>',
-    privado: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18"/><rect x="8" y="8" width="8" height="8" fill="currentColor" stroke="none"/></svg>'
+    privado: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18"/><rect x="8" y="8" width="8" height="8" fill="currentColor" stroke="none"/></svg>',
+    casos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.2" fill="currentColor" stroke="none"/></svg>'
   };
   MU.registarTema = function (t) { MU.TEMAS[t.id] = t; MU.ORDEM.push(t.id); };
 
@@ -544,7 +546,7 @@
 
   /* parâmetro do hash (#tema=acessibilidade&vista=propostas) */
   MU.param = function (nome) {
-    var m = new RegExp('[#&]' + nome + '=([a-z0-9_]+)').exec(location.hash);
+    var m = new RegExp('[#&]' + nome + '=([a-z0-9_-]+)').exec(location.hash);
     return m ? m[1] : null;
   };
   /* actualiza o hash sem disparar hashchange (estado partilhável) */
@@ -566,7 +568,7 @@
     ['veuPane', 'limitesPane', 'rotPane'].forEach(function (p) { map.getPane(p).style.pointerEvents = 'none'; });
     MU.verConcelho();
     var temas = document.getElementById('temas'), tabs = document.getElementById('tabs');
-    var CURTO = { acessibilidade: 'Acesso', regra: '3-30-300', hoje: 'Mudanças', historico: 'Histórico', privado: 'Privado' };
+    var CURTO = { acessibilidade: 'Acesso', regra: '3-30-300', hoje: 'Mudanças', historico: 'Histórico', privado: 'Privado', casos: 'Casos' };
     MU.ORDEM.forEach(function (id) {
       var t = MU.TEMAS[id];
       var b = document.createElement('button');

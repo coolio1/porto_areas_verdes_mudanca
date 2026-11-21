@@ -23,6 +23,7 @@
     ['mapa_unico/mapa_unico.html', 'Verde e uso do solo'],
     ['50espacos/', '50 Espaços Verdes'],
     ['Mobilidade/autocarros.html', 'Mobilidade'],
+    ['casos/', 'Casos'],
     ['artigos/', 'Artigos'],
     ['sobre/', 'Sobre']
   ];
@@ -39,6 +40,7 @@
   var FONTES_PADRAO = 'Sentinel-2, Landsat, OSM, PDM Porto';
   var FONTES = {
     'mapa_unico/mapa_unico.html': 'Sentinel-2, Landsat, GHS-POP, OpenStreetMap, PDM do Porto, CAOP',
+    'casos/': 'Imprensa, actas e arquivos citados em cada caso',
     'Mobilidade/autocarros.html': 'Porto Digital, OSM',
     'Mobilidade/analise.html': 'Porto Digital, STCP, CM Porto, OSM',
     'atropelamentos/dashboard_atropelamentos.html': 'ANSR, INE'
