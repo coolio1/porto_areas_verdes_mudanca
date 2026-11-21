@@ -342,11 +342,11 @@ def escrever_dados() -> None:
     _escrever("casos", dados_casos())
 
 
-def _montar_html(temas, saida: Path, pagina: str, titulo: str, descricao: str, init: str = "") -> None:
+def _montar_html(temas, saida: Path, pagina: str, titulo: str, descricao: str, init: str = "", modelo: str = "template.html") -> None:
     js = (SRC / "core.js").read_text(encoding="utf-8")
     for t in temas:
         js += chr(10) + (SRC / f"tema_{t}.js").read_text(encoding="utf-8")
-    html = (SRC / "template.html").read_text(encoding="utf-8")
+    html = (SRC / modelo).read_text(encoding="utf-8")
     html = (
         html.replace("/*CSS*/", (SRC / "estilo.css").read_text(encoding="utf-8"))
         .replace("<!--NAV-->", get_nav(pagina, depth=1, menu="barra"))
@@ -368,7 +368,8 @@ def escrever_html() -> None:
         ["casos"], RAIZ / "casos" / "index.html", PAGINA_CASOS, "Horrores e sucessos — Porto Verde",
         "Mapa de horrores e sucessos: casos documentados no Porto, com fonte e fotos.",
         init="MU.URL_DADOS = '../mapa_unico/dados/'; "
-             "MU.LIGACOES = [{rotulo: 'Mapa', href: './', on: true}, {rotulo: 'Lista', href: 'lista/'}];")
+             "MU.LIGACOES = [{rotulo: 'Mapa', href: './', on: true}, {rotulo: 'Lista', href: 'lista/'}];",
+        modelo="template_casos.html")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<title>/*TITULO*/</title>
+<meta name="description" content="/*DESC*/">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+/*CSS*/
+</style>
+</head>
+<body class="mu mu-dossie">
+<!--NAV-->
+<div class="dos-folha">
+  <div class="dos-cab"><span>DOSSIÊ URBANO · PORTO</span><span>CASOS CONHECIDOS E DOCUMENTADOS · NUNCA TODOS</span><span id="dos-data"></span></div>
+  <div class="dos-titulo">
+    <h1>Horrores<br><em>e sucessos</em></h1>
+    <div class="dos-lado">
+      <p>Abates, demolições e alterações no Porto que geraram contestação pública. Cada caso traz as fontes, a data e, quando existe foto livre, o antes e o depois.</p>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Vista"></div>
+    </div>
+  </div>
+  <div class="dos-nums" id="dos-nums"></div>
+</div>
+<div class="dos-mapa">
+  <main id="map" aria-label="Mapa do Porto">
+    <div class="cx ficha" id="ficha" role="region" aria-label="Ficha" aria-live="polite"></div>
+    <div class="cx nums-card" id="nums-card" role="region" aria-label="Números-chave"><button type="button" class="x" id="nums-x" aria-label="Fechar os números-chave">×</button><div id="nums-corpo"></div><a class="nums-artigo" id="nums-artigo" target="_blank" rel="noopener" hidden>Ler o artigo &rarr;</a></div>
+    <button type="button" class="cx nums-chip" id="nums-chip" aria-label="Mostrar os números-chave">Números</button>
+    <div class="topo-ctl" id="topo-ctl"><select class="ir" id="ir" aria-label="Ir para um parque"></select><select class="ir fundo" id="fundo-select" aria-label="Fundo do mapa"></select></div>
+    <div class="cx zoom" id="zoom"><button type="button" data-z="1" aria-label="Aproximar">+</button><button type="button" data-z="-1" aria-label="Afastar">−</button><button type="button" data-z="0" aria-label="Ver o concelho inteiro">⌂</button></div>
+    <div class="cx pe" id="pe"><span class="norte" title="Norte"><svg viewBox="0 0 14 20" aria-hidden="true"><path d="M7 1 12 15 7 12 2 15Z" fill="currentColor"/><path d="M7 1 7 12 2 15Z" fill="var(--painel)" stroke="currentColor" stroke-width=".8"/></svg><span class="sr">Norte para cima</span></span><span><span><span class="bar"></span><span class="esc-t"></span></span></span><span class="xy" aria-hidden="true">—</span></div>
+  </main>
+  <aside id="panel" aria-label="Filtros e índice">
+    <button type="button" class="alca" id="alca" aria-expanded="false" hidden>Mostrar camadas e números</button>
+    <div class="temas" id="temas"></div>
+    <div id="ctx-bloco" hidden>
+      <div id="ctx-rows"></div>
+      <div id="pop-legend" class="pop-leg" style="display:none;"></div>
+      <p class="fonte" id="fonte"></p>
+    </div>
+  </aside>
+</div>
+<section class="dos-cartoes" aria-labelledby="dos-lt">
+  <div class="dos-lt"><h2 id="dos-lt">Para ler já</h2><span>MAIS RECENTE PRIMEIRO</span></div>
+  <div class="dos-grelha" id="dos-cartoes"></div>
+  <a class="dos-todos" href="lista/">Ver a lista completa →</a>
+</section>
+<script>
+/*JS*/
+/*INIT*/
+MU.iniciar();
+</script>
+</body>
+</html>

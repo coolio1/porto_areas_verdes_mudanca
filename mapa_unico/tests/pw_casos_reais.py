@@ -40,6 +40,8 @@ with sync_playwright() as p:
         imgs = pg.evaluate("[...document.querySelectorAll('#ficha .fcorpo img')].map(i => i.naturalWidth)")
         ok(t + "fotos da ficha carregam", len(imgs) == min(2, len(com_fotos.get("fotos") or [])) and all(n > 0 for n in imgs), str(imgs))
         if w == 1280:
+            pg.evaluate("document.getElementById('map').scrollIntoView()")   # página «Dossiê» rola: pôr o mapa à vista
+            pg.wait_for_timeout(300)
             ok(t + "ficha não fica tapada pelo cartão «Números»", pg.evaluate(
                 "(() => { const f = document.getElementById('ficha').getBoundingClientRect(); const e = document.elementFromPoint(f.left + f.width / 2, f.bottom - 80); return !!e && !!e.closest('#ficha'); })()"))
         ok(t + "sem erros de JavaScript", not erros, str(erros[:3]))

@@ -83,6 +83,7 @@
         { v: MU.n(N.por_galeria.sucessos), u: '', r: 'sucessos' }
       ]) + '</div>';
       var desc = '<p class="desc">Abates, demolições e alterações que geraram contestação, com fonte e fotos de antes e depois.</p>';
+      self._dossie(D);
       if (!D.casos.length) {
         painel.innerHTML = desc + nums + '<p class="tema-sub casos-vazio">Ainda sem casos publicados.</p>';
         return;
@@ -134,6 +135,21 @@
         });
       });
       self._aplicar();
+    },
+
+    _dossie(D) {   // página «Dossiê» (/casos/): barra de números e cartões «Para ler já» fora do painel
+      var N = D.numeros, nums = document.getElementById('dos-nums'), grelha = document.getElementById('dos-cartoes');
+      if (!nums) return;
+      var meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'], h = new Date();
+      document.getElementById('dos-data').textContent = 'ACTUALIZADO A ' + h.getDate() + ' ' + meses[h.getMonth()] + ' ' + h.getFullYear();
+      var comFoto = D.casos.filter(function (c) { return c.fotos.length; }).length;
+      nums.innerHTML = [[N.total, 'CASOS', ''], [N.por_galeria.horrores, 'HORRORES', 'h'], [N.por_galeria.sucessos, 'SUCESSOS' + (N.por_galeria.sucessos ? '' : ' · EM PREPARAÇÃO'), 's'], [comFoto, 'COM FOTO LIVRE', '']]
+        .map(function (x) { return '<div class="dos-n ' + x[2] + '"><b>' + MU.n(x[0]) + '</b><span>' + x[1] + '</span></div>'; }).join('');
+      grelha.innerHTML = D.casos.slice().sort(function (a, b) { return (b.ano - a.ano) || (a.titulo < b.titulo ? -1 : 1); }).slice(0, 6).map(function (c) {
+        var f = c.fotos.filter(function (x) { return x.papel === 'depois'; })[0] || c.fotos[0];
+        return '<a class="dos-cart" href="' + attr(c.url) + '">' + (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '<span class="dos-sem">sem foto livre</span>') +
+          '<span class="dos-ct">' + c.titulo + '</span><span class="dos-cm">' + c.ano + (c.estado !== 'outro' ? ' · ' + c.estado : '') + '</span></a>';
+      }).join('');
     },
 
     _cartao(c, m) {

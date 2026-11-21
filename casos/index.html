@@ -312,32 +312,88 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
   body.mu .pv-barra__links a{padding:5px 10px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* «Dossiê» (/casos/, template_casos.html): página que rola — cabeçalho de jornal, números, mapa + índice, cartões */
+body.mu-dossie{display:block;height:auto;overflow:auto;background:#F4F1EA;font-family:var(--sans)}
+body.mu-dossie .pv-barra{position:static;border-bottom:1px solid var(--tinta)}
+body.mu-dossie .pv-rodape--mapa{border-top:1px solid var(--tinta)}
+.dos-folha,.dos-cartoes{max-width:1344px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+.dos-cab{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:36px;font:500 12px var(--mono);color:#6B6358;letter-spacing:.06em;border-bottom:1px solid var(--tinta);padding-bottom:10px}
+.dos-titulo{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-end;padding:30px 0 34px;border-bottom:3px double var(--tinta)}
+.dos-titulo h1{margin:0;flex:1 1 560px;font:600 clamp(48px,8vw,104px)/.95 var(--serif);letter-spacing:-.03em}
+.dos-titulo h1 em{font-weight:400;color:var(--marca)}
+.dos-lado{flex:1 1 320px;max-width:420px}
+.dos-lado p{margin:0 0 18px;font:400 19px/1.5 var(--serif)}
+.mu-dossie #tabs{display:flex;border:1px solid var(--tinta);font:500 13px var(--mono);padding:0;background:none}
+.mu-dossie #tabs .tab{flex:1;display:block;padding:12px 16px;text-align:left;background:none;border:0;border-left:1px solid var(--tinta);color:var(--tinta);text-decoration:none;font:inherit;height:auto}
+.mu-dossie #tabs .tab:first-child{border-left:0}
+.mu-dossie #tabs .tab[data-t],.mu-dossie #nums-card,.mu-dossie #nums-chip{display:none}
+body.mu-dossie .pv-barra{display:flex;align-items:center;gap:28px;flex-wrap:wrap;padding:0 clamp(16px,4vw,48px)}
+body.mu-dossie .pv-barra__marca{padding:12px 0}
+body.mu-dossie .pv-barra__links{display:flex;flex-wrap:wrap;gap:6px 4px;border-top:0}
+body.mu-dossie .pv-barra__links a{border:0;padding:8px 11px}
+.mu-dossie #tabs .tab.on{background:var(--tinta);color:#F4F1EA}
+.dos-nums{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--tinta)}
+.dos-n{flex:1 1 200px;padding:18px 0 18px 24px;border-left:1px solid var(--tinta)}
+.dos-n:first-child{padding-left:0;border-left:0}
+.dos-n b{display:block;font:600 64px/1 var(--serif)}
+.dos-n span{display:block;margin-top:6px;font:500 12px var(--mono);color:#6B6358}
+.dos-n.h b{color:#B42F2F}.dos-n.s b{color:#3E6AB3}
+.dos-mapa{max-width:1344px;margin:34px auto 40px;padding:0 clamp(16px,4vw,48px);display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:36px;height:min(680px,calc(100dvh - 120px));min-height:520px}
+.mu-dossie #map{grid-area:auto;border:1px solid var(--tinta)}
+.mu-dossie #panel{grid-area:auto;border:0;background:none;overflow:auto;min-height:0}
+.mu-dossie #panel .desc,.mu-dossie #panel .nums,.mu-dossie #panel .tema-tit{display:none}
+.dos-cartoes{padding-bottom:60px}
+.dos-lt{border-top:3px double var(--tinta);padding-top:30px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.dos-lt h2{margin:0;font:600 34px/1.1 var(--serif)}.dos-lt span{font:500 12px var(--mono);color:#6B6358}
+.dos-grelha{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.dos-cart{display:block;color:var(--tinta);text-decoration:none}
+.dos-cart img,.dos-sem{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border:1px solid var(--tinta)}
+.dos-sem{display:flex;align-items:center;justify-content:center;background:#EFE6D4;font:12px var(--mono);color:#6B6358}
+.dos-ct{display:block;margin-top:10px;font:600 20px/1.2 var(--serif)}.dos-cart:hover .dos-ct{text-decoration:underline}
+.dos-cm{display:block;margin-top:4px;font:12px var(--mono);color:#6B6358}
+.dos-todos{display:inline-block;margin-top:26px;font:500 13px var(--mono);color:var(--marca)}
+@media (max-width:900px){.dos-mapa{grid-template-columns:1fr;height:auto}.mu-dossie #map{height:60vh}.dos-grelha{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.dos-grelha{grid-template-columns:1fr}.dos-n b{font-size:44px}}
 
 </style>
 </head>
-<body class="mu">
+<body class="mu mu-dossie">
 <script src="../assets/js/moldura.js" data-pagina="casos/" data-menu="barra"></script>
-<aside id="panel" aria-label="Temas, camadas e legenda">
-  <button type="button" class="alca" id="alca" aria-expanded="false">Mostrar camadas e números</button>
-  <div class="tabs" id="tabs" role="tablist" aria-label="Tipo de mapa"></div>
-  <div class="temas" id="temas"></div>
-  <div id="ctx-bloco">
-    <div class="cab2"><span>Contexto</span><span></span></div>
-    <div id="ctx-rows"></div>
-    <div id="pop-legend" class="pop-leg" style="display:none;">
-      <span>0</span><i></i><span>150+ hab/píxel de 100 m</span>
+<div class="dos-folha">
+  <div class="dos-cab"><span>DOSSIÊ URBANO · PORTO</span><span>CASOS CONHECIDOS E DOCUMENTADOS · NUNCA TODOS</span><span id="dos-data"></span></div>
+  <div class="dos-titulo">
+    <h1>Horrores<br><em>e sucessos</em></h1>
+    <div class="dos-lado">
+      <p>Abates, demolições e alterações no Porto que geraram contestação pública. Cada caso traz as fontes, a data e, quando existe foto livre, o antes e o depois.</p>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Vista"></div>
     </div>
-    <p class="fonte" id="fonte"></p>
   </div>
-</aside>
-<main id="map" aria-label="Mapa do Porto">
-  <div class="cx ficha" id="ficha" role="region" aria-label="Ficha" aria-live="polite"></div>
-  <div class="cx nums-card" id="nums-card" role="region" aria-label="Números-chave"><button type="button" class="x" id="nums-x" aria-label="Fechar os números-chave">×</button><div id="nums-corpo"></div><a class="nums-artigo" id="nums-artigo" target="_blank" rel="noopener" hidden>Ler o artigo &rarr;</a></div>
-  <button type="button" class="cx nums-chip" id="nums-chip" aria-label="Mostrar os números-chave">Números</button>
-  <div class="topo-ctl" id="topo-ctl"><select class="ir" id="ir" aria-label="Ir para um parque"></select><select class="ir fundo" id="fundo-select" aria-label="Fundo do mapa"></select></div>
-  <div class="cx zoom" id="zoom"><button type="button" data-z="1" aria-label="Aproximar">+</button><button type="button" data-z="-1" aria-label="Afastar">−</button><button type="button" data-z="0" aria-label="Ver o concelho inteiro">⌂</button></div>
-  <div class="cx pe" id="pe"><span class="norte" title="Norte"><svg viewBox="0 0 14 20" aria-hidden="true"><path d="M7 1 12 15 7 12 2 15Z" fill="currentColor"/><path d="M7 1 7 12 2 15Z" fill="var(--painel)" stroke="currentColor" stroke-width=".8"/></svg><span class="sr">Norte para cima</span></span><span><span><span class="bar"></span><span class="esc-t"></span></span></span><span class="xy" aria-hidden="true">—</span></div>
-</main>
+  <div class="dos-nums" id="dos-nums"></div>
+</div>
+<div class="dos-mapa">
+  <main id="map" aria-label="Mapa do Porto">
+    <div class="cx ficha" id="ficha" role="region" aria-label="Ficha" aria-live="polite"></div>
+    <div class="cx nums-card" id="nums-card" role="region" aria-label="Números-chave"><button type="button" class="x" id="nums-x" aria-label="Fechar os números-chave">×</button><div id="nums-corpo"></div><a class="nums-artigo" id="nums-artigo" target="_blank" rel="noopener" hidden>Ler o artigo &rarr;</a></div>
+    <button type="button" class="cx nums-chip" id="nums-chip" aria-label="Mostrar os números-chave">Números</button>
+    <div class="topo-ctl" id="topo-ctl"><select class="ir" id="ir" aria-label="Ir para um parque"></select><select class="ir fundo" id="fundo-select" aria-label="Fundo do mapa"></select></div>
+    <div class="cx zoom" id="zoom"><button type="button" data-z="1" aria-label="Aproximar">+</button><button type="button" data-z="-1" aria-label="Afastar">−</button><button type="button" data-z="0" aria-label="Ver o concelho inteiro">⌂</button></div>
+    <div class="cx pe" id="pe"><span class="norte" title="Norte"><svg viewBox="0 0 14 20" aria-hidden="true"><path d="M7 1 12 15 7 12 2 15Z" fill="currentColor"/><path d="M7 1 7 12 2 15Z" fill="var(--painel)" stroke="currentColor" stroke-width=".8"/></svg><span class="sr">Norte para cima</span></span><span><span><span class="bar"></span><span class="esc-t"></span></span></span><span class="xy" aria-hidden="true">—</span></div>
+  </main>
+  <aside id="panel" aria-label="Filtros e índice">
+    <button type="button" class="alca" id="alca" aria-expanded="false" hidden>Mostrar camadas e números</button>
+    <div class="temas" id="temas"></div>
+    <div id="ctx-bloco" hidden>
+      <div id="ctx-rows"></div>
+      <div id="pop-legend" class="pop-leg" style="display:none;"></div>
+      <p class="fonte" id="fonte"></p>
+    </div>
+  </aside>
+</div>
+<section class="dos-cartoes" aria-labelledby="dos-lt">
+  <div class="dos-lt"><h2 id="dos-lt">Para ler já</h2><span>MAIS RECENTE PRIMEIRO</span></div>
+  <div class="dos-grelha" id="dos-cartoes"></div>
+  <a class="dos-todos" href="lista/">Ver a lista completa →</a>
+</section>
 <script>
 /* Núcleo do mapa único do Porto Verde. Tudo vive em window.MU (sem globais soltas):
    cada tema regista-se com MU.registarTema() e só é montado quando é aberto.
@@ -1066,6 +1122,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
         { v: MU.n(N.por_galeria.sucessos), u: '', r: 'sucessos' }
       ]) + '</div>';
       var desc = '<p class="desc">Abates, demolições e alterações que geraram contestação, com fonte e fotos de antes e depois.</p>';
+      self._dossie(D);
       if (!D.casos.length) {
         painel.innerHTML = desc + nums + '<p class="tema-sub casos-vazio">Ainda sem casos publicados.</p>';
         return;
@@ -1117,6 +1174,21 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
         });
       });
       self._aplicar();
+    },
+
+    _dossie(D) {   // página «Dossiê» (/casos/): barra de números e cartões «Para ler já» fora do painel
+      var N = D.numeros, nums = document.getElementById('dos-nums'), grelha = document.getElementById('dos-cartoes');
+      if (!nums) return;
+      var meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'], h = new Date();
+      document.getElementById('dos-data').textContent = 'ACTUALIZADO A ' + h.getDate() + ' ' + meses[h.getMonth()] + ' ' + h.getFullYear();
+      var comFoto = D.casos.filter(function (c) { return c.fotos.length; }).length;
+      nums.innerHTML = [[N.total, 'CASOS', ''], [N.por_galeria.horrores, 'HORRORES', 'h'], [N.por_galeria.sucessos, 'SUCESSOS' + (N.por_galeria.sucessos ? '' : ' · EM PREPARAÇÃO'), 's'], [comFoto, 'COM FOTO LIVRE', '']]
+        .map(function (x) { return '<div class="dos-n ' + x[2] + '"><b>' + MU.n(x[0]) + '</b><span>' + x[1] + '</span></div>'; }).join('');
+      grelha.innerHTML = D.casos.slice().sort(function (a, b) { return (b.ano - a.ano) || (a.titulo < b.titulo ? -1 : 1); }).slice(0, 6).map(function (c) {
+        var f = c.fotos.filter(function (x) { return x.papel === 'depois'; })[0] || c.fotos[0];
+        return '<a class="dos-cart" href="' + attr(c.url) + '">' + (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '<span class="dos-sem">sem foto livre</span>') +
+          '<span class="dos-ct">' + c.titulo + '</span><span class="dos-cm">' + c.ano + (c.estado !== 'outro' ? ' · ' + c.estado : '') + '</span></a>';
+      }).join('');
     },
 
     _cartao(c, m) {
