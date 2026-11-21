@@ -94,6 +94,7 @@ with sync_playwright() as p:
     pg.click(".caso-mk[data-slug=a-rua]")
     pg.wait_for_selector("#ficha.on .fcorpo", timeout=3000)
     ok("clique abre a ficha com antes e depois", pg.locator("#ficha .fcorpo img").count() == 2)
+    ok("ficha por cima do cartão «Números» (nada tapado)", pg.evaluate("(() => { const f = document.getElementById('ficha').getBoundingClientRect(); const e = document.elementFromPoint(f.left + f.width / 2, f.bottom - 8); return !!e && !!e.closest('#ficha'); })()"))
     ok("ficha com ligação à página do caso", pg.get_attribute("#ficha a.ver-caso", "href") == "../casos/a-rua/")
     ok("hash ganha o caso", "caso=a-rua" in pg.evaluate("location.hash"))
     pg.mouse.move(5, 5)
