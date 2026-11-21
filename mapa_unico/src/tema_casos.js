@@ -49,6 +49,13 @@
           (f.fonte || 'fonte') + '</a></figcaption></figure>';
       }).join('') + '</div>';
     }
+    var fl = c.fotos_ligadas || [];
+    if (fl.length) {
+      h += '<p class="ligadas">' + fl.map(function (f) {
+        return '<a href="' + seguro(f.url) + '" target="_blank" rel="noopener noreferrer">' + PAPEL[f.papel] + (f.ano ? ' · ' + f.ano : '') +
+          ' · ' + (f.fonte || 'fonte') + ' ↗</a>';
+      }).join('<br>') + '</p>';
+    }
     var p1 = (c.corpo_html.match(/<p>[\s\S]*?<\/p>/) || [''])[0];
     h += '<div class="resumo">' + p1 + '</div>';
     var n = c.referencias.length;

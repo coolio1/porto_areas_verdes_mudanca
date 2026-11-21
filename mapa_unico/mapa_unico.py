@@ -316,6 +316,8 @@ def dados_casos(raiz: Path = RAIZ, raiz_fontes: Path = None, raiz_media: Path = 
             "fotos": [{"papel": f["papel"], "src": f"../Horrores/media/{c['slug']}/{f['ficheiro']}",
                        "ano": esc(f.get("ano", "")), "fonte": esc(f.get("fonte", "")), "url": esc(f["url"])}
                       for f in c.get("fotos") or []],
+            "fotos_ligadas": [{"papel": f["papel"], "ano": esc(f.get("ano", "")), "fonte": esc(f.get("fonte", "")),
+                               "url": esc(f["url"])} for f in c.get("fotos_ligadas") or []],
             "referencias": [{"titulo": esc(r["titulo"]), "url": esc(r["url"]), "data": esc(r.get("data", ""))}
                             for r in c["referencias"]],
             "url": f"../casos/{c['slug']}/",

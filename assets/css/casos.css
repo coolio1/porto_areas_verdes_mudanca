@@ -58,3 +58,6 @@
   .caso-fotos-2 { grid-template-columns: 1fr; }
   .caso-texto { font-size: 16.5px; }
 }
+
+.caso-ligadas { margin: 0 0 8px; padding-left: 18px; font-size: 16px; line-height: 1.6; }
+.caso-sec .caso-nota-ligadas { font: 12.5px/1.4 var(--mono); color: var(--suave); }

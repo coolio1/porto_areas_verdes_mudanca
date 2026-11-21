@@ -131,3 +131,14 @@ def test_fontes_por_omissao_nao_traz_caminho_pessoal():
 def test_quatro_tipos_incluindo_lojas_historicas():
     from casos_pipeline.modelo import TIPOS
     assert TIPOS == ("arvores", "demolicao", "patrimonio_alterado", "lojas_historicas")
+
+
+def test_foto_ligada_valida_e_erros(caso_ok, fontes):
+    caso_ok["fotos_ligadas"] = [{"papel": "depois", "ano": 2025, "fonte": "Público", "url": "https://exemplo.pt/foto"}]
+    assert validar_caso(caso_ok, fontes) == []
+    caso_ok["fotos_ligadas"][0]["url"] = "javascript:x"
+    assert any("ligada" in e and "http" in e for e in validar_caso(caso_ok, fontes))
+    caso_ok["fotos_ligadas"][0].update(url="https://exemplo.pt/foto", papel="nada")
+    assert any("ligada" in e and "papel" in e for e in validar_caso(caso_ok, fontes))
+    caso_ok["fotos_ligadas"][0].update(papel="depois", fonte="")
+    assert any("ligada" in e and "fonte" in e for e in validar_caso(caso_ok, fontes))

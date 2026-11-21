@@ -26,6 +26,17 @@ layout: default
     </div>
     {%- endif %}
 
+    {%- if page.fotos_ligadas and page.fotos_ligadas.size > 0 %}
+    <section class="caso-sec"><h2>Fotos na fonte</h2>
+      <ul class="caso-ligadas">
+        {%- for f in page.fotos_ligadas %}
+        <li>{% if f.papel == "antes" %}Antes{% elsif f.papel == "depois" %}Depois{% else %}Foto{% endif %}{% if f.ano %} · {{ f.ano | escape }}{% endif %} · <a href="{{ f.url | escape }}" target="_blank" rel="noopener noreferrer">{{ f.fonte | escape }} ↗</a></li>
+        {%- endfor %}
+      </ul>
+      <p class="caso-nota-ligadas">Fotos publicadas na fonte indicada; ligação externa, sem cópia neste site.</p>
+    </section>
+    {%- endif %}
+
     <div class="caso-texto">{{ content }}</div>
 
     {%- if page.criterio == "editorial" %}<p class="caso-nota">Avaliação do Porto Verde: {{ page.nota_editorial | escape }}</p>{% endif %}

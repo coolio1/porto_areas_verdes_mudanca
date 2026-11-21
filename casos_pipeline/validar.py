@@ -61,6 +61,13 @@ def validar_caso(caso: dict, raiz_fontes: Path, raiz_media: Path = None) -> list
             e.append(f"referência {i}: sem texto guardado em {txt}")
         elif not excerto_em_texto(r["excerto"], txt.read_text(encoding="utf-8")):
             e.append(f"referência {i}: excerto não encontrado no texto da fonte")
+    for i, f in enumerate(caso.get("fotos_ligadas") or [], 1):   # fotos só com ligação à fonte (nada copiado para o site)
+        if f.get("papel") not in PAPEIS:
+            e.append(f"foto ligada {i}: papel inválido")
+        if not f.get("fonte"):
+            e.append(f"foto ligada {i}: falta a «fonte» (nome do meio ou autor)")
+        if not f.get("url") or not _http(f["url"]):
+            e.append(f"foto ligada {i}: url tem de começar por http:// ou https://")
     for f in caso.get("fotos") or []:
         nome = f.get("ficheiro", "?")
         if f.get("papel") not in PAPEIS:

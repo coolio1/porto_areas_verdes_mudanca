@@ -110,3 +110,11 @@ def test_foto_em_falta_aborta_sem_raiz_media_explicita(ambiente):
     _caso(raiz, fontes, "sem-ficheiro", fotos="fotos:" + chr(10) + "  - {papel: antes, ficheiro: nao-existe.jpg, ano: 2015, fonte: Arquivo, url: 'https://x.pt/f', sha256: abc}" + chr(10))
     with pytest.raises(ValueError, match="sem-ficheiro"):
         mapa_unico.dados_casos(raiz, fontes)
+
+
+def test_fotos_ligadas_vao_para_os_dados_escapadas(ambiente):
+    raiz, fontes = ambiente
+    _caso(raiz, fontes, "a", fotos="fotos_ligadas:" + chr(10) + "  - {papel: depois, ano: 2025, fonte: \"Jornal <b>X</b>\", url: 'https://x.pt/f?a=1&b=2'}" + chr(10))
+    c = _dados(raiz, fontes)["casos"][0]
+    assert c["fotos_ligadas"][0]["papel"] == "depois" and "&lt;b&gt;" in c["fotos_ligadas"][0]["fonte"]
+    assert "&amp;" in c["fotos_ligadas"][0]["url"]

@@ -195,6 +195,7 @@ body.mu .pv-rodape__nome{font:700 12.5px var(--sans);color:var(--tinta)}
 .ficha>.ver-caso{display:block;margin-top:10px;padding:8px 10px;background:var(--marca);color:var(--papel);font:500 13px var(--sans);text-decoration:none;text-align:center}
 .ficha>.ver-caso:hover{background:var(--tinta)}
 .ficha .resumo p{margin:0;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ficha .ligadas{margin:0 0 8px;font:400 11.5px/1.5 var(--mono)}
 .ficha .nrefs{margin:8px 0 0;padding-top:8px;border-top:1px solid var(--fino);font:400 11.5px var(--mono);color:var(--suave)}
 /* tema Casos: marcadores, cartão de hover, filtros */
 .caso-mk{background:none;border:0}.caso-mk svg{display:block}

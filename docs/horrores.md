@@ -15,7 +15,7 @@ Mapa e galeria de casos conhecidos no Porto: destruição ou perda urbanística,
 - Cada `referencias[]` com `excerto` **literal** do texto guardado (validador); nunca citar de memória; Haiku nunca cita.
 - Sem nomes de pessoas singulares; voz neutra; juízo atribuído à fonte («segundo …»); instituições só se constarem da fonte.
 - Só dentro do Porto (CAOP, `dtmn` 1312); `freguesia` derivada, não escrita.
-- Fotos: crédito + `url` de origem + `sha256` por foto; revisão humana foto a foto; nunca fotos de utilizadores do Google Maps; Street View/Earth só como último recurso e com termos confirmados antes de guardar/republicar (senão, ligação externa).
+- Fotos «depois»/actuais com direitos reservados: **nunca copiar**; `fotos_ligadas: [{papel, ano, fonte, url}]` mostra só a ligação à página da fonte (decisão do utilizador, 2026-11-21). Fotos copiadas (`fotos:`) só com licença livre: crédito + `url` de origem + `sha256` por foto; revisão humana foto a foto; nunca fotos de utilizadores do Google Maps; Street View/Earth só como último recurso e com termos confirmados antes de guardar/republicar (senão, ligação externa).
 - Antes/depois em par não é obrigatório; página mostra lado a lado (maquete A, aprovada 2026-11-21).
 - Cobertura nunca «completa»: «casos conhecidos e documentados».
 - Não fundir com os 50 Espaços (layout congelado).

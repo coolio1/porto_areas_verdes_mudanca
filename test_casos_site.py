@@ -69,3 +69,8 @@ def test_paginas_de_caso_tem_fontes_proprias():
 def test_layout_nao_mostra_estado_outro():
     h = (RAIZ / "_layouts/caso.html").read_text(encoding="utf-8")
     assert "page.estado != 'outro'" in h
+
+
+def test_layout_mostra_fotos_ligadas_sem_as_copiar():
+    h = (RAIZ / "_layouts/caso.html").read_text(encoding="utf-8")
+    assert "page.fotos_ligadas" in h and "noopener" in h
