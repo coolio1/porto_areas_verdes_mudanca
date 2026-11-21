@@ -8,6 +8,7 @@
   <link rel="icon" type="image/png" href="{{ site.baseurl }}/favicon.png">
   <link rel="icon" type="image/x-icon" href="{{ site.baseurl }}/favicon.ico">
   <script src="{{ site.baseurl }}/assets/js/moldura.js" data-menu="barra" data-rodape="leitura" data-pagina="{% if page.layout == 'post' %}artigos/{% else %}{{ page.url }}{% endif %}"{% if page.fontes %} data-fontes="{{ page.fontes | escape }}"{% endif %}></script>
+  {% if page.folha %}<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/folha.css?v={{ site.time | date: '%s' }}">{% endif %}
   <style>
     :root {
       --green: var(--pv-verde);
@@ -78,7 +79,7 @@
     }
   </style>
 </head>
-<body>
+<body{% if page.folha %} class="folha-pg"{% endif %}>
   <main{% if page.wide %} class="wide"{% endif %}>
     {{ content }}
   </main>

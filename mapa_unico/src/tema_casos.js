@@ -140,8 +140,6 @@
     _dossie(D) {   // página «Dossiê» (/casos/): barra de números e cartões «Para ler já» fora do painel
       var N = D.numeros, nums = document.getElementById('dos-nums'), grelha = document.getElementById('dos-cartoes');
       if (!nums) return;
-      var meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'], h = new Date();
-      document.getElementById('dos-data').textContent = 'ACTUALIZADO A ' + h.getDate() + ' ' + meses[h.getMonth()] + ' ' + h.getFullYear();
       var comFoto = D.casos.filter(function (c) { return c.fotos.length; }).length;
       nums.innerHTML = [[N.total, 'CASOS', ''], [N.por_galeria.horrores, 'HORRORES', 'h'], [N.por_galeria.sucessos, 'SUCESSOS' + (N.por_galeria.sucessos ? '' : ' · EM PREPARAÇÃO'), 's'], [comFoto, 'COM FOTO LIVRE', '']]
         .map(function (x) { return '<div class="dos-n ' + x[2] + '"><b>' + MU.n(x[0]) + '</b><span>' + x[1] + '</span></div>'; }).join('');

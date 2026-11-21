@@ -50,3 +50,8 @@
   .artigos .lin .thumb-a { order: -1; }
   .artigos .dt { flex-direction: row; justify-content: space-between; align-items: center; }
 }
+
+/* dentro da folha (folha.css), como a Mobilidade */
+.folha .artigos { max-width: none; padding: 6px 28px 56px; }
+.folha .tit .n { font: 12.5px/1.3 var(--mono); color: var(--tinta2); flex: none; }
+.folha .artigos .chips { margin-top: 22px; }

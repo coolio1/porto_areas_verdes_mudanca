@@ -349,7 +349,7 @@ def _montar_html(temas, saida: Path, pagina: str, titulo: str, descricao: str, i
     html = (SRC / modelo).read_text(encoding="utf-8")
     html = (
         html.replace("/*CSS*/", (SRC / "estilo.css").read_text(encoding="utf-8"))
-        .replace("<!--NAV-->", get_nav(pagina, depth=1, menu="barra"))
+        .replace("<!--NAV-->", get_nav(pagina, depth=1, menu="barra", rodape="leitura") if modelo != "template.html" else get_nav(pagina, depth=1, menu="barra"))
         .replace("/*TITULO*/", titulo)
         .replace("/*DESC*/", descricao)
         .replace("/*INIT*/", init)

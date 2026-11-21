@@ -100,3 +100,8 @@
   .caso-fotos-2 { grid-template-columns: 1fr; }
   .caso-texto { font-size: 17.5px; }
 }
+
+/* lista dentro da folha (folha.css): o título é o da Mobilidade */
+.folha .casos-indice { padding: 0 0 40px; max-width: none; }
+.folha .tit .caso-abas { margin: 0; flex: none; }
+.folha .caso-filtros { margin-top: 26px; }
