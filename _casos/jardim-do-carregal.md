@@ -11,6 +11,10 @@ ano: 2021
 estado: alterado
 contestacao: "Quatro associações acusaram a Metro de transplantar dez árvores e abater outra no Jardim do Carregal quando o projecto previa duas, e pediram nova avaliação ambiental independente."
 criterio: documental
+fotos:
+  - {papel: antes, ficheiro: carregal-lago-2018.jpg, ano: 2018, fonte: "-wuppertaler, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:POR_Porto_Jardim_Carregal_01.jpg", sha256: 5b8bcf01ee555406730a9db60a889fc27c827949a124710bf91d8e3ced6f5427, nota: "Lago e árvores altas do Jardim do Carregal em Fevereiro de 2018, antes das obras da estação de metro."}
+  - {papel: antes, ficheiro: carregal-relvado-2018.jpg, ano: 2018, fonte: "-wuppertaler, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:POR_Porto_Jardim_Carregal_04.jpg", sha256: 33c55a28624914da826276a49f15816100b83e1f4f0d152b921caf1b5c234208, nota: "Relvado, lago e arvoredo do jardim em Março de 2018, antes das obras da estação de metro."}
+  - {papel: antes, ficheiro: carregal-lago-2019.jpg, ano: 2019, fonte: "Daderot, Wikimedia Commons, CC0", url: "https://commons.wikimedia.org/wiki/File:Jardim_do_Carregal_-_Porto,_Portugal_-_DSC00738.jpg", sha256: 339415714ec54114cf26265ac80a2efffe70d042dc802ac4f1550f4be9149336, nota: "O lago do jardim ao fim da tarde, Novembro de 2019, antes das obras da estação de metro."}
 fotos_ligadas:
   - {papel: depois, fonte: "Público (fotogaleria, 2021)", url: "https://www.publico.pt/2021/05/17/local/noticia/obra-metro-jardim-carregal-impacto-arvores-previsto-1962942"}
 referencias:

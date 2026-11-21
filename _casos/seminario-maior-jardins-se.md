@@ -11,6 +11,9 @@ ano: 2026
 estado: outro
 contestacao: "Petição «Nem a Sé se salva?» (mais de 2800 assinaturas, discutida na Assembleia Municipal a 6 Out 2026), contestação de moradores e pedido de esclarecimentos do ICOMOS Portugal."
 criterio: documental
+fotos:
+  - {papel: antes, ficheiro: seminario-jardim-2007.jpg, ano: 2007, fonte: "António Amen, Wikimedia Commons, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:S%C3%A9-Igreja_de_S._Louren%C3%A7o_-_Semin%C3%A1rio_Maior_(1).jpg", sha256: 484338ff8d186a2b1e3f41ec6919a7361f0ad635d1ebe2ea34122ee943a0b612, nota: "Edifício do Seminário Maior e jardim fronteiro em 2007; não mostra os socalcos em causa."}
+  - {papel: outra, ficheiro: seminario-ponte-maria-pia-c1910.jpg, ano: 1910, fonte: "Henrique António Guedes de Oliveira, Wikimedia Commons, domínio público", url: "https://commons.wikimedia.org/wiki/File:Ponte_Maria_Pia_e_Semin%C3%A1rio_Maior_do_Porto.jpg", sha256: 50a31c88195eb1714ade07903a3a873e6fb24402d385066660e0555343f58f76, nota: "O Seminário Maior no morro, junto à Ponte Maria Pia (c. 1910-1919); contexto histórico."}
 referencias:
   - titulo: "Petição apela à preservação dos jardins da Sé do Porto"
     url: "https://www.jn.pt/pais/artigo/peticao-apela-a-preservacao-dos-jardins-da-se-do-porto/18115004"

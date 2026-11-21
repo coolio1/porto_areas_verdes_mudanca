@@ -5,8 +5,9 @@ Mapa e galeria de casos conhecidos no Porto: destruição ou perda urbanística,
 ## Peças
 - `_casos/<slug>.md` = **fonte única** (front matter = esquema; corpo = descrição). Só casos revistos; tudo o que está aqui é publicado.
 - `casos_pipeline/` = modelo + validador (`python -m casos_pipeline.validar`); `mapa_unico.py` lê os mesmos ficheiros → `mapa_unico/dados/casos.js` (`--casos` regenera só isto).
-- `_layouts/caso.html` + `casos/index.html` + `assets/css/casos.css` = páginas `/casos/` e `/casos/<slug>/` (URL neutra: serve as duas galerias).
-- Tema `casos` do mapa único: `mapa_unico/src/tema_casos.js`; forma do marcador = tipo, cor = galeria, contorno tracejado = `aproximada`.
+- `_layouts/caso.html` + `casos/lista/index.html` + `assets/css/casos.css` = lista `/casos/lista/` e fichas `/casos/<slug>/` (URL neutra: serve as duas galerias).
+- **`/casos/` = mapa autónomo «Horrores e sucessos»** (Positron por defeito), abas Mapa | Lista. `casos/index.html` é **gerado** por `mapa_unico.py` (mesmo `core.js`/template, só o tema `casos`, dados partilhados `mapa_unico/dados/casos.js` via `MU.URL_DADOS`); nunca editar à mão. O mapa único já não tem o tema; `mapa_unico.html#tema=casos` redirige para `/casos/`.
+- Tema `casos`: `mapa_unico/src/tema_casos.js`; forma do marcador = tipo, cor = galeria, contorno tracejado = `aproximada`.
 - Rascunhos: `docs/horrores/rascunhos/` (**gitignored**, repo público); promover = mover para `_casos/`.
 - Texto lido de cada fonte: `Fontes\Horrores\<slug>\<n>.txt` (fora do repo); fotos: `Horrores/media/<slug>/` (JPEG ≤ 900 px).
 
@@ -24,4 +25,4 @@ Mapa e galeria de casos conhecidos no Porto: destruição ou perda urbanística,
 1. Candidatos (pesquisa online, agentes Sonnet) → rascunho + texto lido em `Fontes\Horrores\`; o utilizador escolhe.
 2. Ficha + fotos → revisão do utilizador → mover para `_casos/`.
 3. `python -m casos_pipeline.validar` → `python mapa_unico/mapa_unico.py` → testes (`casos_pipeline/tests`, `mapa_unico/tests`, `test_casos_site.py`) → commit.
-4. Depois do deploy: abrir `/casos/`, `/casos/<slug>/` e `mapa_unico.html#tema=casos&caso=<slug>`.
+4. Depois do deploy: abrir `/casos/#tema=casos&caso=<slug>`, `/casos/lista/` e `/casos/<slug>/`.
