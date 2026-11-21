@@ -100,6 +100,9 @@ Página `chat/`, código do Worker e infra-estrutura na Cloudflare (Worker, AI S
 ## Mobilidade (`Mobilidade/`)
 Autocarros e atropelamentos: método, geração, `.gitignore`, modo «Agora», Análise, Propostas → `docs/mobilidade.md` (ler antes de mexer em `Mobilidade/`). `dashboard_atropelamentos.html` publicado ≠ gerador `mapa_dashboard.py`: não regenerar sem comparar.
 
+## Casos (`/casos/`, tema `casos` do mapa único)
+Horrores e sucessos: regras, esquema e fluxo → `docs/horrores.md` (ler antes de mexer). Nunca editar `mapa_unico/dados/casos.js` à mão; rascunhos só em `docs/horrores/rascunhos/` (gitignored).
+
 ## 50 Espaços (`/50espacos/`)
 Campanha da Campo Aberto (111 espaços, 50 seleccionados). Regras completas, pipeline e fases: `docs/regras-50espacos.md`. Essenciais:
 - Nunca editar `_espacos/**` à mão (gerado por `espacos_pipeline/gerar.py`).

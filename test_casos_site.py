@@ -39,6 +39,14 @@ def test_indice_lista_site_casos_com_filtros():
     assert 'data-galeria' in h and 'data-tipo' in h
 
 
+def test_menu_tem_casos_e_fontes():
+    js = (RAIZ / "assets/js/moldura.js").read_text(encoding="utf-8")
+    assert "['casos/', 'Casos']" in js
+    assert "'casos/':" in js                                          # fontes da página /casos/
+    assert (RAIZ / "docs/horrores.md").exists()
+    assert "docs/horrores.md" in (RAIZ / "CLAUDE.md").read_text(encoding="utf-8")
+
+
 def test_indice_nao_lista_rascunhos():
     gi = (RAIZ / ".gitignore").read_text(encoding="utf-8")
     assert "docs/horrores/rascunhos/" in gi

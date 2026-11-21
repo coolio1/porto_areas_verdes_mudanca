@@ -7,7 +7,8 @@
 ├── nav.py                  # Atalho: get_nav() devolve a etiqueta <script> da moldura
 ├── check_leaflet_init.py   # Validação Leaflet (pre-commit hook)
 ├── test_area.py            # Calibração (área teste Serralves)
-├── mapa_unico/             # PÁGINA ÚNICA dos mapas (5 temas em separadores) — ver «Mapa único» abaixo
+├── mapa_unico/             # PÁGINA ÚNICA dos mapas (6 temas em separadores) — ver «Mapa único» abaixo
+├── _casos/, casos/, casos_pipeline/  # Casos (horrores/sucessos): fonte única `_casos/<slug>.md`, índice `casos/index.html`, validador; tema `casos` do mapa único; ver `docs/horrores.md`
 ├── regra_303030/           # Regra 3-30-300: pipeline LiDAR/OSM/GHS-POP → máscaras (`layers/`) do tema `regra`; números em `docs/regra_303030_numeros.md`; ver CLAUDE.md
 ├── mapa/                   # Mapa actual (Sentinel-2 2016-2025); o .html é agora um redirect
 
