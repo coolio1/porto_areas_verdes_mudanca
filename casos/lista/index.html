@@ -7,7 +7,8 @@ folha: true
 description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com fonte e fotos de antes e depois."
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/casos.css?v={{ site.time | date: '%s' }}">
-{%- assign tipos_ = "arvores:Árvores|demolicao:Demolições|patrimonio_alterado:Património|lojas_historicas:Lojas históricas" | split: "|" -%}
+{%- assign grupos_ = "verde_agua:Verde e água:arvores,agua,frente_agua|espaco_publico:Espaço público:praca|edificado:Edificado:demolicao,construcao_intrusiva,patrimonio_alterado|memoria:Memória e vida urbana:lojas_historicas,equipamentos,arte_publica,arqueologia" | split: "|" -%}
+{%- assign tipos_ = "arvores:Árvores e verde|agua:Ribeiras e água|frente_agua:Frente de rio e mar|praca:Praças e ruas|demolicao:Demolições|construcao_intrusiva:Construções intrusivas|patrimonio_alterado:Património alterado|lojas_historicas:Lojas históricas|equipamentos:Equipamentos colectivos|arte_publica:Arte pública e azulejos|arqueologia:Arqueologia e muralhas" | split: "|" -%}
 {%- assign casos_ = site.casos | sort: "ano" | reverse -%}
 {%- assign n_h_ = site.casos | where: "galeria", "horrores" | size -%}
 {%- assign n_s_ = site.casos | where: "galeria", "sucessos" | size -%}
@@ -23,10 +24,15 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
       <button type="button" data-galeria="horrores" aria-pressed="true"><i class="caso-horrores" aria-hidden="true"></i>Horrores · {{ n_h_ }}</button>
       <button type="button" data-galeria="sucessos" aria-pressed="false"><i class="caso-sucessos" aria-hidden="true"></i>Sucessos · {{ n_s_ }}</button>
     </div>
-    <div class="caso-grupo" role="group" aria-label="Tipo">
-      <button type="button" data-tipo="" aria-pressed="true">Todos</button>
+    <div class="caso-grupo" role="group" aria-label="Grupo">
+      <button type="button" data-grupo="" aria-pressed="true">Todos</button>
+      {%- for g in grupos_ %}{% assign gp_ = g | split: ":" %}
+      <button type="button" data-grupo="{{ gp_[0] }}" aria-pressed="false">{{ gp_[1] }}</button>
+      {%- endfor %}
+    </div>
+    <div class="caso-grupo" role="group" aria-label="Tipo" id="tipos-sub" hidden>
       {%- for t in tipos_ %}{% assign par_ = t | split: ":" %}
-      <button type="button" data-tipo="{{ par_[0] }}" aria-pressed="false">{{ par_[1] }}</button>
+      <button type="button" data-tipo="{{ par_[0] }}" data-de="{% for g in grupos_ %}{% assign gp_ = g | split: ":" %}{% assign ts_ = gp_[2] | split: "," %}{% if ts_ contains par_[0] %}{{ gp_[0] }}{% endif %}{% endfor %}" aria-pressed="false" hidden>{{ par_[1] }}</button>
       {%- endfor %}
     </div>
   </div>
@@ -35,7 +41,7 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
     {%- for c in casos_ %}
     {%- assign foto_ = c.fotos | where: "papel", "depois" | first -%}
     {%- unless foto_ -%}{%- assign foto_ = c.fotos | first -%}{%- endunless %}
-    <li data-galeria="{{ c.galeria }}" data-tipo="{{ c.tipo }}"{% if c.galeria != "horrores" %} hidden{% endif %}>
+    <li data-galeria="{{ c.galeria }}" data-tipo="{{ c.tipo }}" data-grupo="{% for g in grupos_ %}{% assign gp_ = g | split: ':' %}{% assign ts_ = gp_[2] | split: ',' %}{% if ts_ contains c.tipo %}{{ gp_[0] }}{% endif %}{% endfor %}"{% if c.galeria != "horrores" %} hidden{% endif %}>
       <a href="{{ c.url | relative_url }}">
         {%- if foto_ %}<img src="{{ site.baseurl }}/Horrores/media/{{ c.slug }}/{{ foto_.ficheiro }}" alt="" loading="lazy">{% else %}<span class="caso-sem-foto">sem foto livre</span>{% endif %}
         <span class="caso-tit">{{ c.titulo | escape }}</span>
@@ -54,18 +60,28 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
 (function () {
   var q = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var cartoes = q('.caso-grelha li'); if (!cartoes.length) return;
-  var gal = 'horrores', tipo = '';
+  var gal = 'horrores', grupo = '', tipo = '';
+  var tem = function (attr, v) { return cartoes.some(function (li) { return li.dataset.galeria === gal && li.dataset[attr] === v; }); };
   function aplicar() {
     var n = 0;
     cartoes.forEach(function (li) {
-      var ver = li.dataset.galeria === gal && (!tipo || li.dataset.tipo === tipo);
+      var ver = li.dataset.galeria === gal && (!grupo || li.dataset.grupo === grupo) && (!tipo || li.dataset.tipo === tipo);
       li.hidden = !ver; if (ver) n++;
     });
     q('.caso-vazio')[0].hidden = n > 0;
     q('button[data-galeria]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.galeria === gal); });
-    q('button[data-tipo]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.tipo === tipo); });
+    q('button[data-grupo]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.grupo === grupo); b.hidden = !!b.dataset.grupo && !tem('grupo', b.dataset.grupo); });
+    var sub = q('#tipos-sub')[0], mostra = 0;   // 2.º nível: só os tipos do grupo escolhido que têm casos
+    q('button[data-tipo]').forEach(function (b) {
+      var ok = !!grupo && b.dataset.de === grupo && tem('tipo', b.dataset.tipo);
+      b.hidden = !ok; if (ok) mostra++;
+      b.setAttribute('aria-pressed', b.dataset.tipo === tipo);
+    });
+    sub.hidden = mostra < 2;
   }
-  q('button[data-galeria]').forEach(function (b) { b.addEventListener('click', function () { gal = b.dataset.galeria; aplicar(); }); });
-  q('button[data-tipo]').forEach(function (b) { b.addEventListener('click', function () { tipo = b.dataset.tipo; aplicar(); }); });
+  q('button[data-galeria]').forEach(function (b) { b.addEventListener('click', function () { gal = b.dataset.galeria; grupo = tipo = ''; aplicar(); }); });
+  q('button[data-grupo]').forEach(function (b) { b.addEventListener('click', function () { grupo = b.dataset.grupo; tipo = ''; aplicar(); }); });
+  q('button[data-tipo]').forEach(function (b) { b.addEventListener('click', function () { tipo = tipo === b.dataset.tipo ? '' : b.dataset.tipo; aplicar(); }); });
+  aplicar();
 })();
 </script>

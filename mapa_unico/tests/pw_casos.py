@@ -42,7 +42,8 @@ def montar(casos):
     shutil.copy(RAIZ / "casos" / "index.html", tmp / "casos")
     shutil.copy(RAIZ / "mapa_unico" / "dados" / "contexto.js", tmp / "mapa_unico" / "dados")
     shutil.copy(RAIZ / "assets" / "js" / "moldura.js", tmp / "assets" / "js")
-    tipos = ["arvores", "demolicao", "patrimonio_alterado", "lojas_historicas"]
+    sys.path.insert(0, str(RAIZ))
+    from casos_pipeline.modelo import TIPOS as tipos
     d = {"casos": casos, "numeros": {
         "total": len(casos), "por_tipo": {t: sum(c["tipo"] == t for c in casos) for t in tipos},
         "por_galeria": {g: sum(c["galeria"] == g for c in casos) for g in ("horrores", "sucessos")}}}
@@ -127,11 +128,11 @@ with sync_playwright() as p:
     ok("título escapado visível como texto", pg.text_content("#ficha h3") == "<b>x</b> & Cª", repr(pg.text_content("#ficha h3")))
     ok("título sem elemento <b> injectado", pg.locator("#ficha h3 b").count() == 0)
 
-    # filtro por tipo e por galeria
+    # filtro por grupo (liga/desliga os seus tipos) e por galeria
     pg.click("#ficha .x")
-    pg.uncheck("#tema-casos input[data-tipo=arvores]")
+    pg.uncheck("#tema-casos input[data-grupo=verde_agua]")
     ok("filtro por tipo esconde marcadores", pg.locator(".caso-mk").count() == 2, str(pg.locator(".caso-mk").count()))
-    pg.check("#tema-casos input[data-tipo=arvores]")
+    pg.check("#tema-casos input[data-grupo=verde_agua]")
     pg.uncheck("#tema-casos input[data-galeria=sucessos]")
     ok("filtro por galeria esconde sucessos", pg.locator(".caso-mk[data-slug=d-suc]").count() == 0)
     if CAPT:

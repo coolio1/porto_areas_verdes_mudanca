@@ -44,7 +44,7 @@ def test_layout_e_indice_escapam_texto_e_mostram_nota_editorial():
 def test_indice_lista_site_casos_com_filtros():
     h = (RAIZ / "casos/lista/index.html").read_text(encoding="utf-8")
     assert "site.casos" in h and "casos conhecidos e documentados" in h.lower()
-    assert 'data-galeria' in h and 'data-tipo' in h
+    assert 'data-galeria' in h and 'data-tipo' in h and 'data-grupo' in h
 
 
 def test_menu_tem_casos_e_fontes():

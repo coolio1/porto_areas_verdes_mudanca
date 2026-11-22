@@ -130,7 +130,7 @@ def test_fontes_por_omissao_nao_traz_caminho_pessoal():
 
 def test_quatro_tipos_incluindo_lojas_historicas():
     from casos_pipeline.modelo import TIPOS
-    assert TIPOS == ("arvores", "demolicao", "patrimonio_alterado", "lojas_historicas")
+    assert set(TIPOS) >= {"arvores", "demolicao", "patrimonio_alterado", "lojas_historicas"}
 
 
 def test_foto_ligada_valida_e_erros(caso_ok, fontes):

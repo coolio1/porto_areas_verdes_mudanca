@@ -7,7 +7,14 @@ import yaml
 
 RAIZ = Path(__file__).resolve().parents[1]
 
-TIPOS = ("arvores", "demolicao", "patrimonio_alterado", "lojas_historicas")
+# Tipos agrupados (filtros de 2 níveis no mapa e na lista): (grupo, rótulo, tipos). `tipo` é o que se escreve no caso.
+GRUPOS = (
+    ("verde_agua", "Verde e água", ("arvores", "agua", "frente_agua")),
+    ("espaco_publico", "Espaço público", ("praca",)),
+    ("edificado", "Edificado", ("demolicao", "construcao_intrusiva", "patrimonio_alterado")),
+    ("memoria", "Memória e vida urbana", ("lojas_historicas", "equipamentos", "arte_publica", "arqueologia")),
+)
+TIPOS = tuple(t for _, _, ts in GRUPOS for t in ts)
 GALERIAS = ("horrores", "sucessos")
 ESTADOS = ("demolido", "alterado", "abatido", "revertido", "outro")
 CRITERIOS = ("documental", "lista", "editorial")

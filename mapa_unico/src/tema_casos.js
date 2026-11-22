@@ -2,10 +2,15 @@
    Dados de mapa_unico.py (`dados_casos`, texto já escapado). Hover = cartão; clique = ficha fixa (MU.ficha com `corpo`);
    `#tema=casos&caso=<slug>` abre um caso. Marcador = disco com glifo do tipo; cor = galeria (vermelho horrores, azul sucessos). */
 (function () {
-  var TIPOS = [
-    ['arvores', 'Árvores e verde'], ['demolicao', 'Demolições'], ['patrimonio_alterado', 'Património alterado'],
-    ['lojas_historicas', 'Lojas históricas']
+  // Tipos agrupados (espelha casos_pipeline/modelo.py GRUPOS): filtro de 2 níveis; só aparecem os tipos com casos.
+  var GRUPOS = [
+    ['verde_agua', 'Verde e água', [['arvores', 'Árvores e verde'], ['agua', 'Ribeiras e água'], ['frente_agua', 'Frente de rio e mar']]],
+    ['espaco_publico', 'Espaço público', [['praca', 'Praças e ruas']]],
+    ['edificado', 'Edificado', [['demolicao', 'Demolições'], ['construcao_intrusiva', 'Construções intrusivas'], ['patrimonio_alterado', 'Património alterado']]],
+    ['memoria', 'Memória e vida urbana', [['lojas_historicas', 'Lojas históricas'], ['equipamentos', 'Equipamentos colectivos'], ['arte_publica', 'Arte pública e azulejos'], ['arqueologia', 'Arqueologia e muralhas']]]
   ];
+  var TIPOS = [], GRUPO_DE = {};
+  GRUPOS.forEach(function (g) { g[2].forEach(function (t) { TIPOS.push(t); GRUPO_DE[t[0]] = g[0]; }); });
   var ROTULO = {}; TIPOS.forEach(function (t) { ROTULO[t[0]] = t[1]; });
   var COR = { horrores: '#B42F2F', sucessos: '#3E6AB3' };
   var GAL = { horrores: 'Horrores', sucessos: 'Sucessos' };
@@ -18,9 +23,12 @@
     patrimonio_alterado: ['<path d="M8 21h14M10 21V13M15 21V13M20 21V13M8 12l7-5 7 5z"/>', false],
     lojas_historicas: ['<path d="M8 12l1.5-4h11L22 12v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0V12zM9 16v6h12v-6"/>', false]
   };
+  // Tipos novos herdam o glifo do grupo (uma forma por grupo): verde_agua = árvore, espaço público = praça, edificado = edifício, memória = loja.
+  GLIFO.espaco_publico = ['<path d="M8 21h14M10 21V11h10v10M15 11V8"/>', false];
+  var GLIFO_GRUPO = { verde_agua: 'arvores', espaco_publico: 'espaco_publico', edificado: 'demolicao', memoria: 'lojas_historicas' };
 
   function svg(tipo, cor, aprox, tam) {
-    var g = GLIFO[tipo] || ['<circle cx="15" cy="15" r="4"/>', true], gc = aprox ? cor : '#fff';   // tipo desconhecido (dados em cache antigos): ponto
+    var g = GLIFO[tipo] || GLIFO[GLIFO_GRUPO[GRUPO_DE[tipo]]] || ['<circle cx="15" cy="15" r="4"/>', true], gc = aprox ? cor : '#fff';   // tipo desconhecido (dados em cache antigos): ponto
     var disco = aprox ? '<circle cx="15" cy="15" r="13" fill="#fff" stroke="' + cor + '" stroke-width="2.2" stroke-dasharray="3 2.4"/>'
                       : '<circle cx="15" cy="15" r="13" fill="' + cor + '" stroke="#fff" stroke-width="2"/>';
     var corpo = g[1] ? '<g fill="' + gc + '">' + g[0] + '</g>'
@@ -93,9 +101,15 @@
           return '<label><input type="checkbox" data-galeria="' + g + '" checked><span class="sw">' + '<svg viewBox="0 0 30 30" width="20" height="20" aria-hidden="true"><circle cx="15" cy="15" r="13" fill="' + COR[g] + '"/></svg>' +
             '</span>' + GAL[g] + ' <em>' + N.por_galeria[g] + '</em></label>';
         }).join('') +
-        MU.cab2('Tipo', 'glifo do marcador') + TIPOS.map(function (t) {
-          return '<label><input type="checkbox" data-tipo="' + t[0] + '" checked><span class="sw">' + svg(t[0], '#10212C', false, 20) +
-            '</span>' + t[1] + ' <em>' + N.por_tipo[t[0]] + '</em></label>';
+        MU.cab2('Tipo', 'forma do marcador = grupo') + GRUPOS.map(function (g) {
+          var ts = g[2].filter(function (t) { return (N.por_tipo[t[0]] || 0) > 0; });
+          if (!ts.length) return '';
+          var n = ts.reduce(function (s, t) { return s + N.por_tipo[t[0]]; }, 0);
+          return '<div class="casos-grupo"><label class="gr"><input type="checkbox" data-grupo="' + g[0] + '" checked><span class="sw">' +
+            svg(g[0], '#10212C', false, 20) + '</span><strong>' + g[1] + '</strong> <em>' + n + '</em></label>' +
+            (ts.length > 1 ? ts.map(function (t) {
+              return '<label class="sub"><input type="checkbox" data-tipo="' + t[0] + '" checked>' + t[1] + ' <em>' + N.por_tipo[t[0]] + '</em></label>';
+            }).join('') : '<input type="checkbox" data-tipo="' + ts[0][0] + '" checked hidden>') + '</div>';
         }).join('') +
         '<p class="tema-sub">Contorno tracejado: localização aproximada.</p></div>' +
         MU.cab2('Índice', 'mais recente primeiro') + '<ol class="casos-ind">' +
@@ -122,7 +136,11 @@
       painel.querySelectorAll('.casos-filtros input').forEach(function (cb) {
         cb.addEventListener('change', function () {
           if (cb.dataset.galeria) self._filtro.galeria[cb.dataset.galeria] = cb.checked;
-          else self._filtro.tipo[cb.dataset.tipo] = cb.checked;
+          else if (cb.dataset.grupo) {   // o grupo liga ou desliga todos os seus tipos
+            painel.querySelectorAll('.casos-grupo input[data-tipo]').forEach(function (s) {
+              if (GRUPO_DE[s.dataset.tipo] === cb.dataset.grupo) { s.checked = cb.checked; self._filtro.tipo[s.dataset.tipo] = cb.checked; }
+            });
+          } else self._filtro.tipo[cb.dataset.tipo] = cb.checked;
           self._aplicar();
         });
       });
