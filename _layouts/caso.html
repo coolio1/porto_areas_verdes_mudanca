@@ -53,7 +53,7 @@ layout: default
               {%- for f in outras_ %}
               <figure>
                 <a href="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" target="_blank" rel="noopener"><img src="{{ site.baseurl }}/Horrores/media/{{ page.slug }}/{{ f.ficheiro }}" alt="{{ page.titulo | escape }}" loading="lazy"></a>
-                <figcaption>{{ f.ano | escape }} · {% if f.url %}<a href="{{ f.url | escape }}" target="_blank" rel="noopener">{{ f.fonte | escape }}</a>{% else %}{{ f.fonte | escape }}{% endif %}</figcaption>
+                <figcaption>{% if f.ano %}{{ f.ano | escape }} · {% endif %}{% if f.url %}<a href="{{ f.url | escape }}" target="_blank" rel="noopener">{{ f.fonte | escape }}</a>{% else %}{{ f.fonte | escape }}{% endif %}</figcaption>
               </figure>
               {%- endfor %}
             </div>

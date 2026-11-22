@@ -11,6 +11,9 @@ ano: 2018
 estado: outro
 contestacao: "A associação de moradores obteve o embargo total por falta de parecer prévio da DGPC em zona classificada, e o TCAN manteve-o."
 criterio: documental
+fotos:
+  - {papel: outra, ficheiro: outra-1.jpg, fonte: "Artecapital (legenda: «O que resta da casa na rua Montebelo»)", url: "https://www.artecapital.net/arq_des-155-parte-i-porto-eleito-tra-s-vezes-o-melhor-destino-europeu-patrima-nio-ameaa-ado-para-uns-renovado-para-outros-para-ingla-s-na-o-ver", sha256: 5d2f1e40bf58c515ebf2f7a06f1fc2086e526b181ecf99107c7a207ceb05a520}
+  - {papel: outra, ficheiro: outra-2.jpg, fonte: "Artecapital (legenda: «Fachada de casa na Rua Montebelo»)", url: "https://www.artecapital.net/arq_des-155-parte-i-porto-eleito-tra-s-vezes-o-melhor-destino-europeu-patrima-nio-ameaa-ado-para-uns-renovado-para-outros-para-ingla-s-na-o-ver", sha256: 9a813116eff32d44246e87b400cd5005b8909ba3673cd7e410cd38bc02a7e1ec}
 referencias:
   - titulo: "Associação em defesa da Foz Velha pede à Câmara do Porto embargo de obra em Montebelo"
     url: "https://www.rtp.pt/noticias/cultura/associacao-em-defesa-da-foz-velha-pede-a-camara-do-porto-embargo-de-obra-em-montebelo_n1065650"
