@@ -110,3 +110,4 @@
 .folha .tit .caso-abas a + a { border-left-color: #10212C; }
 .folha .tit .caso-abas a.on { background: #10212C; color: #FAFAF7; }
 .caso-filtros [hidden]{display:none}
+#filtro-ano{flex:1 0 100%}

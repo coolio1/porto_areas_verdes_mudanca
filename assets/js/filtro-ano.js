@@ -26,7 +26,7 @@
     function pintar() {
       var p = function (v) { return (v - a0) / (a1 - a0) * 100; };
       sel.style.left = p(estado.de) + '%'; sel.style.right = (100 - p(estado.ate)) + '%';
-      out.textContent = estado.de === estado.ate ? estado.de : estado.de + ' – ' + estado.ate;
+      out.textContent = estado.de === a0 && estado.ate === a1 ? '' : (estado.de === estado.ate ? estado.de : estado.de + ' – ' + estado.ate);   // intervalo escolhido; vazio = todos os anos
       Array.prototype.forEach.call(bs, function (b) { var a = +b.dataset.a; b.classList.toggle('on', a >= estado.de && a <= estado.ate); });
     }
     function mudou() { pintar(); if (aoMudar) aoMudar(estado.de, estado.ate); }
