@@ -12,6 +12,7 @@ estado: abatido
 contestacao: "A Câmara do Porto suspendeu o abate pela Infraestruturas de Portugal por falta de aviso e de estudo; moradores contestaram o corte de 2026 sem aviso nem avaliação independente."
 criterio: documental
 fotos:
+  - {papel: antes, ficheiro: antes-arvores.jpg, fonte: "O Cidadão (foto da notícia)", url: "https://ocidadao.pt/porto-camara-promete-repor-arvores-na-zona-ramalde-prelada-ate-final-de-marco/", sha256: 2cf6890d0c78dbb2679d91d5b27d8d18b1d0231b7ecea8af2166bb122e1ee19f, nota: "Fila de árvores ainda de pé junto à VCI, na zona da Prelada."}
   - {papel: depois, ficheiro: vci-arvores-cortadas-2026.jpg, ano: 2026, fonte: "O Cidadão (foto do corte na Prelada, 2026)", url: "https://ocidadao.pt/porto-camara-promete-repor-arvores-na-zona-ramalde-prelada-ate-final-de-marco/", sha256: fe58a07933447a7a1ebc8617d1d1b5268b3751a53020a251d9c0da4cb8044708}
 referencias:
   - titulo: "Câmara do Porto acusa Infraestuturas de Portugal de abater árvores sem informar município"

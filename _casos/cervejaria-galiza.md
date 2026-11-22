@@ -11,6 +11,10 @@ ano: 2020
 estado: outro
 contestacao: "Os trabalhadores fizeram greve e ocuparam o restaurante, e a Câmara aprovou por unanimidade uma moção a apelar à viabilização da cervejaria; fechou em Julho de 2020 e, em Março de 2021, o senhorio exerceu o direito de preferência."
 criterio: documental
+fotos:
+  - {papel: antes, ficheiro: antes-interior.jpg, fonte: "Time Out Porto (foto Cláudia Paiva)", url: "https://www.timeout.pt/porto/pt/noticias/cervejaria-galiza-encerra-apos-processo-de-insolvencia-070720", sha256: 78e44eb32f778682e027e7824e3a8f432559d15ccdce3d49a00bb7691673f818}
+  - {papel: antes, ficheiro: antes-fachada.jpg, ano: 2020, fonte: "Lusa, via Notícias ao Minuto", url: "https://www.noticiasaominuto.com/economia/1525214/cervejaria-galiza-no-porto-fechou-hoje-apos-ser-decretada-a-insolvencia", sha256: 260c0be947f363c65d472ecf5fc9b62eae14235079effcd93e27ad5ec203d783}
+  - {papel: depois, ficheiro: depois-nova-galiza-2022.jpg, ano: 2022, fonte: "NiT (foto da notícia da reabertura do espaço como Nova Galiza)", url: "https://www.nit.pt/comida/restaurantes/historica-cervejaria-galiza-reabre-no-porto-com-novos-proprietarios", sha256: 818c2cc39aeb506f663de431f2ceb11b2d883d22f4bd56e6cd0b7c9d5b438109}
 referencias:
   - titulo: "Mais de 10 funcionários em ação de protesto no interior da Cervejaria Galiza"
     url: "https://observador.pt/2019/11/12/mais-de-10-funcionarios-em-acao-de-protesto-no-interior-da-cervejaria-galiza/"

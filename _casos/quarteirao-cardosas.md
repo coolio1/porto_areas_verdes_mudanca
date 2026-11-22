@@ -16,6 +16,7 @@ fotos:
   - {papel: depois, ficheiro: depois-2.jpg, ano: 2011, fonte: "JPN (foto da notícia)", url: "https://jpn.up.pt/2015/04/08/reabilitacao-urbana-ainda-nao-esqueceram-as-cardosas/", sha256: aefa14f6fa66067cf8eeaad02d80f8628c4e53cda1c0b1b712e61f78c77ab5d2}
   - {papel: outra, ficheiro: obras-2010-1.jpg, ano: 2010, fonte: "A Baixa do Porto (obras no quarteirão, Dezembro de 2010)", url: "https://porto.taf.net/dp/htmlnode/7452.html", sha256: e5a3468116c094bf20acebbeb5135f9aa0bd3fdfdbf5d04a22c57d1f7360dcd2}
   - {papel: outra, ficheiro: obras-2010-2.jpg, ano: 2010, fonte: "A Baixa do Porto (obras no quarteirão, Dezembro de 2010)", url: "https://porto.taf.net/dp/htmlnode/7452.html", sha256: 5598e4e7bbcdd1e88adf693cdce0baa88f41b1bf9e21358654950cac3a9becf0}
+  - {papel: antes, ficheiro: antes-2007.jpg, ano: 2007, fonte: "AntoniusJ, Wikimedia Commons, domínio público (Palácio das Cardosas, fachada para a Praça da Liberdade)", url: "https://commons.wikimedia.org/wiki/File:Palacio_Cardosas_(Porto).JPG", sha256: c6c11c1d079d8591f70f9fd1420351defb0d68dfc6102647ec3e439d0642bee8}
 referencias:
   - titulo: "Relatório do Icomos-Portugal arrasa intervenção nas Cardosas do Porto"
     url: "https://www.publico.pt/2013/04/01/local/noticia/relatorio-do-icomosportugal-arrasa-intervencao-nas-cardosas-do-porto-1589749"

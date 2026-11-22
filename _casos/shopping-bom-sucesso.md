@@ -13,6 +13,8 @@ contestacao: "Acção popular de 1995 levou os tribunais a declarar nula a licen
 criterio: documental
 fotos:
   - {papel: outra, ficheiro: shopping-2005.jpg, ano: 2005, fonte: "mac`s from Portugal, Flickr via Wikimedia Commons, CC BY 2.0", url: "https://commons.wikimedia.org/wiki/File:CC_Cidade_do_Porto_(Porto).jpg", sha256: cb8e4dd529666394f936153c20bc72a6f9ccb21faad1e829bcaaebf1c71351bd}
+  - {papel: antes, ficheiro: antes-1849-1859.jpg, ano: 1855, fonte: "Frederick William Flower, Wikimedia Commons, domínio público (Quinta do Bom Sucesso: capela e casa, c. 1849-1859)", url: "https://commons.wikimedia.org/wiki/File:Quinta_do_Bom_Socesso.jpeg", sha256: 083187b60059c43b17aa70aa3cec2d111b5b54a1c4365821a9742f97891189c3}
+  - {papel: depois, ficheiro: depois-2009.jpg, ano: 2009, fonte: "Manuel de Sousa, Wikimedia Commons, CC BY-SA 3.0 (capela e casa da quinta hoje encostadas ao shopping)", url: "https://commons.wikimedia.org/wiki/File:Casa_Capela_Bom_Sucesso.jpg", sha256: 7ae49b9e3f4dafb01a083e85aa783d05b4993f2d2f830f689ef8f099bc3cf5e4}
 referencias:
   - titulo: "Shopping Cidade do Porto salvo por nova decisão judicial. Que pode não ser a última (Público)"
     url: "https://www.publico.pt/2020/02/10/local/noticia/shopping-cidade-porto-salvo-nova-decisao-judicial-nao-ultima-1903440"

@@ -13,6 +13,7 @@ contestacao: "Associações ambientalistas e movimentos de cidadãos contestaram
 criterio: documental
 fotos:
   - {papel: depois, ficheiro: depois-2007.jpg, ano: 2007, fonte: "Nelson Rocha, Flickr via Wikimedia Commons, CC BY 2.0", url: "https://commons.wikimedia.org/wiki/File:Av_Aliados_4_(Porto).jpg", sha256: 7977d80eccd281ffcaab268037bfa762e91cd1bc5cc9f8942d230f4a5075c7f9}
+  - {papel: antes, ficheiro: antes-jardins.jpg, fonte: "Fotografia dos jardins da Avenida dos Aliados antes das obras de 2005-2006, autor não identificado (via Blogue dos Caloiros)", url: "https://blogdoscaloiros.blogs.sapo.pt/historia-100-anos-avenida-dos-aliados-160471", sha256: 974a6ec52d1fb70164dd60f80619e47e124d1c3aa8bc582dc92c4a6fd4506c60}
 referencias:
   - titulo: "Protestos contra requalificação dos Aliados saem à rua (JPN)"
     url: "https://www.jpn.up.pt/2005/11/11/protestos-contra-requalificacao-dos-aliados-saem-a-rua/"

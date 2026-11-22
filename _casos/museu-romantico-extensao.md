@@ -12,6 +12,7 @@ estado: alterado
 contestacao: "Uma petição pública (mais de 4 000 assinaturas) pediu a reposição da decoração oitocentista, a oposição municipal e associações de museologia e de estudo do Romantismo criticaram a mudança, e uma herdeira de parte do espólio ameaçou exigir as peças de volta; a Câmara respondeu que «nada foi destruído»."
 criterio: documental
 fotos:
+  - {papel: depois, ficheiro: depois-2021.jpg, ano: 2021, fonte: "Câmara Municipal do Porto (foto no Público)", url: "https://www.publico.pt/2021/08/31/culturaipsilon/noticia/reconfiguracao-exmuseu-romantico-porto-gera-polemica-mobiliza-peticao-protesto-1975772", sha256: abb5c05578e9404369ed54635adf76af31335d0faa242f25b93ab41fadcf1612, nota: "A nova exposição «Extensão do Romantismo», sem a decoração oitocentista."}
   - {papel: antes, ficheiro: museu-romantico-sala-2009.jpg, ano: 2009, fonte: "Torradaemeiadeleite, Wikimedia Commons, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Museu_Rom%C3%A2ntico_da_Quinta_da_Macieirinha.jpg", sha256: 055e4c94efeb74929a4fb300ed1509577b6f7043f68209b2b4a0505809581fee, nota: "Sala de jantar do Museu Romântico em 2009, antes das intervenções de 2018 e de 2021 (moldura vermelha da foto original)."}
 fotos_ligadas:
   - {papel: depois, ano: 2021, fonte: "Museu do Porto (Extensão do Romantismo), direitos reservados", url: "https://museudoporto.pt/en/estacao/romanticism-extension/"}

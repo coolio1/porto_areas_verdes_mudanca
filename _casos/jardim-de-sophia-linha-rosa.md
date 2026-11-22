@@ -12,6 +12,7 @@ estado: outro
 contestacao: "Associações e uma petição pediram a revisão do projecto da Linha Rosa para evitar o abate de 65 árvores no Jardim de Sophia."
 criterio: documental
 fotos:
+  - {papel: depois, ficheiro: depois-2024.jpg, ano: 2024, fonte: "Pedro Granadeiro, Global Imagens (via Dinheiro Vivo/DN)", url: "https://dinheirovivo.dn.pt/estacao-galiza-do-metro-do-porto-coberta-com-15-vigas-de-200-toneladas", sha256: 22ccd1bc3211eb115c4ffcd4c61e295ca36884192ef132e15d9071dbc2338b7f, nota: "Obra da estação Galiza do Metro, na Praça da Galiza, em Junho de 2024."}
   - {papel: antes, ficheiro: jardim-sophia-2018-1.jpg, ano: 2018, fonte: "-wuppertaler, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:POR_Porto_Jardim_Sophia_01.jpg", sha256: 6bd296075eda061e29bed409dc1cbd7e7fc0e2fd6c19f7298622da3efc770371, nota: "Ribeiro e lajes do jardim, antes da obra."}
   - {papel: outra, ficheiro: jardim-sophia-2018-2.jpg, ano: 2018, fonte: "-wuppertaler, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:POR_Porto_Jardim_Sophia_02.jpg", sha256: 6d821e9f86c06b119b15e6b760bf864141ccb9a8029450141d2ffe30561e1442, nota: "Lajes e ribeiro, antes da obra."}
   - {papel: outra, ficheiro: jardim-sophia-2018-3.jpg, ano: 2018, fonte: "-wuppertaler, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:POR_Porto_Jardim_Sophia_03.jpg", sha256: c5c21cc2871705034295c6597cf7cea406c4a336cc8a303f2a393cb6154c4fc1, nota: "Lago e repuxos, antes da obra."}

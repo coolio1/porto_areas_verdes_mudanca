@@ -14,6 +14,7 @@ criterio: documental
 fotos:
   - {papel: antes, ficheiro: antes-2009.jpg, ano: 2009, fonte: "Manuel de Sousa, Wikimedia Commons, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Hospital_Maria_Pia_(Porto).jpg", sha256: c941c827f88650da812e8f9edd30f37f1afabe23d436736341035e0d11ae0aec, nota: "Fachada para a Rua da Boavista, em 2009."}
   - {papel: outra, ficheiro: outra-2015.jpg, ano: 2015, fonte: "Joehawkins, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Hospital_Maria_Pia.JPG", sha256: cd772e32a79e42b16fd0d0e9d3914343163ccbe72800918b00b518dcd0084b73, nota: "Corpo lateral com o letreiro «Hospital Maria Pia, fundado em 1882», em 2015, três anos depois do encerramento."}
+  - {papel: depois, ficheiro: depois-2022.jpg, ano: 2022, fonte: "Público (foto da notícia, 2022)", url: "https://www.publico.pt/2022/02/07/local/noticia/camara-porto-admite-classificar-antigo-hospital-maria-pia-1994533", sha256: d0dfcd98b5ca0fb2777bc1b7450bd6b2e8b6a565317fb575e96644482f09616a, nota: "Fachada do antigo hospital, vedada, quando a Câmara admitiu classificá-lo (2022)."}
 referencias:
   - titulo: "Antigo Hospital Maria Pia do Porto será hotel de quatro estrelas"
     url: "https://www.jn.pt/pais/artigo/antigo-hospital-maria-pia-do-porto-sera-hotel-de-quatro-estrelas/13368546"

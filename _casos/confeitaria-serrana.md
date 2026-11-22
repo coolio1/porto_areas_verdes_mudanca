@@ -12,6 +12,7 @@ estado: alterado
 contestacao: "A Câmara do Porto fez participação de contra-ordenação, o ICOMOS Portugal pediu esclarecimentos e o Bloco de Esquerda denunciou a demolição ilegal."
 criterio: documental
 fotos:
+  - {papel: depois, ficheiro: depois-2026.jpg, ano: 2026, fonte: "Manuel Roberto, Público", url: "https://www.publico.pt/2026/11/10/local/noticia/dono-lello-falhou-trabalhos-arqueologicos-serrana-causou-perda-irreversivel-patrimonio-2194345", sha256: f218f8424ae150303cdb9da6b01fc01229a0a7218b94870dbc088af265b0412d, nota: "O interior do edifício foi totalmente demolido, segundo a legenda do Público."}
   - {papel: antes, ficheiro: serrana-interior-2014.jpg, ano: 2014, fonte: "João Rio, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Vista_da_pintura_de_Acacio_Lino_e_das_esculturas_de_anjos_de_Jose_de_Oliveira_Ferreira.JPG", sha256: 1bc6e9bac67daa4ca39e10416d004a9919ce8ff630014dc91326cc4374d5b329, nota: "Interior antes da demolição: tecto pintado e galeria."}
   - {papel: outra, ficheiro: serrana-interior-2012.jpg, ano: 2012, fonte: "Joao Pires, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Pastelaria_Serrana.JPG", sha256: caeee12fb3b6b2ff0a2e5daf454d48bf1f1eb9a86911c4bef0094a54da323928, nota: "Interior antes da demolição: tecto e escultura de anjo."}
 referencias:

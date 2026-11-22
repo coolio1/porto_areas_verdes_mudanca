@@ -14,6 +14,7 @@ criterio: documental
 fotos:
   - {papel: antes, ficheiro: estacao-boavista-2008.jpg, ano: 2008, fonte: "Nuno Morão, Flickr, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Flickr_-_nmorao_-_Esta%C3%A7%C3%A3o_da_Boavista,_2008.03.17.jpg", sha256: c6bc9af0a8633458a623dc8382cb3b5c0cdf1e9001b92c634b7b9c21191b7137, nota: "Edifício de passageiros e cobertura metálica em ruína."}
   - {papel: outra, ficheiro: estacao-boavista-2009.jpg, ano: 2009, fonte: "Antero Pires, Flickr, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Esta%C3%A7%C3%A3o_ferrovi%C3%A1ria_Boavista.jpg", sha256: 0b58d50757ecddfcaa787a95a32305b40256047fbd5dbfb2f086c1666be12ac9, nota: "Fachada, Praça de Mouzinho de Albuquerque."}
+  - {papel: depois, ficheiro: depois-2022.jpg, ano: 2022, fonte: "Público (foto da notícia do protesto contra a demolição)", url: "https://www.publico.pt/2022/02/10/local/noticia/demolicao-estacao-boavista-porto-vontade-populacao-movimento-1995017", sha256: 8b03c7e6805f1d0e311b47fa5d79123809227365016fca5ef9f6e2e3da092bc3}
 referencias:
   - titulo: "Desafetação do domínio público confirma demolição da estação da Boavista no Porto"
     url: "https://observador.pt/2022/02/08/desafetacao-do-dominio-publico-confirma-demolicao-da-estacao-da-boavista-no-porto/"

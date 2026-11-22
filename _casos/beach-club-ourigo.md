@@ -12,6 +12,7 @@ estado: outro
 contestacao: "A ADERE, o PSD e a CDU pediram o embargo; a APA ordenou a suspensão e a demolição em 2021 e a Inspecção-Geral concluiu que a concessão não podia ter sido atribuída."
 criterio: documental
 fotos:
+  - {papel: depois, ficheiro: depois-2026.jpg, ano: 2026, fonte: "Postal (foto da notícia sobre o início da demolição)", url: "https://postal.pt/nacional/lembra-se-deste-bar-de-praia-apa-comecou-a-demolir-o-pequeno-monstro-que-estava-ha-anos-em-ruinas/", sha256: d01405e148b38027ed6b53802373e211371e3702ffeafed462dddde650168587, nota: "A estrutura de betão na Praia do Ourigo durante a demolição, em 2026."}
   - {papel: antes, ficheiro: ourigo-praia-2013.jpg, ano: 2013, fonte: "Vitor Oliveira, Wikimedia Commons, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Praia_de_Ourigo_-_Porto_-_Portugal_(10914460823).jpg", sha256: 0eb3c1878e08977889396ed85440f20272312884a60e4488af56fb38af174c46, nota: "A praia do Ourigo vista da muralha em 2013, sem construção sobre o areal."}
 fotos_ligadas:
   - {papel: depois, fonte: "Observador/Lusa (2026)", url: "https://observador.pt/2026/07/20/camara-do-porto-remete-prazos-da-demolicao-do-edificio-transparente-para-final-do-ano/"}

@@ -14,6 +14,7 @@ criterio: documental
 fotos:
   - {papel: outra, ficheiro: outra-1.jpg, fonte: "Artecapital (legenda: «O que resta da casa na rua Montebelo»)", url: "https://www.artecapital.net/arq_des-155-parte-i-porto-eleito-tra-s-vezes-o-melhor-destino-europeu-patrima-nio-ameaa-ado-para-uns-renovado-para-outros-para-ingla-s-na-o-ver", sha256: 5d2f1e40bf58c515ebf2f7a06f1fc2086e526b181ecf99107c7a207ceb05a520}
   - {papel: outra, ficheiro: outra-2.jpg, fonte: "Artecapital (legenda: «Fachada de casa na Rua Montebelo»)", url: "https://www.artecapital.net/arq_des-155-parte-i-porto-eleito-tra-s-vezes-o-melhor-destino-europeu-patrima-nio-ameaa-ado-para-uns-renovado-para-outros-para-ingla-s-na-o-ver", sha256: 9a813116eff32d44246e87b400cd5005b8909ba3673cd7e410cd38bc02a7e1ec}
+  - {papel: depois, ficheiro: obra-2018.jpg, ano: 2018, fonte: "DR, Público (legenda: «Obras em Montebelo já começaram, mas há uma ordem judicial para que não prossigam»)", url: "https://www.publico.pt/2018/05/05/local/noticia/ministerio-publico-nao-ve-razoes-para-contestar-obra-na-foz-velha-1827233", sha256: de4e567d45cb7e58a9523e9de9e930d27b0b7be607c89d6bb562a577e3cfb663}
 referencias:
   - titulo: "Associação em defesa da Foz Velha pede à Câmara do Porto embargo de obra em Montebelo"
     url: "https://www.rtp.pt/noticias/cultura/associacao-em-defesa-da-foz-velha-pede-a-camara-do-porto-embargo-de-obra-em-montebelo_n1065650"

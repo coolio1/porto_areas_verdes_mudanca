@@ -14,6 +14,7 @@ criterio: documental
 fotos_ligadas:
   - {papel: depois, fonte: "Público (fotogaleria, 2022)", url: "https://www.publico.pt/2022/07/02/local/noticia/montepio-abateu-dezenas-arvores-porte-centro-porto-2012143"}
 fotos:
+  - {papel: antes, ficheiro: antes-2012.jpg, ano: 2012, fonte: "J. Portojo, blogue A Vida em Fotos", url: "http://portojofotos.blogspot.com/2012/05/129-do-largo-de-mompilher-ate-ao.html", sha256: 716b2eb6ea7e9d6da750d53a1ed6ef2c59ed4a3c2337c36fe9f1f55129b1d771, nota: "A Quinta do Pinheiro em 2012, com o arvoredo e o edifício, vista através da vedação."}
   - {papel: depois, ficheiro: depois-1.jpg, ano: 2022, fonte: "Público (foto da notícia)", url: "https://www.publico.pt/2022/07/02/local/noticia/montepio-abateu-dezenas-arvores-porte-centro-porto-2012143", sha256: fb173e4a0dadf6dc1796482c206d5dd391f009137d47268f4b7d4a288b7dfd73}
 referencias:
   - titulo: "Montepio abateu dezenas de árvores de grande porte no centro do Porto"

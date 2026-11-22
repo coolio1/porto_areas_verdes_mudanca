@@ -11,6 +11,9 @@ ano: 2025
 estado: outro
 contestacao: "Uma petição com 1516 assinaturas pede a suspensão de novas decisões e diz as torres em «total dissonância do entorno»; foi criada uma associação contra o projecto."
 criterio: documental
+fotos:
+  - {papel: antes, ficheiro: antes-ortofoto.jpg, fonte: "Câmara Municipal do Porto, Memória Descritiva do Loteamento UE1 (ortofoto da UOPG1 com os limites das unidades de execução, consulta pública 2025)", url: "https://forum.mubi.pt/uploads/short-url/2oE9Mn08td4d4pqqK0fzR8adxEB.pdf", sha256: 2b91c2c31bc35dcb8c3793a947c009d8510e58146a7d9381d38431ebfe5621de}
+  - {papel: depois, ficheiro: projecto-modelo3d.jpg, ano: 2025, fonte: "Projecto (modelo 3D da proposta de loteamento, não é foto da obra), publicado pelo Público", url: "https://www.publico.pt/2025/07/10/local/noticia/loteamento-avenida-nun-alvares-porto-possibilita-torres-ate-25-andares-2139759", sha256: 9317ddf1390f1df60eb77abf8caf30dd6dd915ea66dc2e1870eeb1a79d74d685}
 referencias:
   - titulo: "Petição para suspender projeto das torres até 25 andares no Porto com 1.500 assinaturas"
     url: "https://observador.pt/2025/09/01/peticao-para-suspender-projeto-das-torres-ate-25-andares-no-porto-com-1-500-assinaturas/"

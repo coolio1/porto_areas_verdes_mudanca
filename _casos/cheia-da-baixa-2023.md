@@ -12,7 +12,8 @@ estado: outro
 contestacao: "A Câmara apontou as obras do metro como a única variável nova e a Metro do Porto afirmou o contrário; um relatório do LNEC concluiu que as obras agravaram a inundação, e um vereador da oposição pediu escrutínio."
 criterio: documental
 fotos:
-  - {papel: outra, ficheiro: enxurrada-2023.jpg, ano: 2023, fonte: "Pedro Granadeiro / Global Imagens, no Jornal de Notícias (legenda: «Enxurrada aconteceu no dia 7 de janeiro»)", url: "https://www.jn.pt/pais/artigo/enxurrada-na-baixa-do-porto-agravada-pelas-obras-do-metro/17796747", sha256: c876d729664115a8d5277951b97d48f9b492c33f1521539e9eb042b4f37d86c2}
+  - {papel: depois, ficheiro: enxurrada-2023.jpg, ano: 2023, fonte: "Pedro Granadeiro / Global Imagens, no Jornal de Notícias (legenda: «Enxurrada aconteceu no dia 7 de janeiro»)", url: "https://www.jn.pt/pais/artigo/enxurrada-na-baixa-do-porto-agravada-pelas-obras-do-metro/17796747", sha256: c876d729664115a8d5277951b97d48f9b492c33f1521539e9eb042b4f37d86c2}
+  - {papel: antes, ficheiro: antes-2012.jpg, ano: 2012, fonte: "Diego Delso, Wikimedia Commons, CC BY-SA 3.0 (Rua de Mouzinho da Silveira)", url: "https://commons.wikimedia.org/wiki/File:Rua_de_Mouzinho_da_Silveira,_Oporto,_Portugal,_2012-05-09,_DD_01.JPG", sha256: 78bfeec37f949a4d0ea144667a8703e57e9fbcbd4b33a454131d9475aeb1f7ec}
 referencias:
   - titulo: "Câmara: A «única variável nova» nas inundações no Porto são as obras do metro"
     url: "https://www.publico.pt/2023/01/09/local/noticia/camara-unica-variavel-nova-inundacoes-porto-sao-obras-metro-2034363"

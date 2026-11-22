@@ -13,6 +13,7 @@ contestacao: "Moradores pediram o embargo de uma moradia cujo telhado ultrapassa
 criterio: documental
 fotos:
   - {papel: antes, ficheiro: antes-2017.jpg, ano: 2017, fonte: "-wuppertaler, Wikimedia Commons, CC BY-SA 4.0 (passeio e miradouro, sem a moradia)", url: "https://commons.wikimedia.org/wiki/File:POR_Porto_Passeio_Fontainhas_02.jpg", sha256: f26a87263c96d7148e06fa5599504327640f41ae3bf823854c37ed60ce998215}
+  - {papel: depois, ficheiro: depois-2019.jpg, ano: 2019, fonte: "Público (foto da notícia sobre a obra já alterada, Setembro de 2019)", url: "https://www.publico.pt/2019/09/27/local/noticia/afinal-povo-qualquer-polemica-obra-fontainhas-ja-alterada-1888000", sha256: 4761565c2d181cb9ddc93ccbbaf2b284e266dd7085e4611bff0d18f49652871b, nota: "Cobertura da moradia em demolição ao lado do muro do passeio, depois de o projecto ser alterado."}
 referencias:
   - titulo: "Moradores das Fontainhas pedem embargo de obra que tapa vistas para o Douro"
     url: "https://www.publico.pt/2019/07/17/local/noticia/moradores-fontainhas-pedem-embargo-obra-tapa-vistas-douro-1880299"

@@ -13,6 +13,7 @@ contestacao: "A Câmara atribuiu os furos a acção humana deliberada e admitiu 
 criterio: documental
 fotos:
   - {papel: depois, ficheiro: depois-1.jpg, ano: 2023, fonte: "Público (foto dos furos nos troncos, Maio de 2023)", url: "https://www.publico.pt/2023/05/08/local/noticia/vandalismo-arvores-classificadas-porto-investigado-acto-lamentavel-2048850", sha256: b4383323c5b4ced0c09c1ffb0569281b8adc6b8201d17ad411ed66d8a4e9194e}
+  - {papel: antes, ficheiro: antes-2014.jpg, ano: 2014, fonte: "jad99, Wikimedia Commons (Flickr), CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Jardins_da_Avenida_de_Montevideu_(14027395583).jpg", sha256: f3495035a79749f7d1451a753becb3f029950b1ab9bef09aba485d0fb79d9ec4}
 referencias:
   - titulo: "Vinte e sete árvores afetadas no Porto depois de injetados pesticidas"
     url: "https://observador.pt/2023/05/08/vinte-e-sete-arvores-afetadas-no-porto-depois-de-injetados-pesticidas/"

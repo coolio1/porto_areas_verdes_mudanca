@@ -14,6 +14,7 @@ criterio: documental
 fotos:
   - {papel: antes, ficheiro: seminario-jardim-2007.jpg, ano: 2007, fonte: "António Amen, Wikimedia Commons, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:S%C3%A9-Igreja_de_S._Louren%C3%A7o_-_Semin%C3%A1rio_Maior_(1).jpg", sha256: 484338ff8d186a2b1e3f41ec6919a7361f0ad635d1ebe2ea34122ee943a0b612, nota: "Edifício do Seminário Maior e jardim fronteiro em 2007; não mostra os socalcos em causa."}
   - {papel: outra, ficheiro: seminario-ponte-maria-pia-c1910.jpg, ano: 1910, fonte: "Henrique António Guedes de Oliveira, Wikimedia Commons, domínio público", url: "https://commons.wikimedia.org/wiki/File:Ponte_Maria_Pia_e_Semin%C3%A1rio_Maior_do_Porto.jpg", sha256: 50a31c88195eb1714ade07903a3a873e6fb24402d385066660e0555343f58f76, nota: "O Seminário Maior no morro, junto à Ponte Maria Pia (c. 1910-1919); contexto histórico."}
+  - {papel: depois, ficheiro: depois-2026.jpg, ano: 2026, fonte: "Jornal de Notícias (foto da notícia sobre a petição, jardim do Seminário Maior)", url: "https://www.jn.pt/pais/artigo/porto-peticao-contesta-obra-da-diocese-no-morro-da-se/18116296", sha256: 541932c8d4eccfdac09e566d2ff307a428e318a1d940c7df4572c55c30e9df66}
 referencias:
   - titulo: "Petição apela à preservação dos jardins da Sé do Porto"
     url: "https://www.jn.pt/pais/artigo/peticao-apela-a-preservacao-dos-jardins-da-se-do-porto/18115004"

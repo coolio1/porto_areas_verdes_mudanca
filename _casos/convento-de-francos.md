@@ -13,6 +13,7 @@ contestacao: "Um artigo de opinião defende que a classificação municipal o po
 criterio: documental
 fotos:
   - {papel: antes, ficheiro: convento-2026.jpg, ano: 2026, fonte: "Observador (imagem de Street View ilustrativa da notícia, Janeiro de 2026)", url: "https://observador.pt/2026/01/27/convento-de-francos-parcialmente-demolido-para-dar-lugar-a-empreendimento-no-porto/", sha256: 14734393c0e4157360f02d4f576846e46dbd1681254b202715006a9b3c33406b}
+  - {papel: depois, ficheiro: projecto-portogardens.jpg, fonte: "Projecto: imagem de arquitectura do empreendimento PortoGardens, via Viva Porto (render, não é foto da obra)", url: "https://viva-porto.pt/este-convento-no-porto-vai-ganhar-nova-vida-e-ja-esta-a-ser-demolido/", sha256: 7d75813afb6ee2fc9cf2e0b4e6dde936a740841dd80096af6b042511e1da36b9}
 referencias:
   - titulo: "Convento de Francos parcialmente demolido para dar lugar a empreendimento no Porto"
     url: "https://observador.pt/2026/01/27/convento-de-francos-parcialmente-demolido-para-dar-lugar-a-empreendimento-no-porto/"
