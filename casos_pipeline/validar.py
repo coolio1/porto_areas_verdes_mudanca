@@ -95,7 +95,24 @@ def validar_todos(raiz: Path = RAIZ, raiz_fontes: Path = FONTES, raiz_media: Pat
     return out
 
 
+def sem_par(raiz: Path = RAIZ) -> dict:
+    """{slug: papéis em falta} dos casos sem foto de antes e/ou de depois (regra MUST de 2026-11-22; ver docs/horrores.md)."""
+    out = {}
+    for c in listar_casos(raiz):
+        papeis = {f.get("papel") for f in c.get("fotos") or []}
+        falta = [p for p in ("antes", "depois") if p not in papeis]
+        if falta:
+            out[c["slug"]] = falta
+    return out
+
+
 if __name__ == "__main__":
+    if "--pares" in sys.argv:
+        faltas = sem_par()
+        for slug, f in faltas.items():
+            print(f"{slug}: falta {' e '.join(f)}")
+        print(f"{len(listar_casos())} casos, {len(faltas)} sem o par antes/depois")
+        sys.exit(1 if faltas else 0)
     resultado = validar_todos()
     for slug, erros in resultado.items():
         print(f"{slug}:", *erros, sep="\n  - ")

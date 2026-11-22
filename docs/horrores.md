@@ -18,7 +18,8 @@ Mapa e galeria de casos conhecidos no Porto: destruição ou perda urbanística,
 - Sem nomes de pessoas singulares; voz neutra; juízo atribuído à fonte («segundo …»); instituições só se constarem da fonte.
 - Só dentro do Porto (CAOP, `dtmn` 1312); `freguesia` derivada, não escrita.
 - **Fotos (decisão do utilizador, 2026-11-21, revoga o «nunca copiar»):** copiar a foto da página da fonte (imprensa, arquivo, Commons, Flickr CC) para `Horrores/media/<slug>/` (JPEG ≤ 900 px) e creditar sempre: `fotos: [{papel, ficheiro, ano, fonte (meio ou autor), url (página de origem), sha256}]`; revisão humana foto a foto. `fotos_ligadas` fica só para fotos que não se conseguem obter. Nunca fotos de utilizadores do Google Maps; Street View/Earth só com termos confirmados.
-- Antes/depois em par não é obrigatório; página mostra lado a lado (maquete A, aprovada 2026-11-21).
+- **MUST (utilizador, 2026-11-22): todo o caso publicado leva foto de antes E de depois, custe o que custar** (revoga «par não obrigatório»). Caso novo → só entra em `_casos/` com o par; sem par → fica em rascunhos. Casos antigos sem par: completar por lotes (`python -m casos_pipeline.validar --pares` lista os que faltam). Vias: foto da fonte, Arquivo Municipal, Commons/Flickr CC, Wayback; Street View/Earth só depois de confirmar os termos.
+- Página mostra antes/depois lado a lado (maquete A, aprovada 2026-11-21).
 - Cobertura nunca «completa»: «casos conhecidos e documentados».
 - Não fundir com os 50 Espaços (layout congelado).
 
