@@ -12,6 +12,8 @@ estado: outro
 contestacao: "A Câmara actual diz que vai avaliar o projecto licenciado pelo executivo anterior, e uma associação de bares defende que a Câmara devia adquirir o imóvel."
 criterio: documental
 fotos:
+  - {papel: antes, ficheiro: antes-2007.jpg, ano: 2007, fonte: "Manuel de Sousa, Wikimedia Commons, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Cafe_Bela_Cruz_(Porto).JPG", sha256: 463bebafbb085774ef65d7af37b8c8cd28c820190c9bf61deee73bc009a77801}
+  - {papel: antes, ficheiro: antes-2012.jpg, ano: 2012, fonte: "Vitor Oliveira, Flickr via Wikimedia Commons, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Caf%C3%A9_Bela_Cruz_-_Porto_-_Portugal_(6885577436).jpg", sha256: dee74f810910b16ff5e40e352b91b1af34bff7bd7c34e1f9dc55c0019e66ef3d}
   - {papel: antes, ficheiro: bela-cruz-2026.jpg, ano: 2026, fonte: "Sábado (foto do edifício, Maio de 2026)", url: "https://www.sabado.pt/portugal/amp/cafe-bela-cruz-demolido-para-dar-lugar-a-habitacao-camara-do-porto-vai-avaliar", sha256: 8d80a24d764e617042723f59378dfddf892fa6acf8f2d88cf149c8b4647ab2f2}
 referencias:
   - titulo: "Café Bela Cruz demolido para dar lugar a habitação, Câmara do Porto vai avaliar"

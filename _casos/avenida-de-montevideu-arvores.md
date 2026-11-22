@@ -11,6 +11,8 @@ ano: 2023
 estado: outro
 contestacao: "A Câmara atribuiu os furos a acção humana deliberada e admitiu suspeita de pesticida; produto, autor e resultado da análise não foram divulgados."
 criterio: documental
+fotos:
+  - {papel: depois, ficheiro: depois-1.jpg, ano: 2023, fonte: "Público (foto dos furos nos troncos, Maio de 2023)", url: "https://www.publico.pt/2023/05/08/local/noticia/vandalismo-arvores-classificadas-porto-investigado-acto-lamentavel-2048850", sha256: b4383323c5b4ced0c09c1ffb0569281b8adc6b8201d17ad411ed66d8a4e9194e}
 referencias:
   - titulo: "Vinte e sete árvores afetadas no Porto depois de injetados pesticidas"
     url: "https://observador.pt/2023/05/08/vinte-e-sete-arvores-afetadas-no-porto-depois-de-injetados-pesticidas/"
