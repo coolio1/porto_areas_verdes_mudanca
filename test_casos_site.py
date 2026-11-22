@@ -102,3 +102,19 @@ def test_layout_campanha_usa_o_template_comum():
     for f in ("campanha", "imprensa", "estudos"):
         t = (RAIZ / f"50espacos/{f}.md").read_text(encoding="utf-8")
         assert "folha: true" in t and "folha_em:" in t and "folha_texto:" in t, f
+
+
+def test_script_da_lista_tem_sintaxe_valida():
+    """O JS embutido em casos/lista/index.html tem de compilar (um resto de edição já o deixou morto no ar)."""
+    import re, shutil, subprocess, tempfile
+    node = shutil.which("node")
+    if not node:
+        import pytest
+        pytest.skip("node não instalado")
+    h = (RAIZ / "casos/lista/index.html").read_text(encoding="utf-8")
+    blocos = [b for b in re.findall(r"<script>(.*?)</script>", h, re.S) if "FiltroAno" in b]
+    assert blocos
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False, encoding="utf-8") as f:
+        f.write(blocos[0])
+    r = subprocess.run([node, "--check", f.name], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr

@@ -87,8 +87,5 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
   q('button[data-tipo]').forEach(function (b) { b.addEventListener('click', function () { tipo = tipo === b.dataset.tipo ? '' : b.dataset.tipo; aplicar(); }); });
   FiltroAno.criar(q('#filtro-ano')[0], cartoes.map(function (li) { return li.dataset.ano; }), function (d, a) { de = d; ate = a; aplicar(); });
   aplicar();
-    });
-  });
-  aplicar();
 })();
 </script>
