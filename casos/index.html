@@ -364,7 +364,7 @@ body.mu-dossie .pv-rodape__nome{font-weight:700}body.mu-dossie .pv-rodape__fonte
 .dos-todos{display:inline-block;margin-top:22px;font:500 13px var(--mono);color:var(--marca)}
 @media (max-width:900px){.dos-mapa{grid-template-columns:1fr;height:auto}.mu-dossie #map{height:60vh}.dos-grelha{grid-template-columns:repeat(2,minmax(0,1fr))}.dos-frame{--m:14px}.dos-titulo,.dos-mapa,.dos-cartoes{padding-left:10px;padding-right:10px}.dos-n{padding:14px 10px}}
 @media (max-width:560px){.dos-grelha{grid-template-columns:1fr}.dos-n b{font-size:30px}}
-.casos-grupo{margin:4px 0 6px}.casos-grupo .sub{display:block;margin-left:28px;font-size:12.5px}
+.casos-grupo{margin:4px 0 6px}.casos-grupo .sub{margin-left:20px;font-size:12.5px}.casos-grupo .gr .sw:empty{display:none}
 .casos-ind li[hidden]{display:none}
 .fa{--fa-cor:var(--tinta,#10212C);--fa-suave:var(--suave,#6b7a85);--fa-fino:var(--fino,#d6dde2);margin:2px 0 6px;max-width:420px}
 .fa-barras{display:flex;align-items:flex-end;gap:2px;height:46px}
@@ -1220,14 +1220,14 @@ body.mu-dossie .pv-rodape__nome{font-weight:700}body.mu-dossie .pv-rodape__fonte
             '</span>' + GAL[g] + ' <em>' + N.por_galeria[g] + '</em></label>';
         }).join('') +
         MU.cab2('Ano', 'casos por ano') + '<div id="casos-anos"></div>' +
-        MU.cab2('Tipo', 'forma do marcador = grupo') + GRUPOS.map(function (g) {
+        MU.cab2('Tipo', 'ícone = o do mapa') + GRUPOS.map(function (g) {
           var ts = g[2].filter(function (t) { return (N.por_tipo[t[0]] || 0) > 0; });
           if (!ts.length) return '';
           var n = ts.reduce(function (s, t) { return s + N.por_tipo[t[0]]; }, 0);
           return '<div class="casos-grupo"><label class="gr"><input type="checkbox" data-grupo="' + g[0] + '" checked><span class="sw">' +
-            svg(g[0], '#10212C', false, 20) + '</span><strong>' + g[1] + '</strong> <em>' + n + '</em></label>' +
+            (ts.length === 1 ? svg(ts[0][0], COR.horrores, false, 20) : '') + '</span><strong>' + g[1] + '</strong> <em>' + n + '</em></label>' +
             (ts.length > 1 ? ts.map(function (t) {
-              return '<label class="sub"><input type="checkbox" data-tipo="' + t[0] + '" checked>' + t[1] + ' <em>' + N.por_tipo[t[0]] + '</em></label>';
+              return '<label class="sub"><input type="checkbox" data-tipo="' + t[0] + '" checked><span class="sw">' + svg(t[0], COR.horrores, false, 18) + '</span>' + t[1] + ' <em>' + N.por_tipo[t[0]] + '</em></label>';
             }).join('') : '<input type="checkbox" data-tipo="' + ts[0][0] + '" checked hidden>') + '</div>';
         }).join('') +
         '<p class="tema-sub">Contorno tracejado: localização aproximada.</p></div>' +

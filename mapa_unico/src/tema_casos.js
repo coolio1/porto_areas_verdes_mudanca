@@ -102,14 +102,14 @@
             '</span>' + GAL[g] + ' <em>' + N.por_galeria[g] + '</em></label>';
         }).join('') +
         MU.cab2('Ano', 'casos por ano') + '<div id="casos-anos"></div>' +
-        MU.cab2('Tipo', 'forma do marcador = grupo') + GRUPOS.map(function (g) {
+        MU.cab2('Tipo', 'ícone = o do mapa') + GRUPOS.map(function (g) {
           var ts = g[2].filter(function (t) { return (N.por_tipo[t[0]] || 0) > 0; });
           if (!ts.length) return '';
           var n = ts.reduce(function (s, t) { return s + N.por_tipo[t[0]]; }, 0);
           return '<div class="casos-grupo"><label class="gr"><input type="checkbox" data-grupo="' + g[0] + '" checked><span class="sw">' +
-            svg(g[0], '#10212C', false, 20) + '</span><strong>' + g[1] + '</strong> <em>' + n + '</em></label>' +
+            (ts.length === 1 ? svg(ts[0][0], COR.horrores, false, 20) : '') + '</span><strong>' + g[1] + '</strong> <em>' + n + '</em></label>' +
             (ts.length > 1 ? ts.map(function (t) {
-              return '<label class="sub"><input type="checkbox" data-tipo="' + t[0] + '" checked>' + t[1] + ' <em>' + N.por_tipo[t[0]] + '</em></label>';
+              return '<label class="sub"><input type="checkbox" data-tipo="' + t[0] + '" checked><span class="sw">' + svg(t[0], COR.horrores, false, 18) + '</span>' + t[1] + ' <em>' + N.por_tipo[t[0]] + '</em></label>';
             }).join('') : '<input type="checkbox" data-tipo="' + ts[0][0] + '" checked hidden>') + '</div>';
         }).join('') +
         '<p class="tema-sub">Contorno tracejado: localização aproximada.</p></div>' +
