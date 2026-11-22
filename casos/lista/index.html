@@ -7,11 +7,10 @@ folha: true
 description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com fonte e fotos de antes e depois."
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/casos.css?v={{ site.time | date: '%s' }}">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/filtro-ano.css?v={{ site.time | date: '%s' }}">
 {%- assign grupos_ = "verde_agua:Verde e água:arvores,agua,frente_agua|espaco_publico:Espaço público:praca|edificado:Edificado:demolicao,construcao_intrusiva,patrimonio_alterado|memoria:Memória e vida urbana:lojas_historicas,equipamentos,arte_publica,arqueologia" | split: "|" -%}
 {%- assign tipos_ = "arvores:Árvores e verde|agua:Ribeiras e água|frente_agua:Frente de rio e mar|praca:Praças e ruas|demolicao:Demolições|construcao_intrusiva:Construções intrusivas|patrimonio_alterado:Património alterado|lojas_historicas:Lojas históricas|equipamentos:Equipamentos colectivos|arte_publica:Arte pública e azulejos|arqueologia:Arqueologia e muralhas" | split: "|" -%}
 {%- assign casos_ = site.casos | sort: "ano" | reverse -%}
-{%- assign anos_ = site.casos | map: "ano" | sort -%}
-{%- assign a0_ = anos_ | first -%}{%- assign a1_ = anos_ | last -%}
 {%- assign n_h_ = site.casos | where: "galeria", "horrores" | size -%}
 {%- assign n_s_ = site.casos | where: "galeria", "sucessos" | size -%}
 {%- capture lado_ %}<nav class="caso-abas" aria-label="Vista"><a href="{{ '/casos/' | relative_url }}">Mapa</a><a href="{{ '/casos/lista/' | relative_url }}" aria-current="page" class="on">Lista</a></nav>{% endcapture -%}
@@ -37,13 +36,7 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
       <button type="button" data-tipo="{{ par_[0] }}" data-de="{% for g in grupos_ %}{% assign gp_ = g | split: ":" %}{% assign ts_ = gp_[2] | split: "," %}{% if ts_ contains par_[0] %}{{ gp_[0] }}{% endif %}{% endfor %}" aria-pressed="false" hidden>{{ par_[1] }}</button>
       {%- endfor %}
     </div>
-    {%- if a0_ != a1_ %}
-    <div class="caso-anos" role="group" aria-label="Ano">
-      <label>De <input type="range" min="{{ a0_ }}" max="{{ a1_ }}" step="1" value="{{ a0_ }}" data-ano="de" aria-label="Ano inicial"></label>
-      <label>Até <input type="range" min="{{ a0_ }}" max="{{ a1_ }}" step="1" value="{{ a1_ }}" data-ano="ate" aria-label="Ano final"></label>
-      <output class="caso-mono" id="anos-out">{{ a0_ }} – {{ a1_ }}</output>
-    </div>
-    {%- endif %}
+    <div id="filtro-ano"></div>
   </div>
 
   <ul class="caso-grelha">
@@ -65,13 +58,12 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
   <a class="caso-mapa" href="{{ '/casos/' | relative_url }}">Ver todos no mapa →</a>
 </div>
 {% include folha-fecha.html %}
+<script src="{{ site.baseurl }}/assets/js/filtro-ano.js?v={{ site.time | date: '%s' }}"></script>
 <script>
 (function () {
   var q = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var cartoes = q('.caso-grelha li'); if (!cartoes.length) return;
   var gal = 'horrores', grupo = '', tipo = '', de = 0, ate = 9999;
-  var rde = q('input[data-ano=de]')[0], rate = q('input[data-ano=ate]')[0];
-  if (rde) { de = +rde.value; ate = +rate.value; }
   var tem = function (attr, v) { return cartoes.some(function (li) { return li.dataset.galeria === gal && li.dataset[attr] === v; }); };
   function aplicar() {
     var n = 0;
@@ -93,14 +85,8 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
   q('button[data-galeria]').forEach(function (b) { b.addEventListener('click', function () { gal = b.dataset.galeria; grupo = tipo = ''; aplicar(); }); });
   q('button[data-grupo]').forEach(function (b) { b.addEventListener('click', function () { grupo = b.dataset.grupo; tipo = ''; aplicar(); }); });
   q('button[data-tipo]').forEach(function (b) { b.addEventListener('click', function () { tipo = tipo === b.dataset.tipo ? '' : b.dataset.tipo; aplicar(); }); });
-  [rde, rate].forEach(function (r) {
-    if (!r) return;
-    r.addEventListener('input', function () {   // os cursores não se cruzam
-      if (r === rde && +rde.value > +rate.value) rate.value = rde.value;
-      if (r === rate && +rate.value < +rde.value) rde.value = rate.value;
-      de = +rde.value; ate = +rate.value;
-      q('#anos-out')[0].textContent = de === ate ? de : de + ' – ' + ate;
-      aplicar();
+  FiltroAno.criar(q('#filtro-ano')[0], cartoes.map(function (li) { return li.dataset.ano; }), function (d, a) { de = d; ate = a; aplicar(); });
+  aplicar();
     });
   });
   aplicar();

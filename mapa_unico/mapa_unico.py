@@ -344,11 +344,13 @@ def escrever_dados() -> None:
 
 def _montar_html(temas, saida: Path, pagina: str, titulo: str, descricao: str, init: str = "", modelo: str = "template.html") -> None:
     js = (SRC / "core.js").read_text(encoding="utf-8")
+    if "casos" in temas:   # filtro de ano partilhado com a lista (única fonte em assets/)
+        js += chr(10) + (RAIZ / "assets/js/filtro-ano.js").read_text(encoding="utf-8")
     for t in temas:
         js += chr(10) + (SRC / f"tema_{t}.js").read_text(encoding="utf-8")
     html = (SRC / modelo).read_text(encoding="utf-8")
     html = (
-        html.replace("/*CSS*/", (SRC / "estilo.css").read_text(encoding="utf-8"))
+        html.replace("/*CSS*/", (SRC / "estilo.css").read_text(encoding="utf-8") + ((RAIZ / "assets/css/filtro-ano.css").read_text(encoding="utf-8") if "casos" in temas else ""))
         .replace("<!--NAV-->", get_nav(pagina, depth=1, menu="barra", rodape="leitura") if modelo != "template.html" else get_nav(pagina, depth=1, menu="barra"))
         .replace("/*TITULO*/", titulo)
         .replace("/*DESC*/", descricao)

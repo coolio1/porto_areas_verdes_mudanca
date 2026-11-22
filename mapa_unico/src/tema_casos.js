@@ -83,8 +83,7 @@
       var self = this, D = MU.DADOS.casos, N = D.numeros;
       self._grupo = L.layerGroup();
       self._entradas = [];
-      var anos = D.casos.map(function (c) { return +c.ano; }), a0 = Math.min.apply(null, anos), a1 = Math.max.apply(null, anos);
-      self._filtro = { galeria: { horrores: true, sucessos: true }, tipo: {}, de: a0, ate: a1 };
+      self._filtro = { galeria: { horrores: true, sucessos: true }, tipo: {}, de: -Infinity, ate: Infinity };
       TIPOS.forEach(function (t) { self._filtro.tipo[t[0]] = true; });
       var nums = '<div class="nums">' + MU.htmlNums([
         { v: MU.n(N.total), u: '', r: 'casos documentados' },
@@ -102,9 +101,7 @@
           return '<label><input type="checkbox" data-galeria="' + g + '" checked><span class="sw">' + '<svg viewBox="0 0 30 30" width="20" height="20" aria-hidden="true"><circle cx="15" cy="15" r="13" fill="' + COR[g] + '"/></svg>' +
             '</span>' + GAL[g] + ' <em>' + N.por_galeria[g] + '</em></label>';
         }).join('') +
-        (a0 < a1 ? MU.cab2('Ano', '<span id="casos-anos">' + a0 + ' – ' + a1 + '</span>') +
-          '<div class="casos-anos"><label>De<input type="range" min="' + a0 + '" max="' + a1 + '" step="1" value="' + a0 + '" data-ano="de" aria-label="Ano inicial"></label>' +
-          '<label>Até<input type="range" min="' + a0 + '" max="' + a1 + '" step="1" value="' + a1 + '" data-ano="ate" aria-label="Ano final"></label></div>' : '') +
+        MU.cab2('Ano', 'casos por ano') + '<div id="casos-anos"></div>' +
         MU.cab2('Tipo', 'forma do marcador = grupo') + GRUPOS.map(function (g) {
           var ts = g[2].filter(function (t) { return (N.por_tipo[t[0]] || 0) > 0; });
           if (!ts.length) return '';
@@ -138,15 +135,8 @@
         self._entradas.push({ c: c, m: m });
       });
       painel.querySelectorAll('.casos-filtros input').forEach(function (cb) {
-        cb.addEventListener(cb.dataset.ano ? 'input' : 'change', function () {
-          if (cb.dataset.ano) {   // os dois cursores nunca se cruzam: o que mexe arrasta o outro
-            var v = +cb.value, o = painel.querySelector('input[data-ano=' + (cb.dataset.ano === 'de' ? 'ate' : 'de') + ']');
-            if (cb.dataset.ano === 'de' && v > +o.value) o.value = v;
-            if (cb.dataset.ano === 'ate' && v < +o.value) o.value = v;
-            self._filtro.de = +painel.querySelector('input[data-ano=de]').value;
-            self._filtro.ate = +painel.querySelector('input[data-ano=ate]').value;
-            painel.querySelector('#casos-anos').textContent = self._filtro.de === self._filtro.ate ? self._filtro.de : self._filtro.de + ' – ' + self._filtro.ate;
-          } else if (cb.dataset.galeria) self._filtro.galeria[cb.dataset.galeria] = cb.checked;
+        cb.addEventListener('change', function () {
+          if (cb.dataset.galeria) self._filtro.galeria[cb.dataset.galeria] = cb.checked;
           else if (cb.dataset.grupo) {   // o grupo liga ou desliga todos os seus tipos
             painel.querySelectorAll('.casos-grupo input[data-tipo]').forEach(function (s) {
               if (GRUPO_DE[s.dataset.tipo] === cb.dataset.grupo) { s.checked = cb.checked; self._filtro.tipo[s.dataset.tipo] = cb.checked; }
@@ -154,6 +144,9 @@
           } else self._filtro.tipo[cb.dataset.tipo] = cb.checked;
           self._aplicar();
         });
+      });
+      FiltroAno.criar(painel.querySelector('#casos-anos'), D.casos.map(function (c) { return c.ano; }), function (de, ate) {
+        self._filtro.de = de; self._filtro.ate = ate; self._aplicar();
       });
       painel.querySelectorAll('.casos-ind button').forEach(function (b) {   // índice: abre o caso e centra o mapa nele
         b.addEventListener('click', function () {
