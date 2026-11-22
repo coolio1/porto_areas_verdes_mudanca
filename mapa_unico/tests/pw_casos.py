@@ -21,10 +21,10 @@ def ok(nome, cond, extra=""):
         falhas.append(nome)
 
 
-def caso(slug, tipo, lat, lon, titulo, fotos=(), galeria="horrores", aprox=False):
+def caso(slug, tipo, lat, lon, titulo, fotos=(), galeria="horrores", aprox=False, ano="2019"):
     return {
         "slug": slug, "titulo": titulo, "galeria": galeria, "tipo": tipo, "lat": lat, "lon": lon,
-        "aproximada": aprox, "ano": "2019", "estado": "abatido", "contestacao": "Petição de moradores.",
+        "aproximada": aprox, "ano": ano, "estado": "abatido", "contestacao": "Petição de moradores.",
         "criterio": "documental", "nota_editorial": "", "freguesia": "Cedofeita",
         "corpo_html": "<p>Descrição do caso.</p>",
         "fotos": [{"papel": p, "src": f"../Horrores/media/{slug}/{p}.jpg", "ano": "2015", "fonte": "Arquivo", "url": "https://x.pt/f"}
@@ -59,7 +59,7 @@ def montar(casos):
 
 CASOS = [
     caso("a-rua", "arvores", 41.1480, -8.6250, "Árvores da Rua A", fotos=("antes", "depois")),
-    caso("b-casa", "demolicao", 41.1560, -8.6100, "Casa B"),
+    caso("b-casa", "demolicao", 41.1560, -8.6100, "Casa B", ano="2005"),
     caso("c-html", "patrimonio_alterado", 41.1540, -8.6400, "&lt;b&gt;x&lt;/b&gt; &amp; Cª", fotos=("antes",)),
     caso("d-suc", "arvores", 41.1600, -8.5900, "Sucesso D", galeria="sucessos"),
 ]
@@ -133,6 +133,14 @@ with sync_playwright() as p:
     pg.uncheck("#tema-casos input[data-grupo=verde_agua]")
     ok("filtro por tipo esconde marcadores", pg.locator(".caso-mk").count() == 2, str(pg.locator(".caso-mk").count()))
     pg.check("#tema-casos input[data-grupo=verde_agua]")
+    # filtro de ano: «De» sobe e esconde o caso de 2005 (marcador e linha do índice); «Até» abaixo de «De» arrasta-o
+    n0 = pg.locator(".caso-mk").count()
+    pg.eval_on_selector("#tema-casos input[data-ano=de]", "e => { e.value = 2010; e.dispatchEvent(new Event('input', {bubbles: true})); }")
+    ok("filtro de ano esconde o caso de 2005", pg.locator(".caso-mk[data-slug=b-casa]").count() == 0 and pg.locator(".caso-mk").count() == n0 - 1)
+    ok("índice acompanha o filtro de ano", pg.locator(".casos-ind li:not([hidden])").count() == n0 - 1)
+    ok("legenda do ano", "2010" in pg.text_content("#casos-anos"), pg.text_content("#casos-anos"))
+    pg.eval_on_selector("#tema-casos input[data-ano=de]", "e => { e.value = 2005; e.dispatchEvent(new Event('input', {bubbles: true})); }")
+    ok("repor o ano devolve o marcador", pg.locator(".caso-mk[data-slug=b-casa]").count() == 1)
     pg.uncheck("#tema-casos input[data-galeria=sucessos]")
     ok("filtro por galeria esconde sucessos", pg.locator(".caso-mk[data-slug=d-suc]").count() == 0)
     if CAPT:

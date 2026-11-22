@@ -109,3 +109,7 @@
 .folha .tit .caso-abas a { color: #10212C; padding: 8px 11px; min-height: 0; }
 .folha .tit .caso-abas a + a { border-left-color: #10212C; }
 .folha .tit .caso-abas a.on { background: #10212C; color: #FAFAF7; }
+
+.caso-anos{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-top:10px}
+.caso-anos label{display:flex;align-items:center;gap:8px;font:400 12px var(--mono, monospace)}
+.caso-anos input{width:min(220px,38vw)}
