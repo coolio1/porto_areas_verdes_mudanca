@@ -12,6 +12,8 @@ estado: alterado
 contestacao: "O ICOMOS-Portugal acusou a Porto Vivo de «puro fachadismo» (2012, 2018); a Porto Vivo defendeu em 2015 que o quarteirão estava adulterado, e a operação recebeu prémios de reabilitação."
 criterio: documental
 fotos:
+  - {papel: antes, ficheiro: cardosas-fachada-2007.jpg, ano: 2007, fonte: "Manuel de Sousa, Wikimedia Commons, domínio público", url: "https://commons.wikimedia.org/wiki/File:Palacio_Cardosas_(Porto).JPG", sha256: b764c40cc950b2945bdd9ab4c0c96670217d925ebd6dc180b50d580e84d8b840, nota: "Fachada do Palácio das Cardosas em Janeiro de 2007, antes da obra."}
+  - {papel: depois, ficheiro: cardosas-intercontinental-2014.jpg, ano: 2014, fonte: "HombreDHojalata, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Pal%C3%A1cio_das_Cardosas_-_InterContinental.JPG", sha256: f72bab0792f7ccaca5e82cac34b9b2d47e665e4c7eb0b0d24c60b30cbdc499a4, nota: "Fachadas do quarteirão, hoje hotel, em 2014."}
   - {papel: depois, ficheiro: depois-1.jpg, ano: 2011, fonte: "Público (foto da notícia)", url: "https://www.publico.pt/2013/04/01/local/noticia/relatorio-do-icomosportugal-arrasa-intervencao-nas-cardosas-do-porto-1589749", sha256: 934e6b5abc8e1ca2a57ba5cbe31758bb0457b915e7de01d22f7dea98bdfa36cc}
   - {papel: depois, ficheiro: depois-2.jpg, ano: 2011, fonte: "JPN (foto da notícia)", url: "https://jpn.up.pt/2015/04/08/reabilitacao-urbana-ainda-nao-esqueceram-as-cardosas/", sha256: aefa14f6fa66067cf8eeaad02d80f8628c4e53cda1c0b1b712e61f78c77ab5d2}
 referencias:
