@@ -39,7 +39,7 @@ description: "Horrores e sucessos: casos conhecidos e documentados no Porto, com
       <a href="{{ c.url | relative_url }}">
         {%- if foto_ %}<img src="{{ site.baseurl }}/Horrores/media/{{ c.slug }}/{{ foto_.ficheiro }}" alt="" loading="lazy">{% else %}<span class="caso-sem-foto">sem foto livre</span>{% endif %}
         <span class="caso-tit">{{ c.titulo | escape }}</span>
-        <span class="caso-mono">{{ c.ano | escape }} · {{ c.estado | escape }}</span>
+        <span class="caso-mono">{{ c.ano | escape }}{% if c.estado != 'outro' and c.estado != 'alterado' %} · {{ c.estado | escape }}{% endif %}</span>
       </a>
     </li>
     {%- endfor %}

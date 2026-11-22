@@ -38,7 +38,7 @@ def test_layout_e_indice_escapam_texto_e_mostram_nota_editorial():
     for campo in ("page.titulo", "page.contestacao", "f.fonte", "r.titulo", "page.nota_editorial", "page.estado", "f.ano"):
         assert "{{ " + campo + " | escape }}" in h, campo
     i = (RAIZ / "casos/lista/index.html").read_text(encoding="utf-8")
-    assert "{{ c.titulo | escape }}" in i and "{{ c.estado | escape }}" in i
+    assert "{{ c.titulo | escape }}" in i and "{{ c.estado | escape }}" in i and "c.estado != 'alterado'" in i
 
 
 def test_indice_lista_site_casos_com_filtros():
@@ -68,7 +68,7 @@ def test_paginas_de_caso_tem_fontes_proprias():
 
 def test_layout_nao_mostra_estado_outro():
     h = (RAIZ / "_layouts/caso.html").read_text(encoding="utf-8")
-    assert "page.estado != 'outro'" in h
+    assert "page.estado != 'outro' and page.estado != 'alterado'" in h
 
 
 def test_layout_mostra_fotos_ligadas_sem_as_copiar():

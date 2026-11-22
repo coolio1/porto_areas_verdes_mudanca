@@ -25,7 +25,7 @@ layout: default
 
     <div class="caso-miolo">
       <p class="caso-migalhas"><a href="{{ '/casos/' | relative_url }}">Horrores e sucessos</a> · <a href="{{ '/casos/lista/' | relative_url }}">Lista</a></p>
-      <p class="caso-etiqueta caso-{{ page.galeria }}"><i aria-hidden="true"></i>{{ galeria_nome_ }} · {{ tipo_nome_ }} · {{ page.ano }}{% if page.estado != 'outro' %} · {{ page.estado | escape }}{% endif %}</p>
+      <p class="caso-etiqueta caso-{{ page.galeria }}"><i aria-hidden="true"></i>{{ galeria_nome_ }} · {{ tipo_nome_ }} · {{ page.ano }}{% if page.estado != 'outro' and page.estado != 'alterado' %} · {{ page.estado | escape }}{% endif %}</p>
       <h1>{{ page.titulo | escape }}</h1>
       {%- if page.contestacao %}<p class="caso-lead">{{ page.contestacao | escape }}</p>{% endif %}
 
@@ -67,7 +67,7 @@ layout: default
             <dl class="caso-ficha-dl">
               <div><dt>Tipo</dt><dd>{{ tipo_nome_ }}</dd></div>
               <div><dt>Ano</dt><dd>{{ page.ano }}</dd></div>
-              {%- if page.estado != 'outro' %}<div><dt>Estado</dt><dd>{{ page.estado | escape }}</dd></div>{% endif %}
+              {%- if page.estado != 'outro' and page.estado != 'alterado' %}<div><dt>Estado</dt><dd>{{ page.estado | escape }}</dd></div>{% endif %}
               <div><dt>Local</dt><dd>{% if page.aproximada %}localização aproximada{% else %}localização conferida{% endif %}</dd></div>
               {%- if page.referencias %}<div><dt>Fontes</dt><dd>{{ page.referencias.size }}</dd></div>{% endif %}
             </dl>

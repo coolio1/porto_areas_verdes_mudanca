@@ -146,7 +146,7 @@
       grelha.innerHTML = D.casos.slice().sort(function (a, b) { return (b.ano - a.ano) || (a.titulo < b.titulo ? -1 : 1); }).slice(0, 6).map(function (c) {
         var f = c.fotos.filter(function (x) { return x.papel === 'depois'; })[0] || c.fotos[0];
         return '<a class="dos-cart" href="' + attr(c.url) + '">' + (f ? '<img src="' + attr(f.src) + '" alt="" loading="lazy">' : '<span class="dos-sem">sem foto livre</span>') +
-          '<span class="dos-ct">' + c.titulo + '</span><span class="dos-cm">' + c.ano + (c.estado !== 'outro' ? ' · ' + c.estado : '') + '</span></a>';
+          '<span class="dos-ct">' + c.titulo + '</span><span class="dos-cm">' + c.ano + (c.estado !== 'outro' && c.estado !== 'alterado' ? ' · ' + c.estado : '') + '</span></a>';
       }).join('');
     },
 
@@ -187,7 +187,7 @@
     _abrir(c, centrar) {
       MU.ficha({
         titulo: c.titulo, cor: COR[c.galeria], sub: (ROTULO[c.tipo] || '') + ' · ' + c.ano,
-        linhas: (c.estado === 'outro' ? [] : [['Estado', ESTADO[c.estado] || c.estado]]).concat([['Local', c.freguesia + (c.aproximada ? ' (aprox.)' : '')]]),
+        linhas: (c.estado === 'outro' || c.estado === 'alterado' ? [] : [['Estado', ESTADO[c.estado] || c.estado]]).concat([['Local', c.freguesia + (c.aproximada ? ' (aprox.)' : '')]]),
         topo: '<a class="ver-caso" href="' + attr(c.url) + '">Abrir a página completa →</a>',
         corpo: corpoFicha(c)
       });
