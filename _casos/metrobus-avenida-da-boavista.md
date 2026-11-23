@@ -12,6 +12,7 @@ estado: outro
 contestacao: "Petição, providência cautelar, moção da Assembleia Municipal e protestos contra o abate de árvores do separador central da Avenida da Boavista."
 criterio: documental
 fotos:
+  - {papel: antes, ficheiro: antes-2024.jpg, ano: 2024, fonte: "filohipo, Mapillary (CC BY-SA 4.0), 29 de Setembro de 2024, Avenida da Boavista junto ao Colégio de Nossa Senhora do Rosário", url: "https://www.mapillary.com/app/?pKey=1582341815696706", sha256: 9cd03b1b5d7918316d79fbebbfa19cc947821755e5dccbe3983185743e9e8f41}
   - {papel: depois, ficheiro: depois-5.jpg, ano: 2025, fonte: "Observador (foto da notícia)", url: "https://observador.pt/2025/10/03/metro-do-porto-suspende-temporarimente-obra-da-segunda-fase-do-metrobus/", sha256: 0b7eeaa8aeb608824254334ca842003a7a1883466872bb443ca0478cb2f9ac46}
   - {papel: depois, ficheiro: depois-2.jpg, ano: 2025, fonte: "RTP Notícias (foto da notícia)", url: "https://www.rtp.pt/noticias/economia/obras-da-segunda-fase-do-metrobus-do-porto-arrancam-na-segunda-feira_n1684481", sha256: 25e1c07e67ff8f195e255230bea5a37d06f59452ee3605d3f91940ac2c270303}
 referencias:
