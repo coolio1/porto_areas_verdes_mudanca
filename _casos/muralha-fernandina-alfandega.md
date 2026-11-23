@@ -11,6 +11,9 @@ ano: 2007
 estado: outro
 contestacao: "Um artigo de opinião do JN (2005) defendia pôr a descoberto a muralha em vez de estacionamento, e um historiador disse ao Público (2009) que os vestígios achados em 2007 foram tapados outra vez; não há petição nem parecer."
 criterio: documental
+fotos:
+  - {papel: antes, ficheiro: antes-2004.jpg, ano: 2004, fonte: "ERA-Arqueologia (foto do projecto «Zona da Alfândega», sondagens de 2004)", url: "https://www.era-arqueologia.pt/projectos/342", sha256: 732b5452df26e05e8039b25835b813d9b96e46e9cf0faa1af5725c964ce1ba4c}
+  - {papel: depois, ficheiro: depois-2017.jpg, ano: 2017, fonte: "-wuppertaler, Wikimedia Commons (CC BY-SA 4.0), Rua Nova da Alfândega", url: "https://commons.wikimedia.org/wiki/File:POR_Porto_Nova_Alfandega_01.jpg", sha256: 0ded92657df46a685bf7cafa5c15b62ab92382729e8cc55a49049bfc2d4b06c3}
 referencias:
   - titulo: "Casas em ruínas põem em causa monumento da zona histórica do Porto"
     url: "https://www.publico.pt/2009/08/17/local/noticia/casas-em-ruinas-poem-em-causa-monumento-da-zona-historica-do-porto-1396432"

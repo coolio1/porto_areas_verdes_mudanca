@@ -13,7 +13,7 @@ contestacao: "Proprietários de terrenos accionaram a Câmara e a Casa da Músic
 criterio: documental
 fotos:
   - {papel: outra, ficheiro: transparente-2007.jpg, ano: 2007, fonte: "Manuel de Sousa, Wikimedia Commons, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Edificio_Transparente_(Porto).JPG", sha256: f2e3aa0fabc352ece6e6ed5fa7f12ef37bc77a0548ca675e37099f2d18f4b528, nota: "O Edifício Transparente visto da praia em 2007."}
-  - {papel: outra, ficheiro: transparente-2013.jpg, ano: 2013, fonte: "Vitor Oliveira, Wikimedia Commons, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Edif%C3%ADcio_Transparente_-_Porto_-_Portugal_(8719179025).jpg", sha256: 7d7dfcb656a3f056f6dbafd4df8a51c2d998698170f1463c85dca69fcec20a9e, nota: "O edifício visto do mar em 2013."}
+  - {papel: depois, ficheiro: transparente-2013.jpg, ano: 2013, fonte: "Vitor Oliveira, Wikimedia Commons, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Edif%C3%ADcio_Transparente_-_Porto_-_Portugal_(8719179025).jpg", sha256: 7d7dfcb656a3f056f6dbafd4df8a51c2d998698170f1463c85dca69fcec20a9e, nota: "O edifício visto do mar em 2013."}
 referencias:
   - titulo: "Consórcio imobiliário quer reaver terreno do Edifício Transparente"
     url: "https://www.publico.pt/2004/07/25/jornal/consorcio-imobiliario-quer-reaver-terreno-do-edificio-transparente-191300"

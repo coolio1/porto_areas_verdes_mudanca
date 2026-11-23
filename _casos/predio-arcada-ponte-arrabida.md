@@ -17,6 +17,7 @@ fotos_ligadas:
 fotos:
   - {papel: depois, ficheiro: depois-3.jpg, ano: 2019, fonte: "Correio da Manhã (foto da notícia)", url: "https://www.cmjornal.pt/portugal/detalhe/ministerio-publico-pede-demolicoes-na-arrabida", sha256: 80307a98b19bf072c36351e7154ad453e6b20fcc758def83ab68d4d0f823d87e}
   - {papel: depois, ficheiro: depois-5.jpg, ano: 2019, fonte: "Público (foto da notícia)", url: "https://www.publico.pt/n1862458", sha256: 84a9116548c7c044aec5d3b503a09c405cc81f5b29ad0be51daf1b9120e735bb}
+  - {papel: antes, ficheiro: antes-2018.jpg, ano: 2018, fonte: "Público (foto de Adriano Miranda, notícia de 22 de Fevereiro de 2018: escarpa a ser preparada para o primeiro prédio)", url: "https://www.publico.pt/2018/02/22/local/noticia/direitos-adquiridos-permitem-predio-na-escarpa-do-porto-que-hoje-seria-ilegal-1804124", sha256: 0969b2d0d936e4c80270355808375ea0a7ef0cdcf7b4e31a9c90b08902286b14}
 referencias:
   - titulo: "APDL vai reclamar terreno na Arrábida onde está a ser construído prédio de dez pisos"
     url: "https://observador.pt/2019/01/24/apdl-vai-reclamar-terreno-na-arrabida-onde-esta-a-ser-construido-predio-de-dez-pisos/"

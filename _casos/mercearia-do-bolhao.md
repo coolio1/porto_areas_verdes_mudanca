@@ -15,6 +15,7 @@ nota_editorial: "Loja de 1880 fechada em 2024, sem estatuto municipal e sem cont
 fotos:
   - {papel: antes, ficheiro: mercearia-liquidacao-2024.jpg, ano: 2024, fonte: "Renascença (foto da loja em liquidação, 2024)", url: "https://rr.pt/noticia/vida/2024/04/22/mercearia-mais-antiga-do-porto-vai-fechar-e-ale-hop-ocupa-o-lugar/375209/", sha256: 59950668e5d541c92195f519e5202ea4d6aa84776fd2f9c97626ce4598d72206}
   - {papel: antes, ficheiro: mercearia-fachada.jpg, ano: 2024, fonte: "Porto Secreto (foto da loja, via Facebook da Mercearia do Bolhão)", url: "https://portosecreto.co/mercearia-do-bolhao/", sha256: a23f9eb86723c48cb13d53f37741c210ce388c92188dd9cffd8891c9e29ff871}
+  - {papel: depois, ficheiro: depois-2024.jpg, ano: 2024, fonte: "Frank Kovalchek, Flickr via Wikimedia Commons, CC BY 2.0 (vaca da Ale-Hop na varanda do 305 da Rua Formosa, Setembro de 2024)", url: "https://commons.wikimedia.org/wiki/File:Cool_sight_in_Porto,_Portugal_(54042636753).jpg", sha256: 189dc81e1a3169a2767fa00cf5ccf6d20f799b0905489522023ca45ea2af88fc}
 referencias:
   - titulo: "Mercearia do Bolhão: estabelecimento histórico vai fechar portas"
     url: "https://portosecreto.co/mercearia-do-bolhao/"
