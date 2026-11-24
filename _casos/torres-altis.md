@@ -1,0 +1,40 @@
+---
+title: "Torres Altis (Foz Residence)"
+titulo: "Torres Altis (Foz Residence)"
+galeria: horrores
+tipo: construcao_intrusiva
+lat: 41.15354
+lon: -8.67004
+aproximada: true
+origem_coord: "OSM/Nominatim, uso do solo «Foz Residence», Foz do Douro; ponto central do loteamento, junto à Rua de Diogo Botelho e à Praça do Império"
+ano: 2002
+estado: outro
+contestacao: "Moradores contestaram a construção; segundo o Público, uma acção judicial de cidadãos estava a ser preparada para o Tribunal Administrativo em Outubro de 2002."
+criterio: documental
+fotos: []
+referencias:
+  - titulo: "Alvará de licença de construção das Torres Altis é inválido (Público)"
+    url: "https://www.publico.pt/2002/09/28/jornal/alvara-de-licenca-de-construcao-das-torres-altis-e-invalido-174881"
+    data: "2002-09-28"
+    tipo: imprensa
+    excerto: "não foi assinado pelo presidente da câmara, como manda a lei"
+  - titulo: "Rio «triste» com Torres Altis (TSF)"
+    url: "https://www.tsf.pt/arquivo/artigo/rio-triste-com-torres-altis/863772"
+    data: "2002-08-29"
+    tipo: imprensa
+    excerto: "«não é possível» impedir ou alterar o projecto"
+  - titulo: "Novo jardim na Foz (Jornal de Notícias)"
+    url: "https://www.jn.pt/arquivo/artigo/novo-jardim-na-foz/531053"
+    data: "2006-01-11"
+    tipo: imprensa
+    excerto: "foram licenciadas, a 18 de Julho de 2002"
+---
+As «Torres Altis» são a urbanização depois comercializada como Foz Residence, na Foz do Douro, junto à Universidade Católica e à Rua de Diogo Botelho. Segundo o Jornal de Notícias, foram licenciadas a 18 de Julho de 2002, após uma polémica longa num processo que vinha da década de 1970.
+
+Em Agosto de 2002, a TSF noticiou que o presidente da Câmara manifestou «uma tristeza muito grande» por não poder fazer nada para impedir a obra, que considerou «completamente despropositadas» as construções para aquela zona da cidade ou qualquer outra. Confirmou a posição do vereador do Urbanismo: legalmente «não é possível» impedir ou alterar o projecto, um empreendimento com mais de 27 mil metros quadrados de área útil.
+
+Em Setembro de 2002, o Público noticiou que o alvará de licença de construção não fora assinado pelo presidente da Câmara, como manda a lei, nem pelo vereador do Urbanismo, mas por um director de departamento, o que, segundo o jurista indicado pela Câmara, torna o acto inexistente. O jornal descreve o historial: promessa de permuta de terrenos em 1989 para terminar um litígio com a sociedade promotora, escritura em 1997, outra permuta em 1999 para duplicar a Rua de Diogo Botelho (direitos de construir 27.756 metros quadrados, em troca de cerca de 1,6 milhões de euros), alvará de urbanização em 2000, projecto de arquitectura deferido em 2001. Segundo o Público, o jurista preparava a acção judicial dos cidadãos que contestam as torres, a entrar no Tribunal Administrativo na semana seguinte.
+
+Segundo o Jornal de Notícias, em Janeiro de 2006 o promotor entregou à Câmara um jardim de proximidade e executou a duplicação da Rua de Diogo Botelho.
+
+Não confirmámos o desfecho da acção judicial nem se o vício do alvará teve consequências: as fontes lidas só mostram que a urbanização foi construída e comercializada. Não encontrámos foto de antes (anterior a 2002) nem foto das torres que identifiquemos com segurança: fica em rascunho.
