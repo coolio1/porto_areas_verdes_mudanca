@@ -12,6 +12,7 @@ estado: outro
 contestacao: "Um artigo de opinião do JN (2005) defendia pôr a descoberto a muralha em vez de estacionamento, e um historiador disse ao Público (2009) que os vestígios achados em 2007 foram tapados outra vez; não há petição nem parecer."
 criterio: documental
 fotos:
+  - {papel: antes, ficheiro: antes-2018.jpg, ano: 2018, fonte: "Guilherme Lemos, arquivo pessoal, in dissertação FAUP «Salvaguarda e valorização da muralha Fernandina do Porto» (2018), p. 106, fig. 4 «Parque de Estacionamento da Alfândega» (acesso aberto; direitos reservados, usada com crédito e ligação à origem)", url: "https://hdl.handle.net/10216/119088", sha256: e9d7b9a4e988f471ab47f2941009a6e908bd0f93ca1a1d78106474c010557df7}
   - {papel: depois, ficheiro: depois-2017.jpg, ano: 2017, fonte: "-wuppertaler, Wikimedia Commons (CC BY-SA 4.0), Rua Nova da Alfândega", url: "https://commons.wikimedia.org/wiki/File:POR_Porto_Nova_Alfandega_01.jpg", sha256: 0ded92657df46a685bf7cafa5c15b62ab92382729e8cc55a49049bfc2d4b06c3}
 referencias:
   - titulo: "Casas em ruínas põem em causa monumento da zona histórica do Porto"
@@ -38,4 +39,4 @@ Em Janeiro de 2005, uma opinião da Redacção do Jornal de Notícias escreveu q
 
 Em 2009, o Público ouviu um historiador da cidade, que criticou as entidades responsáveis pela conservação do património, que «não conservam nem deixam conservar». Como exemplo, afirmou que, ao encontrarem os vestígios no parque de estacionamento da Alfândega em 2007, «mandaram parar a obra» mas depois, por falta de verba, «mandaram tapar outra vez».
 
-Segundo as fontes lidas, a muralha não foi destruída: ficou sob aterro. A contestação é uma opinião de 2005 e o testemunho de um historiador em 2009; não encontrámos petição, parecer nem resposta de qualquer entidade, e as datas das fontes (2004 as sondagens; 2007 o achado, segundo o historiador) não estão conciliadas. Não encontrámos o estado actual do local nem fotografia livre dele. A localização é aproximada.
+Segundo as fontes lidas, a muralha não foi destruída: ficou sob aterro. A contestação é uma opinião de 2005 e o testemunho de um historiador em 2009; não encontrámos petição, parecer nem resposta de qualquer entidade, e as datas das fontes (2004 as sondagens; 2007 o achado, segundo o historiador) não estão conciliadas. Não encontrámos o estado actual do local. A fotografia «antes» é de 2018 (dissertação da FAUP, arquivo pessoal do autor) e mostra o parque de estacionamento sobre o qual, segundo a mesma dissertação, a muralha continua enterrada; não mostra a muralha à vista. A localização é aproximada.

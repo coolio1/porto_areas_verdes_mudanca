@@ -13,6 +13,7 @@ contestacao: "Abaixo-assinado de cerca de 30 moradores, queixa ao Ministério P�
 criterio: documental
 fotos:
   - {papel: depois, ficheiro: depois-2019-obra.jpg, ano: 2019, fonte: "Público (fotografia da notícia de 5 de Fevereiro de 2019, obra no logradouro; sem crédito de autor na página)", url: "https://www.publico.pt/2019/02/05/local/noticia/moradores-tentar-travar-tribunal-empreendimento-pinheiro-manso-1860821", sha256: bcecda7685b5c67bf2fd6d84a2bd4f8edb376a2c621233000eeb0efee8404627}
+  - {papel: antes, ficheiro: antes-2019-casa.jpg, ano: 2019, fonte: "Paulo Pimenta, Público (fotografia da notícia de 5 de Fevereiro de 2019); direitos reservados, usada com crédito e ligação à origem", url: "https://www.publico.pt/2019/02/05/local/noticia/moradores-tentar-travar-tribunal-empreendimento-pinheiro-manso-1860821", sha256: fe12ce425934d20189f4da77a6df3a25e0fa35d386cbcf5792f18ee1b835692a, nota: "Casa existente na frente do terreno (Rua do Pinheiro Manso), que o Público diz ser ampliada pelo projecto e que foi sede do PSD; fotografia já com as obras iniciadas (grua ao fundo). Não mostra o jardim do logradouro."}
 referencias:
   - titulo: "Moradores tentam travar em tribunal empreendimento no Pinheiro Manso"
     url: "https://www.publico.pt/2019/02/05/local/noticia/moradores-tentar-travar-tribunal-empreendimento-pinheiro-manso-1860821"

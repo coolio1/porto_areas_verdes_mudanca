@@ -12,6 +12,7 @@ estado: outro
 contestacao: "Em 2003 e 2004, a Campo Aberto e outras associações ambientalistas contestaram a Alameda de Azevedo, que ameaçava dividir o futuro parque; em 2005, com o parque ainda no papel, a proposta de construir oito lotes na bordadura para o financiar dividiu os ambientalistas."
 criterio: documental
 fotos:
+  - {papel: antes, ficheiro: antes-1939.jpg, ano: 1939, fonte: "Arquivo Municipal do Porto (Gisa), PT-CMP-AM/PUB/CMPRT/DSUO-SU/3779/3210-f.28:n.692, fotografia aérea de 23 de Novembro de 1939 da zona rural de Campanhã (Moinhos e Ponte romana de Tirares sobre o Rio Tinto, Quinta do Lagarteiro, Estrada da Circunvalação), o vale onde depois foi feito o Parque Oriental; descarregamento só para fins académicos e de investigação, outros fins exigem autorização do Arquivo", url: "https://gisaweb.cm-porto.pt/units-of-description/documents/600447/", sha256: 74acfb6b77bf913598f5d612a1b9af0b27d247cd744b8b74bc5c282597ef4b41}
   - {papel: depois, ficheiro: depois-2024.jpg, ano: 2024, fonte: "Sergei Gussev, Flickr via Wikimedia Commons, CC BY 2.0 (Rio Tinto no Parque Oriental, Novembro de 2024; mostra o parque, não a via)", url: "https://commons.wikimedia.org/wiki/File:Porto_(54226329986).jpg", sha256: a90a31d6c6fdfeb9b016f22c57d319bd1dcff896da7b5514711e1cc7e253d829}
 referencias:
   - titulo: "Campo Aberto condena \"atrocidade\" no Parque Oriental do Porto"

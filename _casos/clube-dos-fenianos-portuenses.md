@@ -14,6 +14,7 @@ criterio: documental
 fotos:
   - {papel: antes, ficheiro: fachada-2007.jpg, ano: 2007, fonte: "Manuel de Sousa, Wikimedia Commons, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Clube_Fenianos_(Porto).jpg", sha256: 64cc657184dfee9b7a6de61717444219e3742e5c55c14b6fc893b1c44e91cdc2, nota: "Fachada do edifício em 2007, antes das intervenções referidas (2012-2020). Mostra o exterior; o interior alterado não está documentado em fotografia de licença livre."}
   - {papel: outra, ficheiro: porta-n29-2015.jpg, ano: 2015, fonte: "Turismoenportugal, Wikimedia Commons, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Clube_dos_Fenianos,_Porto.jpg", sha256: 0aa704a9e2f1cd487d4b70227fbad5f3981ed3b693b6918ad2dfa66fd56ead48, nota: "Porta do número 29 em 2015, a meio do período das intervenções; mostra o exterior."}
+  - {papel: depois, ficheiro: depois-via-garrett.jpg, fonte: "Ivo Pereira / Global Imagens, Jornal de Notícias (22 Nov 2023); fotografia sem data própria, mostra o exterior com a placa do Via Garrett; direitos reservados, usada com crédito e ligação à origem", url: "https://www.jn.pt/pais/artigo/fenianos-assumem-espaco-do-via-garrett-na-baixa-do-porto/17809687", sha256: 5b09a4e51a12fd8b5b1ff680a8c3b6689253a389b22c875d83d0057cffb76955}
 referencias:
   - titulo: "Supremo confirma despejo em edifício classificado dos Fenianos no Porto devido a «obras ilegais»"
     url: "https://observador.pt/2023/06/13/supremo-confirma-despejo-em-edificio-classificado-dos-fenianos-no-porto-devido-a-obras-ilegais/"

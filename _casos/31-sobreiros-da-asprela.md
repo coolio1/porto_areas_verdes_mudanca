@@ -13,6 +13,7 @@ contestacao: "A associação Campo Aberto pediu a revogação do despacho; o PAN
 criterio: documental
 fotos:
   - {papel: antes, ficheiro: antes-2020.jpg, ano: 2020, fonte: "Campo Aberto, página «Por amor da árvore 2020» (Maio de 2020); crédito exacto desta imagem não indicado na página, licença não indicada", url: "https://www.campoaberto.pt/2020/05/14/por-amor-da-arvore-2020/", sha256: 58a790f3a2c72077e41ac9ee60468debb31b2adb9c221f9ece9d11b64abdc9ff}
+  - {papel: depois, ficheiro: depois-residencia.jpg, fonte: "Enescoord (construtora), página do projecto «Liv Student – Campus Street»; fotografia sem crédito de autor; direitos reservados, usada com crédito e ligação à origem", url: "https://www.enescoord.pt/projetos/liv-student-campus-street/", sha256: e165e2be224780a8c73732a7dad17bb1fcf0d1b824819d963ceadf62e372ee1d, nota: "Residência de estudantes na Rua da Azenha; a ligação ao despacho de 2020 (promotor VStudent Portugal 2, Rua da Azenha junto ao n.º 114) é inferida pela morada e pelo promotor, não consta de nenhuma fonte. A foto não prova se os sobreiros foram abatidos."}
 referencias:
   - titulo: "Há 31 sobreiros em risco de abate na zona da Asprela, no Porto (Público)"
     url: "https://www.publico.pt/2020/05/18/local/noticia/ha-31-sobreiros-risco-abate-zona-asprela-porto-1917022"

@@ -12,6 +12,7 @@ estado: outro
 contestacao: "Moradores contestaram a construção; segundo o Público, uma acção judicial de cidadãos estava a ser preparada para o Tribunal Administrativo em Outubro de 2002."
 criterio: documental
 fotos:
+  - {papel: antes, ficheiro: antes-1939.jpg, ano: 1939, fonte: "Arquivo Municipal do Porto (Gisa), PT-CMP-AM/PUB/CMPRT/DSUO-SU/3779/3210-f.5:n.012, fotografia aérea de 20 de Novembro de 1939 da zona da Foz, entre a Praça do Império e o Largo do Capitão Pinheiro Torres Meireles, com campos agrícolas na zona da Rotunda do Império (segundo o Arquivo); o terreno do Foz Residence situa-se nesses campos, a cerca de 220 m a leste e 190 m a sul da Praça do Império, localizado pelo traçado da rotunda e das ruas; descarregamento só para fins académicos e de investigação, outros fins exigem autorização do Arquivo", url: "https://gisaweb.cm-porto.pt/units-of-description/documents/587441/", sha256: 86177175021cb553422bb0516ffa1fb4c0d4ac8ccc6e978a0b9938c6b54624bc}
   - {papel: depois, ficheiro: depois-foz-residence.jpg, fonte: "Arquitecto João Paciência, página do projecto Foz Residence (direitos reservados, usada com crédito e ligação à origem)", url: "https://www.joaopaciencia.pt/pt/projectos/foz-residence-porto", sha256: 5d5d40086e2c702693b8ec21c0829d6065d77c691902896c4e83c65dcf2687ae}
 referencias:
   - titulo: "Alvará de licença de construção das Torres Altis é inválido (Público)"
