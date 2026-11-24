@@ -3,10 +3,10 @@ title: "Parque da Cidade: frentes urbanas da Circunvalação e da Boavista"
 titulo: "Parque da Cidade: frentes urbanas da Circunvalação e da Boavista"
 galeria: horrores
 tipo: construcao_intrusiva
-lat: 41.1708
-lon: -8.6690
+lat: 41.1733
+lon: -8.6887
 aproximada: true
-origem_coord: "Franja nascente do Parque da Cidade, junto à Circunvalação; ponto estimado, os terrenos exactos não foram localizados nas fontes"
+origem_coord: "Praça da Cidade do Salvador (OSM), gaveto com a Circunvalação, onde um vereador da CDU (2009) situa uma das zonas de construção; o parque é extenso e os lotes exactos não foram localizados"
 ano: 2002
 estado: revertido
 contestacao: "Em 2001 foram reunidas assinaturas para um referendo local sobre construção no Parque; o presidente eleito em Dezembro de 2001 recusou as construções e a aprovação de Janeiro de 2002 foi depois revogada."
