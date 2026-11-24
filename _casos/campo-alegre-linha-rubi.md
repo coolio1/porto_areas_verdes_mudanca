@@ -17,6 +17,7 @@ fotos_ligadas:
 fotos:
   - {papel: antes, ficheiro: antes-1.jpg, ano: 2024, fonte: "JPN (foto da notícia)", url: "https://www.jpn.up.pt/2024/09/09/metro-do-porto-pede-para-abater-uma-centena-de-arvores-no-campo-alegre/", sha256: 14374acc55212ec56f95e7677371acb9116b0b17462653d426e514dc80e5d5b2}
   - {papel: antes, ficheiro: antes-5.jpg, ano: 2024, fonte: "Jornal de Notícias (foto da notícia)", url: "https://www.jn.pt/pais/artigo/nao-e-compreensivel-abate-de-99-arvores-pela-metro-do-porto/17820583", sha256: 47b4b2dc09d6cfad19eb974698a26c4de3a2e7e0ca1a630988c135989e904c30}
+  - {papel: depois, ficheiro: depois-2025.jpg, ano: 2025, fonte: "Mapillary, sanjorgepinho (CC BY-SA 4.0), Via Panorâmica, Julho de 2025", url: "https://www.mapillary.com/app/?pKey=2558380274503905", sha256: 2626e571fa5e8aa07ca6203229d3297bd485c32a4c3b80a4083db1b7cac9a947, nota: "A obra da Linha Rubi na Via Panorâmica em Julho de 2025, com o tapume do Metro; o talude ainda tem árvores."}
 referencias:
   - titulo: "Título Único Ambiental da Linha Rubi (Declaração de Impacte Ambiental e condições)"
     url: "https://siaia.apambiente.pt/AIADOC/AIA3532/tua_dia_aia35322023313173233.pdf"

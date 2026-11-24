@@ -11,7 +11,8 @@ ano: 2002
 estado: outro
 contestacao: "Moradores contestaram a construção; segundo o Público, uma acção judicial de cidadãos estava a ser preparada para o Tribunal Administrativo em Outubro de 2002."
 criterio: documental
-fotos: []
+fotos:
+  - {papel: depois, ficheiro: depois-foz-residence.jpg, fonte: "Arquitecto João Paciência, página do projecto Foz Residence (direitos reservados, usada com crédito e ligação à origem)", url: "https://www.joaopaciencia.pt/pt/projectos/foz-residence-porto", sha256: 5d5d40086e2c702693b8ec21c0829d6065d77c691902896c4e83c65dcf2687ae}
 referencias:
   - titulo: "Alvará de licença de construção das Torres Altis é inválido (Público)"
     url: "https://www.publico.pt/2002/09/28/jornal/alvara-de-licenca-de-construcao-das-torres-altis-e-invalido-174881"

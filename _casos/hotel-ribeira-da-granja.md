@@ -11,6 +11,8 @@ ano: 2002
 estado: outro
 contestacao: "Em 2002, um texto de opinião e, mais tarde, o então vereador do Ambiente criticaram a aprovação de um hotel a 10 metros da ribeira, contra a estratégia municipal de valorização do vale; em 2019 o Bloco de Esquerda contestou a urbanização vizinha, e em 2025 a Câmara fez um acordo com o promotor para criar um parque."
 criterio: documental
+fotos:
+  - {papel: depois, ficheiro: depois-projecto-2026.jpg, ano: 2026, fonte: "Imagem do projecto (render) do empreendimento e parque junto à ribeira, Jornal de Notícias (direitos reservados, usada com crédito e ligação à origem)", url: "https://www.jn.pt/pais/artigo/parque-com-pontes-na-ribeira-da-granja-no-porto-concluido-dentro-de-dois-anos/18101897", sha256: a0942e15194c5f6ffe5c44fa6fb375652bff11cdd0465a62b0f837d3d655a709}
 referencias:
   - titulo: "Câmara do Porto abre caminho a mais uma herança urbanística polémica"
     url: "https://www.publico.pt/2019/07/15/local/noticia/camara-porto-abre-caminho-heranca-urbanistica-junto-ribeira-granja-1879751"

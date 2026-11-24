@@ -11,6 +11,9 @@ ano: 2019
 estado: outro
 contestacao: "Carta de um grupo de cidadãos (Fórum Cidadania Porto) ao presidente da Câmara, em Junho de 2019, a pedir o indeferimento da demolição."
 criterio: documental
+fotos:
+  - {papel: antes, ficheiro: antes-aerea.jpg, fonte: "Vista aérea do terreno com o palacete, 3% Real Estate (direitos reservados, usada com crédito e ligação à origem)", url: "https://3realestate.pt/empreendimentos/garden-palace/", sha256: 9e04ec03bf161d12f380c0275882ec875fef9d804d581061b9a62c0a3f0f3bc1}
+  - {papel: depois, ficheiro: depois-projecto-2026.jpg, ano: 2026, fonte: "Imagem do projecto (render) do Garden Palace Residence, 3% Real Estate / promotor (direitos reservados, usada com crédito e ligação à origem)", url: "https://3realestate.pt/empreendimentos/garden-palace/", sha256: 2bcbe3a0471888cad111111c865d69c0b363100a1b8976c1a5722747e57314a2}
 referencias:
   - titulo: "Cidadãos denunciam projeto de demolição do palacete da Travessa do Requesende no Porto"
     url: "https://www.dn.pt/arquivo/diario-de-noticias/cidadaos-denunciam-projeto-de-demolicao-do-palacete-da-travessa-do-requesende-no-porto-11052920.html"
