@@ -3,10 +3,10 @@ title: "Casa onde morreu António Nobre (Avenida do Brasil)"
 titulo: "Casa onde morreu António Nobre (Avenida do Brasil)"
 galeria: horrores
 tipo: demolicao
-lat: 41.15345
-lon: -8.67895
+lat: 41.15684
+lon: -8.68135
 aproximada: true
-origem_coord: "Troço da Avenida do Brasil junto à Rua do Farol; o número exacto (521 segundo o Fórum Cidadania Porto) não foi localizado no terreno"
+origem_coord: "Localização da Casa de António Nobre na Avenida do Brasil segundo o OpenStreetMap; o número exacto (521 segundo o Fórum Cidadania Porto) não foi confirmado no terreno"
 ano: 2018
 estado: outro
 contestacao: "Carta aberta do Fórum Cidadania Porto à Câmara (Fevereiro de 2018) e petição de 2015 com 566 assinaturas a pedir que a casa fosse preservada como casa-museu; a Câmara respondeu apenas que o projecto fora aprovado em Maio de 2017."
